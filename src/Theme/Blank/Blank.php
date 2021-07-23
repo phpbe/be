@@ -2,39 +2,17 @@
 <!DOCTYPE html>
 <html>
 <head>
+
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title><?php echo $this->title; ?></title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
 
-    <script src="https://unpkg.com/vue@2.6.11/dist/vue.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
-    <script src="https://unpkg.com/axios@0.19.0/dist/axios.min.js"></script>
-    <script>Vue.prototype.$http = axios;</script>
-
-    <script src="https://unpkg.com/vue-cookies@1.5.13/vue-cookies.js"></script>
-
-    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.2/lib/theme-chalk/index.css">
-    <script src="https://unpkg.com/element-ui@2.13.2/lib/index.js"></script>
-
-    <link rel="stylesheet" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css" />
-
-    <style>
-        body {background-color: #fff;}
-        ::-webkit-scrollbar {width: 8px;}
-        ::-webkit-scrollbar-thumb {background-color: #555;}
-        [v-cloak] {display: none;}
-        [class^="el-icon-fa"],
-        [class*="el-icon-fa"] {
-            display: inline-block;
-            font-style: normal;
-            font-variant: normal;
-            font-weight: normal;
-            font-family: FontAwesome!important;
-            font-size: inherit;
-            text-rendering: auto;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 
     <be-head>
     </be-head>

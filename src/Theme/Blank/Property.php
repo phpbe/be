@@ -1,6 +1,6 @@
 <?php
 
-namespace Be\Mf\Theme\Blank;
+namespace Be\Theme\Blank;
 
 
 class Property extends \Be\Theme\Property

@@ -41,7 +41,7 @@ class System
      *     driver="FormItemSelect",
      *     keyValues = "return \Be\Be::getService('System.Theme')->getThemeKeyValues();")
      */
-    public $theme = 'Sample';
+    public $theme = 'Blank';
 
     /**
      * @BeConfigItem("默认首页", driver="FormItemInput")

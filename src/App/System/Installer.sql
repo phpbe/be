@@ -31,6 +31,19 @@ CREATE TABLE `system_mail_queue` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='发送邮件队列';
 
+CREATE TABLE `system_admin_theme` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  `name` varchar(60) NOT NULL COMMENT '应用名',
+  `label` varchar(60) NOT NULL COMMENT '应用中文标识',
+  `install_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '安装时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='主题';
+
+INSERT INTO `system_admin_theme` (`id`, `name`, `label`, `install_time`, `update_time`) VALUES
+(1, 'Admin', '默认主题', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
 CREATE TABLE `system_theme` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '自增ID',
   `name` varchar(60) NOT NULL COMMENT '应用名',
@@ -42,7 +55,7 @@ CREATE TABLE `system_theme` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='主题';
 
 INSERT INTO `system_theme` (`id`, `name`, `label`, `install_time`, `update_time`) VALUES
-(1, 'Admin', '默认主题', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+(1, 'Blank', '空白主题', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 CREATE TABLE `system_task` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',

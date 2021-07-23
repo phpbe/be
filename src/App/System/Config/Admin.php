@@ -9,7 +9,7 @@ class Admin
     /**
      * @BeConfigItem("主题",
      *     driver="FormItemSelect",
-     *     keyValues = "return \Be\Be::getService('System.Theme')->getThemeKeyValues();")
+     *     keyValues = "return \Be\Be::getService('System.AdminTheme')->getThemeKeyValues();")
      */
     public $theme = 'Admin';
 
