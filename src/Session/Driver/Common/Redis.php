@@ -136,7 +136,9 @@ class Redis extends \SessionHandler implements Driver
 	 * @return string
 	 */
 	public function read($sessionId) {
-		return $this->redis->get('session:'.$sessionId);
+        $sessionData = $this->redis->get('session:'.$sessionId);
+        if (!$sessionData) $sessionData = '';
+        return $sessionData;
 	}
 
 	/**
