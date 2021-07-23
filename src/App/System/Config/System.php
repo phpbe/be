@@ -17,13 +17,6 @@ class System
     public $urlSuffix = '.html';
 
     /**
-     * @BeConfigItem("主题",
-     *     driver="FormItemSelect",
-     *     keyValues = "return \Be\Be::getService('System.Theme')->getThemeKeyValues();")
-     */
-    public $theme = 'Admin';
-
-    /**
      * @BeConfigItem("允许上传的文件大小", driver="FormItemInput")
      */
     public $uploadMaxSize = '100M';
@@ -44,16 +37,16 @@ class System
     public $timezone = 'Asia/Shanghai';
 
     /**
-     * @BeConfigItem("默认首页", driver="FormItemInput")
+     * @BeConfigItem("主题",
+     *     driver="FormItemSelect",
+     *     keyValues = "return \Be\Be::getService('System.Theme')->getThemeKeyValues();")
      */
-    public $home = 'System.System.dashboard';
+    public $theme = 'Sample';
 
     /**
-     * @BeConfigItem("默认分页",
-     *     driver="FormItemInputNumberInt",
-     *     ui="return [':min' => 1];")
+     * @BeConfigItem("默认首页", driver="FormItemInput")
      */
-    public $pageSize = 12;
+    public $home = 'System.Index.index';
 
     /**
      * @BeConfigItem("是否开启开发者模式", driver="FormItemSwitch")
@@ -64,6 +57,5 @@ class System
      * @BeConfigItem("是否开启可安装及重装", driver="FormItemSwitch")
      */
     public $installable = true;
-
 
 }

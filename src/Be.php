@@ -888,8 +888,8 @@ abstract class Be
             if (isset($property->theme)) {
                 $theme = $property->theme;
             } else {
-                $configSystem = self::getConfig('System.System');
-                $theme = $configSystem->theme;
+                $configAdmin = self::getConfig('System.Admin');
+                $theme = $configAdmin->theme;
             }
         }
 

@@ -43,7 +43,7 @@ class Lists extends Driver
         ) {
             $pageSize = $this->setting['pageSize'];
         } else {
-            $pageSize = Be::getConfig('System.System')->pageSize;;
+            $pageSize = Be::getConfig('System.Admin')->pageSize;;
         }
 
         $response->set('title', $this->setting['title'] ?? '');

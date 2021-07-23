@@ -262,7 +262,11 @@ class Swoole extends Driver
 
                 // 默认访问控制台页面
                 if (!$app) {
-                    $route = $request->request('route', $configSystem->home);
+                    if ($admin) {
+                        $route = $request->request('route', Be::getConfig('System.Admin')->home);
+                    } else {
+                        $route = $request->request('route', $configSystem->home);
+                    }
                     $routes = explode('.', $route);
                     if (count($routes) == 3) {
                         $app = $routes[0];
