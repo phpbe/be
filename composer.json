@@ -1,11 +1,11 @@
 {
   "name": "be/be",
   "type": "library",
-  "description": "PHP BE框架（Beyond Exception）",
+  "description": "PHP BE 双驱框架（Beyond Exception），支持普通PHP和Swoole两种方式部署，兼顾便捷与性能。",
   "keywords": [
     "PHP",
     "Be",
-    "框架",
+    "双驱框架",
     "Beyond Exception"
   ],
   "license": "MIT",

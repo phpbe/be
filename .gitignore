@@ -10,4 +10,5 @@ Thumbs.db
 /data/*
 !/data/index.html
 
-
+/upload/*
+!/upload/index.html
