@@ -87,7 +87,7 @@ CREATE TABLE `system_admin_op_log` (
   `ip` varchar(15) NOT NULL DEFAULT '' COMMENT 'IP',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`)
+  KEY `admin_user_id` (`admin_user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统后台操作日志';
 
 CREATE TABLE `system_admin_role` (

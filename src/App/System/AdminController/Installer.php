@@ -412,7 +412,7 @@ class Installer
         $request = Be::getRequest();
         $response = Be::getResponse();
 
-        $tuple = Be::getTuple('system_user');
+        $tuple = Be::getTuple('system_admin_user');
         $tuple->load(1);
 
         if ($request->isPost()) {
@@ -421,7 +421,7 @@ class Installer
 
             $tuple->username = $formData['username'];
             $tuple->salt = Random::complex(32);
-            $tuple->password = Be::getService('System.User')->encryptPassword($formData['password'], $tuple->salt);
+            $tuple->password = Be::getService('System.AdminUser')->encryptPassword($formData['password'], $tuple->salt);
             $tuple->name = $formData['name'];
             $tuple->email = $formData['email'];
             $tuple->update_time = date('Y-m-d H:i:s');

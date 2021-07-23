@@ -40,7 +40,7 @@ class System
         $response->set('adminUserCount', $adminUserCount);
 
         $recentLogs = Be::getTable('system_admin_op_log')
-            ->where('user_id', $my->id)
+            ->where('admin_user_id', $my->id)
             ->orderBy('id', 'DESC')
             ->limit(5)
             ->getObjects();

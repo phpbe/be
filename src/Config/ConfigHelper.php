@@ -35,7 +35,7 @@ class ConfigHelper
         $dir = dirname($path);
         if (!is_dir($dir)) mkdir($dir, 0755, true);
         file_put_contents($path, $code, LOCK_EX);
-        chmod($path, 0755);
+        @chmod($path, 0755);
     }
 
 }
