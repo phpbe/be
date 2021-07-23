@@ -2,10 +2,15 @@
 namespace Be\App\JsonRpc\Config;
 
 /**
- * @BeConfig("日志")
+ * @BeConfig("JsonRpc")
  */
-class Log
+class JsonRpc
 {
+
+    /**
+     * @BeConfigItem("是否启用", driver="FormItemSwitch")
+     */
+    public $enable = false;
 
     /**
      * @BeConfigItem("访问日志", driver="FormItemSwitch")

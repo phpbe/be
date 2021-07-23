@@ -19,8 +19,8 @@ class Index
 
     public function __construct()
     {
-        $configServer = Be::getConfig('System.Server');
-        if (!$configServer->jsonRpc) {
+        $configJsonRpc = Be::getConfig('JsonRpc.JsonRpc');
+        if (!$configJsonRpc->enable) {
             throw new ControllerException('JsonRpc 未启用');
         }
 
