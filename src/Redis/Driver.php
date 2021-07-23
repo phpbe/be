@@ -2,7 +2,8 @@
 
 namespace Be\Redis;
 
-use Be\Config\ConfigFactory;
+
+use Be\Be;
 
 /**
  * Redis 类
@@ -20,7 +21,7 @@ class Driver
         $this->name = $name;
         if ($redis === null) {
 
-            $config = ConfigFactory::getInstance('System.Redis');
+            $config = Be::getConfig('System.Redis');
             if (!isset($config->$name)) {
                 throw new RedisException('Redis config item (' . $name . ') doesn\'t exist!');
             }
