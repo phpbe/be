@@ -28,11 +28,11 @@
             <el-alert
                     title="<?php echo htmlspecialchars($this->e->getMessage()); ?>"
                     type="error"
-                    description="<?php echo '#' . $this->logHash; ?>"
+                    description="<?php if (isset($this->logId)) { echo '<div>#' . $this->logId . '</div>';} ?>"
                     show-icon>
             </el-alert>
 
-            <el-tabs v-model="activeTab" type="border-card">
+            <el-tabs v-model="activeTab" type="border-card" style="margin-top:10px;">
                 <el-tab-pane label="错误跟踪信息" name="tab-trace">
                     <pre class="prettyprint linenums"><?php print_r($this->e->getTrace()); ?></pre>
                 </el-tab-pane>

@@ -18,7 +18,7 @@ class AdminTheme
     }
 
     public function getThemeKeyValues(){
-        return array_keys($this->getThemes());
+        return array_column($this->getThemes(), 'label', 'name');
     }
 
     public function getThemeCount()

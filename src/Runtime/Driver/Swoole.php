@@ -351,8 +351,9 @@ class Swoole extends Driver
                 }
 
             } catch (\Throwable $t) {
+                $logId = Be::getLog()->emergency($t);
+                $response->set('logId', $logId);
                 $response->exception($t);
-                Be::getLog()->emergency($t);
             }
 
             Be::gc();

@@ -10,7 +10,7 @@ class Index
 
     public function index()
     {
-        Be::getResponse()->end('Be framework is working...');
+        Be::getResponse()->success('Be framework is working...');
     }
 
 }

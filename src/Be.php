@@ -853,7 +853,9 @@ abstract class Be
 
         $runtime = self::getRuntime();
         $path = $runtime->getCachePath() . '/Template/' . $theme . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
-        if (!file_exists($path)) {
+
+        $configSystem = self::getConfig('System.System');
+        if ($configSystem->developer || !file_exists($path)) {
             \Be\Template\TemplateHelper::update($template, $theme);
         }
 
@@ -902,7 +904,9 @@ abstract class Be
 
         $runtime = self::getRuntime();
         $path = $runtime->getCachePath() . '/AdminTemplate/' . $theme . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
-        if (!file_exists($path)) {
+
+        $configSystem = self::getConfig('System.System');
+        if ($configSystem->developer || !file_exists($path)) {
             \Be\AdminTemplate\AdminTemplateHelper::update($template, $theme);
         }
 
@@ -928,7 +932,9 @@ abstract class Be
         if (isset(self::$cache['Menu'])) return self::$cache['Menu'];
 
         $path = self::getRuntime()->getCachePath() . '/Menu.php';
-        if (!file_exists($path)) {
+
+        $configSystem = self::getConfig('System.System');
+        if ($configSystem->developer || !file_exists($path)) {
             $service = Be::getService('System.Menu');
             $service->update();
             include_once $path;
@@ -949,7 +955,9 @@ abstract class Be
         if (isset(self::$cache['adminMenu'])) return self::$cache['adminMenu'];
 
         $path = self::getRuntime()->getCachePath() . '/AdminMenu.php';
-        if (!file_exists($path)) {
+
+        $configSystem = self::getConfig('System.System');
+        if ($configSystem->developer || !file_exists($path)) {
             $service = Be::getService('System.AdminMenu');
             $service->update();
             include_once $path;
@@ -971,7 +979,9 @@ abstract class Be
         if (isset(self::$cache[$roleId])) return self::$cache[$roleId];
 
         $path = self::getRuntime()->getCachePath() . '/AdminRole/AdminRole' . $roleId . '.php';
-        if (!file_exists($path)) {
+
+        $configSystem = self::getConfig('System.System');
+        if ($configSystem->developer || !file_exists($path)) {
             $service = Be::getService('System.AdminRole');
             $service->updateAdminRole($roleId);
             include_once $path;

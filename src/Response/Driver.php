@@ -159,7 +159,7 @@ abstract class Driver
         if ($request->isAjax()) {
             $this->json();
         } else {
-            $this->display('App.System.System.success');
+            $this->display('App.System.System.success', 'Blank');
         }
     }
 
@@ -184,7 +184,7 @@ abstract class Driver
         if ($request->isAjax()) {
             $this->json();
         } else {
-            $this->display('App.System.System.error');
+            $this->display('App.System.System.error', 'Blank');
         }
     }
 
@@ -199,12 +199,12 @@ abstract class Driver
         if ($request->isAjax()) {
             $this->set('success', false);
             $this->set('message', $e->getMessage());
-            $this->set('trace', $e->getTrace());
+            // $this->set('trace', $e->getTrace());
             $this->set('code', $e->getCode());
             $this->json();
         } else {
             $this->set('e', $e);
-            $this->display('App.System.System.exception');
+            $this->display('App.System.System.exception', 'Blank');
         }
     }
 
@@ -260,7 +260,7 @@ abstract class Driver
         $this->set('historyUrl', $historyUrl);
         $this->set('historyPost', $historyPost);
         $this->set('redirectTimeout', $redirectTimeout);
-        $this->display('App.System.System.successAndBack');
+        $this->display('App.System.System.successAndBack', 'Blank');
     }
 
     /**
@@ -298,7 +298,7 @@ abstract class Driver
         $this->set('historyUrl', $historyUrl);
         $this->set('historyPost', $historyPost);
         $this->set('redirectTimeout', $redirectTimeout);
-        $this->display('App.System.System.errorAndBack');
+        $this->display('App.System.System.errorAndBack', 'Blank');
     }
 
     /**
