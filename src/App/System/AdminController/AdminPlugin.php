@@ -2,7 +2,7 @@
 
 namespace Be\App\System\AdminController;
 
-use Be\App\System\Service\AdminPlugin\Form\FormItemUEditor\Uploader;
+use Be\App\System\AdminService\AdminPlugin\Form\FormItemUEditor\Uploader;
 use Be\Be;
 use Be\Util\FileSystem\FileSize;
 use Be\Util\Net\FileUpload;
@@ -231,7 +231,7 @@ class AdminPlugin
         $response = Be::getResponse();
         $action = $request->get('action');
 
-        $path = Be::getRuntime()->getRootPath() .  Be::getProperty('App.System')->getPath() . '/Service/Plugin/Form/FormItemUEditor/config.json';
+        $path = Be::getRuntime()->getRootPath() .  Be::getProperty('App.System')->getPath() . '/AdminService/Plugin/Form/FormItemUEditor/config.json';
         $CONFIG = json_decode(preg_replace("/\/\*[\s\S]+?\*\//", "", file_get_contents($path)), true);
 
         switch ($action) {

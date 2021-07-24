@@ -1,8 +1,8 @@
 <?php
-namespace Be\App\System\Service;
+namespace Be\App\System\AdminService;
 
 use Be\Be;
-use Be\App\ServiceException;
+use Be\App\AdminServiceException;
 
 /**
  */
@@ -49,12 +49,12 @@ class FileManager
         if ($absPath == false) return false;
 
         if (strpos($dirName, '/') !== false) {
-            throw new ServiceException('文件夹名称不合法！');
+            throw new AdminServiceException('文件夹名称不合法！');
         }
 
         $dirPath = $absPath . '/' . $dirName;
         if (file_exists($dirPath)) {
-            throw new ServiceException('已存在名称为 ' . $dirName . ' 的文件夹！');
+            throw new AdminServiceException('已存在名称为 ' . $dirName . ' 的文件夹！');
         }
 
         mkdir($dirPath, 0777, true);
@@ -78,21 +78,21 @@ class FileManager
         if ($absPath == false) return false;
 
         if (strpos($oldDirName, '/') !== false || strpos($newDirName, '/') !== false) {
-            throw new ServiceException('文件夹名称不合法！');
+            throw new AdminServiceException('文件夹名称不合法！');
         }
 
         $srcPath = $absPath . '/' . $oldDirName;
         if (!file_exists($srcPath)) {
-            throw new ServiceException('文件夹 ' . $oldDirName . ' 不存在！');
+            throw new AdminServiceException('文件夹 ' . $oldDirName . ' 不存在！');
         }
 
         $dstPath = $absPath . '/' . $newDirName;
         if (file_exists($dstPath)) {
-            throw new ServiceException('已存在名称为 ' . $newDirName . ' 的文件夹！');
+            throw new AdminServiceException('已存在名称为 ' . $newDirName . ' 的文件夹！');
         }
 
         if (!rename($srcPath, $dstPath)) {
-            throw new ServiceException('重命名文件夹失败！');
+            throw new AdminServiceException('重命名文件夹失败！');
         }
 
         return true;
@@ -105,7 +105,7 @@ class FileManager
         if ($absFilePath == false) return false;
 
         if (!unlink($absFilePath)) {
-            throw new ServiceException('删除文件失败，请检查是否有权限！');
+            throw new AdminServiceException('删除文件失败，请检查是否有权限！');
         }
 
         return true;
@@ -118,27 +118,27 @@ class FileManager
         if ($absPath == false) return false;
 
         if (strpos($oldFileName, '/') !== false || strpos($newFileName, '/') !== false) {
-            throw new ServiceException('文件名称不合法！');
+            throw new AdminServiceException('文件名称不合法！');
         }
 
         $srcPath = $absPath . '/' . $oldFileName;
         if (!file_exists($srcPath)) {
-            throw new ServiceException('文件 ' . $oldFileName . ' 不存在！');
+            throw new AdminServiceException('文件 ' . $oldFileName . ' 不存在！');
         }
 
         $type = strtolower(substr(strrchr($newFileName, '.'), 1));
         $config = Be::getConfig('System.System');
         if (!in_array($type, $config->allowUploadFileTypes)) {
-            throw new ServiceException('不允许的文件格式！');
+            throw new AdminServiceException('不允许的文件格式！');
         }
 
         $dstPath = $absPath . '/' . $newFileName;
         if (file_exists($dstPath)) {
-            throw new ServiceException('文件 ' . $newFileName . ' 已存在！');
+            throw new AdminServiceException('文件 ' . $newFileName . ' 已存在！');
         }
 
         if (!rename($srcPath, $dstPath)) {
-            throw new ServiceException('修改文件名失败，请检查名称是否合法！');
+            throw new AdminServiceException('修改文件名失败，请检查名称是否合法！');
         }
 
         return true;
@@ -151,17 +151,17 @@ class FileManager
 
         // 禁止用户查看其它目录
         if (strpos($path, './') != false) {
-            throw new ServiceException('路径不合法！');
+            throw new AdminServiceException('路径不合法！');
         }
 
         if (substr($path, -1, 1) == '/') {
-            throw new ServiceException('路径不合法！');
+            throw new AdminServiceException('路径不合法！');
         }
 
         // 绝对路径
         $absPath = Be::getRuntime()->getUploadPath() . str_replace('/', DIRECTORY_SEPARATOR, $path);
         if (!is_dir($absPath)) {
-            throw new ServiceException('路径不存在！');
+            throw new AdminServiceException('路径不存在！');
         }
 
         return $absPath;
@@ -174,12 +174,12 @@ class FileManager
         if ($absPath == false) return false;
 
         if (strpos($dirName, '/') !== false) {
-            throw new ServiceException('文件夹名称不合法！');
+            throw new AdminServiceException('文件夹名称不合法！');
         }
 
         $absDirPath = $absPath . '/' . $dirName;
         if (!file_exists($absDirPath) || !is_dir($absDirPath)) {
-            throw new ServiceException('文件夹 ' . $dirName . ' 不存在！');
+            throw new AdminServiceException('文件夹 ' . $dirName . ' 不存在！');
         }
 
         return $absDirPath;
@@ -192,12 +192,12 @@ class FileManager
         if ($absPath == false) return false;
 
         if (strpos($fileName, '/') !== false) {
-            throw new ServiceException('文件名称不合法！');
+            throw new AdminServiceException('文件名称不合法！');
         }
 
         $absFilePath = $absPath . '/' . $fileName;
         if (!file_exists($absFilePath) || is_dir($absFilePath)) {
-            throw new ServiceException('文件 ' . $fileName . ' 不存在！');
+            throw new AdminServiceException('文件 ' . $fileName . ' 不存在！');
         }
 
         return $absFilePath;

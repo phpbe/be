@@ -1,5 +1,5 @@
 <?php
-namespace Be\App\System\Service;
+namespace Be\App\System\AdminService;
 
 use Be\Be;
 use Be\Runtime\RuntimeException;

@@ -2,7 +2,7 @@
 
 namespace Be\App\System\AdminController;
 
-use Be\App\ControllerException;
+use Be\App\AdminControllerException;
 use Be\Config\ConfigHelper;
 use Be\AdminPlugin\Detail\Item\DetailItemIcon;
 use Be\AdminPlugin\Form\Item\FormItemAutoComplete;
@@ -26,7 +26,7 @@ class Installer
     {
         $config = Be::getConfig('System.System');
         if (!$config->developer || !$config->installable) {
-            throw new ControllerException('请先开启系统配置中的 "开发者模式" 和 "可安装及重装" 配置项！');
+            throw new AdminControllerException('请先开启系统配置中的 "开发者模式" 和 "可安装及重装" 配置项！');
         }
 
         $this->steps = ['环境检测', '配置数据库', '安装应用', '初始化系统', '完成'];
@@ -152,7 +152,7 @@ class Installer
             try {
                 $postData = $request->json();
                 $formData = $postData['formData'];
-                Be::getService('System.Installer')->testDb($formData);
+                Be::getAdminService('System.Installer')->testDb($formData);
 
                 $configDb = Be::getConfig('System.Db');
 
@@ -338,7 +338,7 @@ class Installer
         $response = Be::getResponse();
         try {
             $postData = $request->json();
-            $databases = Be::getService('System.Installer')->testDb($postData['formData']);
+            $databases = Be::getAdminService('System.Installer')->testDb($postData['formData']);
             $response->set('success', true);
             $response->set('data', [
                 'databases' => $databases,
@@ -362,7 +362,7 @@ class Installer
             try {
                 $postData = $request->json();
                 $formData = $postData['formData'];
-                $service = Be::getService('System.Installer');
+                $service = Be::getAdminService('System.Installer');
                 if (isset($formData['appNames']) && is_array($formData['appNames']) && count($formData['appNames'])) {
                     foreach ($formData['appNames'] as $appName) {
                         $service->installApp($appName);
@@ -388,7 +388,7 @@ class Installer
                 'label' => $property->getLabel(),
                 'description' => $property->getDescription(),
             ];
-            $appNames = Be::getService('System.Installer')->getAppNames();
+            $appNames = Be::getAdminService('System.Installer')->getAppNames();
             foreach ($appNames as $appName) {
                 $property = Be::getProperty('App.' . $appName);
                 $appProperties[] = [
@@ -421,7 +421,7 @@ class Installer
 
             $tuple->username = $formData['username'];
             $tuple->salt = Random::complex(32);
-            $tuple->password = Be::getService('System.AdminUser')->encryptPassword($formData['password'], $tuple->salt);
+            $tuple->password = Be::getAdminService('System.AdminUser')->encryptPassword($formData['password'], $tuple->salt);
             $tuple->name = $formData['name'];
             $tuple->email = $formData['email'];
             $tuple->update_time = date('Y-m-d H:i:s');

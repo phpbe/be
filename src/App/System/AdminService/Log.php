@@ -1,9 +1,9 @@
 <?php
 
-namespace Be\App\System\Service;
+namespace Be\App\System\AdminService;
 
 use Be\Be;
-use Be\App\ServiceException;
+use Be\App\AdminServiceException;
 
 class Log
 {
@@ -154,13 +154,13 @@ class Log
      * @param int $day 日
      * @param string $hashName 日志的 hash 文件名
      * @return array
-     * @throws ServiceException
+     * @throws AdminServiceException
      */
     public function getLog($year, $month, $day, $hashName)
     {
         $dataPath = Be::getRuntime()->getDataPath() . '/System/Log/' . $year . '/' . $month . '/' . $day . '/' . $hashName;
         if (!is_file($dataPath)) {
-            throw new ServiceException('打开日志数据文件不存在！');
+            throw new AdminServiceException('打开日志数据文件不存在！');
         }
 
         $data = file_get_contents($dataPath);

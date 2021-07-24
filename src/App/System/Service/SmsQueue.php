@@ -6,7 +6,7 @@ namespace Be\App\System\Service;
  * 通过队列发送短信
  *
  * Class Sms
- * @package Be\System\App\System\Service
+ * @package Be\App\System\Service
  */
 class SmsQueue
 {

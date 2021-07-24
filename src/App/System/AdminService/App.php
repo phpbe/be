@@ -1,10 +1,10 @@
 <?php
 
-namespace Be\App\System\Service;
+namespace Be\App\System\AdminService;
 
 use Be\Config\ConfigHelper;
 use Be\Be;
-use Be\App\ServiceException;
+use Be\App\AdminServiceException;
 
 class App
 {
@@ -62,13 +62,13 @@ class App
     /**
      * @param string $appName 应应用名
      * @return bool
-     * @throws ServiceException
+     * @throws AdminServiceException
      */
     public function install($appName)
     {
         try {
             $exist = Be::getTuple('system_app')->loadBy('name', $appName);
-            throw new ServiceException('应用已于' . $exist->install_time . '安装过！');
+            throw new AdminServiceException('应用已于' . $exist->install_time . '安装过！');
         } catch (\Throwable $t) {
 
         }
@@ -96,7 +96,7 @@ class App
      *
      * @param string $appName 应应用名
      * @return bool
-     * @throws ServiceException
+     * @throws AdminServiceException
      */
     public function uninstall($appName)
     {

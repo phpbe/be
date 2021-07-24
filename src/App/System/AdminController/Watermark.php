@@ -34,7 +34,7 @@ class Watermark
 
         sleep(1);
 
-        $serviceWatermark = Be::getService('System.Watermark');
+        $serviceWatermark = Be::getAdminService('System.Watermark');
         $serviceWatermark->mark($dst);
 
         $response->set('title', '水印预览');

@@ -1,8 +1,8 @@
 <?php
-namespace Be\App\System\Service;
+namespace Be\App\System\AdminService;
 
 use Be\Be;
-use Be\App\ServiceException;
+use Be\App\AdminServiceException;
 
 class AdminTheme
 {
@@ -29,13 +29,13 @@ class AdminTheme
     /**
      * @param string $themeName 主题用名
      * @return bool
-     * @throws ServiceException
+     * @throws AdminServiceException
      */
     public function install($themeName)
     {
         try {
             $exist = Be::getTuple('system_admin_theme')->loadBy('name', $themeName);
-            throw new ServiceException('主题已于' . $exist->install_time . '安装过！');
+            throw new AdminServiceException('主题已于' . $exist->install_time . '安装过！');
         } catch (\Throwable $t) {
 
         }
@@ -55,7 +55,7 @@ class AdminTheme
      *
      * @param string $themeName 应应用名
      * @return bool
-     * @throws ServiceException
+     * @throws AdminServiceException
      */
     public function uninstall($themeName)
     {
@@ -63,7 +63,7 @@ class AdminTheme
         try {
             $exist = Be::getTuple('system_admin_theme')->loadBy('name', $themeName);
         } catch (\Throwable $t) {
-            throw new ServiceException('该主题尚未安装！');
+            throw new AdminServiceException('该主题尚未安装！');
         }
 
         $exist->delete();

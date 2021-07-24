@@ -77,5 +77,5 @@ function beAdminUrl($route = null, $params = [])
  */
 function beAdminOpLog($content, $details = '')
 {
-    \Be\Be::getService('System.AdminOpLog')->addLog($content, $details);
+    \Be\Be::getAdminService('System.AdminOpLog')->addLog($content, $details);
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace Be\App\System\Service;
+namespace Be\App\System\AdminService;
 
 use Be\Db\Tuple;
 use Be\Util\Random;
-use Be\App\ServiceException;
+use Be\App\AdminServiceException;
 use Be\Be;
 
 class AdminUser
@@ -22,17 +22,17 @@ class AdminUser
     {
         $username = trim($username);
         if (!$username) {
-            throw new ServiceException('参数用户名（username）缺失！');
+            throw new AdminServiceException('参数用户名（username）缺失！');
         }
 
         $password = trim($password);
         if (!$password) {
-            throw new ServiceException('参数密码（password）缺失！');
+            throw new AdminServiceException('参数密码（password）缺失！');
         }
 
         $ip = trim($ip);
         if (!$ip) {
-            throw new ServiceException('参数IP（$ip）缺失！');
+            throw new AdminServiceException('参数IP（$ip）缺失！');
         }
 
         $request = Be::getRequest();
@@ -44,7 +44,7 @@ class AdminUser
         if (!$times) $times = 0;
         $times++;
         if ($times > 10) {
-            throw new ServiceException('登陆失败次数过多，请稍后再试！');
+            throw new AdminServiceException('登陆失败次数过多，请稍后再试！');
         }
         $session->set($timesKey, $times);
 
@@ -65,7 +65,7 @@ class AdminUser
                 try {
                     $conn = ldap_connect($configAdminUser->ldap_host);
                 } catch (\Throwable $e) {
-                    throw new ServiceException('无法连接到LDAP服务器（' . $configAdminUser->ldap_host . '）！');
+                    throw new AdminServiceException('无法连接到LDAP服务器（' . $configAdminUser->ldap_host . '）！');
                 }
 
                 ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, 3);
@@ -81,12 +81,12 @@ class AdminUser
                 } catch (\Throwable $e) {
                     $ldapErr = ldap_error($conn);
                     ldap_close($conn);
-                    throw new ServiceException('LDAP登录失败' . ($ldapErr ? ('（' . $ldapErr . '）') : '') . '！');
+                    throw new AdminServiceException('LDAP登录失败' . ($ldapErr ? ('（' . $ldapErr . '）') : '') . '！');
                 }
 
                 if (!$bind) {
                     ldap_close($conn);
-                    throw new ServiceException('用户账号和密码不匹配！');
+                    throw new AdminServiceException('用户账号和密码不匹配！');
                 }
 
                 ldap_close($conn);
@@ -112,14 +112,14 @@ class AdminUser
                 try {
                     $tupleAdminUser->loadBy('username', $username);
                 } catch (\Exception $e) {
-                    throw new ServiceException('用户账号（' . $username . '）不存在！');
+                    throw new AdminServiceException('用户账号（' . $username . '）不存在！');
                 }
 
                 if ($tupleAdminUser->password === $this->encryptPassword($password, $tupleAdminUser->salt)) {
                     if ($tupleAdminUser->is_delete == 1) {
-                        throw new ServiceException('用户账号（' . $username . '）不可用！');
+                        throw new AdminServiceException('用户账号（' . $username . '）不可用！');
                     } elseif ($tupleAdminUser->is_enable == 0) {
-                        throw new ServiceException('用户账号（' . $username . '）已被禁用！');
+                        throw new AdminServiceException('用户账号（' . $username . '）已被禁用！');
                     } else {
                         $tupleAdminUser->last_login_time = $tupleAdminUser->this_login_time;
                         $tupleAdminUser->this_login_time = date('Y-m-d H:i:s');
@@ -129,7 +129,7 @@ class AdminUser
                         $tupleAdminUser->save();
                     }
                 } else {
-                    throw new ServiceException('密码错误！');
+                    throw new AdminServiceException('密码错误！');
                 }
             }
 
@@ -160,7 +160,7 @@ class AdminUser
      * 标记用户已成功登录
      *
      * @param Tuple | Object | int $adminUserId 用户Row对象 | Object数据 | 用户ID
-     * @throws ServiceException
+     * @throws AdminServiceException
      */
     public function makeLogin($adminUserId)
     {
@@ -174,7 +174,7 @@ class AdminUser
             $tupleAdminUser->load($adminUserId);
             $adminUser = $tupleAdminUser->toObject();
         } else {
-            throw new ServiceException('参数无法识别！');
+            throw new AdminServiceException('参数无法识别！');
         }
 
         unset($adminUser->password);

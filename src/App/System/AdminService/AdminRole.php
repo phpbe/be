@@ -1,9 +1,9 @@
 <?php
 
-namespace Be\App\System\Service;
+namespace Be\App\System\AdminService;
 
 use Be\Db\Tuple;
-use Be\App\ServiceException;
+use Be\App\AdminServiceException;
 use Be\Util\Annotation;
 use Be\Be;
 
@@ -55,7 +55,7 @@ class AdminRole
      * 更新指定角色到文件缓存中
      *
      * @param $roleId
-     * @throws ServiceException
+     * @throws AdminServiceException
      */
     public function updateAdminRole($roleId)
     {
@@ -67,7 +67,7 @@ class AdminRole
         $tuple = Be::newTuple('system_admin_role');
         $tuple->load($roleId);
         if (!$tuple->id) {
-            throw new ServiceException('未找到指定编号（#' . $roleId . '）的角色！');
+            throw new AdminServiceException('未找到指定编号（#' . $roleId . '）的角色！');
         }
 
         $code = '<?php' . "\n";
@@ -99,7 +99,7 @@ class AdminRole
     {
         $permissions = [];
 
-        $apps = Be::getService('System.App')->getApps();
+        $apps = Be::getAdminService('System.App')->getApps();
         foreach ($apps as $app) {
             $appName = $app->name;
             $appProperty = Be::getProperty('App.' . $appName);
@@ -177,7 +177,7 @@ class AdminRole
     public function getPermissionTree()
     {
         $treeData = [];
-        $apps = Be::getService('System.App')->getApps();
+        $apps = Be::getAdminService('System.App')->getApps();
         foreach ($apps as $app) {
             $appName = $app->name;
 

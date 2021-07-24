@@ -1,6 +1,6 @@
 <?php
 
-namespace Be\App\System\Service\AdminPlugin\Form\FormItemUEditor;
+namespace Be\App\System\AdminService\AdminPlugin\Form\FormItemUEditor;
 
 use Be\Be;
 

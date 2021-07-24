@@ -26,7 +26,7 @@ class Log
         //$a = 1/0;
         //Be::getTable('op_log');
 
-        $serviceSystemLog = Be::getService('System.Log');
+        $serviceSystemLog = Be::getAdminService('System.Log');
         if ($request->isAjax()) {
             $postData = $request->json();
             $formData = $postData['formData'];
@@ -244,7 +244,7 @@ class Log
         $data = $request->post('data', '', '');
         $data = json_decode($data, true);
         try {
-            $servicebeAdminOpLog = Be::getService('System.Log');
+            $servicebeAdminOpLog = Be::getAdminService('System.Log');
             $log = $servicebeAdminOpLog->getlog($data['row']['year'], $data['row']['month'], $data['row']['day'], $data['row']['hash']);
             $response->set('title', '系统日志明细');
             $response->set('log', $log);
@@ -273,7 +273,7 @@ class Log
         $day = $formData['day'];
 
         try {
-            $servicebeAdminOpLog = Be::getService('System.Log');
+            $servicebeAdminOpLog = Be::getAdminService('System.Log');
             $servicebeAdminOpLog->deleteLogs($range, $year, $month, $day);
             $response->success('删除日志成功！');
         } catch (\Exception $e) {

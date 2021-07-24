@@ -1,10 +1,10 @@
 <?php
 
-namespace Be\App\System\Service;
+namespace Be\App\System\AdminService;
 
 use Be\Config\ConfigHelper;
 use Be\Be;
-use Be\App\ServiceException;
+use Be\App\AdminServiceException;
 
 class Installer
 {
@@ -14,7 +14,7 @@ class Installer
      *
      * @param $data
      * @return array|null 返回库名列表
-     * @throws ServiceException
+     * @throws AdminServiceException
      */
     public function testDb($data)
     {
@@ -32,7 +32,7 @@ class Installer
             $dsn = 'mysql:host=' . $host . ';port=' . $port;
             $connection = new \PDO($dsn, $username, $password, $options);
         } catch (\Throwable $t) {
-            throw new ServiceException('连接数据库失败：' . $t->getMessage());
+            throw new AdminServiceException('连接数据库失败：' . $t->getMessage());
         }
 
         $values = null;
@@ -42,7 +42,7 @@ class Installer
             $values = $statement->fetchAll(\PDO::FETCH_COLUMN);
             $statement->closeCursor();
         } catch (\Throwable $t) {
-            throw new ServiceException('连接数据库成功，但获取库名列表失败：' . $t->getMessage());
+            throw new AdminServiceException('连接数据库成功，但获取库名列表失败：' . $t->getMessage());
         }
 
         return $values;

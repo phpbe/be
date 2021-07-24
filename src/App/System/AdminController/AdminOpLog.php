@@ -22,7 +22,7 @@ class AdminOpLog
     public function logs()
     {
         $adminUserKeyValues = Be::getDb()->getKeyValues('SELECT id, `name` FROM `system_admin_user` WHERE is_delete=0');
-        $appKeyValues = Be::getService('System.App')->getAppNameLabelKeyValues();
+        $appKeyValues = Be::getAdminService('System.App')->getAppNameLabelKeyValues();
 
         Be::getAdminPlugin('Curd')->setting([
             'label' => '后台操作日志',

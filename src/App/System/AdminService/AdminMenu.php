@@ -1,11 +1,11 @@
 <?php
 
-namespace Be\App\System\Service;
+namespace Be\App\System\AdminService;
 
 use Be\Util\Annotation;
 use Be\Be;
 
-class Menu
+class AdminMenu
 {
 
     private $menus = null;
@@ -19,12 +19,12 @@ class Menu
 
         $menus = [];
 
-        $apps = Be::getService('System.App')->getApps();
+        $apps = Be::getAdminService('System.App')->getApps();
         foreach ($apps as $app) {
 
             $appProperty = Be::getProperty('App.'.$app->name);
             $appName = $app->name;
-            $controllerDir = Be::getRuntime()->getRootPath() . $appProperty->getPath(). '/Controller';
+            $controllerDir = Be::getRuntime()->getRootPath() . $appProperty->getPath(). '/AdminController';
             if (!file_exists($controllerDir) && !is_dir($controllerDir)) continue;
 
             $controllers = scandir($controllerDir);
@@ -32,7 +32,7 @@ class Menu
                 if ($controller == '.' || $controller == '..' || is_dir($controllerDir . '/' . $controller)) continue;
 
                 $controller = substr($controller, 0, -4);
-                $className = 'Be\\Mf\\App\\' . $appName . '\\Controller\\' . $controller;
+                $className = 'Be\\App\\' . $appName . '\\AdminController\\' . $controller;
                 if (!class_exists($className)) continue;
 
                 $reflection = new \ReflectionClass($className);
@@ -107,7 +107,7 @@ class Menu
                         $menus[$appName] = [
                             'app' => $app,
                             'groups' => [],
-                            'ordering' => $app->ordering,
+                            'ordering' => $menu['ordering'],
                         ];
                     }
 
@@ -168,9 +168,9 @@ class Menu
         $menus = $this->getMenus();
 
         $code = '<?php' . "\n";
-        $code .= 'namespace Be\\Mf\\Cache;' . "\n";
+        $code .= 'namespace Be\\Cache;' . "\n";
         $code .= "\n";
-        $code .= 'class Menu extends \\Be\\System\\Menu\\Driver' . "\n";
+        $code .= 'class AdminMenu extends \\Be\\AdminMenu\\Driver' . "\n";
         $code .= '{' . "\n";
         $code .= '  public function __construct()' . "\n";
         $code .= '  {' . "\n";
@@ -189,7 +189,7 @@ class Menu
         $code .= '  }' . "\n";
         $code .= '}' . "\n";
 
-        $path = Be::getRuntime()->getCachePath() . '/Menu.php';
+        $path = Be::getRuntime()->getCachePath() . '/AdminMenu.php';
         $dir = dirname($path);
         if (!is_dir($dir)) mkdir($dir, 0777, true);
 

@@ -22,7 +22,7 @@ class Cache
     {
         $request = Be::getRequest();
         $response = Be::getResponse();
-        $serviceSystemLog = Be::getService('System.Cache');
+        $serviceSystemLog = Be::getAdminService('System.Cache');
         if ($request->isAjax()) {
             $tableData = $serviceSystemLog->getCategories();
             $response->set('success', true);
@@ -164,7 +164,7 @@ class Cache
         try {
             $postData = $request->json();
             $name = $postData['row']['name'] ?? null;
-            $serviceSystemCache = Be::getService('System.Cache');
+            $serviceSystemCache = Be::getAdminService('System.Cache');
             $serviceSystemCache->delete($name);
             beAdminOpLog($name ? ('清除缓存（' . $name. '）') : '清除所有缓存' );
             $response->success('清除缓存成功！');

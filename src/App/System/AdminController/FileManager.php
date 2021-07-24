@@ -82,7 +82,7 @@ class FileManager
         $option['sort'] = $sort;
         $option['filterImage'] = $filterImage;
 
-        $serviceSystemFileManager = Be::getService('System.FileManager');
+        $serviceSystemFileManager = Be::getAdminService('System.FileManager');
         $files = $serviceSystemFileManager->getFiles($option);
 
         $response->set('path', $path);
@@ -103,7 +103,7 @@ class FileManager
         $dirName = $request->post('dirName', '');
         $return = beAdminUrl('System.FileManager.browser');
 
-        $serviceSystemFileManager = Be::getService('System.FileManager');
+        $serviceSystemFileManager = Be::getAdminService('System.FileManager');
         if ($serviceSystemFileManager->createDir($dirName)) {
             $response->success('创建文件夹(' . $dirName . ')成功！', $return);
         } else {
@@ -120,7 +120,7 @@ class FileManager
         $dirName = $request->get('dirName', '');
         $return = beAdminUrl('System.FileManager.browser');
 
-        $serviceSystemFileManager = Be::getService('System.FileManager');
+        $serviceSystemFileManager = Be::getAdminService('System.FileManager');
         if ($serviceSystemFileManager->deleteDir($dirName)) {
             $response->success('删除文件夹(' . $dirName . ')成功！', $return);
         } else {
@@ -138,7 +138,7 @@ class FileManager
         $newDirName = $request->post('newDirName', '');
         $return = beAdminUrl('System.FileManager.browser');
 
-        $serviceSystemFileManager = Be::getService('System.FileManager');
+        $serviceSystemFileManager = Be::getAdminService('System.FileManager');
         if ($serviceSystemFileManager->editDirName($oldDirName, $newDirName)) {
             $response->success('重命名文件夹成功！', $return);
         } else {
@@ -169,7 +169,7 @@ class FileManager
                 $response->error('文件名称不合法！', $return);
             }
 
-            $serviceSystemFileManager = Be::getService('System.FileManager');
+            $serviceSystemFileManager = Be::getAdminService('System.FileManager');
             $absPath = $serviceSystemFileManager->getAbsPath();
             if ($absPath == false) {
                 $response->error($serviceSystemFileManager->getError(), $return);
@@ -193,7 +193,7 @@ class FileManager
             if (move_uploaded_file($file['tmpName'], $dstPath)) {
                 $watermark = $request->post('watermark', 0, 'int');
                 if ($watermark == 1 && in_array($type, $configSystem->allowUploadImageTypes)) {
-                    $serviceSystem = Be::getService('System.Admin');
+                    $serviceSystem = Be::getAdminService('System.Watermark');
                     $serviceSystem->watermark($dstPath);
                 }
 
@@ -235,7 +235,7 @@ class FileManager
         $fileName = $request->get('fileName', '');
         $return = beAdminUrl('System.FileManager.browser');
 
-        $serviceSystemFileManager = Be::getService('System.FileManager');
+        $serviceSystemFileManager = Be::getAdminService('System.FileManager');
         if ($serviceSystemFileManager->deleteFile($fileName)) {
             $response->success('删除文件(' . $fileName . ')成功！', $return);
         } else {
@@ -252,7 +252,7 @@ class FileManager
         $oldFileName = $request->post('oldFileName', '');
         $newFileName = $request->post('newFileName', '');
 
-        $serviceSystemFileManager = Be::getService('System.FileManager');
+        $serviceSystemFileManager = Be::getAdminService('System.FileManager');
         if ($serviceSystemFileManager->editFileName($oldFileName, $newFileName)) {
             $response->success('重命名文件成功！', beAdminUrl('System.FileManager.browser'));
         } else {
@@ -268,7 +268,7 @@ class FileManager
 
         $fileName = $request->get('fileName', '');
 
-        $serviceSystemFileManager = Be::getService('System.FileManager');
+        $serviceSystemFileManager = Be::getAdminService('System.FileManager');
         $absFilePath = $serviceSystemFileManager->getAbsFilePath($fileName);
         if ($absFilePath == false) {
             $response->error($serviceSystemFileManager->getError());

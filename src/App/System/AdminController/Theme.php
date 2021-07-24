@@ -158,7 +158,7 @@ class Theme
             $themeName = $postData['formData']['themeName'];
 
             try {
-                $serviceApp = Be::getService('System.Theme');
+                $serviceApp = Be::getAdminService('System.Theme');
                 $serviceApp->install($themeName);
 
                 beAdminOpLog('安装新主题：' . $themeName);
@@ -206,7 +206,7 @@ class Theme
         $themeName = $postData['row']['name'];
 
         try {
-            $serviceTheme = Be::getService('System.Theme');
+            $serviceTheme = Be::getAdminService('System.Theme');
             $serviceTheme->uninstall($themeName);
 
             beAdminOpLog('卸载主题：' . $themeName);
