@@ -4,7 +4,7 @@ namespace Be\Runtime;
 
 
 use Be\Be;
-use Be\Mf\Task\TaskHelper;
+use Be\Task\TaskHelper;
 
 class Task
 {
@@ -18,7 +18,7 @@ class Task
     {
         while (true) {
 
-            $swooleHttpServer = Be::getRuntime()->getHttpServer()->getSwooleHttpServer();
+            $swooleHttpServer = Be::getRuntime()->getSwooleHttpServer();
             $taskState = $swooleHttpServer->state->get('task', 'value');
             if (!$taskState) {
                 return;
@@ -41,7 +41,7 @@ class Task
 
             if (count($tasks) == 0) return;
 
-            $server = Be::getRuntime()->getHttpServer()->getSwooleHttpServer();
+            $server = Be::getRuntime()->getSwooleHttpServer();
             $t = time();
             foreach ($tasks as $task) {
                 if (TaskHelper::isOnTime($task->schedule, $t)) {
