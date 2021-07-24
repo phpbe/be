@@ -353,7 +353,7 @@ abstract class Be
      */
     public static function newRedis(string $name = 'master')
     {
-        $config =  Be::getConfig('System.Redis');
+        $config = Be::getConfig('System.Redis');
         if (!isset($config->$name)) {
             throw new RuntimeException('Redis config item (' . $name . ') doesn\'t exist!');
         }
@@ -1029,7 +1029,35 @@ abstract class Be
     }
 
     /**
-     * 获取当前用户
+     * 设置当前后台用户
+     *
+     * @param \stdClass | null $adminUser
+     */
+    public static function setAdminUser($adminUser = null)
+    {
+        Be::getSession()->set('_adminUser', $adminUser);
+        if (self::getRuntime()->getMode() == 'Swoole') {
+            $cid = \Swoole\Coroutine::getCid();
+            if (isset(self::$cache[$cid]['adminUser'])) {
+                if ($adminUser === null) {
+                    unset(self::$cache[$cid]['adminUser']);
+                } else {
+                    self::$cache[$cid]['adminUser'] = new \Be\AdminUser\AdminUser($adminUser);
+                }
+            }
+        } else {
+            if (isset(self::$cache['adminUser'])) {
+                if ($adminUser === null) {
+                    unset(self::$cache['adminUser']);
+                } else {
+                    self::$cache['adminUser'] = new \Be\AdminUser\AdminUser($adminUser);
+                }
+            }
+        }
+    }
+
+    /**
+     * 获取当前后台用户
      *
      * @return \Be\AdminUser\AdminUser | mixed
      */
@@ -1052,6 +1080,34 @@ abstract class Be
             $user = Be::getSession()->get('_adminUser');
             self::$cache['adminUser'] = new \Be\AdminUser\AdminUser($user);
             return self::$cache['adminUser'];
+        }
+    }
+
+    /**
+     * 设置当前用户
+     *
+     * @param \stdClass | null $user
+     */
+    public static function setUser($user = null)
+    {
+        Be::getSession()->set('_user', $user);
+        if (self::getRuntime()->getMode() == 'Swoole') {
+            $cid = \Swoole\Coroutine::getCid();
+            if (isset(self::$cache[$cid]['user'])) {
+                if ($user === null) {
+                    unset(self::$cache[$cid]['user']);
+                } else {
+                    self::$cache[$cid]['user'] = new \Be\User\User($user);
+                }
+            }
+        } else {
+            if (isset(self::$cache['user'])) {
+                if ($user === null) {
+                    unset(self::$cache['user']);
+                } else {
+                    self::$cache['user'] = new \Be\User\User($user);
+                }
+            }
         }
     }
 

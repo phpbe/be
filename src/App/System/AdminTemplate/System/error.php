@@ -18,7 +18,7 @@
         {
             ?>
             <div class="error-timer">
-                <span>{{timer}}</span> 秒后跳转到：<el-link type="primary" href="<?php echo $this->redirectUrl; ?>"><?php echo $this->redirectUrl; ?></el-link>
+                <span>{{redirectTimer}}</span> 秒后跳转到：<el-link type="primary" href="<?php echo $this->redirectUrl; ?>"><?php echo $this->redirectUrl; ?></el-link>
             </div>
             <?php
         }
@@ -29,26 +29,27 @@
         new Vue({
             el: '#app',
             data: {
-                timer: <?php echo isset($this->redirectTimeout) ? $this->redirectTimeout : 0; ?>
+                redirectTimer: <?php echo isset($this->redirectTimeout) ? $this->redirectTimeout : 0; ?>
             },
             created: function () {
                 <?php
                 if (isset($this->redirectUrl)) {
-                if (isset($this->redirectTimeout) && $this->redirectTimeout > 0) {
-                ?>
-                var _this = this;
-                setInterval(function () {
-                    _this.timer--;
-                    if (_this.timer <= 0) {
+                    if (isset($this->redirectTimeout) && $this->redirectTimeout > 0) {
+                        ?>
+                        var _this = this;
+                        var timer = setInterval(function () {
+                            _this.redirectTimer--;
+                            if (_this.redirectTimer <= 0) {
+                                clearInterval(timer);
+                                window.location.href = "<?php echo $this->redirectUrl; ?>";
+                            }
+                        }, 1000);
+                        <?php
+                    } else {
+                        ?>
                         window.location.href = "<?php echo $this->redirectUrl; ?>";
+                        <?php
                     }
-                }, 1000);
-                <?php
-                } else {
-                ?>
-                window.location.href = "<?php echo $this->redirectUrl; ?>";
-                <?php
-                }
                 }
                 ?>
             }

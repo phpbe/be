@@ -18,13 +18,13 @@
         {
             ?>
             <div class="error-timer">
-                <span>{{timer}}</span> 秒后返回
+                <span>{{redirectTimer}}</span> 秒后返回
             </div>
             <?php
         }
         ?>
 
-        <form action="<?php echo $this->historyUrl; ?>" id="from-history" method="post">
+        <form action="<?php echo $this->historyUrl; ?>" id="form-history" method="post">
             <?php
             if (is_array($this->historyPost) && count($this->historyPost) > 0) {
                 foreach ($this->historyPost as $key => $val) {
@@ -39,24 +39,25 @@
         new Vue({
             el: '#app',
             data: {
-                timer: <?php echo isset($this->redirectTimeout) ? $this->redirectTimeout : 0; ?>
+                redirectTimer: <?php echo isset($this->redirectTimeout) ? $this->redirectTimeout : 0; ?>
             },
             created: function () {
                 <?php
                 if (isset($this->redirectTimeout) && $this->redirectTimeout > 0) {
-                ?>
-                var _this = this;
-                setInterval(function () {
-                    _this.timer--;
-                    if (_this.timer <= 0) {
-                        document.getElementById("from-history").submit();
-                    }
-                }, 1000);
-                <?php
+                    ?>
+                    var _this = this;
+                    var timer = setInterval(function () {
+                        _this.redirectTimer--;
+                        if (_this.redirectTimer <= 0) {
+                            clearInterval(timer);
+                            document.getElementById("form-history").submit();
+                        }
+                    }, 1000);
+                    <?php
                 } else {
-                ?>
-                document.getElementById("from-history").submit();
-                <?php
+                    ?>
+                    document.getElementById("form-history").submit();
+                    <?php
                 }
                 ?>
             }

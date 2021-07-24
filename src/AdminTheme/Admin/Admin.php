@@ -38,7 +38,7 @@ $themeUrl = Be::getProperty('AdminTheme.Admin')->getUrl();
             <be-west>
 
             <div class="logo">
-                <a href="<?php echo beUrl(); ?>"></a>
+                <a href="<?php echo beAdminUrl(); ?>"></a>
             </div>
 
             <div class="west-menu">
@@ -186,7 +186,7 @@ $themeUrl = Be::getProperty('AdminTheme.Admin')->getUrl();
                     ?>" style="max-width:24px;max-height:24px; vertical-align: middle;" />
                     <?php echo $my->name; ?>
 
-                    <el-button type="danger" icon="el-icon-star-off" onclick="window.location.href='<?php echo beUrl('System.User.logout')?>';" size="mini">退出</el-button>
+                    <el-button type="danger" icon="el-icon-star-off" onclick="window.location.href='<?php echo beAdminUrl('System.AdminUser.logout')?>';" size="mini">退出</el-button>
 
                 </div>
 

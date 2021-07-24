@@ -39,8 +39,8 @@ interface Driver
      * 获取session 值
      *
      * @param string $name 名称
-     * @param string $default 默认值
-     * @return mixed
+     * @param string | array | \stdClass $default 默认值
+     * @return string | array | \stdClass
      */
     public function get($name = null, $default = null);
 
@@ -48,7 +48,7 @@ interface Driver
      * 向session中赋值
      *
      * @param string $name 名称
-     * @param string $value 值
+     * @param string | array | \stdClass $value 值
      */
     public function set($name, $value);
 
@@ -65,8 +65,7 @@ interface Driver
      *
      * 删除除指定名称的 session
      * @param string $name 名称
-     *
-     * @return mixed
+     * @return string | array | \stdClass
      */
     public function delete($name);
 

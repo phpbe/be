@@ -181,8 +181,7 @@ class AdminUser
         unset($adminUser->salt);
         unset($adminUser->remember_me_token);
 
-        //UserFactory::release();
-        Be::getSession()->set('_adminUser', $adminUser);
+        Be::setAdminUser($adminUser);
     }
 
     /**
