@@ -708,7 +708,7 @@ abstract class Be
         if (self::getRuntime()->getMode() == 'Swoole') {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['adminService'][$name])) return self::$cache[$cid]['adminService'][$name];
-            self::$cache[$cid]['adminService'][$name] = self::newService($name);
+            self::$cache[$cid]['adminService'][$name] = self::newAdminService($name);
             return self::$cache[$cid]['adminService'][$name];
         } else {
             if (isset(self::$cache['adminService'][$name])) {

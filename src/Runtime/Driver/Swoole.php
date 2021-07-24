@@ -207,7 +207,7 @@ class Swoole extends Driver
                 // 检查网站配置， 是否暂停服务
                 $configSystem = Be::getConfig('System.System');
 
-                $admin = false;
+                $admin = null;
                 $app = null;
                 $controller = null;
                 $action = null;
@@ -332,9 +332,7 @@ class Swoole extends Driver
                             $response->error('方法 ' . $action . ' 在控制器 ' . $class . ' 中不存在！');
                         }
                     }
-
                 } else {
-
                     $class = 'Be\\App\\' . $app . '\\Controller\\' . $controller;
                     if (!class_exists($class)) {
                         $response->set('code', 404);

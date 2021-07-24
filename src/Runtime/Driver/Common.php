@@ -182,9 +182,7 @@ class Common extends Driver
                         $response->error('方法 ' . $action . ' 在控制器 ' . $class . ' 中不存在！');
                     }
                 }
-
             } else {
-
                 $class = 'Be\\App\\' . $app . '\\Controller\\' . $controller;
                 if (!class_exists($class)) {
                     $response->set('code', 404);
