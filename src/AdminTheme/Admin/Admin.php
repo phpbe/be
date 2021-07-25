@@ -21,8 +21,8 @@ $themeUrl = Be::getProperty('AdminTheme.Admin')->getUrl();
 
     <script src="<?php echo $themeUrl; ?>/js/vue-cookies-1.5.13.js"></script>
 
-    <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/element-ui-2.13.2.css">
-    <script src="<?php echo $themeUrl; ?>/js/element-ui-2.13.2.js"></script>
+    <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/element-ui-2.15.3.css">
+    <script src="<?php echo $themeUrl; ?>/js/element-ui-2.15.3.js"></script>
 
     <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/font-awesome-4.7.0.min.css" />
 

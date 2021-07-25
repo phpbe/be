@@ -5,10 +5,6 @@
             margin-left: 4px;
             margin-right: 4px;
         }
-
-        .el-drawer__header span {
-            outline: none;
-        }
     </style>
 </be-head>
 

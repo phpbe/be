@@ -19,8 +19,8 @@ $themeUrl = Be::getProperty('AdminTheme.Nude')->getUrl();
 
     <script src="<?php echo $adminThemeUrl; ?>/js/vue-cookies-1.5.13.js"></script>
 
-    <link rel="stylesheet" href="<?php echo $adminThemeUrl; ?>/css/element-ui-2.13.2.css">
-    <script src="<?php echo $adminThemeUrl; ?>/js/element-ui-2.13.2.js"></script>
+    <link rel="stylesheet" href="<?php echo $adminThemeUrl; ?>/css/element-ui-2.15.3.css">
+    <script src="<?php echo $adminThemeUrl; ?>/js/element-ui-2.15.3.js"></script>
 
     <link rel="stylesheet" href="<?php echo $adminThemeUrl; ?>/css/font-awesome-4.7.0.min.css" />
 

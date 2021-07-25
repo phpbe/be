@@ -12,8 +12,8 @@
 
     <script src="https://unpkg.com/vue-cookies@1.5.13/vue-cookies.js"></script>
 
-    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.2/lib/theme-chalk/index.css">
-    <script src="https://unpkg.com/element-ui@2.13.2/lib/index.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.15.3/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/element-ui@2.15.3/lib/index.js"></script>
 
     <link rel="stylesheet" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css" />
 
