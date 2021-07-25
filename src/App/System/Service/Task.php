@@ -1,7 +1,6 @@
 <?php
 
-namespace Be\Runtime;
-
+namespace Be\App\System\Service;
 
 use Be\Be;
 use Be\Task\TaskHelper;
@@ -10,57 +9,89 @@ class Task
 {
 
     /**
-     * 定时计划任务调度
+     * 触发启动指定的计划任务
      *
-     * @param $process
+     * @param string $taskRoute
+     * @param $triggerType
+     *              SYSTEM: 系统定时任务按时启动
+     *              MANUAL: 用户手工触发
+     *              RELATED：程序功能关联触发。
      */
-    public static function process($process)
+    public function trigger($taskRoute, $triggerType = 'RELATED')
     {
-        while (true) {
+        $parts = explode('.', $taskRoute);
+        $app = $parts[0];
+        $name = $parts[1];
 
-            $swooleHttpServer = Be::getRuntime()->getSwooleHttpServer();
-            $taskState = $swooleHttpServer->state->get('task', 'value');
-            if (!$taskState) {
-                return;
-            }
+        $tuple = Be::getTuple('system_task');
+        $tuple->loadBy([
+            'app' => $app,
+            'name' => $name,
+        ]);
 
-            // 每分钟执行一次
-            $sec = (int)date('s', time());
-            $sleep = 60 - $sec;
-            if ($sleep > 0) {
-                \Swoole\Coroutine::sleep($sleep);
-            }
+        $tuple->trigger = $triggerType;
 
-            $tasks = [];
-            try {
-                $db = Be::newDb();
-                $sql = 'SELECT * FROM system_task WHERE is_enable = 1 AND is_delete = 0 AND schedule != \'\'';
-                $tasks = $db->getObjects($sql);
-            } catch (\Throwable $t) {
-            }
+        if (Be::getRuntime()->getMode() == 'Swoole') {
+            Be::getRuntime()->task($tuple->toObject());
+        } else {
+            $config = Be::getConfig('System.Task');
+            $url = beUrl('System.Task.run', ['password' => $config->password, 'taskId' => $tuple->id, 'trigger' => $triggerType]);
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_HEADER, 1);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curl, CURLOPT_TIMEOUT, 1);
+            curl_exec($curl);
+            curl_close($curl);
+        }
+    }
 
-            if (count($tasks) == 0) return;
 
-            $t = time();
-            foreach ($tasks as $task) {
-                if (TaskHelper::isOnTime($task->schedule, $t)) {
-                    $swooleHttpServer->task($task);
-                }
+    /**
+     * 普通PHP模式 下任务调度
+     *
+     * 调度
+     */
+    public function dispatch()
+    {
+        $db = Be::getDb();
+
+        $sql = 'SELECT * FROM system_task WHERE is_enable = 1 AND is_delete = 0 AND schedule != \'\'';
+        $tasks = $db->getObjects($sql);
+
+        $config = Be::getConfig('System.Task');
+        $t = time();
+        foreach ($tasks as $task) {
+            if (TaskHelper::isOnTime($task->schedule, $t)) {
+                $url = beUrl('System.Task.run', ['password' => $config->password, 'taskId' => $task->id, 'timestamp' => $t, 'trigger' => 'SYSTEM']);
+                $curl = curl_init();
+                curl_setopt($curl, CURLOPT_URL, $url);
+                curl_setopt($curl, CURLOPT_HEADER, 1);
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($curl, CURLOPT_TIMEOUT, 1);
+                curl_exec($curl);
+                curl_close($curl);
             }
         }
     }
 
     /**
-     * \Swoole\Http\Server task 回调
+     * 普通PHP模式  执行计划任务
      *
-     * @param \Swoole\Http\Server $swooleHttpServer
-     * @param \Swoole\Server\Task $swooleServerTask
      */
-    public static function onTask(\Swoole\Http\Server $swooleHttpServer, \Swoole\Server\Task $swooleServerTask)
+    public function run($taskId, $timestamp, $trigger)
     {
-        $task = $swooleServerTask->data;
-        $trigger = $task->trigger;
-        unset($task->trigger);
+        $tuple = Be::getTuple('system_task');
+        $tuple->load($taskId);
+        $task = $tuple->toObject();
+
+        /*
+        if ($trigger == 'SYSTEM') {
+            if (TaskHelper::isOnTime($task->schedule, $timestamp)) {
+                return;
+            }
+        }
+        */
 
         $class = '\\Be\\App\\' . $task->app . '\\Task\\' . $task->name;
         if (class_exists($class)) {
@@ -133,6 +164,5 @@ class Task
             }
         }
     }
-
 
 }

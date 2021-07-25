@@ -2,7 +2,9 @@
 
 namespace Be\AdminPlugin\Task;
 
+use Be\Config\ConfigHelper;
 use Be\Db\Tuple;
+use Be\System\Response;
 use Be\Util\Datetime;
 use Be\Be;
 use Be\AdminPlugin\Detail\Item\DetailItemCode;
@@ -19,6 +21,7 @@ use Be\AdminPlugin\Table\Item\TableItemLink;
 use Be\AdminPlugin\Table\Item\TableItemSelection;
 use Be\AdminPlugin\Table\Item\TableItemSwitch;
 use Be\Task\Annotation\BeTask;
+use Be\Util\Random;
 
 /**
  * 计划任务
@@ -116,6 +119,56 @@ class Task extends Driver
         }
 
 
+        $toolbarItems = [
+            [
+                'label' => '启用',
+                'task' => 'fieldEdit',
+                'postData' => [
+                    'field' => 'is_enable',
+                    'value' => '1',
+                ],
+                'target' => 'ajax',
+                'ui' => [
+                    'icon' => 'el-icon-fa fa-check',
+                    'type' => 'primary',
+                ]
+            ],
+            [
+                'label' => '禁用',
+                'task' => 'fieldEdit',
+                'postData' => [
+                    'field' => 'is_enable',
+                    'value' => '0',
+                ],
+                'target' => 'ajax',
+                'ui' => [
+                    'icon' => 'el-icon-fa fa-lock',
+                    'type' => 'warning',
+                ]
+            ],
+            [
+                'label' => '删除一个月前运行日志',
+                'task' => 'deleteLogs',
+                'target' => 'ajax',
+                'confirm' => '本操作为物理删除，不可恢复，确认要删除么？',
+                'ui' => [
+                    'icon' => 'el-icon-fa fa-remove',
+                    'type' => 'danger',
+                ]
+            ],
+        ];
+
+        if (Be::getRuntime()->getMode() == 'Common') {
+            $toolbarItems[] = [
+                'label' => '定时任务配置说明',
+                'task' => 'cronHelp',
+                'ui' => [
+                    'icon' => 'el-icon-question',
+                ]
+            ];
+        }
+
+
         Be::getAdminPlugin('Curd')->setting([
 
             'label' => '计划任务',
@@ -157,47 +210,8 @@ class Task extends Driver
                     ],
                 ],
 
-
                 'toolbar' => [
-
-                    'items' => [
-                        [
-                            'label' => '启用',
-                            'task' => 'fieldEdit',
-                            'postData' => [
-                                'field' => 'is_enable',
-                                'value' => '1',
-                            ],
-                            'target' => 'ajax',
-                            'ui' => [
-                                'icon' => 'el-icon-fa fa-check',
-                                'type' => 'primary',
-                            ]
-                        ],
-                        [
-                            'label' => '禁用',
-                            'task' => 'fieldEdit',
-                            'postData' => [
-                                'field' => 'is_enable',
-                                'value' => '0',
-                            ],
-                            'target' => 'ajax',
-                            'ui' => [
-                                'icon' => 'el-icon-fa fa-lock',
-                                'type' => 'warning',
-                            ]
-                        ],
-                        [
-                            'label' => '删除一个月前运行日志',
-                            'task' => 'deleteLogs',
-                            'target' => 'ajax',
-                            'confirm' => '本操作为物理删除，不可恢复，确认要删除么？',
-                            'ui' => [
-                                'icon' => 'el-icon-fa fa-remove',
-                                'type' => 'danger',
-                            ]
-                        ],
-                    ]
+                    'items' => $toolbarItems,
                 ],
 
                 'table' => [
@@ -330,7 +344,7 @@ class Task extends Driver
                             'label' => '任务数据',
                             'driver' => DetailItemCode::class,
                             'language' => 'json',
-                            'value' => function($row) {
+                            'value' => function ($row) {
                                 if (!$row['data']) {
                                     return '{}';
                                 } else {
@@ -377,7 +391,7 @@ class Task extends Driver
                             'name' => 'schedule',
                             'label' => '执行计划',
                             'driver' => FormItemCron::class,
-                            'ui' => function($row) {
+                            'ui' => function ($row) {
                                 return [
                                     'form-item' => [
                                         'v-if' => $row['schedule_lock'] == '0' ? 'true' : 'false'
@@ -395,7 +409,7 @@ class Task extends Driver
                             'label' => '任务数据',
                             'driver' => FormItemCode::class,
                             'language' => 'json',
-                            'value' => function($row) {
+                            'value' => function ($row) {
                                 if (!$row['data']) {
                                     return '{}';
                                 } else {
@@ -439,8 +453,7 @@ class Task extends Driver
             $postData = $request->json();
             $task = Be::getTuple('system_task');
             $task->load($postData['row']['id']);
-            $task->trigger = 'MANUAL';
-            Be::getRuntime()->getHttpServer()->getSwooleHttpServer()->task($task);
+            Be::getService('System.Task')->trigger($task->app . '.' . $task->name, 'MANUAL');
             beAdminOpLog('手工启动任务：' . $task->label . '（' . $task->app . '.' . $task->name . '）');
             $response->success('任务启动成功！');
         } catch (\Throwable $t) {
@@ -460,7 +473,7 @@ class Task extends Driver
         $postData = json_decode($postData, true);
         $taskId = $postData['row']['id'];
 
-        $url = beAdminUrl(null, ['task'=>'logs', 'task_id' => $taskId]);
+        $url = beAdminUrl(null, ['task' => 'logs', 'task_id' => $taskId]);
         $response = Be::getResponse();
         $response->redirect($url);
     }
@@ -645,7 +658,7 @@ class Task extends Driver
                             'label' => '任务数据',
                             'driver' => DetailItemCode::class,
                             'language' => 'json',
-                            'value' => function($row) {
+                            'value' => function ($row) {
                                 if (!$row['data']) {
                                     return '{}';
                                 } else {
@@ -700,7 +713,7 @@ class Task extends Driver
             $taskId = $tuple->task_id;
             $taskLogId = $tuple->id;
             $tuple->delete();
-            beAdminOpLog('删除了一条计划任务（#'.$taskId.'）日志（#'.$taskLogId.'）。');
+            beAdminOpLog('删除了一条计划任务（#' . $taskId . '）日志（#' . $taskLogId . '）。');
             $response->success('删除计划任务日志成功！');
         } catch (\Throwable $t) {
             $response->error($t->getMessage());
@@ -726,5 +739,23 @@ class Task extends Driver
             Be::getLog()->error($t);
         }
     }
+
+    public function cronHelp()
+    {
+        $response = Be::getResponse();
+
+        $configTask = Be::getConfig('System.Task');
+        if ($configTask->password == '') {
+            $configTask->password = Random::complex(16);
+            ConfigHelper::update('System.Task', $configTask);
+            $response->set('configTaskPassword', 1);
+        } else {
+            $response->set('configTaskPassword', 0);
+        }
+        $response->set('configTask', $configTask);
+
+        $response->display('AdminPlugin.Task.cronHelp', 'Nude');
+    }
+
 }
 
