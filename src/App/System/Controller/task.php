@@ -58,10 +58,7 @@ class Task
         }
 
         set_time_limit(0);
-        ini_set('memory_limit', '1536M');
-        ini_set('memory_limit', '2g');
-        ini_set('memory_limit', '4g');
-        ini_set('memory_limit', '8g');
+        ini_set('memory_limit', '1g');
         ignore_user_abort(true);
         session_write_close();
         header("Connection: close");
