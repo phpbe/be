@@ -2,9 +2,9 @@
 
 namespace Be\Cache\Driver;
 
+use Be\Be;
 use Be\Cache\Config;
 use Be\Cache\Driver;
-use Be\Redis\RedisFactory;
 
 /**
  * 缓存驱动
@@ -24,7 +24,7 @@ class Redis implements Driver
      */
     public function __construct($config)
     {
-        $this->redis = RedisFactory::getInstance($config->redis);
+        $this->redis = Be::getRedis($config->redis);
     }
 
     /**
