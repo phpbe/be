@@ -127,12 +127,12 @@ class Swoole extends Driver
         Be::initRedisPools();
 
         if ($configServer->clearCacheOnStart) {
-            $dir = Be::getRuntime()->getCachePath();
+            $dir = Be::getRuntime()->getCachePath() . '/*';
             \Be\Util\FileSystem\Dir::rm($dir);
         } else {
             $sessionConfig = Be::getConfig('System.Session');
             if ($sessionConfig->driver == 'File') {
-                $dir = Be::getRuntime()->getCachePath() . '/session';
+                $dir = Be::getRuntime()->getCachePath() . '/session/*';
                 \Be\Util\FileSystem\Dir::rm($dir);
             }
         }
