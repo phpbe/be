@@ -126,7 +126,7 @@ class FormItemUEditor extends FormItem
         }
         $html .= '>';
 
-        $html .= '<textarea ref="refFormItemCode_' . $this->name . '" v-model="formData.' . $this->name . '"></textarea>';
+        $html .= '<textarea ref="refFormItemUEditor_' . $this->name . '" v-model="formData.' . $this->name . '"></textarea>';
         //<script id="editor" type="text/plain" style="width:1024px;height:500px;"></script>
         $html .= '</el-form-item>';
         return $html;
@@ -155,7 +155,7 @@ class FormItemUEditor extends FormItem
      */
     public function getVueHooks()
     {
-        $mountedCode = 'this.formItems.' . $this->name . '.uEditor = UE.getEditor(this.$refs.refFormItemCode_' . $this->name . ',' . json_encode($this->option) . ');';
+        $mountedCode = 'this.formItems.' . $this->name . '.uEditor = UE.getEditor(this.$refs.refFormItemUEditor_' . $this->name . ',' . json_encode($this->option) . ');';
 
         $updatedCode = 'this.formData.' . $this->name . ' = this.formItems.' . $this->name . '.uEditor.getContent();';
         return [
