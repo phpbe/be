@@ -16,7 +16,7 @@ class Oracle extends Connection
     {
         $this->name = $name;
 
-        $config = Be::getConfig('System.Db');
+        $config = Be::getConfig('App.System.Db');
         if (!isset($config->$name)) {
             throw new DbException('数据库配置项（' . $name . '）不存在！');
         }

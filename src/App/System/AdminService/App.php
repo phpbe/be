@@ -17,7 +17,7 @@ class App
     public function getApps()
     {
         if ($this->apps == null) {
-            $configApp = Be::getConfig('System.App');
+            $configApp = Be::getConfig('App.System.App');
             $apps = [];
             foreach( $configApp->names as $appName) {
                 $appProperty = Be::getProperty('App.' . $appName);
@@ -39,7 +39,7 @@ class App
      */
     public function getAppNames()
     {
-        $configApp = Be::getConfig('System.App');
+        $configApp = Be::getConfig('App.System.App');
         return $configApp->names;
     }
 
@@ -82,7 +82,7 @@ class App
             $installer->install();
         }
 
-        $configApp = Be::getConfig('System.App');
+        $configApp = Be::getConfig('App.System.App');
         $names = $configApp->names;
         $names[] = $appName;
         $configApp->names = array_unique($names);
@@ -109,7 +109,7 @@ class App
             $unInstaller->uninstall();
         }
 
-        $configApp = Be::getConfig('System.App');
+        $configApp = Be::getConfig('App.System.App');
         $names = $configApp->names;
         $newNames = [];
         foreach ($names as $name) {

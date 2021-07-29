@@ -15,7 +15,7 @@ class Mail
     // 构造函数
     public function __construct()
     {
-        $config = Be::getConfig('System.Mail');
+        $config = Be::getConfig('App.System.Mail');
         $class = '\\Be\\App\\Service\\Mail\\' . $config->driver;
         $this->driver = new $class();
     }

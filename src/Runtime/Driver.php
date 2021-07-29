@@ -12,8 +12,6 @@ abstract class Driver
 
     protected $rootPath = null;
 
-    protected $cacheDir = 'cache'; // 存放临时文件
-
     protected $dataDir = 'data'; // 存放系统生成的永久性文件，如配置文件
 
     protected $uploadDir = 'upload'; // 用户上传的数据
@@ -55,27 +53,11 @@ abstract class Driver
     }
 
     /**
-     * @param string $cacheDir
-     */
-    public function setCacheDir($cacheDir)
-    {
-        $this->cacheDir = $cacheDir;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCacheDir()
-    {
-        return $this->cacheDir;
-    }
-
-    /**
      * @return string
      */
     public function getCachePath()
     {
-        return $this->rootPath . '/' . $this->cacheDir;
+        return $this->rootPath . '/' . $this->dataDir . '/Cache';
     }
 
     /**

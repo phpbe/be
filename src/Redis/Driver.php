@@ -21,7 +21,7 @@ class Driver
         $this->name = $name;
         if ($redis === null) {
 
-            $config = Be::getConfig('System.Redis');
+            $config = Be::getConfig('App.System.Redis');
             if (!isset($config->$name)) {
                 throw new RedisException('Redis config item (' . $name . ') doesn\'t exist!');
             }

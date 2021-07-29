@@ -53,7 +53,7 @@ class JsonRpcProxy
         $header[] = 'Content-Type: application/json; charset=utf-8';
         curl_setopt($handler, CURLOPT_HTTPHEADER, $header);
 
-        curl_setopt($handler, CURLOPT_URL, Be::getConfig('JsonRpc.Test')->url);
+        curl_setopt($handler, CURLOPT_URL, Be::getConfig('App.JsonRpc.Test')->url);
         curl_setopt($handler,CURLOPT_POST,true);
         curl_setopt($handler,CURLOPT_POSTFIELDS, json_encode($data));
 

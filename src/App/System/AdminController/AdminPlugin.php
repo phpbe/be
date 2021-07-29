@@ -20,7 +20,7 @@ class AdminPlugin
 
         $file = $request->files('file');
         if ($file['error'] == 0) {
-            $configSystem = Be::getConfig('System.System');
+            $configSystem = Be::getConfig('App.System.System');
             $maxSize = $configSystem->uploadMaxSize;
             $maxSizeInt = FileSize::string2Int($maxSize);
             if ($file['size'] > $maxSizeInt) {
@@ -82,7 +82,7 @@ class AdminPlugin
         $file = $request->files('file');
         if ($file['error'] == 0) {
 
-            $configSystem = Be::getConfig('System.System');
+            $configSystem = Be::getConfig('App.System.System');
             $maxSize = $configSystem->uploadMaxSize;
             $maxSizeInt = FileSize::string2Int($maxSize);
             if ($file['size'] > $maxSizeInt) {
@@ -158,7 +158,7 @@ class AdminPlugin
         $file = $request->files('file');
         if ($file['error'] == 0) {
 
-            $configSystem = Be::getConfig('System.System');
+            $configSystem = Be::getConfig('App.System.System');
             $maxSize = $configSystem->uploadMaxSize;
             $maxSizeInt = FileSize::string2Int($maxSize);
             if ($file['size'] > $maxSizeInt) {

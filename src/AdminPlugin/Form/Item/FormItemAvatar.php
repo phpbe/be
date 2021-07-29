@@ -41,7 +41,7 @@ class FormItemAvatar extends FormItem
         }
         $this->path = $params['path'];
 
-        $configSystem = Be::getConfig('System.System');
+        $configSystem = Be::getConfig('App.System.System');
         $this->maxSize = $configSystem->uploadMaxSize;
         $this->maxSizeInt = FileSize::string2Int($this->maxSize);
 

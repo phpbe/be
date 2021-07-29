@@ -20,7 +20,7 @@ function beUrl($route = null, $params = [])
         }
     }
 
-    $configSystem = \Be\Be::getConfig('System.System');
+    $configSystem = \Be\Be::getConfig('App.System.System');
     if ($configSystem->urlRewrite) {
         $urlParams = '';
         if (count($params)) {
@@ -54,7 +54,7 @@ function beAdminUrl($route = null, $params = [])
         }
     }
 
-    $configSystem = \Be\Be::getConfig('System.System');
+    $configSystem = \Be\Be::getConfig('App.System.System');
     if ($configSystem->urlRewrite) {
         $urlParams = '';
         if (count($params)) {

@@ -152,7 +152,7 @@ class FileManager
         $request = Be::getRequest();
         $response = Be::getResponse();
 
-        $configSystem = Be::getConfig('System.System');
+        $configSystem = Be::getConfig('App.System.System');
 
         $return = beAdminUrl('System.FileManager.browser');
 

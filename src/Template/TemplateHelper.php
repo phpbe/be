@@ -214,13 +214,13 @@ class TemplateHelper
 
         $className = array_pop($parts);
 
-        $codePhp = '<?php' . "\n";
-        $codePhp .= 'namespace Be\\Cache\\Template\\' . $theme . '\\' . $type . '\\' . $name;
+        $namespace = 'Be\\Data\\Cache\\Template\\' . $theme . '\\' . $type . '\\' . $name;
         if (count($parts) > 0) {
-            $codePhp .= '\\' . implode('\\', $parts);
+            $namespace .= '\\' . implode('\\', $parts);
         }
-        $codePhp .= ';' . "\n";
-        $codePhp .= "\n";
+
+        $codePhp = '<?php' . "\n";
+        $codePhp .= 'namespace ' . $namespace . ";\n\n";
         $codePhp .= $codeUse;
         $codePhp .= "\n";
         $codePhp .= 'class ' . $className . ' extends ' . $extends . "\n";

@@ -4,7 +4,6 @@ namespace Be\Cache\Driver;
 
 use Be\Be;
 use Be\Cache\Driver;
-use Be\Runtime\RuntimeFactory;
 
 /**
  * 缓存驱动

@@ -24,7 +24,7 @@ class Installer
 
     public function __construct()
     {
-        $config = Be::getConfig('System.System');
+        $config = Be::getConfig('App.System.System');
         if (!$config->developer || !$config->installable) {
             throw new AdminControllerException('请先开启系统配置中的 "开发者模式" 和 "可安装及重装" 配置项！');
         }
@@ -154,7 +154,7 @@ class Installer
                 $formData = $postData['formData'];
                 Be::getAdminService('System.Installer')->testDb($formData);
 
-                $configDb = Be::getConfig('System.Db');
+                $configDb = Be::getConfig('App.System.Db');
 
                 $configDbDefault = new \Be\Db\Config();
                 foreach ($configDbDefault->master as $k => $v) {
@@ -178,7 +178,7 @@ class Installer
             $response->set('steps', $this->steps);
             $response->set('step', 1);
 
-            $configDb = Be::getConfig('System.Db');
+            $configDb = Be::getConfig('App.System.Db');
             Be::getAdminPlugin('Form')
                 ->setting([
                     'title' => '系统数据库配置',
@@ -324,7 +324,7 @@ class Installer
                         }',
                     ],
                 ])
-                ->setValue(Be::getConfig('System.Db')->master)
+                ->setValue(Be::getConfig('App.System.Db')->master)
                 ->execute();
         }
     }
@@ -525,7 +525,7 @@ class Installer
         $response->set('url', beAdminUrl());
         $response->display('App.System.Installer.complete', 'Installer');
 
-        $config = Be::getConfig('System.System');
+        $config = Be::getConfig('App.System.System');
         $config->installable = false;
         ConfigHelper::update('System.System', $config);
 

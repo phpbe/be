@@ -33,7 +33,7 @@ class FormItemFile extends FormItem
         }
         $this->path = $params['path'];
 
-        $configSystem = Be::getConfig('System.System');
+        $configSystem = Be::getConfig('App.System.System');
         $this->maxSize = $configSystem->uploadMaxSize;
         $this->maxSizeInt = FileSize::string2Int($this->maxSize);
 
@@ -41,7 +41,7 @@ class FormItemFile extends FormItem
         if (isset($params['allowUploadFileTypes'])) {
             $this->allowUploadFileTypes = $params['allowUploadFileTypes'];
         } else {
-            $this->allowUploadFileTypes = Be::getConfig('System.System')->allowUploadFileTypes;
+            $this->allowUploadFileTypes = Be::getConfig('App.System.System')->allowUploadFileTypes;
         }
 
         if (!$this->description) {

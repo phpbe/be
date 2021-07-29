@@ -4,7 +4,7 @@ use Be\Be;
 
 <be-html>
 <?php
-$config = Be::getConfig('System.System');
+$config = Be::getConfig('App.System.System');
 $my = Be::getAdminUser();
 $themeUrl = Be::getProperty('AdminTheme.Admin')->getUrl();
 ?>
@@ -174,7 +174,7 @@ $themeUrl = Be::getProperty('AdminTheme.Admin')->getUrl();
 
                 <div class="user">
                     <?php
-                    $configUser = Be::getConfig('System.AdminUser');
+                    $configUser = Be::getConfig('App.System.AdminUser');
                     ?>
                     您好：
                     <img src="<?php

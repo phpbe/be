@@ -19,12 +19,12 @@ class Index
 
     public function __construct()
     {
-        $configJsonRpc = Be::getConfig('JsonRpc.JsonRpc');
+        $configJsonRpc = Be::getConfig('App.JsonRpc.JsonRpc');
         if (!$configJsonRpc->enable) {
             throw new ControllerException('JsonRpc 未启用');
         }
 
-        $this->configLog = Be::getConfig('JsonRpc.Log');
+        $this->configLog = Be::getConfig('App.JsonRpc.Log');
     }
 
     public function index()

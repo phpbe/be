@@ -10,7 +10,7 @@ use Be\Be;
 <be-center>
 <?php
 $my = Be::getAdminUser();
-$configAdminUser = Be::getConfig('System.AdminUser');
+$configAdminUser = Be::getConfig('App.System.AdminUser');
 ?>
 <div id="app">
 

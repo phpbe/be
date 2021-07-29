@@ -18,7 +18,7 @@ class MailQueue extends \Be\Task\TaskInterval
     {
         $t0 = microtime(1);
 
-        $config = Be::getConfig('System.Mail');
+        $config = Be::getConfig('App.System.Mail');
         $mailQueueMaxTryTimes = 10;
         if (isset($config->mailQueueMaxTryTimes)) {
             $mailQueueMaxTryTimes = $config->mailQueueMaxTryTimes;
@@ -55,7 +55,7 @@ class MailQueue extends \Be\Task\TaskInterval
 
     private function send($queue)
     {
-        $config = Be::getConfig('System.Mail');
+        $config = Be::getConfig('App.System.Mail');
         $class = '\\Be\\App\\System\\Service\\Mail\\' . $config->driver;
 
         /**

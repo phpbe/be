@@ -71,7 +71,7 @@ class AdminRole
         }
 
         $code = '<?php' . "\n";
-        $code .= 'namespace Be\\Cache\\AdminRole;' . "\n";
+        $code .= 'namespace Be\\Data\\Cache\\AdminRole;' . "\n";
         $code .= "\n";
         $code .= 'class AdminRole' . $roleId . ' extends \\Be\\AdminUser\\AdminRole' . "\n";
         $code .= '{' . "\n";
@@ -156,7 +156,7 @@ class AdminRole
         }
 
         $code = '<?php' . "\n";
-        $code .= 'namespace Be\\Cache\\AdminRole;' . "\n";
+        $code .= 'namespace Be\\Data\\Cache\\AdminRole;' . "\n";
         $code .= "\n";
         $code .= 'class AdminRole0 extends \\Be\\AdminUser\\AdminRole' . "\n";
         $code .= '{' . "\n";

@@ -21,7 +21,7 @@
 
     <div id="app" v-cloak>
         <?php
-        $configSystem = \Be\Be::getConfig('System.System');
+        $configSystem = \Be\Be::getConfig('App.System.System');
         if ($configSystem->developer) {
             $request = \Be\Be::getRequest();
             ?>

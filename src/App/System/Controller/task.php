@@ -30,7 +30,7 @@ class Task
         }
 
         $password = $request->get('password', '');
-        $config = Be::getConfig('System.Task');
+        $config = Be::getConfig('App.System.Task');
         if ($config->password != $password) {
             $response->error('密码错误, 任务调度中止！');
             return;
@@ -51,7 +51,7 @@ class Task
         }
 
         $password = $request->get('password', '');
-        $config = Be::getConfig('System.Task');
+        $config = Be::getConfig('App.System.Task');
         if ($config->password != $password) {
             $response->error('密码（password）错误, 任务调度中止！');
             return;

@@ -18,7 +18,7 @@ class Redis extends Driver
     public function read()
     {
         if ($this->data === null) {
-            $this->redis = Be::getRedis(Be::getConfig('System.Session')->redis);
+            $this->redis = Be::getRedis(Be::getConfig('App.System.Session')->redis);
             $data = $this->redis->get('session:' . $this->id);
             if ($data) {
                 $data = unserialize($data);

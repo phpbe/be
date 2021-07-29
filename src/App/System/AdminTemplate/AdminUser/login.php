@@ -7,7 +7,7 @@ use Be\Be;
 
 <be-body>
 <?php
-$config = Be::getConfig('System.System');
+$config = Be::getConfig('App.System.System');
 ?>
 <div id="app">
 

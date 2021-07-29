@@ -168,9 +168,9 @@ class Menu
         $menus = $this->getMenus();
 
         $code = '<?php' . "\n";
-        $code .= 'namespace Be\\Mf\\Cache;' . "\n";
+        $code .= 'namespace Be\\Data\\Cache;' . "\n";
         $code .= "\n";
-        $code .= 'class Menu extends \\Be\\System\\Menu\\Driver' . "\n";
+        $code .= 'class Menu extends \\Be\\Menu\\Driver' . "\n";
         $code .= '{' . "\n";
         $code .= '  public function __construct()' . "\n";
         $code .= '  {' . "\n";

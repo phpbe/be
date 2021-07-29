@@ -62,7 +62,7 @@ class Config extends Driver
         $configItemDrivers = [];
         $className = '\\Be\\App\\' . $appName . '\\Config\\' . $configName;
         if (class_exists($className)) {
-            $configInstance = Be::getConfig($appName . '.' . $configName);
+            $configInstance = Be::getConfig('App.' . $appName . '.' . $configName);
             $reflection = new \ReflectionClass($className);
             $properties = $reflection->getProperties(\ReflectionMethod::IS_PUBLIC);
             foreach ($properties as $property) {
@@ -122,7 +122,7 @@ class Config extends Driver
             $formData = $postData['formData'];
 
             $code = "<?php\n";
-            $code .= 'namespace Be\\Data\\' . $appName . '\\Config;' . "\n\n";
+            $code .= 'namespace Be\\Data\\App\\' . $appName . '\\Config;' . "\n\n";
             $code .= 'class ' . $configName . "\n";
             $code .= "{\n";
 
@@ -204,7 +204,7 @@ class Config extends Driver
                 }
             }
 
-            $instance = Be::getConfig($appName . '.' . $configName);
+            $instance = Be::getConfig('App.' . $appName . '.' . $configName);
             $vars = get_object_vars($instance);
             foreach ($vars as $k => $v) {
                 if (isset($newValueStrings[$k])) {
@@ -217,7 +217,7 @@ class Config extends Driver
             $code .= "}\n";
 
             $runtime = Be::getRuntime();
-            $path = $runtime->getDataPath() . '/' . $appName . '/Config/' . $configName . '.php';
+            $path = $runtime->getDataPath() . '/App/' . $appName . '/Config/' . $configName . '.php';
             $dir = dirname($path);
             if (!is_dir($dir)) mkdir($dir, 0755, true);
             file_put_contents($path, $code, LOCK_EX);
@@ -255,11 +255,11 @@ class Config extends Driver
             }
 
             $runtime = Be::getRuntime();
-            $path = $runtime->getDataPath() . '/' . $appName . '/Config/' . $configName . '.php';
+            $path = $runtime->getDataPath() . '/App/' . $appName . '/Config/' . $configName . '.php';
             if (file_exists($path)) @unlink($path);
 
             // 更新 config 实例
-            $config = Be::getConfig($appName . '.' . $configName);
+            $config = Be::getConfig('App.' . $appName . '.' . $configName);
 
             $class = '\\Be\\App\\' . $appName . '\\Config\\' . $configName;
             $newConfig = new $class();

@@ -34,7 +34,7 @@ class Task
         if (Be::getRuntime()->getMode() == 'Swoole') {
             Be::getRuntime()->task($tuple->toObject());
         } else {
-            $config = Be::getConfig('System.Task');
+            $config = Be::getConfig('App.System.Task');
             $url = beUrl('System.Task.run', ['password' => $config->password, 'taskId' => $tuple->id, 'trigger' => $triggerType]);
             $curl = curl_init();
             curl_setopt($curl, CURLOPT_URL, $url);
@@ -59,7 +59,7 @@ class Task
         $sql = 'SELECT * FROM system_task WHERE is_enable = 1 AND is_delete = 0 AND schedule != \'\'';
         $tasks = $db->getObjects($sql);
 
-        $config = Be::getConfig('System.Task');
+        $config = Be::getConfig('App.System.Task');
         $t = time();
         foreach ($tasks as $task) {
             if (TaskHelper::isOnTime($task->schedule, $t)) {

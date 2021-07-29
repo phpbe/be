@@ -43,7 +43,7 @@ class DbHelper
         unset($field);
 
         $code = '<?php' . "\n";
-        $code .= 'namespace Be\\Cache\\TableProperty\\' . $dbName . ';' . "\n";
+        $code .= 'namespace Be\\Data\\Cache\\TableProperty\\' . $dbName . ';' . "\n";
         $code .= "\n";
         $code .= 'class ' . $tableName . ' extends \\Be\\Db\\TableProperty' . "\n";
         $code .= '{' . "\n";
@@ -74,7 +74,7 @@ class DbHelper
 
         $runtime = Be::getRuntime();
         $code = '<?php' . "\n";
-        $code .= 'namespace Be\\Cache\\Table\\' . $dbName . ';' . "\n";
+        $code .= 'namespace Be\\Data\\Cache\\Table\\' . $dbName . ';' . "\n";
         $code .= "\n";
         $code .= 'class ' . $tableName . ' extends \\Be\\Db\\Table' . "\n";
         $code .= '{' . "\n";
@@ -106,7 +106,7 @@ class DbHelper
 
         $runtime = Be::getRuntime();
         $code = '<?php' . "\n";
-        $code .= 'namespace Be\\Cache\\Tuple\\' . $dbName . ';' . "\n";
+        $code .= 'namespace Be\\Data\\Cache\\Tuple\\' . $dbName . ';' . "\n";
         $code .= "\n";
         $code .= 'class ' . $tableName . ' extends \\Be\\Db\\Tuple' . "\n";
         $code .= '{' . "\n";

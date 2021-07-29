@@ -17,7 +17,7 @@ class Mysql extends Connection
         $this->name = $name;
         if ($pdo === null) {
 
-            $config = Be::getConfig('System.Db');
+            $config = Be::getConfig('App.System.Db');
             if (!isset($config->$name)) {
                 throw new DbException('数据库配置项（' . $name . '）不存在！');
             }

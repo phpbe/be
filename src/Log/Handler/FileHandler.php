@@ -25,7 +25,7 @@ class FileHandler extends AbstractProcessingHandler
         $month = date('m', $t);
         $day = date('d', $t);
 
-        $dir = Be::getRuntime()->getDataPath() . '/System/Log/' .  $year . '/' . $month . '/' . $day . '/';
+        $dir = Be::getRuntime()->getDataPath() . '/App/System/Log/' .  $year . '/' . $month . '/' . $day . '/';
         if (!is_dir($dir)) {
             mkdir($dir, 0755, true);
             @chmod($dir, 0755);

@@ -141,18 +141,16 @@ abstract class Be
     public static function newConfig(string $name)
     {
         $parts = explode('.', $name);
-        $appName = $parts[0];
-        $configName = $parts[1];
-
-        $class = 'Be\\Data\\' . $appName . '\\Config\\' . $configName;
+        $type = array_shift($parts);
+        $catalog = array_shift($parts);
+        $class = 'Be\\Data\\' . $type . '\\' . $catalog . '\\Config\\' . implode('\\', $parts);
         if (class_exists($class)) {
             return new $class();
         }
 
-        $class = 'Be\\App\\' . $appName . '\\Config\\' . $configName;
+        $class = 'Be\\' . $type . '\\' . $catalog . '\\Config\\' . implode('\\', $parts);
         if (class_exists($class)) {
             $instance = new $class();
-            // ConfigHelper::update($name, $instance);
             return $instance;
         }
 
@@ -207,7 +205,7 @@ abstract class Be
      */
     public static function getSession()
     {
-        $config = self::getConfig('System.Session');
+        $config = self::getConfig('App.System.Session');
         if (self::getRuntime()->getMode() == 'Swoole') {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['session'])) {
@@ -242,7 +240,7 @@ abstract class Be
      */
     public static function getCache()
     {
-        $config = self::getConfig('System.Cache');
+        $config = self::getConfig('App.System.Cache');
         if (self::getRuntime()->getMode() == 'Swoole') {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['cache'])) {
@@ -276,7 +274,7 @@ abstract class Be
     {
         if (self::$cache['redis']['pools'] === null) {
             self::$cache['redis']['pools'] = [];
-            $config = Be::getConfig('System.Redis');
+            $config = Be::getConfig('App.System.Redis');
             foreach ($config as $k => $v) {
                 $size = isset($v['pool']) ? intval($v['pool']) : 0;
                 if ($size <= 0) {
@@ -321,7 +319,7 @@ abstract class Be
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['redis'][$name])) return self::$cache[$cid]['redis'][$name];
 
-            $config = Be::getConfig('System.Redis');
+            $config = Be::getConfig('App.System.Redis');
             if (!isset($config->$name)) {
                 throw new RuntimeException('Redis config item (' . $name . ') doesn\'t exist!');
             }
@@ -353,7 +351,7 @@ abstract class Be
      */
     public static function newRedis(string $name = 'master')
     {
-        $config = Be::getConfig('System.Redis');
+        $config = Be::getConfig('App.System.Redis');
         if (!isset($config->$name)) {
             throw new RuntimeException('Redis config item (' . $name . ') doesn\'t exist!');
         }
@@ -391,7 +389,7 @@ abstract class Be
      */
     public static function newEs()
     {
-        $config = self::getConfig('System.Es');
+        $config = self::getConfig('App.System.Es');
         $driver = \Elasticsearch\ClientBuilder::create()->setHosts($config->hosts)->build();
         return $driver;
     }
@@ -404,7 +402,7 @@ abstract class Be
         if (self::$cache['db']['pools'] === null) {
             self::$cache['db']['pools'] = [];
 
-            $config = self::getConfig('System.Db');
+            $config = self::getConfig('App.System.Db');
             foreach ($config as $k => $v) {
                 if ($v['driver'] != 'mysql') continue;
 
@@ -447,7 +445,7 @@ abstract class Be
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['db'][$name])) return self::$cache[$cid]['db'][$name];
 
-            $config = self::getConfig('System.Db');
+            $config = self::getConfig('App.System.Db');
             if (!isset($config->$name)) {
                 throw new RuntimeException('Db config item (' . $name . ') doesn\'t exist!');
             }
@@ -490,7 +488,7 @@ abstract class Be
      */
     public static function newDb(string $name = 'master')
     {
-        $config = Be::getConfig('System.Db');
+        $config = Be::getConfig('App.System.Db');
         if (!isset($config->$name)) {
             throw new RuntimeException('Db config item (' . $name . ') doesn\'t exist!');
         }
@@ -544,12 +542,12 @@ abstract class Be
     public static function newTuple(string $name, string $db = 'master')
     {
         $path = self::getRuntime()->getCachePath() . '/Tuple/' . $db . '/' . $name . '.php';
-        if (Be::getConfig('System.System')->developer || !file_exists($path)) {
+        if (Be::getConfig('App.System.System')->developer || !file_exists($path)) {
             \Be\Db\DbHelper::updateTuple($name, $db);
             include_once $path;
         }
 
-        $class = 'Be\\Cache\\Tuple\\' . $db . '\\' . $name;
+        $class = 'Be\\Data\\Cache\\Tuple\\' . $db . '\\' . $name;
         return (new $class());
     }
 
@@ -586,12 +584,12 @@ abstract class Be
     public static function newTable(string $name, string $db = 'master')
     {
         $path = self::getRuntime()->getCachePath() . '/Table/' . $db . '/' . $name . '.php';
-        if (Be::getConfig('System.System')->developer || !file_exists($path)) {
+        if (Be::getConfig('App.System.System')->developer || !file_exists($path)) {
             \Be\Db\DbHelper::updateTable($name, $db);
             include_once $path;
         }
 
-        $class = 'Be\\Cache\\Table\\' . $db . '\\' . $name;
+        $class = 'Be\\Data\\Cache\\Table\\' . $db . '\\' . $name;
         return (new $class());
     }
 
@@ -607,12 +605,12 @@ abstract class Be
         if (isset(self::$cache['tableProperty'][$db][$name])) return self::$cache['tableProperty'][$db][$name];
 
         $path = self::getRuntime()->getCachePath() . '/TableProperty/' . $db . '/' . $name . '.php';
-        if (Be::getConfig('System.System')->developer || !file_exists($path)) {
+        if (Be::getConfig('App.System.System')->developer || !file_exists($path)) {
             \Be\Db\DbHelper::updateTableProperty($name, $db);
             include_once $path;
         }
 
-        $class = 'Be\\Cache\\TableProperty\\' . $db . '\\' . $name;
+        $class = 'Be\\Data\\Cache\\TableProperty\\' . $db . '\\' . $name;
         self::$cache['tableProperty'][$db][$name] = new $class();
         return self::$cache['tableProperty'][$db][$name];
     }
@@ -648,7 +646,7 @@ abstract class Be
      */
     public static function newMongoDb(string $name)
     {
-        $config = Be::getConfig('System.MongoDb');
+        $config = Be::getConfig('App.System.MongoDb');
         if (!isset($config->$name)) {
             throw new RuntimeException('MongoDb config item (' . $name . ') doesn\'t exist!');
         }
@@ -869,7 +867,7 @@ abstract class Be
             if (isset($property->theme)) {
                 $theme = $property->theme;
             } else {
-                $configSystem = self::getConfig('System.System');
+                $configSystem = self::getConfig('App.System.System');
                 $theme = $configSystem->theme;
             }
         }
@@ -883,11 +881,11 @@ abstract class Be
         }
 
         $path = $runtime->getCachePath() . '/Template/' . $theme . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
-        if (self::getConfig('System.System')->developer || !file_exists($path)) {
+        if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
             \Be\Template\TemplateHelper::update($template, $theme);
         }
 
-        $class = 'Be\\Cache\\Template\\' . $theme . '\\' . $type . '\\' . $name . '\\' . implode('\\', $parts);
+        $class = 'Be\\Data\\Cache\\Template\\' . $theme . '\\' . $type . '\\' . $name . '\\' . implode('\\', $parts);
 
         if ($runtime->getMode() == 'Swoole') {
             $cid = \Swoole\Coroutine::getCid();
@@ -918,7 +916,7 @@ abstract class Be
             if (isset($property->theme)) {
                 $theme = $property->theme;
             } else {
-                $configAdmin = self::getConfig('System.Admin');
+                $configAdmin = self::getConfig('App.System.Admin');
                 $theme = $configAdmin->theme;
             }
         }
@@ -932,11 +930,11 @@ abstract class Be
         }
 
         $path = $runtime->getCachePath() . '/AdminTemplate/' . $theme . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
-        if (self::getConfig('System.System')->developer || !file_exists($path)) {
+        if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
             \Be\AdminTemplate\AdminTemplateHelper::update($template, $theme);
         }
 
-        $class = 'Be\\Cache\\AdminTemplate\\' . $theme . '\\' . $type . '\\' . $name . '\\' . implode('\\', $parts);
+        $class = 'Be\\Data\\Cache\\AdminTemplate\\' . $theme . '\\' . $type . '\\' . $name . '\\' . implode('\\', $parts);
 
         if ($runtime->getMode() == 'Swoole') {
             $cid = \Swoole\Coroutine::getCid();
@@ -958,13 +956,13 @@ abstract class Be
         if (isset(self::$cache['Menu'])) return self::$cache['Menu'];
 
         $path = self::getRuntime()->getCachePath() . '/Menu.php';
-        if (self::getConfig('System.System')->developer || !file_exists($path)) {
+        if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
             $service = Be::getAdminService('System.Menu');
             $service->update();
             include_once $path;
         }
 
-        $class = 'Be\\Cache\\Menu';
+        $class = 'Be\\Data\\Cache\\Menu';
         self::$cache['Menu'] = new $class();
         return self::$cache['Menu'];
     }
@@ -979,13 +977,13 @@ abstract class Be
         if (isset(self::$cache['adminMenu'])) return self::$cache['adminMenu'];
 
         $path = self::getRuntime()->getCachePath() . '/AdminMenu.php';
-        if (self::getConfig('System.System')->developer || !file_exists($path)) {
+        if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
             $service = Be::getAdminService('System.AdminMenu');
             $service->update();
             include_once $path;
         }
 
-        $class = 'Be\\Cache\\AdminMenu';
+        $class = 'Be\\Data\\Cache\\AdminMenu';
         self::$cache['adminMenu'] = new $class();
         return self::$cache['adminMenu'];
     }
@@ -1001,13 +999,13 @@ abstract class Be
         if (isset(self::$cache['adminRole'][$roleId])) return self::$cache['adminRole'][$roleId];
 
         $path = self::getRuntime()->getCachePath() . '/AdminRole/AdminRole' . $roleId . '.php';
-        if (self::getConfig('System.System')->developer || !file_exists($path)) {
+        if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
             $service = Be::getAdminService('System.AdminRole');
             $service->updateAdminRole($roleId);
             include_once $path;
         }
 
-        $class = 'Be\\Cache\\AdminRole\\AdminRole' . $roleId;
+        $class = 'Be\\Data\\Cache\\AdminRole\\AdminRole' . $roleId;
         self::$cache['adminRole'][$roleId] = new $class();
         return self::$cache['adminRole'][$roleId];
     }

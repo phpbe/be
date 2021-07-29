@@ -47,7 +47,7 @@
             </el-tab-pane>
 
             <?php
-            $configSystemLog = \Be\Be::getConfig('System.Log');
+            $configSystemLog = \Be\Be::getConfig('App.System.Log');
 
             if (isset($configSystemLog->server) && $configSystemLog->server) {
                 ?>

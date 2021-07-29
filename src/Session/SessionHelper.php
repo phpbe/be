@@ -35,7 +35,7 @@ abstract class SessionHelper
             }
         }
 
-        $config = Be::getConfig('System.redis');
+        $config = Be::getConfig('App.System.redis');
         $arrConfig = get_object_vars($config);
         foreach ($arrConfig as $k => $v) {
             if (!isset($keyValues[$k])) {

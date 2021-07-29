@@ -67,7 +67,7 @@ class Installer
 
                             if (file_exists($propertyPath)) {
                                 $content = file_get_contents($propertyPath);
-                                preg_match('/namespace\s+Be\\\\Mf\\\\App\\\\(\w+)/i', $content, $matches);
+                                preg_match('/namespace\s+Be\\\\App\\\\(\w+)/i', $content, $matches);
                                 if (isset($matches[1]) && $matches[1] != 'System') {
                                     $apps[] = $matches[1];
                                 }
@@ -95,7 +95,7 @@ class Installer
             $installer = new $class();
             $installer->install();
 
-            $configApp = Be::getConfig('System.App');
+            $configApp = Be::getConfig('App.System.App');
             $names = $configApp->names;
             $names[] = $app;
             $configApp->names = array_unique($names);
@@ -118,7 +118,7 @@ class Installer
             $unInstaller = new $class();
             $unInstaller->uninstall();
 
-            $configApp = Be::getConfig('System.App');
+            $configApp = Be::getConfig('App.System.App');
             $names = $configApp->names;
             $newNames = [];
             foreach ($names as $name) {

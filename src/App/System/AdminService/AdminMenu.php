@@ -168,7 +168,7 @@ class AdminMenu
         $menus = $this->getMenus();
 
         $code = '<?php' . "\n";
-        $code .= 'namespace Be\\Cache;' . "\n";
+        $code .= 'namespace Be\\Data\\Cache;' . "\n";
         $code .= "\n";
         $code .= 'class AdminMenu extends \\Be\\AdminMenu\\Driver' . "\n";
         $code .= '{' . "\n";

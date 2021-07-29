@@ -25,7 +25,7 @@ class Common extends Driver
 
         try {
             // 检查网站配置， 是否暂停服务
-            $configSystem = Be::getConfig('System.System');
+            $configSystem = Be::getConfig('App.System.System');
 
             // 默认时区
             date_default_timezone_set($configSystem->timezone);
@@ -112,7 +112,7 @@ class Common extends Driver
             // 默认访问控制台页面
             if (!$app) {
                 if ($admin) {
-                    $route = $request->request('route', Be::getConfig('System.Admin')->home);
+                    $route = $request->request('route', Be::getConfig('App.System.Admin')->home);
                 } else {
                     $route = $request->request('route', $configSystem->home);
                 }
@@ -156,7 +156,7 @@ class Common extends Driver
                         }
 
                         // 已登录用户，IP锁定功能校验
-                        $configAdminUser = Be::getConfig('System.AdminUser');
+                        $configAdminUser = Be::getConfig('App.System.AdminUser');
                         if ($configAdminUser->ipLock) {
                             if ($my->this_login_ip != $request->getIp()) {
                                 Be::getAdminService('System.AdminUser')->logout();

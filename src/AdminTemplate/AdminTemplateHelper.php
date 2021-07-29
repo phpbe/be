@@ -215,7 +215,7 @@ class AdminTemplateHelper
         $className = array_pop($parts);
 
         $codePhp = '<?php' . "\n";
-        $codePhp .= 'namespace Be\\Cache\\AdminTemplate\\' . $theme . '\\' . $type . '\\' . $name;
+        $codePhp .= 'namespace Be\\Data\\Cache\\AdminTemplate\\' . $theme . '\\' . $type . '\\' . $name;
         if (count($parts) > 0) {
             $codePhp .= '\\' . implode('\\', $parts);
         }

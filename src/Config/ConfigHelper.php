@@ -16,13 +16,19 @@ class ConfigHelper
     public static function update($name, $instance)
     {
         $parts = explode('.', $name);
-        $appName = $parts[0];
-        $configName = $parts[1];
+        $type = array_shift($parts);
+        $catalog = array_shift($parts);
+        $className = array_pop($parts);
 
         $runtime = Be::getRuntime();
         $code = "<?php\n";
-        $code .= 'namespace Be\\Data\\' . $appName . '\\Config;' . "\n\n";
-        $code .= 'class ' . $configName . "\n";
+        $namespace = 'Be\\Data\\' . $type . '\\' . $catalog . '\\Config';
+        if (count($parts) > 0) {
+            $namespace .= '\\' . implode('\\', $parts);
+        }
+
+        $code .= 'namespace ' . $namespace . ";\n\n";
+        $code .= 'class ' . $className . "\n";
         $code .= "{\n";
 
         $vars = get_object_vars($instance);
@@ -31,7 +37,7 @@ class ConfigHelper
         }
         $code .= "}\n";
 
-        $path = $runtime->getDataPath() . '/' . $appName . '/Config/' . $configName . '.php';
+        $path = $runtime->getDataPath() . '/' . $type . '/' . $catalog . '/Config/' . implode('/', $parts) . '/' . $className . '.php';
         $dir = dirname($path);
         if (!is_dir($dir)) mkdir($dir, 0755, true);
         file_put_contents($path, $code, LOCK_EX);

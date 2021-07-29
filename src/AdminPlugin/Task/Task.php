@@ -744,7 +744,7 @@ class Task extends Driver
     {
         $response = Be::getResponse();
 
-        $configTask = Be::getConfig('System.Task');
+        $configTask = Be::getConfig('App.System.Task');
         if ($configTask->password == '') {
             $configTask->password = Random::complex(16);
             ConfigHelper::update('System.Task', $configTask);

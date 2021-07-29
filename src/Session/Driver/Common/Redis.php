@@ -115,7 +115,7 @@ class Redis extends \SessionHandler implements Driver
 	 * @return bool
 	 */
 	public function open($savePath, $sessionId) {
-        $this->redis = Be::getRedis(Be::getConfig('System.Session')->redis);
+        $this->redis = Be::getRedis(Be::getConfig('App.System.Session')->redis);
 		return true;
 	}
 

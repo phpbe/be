@@ -83,7 +83,7 @@ class AdminUser
      */
     public function adminUsers()
     {
-        $configAdminUser = Be::getConfig('System.AdminUser');
+        $configAdminUser = Be::getConfig('App.System.AdminUser');
         $adminRoleKeyValues = Be::getAdminService('System.AdminRole')->getAdminRoleKeyValues();
         $genderKeyValues = [
             '-1' => '保密',

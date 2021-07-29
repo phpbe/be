@@ -58,7 +58,7 @@ class AdminUser
         try {
             $tupleAdminUser = Be::newTuple('system_admin_user');
 
-            $configAdminUser = Be::getConfig('System.AdminUser');
+            $configAdminUser = Be::getConfig('App.System.AdminUser');
             if ($configAdminUser->ldap) {
 
                 $conn = null;

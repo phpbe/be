@@ -15,7 +15,7 @@
 <be-body>
     <div class="p-2">
     <?php
-    $configSystem = \Be\Be::getConfig('System.System');
+    $configSystem = \Be\Be::getConfig('App.System.System');
     if ($configSystem->developer) {
         $request = \Be\Be::getRequest();
         ?>

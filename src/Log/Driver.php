@@ -34,7 +34,7 @@ class Driver
     {
         if ($this->logger === null) {
 
-            $configSystemLog = Be::getConfig('System.Log');
+            $configSystemLog = Be::getConfig('App.System.Log');
 
             $level = Logger::DEBUG;
             if (isset($configSystemLog->level)) {

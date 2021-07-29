@@ -35,12 +35,12 @@ class FormItemImage extends FormItem
         }
         $this->path = $params['path'];
 
-        $configSystem = Be::getConfig('System.System');
+        $configSystem = Be::getConfig('App.System.System');
         $this->maxSize = $configSystem->uploadMaxSize;
         $this->maxSizeInt = FileSize::string2Int($this->maxSize);
 
         // 允许上传的图像类型
-        $this->allowUploadImageTypes = Be::getConfig('System.System')->allowUploadImageTypes;
+        $this->allowUploadImageTypes = Be::getConfig('App.System.System')->allowUploadImageTypes;
 
         if ($this->required) {
             if (!isset($this->ui['form-item'][':rules'])) {
