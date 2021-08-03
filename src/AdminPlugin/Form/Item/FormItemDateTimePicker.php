@@ -39,7 +39,12 @@ class FormItemDateTimePicker extends FormItem
         }
 
         $this->ui['type'] = 'datetime';
-        $this->ui['v-model'] = 'formData.' . $this->name;
+
+        if ($this->name !== null) {
+            if (!isset($this->ui['v-model'])) {
+                $this->ui['v-model'] = 'formData.' . $this->name;
+            }
+        }
     }
 
     /**

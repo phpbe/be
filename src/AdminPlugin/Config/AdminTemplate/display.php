@@ -25,10 +25,18 @@
 
                                         echo $driver->getHtml();
 
-                                        if (is_array($driver->value) || is_object($driver->value)) {
-                                            $formData[$driver->name] =  json_encode($driver->value, JSON_PRETTY_PRINT);
+                                        if ($driver instanceof \Be\AdminPlugin\Form\Item\FormItems) {
+                                            if ($driver->name !== null) {
+                                                $formData[$driver->name] = $driver->value;
+                                            }
                                         } else {
-                                            $formData[$driver->name] = $driver->value;
+                                            if ($driver->name !== null) {
+                                                if (is_array($driver->value) || is_object($driver->value)) {
+                                                    $formData[$driver->name] =  json_encode($driver->value, JSON_PRETTY_PRINT);
+                                                } else {
+                                                    $formData[$driver->name] = $driver->value;
+                                                }
+                                            }
                                         }
 
                                         $jsX = $driver->getJs();

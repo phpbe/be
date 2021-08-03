@@ -36,6 +36,7 @@
 
             if (isset($this->setting['form']['items']) && count($this->setting['form']['items']) > 0) {
                 foreach ($this->setting['form']['items'] as $item) {
+
                     $driver = null;
                     if (isset($item['driver'])) {
                         $driverName = $item['driver'];
@@ -43,10 +44,17 @@
                     } else {
                         $driver = new \Be\AdminPlugin\Form\Item\FormItemInput($item, $this->row);
                     }
+
                     echo $driver->getHtml();
 
-                    if ($driver->name !== null) {
-                        $formData[$driver->name] = $driver->getValueString();
+                    if ($driver instanceof \Be\AdminPlugin\Form\Item\FormItems) {
+                        if ($driver->name !== null) {
+                            $formData[$driver->name] = $driver->value;
+                        }
+                    } else {
+                        if ($driver->name !== null) {
+                            $formData[$driver->name] = $driver->getValueString();
+                        }
                     }
 
                     $jsX = $driver->getJs();

@@ -36,7 +36,11 @@ class FormItemInputTextArea extends FormItem
             $this->ui[':autosize'] = '{minRows:3,maxRows:10}';
         }
 
-        $this->ui['v-model'] = 'formData.' . $this->name;
+        if ($this->name !== null) {
+            if (!isset($this->ui['v-model'])) {
+                $this->ui['v-model'] = 'formData.' . $this->name;
+            }
+        }
     }
 
     /**

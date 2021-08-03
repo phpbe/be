@@ -326,7 +326,15 @@ class FormItemCode extends FormItem
         }
         $html .= '>';
 
-        $html .= '<textarea ref="refFormItemCode_' . $this->name . '" v-model="formData.' . $this->name . '"></textarea>';
+        $html .= '<textarea ref="refFormItemCode_' . $this->name . '"';
+        if ($this->name !== null) {
+            if (!isset($this->ui['v-model'])) {
+                $html .= ' v-model="formData.' . $this->name . '"';
+            } else {
+                $html .= ' v-model="' . $this->ui['v-model'] . '"';
+            }
+        }
+        $html .= '></textarea>';
 
         $html .= '</el-form-item>';
         return $html;

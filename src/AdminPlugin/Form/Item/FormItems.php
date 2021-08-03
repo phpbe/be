@@ -5,9 +5,9 @@ namespace Be\AdminPlugin\Form\Item;
 use Be\AdminPlugin\AdminPluginException;
 
 /**
- * 表单项
+ * 表单项组
  */
-abstract class FormItem
+abstract class FormItems
 {
 
     protected $name = null; // 键名
@@ -15,13 +15,14 @@ abstract class FormItem
     protected $value = null; // 值
     protected $nullValue = ''; // 空值
     protected $defaultValue = ''; // 默认址
-    protected $valueType = 'string'; // 值类型
+    protected $valueType = 'mixed'; // 值类型
     protected $keyValues = null; // 可选值键值对
     protected $description = ''; // 描述
     protected $ui = []; // UI界面参数
     protected $newValue = ''; // 新值，提交后生成
     protected $required = false; // 是否必填
     protected $disabled = false; // 是否不可编辑
+    protected $items = [];
 
     /**
      * 构造函数
@@ -160,7 +161,14 @@ abstract class FormItem
             $this->ui['form-item']['label'] = htmlspecialchars($this->label);
         }
 
+        if (!isset($params['items'])) {
+            throw new AdminPluginException('参数' . $this->label . ' (' . $this->name . ') 须指定子项目参数（items）');
+        }
+        $this->items = $params['items'];
+
     }
+
+    protected $js = [];
 
     /**
      * 获取需要引入的 JS 文件
@@ -169,10 +177,14 @@ abstract class FormItem
      */
     public function getJs()
     {
+        if (count($this->js) > 0) {
+            return $this->js;
+        }
+
         return false;
     }
 
-
+    protected $css = [];
     /**
      * 获取需要引入的 CSS 文件
      *
@@ -180,18 +192,14 @@ abstract class FormItem
      */
     public function getCss()
     {
+        if (count($this->css) > 0) {
+            return $this->css;
+        }
+
         return false;
     }
 
-    /**
-     * 获取HTML内容
-     *
-     * @return string
-     */
-    public function getHtml()
-    {
-        return '';
-    }
+    protected $vueData = [];
 
     /**
      * 获取 vue data
@@ -200,8 +208,14 @@ abstract class FormItem
      */
     public function getVueData()
     {
+        if (count($this->vueData) > 0) {
+            return $this->vueData;
+        }
+
         return false;
     }
+
+    protected $vueMethods = [];
 
     /**
      * 获取 vue 方法
@@ -210,8 +224,13 @@ abstract class FormItem
      */
     public function getVueMethods()
     {
+        if (count($this->vueMethods) > 0) {
+            return $this->vueMethods;
+        }
         return false;
     }
+
+    protected $vueHooks = [];
 
     /**
      * 获取 vue 钩子
@@ -220,8 +239,13 @@ abstract class FormItem
      */
     public function getVueHooks()
     {
+        if (count($this->vueHooks) > 0) {
+            return $this->vueHooks;
+        }
+
         return false;
     }
+
 
     public function __get($property)
     {
@@ -268,68 +292,7 @@ abstract class FormItem
     {
         if (isset($data[$this->name]) && $data[$this->name] !== $this->nullValue) {
             $newValue = $data[$this->name];
-            switch ($this->valueType) {
-                case 'array(int)':
-                    $newValue = htmlspecialchars_decode($newValue);
-                    $newValue = json_decode($newValue, true);
-                    if (NULL === $newValue) {
-                        throw new AdminPluginException('参数 ' . $this->label . ' (' . $this->name . ') 数据格式非有效的 JSON！');
-                    }
-                    $newValue = array_map('intval', $newValue);
-                    $this->newValue = $newValue;
-                    break;
-                case 'array(float)':
-                    $newValue = htmlspecialchars_decode($newValue);
-                    $newValue = json_decode($newValue, true);
-                    if (NULL === $newValue) {
-                        throw new AdminPluginException('参数 ' . $this->label . ' (' . $this->name . ') 数据格式非有效的 JSON！');
-                    }
-                    $newValue = array_map('floatval', $newValue);
-                    $this->newValue = $newValue;
-                    break;
-                case 'array':
-                case 'array(string)':
-                    $newValue = htmlspecialchars_decode($newValue);
-                    $newValue = json_decode($newValue, true);
-                    if (NULL === $newValue) {
-                        throw new AdminPluginException('参数 ' . $this->label . ' (' . $this->name . ') 数据格式非有效的 JSON！');
-                    }
-                    $newValue = array_map('trim', $newValue);
-                    $this->newValue = $newValue;
-                    break;
-                case 'mixed':
-                    $newValue = htmlspecialchars_decode($newValue);
-                    $newValue = json_decode($newValue, true);
-                    if (NULL === $newValue) {
-                        throw new AdminPluginException('参数 ' . $this->label . ' (' . $this->name . ') 数据格式非有效的 JSON！');
-                    }
-                    $this->newValue = $newValue;
-                    break;
-                case 'bool':
-                    $this->newValue = $data[$this->name] ? true : false;
-                    break;
-                case 'int':
-                    if (!is_numeric($newValue)) {
-                        throw new AdminPluginException('参数 ' . $this->label . ' (' . $this->name . ') 不是合法的数字');
-                    }
-                    $this->newValue = intval($newValue);
-                    break;
-                case 'float':
-                    if (!is_numeric($newValue)) {
-                        throw new AdminPluginException('参数 ' . $this->label . ' (' . $this->name . ') 不是合法的数字');
-                    }
-                    $this->newValue = floatval($newValue);
-                    break;
-                case 'string':
-                    $newValue = htmlspecialchars_decode($newValue);
-                    $this->newValue = trim($newValue);
-                    break;
-                default:
-                    if (!is_array($newValue) && !is_object($newValue)) {
-                        $newValue = htmlspecialchars_decode($newValue);
-                    }
-                    $this->newValue = $newValue;
-            }
+            $this->newValue = $newValue;
         } else {
             $this->newValue = $this->nullValue;
         }

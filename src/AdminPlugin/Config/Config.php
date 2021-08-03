@@ -63,12 +63,16 @@ class Config extends Driver
         $className = '\\Be\\App\\' . $appName . '\\Config\\' . $configName;
         if (class_exists($className)) {
             $configInstance = Be::getConfig('App.' . $appName . '.' . $configName);
+            $originalConfigInstance = new $className();
+
             $reflection = new \ReflectionClass($className);
-            $properties = $reflection->getProperties(\ReflectionMethod::IS_PUBLIC);
+            $properties = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC);
             foreach ($properties as $property) {
                 $itemName = $property->getName();
                 $itemComment = $property->getDocComment();
                 $parseItemComments = \Be\Util\Annotation::parse($itemComment);
+
+                $configItem = null;
                 if (isset($parseItemComments['BeConfigItem'][0])) {
                     $annotation = new BeConfigItem($parseItemComments['BeConfigItem'][0]);
                     $configItem = $annotation->toArray();
@@ -76,6 +80,14 @@ class Config extends Driver
                         $configItem['label'] = $configItem['value'];
                         unset($configItem['value']);
                     }
+                } else {
+                    $fn = '_' . $itemName;
+                    if (is_callable([$originalConfigInstance, $fn])) {
+                        $configItem = $originalConfigInstance->$fn($itemName);
+                    }
+                }
+
+                if ($configItem) {
 
                     $configItem['name'] = $itemName;
                     $configItem['value'] = $configInstance->$itemName;
@@ -130,6 +142,7 @@ class Config extends Driver
             if (!class_exists($className)) {
                 throw new AdminPluginException('配置项（' . $className . '）不存在！');
             }
+            $originalConfigInstance = new $className();
 
             $newValues = [];
             $newValueStrings = [];
@@ -143,6 +156,8 @@ class Config extends Driver
 
                 $itemComment = $property->getDocComment();
                 $parseItemComments = \Be\Util\Annotation::parse($itemComment);
+
+                $configItem = null;
                 if (isset($parseItemComments['BeConfigItem'][0])) {
                     $annotation = new BeConfigItem($parseItemComments['BeConfigItem'][0]);
                     $configItem = $annotation->toArray();
@@ -150,9 +165,15 @@ class Config extends Driver
                         $configItem['label'] = $configItem['value'];
                         unset($configItem['value']);
                     }
+                } else {
+                    $fn = '_' . $itemName;
+                    if (is_callable([$originalConfigInstance, $fn])) {
+                        $configItem = $originalConfigInstance->$fn($itemName);
+                    }
+                }
 
+                if ($configItem) {
                     $configItem['name'] = $itemName;
-                    $configItems[] = $configItem;
 
                     $driverClass = null;
                     if (isset($configItem['driver'])) {
@@ -172,16 +193,16 @@ class Config extends Driver
                     switch ($driver->valueType) {
                         case 'array(int)':
                         case 'array(float)':
-                        $newValueString = '[' . implode(',', $driver->newValue) . ']';
+                            $newValueString = '[' . implode(',', $driver->newValue) . ']';
                             break;
                         case 'array':
                         case 'array(string)':
-                        $newValueString = $driver->newValue;
+                            $newValueString = $driver->newValue;
                             foreach ($newValueString as &$x) {
                                 $x = str_replace('\'', '\\\'', $x);
                             }
                             unset($x);
-                        $newValueString = '[\'' . implode('\',\'', $newValueString) . '\']';
+                            $newValueString = '[\'' . implode('\',\'', $newValueString) . '\']';
                             break;
                         case 'mixed':
                             $newValueString = var_export($driver->newValue, true);

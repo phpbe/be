@@ -50,7 +50,12 @@ class FormItemDatePickerMonthRange extends FormItem
 
         $this->ui['type'] = 'monthrange';
         $this->ui['@change'] = 'formItemDatePickerMonthRange_' . $this->name.'_change';
-        $this->ui['v-model'] = 'formItems.' . $this->name.'.value';
+
+        if ($this->name !== null) {
+            if (!isset($this->ui['v-model'])) {
+                $this->ui['v-model'] = 'formItems.' . $this->name.'.value';
+            }
+        }
     }
 
     /**

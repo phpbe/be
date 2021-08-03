@@ -34,7 +34,9 @@ class FormItemInput extends FormItem
             $this->ui['clearable'] = null;
         }
 
-        $this->ui['v-model'] = 'formData.' . $this->name;
+        if (!isset($this->ui['v-model'])) {
+            $this->ui['v-model'] = 'formData.' . $this->name;
+        }
     }
 
 
