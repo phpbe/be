@@ -129,8 +129,10 @@ class FormItemsObject extends FormItems
                     $driver = new \Be\AdminPlugin\Form\Item\FormItemInput($item, $data[$this->name]);
                 }
 
-                $driver->submit($data[$this->name]);
-                $newValue[$driver->name] = $driver->newValue;
+                if ($driver->name) {
+                    $driver->submit($data[$this->name]);
+                    $newValue[$driver->name] = $driver->newValue;
+                }
             }
             $this->newValue = $newValue;
         } else {
