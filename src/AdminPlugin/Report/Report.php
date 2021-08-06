@@ -475,13 +475,18 @@ class Report extends Driver
         if (isset($this->setting['lists']['form']['items']) && count($this->setting['lists']['form']['items']) > 0) {
             foreach ($this->setting['lists']['form']['items'] as $item) {
 
-                $driverName = null;
+                $driverClass = null;
                 if (isset($item['driver'])) {
-                    $driverName = $item['driver'];
+                    if (substr($item['driver'], 0, 8) == 'FormItem') {
+                        $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $item['driver'];
+                    } else {
+                        $driverClass = $item['driver'];
+                    }
                 } else {
-                    $driverName = \Be\AdminPlugin\Form\Item\FormItemInput::class;
+                    $driverClass = \Be\AdminPlugin\Form\Item\FormItemInput::class;
                 }
-                $driver = new $driverName($item);
+                $driver = new $driverClass($item);
+
                 $driver->submit($formData);
 
                 if ($driver->newValue === '') {

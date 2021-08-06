@@ -37,13 +37,17 @@
             if (isset($this->setting['form']['items']) && count($this->setting['form']['items']) > 0) {
                 foreach ($this->setting['form']['items'] as $item) {
 
-                    $driver = null;
+                    $driverClass = null;
                     if (isset($item['driver'])) {
-                        $driverName = $item['driver'];
-                        $driver = new $driverName($item, $this->row);
+                        if (substr($item['driver'], 0, 8) == 'FormItem') {
+                            $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $item['driver'];
+                        } else {
+                            $driverClass = $item['driver'];
+                        }
                     } else {
-                        $driver = new \Be\AdminPlugin\Form\Item\FormItemInput($item, $this->row);
+                        $driverClass = \Be\AdminPlugin\Form\Item\FormItemInput::class;
                     }
+                    $driver = new $driverClass($item, $this->row);
 
                     echo $driver->getHtml();
 

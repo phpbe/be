@@ -3,11 +3,12 @@
 namespace Be\AdminPlugin\Form\Item;
 
 use Be\AdminPlugin\AdminPluginException;
+use Be\Config\Annotation\BeConfigItem;
 
 /**
  * 表单项 混合体
  */
-class FormItemsObject extends FormItems
+class FormItemsConfig extends FormItems
 {
 
     /**
@@ -18,6 +19,63 @@ class FormItemsObject extends FormItems
      */
     public function __construct($params = [], $row = [])
     {
+        if (!isset($params['items'][0])) {
+            throw new AdminPluginException('参数' . $this->label . ' (' . $this->name . ') 须指定子项目参数（items）');
+        }
+
+        $item = $params['items'][0];
+
+        $className = null;
+        if (strpos($item, '\\') !== false) {
+            $className = $item;
+            $configName = substr($className, strrpos($item, '\\') + 1);
+        } else {
+            $parts = explode('.', $item);
+            if (count($parts) > 3) {
+                $type = array_shift($parts);
+                $catalog = array_shift($parts);
+                $className = '\\Be\\' . $type . '\\' . $catalog . '\\Config\\' . implode('\\', $parts);
+                $configName = end($parts);
+            }
+        }
+
+        if (!$className || !class_exists($className)) {
+            throw new AdminPluginException('配置项' . $this->label . '里的类 (' . $item . ') 不存在！');
+        }
+
+        $configInstance = new $className();
+
+        $items = [];
+        $reflection = new \ReflectionClass($className);
+        $properties = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC);
+        foreach ($properties as $property) {
+            $itemName = $property->getName();
+            $itemComment = $property->getDocComment();
+            $parseItemComments = \Be\Util\Annotation::parse($itemComment);
+
+            $configItem = null;
+            if (isset($parseItemComments['BeConfigItem'][0])) {
+                $annotation = new BeConfigItem($parseItemComments['BeConfigItem'][0]);
+                $configItem = $annotation->toArray();
+                if (isset($configItem['value'])) {
+                    $configItem['label'] = $configItem['value'];
+                    unset($configItem['value']);
+                }
+            } else {
+                $fn = '_' . $itemName;
+                if (is_callable([$configInstance, $fn])) {
+                    $configItem = $configInstance->$fn($itemName);
+                }
+            }
+
+            if ($configItem) {
+                $configItem['name'] = $itemName;
+                $items[] = $configItem;
+            }
+        }
+
+        $params['items'] = $items;
+
         parent::__construct($params, $row);
 
         if ($this->name !== null) {
@@ -146,8 +204,6 @@ class FormItemsObject extends FormItems
         } else {
             $this->newValue = $this->nullValue;
         }
-
-
     }
 
 }

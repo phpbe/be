@@ -434,14 +434,17 @@ class Curd extends Driver
         if (isset($this->setting['lists']['form']['items']) && count($this->setting['lists']['form']['items']) > 0) {
             foreach ($this->setting['lists']['form']['items'] as $item) {
 
-                $driverName = null;
+                $driverClass = null;
                 if (isset($item['driver'])) {
-                    $driverName = $item['driver'];
+                    if (substr($item['driver'], 0, 8) == 'FormItem') {
+                        $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $item['driver'];
+                    } else {
+                        $driverClass = $item['driver'];
+                    }
                 } else {
-                    $driverName = \Be\AdminPlugin\Form\Item\FormItemInput::class;
+                    $driverClass = \Be\AdminPlugin\Form\Item\FormItemInput::class;
                 }
-
-                $driver = new $driverName($item);
+                $driver = new $driverClass($item);
 
                 if ($driver->name == null) {
                     continue;
@@ -664,13 +667,18 @@ class Curd extends Driver
 
                 if (isset($this->setting['create']['form']['items']) && count($this->setting['create']['form']['items']) > 0) {
                     foreach ($this->setting['create']['form']['items'] as $item) {
-                        $driver = null;
+
+                        $driverClass = null;
                         if (isset($item['driver'])) {
-                            $driverName = $item['driver'];
-                            $driver = new $driverName($item);
+                            if (substr($item['driver'], 0, 8) == 'FormItem') {
+                                $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $item['driver'];
+                            } else {
+                                $driverClass = $item['driver'];
+                            }
                         } else {
-                            $driver = new \Be\AdminPlugin\Form\Item\FormItemInput($item);
+                            $driverClass = \Be\AdminPlugin\Form\Item\FormItemInput::class;
                         }
+                        $driver = new $driverClass($item);
 
                         if ($driver->name == null) {
                             continue;
@@ -806,13 +814,17 @@ class Curd extends Driver
                             continue;
                         }
 
-                        $driver = null;
+                        $driverClass = null;
                         if (isset($item['driver'])) {
-                            $driverName = $item['driver'];
-                            $driver = new $driverName($item);
+                            if (substr($item['driver'], 0, 8) == 'FormItem') {
+                                $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $item['driver'];
+                            } else {
+                                $driverClass = $item['driver'];
+                            }
                         } else {
-                            $driver = new \Be\AdminPlugin\Form\Item\FormItemInput($item);
+                            $driverClass = \Be\AdminPlugin\Form\Item\FormItemInput::class;
                         }
+                        $driver = new $driverClass($item);
 
                         if ($driver->name == null) {
                             continue;

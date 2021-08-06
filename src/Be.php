@@ -143,12 +143,12 @@ abstract class Be
         $parts = explode('.', $name);
         $type = array_shift($parts);
         $catalog = array_shift($parts);
-        $class = 'Be\\Data\\' . $type . '\\' . $catalog . '\\Config\\' . implode('\\', $parts);
+        $class = '\\Be\\Data\\' . $type . '\\' . $catalog . '\\Config\\' . implode('\\', $parts);
         if (class_exists($class)) {
             return new $class();
         }
 
-        $class = 'Be\\' . $type . '\\' . $catalog . '\\Config\\' . implode('\\', $parts);
+        $class = '\\Be\\' . $type . '\\' . $catalog . '\\Config\\' . implode('\\', $parts);
         if (class_exists($class)) {
             $instance = new $class();
             return $instance;
@@ -190,7 +190,7 @@ abstract class Be
         if (isset(self::$cache['property'][$name])) return self::$cache['property'][$name];
 
         $parts = explode('.', $name);
-        $class = 'Be\\' . implode('\\', $parts) . '\\Property';
+        $class = '\\Be\\' . implode('\\', $parts) . '\\Property';
         if (!class_exists($class)) throw new RuntimeException('Property ' . $name . ' doesn\'t exist!');
         $instance = new $class();
 
@@ -547,7 +547,7 @@ abstract class Be
             include_once $path;
         }
 
-        $class = 'Be\\Data\\Cache\\Tuple\\' . $db . '\\' . $name;
+        $class = '\\Be\\Data\\Cache\\Tuple\\' . $db . '\\' . $name;
         return (new $class());
     }
 
@@ -589,7 +589,7 @@ abstract class Be
             include_once $path;
         }
 
-        $class = 'Be\\Data\\Cache\\Table\\' . $db . '\\' . $name;
+        $class = '\\Be\\Data\\Cache\\Table\\' . $db . '\\' . $name;
         return (new $class());
     }
 
@@ -610,7 +610,7 @@ abstract class Be
             include_once $path;
         }
 
-        $class = 'Be\\Data\\Cache\\TableProperty\\' . $db . '\\' . $name;
+        $class = '\\Be\\Data\\Cache\\TableProperty\\' . $db . '\\' . $name;
         self::$cache['tableProperty'][$db][$name] = new $class();
         return self::$cache['tableProperty'][$db][$name];
     }
@@ -685,7 +685,7 @@ abstract class Be
     {
         $parts = explode('.', $name);
         $app = array_shift($parts);
-        $class = 'Be\\App\\' . $app . '\\Service\\' . implode('\\', $parts);
+        $class = '\\Be\\App\\' . $app . '\\Service\\' . implode('\\', $parts);
         return new $class();
     }
 
@@ -721,7 +721,7 @@ abstract class Be
     {
         $parts = explode('.', $name);
         $app = array_shift($parts);
-        $class = 'Be\\App\\' . $app . '\\AdminService\\' . implode('\\', $parts);
+        $class = '\\Be\\App\\' . $app . '\\AdminService\\' . implode('\\', $parts);
         return new $class();
     }
 
@@ -759,7 +759,7 @@ abstract class Be
     {
         $class = null;
         if (strpos($name, '\\') === false) {
-            $class = 'Be\\Lib\\' . $name . '\\' . $name;
+            $class = '\\Be\\Lib\\' . $name . '\\' . $name;
         } else {
             $class = $name;
         }
@@ -800,7 +800,7 @@ abstract class Be
      */
     public static function newPlugin(string $name)
     {
-        $class = 'Be\\Plugin\\' . $name . '\\' . $name;
+        $class = '\\Be\\Plugin\\' . $name . '\\' . $name;
         if (!class_exists($class)) {
             throw new RuntimeException('Plugin ' . $name . ' doesn\'t exist!');
         }
@@ -840,7 +840,7 @@ abstract class Be
      */
     public static function newAdminPlugin(string $name)
     {
-        $class = 'Be\\AdminPlugin\\' . $name . '\\' . $name;
+        $class = '\\Be\\AdminPlugin\\' . $name . '\\' . $name;
         if (!class_exists($class)) {
             throw new RuntimeException('AdminPlugin ' . $name . ' doesn\'t exist!');
         }
@@ -885,7 +885,7 @@ abstract class Be
             \Be\Template\TemplateHelper::update($template, $theme);
         }
 
-        $class = 'Be\\Data\\Cache\\Template\\' . $theme . '\\' . $type . '\\' . $name . '\\' . implode('\\', $parts);
+        $class = '\\Be\\Data\\Cache\\Template\\' . $theme . '\\' . $type . '\\' . $name . '\\' . implode('\\', $parts);
 
         if ($runtime->getMode() == 'Swoole') {
             $cid = \Swoole\Coroutine::getCid();
@@ -934,7 +934,7 @@ abstract class Be
             \Be\AdminTemplate\AdminTemplateHelper::update($template, $theme);
         }
 
-        $class = 'Be\\Data\\Cache\\AdminTemplate\\' . $theme . '\\' . $type . '\\' . $name . '\\' . implode('\\', $parts);
+        $class = '\\Be\\Data\\Cache\\AdminTemplate\\' . $theme . '\\' . $type . '\\' . $name . '\\' . implode('\\', $parts);
 
         if ($runtime->getMode() == 'Swoole') {
             $cid = \Swoole\Coroutine::getCid();
@@ -962,7 +962,7 @@ abstract class Be
             include_once $path;
         }
 
-        $class = 'Be\\Data\\Cache\\Menu';
+        $class = '\\Be\\Data\\Cache\\Menu';
         self::$cache['Menu'] = new $class();
         return self::$cache['Menu'];
     }
@@ -983,7 +983,7 @@ abstract class Be
             include_once $path;
         }
 
-        $class = 'Be\\Data\\Cache\\AdminMenu';
+        $class = '\\Be\\Data\\Cache\\AdminMenu';
         self::$cache['adminMenu'] = new $class();
         return self::$cache['adminMenu'];
     }
@@ -1005,7 +1005,7 @@ abstract class Be
             include_once $path;
         }
 
-        $class = 'Be\\Data\\Cache\\AdminRole\\AdminRole' . $roleId;
+        $class = '\\Be\\Data\\Cache\\AdminRole\\AdminRole' . $roleId;
         self::$cache['adminRole'][$roleId] = new $class();
         return self::$cache['adminRole'][$roleId];
     }

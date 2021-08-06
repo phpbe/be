@@ -3,11 +3,12 @@
 namespace Be\AdminPlugin\Form\Item;
 
 use Be\AdminPlugin\AdminPluginException;
+use Be\Config\Annotation\BeConfigItem;
 
 /**
  * 表单项 混合体数组
  */
-class FormItemsObjects extends FormItems
+class FormItemsConfigs extends FormItems
 {
 
     private $resize = true;
@@ -22,6 +23,63 @@ class FormItemsObjects extends FormItems
      */
     public function __construct($params = [], $row = [])
     {
+        if (!isset($params['items'][0])) {
+            throw new AdminPluginException('参数' . $this->label . ' (' . $this->name . ') 须指定子项目参数（items）');
+        }
+
+        $item = $params['items'][0];
+
+        $className = null;
+        if (strpos($item, '\\') !== false) {
+            $className = $item;
+            $configName = substr($className, strrpos($item, '\\') + 1);
+        } else {
+            $parts = explode('.', $item);
+            if (count($parts) > 3) {
+                $type = array_shift($parts);
+                $catalog = array_shift($parts);
+                $className = '\\Be\\' . $type . '\\' . $catalog . '\\Config\\' . implode('\\', $parts);
+                $configName = end($parts);
+            }
+        }
+
+        if (!$className || !class_exists($className)) {
+            throw new AdminPluginException('配置项' . $this->label . '里的类 (' . $item . ') 不存在！');
+        }
+
+        $configInstance = new $className();
+
+        $items = [];
+        $reflection = new \ReflectionClass($className);
+        $properties = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC);
+        foreach ($properties as $property) {
+            $itemName = $property->getName();
+            $itemComment = $property->getDocComment();
+            $parseItemComments = \Be\Util\Annotation::parse($itemComment);
+
+            $configItem = null;
+            if (isset($parseItemComments['BeConfigItem'][0])) {
+                $annotation = new BeConfigItem($parseItemComments['BeConfigItem'][0]);
+                $configItem = $annotation->toArray();
+                if (isset($configItem['value'])) {
+                    $configItem['label'] = $configItem['value'];
+                    unset($configItem['value']);
+                }
+            } else {
+                $fn = '_' . $itemName;
+                if (is_callable([$configInstance, $fn])) {
+                    $configItem = $configInstance->$fn($itemName);
+                }
+            }
+
+            if ($configItem) {
+                $configItem['name'] = $itemName;
+                $items[] = $configItem;
+            }
+        }
+
+        $params['items'] = $items;
+
         parent::__construct($params, $row);
 
         if (isset($params['resize'])) {
@@ -61,17 +119,17 @@ class FormItemsObjects extends FormItems
         }
         $html .= '>';
 
-        $html .= '<el-card class="box-card" shadow="hover" style="margin-bottom: 10px;" v-for="(formItemsObjectsItem, formItemsObjectsIndex) in formData.' . $this->name . '">';
+        $html .= '<el-card class="box-card" shadow="hover" style="margin-bottom: 10px;" v-for="(formItemsConfigsItem, formItemsConfigsIndex) in formData.' . $this->name . '">';
 
         $html .= '<template slot="header">';
-        $html .= '<span>' . $this->label . ' - {{formItemsObjectsIndex+1}}</span>';
-        $html .= '<el-button type="danger" icon="el-icon-remove" style="float: right;" @click.prevent="FormItemsObjects_remove(\'' . $this->name . '\', formItemsObjectsIndex)">删除</el-button>';
+        $html .= '<span>' . $this->label . ' - {{formItemsConfigsIndex+1}}</span>';
+        $html .= '<el-button type="danger" icon="el-icon-remove" style="float: right;" @click.prevent="FormItemsConfigs_remove(\'' . $this->name . '\', formItemsConfigsIndex)">删除</el-button>';
         $html .= '</template>';
 
         foreach ($this->items as $item) {
             if (isset($item['name'])) {
-                //$item['ui'][':prop'] = '\'formItemsObjectsItem.\' + formItemsObjectsIndex + \'.' . $item['name'] . '\'';
-                $item['ui']['v-model'] = 'formItemsObjectsItem.' . $item['name'];
+                //$item['ui'][':prop'] = '\'formItemsConfigsItem.\' + formItemsConfigsIndex + \'.' . $item['name'] . '\'';
+                $item['ui']['v-model'] = 'formItemsConfigsItem.' . $item['name'];
             }
 
             $driverClass = null;
@@ -125,7 +183,7 @@ class FormItemsObjects extends FormItems
         $html .= '</el-card>';
 
         if ($this->resize) {
-            $html .= '<el-button type="primary" icon="el-icon-plus" @click="FormItemsObjects_' . $this->name . '_add">新增</el-button>';
+            $html .= '<el-button type="primary" icon="el-icon-plus" @click="FormItemsConfigs_' . $this->name . '_add">新增</el-button>';
         }
 
         $html .= '</el-form-item>';
@@ -222,11 +280,11 @@ class FormItemsObjects extends FormItems
             }
 
             $vueMethodsX = [
-                'FormItemsObjects_' . $this->name . '_add' => 'function() {
+                'FormItemsConfigs_' . $this->name . '_add' => 'function() {
                     ' . ($this->maxSize > 0 ? 'if (this.formData[\'' . $this->name . '\'].length >= ' . $this->maxSize . ') {return;}' : '') . '
                     this.formData[\'' . $this->name . '\'].push(' . json_encode($data) . ');
                 }',
-                'FormItemsObjects_remove' => 'function(name, index) {
+                'FormItemsConfigs_remove' => 'function(name, index) {
                     if (this.formData[name].length <= this.formItems[name].minSize) {
                         return;
                     }

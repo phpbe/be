@@ -75,13 +75,18 @@
                     <el-col :span="24">
                         <?php
                         foreach ($this->setting['form']['items'] as $item) {
-                            $driver = null;
+                            $driverClass = null;
                             if (isset($item['driver'])) {
-                                $driverName = $item['driver'];
-                                $driver = new $driverName($item);
+                                if (substr($item['driver'], 0, 8) == 'FormItem') {
+                                    $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $item['driver'];
+                                } else {
+                                    $driverClass = $item['driver'];
+                                }
                             } else {
-                                $driver = new \Be\AdminPlugin\Form\Item\FormItemInput($item);
+                                $driverClass = \Be\AdminPlugin\Form\Item\FormItemInput::class;
                             }
+                            $driver = new $driverClass($item);
+
                             echo $driver->getHtml();
 
                             if ($driver->name !== null) {
