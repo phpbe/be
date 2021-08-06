@@ -81,7 +81,7 @@ class FormItemSelect extends FormItem
         $html .= '>';
 
         foreach ($this->keyValues as $key => $val) {
-            $html .= '<el-option value="'. $key .'">' .$val . '</el-option>';
+            $html .= '<el-option value="'. $key .'" key="'. $key .'" label="' .$val . '"></el-option>';
         }
 
         $html .= '</el-select>';

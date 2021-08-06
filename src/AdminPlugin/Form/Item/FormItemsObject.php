@@ -51,6 +51,7 @@ class FormItemsObject extends FormItems
 
             if (isset($item['name'])) {
                 $item['ui']['v-model'] = 'formData.' . $this->name . '.' . $item['name'];
+                $item['value'] = $this->value[$item['name']];
             }
 
             $driverClass = null;

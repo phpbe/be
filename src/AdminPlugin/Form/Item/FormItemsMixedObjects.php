@@ -218,7 +218,7 @@ class FormItemsMixedObjects extends FormItems
             ]
         ];
 
-        \Be\Util\Arr::merge($this->vueData, $vueDataX);
+        $this->vueData = \Be\Util\Arr::merge($this->vueData, $vueDataX);
 
         return $this->vueData;
     }
