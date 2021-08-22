@@ -115,6 +115,13 @@ class Common extends Driver
             $template = 'App.' . $request->getRoute();
         }
 
+        if ($theme === null) {
+            $_theme = $request->get('_theme', false);
+            if ($_theme) {
+                $theme = $_theme;
+            }
+        }
+
         $templateInstance = $request->isAdmin() ? Be::getAdminTemplate($template, $theme) : Be::getTemplate($template, $theme);
         foreach ($this->data as $key => $val) {
             $templateInstance->$key = $val;

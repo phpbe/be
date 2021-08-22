@@ -3,10 +3,7 @@
 namespace Be\Response\Driver;
 
 use Be\Be;
-use Be\Request\RequestFactory;
 use Be\Response\Driver;
-use Be\Session\SessionFactory;
-use Be\Template\TemplateFactory;
 
 /**
  * Class Driver
@@ -125,8 +122,16 @@ class Swoole extends Driver
      */
     public function display(string $template = null, string $theme = null)
     {
+        $request = Be::getRequest();
         if ($template === null) {
-            $template = 'App.' . Be::getRequest()->getRoute();
+            $template = 'App.' . $request->getRoute();
+        }
+
+        if ($theme === null) {
+            $_theme = $request->get('_theme', false);
+            if ($_theme) {
+                $theme = $_theme;
+            }
         }
 
         $this->response->end($this->fetch($template, $theme));

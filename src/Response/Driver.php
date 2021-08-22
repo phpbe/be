@@ -3,9 +3,6 @@
 namespace Be\Response;
 
 use Be\Be;
-use Be\Request\RequestFactory;
-use Be\Session\SessionFactory;
-use Be\Template\TemplateFactory;
 
 
 /**
