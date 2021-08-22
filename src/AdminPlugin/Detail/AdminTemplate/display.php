@@ -35,13 +35,19 @@
 
             if (isset($this->setting['form']['items']) && count($this->setting['form']['items']) > 0) {
                 foreach ($this->setting['form']['items'] as $item) {
-                    $driver = null;
+
+                    $driverClass = null;
                     if (isset($item['driver'])) {
-                        $driverName = $item['driver'];
-                        $driver = new $driverName($item, $this->row);
+                        if (substr($item['driver'], 0, 10) == 'DetailItem') {
+                            $driverClass = '\\Be\\AdminPlugin\\Detail\\Item\\' . $item['driver'];
+                        } else {
+                            $driverClass = $item['driver'];
+                        }
                     } else {
-                        $driver = new \Be\AdminPlugin\Detail\Item\DetailItemText($item, $this->row);
+                        $driverClass = \Be\AdminPlugin\Detail\Item\DetailItem::class;
                     }
+                    $driver = new $driverClass($item);
+
                     echo $driver->getHtml();
 
                     $formData[$driver->name] = $driver->value;
@@ -98,13 +104,18 @@
                             }
                         }
 
-                        $driver = null;
+                        $driverClass = null;
                         if (isset($item['driver'])) {
-                            $driverName = $item['driver'];
-                            $driver = new $driverName($item);
+                            if (substr($item['driver'], 0, 10) == 'FormAction') {
+                                $driverClass = '\\Be\\AdminPlugin\\Form\\Action\\' . $item['driver'];
+                            } else {
+                                $driverClass = $item['driver'];
+                            }
                         } else {
-                            $driver = new \Be\AdminPlugin\Form\Action\FormActionButton($item);
+                            $driverClass = \Be\AdminPlugin\Form\Action\FormActionButton::class;
                         }
+                        $driver = new $driverClass($item);
+
                         echo $driver->getHtml() . ' ';
 
                         $vueDataX = $driver->getVueData();

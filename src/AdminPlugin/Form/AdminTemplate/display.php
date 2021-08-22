@@ -137,13 +137,18 @@
                             }
                         }
 
-                        $driver = null;
+                        $driverClass = null;
                         if (isset($item['driver'])) {
-                            $driverName = $item['driver'];
-                            $driver = new $driverName($item, $this->row);
+                            if (substr($item['driver'], 0, 10) == 'FormAction') {
+                                $driverClass = '\\Be\\AdminPlugin\\Form\\Action\\' . $item['driver'];
+                            } else {
+                                $driverClass = $item['driver'];
+                            }
                         } else {
-                            $driver = new \Be\AdminPlugin\Form\Action\FormActionButton($item, $this->row);
+                            $driverClass = \Be\AdminPlugin\Form\Action\FormActionButton::class;
                         }
+                        $driver = new $driverClass($item);
+
                         echo $driver->getHtml() . ' ';
 
                         $vueDataX = $driver->getVueData();

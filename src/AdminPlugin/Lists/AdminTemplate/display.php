@@ -142,13 +142,18 @@
                                     }
                                 }
 
-                                $driver = null;
+                                $driverClass = null;
                                 if (isset($item['driver'])) {
-                                    $driverName = $item['driver'];
-                                    $driver = new $driverName($item);
+                                    if (substr($item['driver'], 0, 10) == 'FormAction') {
+                                        $driverClass = '\\Be\\AdminPlugin\\Form\\Action\\' . $item['driver'];
+                                    } else {
+                                        $driverClass = $item['driver'];
+                                    }
                                 } else {
-                                    $driver = new \Be\AdminPlugin\Form\Action\FormActionButton($item);
+                                    $driverClass = \Be\AdminPlugin\Form\Action\FormActionButton::class;
                                 }
+                                $driver = new $driverClass($item);
+
                                 $html .= $driver->getHtml() . ' ';
 
                                 $vueDataX = $driver->getVueData();
@@ -179,13 +184,18 @@
             if (isset($this->setting['toolbar']['items']) && count($this->setting['toolbar']['items']) > 0) {
                 echo '<el-row id="toolbar-items" ref="toolbarItemsRef"><el-col :span="24">';
                 foreach ($this->setting['toolbar']['items'] as $item) {
-                    $driver = null;
+                    $driverClass = null;
                     if (isset($item['driver'])) {
-                        $driverName = $item['driver'];
-                        $driver = new $driverName($item);
+                        if (substr($item['driver'], 0, 11) == 'ToolbarItem') {
+                            $driverClass = '\\Be\\AdminPlugin\\Toolbar\\Item\\' . $item['driver'];
+                        } else {
+                            $driverClass = $item['driver'];
+                        }
                     } else {
-                        $driver = new \Be\AdminPlugin\Toolbar\Item\ToolbarItemButton($item);
+                        $driverClass = \Be\AdminPlugin\Toolbar\Item\ToolbarItemButton::class;
                     }
+                    $driver = new $driverClass($item);
+
                     $toolbarItemDriverNames[] = $driver->name;
 
                     echo '<el-form-item>';
@@ -243,13 +253,18 @@
 
                     if (isset($this->setting['operation']['items'])) {
                         foreach ($this->setting['operation']['items'] as $item) {
-                            $driver = null;
+                            $driverClass = null;
                             if (isset($item['driver'])) {
-                                $driverName = $item['driver'];
-                                $driver = new $driverName($item);
+                                if (substr($item['driver'], 0, 13) == 'OperationItem') {
+                                    $driverClass = '\\Be\\AdminPlugin\\Operation\\Item\\' . $item['driver'];
+                                } else {
+                                    $driverClass = $item['driver'];
+                                }
                             } else {
-                                $driver = new \Be\AdminPlugin\Operation\Item\OperationItemLink($item);
+                                $driverClass = \Be\AdminPlugin\Operation\Item\OperationItemLink::class;
                             }
+                            $driver = new $driverClass($item);
+
                             $opHtml .= $driver->getHtml();
 
                             $vueDataX = $driver->getVueData();
@@ -273,13 +288,19 @@
                 }
 
                 foreach ($this->setting['table']['items'] as $item) {
-                    $driver = null;
+
+                    $driverClass = null;
                     if (isset($item['driver'])) {
-                        $driverName = $item['driver'];
-                        $driver = new $driverName($item);
+                        if (substr($item['driver'], 0, 9) == 'TableItem') {
+                            $driverClass = '\\Be\\AdminPlugin\\Table\\Item\\' . $item['driver'];
+                        } else {
+                            $driverClass = $item['driver'];
+                        }
                     } else {
-                        $driver = new \Be\AdminPlugin\Table\Item\TableItemText($item);
+                        $driverClass = \Be\AdminPlugin\Table\Item\TableItemText::class;
                     }
+                    $driver = new $driverClass($item);
+
                     echo $driver->getHtml();
 
                     $vueDataX = $driver->getVueData();

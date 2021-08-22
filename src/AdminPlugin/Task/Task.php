@@ -4,7 +4,6 @@ namespace Be\AdminPlugin\Task;
 
 use Be\Config\ConfigHelper;
 use Be\Db\Tuple;
-use Be\System\Response;
 use Be\Util\Datetime;
 use Be\Be;
 use Be\AdminPlugin\Detail\Item\DetailItemCode;

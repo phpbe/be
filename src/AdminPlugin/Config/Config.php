@@ -147,7 +147,7 @@ class Config extends Driver
             $newValues = [];
             $newValueStrings = [];
             $reflection = new \ReflectionClass($className);
-            $properties = $reflection->getProperties(\ReflectionMethod::IS_PUBLIC);
+            $properties = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC);
             foreach ($properties as $property) {
                 $itemName = $property->getName();
                 if (!isset($formData[$itemName])) {
