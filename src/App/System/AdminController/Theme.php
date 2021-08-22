@@ -1,4 +1,5 @@
 <?php
+
 namespace Be\App\System\AdminController;
 
 use Be\AdminPlugin\Form\Item\FormItemDatePickerRange;
@@ -102,6 +103,14 @@ class Theme
                             ]
                         ],
                         [
+                            'label' => '配置',
+                            'action' => 'goSetting',
+                            'target' => 'blank',
+                            'ui' => [
+                                'type' => 'success'
+                            ]
+                        ],
+                        [
                             'label' => '卸载',
                             'action' => 'uninstall',
                             'confirm' => '确认要卸载么？',
@@ -190,7 +199,7 @@ class Theme
     /**
      * 卸载主题
      *
-     * @BePermission("卸载主题", ordering="2.22")
+     * @BePermission("卸载主题", ordering="2.23")
      */
     public function uninstall()
     {
@@ -216,6 +225,314 @@ class Theme
         }
     }
 
+    /**
+     * 配置主题
+     *
+     * @BePermission("配置主题", ordering="2.22")
+     */
+    public function goSetting()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+        $postData = $request->post('data', '', '');
+        $postData = json_decode($postData, true);
+        $url = beAdminUrl('System.Theme.setting', ['themeName' => $postData['row']['name']]);
+        $response->redirect($url);
+    }
+
+    /**
+     * 配置主题
+     *
+     * @BePermission("配置主题", ordering="2.22")
+     */
+    public function setting()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $themeName = $request->get('themeName', '');
+        $pageName = $request->get('pageName', 'Home');
+
+        $sectionType = $request->get('sectionType', '');
+        $sectionKey = $request->get('sectionKey', '');
+        $sectionName = $request->get('sectionName', '');
+
+        $itemKey = $request->get('itemKey', '');
+        $itemName = $request->get('itemName', '');
+
+        $service = Be::getAdminService('System.Theme');
+        $theme = $service->getTheme($themeName);
+
+        $response->set('themeName', $themeName);
+        $response->set('theme', $theme);
+
+        $page = $service->getThemePage($themeName, $pageName);
+        $response->set('pageName', $pageName);
+        $response->set('page', $page);
+        //print_r($page);
+
+        if ($pageName != 'Home') {
+            $pageHome = $service->getThemePage($themeName, 'Home');
+            $response->set('pageHome', $pageHome);
+        }
+
+        $response->set('sectionType', $sectionType);
+        $response->set('sectionKey', $sectionKey);
+        $response->set('sectionName', $sectionName);
+
+        $response->set('itemKey', $itemKey);
+        $response->set('itemName', $itemName);
+
+        $response->display();
+    }
+
+    public function enableSectionType()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $themeName = $request->get('themeName', '');
+        $pageName = $request->get('pageName', '');
+
+        $sectionType = $request->get('sectionType', '');
+
+        $service = Be::getAdminService('System.Theme');
+        $service->enableSectionType($themeName, $pageName, $sectionType);
+
+        $url = beAdminUrl('System.Theme.setting', ['themeName' => $themeName, 'pageName' => $pageName]);
+        $response->redirect($url);
+    }
+
+    public function disableSectionType()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $themeName = $request->get('themeName', '');
+        $pageName = $request->get('pageName', '');
+
+        $sectionType = $request->get('sectionType', '');
+
+        $service = Be::getAdminService('System.Theme');
+        $service->disableSectionType($themeName, $pageName, $sectionType);
+
+        $url = beAdminUrl('System.Theme.setting', ['themeName' => $themeName, 'pageName' => $pageName]);
+        $response->redirect($url);
+    }
+
+    /**
+     * 新增组件
+     */
+    public function addSection()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $themeName = $request->get('themeName', '');
+        $pageName = $request->get('pageName', '');
+
+        $sectionType = $request->json('sectionType', '');
+        $sectionName = $request->json('sectionName', '');
+
+        $service = Be::getAdminService('System.Theme');
+        $service->addSection($themeName, $pageName, $sectionType, $sectionName);
+
+        $page = $service->getThemePage($themeName, $pageName);
+        $response->set('page', $page);
+
+        $response->success('保存成功！');
+    }
+
+    /**
+     * 删除组件
+     */
+    public function deleteSection()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $themeName = $request->get('themeName', '');
+        $pageName = $request->get('pageName', '');
+
+        $sectionType = $request->json('sectionType', '');
+        $sectionKey = $request->json('sectionKey', '');
+
+        $service = Be::getAdminService('System.Theme');
+        $service->deleteSection($themeName, $pageName, $sectionType, $sectionKey);
+
+        $page = $service->getThemePage($themeName, $pageName);
+        $response->set('page', $page);
+
+        $response->success('保存成功！');
+    }
+
+    /**
+     * 组件排序
+     */
+    public function sortSection()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $themeName = $request->get('themeName', '');
+        $pageName = $request->get('pageName', '');
+
+        $sectionType = $request->json('sectionType', '');
+
+        $oldIndex = $request->json('oldIndex', '');
+        $newIndex = $request->json('newIndex', '');
+
+        $service = Be::getAdminService('System.Theme');
+        $service->sortSection($themeName, $pageName, $sectionType, $oldIndex, $newIndex);
+
+        $page = $service->getThemePage($themeName, $pageName);
+        $response->set('page', $page);
+
+        $response->success('保存成功！');
+    }
+
+    /**
+     * 新增组件子项
+     */
+    public function addSectionItem()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $themeName = $request->get('themeName', '');
+        $pageName = $request->get('pageName', '');
+
+        $sectionType = $request->get('sectionType', '');
+        $sectionKey = $request->get('sectionKey', '');
+        $sectionName = $request->get('sectionName', '');
+
+        $itemKey = $request->get('itemKey', '');
+        $itemName = $request->get('itemName', '');
+
+        $service = Be::getAdminService('System.Theme');
+        $service->addSectionItem($themeName, $pageName, $sectionType, $sectionKey, $itemName);
+
+        $page = $service->getThemePage($themeName, $pageName);
+        $response->set('page', $page);
+
+        $response->success('保存成功！');
+    }
+
+    /**
+     * 删除子组件
+     */
+    public function deleteSectionItem()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $themeName = $request->get('themeName', '');
+        $pageName = $request->get('pageName', '');
+
+        $sectionType = $request->json('sectionType', '');
+        $sectionKey = $request->json('sectionKey', '');
+
+        $itemKey = $request->json('itemKey', '');
+
+        $service = Be::getAdminService('System.Theme');
+        $service->deleteSectionItem($themeName, $pageName, $sectionType, $sectionKey, $itemKey);
+
+        $page = $service->getThemePage($themeName, $pageName);
+        $response->set('page', $page);
+
+        $response->success('保存成功！');
+    }
+
+    /**
+     * 编辑组件子项
+     */
+    public function editSectionItem()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $themeName = $request->get('themeName', '');
+        $pageName = $request->get('pageName', 'Home');
+
+        $sectionType = $request->get('sectionType', '');
+        $sectionKey = $request->get('sectionKey', '');
+
+        $itemKey = $request->get('itemKey', '');
+
+        $response->set('themeName', $themeName);
+        $response->set('pageName', $pageName);
+        $response->set('sectionType', $sectionType);
+        $response->set('sectionKey', $sectionKey);
+        $response->set('itemKey', $itemKey);
+
+        $service = Be::getAdminService('System.Theme');
+        if ($sectionType && $sectionKey !== '') {
+            if ($itemKey !== '') {
+                $drivers = $service->getThemeSectionItemDrivers($themeName, $pageName, $sectionType, $sectionKey, $itemKey);
+                //print_r($drivers);
+                $response->set('drivers', $drivers);
+            } else {
+                $drivers = $service->getThemeSectionDrivers($themeName, $pageName, $sectionType, $sectionKey);
+                $response->set('drivers', $drivers);
+            }
+        } else {
+            $drivers = $service->getThemeDrivers($themeName);
+            $response->set('drivers', $drivers);
+        }
+
+        $response->display(null, 'Blank');
+    }
+
+    /**
+     * 编辑组件子项保存
+     */
+    public function saveSectionItem()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $postData = $request->json();
+        $formData = $postData['formData'];
+
+        $themeName = $request->get('themeName', '');
+        $pageName = $request->get('pageName', '');
+
+        $sectionType = $request->get('sectionType', '');
+        $sectionKey = $request->get('sectionKey', '');
+
+        $itemKey = $request->get('itemKey', '');
+
+        $service = Be::getAdminService('System.Theme');
+        $service->saveSectionItem($themeName, $pageName, $sectionType, $sectionKey, $itemKey, $formData);
+
+        $response->success('保存成功！');
+    }
+
+    /**
+     * 组件排序
+     */
+    public function sortSectionItem()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $themeName = $request->get('themeName', '');
+        $pageName = $request->get('pageName', '');
+
+        $sectionType = $request->json('sectionType', '');
+        $sectionKey = $request->json('sectionKey', '', 'int');
+
+        $oldIndex = $request->json('oldIndex', '');
+        $newIndex = $request->json('newIndex', '');
+
+        $service = Be::getAdminService('System.Theme');
+        $service->sortSectionItem($themeName, $pageName, $sectionType, $sectionKey, $oldIndex, $newIndex);
+
+        $page = $service->getThemePage($themeName, $pageName);
+        $response->set('page', $page);
+
+        $response->success('保存成功！');
+    }
 
 }
 
