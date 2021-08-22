@@ -28,19 +28,25 @@ class AdminTemplateHelper
         $type = array_shift($parts);
         $name = array_shift($parts);
 
-        $property = Be::getProperty($type . '.' . $name);
-        $fileTemplate = $runtime->getRootPath() . $property->getPath() . '/AdminTemplate/' . implode('/', $parts) . '.php';
-
+        $fileTemplate = $runtime->getRootPath() . $themeProperty->getPath() . '/AdminTemplate/' . $type . '/' . $name . '/'  . implode('/', $parts) . '.php';
         if (!file_exists($fileTemplate)) {
-            throw new RuntimeException('AdminTemplate ' . $template . ' doesn\'t exist!');
+            $property = Be::getProperty($type . '.' . $name);
+            $fileTemplate = $runtime->getRootPath() . $property->getPath() . '/AdminTemplate/' . implode('/', $parts) . '.php';
+            if (!file_exists($fileTemplate)) {
+                throw new RuntimeException('AdminTemplate ' . $template . ' doesn\'t exist!');
+            }
         }
 
         $path = $runtime->getCachePath() . '/AdminTemplate/' . $theme . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
         $dir = dirname($path);
-        if (!is_dir($dir)) mkdir($dir, 0777, true);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+        }
 
         $contentTheme = file_get_contents($fileTheme);
         $contentTemplate = file_get_contents($fileTemplate);
+
+        $contentTemplate = str_replace('\\', '\\\\', $contentTemplate);
 
         $extends = '\\Be\\AdminTemplate\\Driver';
         if (preg_match('/<be-extends>(.*?)<\/be-extends>/s', $contentTemplate, $matches)) {
