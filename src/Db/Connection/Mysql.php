@@ -16,42 +16,48 @@ class Mysql extends Connection
     {
         $this->name = $name;
         if ($pdo === null) {
-
-            $config = Be::getConfig('App.System.Db');
-            if (!isset($config->$name)) {
-                throw new DbException('数据库配置项（' . $name . '）不存在！');
-            }
-            $config = $config->$name;
-
-            $options = array(
-                \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
-            );
-
-            if (isset($config['options'])) {
-                $options = $config['options'] + $options;
-            }
-
-            // 设置默认编码为 UTF-8
-            if (empty($config['charset'])) {
-                $config['charset'] = 'utf8mb4';
-            }
-
-            $dsn = null;
-            if (isset($config['dsn']) && $config['dsn']) {
-                $dsn = $config['dsn'];
-            } else {
-                $dsn = 'mysql:dbname=' . $config['name'] . ';host=' . $config['host'] . ';port=' . $config['port'] . ';charset=' . $config['charset'];
-            }
-
-            $pdo = new \PDO($dsn, $config['username'], $config['password'], $options);
-            if (!$pdo) throw new DbException('连接MySQL数据库' . $config['name'] . '（' . $config['host'] . '） 失败！');
-
-            $pdo->query('SET NAMES ' . $config['charset']);
-
-            $this->pdo = $pdo;
+            $this->connect();
         } else {
             $this->pdo = $pdo;
         }
+    }
+
+    public function connect()
+    {
+        $name = $this->name;
+
+        $config = Be::getConfig('App.System.Db');
+        if (!isset($config->$name)) {
+            throw new DbException('数据库配置项（' . $name . '）不存在！');
+        }
+        $config = $config->$name;
+
+        $options = array(
+            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
+        );
+
+        if (isset($config['options'])) {
+            $options = $config['options'] + $options;
+        }
+
+        // 设置默认编码为 UTF-8
+        if (empty($config['charset'])) {
+            $config['charset'] = 'utf8mb4';
+        }
+
+        $dsn = null;
+        if (isset($config['dsn']) && $config['dsn']) {
+            $dsn = $config['dsn'];
+        } else {
+            $dsn = 'mysql:dbname=' . $config['name'] . ';host=' . $config['host'] . ';port=' . $config['port'] . ';charset=' . $config['charset'];
+        }
+
+        $pdo = new \PDO($dsn, $config['username'], $config['password'], $options);
+        if (!$pdo) throw new DbException('连接MySQL数据库' . $config['name'] . '（' . $config['host'] . '） 失败！');
+
+        $pdo->query('SET NAMES ' . $config['charset']);
+
+        $this->pdo = $pdo;
     }
 
     /**

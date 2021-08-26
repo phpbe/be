@@ -61,6 +61,19 @@ abstract class Connection
     }
 
     /**
+     * 连接数据库
+     */
+    abstract public function connect();
+
+    /**
+     * 重新连接数据库
+     */
+    public function reconnect() {
+        $this->pdo = null;
+        $this->connect();
+    }
+
+    /**
      * 预编译 sql 语句
      *
      * @param string $sql 查询语句
@@ -70,13 +83,25 @@ abstract class Connection
      */
     public function prepare($sql, array $options = null)
     {
-        $statement = null;
-        if ($options === null) {
-            $statement = $this->pdo->prepare($sql);
-        } else {
-            $statement = $this->pdo->prepare($sql, $options);
+        try {
+            $statement = null;
+            if ($options === null) {
+                $statement = $this->pdo->prepare($sql);
+            } else {
+                $statement = $this->pdo->prepare($sql, $options);
+            }
+            return $statement;
+        } catch (\PDOException $e) {
+            /*
+             * 当错误码为2006/2013，且没有事务时，重连数据库，
+             */
+            if (($e->errorInfo[1] == 2006 || $e->errorInfo[1] == 2013) && $this->transactions == 0) {
+                $this->reconnect();
+                return $this->prepare($sql, $options);
+            }
+
+            throw $e;
         }
-        return $statement;
     }
 
     /**
@@ -90,13 +115,26 @@ abstract class Connection
      */
     public function execute($sql, array $bind = null, array $prepareOptions = null)
     {
-        if ($bind === null) {
-            $statement = $this->pdo->query($sql);
-        } else {
-            $statement = $this->prepare($sql, $prepareOptions);
-            $statement->execute($bind);
+        try {
+            if ($bind === null) {
+                $statement = $this->pdo->query($sql);
+            } else {
+                $statement = $this->prepare($sql, $prepareOptions);
+                $statement->execute($bind);
+            }
+            return $statement;
+
+        } catch (\PDOException $e) {
+            /*
+             * 当错误码为2006/2013，且没有事务时，重连数据库，
+             */
+            if (($e->errorInfo[1] == 2006 || $e->errorInfo[1] == 2013) && $this->transactions == 0) {
+                $this->reconnect();
+                return $this->execute($sql, $bind, $prepareOptions);
+            }
+
+            throw $e;
         }
-        return $statement;
     }
 
     /**
@@ -121,7 +159,19 @@ abstract class Connection
      */
     public function getLastInsertId()
     {
-        return $this->pdo->lastInsertId();
+        try {
+            return $this->pdo->lastInsertId();
+        } catch (\PDOException $e) {
+            /*
+             * 当错误码为2006/2013，且没有事务时，重连数据库，
+             */
+            if (($e->errorInfo[1] == 2006 || $e->errorInfo[1] == 2013) && $this->transactions == 0) {
+                $this->reconnect();
+                return $this->pdo->lastInsertId();
+            }
+
+            throw $e;
+        }
     }
 
     /**
@@ -192,7 +242,19 @@ abstract class Connection
      */
     public function getVersion()
     {
-        return $this->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION);
+        try {
+            return $this->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION);
+        } catch (\PDOException $e) {
+            /*
+             * 当错误码为2006/2013，且没有事务时，重连数据库，
+             */
+            if (($e->errorInfo[1] == 2006 || $e->errorInfo[1] == 2013) && $this->transactions == 0) {
+                $this->reconnect();
+                return $this->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION);
+            }
+
+            throw $e;
+        }
     }
 
     /**
@@ -227,7 +289,19 @@ abstract class Connection
      */
     public function quoteValue($value)
     {
-        return $this->pdo->quote((string)$value);
+        try {
+            return $this->pdo->quote((string)$value);
+        } catch (\PDOException $e) {
+            /*
+             * 当错误码为2006/2013，且没有事务时，重连数据库，
+             */
+            if (($e->errorInfo[1] == 2006 || $e->errorInfo[1] == 2013) && $this->transactions == 0) {
+                $this->reconnect();
+                return $this->pdo->quote((string)$value);
+            }
+
+            throw $e;
+        }
     }
 
     /**
@@ -241,7 +315,19 @@ abstract class Connection
     {
         $quotedValues = [];
         foreach ($values as $value) {
-            $quotedValues[] = $this->pdo->quote((string)$value);
+            try {
+                $quotedValues[] = $this->pdo->quote((string)$value);
+            } catch (\PDOException $e) {
+                /*
+                 * 当错误码为2006/2013，且没有事务时，重连数据库，
+                 */
+                if (($e->errorInfo[1] == 2006 || $e->errorInfo[1] == 2013) && $this->transactions == 0) {
+                    $this->reconnect();
+                    $quotedValues[] = $this->pdo->quote((string)$value);
+                }
+
+                throw $e;
+            }
         }
         return $quotedValues;
     }

@@ -16,7 +16,12 @@ class Mssql extends Connection
     public function __construct($name, $pdo = null)
     {
         $this->name = $name;
+        $this->connect();
+    }
 
+    public function connect()
+    {
+        $name = $this->name;
         $config = Be::getConfig('App.System.Db');
         if (!isset($config->$name)) {
             throw new DbException('数据库配置项（' . $name . '）不存在！');
