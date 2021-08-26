@@ -193,7 +193,19 @@ abstract class Connection
     {
         $this->transactions++;
         if ($this->transactions == 1) {
-            $this->pdo->beginTransaction();
+            try {
+                $this->pdo->beginTransaction();
+            } catch (\PDOException $e) {
+                /*
+                 * 当错误码为2006/2013，且没有事务时，重连数据库，
+                 */
+                if (($e->errorInfo[1] == 2006 || $e->errorInfo[1] == 2013) && $this->transactions == 1) {
+                    $this->reconnect();
+                    $this->pdo->beginTransaction();
+                } else {
+                    throw $e;
+                }
+            }
         }
     }
 
@@ -324,9 +336,9 @@ abstract class Connection
                 if (($e->errorInfo[1] == 2006 || $e->errorInfo[1] == 2013) && $this->transactions == 0) {
                     $this->reconnect();
                     $quotedValues[] = $this->pdo->quote((string)$value);
+                } else {
+                    throw $e;
                 }
-
-                throw $e;
             }
         }
         return $quotedValues;
