@@ -196,8 +196,8 @@
                 </h2>
 
                 <?php
-                foreach (['north', 'middle', 'south'] as $sectionType) {
-                    $key = $sectionType . 'SectionsEnabled';
+                foreach (array_keys($this->theme['property']->pages[$this->pageName]['sections']) as $sectionType) {
+                    $key = $sectionType . 'Sections';
                     if (!isset($this->page[$key]) && isset($this->pageHome[$key])) {
                         ?>
                         <ul class="west-links-disabled <?php echo $sectionType; ?>-west-links">
@@ -242,9 +242,9 @@
                     }
                     ?>
                     <ul class="west-links <?php echo $sectionType; ?>-west-links">
-                        <draggable v-model="page.<?php echo $sectionType; ?>SectionsEnabled" handle=".drag-icon" force-fallback="true" group="<?php echo $sectionType; ?>" animation="100" @update="sectionDragUpdate">
+                        <draggable v-model="page.<?php echo $sectionType; ?>Sections" handle=".drag-icon" force-fallback="true" group="<?php echo $sectionType; ?>" animation="100" @update="sectionDragUpdate">
                             <transition-group>
-                                <li v-for="(section, sectionKey) in page.<?php echo $sectionType; ?>SectionsEnabled" :key="sectionKey" data-sectiontype="<?php echo $sectionType; ?>">
+                                <li v-for="(section, sectionKey) in page.<?php echo $sectionType; ?>Sections" :key="sectionKey" data-sectiontype="<?php echo $sectionType; ?>">
                                     <div style="display: flex">
                                         <div style="flex: 0 0 20px; height: 30px; line-height: 30px;">
                                             <a v-if="section.items" href="javascript:void(0);" @click="toggleSection('<?php echo $sectionType; ?>', sectionKey)">
@@ -253,7 +253,7 @@
                                         </div>
 
                                         <div style="flex: 1">
-                                            <a href="javascript:void(0);" @click="editItem(section.url)" :class="activeUrl == section.url ? 'active' : ''">
+                                            <a href="javascript:void(0);" @click="editItem(section.url, '<?php echo $sectionType; ?>', sectionKey)" :class="activeUrl == section.url ? 'active' : ''">
                                                 <span class="icon" v-html="section.icon"></span>{{section.label}}
                                             </a>
                                         </div>
@@ -277,7 +277,7 @@
                                                     <li v-for="(existItem, existItemKey) in section.items.existItems" :key="existItemKey" data-sectiontype="<?php echo $sectionType; ?>" :data-sectionkey="sectionKey">
                                                         <div style="display: flex">
                                                             <div style="flex: 1">
-                                                                <a href="javascript:void(0);" @click="editItem(existItem.url)" :class="activeUrl == existItem.url ? 'active' : ''">
+                                                                <a href="javascript:void(0);" @click="editItem(existItem.url, '<?php echo $sectionType; ?>', sectionKey)" :class="activeUrl == existItem.url ? 'active' : ''">
                                                                     <span class="icon" v-html="existItem.icon"></span>{{existItem.label}}
                                                                 </a>
                                                             </div>
@@ -326,7 +326,7 @@
                                     新增组件
                                 </span>
                                 <el-dropdown-menu slot="dropdown">
-                                    <el-dropdown-item v-for="(section, sectionKey) in page.<?php echo $sectionType; ?>Sections" :command="'<?php echo $sectionType; ?>-' + section.name">
+                                    <el-dropdown-item v-for="(section, sectionKey) in page.<?php echo $sectionType; ?>SectionsAvailable" :command="'<?php echo $sectionType; ?>-' + section.name">
                                         <span class="icon" v-html="section.icon"></span>{{section.label}}
                                     </el-dropdown-item>
                                 </el-dropdown-menu>
@@ -358,7 +358,7 @@
             <div style="position: absolute;left:0; right:0; bottom:0; height: 35px; line-height: 35px; background-color: #fff; ">
                 <ul class="west-links">
                     <li>
-                        <a href="javascript:void(0);" @click="editItem(theme.url)" :class="activeUrl == theme.url ? 'active' : ''" style=" padding-left: 20px;">
+                        <a href="javascript:void(0);" @click="editItem(theme.url, '', '')" :class="activeUrl == theme.url ? 'active' : ''" style=" padding-left: 20px;">
                             主题参数配置
                         </a>
                     </li>
@@ -383,7 +383,7 @@
 
     <?php
     $toggle = [];
-    foreach (['north', 'middle', 'south'] as $sectionType) {
+    foreach (array_keys($this->theme['property']->pages[$this->pageName]['sections']) as $sectionType) {
         if (isset($this->page[$sectionType.'Sections'])) {
             foreach ($this->page[$sectionType.'Sections'] as $sectionKey => $sectionName) {
                 $toggle[$sectionType][$sectionKey] = 0;
@@ -406,7 +406,8 @@
                 page : <?php echo json_encode($this->page); ?>,
                 toggle: <?php echo json_encode($toggle); ?>,
                 activeUrl: "<?php echo beAdminUrl('System.Theme.editSectionItem', ['themeName' => $this->themeName, 'pageName' => $this->pageName, 'sectionType' => $this->sectionType, 'sectionKey' => $this->sectionKey, 'sectionName' => $this->sectionName, 'itemKey' => $this->itemKey, 'itemName' => $this->itemName]); ?>",
-                previewUrl: "\"<?php echo $this->page['desktopPreviewUrl']; ?>",
+                previewUrl: "<?php echo $this->page['desktopPreviewUrl']; ?>",
+                previewUrlTag: "",
                 screen: "desktop"
             },
             methods: {
@@ -414,10 +415,10 @@
                     this.screen = command;
                     switch (this.screen) {
                         case "desktop":
-                            this.previewUrl = this.page.desktopPreviewUrl;
+                            this.previewUrl = this.page.desktopPreviewUrl + this.previewUrlTag;
                             break;
                         case "mobile":
-                            this.previewUrl = this.page.mobilePreviewUrl;
+                            this.previewUrl = this.page.mobilePreviewUrl + this.previewUrlTag;
                             break;
                     }
                 },
@@ -426,10 +427,10 @@
                     randomParam += "_=" + Math.random();
                     switch (this.screen) {
                         case "desktop":
-                            this.previewUrl = this.page.desktopPreviewUrl + randomParam;
+                            this.previewUrl = this.page.desktopPreviewUrl + randomParam + this.previewUrlTag;
                             break;
                         case "mobile":
-                            this.previewUrl = this.page.mobilePreviewUrl + randomParam;
+                            this.previewUrl = this.page.mobilePreviewUrl + randomParam + this.previewUrlTag;
                             break;
                     }
                 },
@@ -521,8 +522,14 @@
                         _this.$message.error(error);
                     });
                 },
-                editItem: function(url) {
-                    this.activeUrl = url
+                editItem: function(url, sectionType, sectionKey) {
+                    this.activeUrl = url;
+
+                    var previewUrlTag = "#be-section-" + sectionType + "-" + sectionKey;
+                    if (this.previewUrlTag != previewUrlTag) {
+                        this.previewUrlTag = previewUrlTag;
+                        this.reloadPreviewFrame();
+                    }
                 },
                 addSectionItem:  function (command) {
                     var loading = this.$loading();
@@ -596,59 +603,6 @@
                         loading.close();
                         _this.$message.error(error);
                     });
-                },
-                saveConfig: function () {
-                    this.loading = true;
-                    var _this = this;
-                    _this.$http.post("<?php echo beAdminUrl(null, ['task' => 'saveConfig']); ?>", {
-                        formData: _this.formData
-                    }).then(function (response) {
-                        _this.loading = false;
-                        if (response.status == 200) {
-                            if (response.data.success) {
-                                _this.$message.success(response.data.message);
-                            } else {
-                                _this.$message.error(response.data.message);
-                            }
-                        }
-                    }).catch(function (error) {
-                        _this.loading = false;
-                        _this.$message.error(error);
-                    });
-                },
-                resetConfig: function () {
-                    var _this = this;
-                    this.$confirm('该操作不可恢复，确认恢复默认值吗？', '确认恢复默认值吗', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-                    }).then(function () {
-                        _this.loading = true;
-                        _this.$http.get("<?php echo beAdminUrl(null); ?>")
-                            .then(function (response) {
-                                _this.loading = false;
-                                if (response.status == 200) {
-                                    if (response.data.success) {
-                                        _this.$message.success(response.data.message);
-                                        window.location.reload();
-                                    } else {
-                                        _this.$message.error(response.data.message);
-                                    }
-                                }
-                            })
-                            .catch(function (error) {
-                                _this.loading = false;
-                                _this.$message.error(error);
-                            });
-                    }).catch(function () {
-                        _this.loading = false;
-                    });
-                },
-                goto: function (tab) {
-                    var sUrl = "<?php echo beAdminUrl(\Be\Be::getRequest()->getRoute()); ?>";
-                    sUrl += sUrl.indexOf("?") >= 0 ? "&" : "?";
-                    sUrl += "configName=" + tab.name;
-                    window.location.href = sUrl;
                 }
             }
         });

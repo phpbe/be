@@ -88,24 +88,8 @@ class Theme
         $property = Be::getProperty('Theme.' . $themeName);
         $theme['property'] = $property;
 
-        $pageNames = null;
-        if (isset($property->pages) && is_array($property->pages) && count($property->pages) > 0) {
-            $pageNames = $property->pages;
-        } else {
-            $pageNames = [];
-            $dir = Be::getRuntime()->getRootPath() . $property->getPath() . '/Config/Page';
-            if (file_exists($dir) && is_dir($dir)) {
-                $fileNames = scandir($dir);
-                foreach ($fileNames as $fileName) {
-                    if ($fileName != '.' && $fileName != '..' && is_file($dir . '/' . $fileName)) {
-                        $pageNames[] = substr($fileName, 0, -4);
-                    }
-                }
-            }
-        }
-
         $pages = [];
-        foreach ($pageNames as $pageName) {
+        foreach ($property->pages as $pageName => $pageData) {
             $className = '\\Be\\Theme\\' . $themeName . '\\Config\\Page\\' . $pageName;
             $page = $this->getConfigAnnotation($className, false);
             $page['url'] = beAdminUrl('System.Theme.setting', ['themeName' => $themeName, 'pageName' => $pageName]);
@@ -118,16 +102,22 @@ class Theme
 
     public function getThemePage($themeName, $pageName)
     {
+        $themeProperty = Be::getProperty('Theme.' . $themeName);
+        if (!isset($themeProperty->pages[$pageName])) {
+            throw new AdminServiceException('主题 ' . $themeName . ' 属性 pages 配置项中' . $pageName . ' 缺失！');
+        }
+        $themePageProperty = $themeProperty->pages[$pageName];
+
         $themePage = [];
 
         $configPageInstance = Be::getConfig('Theme.' . $themeName . '.Page.' . $pageName);
 
         $params = [];
-        if (isset($configPageInstance->url[1]) && is_array($configPageInstance->url[1]) && count($configPageInstance->url[1]) > 0) {
-            $params = $configPageInstance->url[1];
+        if (isset($themePageProperty['url'][1]) && is_array($themePageProperty['url'][1]) && count($themePageProperty['url'][1]) > 0) {
+            $params = $themePageProperty['url'][1];
         }
-        $desktopPreviewUrl = beUrl($configPageInstance->url[0], array_merge($params, ['_theme' => $themeName]));
-        $mobilePreviewUrl = beUrl($configPageInstance->url[0], array_merge($params, ['_theme' => $themeName, '_isMobile' => 1]));
+        $desktopPreviewUrl = beUrl($themePageProperty['url'][0], array_merge($params, ['_theme' => $themeName]));
+        $mobilePreviewUrl = beUrl($themePageProperty['url'][0], array_merge($params, ['_theme' => $themeName, '_isMobile' => 1]));
         $themePage['desktopPreviewUrl'] = $desktopPreviewUrl;
         $themePage['mobilePreviewUrl'] = $mobilePreviewUrl;
 
@@ -135,12 +125,10 @@ class Theme
         $themePage['page'] = $this->getConfigAnnotation($className, false);
         $originalConfigPageInstance = new $className();
 
-        foreach (['north', 'middle', 'south'] as $sectionType) {
-            $key = $sectionType . 'Sections';
-            if (isset($configPageInstance->$key) && $configPageInstance->$key) {
+        foreach (array_keys($themePageProperty['sections']) as $sectionType) {
+            if (isset($themePageProperty['sections'][$sectionType]) && $themePageProperty['sections'][$sectionType]) {
                 $sections = [];
-                foreach ($configPageInstance->$key as $sectionKey => $sectionName) {
-
+                foreach ($themePageProperty['sections'][$sectionType] as $sectionName) {
                     $className = '\\Be\\Theme\\' . $themeName . '\\Config\\Section\\' . $sectionName;
                     $sectionInstance = new $className();
 
@@ -162,11 +150,11 @@ class Theme
                     $sections[] = $section;
                 }
 
-                $themePage[$key] = $sections;
+                $themePage[$sectionType . 'SectionsAvailable'] = $sections;
             }
 
             $sectionsEnabled = [];
-            $key = $sectionType . 'SectionsEnabled';
+            $key = $sectionType . 'Sections';
             if (isset($configPageInstance->$key) && $configPageInstance->$key) {
                 foreach ($configPageInstance->$key as $sectionKey => $sectionName) {
                     $sectionsEnabled[] = $this->getThemeSection($themeName, $pageName, $sectionType, $sectionKey, $sectionName);
@@ -189,8 +177,6 @@ class Theme
 
         if (isset($sectionInstance->items)) {
             $section = $this->getConfigAnnotation($className, true);
-
-            $section['url'] = beAdminUrl('System.Theme.editSectionItem', ['themeName' => $themeName, 'pageName' => $pageName, 'sectionType' => $sectionType, 'sectionKey' => $sectionKey, 'sectionName' => $sectionName]);
 
             $configItems = $section['configItems'];
             unset($section['configItems']);
@@ -290,6 +276,8 @@ class Theme
             $section = $this->getConfigAnnotation($className, false);
         }
 
+        $section['url'] = beAdminUrl('System.Theme.editSectionItem', ['themeName' => $themeName, 'pageName' => $pageName, 'sectionType' => $sectionType, 'sectionKey' => $sectionKey, 'sectionName' => $sectionName]);
+
         $icon = null;
         if (isset($section['icon'])) {
             $icon = $section['icon'];
@@ -346,7 +334,7 @@ class Theme
     {
         $configInstance = Be::getConfig('Theme.' . $themeName . '.Page.' . $pageName);
 
-        $propertyName = $sectionType . 'SectionsEnabled';
+        $propertyName = $sectionType . 'Sections';
         $sectionName = $configInstance->$propertyName[$sectionKey];
 
         $propertyName = $sectionType . 'SectionsData';
@@ -395,7 +383,7 @@ class Theme
     {
         $configInstance = Be::getConfig('Theme.' . $themeName . '.Page.' . $pageName);
 
-        $propertyName = $sectionType . 'SectionsEnabled';
+        $propertyName = $sectionType . 'Sections';
         $sectionName = $configInstance->$propertyName[$sectionKey];
 
         $propertyName = $sectionType . 'SectionsData';
@@ -420,8 +408,8 @@ class Theme
                                     $configItemDrivers = [];
                                     foreach ($configItemAnnotation['configItems'] as $configItemItem) {
 
-                                        if (isset($itemData[$configItemItem['name']])) {
-                                            $configItemItem['value'] = $itemData[$configItemItem['name']];
+                                        if (isset($itemData['data'][$configItemItem['name']])) {
+                                            $configItemItem['value'] = $itemData['data'][$configItemItem['name']];
                                         }
 
                                         $driverClass = null;
@@ -551,9 +539,6 @@ class Theme
         $propertyName = $sectionType . 'Sections';
         $configPageInstance->$propertyName = $configPageHomeInstance->$propertyName;
 
-        $propertyName = $sectionType . 'SectionsEnabled';
-        $configPageInstance->$propertyName = $configPageHomeInstance->$propertyName;
-
         $propertyName = $sectionType . 'SectionsData';
         $configPageInstance->$propertyName = $configPageHomeInstance->$propertyName;
 
@@ -579,9 +564,6 @@ class Theme
         $propertyName = $sectionType . 'Sections';
         unset($configPageInstance->$propertyName);
 
-        $propertyName = $sectionType . 'SectionsEnabled';
-        unset($configPageInstance->$propertyName);
-
         $propertyName = $sectionType . 'SectionsData';
         unset($configPageInstance->$propertyName);
 
@@ -605,7 +587,7 @@ class Theme
         $configSectionInstance = Be::getConfig($configSectionKey);
         $sectionData = get_object_vars($configSectionInstance);
 
-        $propertyName = $sectionType . 'SectionsEnabled';
+        $propertyName = $sectionType . 'Sections';
         $configInstance->$propertyName[] = $sectionName;
 
         $propertyName = $sectionType . 'SectionsData';
@@ -627,7 +609,7 @@ class Theme
         $configKey = 'Theme.' . $themeName . '.Page.' . $pageName;
         $configInstance = Be::getConfig($configKey);
 
-        foreach (['SectionsEnabled', 'SectionsData'] as $key) {
+        foreach (['Sections', 'SectionsData'] as $key) {
             $propertyName = $sectionType . $key;
             if (isset($configInstance->$propertyName[$sectionKey])) {
                 unset($configInstance->$propertyName[$sectionKey]);
@@ -652,7 +634,7 @@ class Theme
         $configKey = 'Theme.' . $themeName . '.Page.' . $pageName;
         $configInstance = Be::getConfig($configKey);
 
-        foreach (['SectionsEnabled', 'SectionsData'] as $key) {
+        foreach (['Sections', 'SectionsData'] as $key) {
             $propertyName = $sectionType . $key;
             if (!isset($configInstance->$propertyName[$oldIndex]) || !isset($configInstance->$propertyName[$newIndex])) {
                 throw new AdminServiceException('组件排序出错：索引超出数据范围');
@@ -683,7 +665,7 @@ class Theme
         $configKey = 'Theme.' . $themeName . '.Page.' . $pageName;
         $configInstance = Be::getConfig($configKey);
 
-        $propertyName = $sectionType . 'SectionsEnabled';
+        $propertyName = $sectionType . 'Sections';
         $sectionName = $configInstance->$propertyName[$sectionKey];
 
         $propertyName = $sectionType . 'SectionsData';
@@ -745,38 +727,34 @@ class Theme
         $configInstance = null;
 
         // 配置主题 Theme 信息
-        if (!$sectionType) {
+        if ($sectionType === '') {
             $configKey = 'Theme.' . $themeName . '.Theme';
             $configInstance = Be::getConfig($configKey);
 
             $className = '\\Be\\Theme\\' . $themeName . '\\Config\\Theme';
-            $newValues = $this->submitFormData($className, $formData);
+            $newValues = $this->submitFormData($className, $formData, get_object_vars($configInstance));
 
             foreach ($newValues as $key => $val) {
-                if (isset($configInstance->$key)) {
-                    $configInstance->$key = $val;
-                }
+                $configInstance->$key = $val;
             }
 
         } else {
             $configKey = 'Theme.' . $themeName . '.Page.' . $pageName;
             $configInstance = Be::getConfig($configKey);
 
-            $propertyName = $sectionType . 'SectionsEnabled';
+            $propertyName = $sectionType . 'Sections';
             $sectionName = $configInstance->$propertyName[$sectionKey];
 
             $propertyName = $sectionType . 'SectionsData';
             $sectionData = $configInstance->$propertyName[$sectionKey];
 
             // 配置组件信息
-            if (!$itemKey) {
+            if ($itemKey === '') {
                 $className = '\\Be\\Theme\\' . $themeName . '\\Config\\Section\\' . $sectionName;
-                $newValues = $this->submitFormData($className, $formData);
+                $newValues = $this->submitFormData($className, $formData, $sectionData);
 
                 foreach ($newValues as $key => $val) {
-                    if (isset($sectionData[$key])) {
-                        $sectionData[$key] = $val;
-                    }
+                    $sectionData[$key] = $val;
                 }
 
                 $propertyName = $sectionType . 'SectionsData';
@@ -785,7 +763,7 @@ class Theme
                 // 配置子组件信息
                 $itemData = $sectionData['items'][$itemKey];
                 $className = '\\Be\\Theme\\' . $themeName . '\\Config\\Section\\' . $sectionName . '\\' . $itemData['name'];
-                $newValues = $this->submitFormData($className, $formData);
+                $newValues = $this->submitFormData($className, $formData, $itemData['data']);
 
                 $sectionData['items'][$itemKey] = [
                     'name' => $itemData['name'],
@@ -800,7 +778,7 @@ class Theme
         ConfigHelper::update($configKey, $configInstance);
     }
 
-    private function submitFormData($className, $formData)
+    private function submitFormData($className, $formData, $oldValue)
     {
         $originalConfigInstance = new $className();
 
@@ -849,6 +827,11 @@ class Theme
                 } else {
                     $driverClass = \Be\AdminPlugin\Form\Item\FormItemInput::class;
                 }
+
+                if (isset($oldValue[$itemName])) {
+                    $configItem['value'] = $oldValue[$itemName];
+                }
+
                 $driver = new $driverClass($configItem);
                 $driver->submit($formData);
 

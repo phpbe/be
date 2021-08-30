@@ -7,4 +7,11 @@ namespace Be\Theme;
 abstract class Property extends \Be\Property\Driver
 {
 
+    /**
+     * 可䨒置的页面
+     *
+     * @var string[]
+     */
+    public $pages = ['Home'];
+
 }

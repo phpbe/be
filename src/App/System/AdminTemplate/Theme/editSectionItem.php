@@ -8,11 +8,12 @@
 
         .el-form--label-top .el-form-item__label {
             padding: 0;
+            line-height: 24px;
         }
 
         .el-form-item--mini.el-form-item,
         .el-form-item--small.el-form-item {
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
         .el-color-dropdown {
@@ -116,7 +117,8 @@
             el: '#app',
             data: {
                 formData: <?php echo json_encode($formData); ?>,
-                loading: false<?php
+                loading: false,
+                changing: 0<?php
                 if ($vueData) {
                     foreach ($vueData as $k => $v) {
                         echo ',' . $k . ':' . json_encode($v);
@@ -128,20 +130,35 @@
                 formData: {
                     handler: function(newValue, oldValue) {
                         // console.log(newValue)
+
+                        if (this.changing >= 1) {
+                            this.changing = 1;
+                            return;
+                        }
+
+                        this.changing = 1;
                         var _this = this;
-                        this.$http.post("<?php echo beAdminUrl('System.Theme.saveSectionItem', ['themeName' => $this->themeName, 'pageName' => $this->pageName, 'sectionType' => $this->sectionType, 'sectionKey' => $this->sectionKey, 'itemKey' => $this->itemKey]); ?>", {
-                            formData: this.formData,
-                        }).then(function (response) {
-                            if (response.status == 200) {
-                                if (response.data.success) {
-                                    parent.reloadPreviewFrame();
-                                } else {
-                                    _this.$message.error(response.data.message);
-                                }
+                        var timer = setInterval(function () {
+                            _this.changing++;
+                            if (_this.changing > 5) {
+                                _this.changing = 0;
+                                clearInterval(timer);
+
+                                _this.$http.post("<?php echo beAdminUrl('System.Theme.saveSectionItem', ['themeName' => $this->themeName, 'pageName' => $this->pageName, 'sectionType' => $this->sectionType, 'sectionKey' => $this->sectionKey, 'itemKey' => $this->itemKey]); ?>", {
+                                    formData: _this.formData,
+                                }).then(function (response) {
+                                    if (response.status == 200) {
+                                        if (response.data.success) {
+                                            parent.reloadPreviewFrame();
+                                        } else {
+                                            alert(response.data.message);
+                                        }
+                                    }
+                                }).catch(function (error) {
+                                    alert(error);
+                                });
                             }
-                        }).catch(function (error) {
-                            _this.$message.error(error);
-                        });
+                        }, 100);
                     },
                     deep: true
                 }

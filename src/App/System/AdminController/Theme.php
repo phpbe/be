@@ -469,7 +469,6 @@ class Theme
         if ($sectionType && $sectionKey !== '') {
             if ($itemKey !== '') {
                 $drivers = $service->getThemeSectionItemDrivers($themeName, $pageName, $sectionType, $sectionKey, $itemKey);
-                //print_r($drivers);
                 $response->set('drivers', $drivers);
             } else {
                 $drivers = $service->getThemeSectionDrivers($themeName, $pageName, $sectionType, $sectionKey);
