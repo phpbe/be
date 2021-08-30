@@ -186,6 +186,7 @@ class AdminPlugin
             if ($libImage->isImage()) {
                 $maxWidth = $request->post('maxWidth', 0, 'int');
                 $maxHeight = $request->post('maxHeight', 0, 'int');
+                $filename = $request->post('filename', '');
 
                 if ($maxWidth > 0 && $maxHeight> 0) {
                     if ($libImage->getWidth() > $maxWidth || $libImage->getheight() > $maxHeight) {
@@ -193,7 +194,21 @@ class AdminPlugin
                     }
                 }
 
-                $newImageName = date('YmdHis') . '-' . \Be\Util\Random::simple(10) . '.' . $libImage->getType();
+                $newImageName = null;
+                if ($filename) {
+                    if (strpos($filename, '{datetime}') !== false) {
+                        $filename = str_replace('{datetime}', date('YmdHis'), $filename);
+                    }
+
+                    if (strpos($filename, '{random}') !== false) {
+                        $random = \Be\Util\Random::simple(10);
+                        $filename = str_replace('{random}', $random, $filename);
+                    }
+
+                    $newImageName = $filename . '.' . $libImage->getType();
+                } else {
+                    $newImageName = date('YmdHis') . '-' . \Be\Util\Random::simple(10) . '.' . $libImage->getType();
+                }
                 $newImagePath = Be::getRuntime()->getUploadPath() . '/tmp/' . $newImageName;
 
                 $dir = dirname($newImagePath);

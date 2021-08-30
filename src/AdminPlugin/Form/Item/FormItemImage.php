@@ -18,6 +18,7 @@ class FormItemImage extends FormItem
     public $allowUploadImageTypes = []; // 允许上传的图像类型
     public $maxWidth = 0;
     public $maxHeight = 0;
+    public $filename = ''; // 指定存储的文件名
 
     /**
      * 构造函数
@@ -56,6 +57,11 @@ class FormItemImage extends FormItem
         // 最大高度
         if (isset($params['maxHeight']) && is_numeric($params['maxHeight']) && $params['maxHeight'] > 0) {
             $this->maxHeight = $params['maxHeight'];
+        }
+
+        // 文件名
+        if (isset($params['filename'])) {
+            $this->filename = $params['filename'];
         }
 
         if (!$this->description) {
@@ -161,7 +167,8 @@ class FormItemImage extends FormItem
                     'fileList' => [],
                     'postData' => [
                         'maxWidth' => $this->maxWidth,
-                        'maxHeight' => $this->maxHeight
+                        'maxHeight' => $this->maxHeight,
+                        'filename' => $this->filename
                     ],
                 ]
             ]
