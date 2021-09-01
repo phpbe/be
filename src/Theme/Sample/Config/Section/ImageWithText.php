@@ -108,16 +108,5 @@ class ImageWithText
      */
     public $marginLeftRight = 0;
 
-    /**
-     * @BeConfigItem("子项",
-     *     driver = "FormItemsConfigs",
-     *     items = "return [
-     *          \Be\Theme\Sample\Config\Section\Banner\Image::class,
-     *     ]"
-     * )
-     */
-    public $items = [];
-
-
 
 }
