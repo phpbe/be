@@ -695,47 +695,6 @@ abstract class Be
     }
 
     /**
-     * 获取指定的一个后台服务
-     *
-     * @param string $name 服务名
-     * @return mixed
-     */
-    public static function getAdminService(string $name)
-    {
-        if (self::getRuntime()->getMode() == 'Swoole') {
-            $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['adminService'][$name])) return self::$cache[$cid]['adminService'][$name];
-            self::$cache[$cid]['adminService'][$name] = self::newAdminService($name);
-            return self::$cache[$cid]['adminService'][$name];
-        } else {
-            if (isset(self::$cache['adminService'][$name])) {
-                return self::$cache['adminService'][$name];
-            }
-            self::$cache['adminService'][$name] = self::newAdminService($name);
-            return self::$cache['adminService'][$name];
-        }
-    }
-
-    /**
-     * 新创建一个后台服务
-     *
-     * @param string $name 服务名
-     * @return mixed
-     */
-    public static function newAdminService(string $name)
-    {
-        $parts = explode('.', $name);
-        $type = array_shift($parts);
-        $catalog = array_shift($parts);
-        $class = '\\Be\\' . $type . '\\' . $catalog . '\\AdminService\\' . implode('\\', $parts);
-        if (!class_exists($class)) {
-            throw new RuntimeException('AdminService (' . $name . ') doesn\'t exist!');
-        }
-
-        return new $class();
-    }
-
-    /**
      * 获取指定的库
      *
      * @param string $name 库名，可指定命名空间，调用第三方库
@@ -873,13 +832,7 @@ abstract class Be
         $name = array_shift($parts);
 
         if ($theme === null) {
-            $property = self::getProperty($type . '.' . $name);
-            if (isset($property->theme)) {
-                $theme = $property->theme;
-            } else {
-                $configSystem = self::getConfig('App.System.System');
-                $theme = $configSystem->theme;
-            }
+            $theme = self::getConfig('App.System.System')->theme;
         }
 
         $runtime = self::getRuntime();
@@ -922,13 +875,7 @@ abstract class Be
         $name = array_shift($parts);
 
         if ($theme === null) {
-            $property = self::getProperty($type . '.' . $name);
-            if (isset($property->theme)) {
-                $theme = $property->theme;
-            } else {
-                $configAdmin = self::getConfig('App.System.Admin');
-                $theme = $configAdmin->theme;
-            }
+            $theme = self::getConfig('App.System.Admin')->theme;
         }
 
         $runtime = self::getRuntime();
@@ -967,7 +914,7 @@ abstract class Be
 
         $path = self::getRuntime()->getCachePath() . '/Menu.php';
         if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
-            $service = Be::getAdminService('App.System.Menu');
+            $service = Be::getService('App.System.Admin.Menu');
             $service->update();
         }
 
@@ -987,7 +934,7 @@ abstract class Be
 
         $path = self::getRuntime()->getCachePath() . '/AdminMenu.php';
         if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
-            $service = Be::getAdminService('App.System.AdminMenu');
+            $service = Be::getService('App.System.Admin.AdminMenu');
             $service->update();
         }
 
@@ -1008,7 +955,7 @@ abstract class Be
 
         $path = self::getRuntime()->getCachePath() . '/AdminRole/AdminRole' . $roleId . '.php';
         if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
-            $service = Be::getAdminService('App.System.AdminRole');
+            $service = Be::getService('App.System.Admin.AdminRole');
             $service->updateAdminRole($roleId);
         }
 

@@ -32,10 +32,10 @@ class TemplateHelper
         $type = array_shift($parts);
         $name = array_shift($parts);
 
-        $fileTemplate = $runtime->getRootPath() . $themeProperty->getPath() . '/' . $templateNamespace . '/' . $type . '/' . $name . '/'  . implode('/', $parts) . '.php';
+        $fileTemplate = $runtime->getRootPath() . $themeProperty->getPath() . '/Template/' . $type . '/' . $name . '/'  . implode('/', $parts) . '.php';
         if (!file_exists($fileTemplate)) {
             $property = Be::getProperty($type . '.' . $name);
-            $fileTemplate = $runtime->getRootPath() . $property->getPath() . '/' . $templateNamespace . '/' . implode('/', $parts) . '.php';
+            $fileTemplate = $runtime->getRootPath() . $property->getPath() . '/Template/' . implode('/', $parts) . '.php';
             if (!file_exists($fileTemplate)) {
                 throw new RuntimeException($templateNamespace . ' ' . $template . ' doesn\'t exist!');
             }

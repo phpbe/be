@@ -156,7 +156,11 @@ abstract class Driver
         if ($request->isAjax()) {
             $this->json();
         } else {
-            $this->display('App.System.System.success', 'Blank');
+            if ($request->isAdmin()) {
+                $this->display('App.System.Admin.System.success', 'Blank');
+            } else {
+                $this->display('App.System.System.success', 'Blank');
+            }
         }
     }
 
@@ -181,7 +185,11 @@ abstract class Driver
         if ($request->isAjax()) {
             $this->json();
         } else {
-            $this->display('App.System.System.error', 'Blank');
+            if ($request->isAdmin()) {
+                $this->display('App.System.Admin.System.error', 'Blank');
+            } else {
+                $this->display('App.System.System.error', 'Blank');
+            }
         }
     }
 
@@ -201,7 +209,12 @@ abstract class Driver
             $this->json();
         } else {
             $this->set('e', $e);
-            $this->display('App.System.System.exception', 'Blank');
+
+            if ($request->isAdmin()) {
+                $this->display('App.System.Admin.System.exception', 'Blank');
+            } else {
+                $this->display('App.System.System.exception', 'Blank');
+            }
         }
     }
 
@@ -257,7 +270,12 @@ abstract class Driver
         $this->set('historyUrl', $historyUrl);
         $this->set('historyPost', $historyPost);
         $this->set('redirectTimeout', $redirectTimeout);
-        $this->display('App.System.System.successAndBack', 'Blank');
+
+        if ($request->isAdmin()) {
+            $this->display('App.System.Admin.System.successAndBack', 'Blank');
+        } else {
+            $this->display('App.System.System.successAndBack', 'Blank');
+        }
     }
 
     /**
@@ -295,7 +313,12 @@ abstract class Driver
         $this->set('historyUrl', $historyUrl);
         $this->set('historyPost', $historyPost);
         $this->set('redirectTimeout', $redirectTimeout);
-        $this->display('App.System.System.errorAndBack', 'Blank');
+
+        if ($request->isAdmin()) {
+            $this->display('App.System.Admin.System.errorAndBack', 'Blank');
+        } else {
+            $this->display('App.System.System.errorAndBack', 'Blank');
+        }
     }
 
     /**

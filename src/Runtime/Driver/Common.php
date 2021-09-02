@@ -137,7 +137,7 @@ class Common extends Driver
                 if (!$adminRole0->hasPermission($app, $controller, $action)) {
                     $my = Be::getAdminUser();
                     if ($my->id == 0) {
-                        Be::getAdminService('App.System.AdminUser')->rememberMe();
+                        Be::getService('App.System.Admin.AdminUser')->rememberMe();
                         $my = Be::getAdminUser();
                     }
 
@@ -159,7 +159,7 @@ class Common extends Driver
                         $configAdminUser = Be::getConfig('App.System.AdminUser');
                         if ($configAdminUser->ipLock) {
                             if ($my->this_login_ip != $request->getIp()) {
-                                Be::getAdminService('App.System.AdminUser')->logout();
+                                Be::getService('App.System.Admin.AdminUser')->logout();
                                 $redirectUrl = beAdminUrl('System.AdminUser.login');
                                 $response->error('检测到您的账号在其它地点（' . $my->this_login_ip . ' ' . $my->this_login_time . '）登录！', $redirectUrl);
                                 Be::gc();
@@ -169,7 +169,7 @@ class Common extends Driver
                     }
                 }
 
-                $class = 'Be\\App\\' . $app . '\\AdminController\\' . $controller;
+                $class = 'Be\\App\\' . $app . '\\Controller\\Admin\\' . $controller;
                 if (!class_exists($class)) {
                     $response->set('code', 404);
                     $response->error('控制器 ' . $app . '/' . $controller . ' 不存在！');

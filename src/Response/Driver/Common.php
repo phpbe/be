@@ -112,7 +112,11 @@ class Common extends Driver
     {
         $request = Be::getRequest();
         if ($template === null) {
-            $template = 'App.' . $request->getRoute();
+            if ($request->isAdmin()) {
+                $template = 'App.' . $request->getAppName() . '.Admin.' . $request->getControllerName() . '.' . $request->getActionName();
+            } else {
+                $template = 'App.' . $request->getRoute();
+            }
         }
 
         if ($theme === null) {

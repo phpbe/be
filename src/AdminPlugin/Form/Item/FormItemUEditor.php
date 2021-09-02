@@ -84,7 +84,7 @@ class FormItemUEditor extends FormItem
      */
     public function getJs()
     {
-        $baseUrl = Be::getProperty('AdminPlugin.Form')->getUrl() . '/AdminTemplate/ueditor1_4_3_3/';
+        $baseUrl = Be::getProperty('AdminPlugin.Form')->getUrl() . '/Template/ueditor1_4_3_3/';
         $js = [];
         foreach ($this->js as $x) {
             $js[] = $baseUrl . $x;
@@ -100,7 +100,7 @@ class FormItemUEditor extends FormItem
      */
     public function getCss()
     {
-        $baseUrl = Be::getProperty('AdminPlugin.Form')->getUrl() . '/AdminTemplate/ueditor1_4_3_3/';
+        $baseUrl = Be::getProperty('AdminPlugin.Form')->getUrl() . '/Template/ueditor1_4_3_3/';
         $css = [];
         foreach ($this->css as $x) {
             $css[] = $baseUrl . $x;
