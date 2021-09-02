@@ -287,7 +287,7 @@ class Swoole extends Driver
                     if (!$adminRole0->hasPermission($app, $controller, $action)) {
                         $my = Be::getAdminUser();
                         if ($my->id == 0) {
-                            Be::getAdminService('System.AdminUser')->rememberMe();
+                            Be::getAdminService('App.System.AdminUser')->rememberMe();
                             $my = Be::getAdminUser();
                         }
 
@@ -309,7 +309,7 @@ class Swoole extends Driver
                             $configAdminUser = Be::getConfig('App.System.AdminUser');
                             if ($configAdminUser->ipLock) {
                                 if ($my->this_login_ip != $request->getIp()) {
-                                    Be::getAdminService('System.AdminUser')->logout();
+                                    Be::getAdminService('App.System.AdminUser')->logout();
                                     $redirectUrl = beAdminUrl('System.AdminUser.login');
                                     $response->error('检测到您的账号在其它地点（' . $my->this_login_ip . ' ' . $my->this_login_time . '）登录！', $redirectUrl);
                                     Be::gc();

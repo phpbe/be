@@ -18,9 +18,10 @@
   ],
   "require": {
     "php": "~7.1",
+    "ext-pdo": "*",
+    "ext-json": "*",
     "monolog/monolog": "~1.11",
-    "elasticsearch/elasticsearch": "^v7.11",
-    "ext-pdo": "*"
+    "elasticsearch/elasticsearch": "^v7.11"
   },
   "autoload": {
     "psr-4": {

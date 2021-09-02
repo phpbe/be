@@ -99,7 +99,7 @@ class AdminRole
     {
         $permissions = [];
 
-        $apps = Be::getAdminService('System.App')->getApps();
+        $apps = Be::getAdminService('App.System.App')->getApps();
         foreach ($apps as $app) {
             $appName = $app->name;
             $appProperty = Be::getProperty('App.' . $appName);
@@ -177,7 +177,7 @@ class AdminRole
     public function getPermissionTree()
     {
         $treeData = [];
-        $apps = Be::getAdminService('System.App')->getApps();
+        $apps = Be::getAdminService('App.System.App')->getApps();
         foreach ($apps as $app) {
             $appName = $app->name;
 

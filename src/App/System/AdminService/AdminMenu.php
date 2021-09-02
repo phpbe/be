@@ -19,7 +19,7 @@ class AdminMenu
 
         $menus = [];
 
-        $apps = Be::getAdminService('System.App')->getApps();
+        $apps = Be::getAdminService('App.System.App')->getApps();
         foreach ($apps as $app) {
 
             $appProperty = Be::getProperty('App.'.$app->name);

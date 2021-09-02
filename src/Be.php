@@ -684,8 +684,13 @@ abstract class Be
     public static function newService(string $name)
     {
         $parts = explode('.', $name);
-        $app = array_shift($parts);
-        $class = '\\Be\\App\\' . $app . '\\Service\\' . implode('\\', $parts);
+        $type = array_shift($parts);
+        $catalog = array_shift($parts);
+        $class = '\\Be\\' . $type . '\\' . $catalog . '\\Service\\' . implode('\\', $parts);
+        if (!class_exists($class)) {
+            throw new RuntimeException('Service (' . $name . ') doesn\'t exist!');
+        }
+
         return new $class();
     }
 
@@ -720,8 +725,13 @@ abstract class Be
     public static function newAdminService(string $name)
     {
         $parts = explode('.', $name);
-        $app = array_shift($parts);
-        $class = '\\Be\\App\\' . $app . '\\AdminService\\' . implode('\\', $parts);
+        $type = array_shift($parts);
+        $catalog = array_shift($parts);
+        $class = '\\Be\\' . $type . '\\' . $catalog . '\\AdminService\\' . implode('\\', $parts);
+        if (!class_exists($class)) {
+            throw new RuntimeException('AdminService (' . $name . ') doesn\'t exist!');
+        }
+
         return new $class();
     }
 
@@ -931,7 +941,7 @@ abstract class Be
 
         $path = $runtime->getCachePath() . '/AdminTemplate/' . $theme . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
         if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
-            \Be\AdminTemplate\AdminTemplateHelper::update($template, $theme);
+            \Be\Template\TemplateHelper::update($template, $theme, true);
         }
 
         $class = '\\Be\\Data\\Cache\\AdminTemplate\\' . $theme . '\\' . $type . '\\' . $name . '\\' . implode('\\', $parts);
@@ -957,9 +967,8 @@ abstract class Be
 
         $path = self::getRuntime()->getCachePath() . '/Menu.php';
         if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
-            $service = Be::getAdminService('System.Menu');
+            $service = Be::getAdminService('App.System.Menu');
             $service->update();
-            include_once $path;
         }
 
         $class = '\\Be\\Data\\Cache\\Menu';
@@ -978,9 +987,8 @@ abstract class Be
 
         $path = self::getRuntime()->getCachePath() . '/AdminMenu.php';
         if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
-            $service = Be::getAdminService('System.AdminMenu');
+            $service = Be::getAdminService('App.System.AdminMenu');
             $service->update();
-            include_once $path;
         }
 
         $class = '\\Be\\Data\\Cache\\AdminMenu';
@@ -1000,9 +1008,8 @@ abstract class Be
 
         $path = self::getRuntime()->getCachePath() . '/AdminRole/AdminRole' . $roleId . '.php';
         if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
-            $service = Be::getAdminService('System.AdminRole');
+            $service = Be::getAdminService('App.System.AdminRole');
             $service->updateAdminRole($roleId);
-            include_once $path;
         }
 
         $class = '\\Be\\Data\\Cache\\AdminRole\\AdminRole' . $roleId;

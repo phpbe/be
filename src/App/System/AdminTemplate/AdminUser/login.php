@@ -1,13 +1,10 @@
-<?php
-use Be\Be;
-?>
 <be-head>
-<link type="text/css" rel="stylesheet" href="<?php echo Be::getProperty('App.System')->getUrl(); ?>/AdminTemplate/AdminUser/css/login.css" />
+<link type="text/css" rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/AdminTemplate/AdminUser/css/login.css" />
 </be-head>
 
 <be-body>
 <?php
-$config = Be::getConfig('App.System.System');
+$config = \Be\Be::getConfig('App.System.System');
 ?>
 <div id="app">
 
@@ -33,7 +30,7 @@ $config = Be::getConfig('App.System.System');
 </div>
 
 <?php
-$return = Be::getRequest()->get('return', '');
+$return = \Be\Be::getRequest()->get('return', '');
 if ($return=='') {
     $return = beAdminUrl('System.System.dashboard');
 } else {

@@ -22,7 +22,7 @@ class App
         if ($request->isAjax()) {
             try {
                 $postData = $request->json();
-                $apps = Be::getAdminService('System.App')->getApps();
+                $apps = Be::getAdminService('App.System.App')->getApps();
                 $page = $postData['page'];
                 $pageSize = $postData['pageSize'];
                 $tableData = array_slice($apps, ($page - 1) * $pageSize, $pageSize);
@@ -122,7 +122,7 @@ class App
             $appName = $postData['formData']['appName'];
 
             try {
-                $serviceApp = Be::getAdminService('System.App');
+                $serviceApp = Be::getAdminService('App.System.App');
                 $serviceApp->install($appName);
 
                 beAdminOpLog('安装新应用：' . $appName);
@@ -175,7 +175,7 @@ class App
         $appName = $postData['row']['name'];
 
         try {
-            $serviceApp = Be::getAdminService('System.App');
+            $serviceApp = Be::getAdminService('App.System.App');
             $serviceApp->uninstall($appName);
 
             beAdminOpLog('卸载应用：' . $appName);

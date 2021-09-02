@@ -452,7 +452,7 @@ class Task extends Driver
             $postData = $request->json();
             $task = Be::getTuple('system_task');
             $task->load($postData['row']['id']);
-            Be::getService('System.Task')->trigger($task->app . '.' . $task->name, 'MANUAL');
+            Be::getService('App.System.Task')->trigger($task->app . '.' . $task->name, 'MANUAL');
             beAdminOpLog('手工启动任务：' . $task->label . '（' . $task->app . '.' . $task->name . '）');
             $response->success('任务启动成功！');
         } catch (\Throwable $t) {

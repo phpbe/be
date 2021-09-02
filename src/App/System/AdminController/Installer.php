@@ -152,7 +152,7 @@ class Installer
             try {
                 $postData = $request->json();
                 $formData = $postData['formData'];
-                Be::getAdminService('System.Installer')->testDb($formData);
+                Be::getAdminService('App.System.Installer')->testDb($formData);
 
                 $configDb = Be::getConfig('App.System.Db');
 
@@ -338,7 +338,7 @@ class Installer
         $response = Be::getResponse();
         try {
             $postData = $request->json();
-            $databases = Be::getAdminService('System.Installer')->testDb($postData['formData']);
+            $databases = Be::getAdminService('App.System.Installer')->testDb($postData['formData']);
             $response->set('success', true);
             $response->set('data', [
                 'databases' => $databases,
@@ -362,7 +362,7 @@ class Installer
             try {
                 $postData = $request->json();
                 $formData = $postData['formData'];
-                $service = Be::getAdminService('System.Installer');
+                $service = Be::getAdminService('App.System.Installer');
                 if (isset($formData['appNames']) && is_array($formData['appNames']) && count($formData['appNames'])) {
                     foreach ($formData['appNames'] as $appName) {
                         $service->installApp($appName);
@@ -388,7 +388,7 @@ class Installer
                 'label' => $property->getLabel(),
                 'description' => $property->getDescription(),
             ];
-            $appNames = Be::getAdminService('System.Installer')->getAppNames();
+            $appNames = Be::getAdminService('App.System.Installer')->getAppNames();
             foreach ($appNames as $appName) {
                 $property = Be::getProperty('App.' . $appName);
                 $appProperties[] = [
@@ -421,7 +421,7 @@ class Installer
 
             $tuple->username = $formData['username'];
             $tuple->salt = Random::complex(32);
-            $tuple->password = Be::getAdminService('System.AdminUser')->encryptPassword($formData['password'], $tuple->salt);
+            $tuple->password = Be::getAdminService('App.System.AdminUser')->encryptPassword($formData['password'], $tuple->salt);
             $tuple->name = $formData['name'];
             $tuple->email = $formData['email'];
             $tuple->update_time = date('Y-m-d H:i:s');

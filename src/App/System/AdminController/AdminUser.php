@@ -41,7 +41,7 @@ class AdminUser
             $password = $request->json('password', '');
             $ip = $request->getIp();
             try {
-                $serviceUser = Be::getAdminService('System.AdminUser');
+                $serviceUser = Be::getAdminService('App.System.AdminUser');
                 $serviceUser->login($username, $password, $ip);
                 $response->success('登录成功！');
             } catch (\Exception $e) {
@@ -68,7 +68,7 @@ class AdminUser
     {
         $response = Be::getResponse();
         try {
-            Be::getAdminService('System.AdminUser')->logout();
+            Be::getAdminService('App.System.AdminUser')->logout();
             $response->success('成功退出！', beAdminUrl('System.AdminUser.login'));
         } catch (\Exception $e) {
             $response->error($e->getMessage());
@@ -84,7 +84,7 @@ class AdminUser
     public function adminUsers()
     {
         $configAdminUser = Be::getConfig('App.System.AdminUser');
-        $adminRoleKeyValues = Be::getAdminService('System.AdminRole')->getAdminRoleKeyValues();
+        $adminRoleKeyValues = Be::getAdminService('App.System.AdminRole')->getAdminRoleKeyValues();
         $genderKeyValues = [
             '-1' => '保密',
             '0' => '女',
@@ -481,7 +481,7 @@ class AdminUser
                 'events' => [
                     'before' => function (Tuple &$tuple) {
                         $tuple->salt = Random::complex(32);
-                        $tuple->password = Be::getAdminService('System.AdminUser')->encryptPassword($tuple->password, $tuple->salt);
+                        $tuple->password = Be::getAdminService('App.System.AdminUser')->encryptPassword($tuple->password, $tuple->salt);
                         $tuple->create_time = date('Y-m-d H:i:s');
                         $tuple->update_time = date('Y-m-d H:i:s');
                     },
@@ -556,7 +556,7 @@ class AdminUser
                     'before' => function (Tuple &$tuple) {
                         if ($tuple->password != '') {
                             $tuple->salt = Random::complex(32);
-                            $tuple->password = Be::getAdminService('System.AdminUser')->encryptPassword($tuple->password, $tuple->salt);
+                            $tuple->password = Be::getAdminService('App.System.AdminUser')->encryptPassword($tuple->password, $tuple->salt);
                         } else {
                             unset($tuple->password);
                         }

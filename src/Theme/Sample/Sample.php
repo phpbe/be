@@ -1,7 +1,3 @@
-<?php
-use Be\Be;
-?>
-
 <be-html>
 <!DOCTYPE html>
 <html>
@@ -17,7 +13,7 @@ use Be\Be;
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <?php
-    $configTheme = Be::getConfig('Theme.Sample.Theme');
+    $configTheme = \Be\Be::getConfig('Theme.Sample.Theme');
     ?>
     <style type="text/css">
         body {
@@ -45,7 +41,7 @@ use Be\Be;
 <body>
     <be-body>
         <?php
-        $configTheme = Be::getConfig('Theme.Sample.Theme');
+        $configTheme = \Be\Be::getConfig('Theme.Sample.Theme');
         switch ($configTheme->width) {
             case 'fullWidth':
                 echo '<div class="full-width">';
@@ -60,13 +56,13 @@ use Be\Be;
 
         <be-north>
             <?php
-            $configPage = Be::getConfig('Theme.Sample.Page.Home');
+            $configPage = \Be\Be::getConfig('Theme.Sample.Page.Home');
             if (isset($configPage->northSections) && count($configPage->northSections) > 0) {
                 $sectionType = 'north';
                 foreach ($configPage->northSections as $sectionKey => $sectionName) {
                     $sectionData = $configPage->northSectionsData[$sectionKey];
                     echo '<div id="be-section-'.$sectionType.'-'.$sectionKey.'">';
-                    include Be::getRuntime()->getRootPath() . '/' . Be::getProperty('Theme.Sample')->getPath() . '/Section/'.$sectionName.'.php';
+                    include \Be\Be::getRuntime()->getRootPath() . '/' . \Be\Be::getProperty('Theme.Sample')->getPath() . '/Section/'.$sectionName.'.php';
                     echo '</div>';
                 }
             }
@@ -85,15 +81,17 @@ use Be\Be;
 
         <be-south>
             <?php
-            $configPage = Be::getConfig('Theme.Sample.Page.Home');
+            $configPage = \Be\Be::getConfig('Theme.Sample.Page.Home');
             if (isset($configPage->southSections) && count($configPage->southSections) > 0) {
                 $sectionType = 'south';
+                echo '<div class="border-top mt-4 pb-4">';
                 foreach ($configPage->southSections as $sectionKey => $sectionName) {
                     $sectionData = $configPage->southSectionsData[$sectionKey];
                     echo '<div id="be-section-'.$sectionType.'-'.$sectionKey.'">';
-                    include Be::getRuntime()->getRootPath() . '/' . Be::getProperty('Theme.Sample')->getPath() . '/Section/'.$sectionName.'.php';
+                    include \Be\Be::getRuntime()->getRootPath() . '/' . \Be\Be::getProperty('Theme.Sample')->getPath() . '/Section/'.$sectionName.'.php';
                     echo '</div>';
                 }
+                echo '</div>';
             }
             ?>
         </be-south>

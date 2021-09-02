@@ -13,31 +13,35 @@ class TemplateHelper
      *
      * @param string $template 模析名
      * @param string $theme 主题名
+     * @param bool $admin 是否后台模板
      * @throws \Exception
      */
-    public static function update($template, $theme)
+    public static function update($template, $theme, $admin = false)
     {
-        $themeProperty = Be::getProperty( 'Theme.' . $theme);
+        $themeNamespace = $admin ? 'AdminTheme' : 'Theme';
+        $templateNamespace = $admin ? 'AdminTemplate' : 'Template';
+
+        $themeProperty = Be::getProperty( $themeNamespace . '.' . $theme);
         $runtime = Be::getRuntime();
         $fileTheme = $runtime->getRootPath() . $themeProperty->getPath() . '/' . $theme . '.php';
         if (!file_exists($fileTheme)) {
-            throw new RuntimeException('Theme ' . $theme . ' doesn\'t exist!');
+            throw new RuntimeException($themeNamespace . ' ' . $theme . ' doesn\'t exist!');
         }
 
         $parts = explode('.', $template);
         $type = array_shift($parts);
         $name = array_shift($parts);
 
-        $fileTemplate = $runtime->getRootPath() . $themeProperty->getPath() . '/Template/' . $type . '/' . $name . '/'  . implode('/', $parts) . '.php';
+        $fileTemplate = $runtime->getRootPath() . $themeProperty->getPath() . '/' . $templateNamespace . '/' . $type . '/' . $name . '/'  . implode('/', $parts) . '.php';
         if (!file_exists($fileTemplate)) {
             $property = Be::getProperty($type . '.' . $name);
-            $fileTemplate = $runtime->getRootPath() . $property->getPath() . '/Template/' . implode('/', $parts) . '.php';
+            $fileTemplate = $runtime->getRootPath() . $property->getPath() . '/' . $templateNamespace . '/' . implode('/', $parts) . '.php';
             if (!file_exists($fileTemplate)) {
-                throw new RuntimeException('Template ' . $template . ' doesn\'t exist!');
+                throw new RuntimeException($templateNamespace . ' ' . $template . ' doesn\'t exist!');
             }
         }
 
-        $path = $runtime->getCachePath() . '/Template/' . $theme . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
+        $path = $runtime->getCachePath() . '/' . $templateNamespace . '/' . $theme . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
@@ -46,7 +50,7 @@ class TemplateHelper
         $contentTheme = file_get_contents($fileTheme);
         $contentTemplate = file_get_contents($fileTemplate);
 
-        $contentTemplate = str_replace('\\', '\\\\', $contentTemplate);
+        $contentTemplate = str_replace('\\\\', '\\\\\\\\', $contentTemplate);
 
         $extends = '\\Be\\Template\\Driver';
         if (preg_match('/<be-extends>(.*?)<\/be-extends>/s', $contentTemplate, $matches)) {
@@ -64,10 +68,10 @@ class TemplateHelper
                     $tmpName = array_shift($includes);
 
                     $tmpProperty = Be::getProperty($tmpType . '.' . $tmpName);
-                    $fileInclude = $runtime->getRootPath() . $tmpProperty->getPath() . '/Template/' . implode('/', $includes) . '.php';
+                    $fileInclude = $runtime->getRootPath() . $tmpProperty->getPath() . '/' . $templateNamespace . '/' . implode('/', $includes) . '.php';
                     if (!file_exists($fileInclude)) {
                         // 模板中包含的文件 $m 不存在
-                        throw new RuntimeException('Template include file ' . $m . ' doesn\'t exist!');
+                        throw new RuntimeException($templateNamespace . ' include file ' . $m . ' doesn\'t exist!');
                     }
 
                     $contentInclude = file_get_contents($fileInclude);
@@ -220,7 +224,7 @@ class TemplateHelper
 
         $className = array_pop($parts);
 
-        $namespace = 'Be\\Data\\Cache\\Template\\' . $theme . '\\' . $type . '\\' . $name;
+        $namespace = 'Be\\Data\\Cache\\' . $templateNamespace . '\\' . $theme . '\\' . $type . '\\' . $name;
         if (count($parts) > 0) {
             $namespace .= '\\' . implode('\\', $parts);
         }

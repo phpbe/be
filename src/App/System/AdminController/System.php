@@ -53,10 +53,10 @@ class System
             ->getObjects();
         $response->set('recentLoginLogs', $recentLoginLogs);
 
-        $serviceApp = Be::getAdminService('System.App');
+        $serviceApp = Be::getAdminService('App.System.App');
         $response->set('appCount', $serviceApp->getAppCount());
 
-        $serviceTheme = Be::getAdminService('System.Theme');
+        $serviceTheme = Be::getAdminService('App.System.Theme');
         $response->set('themeCount', $serviceTheme->getThemeCount());
 
         $response->display();

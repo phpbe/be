@@ -8,7 +8,7 @@
 </style>
 
 <div id="footer-<?php echo $sectionType . '-' . $sectionKey; ?>">
-    <div class="border-top pt-4 pb-4 text-center">
+    <div class="text-center">
         <?php
         if (isset($sectionData['copyright'])) {
             echo $sectionData['copyright'];

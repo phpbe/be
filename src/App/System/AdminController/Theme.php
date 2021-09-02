@@ -167,7 +167,7 @@ class Theme
             $themeName = $postData['formData']['themeName'];
 
             try {
-                $serviceApp = Be::getAdminService('System.Theme');
+                $serviceApp = Be::getAdminService('App.System.Theme');
                 $serviceApp->install($themeName);
 
                 beAdminOpLog('安装新主题：' . $themeName);
@@ -215,7 +215,7 @@ class Theme
         $themeName = $postData['row']['name'];
 
         try {
-            $serviceTheme = Be::getAdminService('System.Theme');
+            $serviceTheme = Be::getAdminService('App.System.Theme');
             $serviceTheme->uninstall($themeName);
 
             beAdminOpLog('卸载主题：' . $themeName);
@@ -260,7 +260,7 @@ class Theme
         $itemKey = $request->get('itemKey', '');
         $itemName = $request->get('itemName', '');
 
-        $service = Be::getAdminService('System.Theme');
+        $service = Be::getAdminService('App.System.Theme');
         $theme = $service->getTheme($themeName);
 
         $response->set('themeName', $themeName);
@@ -296,7 +296,7 @@ class Theme
 
         $sectionType = $request->get('sectionType', '');
 
-        $service = Be::getAdminService('System.Theme');
+        $service = Be::getAdminService('App.System.Theme');
         $service->enableSectionType($themeName, $pageName, $sectionType);
 
         $url = beAdminUrl('System.Theme.setting', ['themeName' => $themeName, 'pageName' => $pageName]);
@@ -313,7 +313,7 @@ class Theme
 
         $sectionType = $request->get('sectionType', '');
 
-        $service = Be::getAdminService('System.Theme');
+        $service = Be::getAdminService('App.System.Theme');
         $service->disableSectionType($themeName, $pageName, $sectionType);
 
         $url = beAdminUrl('System.Theme.setting', ['themeName' => $themeName, 'pageName' => $pageName]);
@@ -334,7 +334,7 @@ class Theme
         $sectionType = $request->json('sectionType', '');
         $sectionName = $request->json('sectionName', '');
 
-        $service = Be::getAdminService('System.Theme');
+        $service = Be::getAdminService('App.System.Theme');
         $service->addSection($themeName, $pageName, $sectionType, $sectionName);
 
         $page = $service->getThemePage($themeName, $pageName);
@@ -357,7 +357,7 @@ class Theme
         $sectionType = $request->json('sectionType', '');
         $sectionKey = $request->json('sectionKey', '');
 
-        $service = Be::getAdminService('System.Theme');
+        $service = Be::getAdminService('App.System.Theme');
         $service->deleteSection($themeName, $pageName, $sectionType, $sectionKey);
 
         $page = $service->getThemePage($themeName, $pageName);
@@ -382,7 +382,7 @@ class Theme
         $oldIndex = $request->json('oldIndex', '');
         $newIndex = $request->json('newIndex', '');
 
-        $service = Be::getAdminService('System.Theme');
+        $service = Be::getAdminService('App.System.Theme');
         $service->sortSection($themeName, $pageName, $sectionType, $oldIndex, $newIndex);
 
         $page = $service->getThemePage($themeName, $pageName);
@@ -409,7 +409,7 @@ class Theme
         $itemKey = $request->get('itemKey', '');
         $itemName = $request->get('itemName', '');
 
-        $service = Be::getAdminService('System.Theme');
+        $service = Be::getAdminService('App.System.Theme');
         $service->addSectionItem($themeName, $pageName, $sectionType, $sectionKey, $itemName);
 
         $page = $service->getThemePage($themeName, $pageName);
@@ -434,7 +434,7 @@ class Theme
 
         $itemKey = $request->json('itemKey', '');
 
-        $service = Be::getAdminService('System.Theme');
+        $service = Be::getAdminService('App.System.Theme');
         $service->deleteSectionItem($themeName, $pageName, $sectionType, $sectionKey, $itemKey);
 
         $page = $service->getThemePage($themeName, $pageName);
@@ -465,7 +465,7 @@ class Theme
         $response->set('sectionKey', $sectionKey);
         $response->set('itemKey', $itemKey);
 
-        $service = Be::getAdminService('System.Theme');
+        $service = Be::getAdminService('App.System.Theme');
         if ($sectionType && $sectionKey !== '') {
             if ($itemKey !== '') {
                 $drivers = $service->getThemeSectionItemDrivers($themeName, $pageName, $sectionType, $sectionKey, $itemKey);
@@ -501,7 +501,7 @@ class Theme
 
         $itemKey = $request->get('itemKey', '');
 
-        $service = Be::getAdminService('System.Theme');
+        $service = Be::getAdminService('App.System.Theme');
         $service->saveSectionItem($themeName, $pageName, $sectionType, $sectionKey, $itemKey, $formData);
 
         $response->success('保存成功！');
@@ -524,7 +524,7 @@ class Theme
         $oldIndex = $request->json('oldIndex', '');
         $newIndex = $request->json('newIndex', '');
 
-        $service = Be::getAdminService('System.Theme');
+        $service = Be::getAdminService('App.System.Theme');
         $service->sortSectionItem($themeName, $pageName, $sectionType, $sectionKey, $oldIndex, $newIndex);
 
         $page = $service->getThemePage($themeName, $pageName);

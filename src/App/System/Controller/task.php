@@ -36,7 +36,7 @@ class Task
             return;
         }
 
-        Be::getService('System.Task')->dispatch();
+        Be::getService('App.System.Task')->dispatch();
     }
 
 
@@ -84,7 +84,7 @@ class Task
             return;
         }
 
-        Be::getService('System.Task')->run($taskId, $timestamp, $trigger);
+        Be::getService('App.System.Task')->run($taskId, $timestamp, $trigger);
     }
 
 

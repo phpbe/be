@@ -58,22 +58,22 @@ class Index
 
             $resultsStr = json_encode($results);
             if ($this->configLog->accessLog) {
-                Be::getService('JsonRpc.Log')->accessLog($inputDataStr, $resultsStr);
+                Be::getService('App.JsonRpc.Log')->accessLog($inputDataStr, $resultsStr);
             }
 
             if ($this->configLog->errorLog && $hasError) {
-                Be::getService('JsonRpc.Log')->errorLog($inputDataStr, $resultsStr);
+                Be::getService('App.JsonRpc.Log')->errorLog($inputDataStr, $resultsStr);
             }
             $response->end($resultsStr);
         } else {
             $result = $this->handle($inputData);
             $resultStr = json_encode($result);
             if ($this->configLog->accessLog) {
-                Be::getService('JsonRpc.Log')->accessLog($inputDataStr, $resultStr);
+                Be::getService('App.JsonRpc.Log')->accessLog($inputDataStr, $resultStr);
             }
 
             if ($this->configLog->errorLog && isset($result['error'])) {
-                Be::getService('JsonRpc.Log')->errorLog($inputDataStr, $resultStr);
+                Be::getService('App.JsonRpc.Log')->errorLog($inputDataStr, $resultStr);
             }
             $response->end($resultStr);
         }

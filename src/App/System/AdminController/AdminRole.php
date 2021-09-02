@@ -263,7 +263,7 @@ class AdminRole
                                 return explode(',', $row['permissions']);
                             },
                             'treeData' => function () {
-                                return Be::getAdminService('System.AdminRole')->getPermissionTree();
+                                return Be::getAdminService('App.System.AdminRole')->getPermissionTree();
                             },
                         ],
                         [
@@ -318,7 +318,7 @@ class AdminRole
                                 ]
                             ],
                             'treeData' => function () {
-                                return Be::getAdminService('System.AdminRole')->getPermissionTree();
+                                return Be::getAdminService('App.System.AdminRole')->getPermissionTree();
                             },
                         ],
                         [
@@ -391,7 +391,7 @@ class AdminRole
                                 return explode(',', $row['permissions']);
                             },
                             'treeData' => function () {
-                                return Be::getAdminService('System.AdminRole')->getPermissionTree();
+                                return Be::getAdminService('App.System.AdminRole')->getPermissionTree();
                             },
                         ],
                         [

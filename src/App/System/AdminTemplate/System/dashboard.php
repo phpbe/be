@@ -1,16 +1,12 @@
-<?php
-use Be\Be;
-?>
-
 <be-head>
-<link type="text/css" rel="stylesheet" href="<?php echo Be::getProperty('App.System')->getUrl(); ?>/AdminTemplate/System/css/dashboard.css">
-<script type="text/javascript" language="javascript" src="<?php echo Be::getProperty('App.System')->getUrl(); ?>/AdminTemplate/System/js/dashboard.js"></script>
+<link type="text/css" rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/AdminTemplate/System/css/dashboard.css">
+<script type="text/javascript" language="javascript" src="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/AdminTemplate/System/js/dashboard.js"></script>
 </be-head>
 
 <be-center>
 <?php
-$my = Be::getAdminUser();
-$configAdminUser = Be::getConfig('App.System.AdminUser');
+$my = \Be\Be::getAdminUser();
+$configAdminUser = \Be\Be::getConfig('App.System.AdminUser');
 ?>
 <div id="app">
 
@@ -20,9 +16,9 @@ $configAdminUser = Be::getConfig('App.System.AdminUser');
             <el-card shadow="hover" style="height: 180px;">
                 <el-image src="<?php
                 if ($this->adminUser->avatar == '') {
-                    echo Be::getProperty('App.System')->getUrl().'/AdminTemplate/AdminUser/images/avatar.png';
+                    echo \Be\Be::getProperty('App.System')->getUrl().'/AdminTemplate/AdminUser/images/avatar.png';
                 } else {
-                    echo Be::getRequest()->getUploadUrl().'/System/AdminUser/Avatar/'.$this->adminUser->avatar;
+                    echo \Be\Be::getRequest()->getUploadUrl().'/System/AdminUser/Avatar/'.$this->adminUser->avatar;
                 }
                 ?>"></el-image>
 
