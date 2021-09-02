@@ -61,7 +61,7 @@ class File extends Driver
      *
      * @return bool
      */
-    public function destroy()
+    public function wipe()
     {
         $this->data = null;
 

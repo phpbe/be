@@ -219,7 +219,7 @@ class AdminUser
      */
     public function logout()
     {
-        Be::getSession()->destroy();
+        Be::getSession()->wipe();
         Be::getResponse()->cookie('_adminRememberMe', '', -1);
     }
 

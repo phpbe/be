@@ -146,6 +146,6 @@ abstract class Driver implements \Be\Session\Driver
      *
      * @return bool
      */
-    abstract function destroy();
+    abstract function wipe();
 
 }

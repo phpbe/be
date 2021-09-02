@@ -113,15 +113,14 @@ class File implements Driver
 
     /**
      * 销毁 session
-     *
      * @return bool
      */
-    public function destroy()
+    public function wipe()
     {
         Be::getResponse()->cookie(session_name(), '', -1);
         session_unset();
         session_destroy();
         return true;
     }
-	
+
 }

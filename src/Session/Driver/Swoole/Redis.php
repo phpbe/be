@@ -48,7 +48,7 @@ class Redis extends Driver
      *
      * @return bool
      */
-    public function destroy()
+    public function wipe()
     {
         $this->data = null;
         return $this->redis->del('session:' . $this->id);

@@ -157,7 +157,8 @@ class Redis extends \SessionHandler implements Driver
 	 * @return bool
 	 */
 	public function destroy($sessionId) {
-		return $this->redis->del('session:'.$sessionId);
+		$this->redis->del('session:'.$sessionId);
+		return true;
 	}
 
 	/**
@@ -170,5 +171,13 @@ class Redis extends \SessionHandler implements Driver
 		return true;
 	}
 
+    /**
+     * 销毁 session
+     * @return bool
+     */
+    public function wipe()
+    {
+        return session_destroy();
+    }
 
 }
