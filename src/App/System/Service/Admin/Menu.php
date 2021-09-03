@@ -15,7 +15,7 @@ class Menu
      */
     public function getMenus()
     {
-
+        return [];
     }
 
     /**
