@@ -2,7 +2,7 @@
 
 namespace Be\App\System\Controller\Admin;
 
-use Be\App\AdminControllerException;
+use Be\App\ControllerException;
 use Be\Config\ConfigHelper;
 use Be\AdminPlugin\Detail\Item\DetailItemIcon;
 use Be\AdminPlugin\Form\Item\FormItemAutoComplete;
@@ -26,7 +26,7 @@ class Installer
     {
         $config = Be::getConfig('App.System.System');
         if (!$config->developer || !$config->installable) {
-            throw new AdminControllerException('请先开启系统配置中的 "开发者模式" 和 "可安装及重装" 配置项！');
+            throw new ControllerException('请先开启系统配置中的 "开发者模式" 和 "可安装及重装" 配置项！');
         }
 
         $this->steps = ['环境检测', '配置数据库', '安装应用', '初始化系统', '完成'];

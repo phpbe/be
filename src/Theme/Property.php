@@ -14,4 +14,16 @@ abstract class Property extends \Be\Property\Driver
      */
     public $pages = ['Home'];
 
+    /**
+     * 预览图片
+     *
+     * @var string
+     */
+    public $previewImage = '';
+
+
+    public function getPreviewImageUrl () {
+        return $this->getUrl() . '/' . $this->previewImage;
+    }
+
 }

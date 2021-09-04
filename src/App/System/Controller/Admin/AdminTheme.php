@@ -2,6 +2,11 @@
 namespace Be\App\System\Controller\Admin;
 
 use Be\AdminPlugin\Form\Item\FormItemDatePickerRange;
+use Be\AdminPlugin\Table\Item\TableItemCustom;
+use Be\AdminPlugin\Table\Item\TableItemIcon;
+use Be\AdminPlugin\Table\Item\TableItemImage;
+use Be\AdminPlugin\Table\Item\TableItemSwitch;
+use Be\AdminPlugin\Table\Item\TableItemTag;
 use Be\Be;
 use Be\Db\Tuple;
 
@@ -18,181 +23,155 @@ class AdminTheme
      */
     public function themes()
     {
-        Be::getAdminPlugin('Curd')->setting([
-
-            'label' => '主题管理',
-            'table' => 'system_admin_theme',
-
-            'lists' => [
-                'title' => '已安装的主题列表',
-                'form' => [
-                    'items' => [
-                        [
-                            'name' => 'name',
-                            'label' => '主题名',
-                        ],
-                        [
-                            'name' => 'label',
-                            'label' => '主题中文名',
-                        ],
-                        [
-                            'name' => 'install_time',
-                            'label' => '安装时间',
-                            'driver' => FormItemDatePickerRange::class,
-                        ],
-                    ],
-                ],
-
-
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+        if ($request->isAjax()) {
+            $postData = $request->json();
+            $service = Be::getService('App.System.Admin.AdminTheme');
+            $themes = $service->getAvailableThemes();
+            $page = $postData['page'];
+            $pageSize = $postData['pageSize'];
+            $tableData = array_slice($themes, ($page - 1) * $pageSize, $pageSize);
+            $response->set('success', true);
+            $response->set('data', [
+                'total' => count($themes),
+                'tableData' => $tableData,
+            ]);
+            $response->json();
+        } else {
+            Be::getAdminPlugin('Lists')->setting([
+                'title' => '后台主题列表',
+                'pageSize' => 10,
                 'toolbar' => [
-
                     'items' => [
                         [
-                            'label' => '安装',
-                            'action' => 'install',
-                            'target' => 'drawer',
+                            'label' => '发现',
+                            'action' => 'discover',
+                            'target' => 'ajax',
                             'ui' => [
-                                'icon' => 'el-icon-plus',
                                 'type' => 'primary',
+                                'icon' => 'el-icon-search'
                             ]
                         ],
-                    ]
+                    ],
                 ],
 
                 'table' => [
                     'items' => [
                         [
-                            'name' => 'id',
-                            'label' => 'ID',
-                            'width' => '90',
+                            'name' => 'previewImageUrl',
+                            'label' => '缩略图',
+                            'driver' => TableItemImage::class,
+                            'width' => '160',
                         ],
                         [
                             'name' => 'name',
-                            'label' => '主题名',
-                            'width' => '120',
-                            'align' => 'left',
+                            'label' => '名称',
+                            'width' => '160',
                         ],
                         [
                             'name' => 'label',
-                            'label' => '主题中文名',
+                            'label' => '中文名称',
+                            'width' => '160',
                         ],
                         [
-                            'name' => 'install_time',
-                            'label' => '安装时间',
-                            'width' => '150',
+                            'name' => 'path',
+                            'label' => '路径',
+                            'align' => 'left',
+                        ],
+
+                        [
+                            'name' => 'is_enable',
+                            'label' => '启用/禁用',
+                            'driver' => TableItemSwitch::class,
+                            'target' => 'ajax',
+                            'action' => 'toggleEnable',
+                            'width' => '90',
                         ],
                         [
-                            'name' => 'update_time',
-                            'label' => '更新时间',
-                            'width' => '150',
+                            'name' => 'is_default',
+                            'label' => '当前主题',
+                            'driver' => TableItemSwitch::class,
+                            'target' => 'ajax',
+                            'task' => 'toggleDefault',
+                            'width' => '90',
                         ],
                     ],
                 ],
-
                 'operation' => [
                     'label' => '操作',
                     'width' => '120',
                     'items' => [
                         [
-                            'label' => '编辑',
-                            'task' => 'edit',
-                            'target' => 'drawer',
+                            'label' => '配置',
+                            'action' => 'goSetting',
+                            'target' => 'blank',
                             'ui' => [
-                                'type' => 'primary'
-                            ]
-                        ],
-                        [
-                            'label' => '卸载',
-                            'action' => 'uninstall',
-                            'confirm' => '确认要卸载么？',
-                            'target' => 'ajax',
-                            'ui' => [
-                                'type' => 'danger'
+                                'type' => 'success'
                             ]
                         ],
                     ]
                 ],
-            ],
 
-            'edit' => [
-                'title' => '编辑主题',
-                'form' => [
-                    'items' => [
-                        [
-                            'name' => 'name',
-                            'label' => '主题名',
-                            'disabled' => true,
-                        ],
-                        [
-                            'name' => 'label',
-                            'label' => '主题中文名',
-                        ],
-                    ]
-                ],
-                'events' => [
-                    'before' => function (Tuple &$tuple) {
-                        $tuple->update_time = date('Y-m-d H:i:s');
-                    }
-                ]
-            ],
-        ])->execute();
-    }
-
-    /**
-     * 安装新主题
-     *
-     * @BePermission("安装主题", ordering="2.21")
-     */
-    public function install()
-    {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
-
-        if ($request->isAjax()) {
-            $postData = $request->json();
-
-            if (!isset($postData['formData']['themeName'])) {
-                $response->error('参数主题名缺失！');
-            }
-
-            $themeName = $postData['formData']['themeName'];
-
-            try {
-                $serviceApp = Be::getService('App.System.Admin.AdminTheme');
-                $serviceApp->install($themeName);
-
-                beAdminOpLog('安装新后台主题：' . $themeName);
-                $response->success('主题安装成功！');
-            } catch (\Throwable $t) {
-                $response->error($t->getMessage());
-            }
-        } else {
-            Be::getAdminPlugin('Form')
-                ->setting([
-                    'title' => '安装新后台主题',
-                    'form' => [
-                        'items' => [
-                            [
-                                'name' => 'themeName',
-                                'label' => '主题名',
-                                'required' => true,
-                            ],
-                        ],
-                        'actions' => [
-                            'submit' => '安装',
-                        ]
-                    ],
-                ])
-                ->execute();
+            ])->execute();
         }
     }
 
     /**
-     * 卸载主题
+     * 发现
      *
-     * @BePermission("卸载主题", ordering="2.22")
+     * @BePermission("发现主题", ordering="2.22")
      */
-    public function uninstall()
+    public function discover()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+        try {
+            $serviceTheme = Be::getService('App.System.Admin.AdminTheme');
+            $n = $serviceTheme->discover();
+            $response->success('发现 ' . $n . ' 个新主题！');
+        } catch (\Throwable $t) {
+            $response->error($t->getMessage());
+        }
+    }
+
+    /**
+     * 启用/禁用主题
+     *
+     * @BePermission("启用/禁用主题", ordering="2.22")
+     */
+    public function toggleEnable()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $postData = $request->json();
+
+        if (!isset($postData['row']['name'])) {
+            $response->error('参数主题名缺失！');
+        }
+
+        $themeName = $postData['row']['name'];
+        $isEnable = $postData['row']['is_enable'];
+
+        try {
+            $serviceTheme = Be::getService('App.System.Admin.AdminTheme');
+            $serviceTheme->toggleEnable($themeName, $isEnable);
+
+            beAdminOpLog(($isEnable ? '启用' : '禁用' ) . '主题：' . $themeName);
+            $response->success(($isEnable ? '启用' : '禁用' ) . '主题成功！');
+        } catch (\Throwable $t) {
+            $response->error($t->getMessage());
+        }
+    }
+
+
+    /**
+     * 设置默认主题
+     *
+     * @BePermission("设置默认主题", ordering="2.22")
+     */
+    public function toggleDefault()
     {
         $request = Be::getRequest();
         $response = Be::getResponse();
@@ -207,10 +186,10 @@ class AdminTheme
 
         try {
             $serviceTheme = Be::getService('App.System.Admin.AdminTheme');
-            $serviceTheme->uninstall($themeName);
+            $serviceTheme->toggleDefault($themeName);
 
-            beAdminOpLog('卸载主题：' . $themeName);
-            $response->success('主题卸载成功！');
+            beAdminOpLog('设置默认主题：' . $themeName);
+            $response->success('设置默认主题成功！');
         } catch (\Throwable $t) {
             $response->error($t->getMessage());
         }

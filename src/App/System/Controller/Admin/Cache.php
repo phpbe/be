@@ -22,9 +22,9 @@ class Cache
     {
         $request = Be::getRequest();
         $response = Be::getResponse();
-        $serviceSystemLog = Be::getService('App.System.Admin.Cache');
         if ($request->isAjax()) {
-            $tableData = $serviceSystemLog->getCategories();
+            $service = Be::getService('App.System.Admin.Cache');
+            $tableData = $service->getCategories();
             $response->set('success', true);
             $response->set('data', [
                 'total' => 0,

@@ -1,10 +1,7 @@
-<?php
-use Be\Be;
-?>
 <be-html>
 <?php
 $adminThemeUrl = \Be\Be::getProperty('AdminTheme.Admin')->getUrl();
-$themeUrl = Be::getProperty('AdminTheme.Nude')->getUrl();
+$themeUrl = \Be\Be::getProperty('AdminTheme.Nude')->getUrl();
 ?>
 <!DOCTYPE html>
 <html>
