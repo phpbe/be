@@ -36,7 +36,7 @@ class AdminRole
             'label' => '角色管理',
             'table' => 'system_admin_role',
 
-            'lists' => [
+            'Grid' => [
                 'title' => '角色管理',
 
                 'filter' => [

@@ -43,7 +43,7 @@ class Task extends Driver
         $request = Be::getRequest();
 
         if ($task === null) {
-            $task = $request->request('task', 'lists');
+            $task = $request->request('task', 'Grid');
         }
 
         if (method_exists($this, $task)) {
@@ -173,7 +173,7 @@ class Task extends Driver
             'label' => '计划任务',
             'table' => 'system_task',
 
-            'lists' => [
+            'Grid' => [
                 'title' => '计划任务',
 
                 'filter' => [
@@ -501,7 +501,7 @@ class Task extends Driver
             'label' => '计划任务日志',
             'table' => 'system_task_log',
 
-            'lists' => [
+            'Grid' => [
                 'title' => '计划任务日志列表',
                 'orderBy' => 'id',
                 'orderByDir' => 'DESC',
@@ -617,7 +617,7 @@ class Task extends Driver
                 ],
 
             ],
-        ])->execute('lists');
+        ])->execute('Grid');
     }
 
 
@@ -643,7 +643,7 @@ class Task extends Driver
             'label' => '计划任务日志',
             'table' => 'system_task_log',
 
-            'lists' => [],
+            'Grid' => [],
 
             'detail' => [
                 'form' => [

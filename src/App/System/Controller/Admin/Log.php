@@ -43,12 +43,12 @@ class Log
             $offset = ($page - 1) * $pageSize;
             if ($offset > $total) $offset = $total;
 
-            $tableData = $serviceSystemLog->getlogs($year, $month, $day, $offset, $pageSize);
+            $gridData = $serviceSystemLog->getlogs($year, $month, $day, $offset, $pageSize);
 
             $response->set('success', true);
             $response->set('data', [
                 'total' => $total,
-                'tableData' => $tableData,
+                'gridData' => $gridData,
             ]);
             $response->json();
 
@@ -89,7 +89,7 @@ class Log
                 $days = [$day];
             }
 
-            Be::getAdminPlugin('Lists')->setting([
+            Be::getAdminPlugin('Grid')->setting([
                 'pageSize' => 10,
                 'form' => [
                     'items' => [

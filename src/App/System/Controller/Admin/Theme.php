@@ -24,7 +24,7 @@ class Theme
             'label' => '主题管理',
             'table' => 'system_theme',
 
-            'lists' => [
+            'Grid' => [
                 'title' => '已安装的主题列表',
                 'form' => [
                     'items' => [

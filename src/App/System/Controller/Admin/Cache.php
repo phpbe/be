@@ -24,15 +24,15 @@ class Cache
         $response = Be::getResponse();
         if ($request->isAjax()) {
             $service = Be::getService('App.System.Admin.Cache');
-            $tableData = $service->getCategories();
+            $gridData = $service->getCategories();
             $response->set('success', true);
             $response->set('data', [
                 'total' => 0,
-                'tableData' => $tableData,
+                'gridData' => $gridData,
             ]);
             $response->json();
         } else {
-            Be::getAdminPlugin('Lists')->setting([
+            Be::getAdminPlugin('Grid')->setting([
                 'pageSize' => 10,
                 'toolbar' => [
                     'items' => [

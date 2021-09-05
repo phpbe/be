@@ -31,15 +31,15 @@ class AdminTheme
             $themes = $service->getAvailableThemes();
             $page = $postData['page'];
             $pageSize = $postData['pageSize'];
-            $tableData = array_slice($themes, ($page - 1) * $pageSize, $pageSize);
+            $gridData = array_slice($themes, ($page - 1) * $pageSize, $pageSize);
             $response->set('success', true);
             $response->set('data', [
                 'total' => count($themes),
-                'tableData' => $tableData,
+                'gridData' => $gridData,
             ]);
             $response->json();
         } else {
-            Be::getAdminPlugin('Lists')->setting([
+            Be::getAdminPlugin('Grid')->setting([
                 'title' => '后台主题列表',
                 'pageSize' => 10,
                 'toolbar' => [
@@ -54,6 +54,44 @@ class AdminTheme
                             ]
                         ],
                     ],
+                ],
+
+                'layout' => 'card',
+
+                'card' => [
+                    'image' => [
+                        'name' => 'previewImageUrl',
+                    ],
+                    'items' => [
+                        [
+                            'name' => 'name',
+                            'label' => '名称',
+                        ],
+                        [
+                            'name' => 'label',
+                            'label' => '中文名称',
+                        ],
+                        [
+                            'name' => 'path',
+                            'label' => '路径',
+                        ],
+                        [
+                            'name' => 'is_enable',
+                            'label' => '启用/禁用',
+                            'driver' => TableItemSwitch::class,
+                            'target' => 'ajax',
+                            'action' => 'toggleEnable',
+                            'width' => '90',
+                        ],
+                        [
+                            'name' => 'is_default',
+                            'label' => '当前主题',
+                            'driver' => TableItemSwitch::class,
+                            'target' => 'ajax',
+                            'task' => 'toggleDefault',
+                            'width' => '90',
+                        ],
+                    ]
                 ],
 
                 'table' => [
@@ -79,7 +117,6 @@ class AdminTheme
                             'label' => '路径',
                             'align' => 'left',
                         ],
-
                         [
                             'name' => 'is_enable',
                             'label' => '启用/禁用',

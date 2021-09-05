@@ -1,6 +1,6 @@
 <?php
 
-namespace Be\AdminPlugin\Lists;
+namespace Be\AdminPlugin\Grid;
 
 
 class Property extends \Be\AdminPlugin\Property

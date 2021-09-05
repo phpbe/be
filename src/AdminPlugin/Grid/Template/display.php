@@ -1,10 +1,21 @@
 <be-head>
     <style type="text/css">
-        .el-table__row .el-divider__text, .el-link {
-            font-size: 12px;
-            margin-left: 4px;
-            margin-right: 4px;
+        <?php
+        if ($this->setting['layout'] == 'table') {
+            ?>
+            .el-table__row .el-divider__text, .el-link {
+                font-size: 12px;
+                margin-left: 4px;
+                margin-right: 4px;
+            }
+            <?php
+        } elseif ($this->setting['layout'] == 'card') {
+            ?>
+
+            <?php
         }
+    ?>
+
     </style>
 </be-head>
 
@@ -215,112 +226,210 @@
                 echo '</el-col></el-row>';
             }
 
-            if ($tabHtml && $tabPosition == 'beforeTable') {
+            if ($tabHtml && ($tabPosition == 'beforeGrid')) {
                 echo $tabHtml;
             }
-            ?>
 
-            <el-table<?php
-            $tableUi = [
-                ':data' => 'tableData',
-                'ref' => 'tableRef',
-                'v-loading' => 'loading',
-                'size' => 'mini',
-                ':height' => 'tableHeight',
-                ':default-sort' => '{prop:orderBy,order:orderByDir}',
-                '@sort-change' => 'sort',
-                '@selection-change' => 'selectionChange',
-            ];
-            if (isset($this->setting['table']['ui'])) {
-                $tableUi = array_merge($tableUi, $this->setting['table']['ui']);
-            }
-
-            foreach ($tableUi as $k => $v) {
-                if ($v === null) {
-                    echo ' ' . $k;
-                } else {
-                    echo ' ' . $k . '="' . $v . '"';
+            if ($this->setting['layout'] == 'table') {
+                ?>
+                <el-table<?php
+                $tableUi = [
+                    ':data' => 'gridData',
+                    'ref' => 'tableRef',
+                    'v-loading' => 'loading',
+                    'size' => 'mini',
+                    ':height' => 'tableHeight',
+                    ':default-sort' => '{prop:orderBy,order:orderByDir}',
+                    '@sort-change' => 'sort',
+                    '@selection-change' => 'selectionChange',
+                ];
+                if (isset($this->setting['table']['ui'])) {
+                    $tableUi = array_merge($tableUi, $this->setting['table']['ui']);
                 }
-            }
-            ?>>
-                <?php
-                $opHtml = null;
-                $opPosition = 'right';
-                if (isset($this->setting['operation'])) {
 
-                    $operationDriver = new \Be\AdminPlugin\Operation\Wrap($this->setting['operation']);
-                    $opHtml = $operationDriver->getHtmlBefore();
+                foreach ($tableUi as $k => $v) {
+                    if ($v === null) {
+                        echo ' ' . $k;
+                    } else {
+                        echo ' ' . $k . '="' . $v . '"';
+                    }
+                }
+                ?>>
+                    <?php
+                    $opHtml = null;
+                    $opPosition = 'right';
+                    if (isset($this->setting['operation'])) {
 
-                    if (isset($this->setting['operation']['items'])) {
-                        foreach ($this->setting['operation']['items'] as $item) {
-                            $driverClass = null;
-                            if (isset($item['driver'])) {
-                                if (substr($item['driver'], 0, 13) == 'OperationItem') {
-                                    $driverClass = '\\Be\\AdminPlugin\\Operation\\Item\\' . $item['driver'];
+                        $operationDriver = new \Be\AdminPlugin\Operation\Wrap($this->setting['operation']);
+                        $opHtml = $operationDriver->getHtmlBefore();
+
+                        if (isset($this->setting['operation']['items'])) {
+                            foreach ($this->setting['operation']['items'] as $item) {
+                                $driverClass = null;
+                                if (isset($item['driver'])) {
+                                    if (substr($item['driver'], 0, 13) == 'OperationItem') {
+                                        $driverClass = '\\Be\\AdminPlugin\\Operation\\Item\\' . $item['driver'];
+                                    } else {
+                                        $driverClass = $item['driver'];
+                                    }
                                 } else {
-                                    $driverClass = $item['driver'];
+                                    $driverClass = \Be\AdminPlugin\Operation\Item\OperationItemLink::class;
                                 }
-                            } else {
-                                $driverClass = \Be\AdminPlugin\Operation\Item\OperationItemLink::class;
-                            }
-                            $driver = new $driverClass($item);
+                                $driver = new $driverClass($item);
 
-                            $opHtml .= $driver->getHtml();
+                                $opHtml .= $driver->getHtml();
 
-                            $vueDataX = $driver->getVueData();
-                            if ($vueDataX) {
-                                $vueData = \Be\Util\Arr::merge($vueData, $vueDataX);
-                            }
+                                $vueDataX = $driver->getVueData();
+                                if ($vueDataX) {
+                                    $vueData = \Be\Util\Arr::merge($vueData, $vueDataX);
+                                }
 
-                            $vueMethodsX = $driver->getVueMethods();
-                            if ($vueMethodsX) {
-                                $vueMethods = array_merge($vueMethods, $vueMethodsX);
+                                $vueMethodsX = $driver->getVueMethods();
+                                if ($vueMethodsX) {
+                                    $vueMethods = array_merge($vueMethods, $vueMethodsX);
+                                }
                             }
+                        }
+
+                        $opHtml .= $operationDriver->getHtmlAfter();
+                        $opPosition = $operationDriver->position;
+
+                        if ($opPosition == 'left') {
+                            echo $opHtml;
                         }
                     }
 
-                    $opHtml .= $operationDriver->getHtmlAfter();
-                    $opPosition = $operationDriver->position;
+                    foreach ($this->setting['table']['items'] as $item) {
 
-                    if ($opPosition == 'left') {
+                        $driverClass = null;
+                        if (isset($item['driver'])) {
+                            if (substr($item['driver'], 0, 9) == 'TableItem') {
+                                $driverClass = '\\Be\\AdminPlugin\\Table\\Item\\' . $item['driver'];
+                            } else {
+                                $driverClass = $item['driver'];
+                            }
+                        } else {
+                            $driverClass = \Be\AdminPlugin\Table\Item\TableItemText::class;
+                        }
+                        $driver = new $driverClass($item);
+
+                        echo $driver->getHtml();
+
+                        $vueDataX = $driver->getVueData();
+                        if ($vueDataX) {
+                            $vueData = \Be\Util\Arr::merge($vueData, $vueDataX);
+                        }
+
+                        $vueMethodsX = $driver->getVueMethods();
+                        if ($vueMethodsX) {
+                            $vueMethods = array_merge($vueMethods, $vueMethodsX);
+                        }
+                    }
+
+                    if (isset($this->setting['operation']) && $opPosition == 'right') {
                         echo $opHtml;
                     }
-                }
-
-                foreach ($this->setting['table']['items'] as $item) {
-
-                    $driverClass = null;
-                    if (isset($item['driver'])) {
-                        if (substr($item['driver'], 0, 9) == 'TableItem') {
-                            $driverClass = '\\Be\\AdminPlugin\\Table\\Item\\' . $item['driver'];
-                        } else {
-                            $driverClass = $item['driver'];
-                        }
-                    } else {
-                        $driverClass = \Be\AdminPlugin\Table\Item\TableItemText::class;
-                    }
-                    $driver = new $driverClass($item);
-
-                    echo $driver->getHtml();
-
-                    $vueDataX = $driver->getVueData();
-                    if ($vueDataX) {
-                        $vueData = \Be\Util\Arr::merge($vueData, $vueDataX);
-                    }
-
-                    $vueMethodsX = $driver->getVueMethods();
-                    if ($vueMethodsX) {
-                        $vueMethods = array_merge($vueMethods, $vueMethodsX);
-                    }
-                }
-
-                if (isset($this->setting['operation']) && $opPosition == 'right') {
-                    echo $opHtml;
-                }
+                    ?>
+                </el-table>
+                <?php
+            } elseif ($this->setting['layout'] == 'card') {
                 ?>
-            </el-table>
+                <div v-loading='loading'>
+                    <el-row<?php
+                        foreach ($this->setting['card']['ui']['row'] as $k => $v) {
+                            if ($v === null) {
+                                echo ' ' . $k;
+                            } else {
+                                echo ' ' . $k . '="' . $v . '"';
+                            }
+                        }
+                        ?> >
 
-            <?php
+                        <el-col<?php
+                            foreach ($this->setting['card']['ui']['col'] as $k => $v) {
+                                if ($v === null) {
+                                    echo ' ' . $k;
+                                } else {
+                                    echo ' ' . $k . '="' . $v . '"';
+                                }
+                            }
+                            ?> >
+                            <el-card<?php
+                                foreach ($this->setting['card']['ui'] as $k => $v) {
+                                    if ($k == 'row' || $k == 'col') {
+                                        continue;
+                                    }
+
+                                    if ($v === null) {
+                                        echo ' ' . $k;
+                                    } else {
+                                        echo ' ' . $k . '="' . $v . '"';
+                                    }
+                                }
+                                ?>  v-for="(item, itemKey) in gridData">
+                                <?php
+                                if (isset($this->setting['card']['template'])) {
+                                    echo $this->setting['card']['template'];
+                                } else {
+
+                                    if (isset($this->setting['card']['image'])) {
+                                        if ($this->setting['card']['image']['position'] == 'left') {
+                                            echo '<div style="display: flex">';
+                                            echo '<div style="flex: 0 0 ' . $this->setting['card']['image']['maxWidth'] . 'px;height:' . $this->setting['card']['image']['maxHeight'] . 'px;;line-height:' . $this->setting['card']['image']['maxHeight'] . 'px;">';
+                                            echo '<img :src="item.'. $this->setting['card']['image']['name'] .'" style="width: 100%;">';
+                                            echo '</div>';
+                                            echo '<div style="flex: 0 0 ' . $this->setting['card']['image']['space'] . 'px;"></div>';
+                                            echo '<div style="flex: 1 1 auto;">';
+                                        } elseif ($this->setting['card']['image']['position'] == 'left') {
+                                            echo '<div style="width:' . $this->setting['card']['image']['maxWidth'] . 'px;margin-bottom: ' . $this->setting['card']['image']['space'] . 'px;">';
+                                            echo '<img :src="item.'. $this->setting['card']['image']['name'] .'" style="width:100%;max-height:' . $this->setting['card']['image']['maxHeight'] . 'px;">';
+                                            echo '</div>';
+                                        }
+                                    }
+
+                                    if (isset($this->setting['card']['items'])) {
+                                        foreach ($this->setting['card']['items'] as $item) {
+                                            $driverClass = null;
+                                            if (isset($item['driver'])) {
+                                                if (substr($item['driver'], 0, 9) == 'CardItem') {
+                                                    $driverClass = '\\Be\\AdminPlugin\\Card\\Item\\' . $item['driver'];
+                                                } else {
+                                                    $driverClass = $item['driver'];
+                                                }
+                                            } else {
+                                                $driverClass = \Be\AdminPlugin\Card\Item\CardItemText::class;
+                                            }
+                                            $driver = new $driverClass($item);
+
+                                            echo $driver->getHtml();
+
+                                            $vueDataX = $driver->getVueData();
+                                            if ($vueDataX) {
+                                                $vueData = \Be\Util\Arr::merge($vueData, $vueDataX);
+                                            }
+
+                                            $vueMethodsX = $driver->getVueMethods();
+                                            if ($vueMethodsX) {
+                                                $vueMethods = array_merge($vueMethods, $vueMethodsX);
+                                            }
+                                        }
+                                    }
+
+                                    if (isset($this->setting['card']['image'])) {
+                                        if ($this->setting['card']['image']['position'] == 'left') {
+                                            echo '</div>';
+                                            echo '</div>';
+                                        }
+                                    }
+                                }
+                                ?>
+                            </el-card>
+                        </el-col>
+                    </el-row>
+                </div>
+                <?php
+            }
+
             if (isset($this->setting['footnote'])) {
                 echo $this->setting['footnote'];
             }
@@ -418,7 +527,7 @@
             el: '#app',
             data: {
                 formData: <?php echo json_encode($formData); ?>,
-                tableData: [],
+                gridData: [],
                 orderBy: "",
                 orderByDir: "",
                 pageSize: pageSize,
@@ -440,9 +549,9 @@
             methods: {
                 submit: function () {
                     this.page = 1;
-                    this.loadTableData();
+                    this.loadGridData();
                 },
-                loadTableData: function () {
+                loadGridData: function () {
                     this.loading = true;
                     var _this = this;
                     _this.$http.post("<?php echo $this->setting['form']['action']; ?>", {
@@ -458,11 +567,11 @@
                             var responseData = response.data;
                             if (responseData.success) {
                                 _this.total = parseInt(responseData.data.total);
-                                _this.tableData = responseData.data.tableData;
+                                _this.gridData = responseData.data.gridData;
                                 _this.pages = Math.floor(_this.total / _this.pageSize);
                             } else {
                                 _this.total = 0;
-                                _this.tableData = [];
+                                _this.gridData = [];
                                 _this.page = 1;
                                 _this.pages = 1;
 
@@ -482,7 +591,7 @@
                         _this.$message.error(error);
                     });
                 },
-                reloadTableData: function () {
+                reloadGridData: function () {
                     var _this = this;
                     _this.$http.post("<?php echo $this->setting['form']['action']; ?>", {
                         formData: _this.formData,
@@ -495,7 +604,7 @@
                             var responseData = response.data;
                             if (responseData.success) {
                                 _this.total = parseInt(responseData.data.total);
-                                _this.tableData = responseData.data.tableData;
+                                _this.gridData = responseData.data.gridData;
                                 _this.pages = Math.floor(_this.total / _this.pageSize);
                             }
                             _this.resize();
@@ -507,11 +616,11 @@
                     this.pageSize = pageSize;
                     this.page = 1;
                     localStorage.setItem(pageSizeKey, pageSize);
-                    this.loadTableData();
+                    this.loadGridData();
                 },
                 gotoPage: function (page) {
                     this.page = page;
-                    this.loadTableData();
+                    this.loadGridData();
                 },
                 sort: function (option) {
                     if (option.order == "ascending" || option.order == "descending") {
@@ -521,7 +630,7 @@
                         this.orderBy = "";
                         this.orderByDir = "";
                     }
-                    this.loadTableData();
+                    this.loadGridData();
                 },
                 formAction: function (name, option) {
                     var data = {
@@ -549,7 +658,7 @@
                     data.selectedRows = this.selectedRows;
                     return this.action(option, data);
                 },
-                tableItemAction: function (name, option, row) {
+                gridItemAction: function (name, option, row) {
                     switch (option.target) {
                         case "dialog":
                             option.dialog.title = row[name];
@@ -590,7 +699,7 @@
                                         });
                                     }
                                 }
-                                _this.loadTableData();
+                                _this.loadGridData();
                             }
                         }).catch(function (error) {
                             _this.$message({
@@ -598,7 +707,7 @@
                                 message: error,
                                 type: 'error'
                             });
-                            _this.loadTableData();
+                            _this.loadGridData();
                         });
                     } else {
                         var eForm = document.createElement("form");
@@ -684,8 +793,10 @@
                     ?>
                 },
                 resize: function () {
+                    <?php if ($this->setting['layout'] == 'table') { ?>
                     var offset = this.total > 0 ? 55 : 15;
                     this.tableHeight = document.documentElement.clientHeight - this.$refs.tableRef.$el.offsetTop - offset;
+                    <?php } ?>
                 }
                 <?php
                 if ($vueMethods) {
@@ -700,7 +811,7 @@
                 <?php
                 if (isset($this->setting['reload']) && is_numeric($this->setting['reload'])) {
                     echo 'var _this = this;';
-                    echo 'setInterval(function () {_this.reloadTableData();}, ' . ($this->setting['reload'] * 1000) . ');';
+                    echo 'setInterval(function () {_this.reloadGridData();}, ' . ($this->setting['reload'] * 1000) . ');';
                 }
 
                 if (isset($vueHooks['created'])) {
@@ -724,11 +835,14 @@
                 ?>
             },
             updated: function () {
+                <?php if ($this->setting['layout'] == 'table') { ?>
                 var _this = this;
                 this.$nextTick(function () {
                     _this.$refs['tableRef'].doLayout();
                 });
                 <?php
+                }
+
                 if (isset($vueHooks['updated'])) {
                     echo $vueHooks['updated'];
                 }
@@ -759,7 +873,7 @@
         });
 
         function reload() {
-            vueLists.loadTableData();
+            vueLists.loadGridata();
         }
 
         function close() {
@@ -778,17 +892,17 @@
         function closeAndReload() {
             vueLists.drawer.visible = false;
             vueLists.dialog.visible = false;
-            vueLists.loadTableData();
+            vueLists.loadGridata();
         }
 
         function closeDrawerAndReload() {
             vueLists.drawer.visible = false;
-            vueLists.loadTableData();
+            vueLists.loadGridata();
         }
 
         function closeDialogAndReload() {
             vueLists.dialog.visible = false;
-            vueLists.loadTableData();
+            vueLists.loadGridata();
         }
 
     </script>

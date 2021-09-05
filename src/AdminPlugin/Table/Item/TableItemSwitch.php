@@ -37,7 +37,7 @@ class TableItemSwitch extends TableItem
         }
 
         if (!isset($this->ui['v-model'])) {
-            $this->ui['v-model'] = 'tableData[scope.$index].' . $this->name; //'scope.row.' . $this->name;
+            $this->ui['v-model'] = 'gridData[scope.$index].' . $this->name; //'scope.row.' . $this->name;
         }
     }
 

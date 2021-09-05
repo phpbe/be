@@ -96,7 +96,7 @@ class AdminUser
             'label' => '用户管理',
             'table' => 'system_admin_user',
 
-            'lists' => [
+            'Grid' => [
                 'title' => '用户列表',
 
                 'filter' => [

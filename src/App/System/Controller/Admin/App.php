@@ -25,11 +25,11 @@ class App
                 $apps = Be::getService('App.System.Admin.App')->getApps();
                 $page = $postData['page'];
                 $pageSize = $postData['pageSize'];
-                $tableData = array_slice($apps, ($page - 1) * $pageSize, $pageSize);
+                $gridData = array_slice($apps, ($page - 1) * $pageSize, $pageSize);
                 $response->set('success', true);
                 $response->set('data', [
                     'total' => count($apps),
-                    'tableData' => $tableData,
+                    'gridData' => $gridData,
                 ]);
                 $response->json();
             } catch (\Throwable $t) {
@@ -41,7 +41,7 @@ class App
 
         } else {
 
-            Be::getAdminPlugin('Lists')
+            Be::getAdminPlugin('Grid')
                 ->setting([
                     'title' => '已安装的应用列表',
 

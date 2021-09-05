@@ -27,7 +27,7 @@ class AdminUserLoginLog
         Be::getAdminPlugin('Curd')->setting([
             'label' => '用户登录日志',
             'table' => 'system_admin_user_login_log',
-            'lists' => [
+            'Grid' => [
                 'title' => '用户登录日志',
                 'orderBy' => 'create_time',
                 'orderByDir' => 'DESC',

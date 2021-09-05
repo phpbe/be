@@ -43,7 +43,7 @@ class Report extends Driver
     public function execute($task = null)
     {
         if ($task === null) {
-            $task = Be::getRequest()->request('task', 'lists');
+            $task = Be::getRequest()->request('task', 'Grid');
         }
 
         if (method_exists($this, $task)) {
@@ -146,10 +146,10 @@ class Report extends Driver
                         $sqlData .= ' ' . $orderBySql;
                     }
                 } else {
-                    if (isset($this->setting['lists']['orderBy'])) {
-                        $orderBy = $this->setting['lists']['orderBy'];
-                        if (isset($this->setting['lists']['orderByDir'])) {
-                            $orderByDir = $this->setting['lists']['orderByDir'];
+                    if (isset($this->setting['Grid']['orderBy'])) {
+                        $orderBy = $this->setting['Grid']['orderBy'];
+                        if (isset($this->setting['Grid']['orderByDir'])) {
+                            $orderByDir = $this->setting['Grid']['orderByDir'];
                             $orderBySql = ' ORDER BY ' . $orderBy . ' ' . $orderByDir;
                         } else {
                             $orderBySql = ' ORDER BY ' . $orderBy;
@@ -184,7 +184,7 @@ class Report extends Driver
                 foreach ($rows as $row) {
                     $formattedRow = [];
 
-                    foreach ($this->setting['lists']['table']['items'] as $item) {
+                    foreach ($this->setting['Grid']['table']['items'] as $item) {
                         $itemName = $item['name'];
                         $itemValue = '';
                         if (isset($item['value'])) {
@@ -221,9 +221,9 @@ class Report extends Driver
                             continue;
                         }
 
-                        if (isset($this->setting['lists']['table']['exclude']) &&
-                            is_array($this->setting['lists']['table']['exclude']) &&
-                            in_array($k, $this->setting['lists']['table']['exclude'])
+                        if (isset($this->setting['Grid']['table']['exclude']) &&
+                            is_array($this->setting['Grid']['table']['exclude']) &&
+                            in_array($k, $this->setting['Grid']['table']['exclude'])
                         ) {
                             continue;
                         }
@@ -236,7 +236,7 @@ class Report extends Driver
                 $response->set('success', true);
                 $response->set('data', [
                     'total' => $total,
-                    'tableData' => $formattedRows,
+                    'gridData' => $formattedRows,
                 ]);
                 $response->json();
             } catch (\Throwable $t) {
@@ -247,9 +247,9 @@ class Report extends Driver
             }
 
         } else {
-            $setting = $this->setting['lists'];
+            $setting = $this->setting['Grid'];
 
-            Be::getAdminPlugin('Lists')
+            Be::getAdminPlugin('Grid')
                 ->setting($setting)
                 ->display();
 
@@ -319,8 +319,8 @@ class Report extends Driver
             $filename = null;
             if (isset($this->setting['export']['title'])) {
                 $filename = $this->setting['export']['title'];
-            } elseif (isset($this->setting['lists']['title'])) {
-                $filename = $this->setting['lists']['title'];
+            } elseif (isset($this->setting['Grid']['title'])) {
+                $filename = $this->setting['Grid']['title'];
             }
             $filename .= '（' . date('YmdHis') . '）';
             $filename .= ($exportDriver == 'csv' ? '.csv' : '.xls');
@@ -331,7 +331,7 @@ class Report extends Driver
             if (isset($this->setting['export']['items'])) {
                 $fields = $this->setting['export']['items'];
             } else {
-                $fields = $this->setting['lists']['table']['items'];
+                $fields = $this->setting['Grid']['table']['items'];
             }
 
             $headers = [];
@@ -407,8 +407,8 @@ class Report extends Driver
             $content = null;
             if (isset($this->setting['export']['title'])) {
                 $content = $this->setting['export']['title'] . '（' . $exportDriver . '）';
-            } elseif (isset($this->setting['lists']['title'])) {
-                $content = '导出 ' . $this->setting['lists']['title'] . '（' . $exportDriver . '）';
+            } elseif (isset($this->setting['Grid']['title'])) {
+                $content = '导出 ' . $this->setting['Grid']['title'] . '（' . $exportDriver . '）';
             } else {
                 $content = '导出 ' . $exportDriver;
             }
@@ -435,8 +435,8 @@ class Report extends Driver
 
         $wheres = [];
 
-        if (isset($this->setting['lists']['filter']) && count($this->setting['lists']['filter']) > 0) {
-            foreach ($this->setting['lists']['filter'] as $filter) {
+        if (isset($this->setting['Grid']['filter']) && count($this->setting['Grid']['filter']) > 0) {
+            foreach ($this->setting['Grid']['filter'] as $filter) {
                 if (is_array($filter)) {
                     $n = count($filter);
                     if ($n == 2) {
@@ -450,7 +450,7 @@ class Report extends Driver
             }
         }
 
-        if (isset($this->setting['lists']['tab'])) {
+        if (isset($this->setting['Grid']['tab'])) {
             if (isset($item['buildSql']) && $item['buildSql'] instanceof \Closure) {
                 $buildSql = $item['buildSql'];
                 $sql = $buildSql($this->setting['db'], $formData);
@@ -458,12 +458,12 @@ class Report extends Driver
                     $wheres[] = $sql;
                 }
             } else {
-                $driver = new \Be\AdminPlugin\Tab\Driver($this->setting['lists']['tab']);
+                $driver = new \Be\AdminPlugin\Tab\Driver($this->setting['Grid']['tab']);
                 $driver->submit($formData);
                 if ($driver->newValue !== '') {
                     $sql = '';
-                    if (isset($this->setting['lists']['tab']['table'])) {
-                        $sql .= $db->quoteKey($this->setting['lists']['tab']['table']) . '.';
+                    if (isset($this->setting['Grid']['tab']['table'])) {
+                        $sql .= $db->quoteKey($this->setting['Grid']['tab']['table']) . '.';
                     }
                     $sql .= $db->quoteKey($driver->name) . ' = ' . $db->quoteValue($driver->newValue);
                     $wheres[] = $sql;
@@ -472,8 +472,8 @@ class Report extends Driver
         }
 
         // 表单搜索
-        if (isset($this->setting['lists']['form']['items']) && count($this->setting['lists']['form']['items']) > 0) {
-            foreach ($this->setting['lists']['form']['items'] as $item) {
+        if (isset($this->setting['Grid']['form']['items']) && count($this->setting['Grid']['form']['items']) > 0) {
+            foreach ($this->setting['Grid']['form']['items'] as $item) {
 
                 $driverClass = null;
                 if (isset($item['driver'])) {

@@ -1,13 +1,13 @@
 <?php
 
-namespace Be\AdminPlugin\Table\Item;
+namespace Be\AdminPlugin\Card\Item;
 
 use Be\Be;
 
 /**
  * 字段驱动
  */
-abstract class TableItem
+abstract class CardItem
 {
 
     public $name = null; // 键名
@@ -43,7 +43,7 @@ abstract class TableItem
                 $this->name = $name;
             }
         } else {
-            $this->name = 'n' . (self::$nameIndex++);
+            $this->name = 'CardItem' . (self::$nameIndex++);
         }
 
         if (isset($params['label'])) {
@@ -220,30 +220,6 @@ abstract class TableItem
             $this->ui['table-column']['label'] = $this->label;
         }
 
-        if (!isset($this->ui['table-column']['sortable']) && isset($params['sortable']) && $params['sortable']) {
-            $this->ui['table-column']['sortable'] = 'custom';
-        }
-
-        if (!isset($this->ui['table-column']['width']) && isset($params['width'])) {
-            $this->ui['table-column']['width'] = $params['width'];
-        }
-
-        if (!isset($this->ui['table-column']['align'])) {
-            if (isset($params['align'])) {
-                $this->ui['table-column']['align'] = $params['align'];
-            } else {
-                $this->ui['table-column']['align'] = 'center';
-            }
-        }
-
-        if (!isset($this->ui['table-column']['header-align'])) {
-            if (isset($params['header-align'])) {
-                $this->ui['table-column']['header-align'] = $params['header-align'];
-            } else {
-                $this->ui['table-column']['header-align'] = $this->ui['table-column']['align'];
-            }
-        }
-
     }
 
 
@@ -257,7 +233,7 @@ abstract class TableItem
         if (!$this->url) return false;
 
         $vueData = [
-            'tableItems' => [
+            'cardItems' => [
                 $this->name => [
                     'url' => $this->url,
                     'confirm' => $this->confirm === null ? '' : $this->confirm,
@@ -268,9 +244,9 @@ abstract class TableItem
         ];
 
         if ($this->target == 'dialog') {
-            $vueData['tableItems'][$this->name]['dialog'] = $this->dialog;
+            $vueData['cardItems'][$this->name]['dialog'] = $this->dialog;
         } elseif ($this->target == 'drawer') {
-            $vueData['tableItems'][$this->name]['drawer'] = $this->drawer;
+            $vueData['cardItems'][$this->name]['drawer'] = $this->drawer;
         }
 
         return $vueData;
@@ -284,8 +260,8 @@ abstract class TableItem
     public function getVueMethods()
     {
         return [
-            'tableItemClick' => 'function (name, row) {
-                var option = this.tableItems[name];
+            'cardItemClick' => 'function (name, row) {
+                var option = this.cardItems[name];
                 if (option.confirm) {
                     var _this = this;
                     this.$confirm(option.confirm, \'操作确认\', {
