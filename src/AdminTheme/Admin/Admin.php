@@ -1,12 +1,8 @@
-<?php
-use Be\Be;
-?>
-
 <be-html>
 <?php
-$config = Be::getConfig('App.System.System');
-$my = Be::getAdminUser();
-$themeUrl = Be::getProperty('AdminTheme.Admin')->getUrl();
+$config = \Be\Be::getConfig('App.System.System');
+$my = \Be\Be::getAdminUser();
+$themeUrl = \Be\Be::getProperty('AdminTheme.Admin')->getUrl();
 ?>
 <!DOCTYPE html>
 <html>
@@ -43,7 +39,7 @@ $themeUrl = Be::getProperty('AdminTheme.Admin')->getUrl();
 
             <div class="west-menu">
                 <?php
-                $adminMenu = Be::getAdminMenu();
+                $adminMenu = \Be\Be::getAdminMenu();
                 $adminMenuTree = $adminMenu->getMenuTree()
                 ?>
                 <el-menu
@@ -54,7 +50,7 @@ $themeUrl = Be::getProperty('AdminTheme.Admin')->getUrl();
                         :collapse="collapse"
                         :collapse-transition="false">
                     <?php
-                    $appName = Be::getRequest()->getAppName();
+                    $appName = \Be\Be::getRequest()->getAppName();
                     foreach ($adminMenuTree as $menu) {
 
                         if ($menu->id == $appName) {
@@ -107,7 +103,7 @@ $themeUrl = Be::getProperty('AdminTheme.Admin')->getUrl();
                 <div class="menu">
                     <div v-cloak>
                         <?php
-                        $adminMenu = Be::getAdminMenu();
+                        $adminMenu = \Be\Be::getAdminMenu();
                         $adminMenuTree = $adminMenu->getMenuTree()
                         ?>
                         <el-menu
@@ -124,16 +120,28 @@ $themeUrl = Be::getProperty('AdminTheme.Admin')->getUrl();
                                     echo '<el-submenu index="north-menu-'.$menu->id.'">';
 
                                     echo '<template slot="title">';
-                                    echo '<i class="'.$menu->icon.'"></i>';
-                                    echo '<span>'.$menu->label.'</span>';
+                                    if ($menu->url) {
+                                        echo '<el-link href="'.$menu->url.'" icon="'.$menu->icon.'" :underline="false" style="display:inline !important;">';
+                                        echo $menu->label;
+                                        echo '</el-link>';
+                                    } else {
+                                        echo '<i class="'.$menu->icon.'"></i>';
+                                        echo '<span>'.$menu->label.'</span>';
+                                    }
                                     echo '</template>';
 
                                     foreach ($menu->subMenu as $subMenu) {
                                         echo '<el-submenu index="north-menu-'.$subMenu->id.'">';
 
                                         echo '<template slot="title">';
-                                        echo '<i class="'.$subMenu->icon.'"></i>';
-                                        echo '<span>'.$subMenu->label.'</span>';
+                                        if ($subMenu->url) {
+                                            echo '<el-link href="'.$subMenu->url.'" icon="'.$subMenu->icon.'" :underline="false">';
+                                            echo $subMenu->label;
+                                            echo '</el-link>';
+                                        } else {
+                                            echo '<i class="'.$subMenu->icon.'"></i>';
+                                            echo '<span>'.$subMenu->label.'</span>';
+                                        }
                                         echo '</template>';
 
                                         if ($subMenu->subMenu) {
@@ -154,8 +162,7 @@ $themeUrl = Be::getProperty('AdminTheme.Admin')->getUrl();
 
                             <el-submenu>
                                 <template slot="title">
-                                    <i class="el-icon-question"></i>
-                                    <span slot="title">帮助</span>
+                                    <el-link href="http://www.phpbe.com/" target="_blank" icon="el-icon-position" :underline="false" style="display:inline !important;">帮助</el-link>
                                 </template>
 
                                 <el-menu-item index="help-official">
@@ -174,14 +181,14 @@ $themeUrl = Be::getProperty('AdminTheme.Admin')->getUrl();
 
                 <div class="user">
                     <?php
-                    $configUser = Be::getConfig('App.System.AdminUser');
+                    $configUser = \Be\Be::getConfig('App.System.AdminUser');
                     ?>
                     您好：
                     <img src="<?php
                     if ($my->avatar == '') {
-                        echo Be::getProperty('App.System')->getUrl().'/AdminTemplate/AdminUser/images/avatar.png';
+                        echo \Be\Be::getProperty('App.System')->getUrl().'/AdminTemplate/AdminUser/images/avatar.png';
                     } else {
-                        echo Be::getRequest()->getUploadUrl().'/System/AdminUser/Avatar/'.$my->avatar;
+                        echo \Be\Be::getRequest()->getUploadUrl().'/System/AdminUser/Avatar/'.$my->avatar;
                     }
                     ?>" style="max-width:24px;max-height:24px; vertical-align: middle;" />
                     <?php echo $my->name; ?>
@@ -206,7 +213,7 @@ $themeUrl = Be::getProperty('AdminTheme.Admin')->getUrl();
 
     <script>
         <?php
-        $menuKey = Be::getRequest()->getRoute();
+        $menuKey = \Be\Be::getRequest()->getRoute();
         ?>
         var vueNorth = new Vue({
             el: '#be-north',

@@ -88,38 +88,37 @@ class Theme
                             'width' => '150',
                         ],
                     ],
-                ],
-
-                'operation' => [
-                    'label' => '操作',
-                    'width' => '120',
-                    'items' => [
-                        [
-                            'label' => '编辑',
-                            'task' => 'edit',
-                            'target' => 'drawer',
-                            'ui' => [
-                                'type' => 'primary'
-                            ]
-                        ],
-                        [
-                            'label' => '配置',
-                            'action' => 'goSetting',
-                            'target' => 'blank',
-                            'ui' => [
-                                'type' => 'success'
-                            ]
-                        ],
-                        [
-                            'label' => '卸载',
-                            'action' => 'uninstall',
-                            'confirm' => '确认要卸载么？',
-                            'target' => 'ajax',
-                            'ui' => [
-                                'type' => 'danger'
-                            ]
-                        ],
-                    ]
+                    'operation' => [
+                        'label' => '操作',
+                        'width' => '120',
+                        'items' => [
+                            [
+                                'label' => '编辑',
+                                'task' => 'edit',
+                                'target' => 'drawer',
+                                'ui' => [
+                                    'type' => 'primary'
+                                ]
+                            ],
+                            [
+                                'label' => '配置',
+                                'action' => 'goSetting',
+                                'target' => 'blank',
+                                'ui' => [
+                                    'type' => 'success'
+                                ]
+                            ],
+                            [
+                                'label' => '卸载',
+                                'action' => 'uninstall',
+                                'confirm' => '确认要卸载么？',
+                                'target' => 'ajax',
+                                'ui' => [
+                                    'type' => 'danger'
+                                ]
+                            ],
+                        ]
+                    ],
                 ],
             ],
 

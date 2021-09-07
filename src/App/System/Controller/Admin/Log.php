@@ -203,25 +203,25 @@ class Log
                             'width' => '150',
                         ],
                     ],
+                    'operation' => [
+                        'label' => '操作',
+                        'width' => '120',
+                        'items' => [
+                            [
+                                'label' => '查看明细',
+                                'url' => beAdminUrl('System.Log.detail'),
+                                'target' => 'drawer',
+                                'drawer' => [
+                                    'width' => '75%',
+                                ],
+                                'ui' => [
+                                    'type' => 'primary'
+                                ]
+                            ],
+                        ]
+                    ],
                 ],
 
-                'operation' => [
-                    'label' => '操作',
-                    'width' => '120',
-                    'items' => [
-                        [
-                            'label' => '查看明细',
-                            'url' => beAdminUrl('System.Log.detail'),
-                            'target' => 'drawer',
-                            'drawer' => [
-                                'width' => '75%',
-                            ],
-                            'ui' => [
-                                'type' => 'primary'
-                            ]
-                        ],
-                    ]
-                ],
                 'vueMethods' => [
                     'showLogs' => 'function() {
                         this.formAction("", {url:"' . beAdminUrl('System.Log.lists') . '", target:"self", postData: []});

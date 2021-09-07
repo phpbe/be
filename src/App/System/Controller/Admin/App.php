@@ -79,23 +79,23 @@ class App
                                 'label' => '应用中文名',
                             ],
                         ],
+                        'operation' => [
+                            'label' => '操作',
+                            'width' => '120',
+                            'items' => [
+                                [
+                                    'label' => '卸载',
+                                    'action' => 'uninstall',
+                                    'confirm' => '应用数据将被清除，且不可恢复，确认要卸载么？',
+                                    'target' => 'ajax',
+                                    'ui' => [
+                                        'type' => 'danger'
+                                    ]
+                                ],
+                            ]
+                        ],
                     ],
 
-                    'operation' => [
-                        'label' => '操作',
-                        'width' => '120',
-                        'items' => [
-                            [
-                                'label' => '卸载',
-                                'action' => 'uninstall',
-                                'confirm' => '应用数据将被清除，且不可恢复，确认要卸载么？',
-                                'target' => 'ajax',
-                                'ui' => [
-                                    'type' => 'danger'
-                                ]
-                            ],
-                        ]
-                    ],
                 ])
                 ->display();
 

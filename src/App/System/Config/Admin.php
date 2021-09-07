@@ -16,7 +16,7 @@ class Admin
     /**
      * @BeConfigItem("默认首页", driver="FormItemInput")
      */
-    public $home = 'System.System.dashboard';
+    public $home = 'System.Index.index';
 
     /**
      * @BeConfigItem("默认分页",

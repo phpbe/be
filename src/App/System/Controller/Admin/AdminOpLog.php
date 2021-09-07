@@ -123,23 +123,21 @@ class AdminOpLog
                             'width' => '150',
                         ],
                     ],
+                    'operation' => [
+                        'label' => '操作',
+                        'width' => '120',
+                        'items' => [
+                            [
+                                'label' => '查看',
+                                'task' => 'detail',
+                                'ui' => [
+                                    'icon' => 'el-icon-search',
+                                    'type' => 'success'
+                                ]
+                            ],
+                        ]
+                    ],
                 ],
-
-                'operation' => [
-                    'label' => '操作',
-                    'width' => '120',
-                    'items' => [
-                        [
-                            'label' => '查看',
-                            'task' => 'detail',
-                            'ui' => [
-                                'icon' => 'el-icon-search',
-                                'type' => 'success'
-                            ]
-                        ],
-                    ]
-                ],
-
             ],
 
             'detail' => [

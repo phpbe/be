@@ -88,24 +88,24 @@ class Cache
                     'ui' => [
                         'show-summary' => null,
                         ':summary-method' => 'getSummaries',
-                    ]
+                    ],
+                    'operation' => [
+                        'label' => '操作',
+                        'width' => '120',
+                        'items' => [
+                            [
+                                'label' => '清除',
+                                'action' => 'delete',
+                                'target' => 'ajax',
+                                'confirm' => '确认要清除缓存么？',
+                                'ui' => [
+                                    'type' => 'danger'
+                                ]
+                            ],
+                        ]
+                    ],
                 ],
 
-                'operation' => [
-                    'label' => '操作',
-                    'width' => '120',
-                    'items' => [
-                        [
-                            'label' => '清除',
-                            'action' => 'delete',
-                            'target' => 'ajax',
-                            'confirm' => '确认要清除缓存么？',
-                            'ui' => [
-                                'type' => 'danger'
-                            ]
-                        ],
-                    ]
-                ],
 
                 'vueMethods' => [
                     'getSummaries' => 'function(param) {

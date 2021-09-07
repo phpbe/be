@@ -5,7 +5,7 @@ namespace Be\AdminPlugin\Operation;
 /**
  * 操作 包装容器
  */
-class Wrap
+class TableWrap
 {
     public $name = null; // 键名
     public $label = ''; // 配置项中文名称

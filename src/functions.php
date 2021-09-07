@@ -46,15 +46,19 @@ function beAdminUrl($route = null, $params = [])
 {
     $request = \Be\Be::getRequest();
     $adminAlias = \Be\Be::getRuntime()->getAdminAlias();
+    $configSystem = \Be\Be::getConfig('App.System.System');
     if ($route === null) {
         if (count($params) > 0) {
             $route = $request->getRoute();
         } else {
-            return $request->getRootUrl() . '/' . $adminAlias;
+            if ($configSystem->urlRewrite) {
+                return $request->getRootUrl() . '/' . $adminAlias;
+            } else {
+                return $request->getRootUrl() . '/?admin=1';
+            }
         }
     }
 
-    $configSystem = \Be\Be::getConfig('App.System.System');
     if ($configSystem->urlRewrite) {
         $urlParams = '';
         if (count($params)) {

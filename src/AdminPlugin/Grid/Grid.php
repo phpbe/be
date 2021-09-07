@@ -41,38 +41,32 @@ class Grid extends Driver
             }
         }
 
-        if ($setting['layout'] == 'card' || ($setting['layout'] == 'toggle' && $request->get('layout', 'table') == 'card')) {
+        if ($setting['layout'] == 'toggle') {
+            if (!isset($setting['defaultLayout'])) {
+                $setting['defaultLayout'] = 'card';
+            }
 
-            // 设置几列
+            $setting['actualLayout'] = $request->get('layout', $setting['defaultLayout']);
+        } else {
+            $setting['actualLayout'] = $setting['layout'];
+        }
+
+        if ($setting['actualLayout'] == 'card') {
+            if (!isset($setting['card']['ui']['row'])) {
+                $setting['card']['ui']['row'] = [
+                    ':gutter' => 20,
+                ];
+            }
+
+            // 设置一行展示几列
             if (isset($setting['card']['cols'])) {
-                if ($setting['card']['cols'] < 12) {
-                    $setting['card']['ui']['row'] = [
-                        ':gutter' => $setting['card']['cols'],
-                    ];
-
-                    $setting['card']['ui']['col'] = [
-                        ':span' => 1,
-                    ];
-                } else {
-                    $setting['card']['ui']['row'] = [
-                        ':gutter' => 12,
-                    ];
-
-                    $setting['card']['ui']['col'] = [
-                        ':span' => 1,
-                    ];
-                }
+                $setting['card']['ui']['col'] = [
+                    ':span' => (int) 24 / $setting['card']['cols'],
+                ];
             } else {
-
-                if (!isset($setting['card']['ui']['row'])) {
-                    $setting['card']['ui']['row'] = [
-                        ':gutter' => 12,
-                    ];
-                }
-
                 if (!isset($setting['card']['ui']['col'])) {
                     $setting['card']['ui']['col'] = [
-                        ':span' => 4,
+                        ':span' => 8,
                     ];
                 }
             }
@@ -81,25 +75,35 @@ class Grid extends Driver
                 $setting['card']['ui']['shadow'] = 'hover';
             }
 
-            if (!isset($setting['card']['template'])) {
-                $setting['card']['template'] = '';
+            if (isset($setting['card']['image'])) {
+
+                if (!isset($setting['card']['image']['position'])) {
+                    $setting['card']['image']['position'] = 'left';
+                }
+
+                if ($setting['card']['image']['position'] == 'left')
+                {
+                    if (!isset($setting['card']['image']['space'])) {
+                        $setting['card']['image']['space'] = '20';
+                    }
+
+                    if (!isset($setting['card']['image']['maxWidth'])) {
+                        $setting['card']['image']['maxWidth'] = '400';
+                    }
+
+                    if (!isset($setting['card']['image']['maxHeight'])) {
+                        $setting['card']['image']['maxHeight'] = '300';
+                    }
+                } else {
+                    if (!isset($setting['card']['image']['space'])) {
+                        $setting['card']['image']['space'] = '10';
+                    }
+                }
             }
 
-            if (isset($this->setting['card']['image'])) {
-                if (!isset($this->setting['card']['image']['space'])) {
-                    $this->setting['card']['image']['space'] = '15';
-                }
-
-                if (!isset($this->setting['card']['image']['position'])) {
-                    $this->setting['card']['image']['position'] = 'left';
-                }
-
-                if (!isset($this->setting['card']['image']['maxWidth'])) {
-                    $this->setting['card']['image']['maxWidth'] = '400';
-                }
-
-                if (!isset($this->setting['card']['image']['maxHeight'])) {
-                    $this->setting['card']['image']['maxHeight'] = '300';
+            if (isset($setting['card']['operation'])) {
+                if (!isset($setting['card']['operation']['position'])) {
+                    $setting['card']['operation']['position'] = 'right';
                 }
             }
         }

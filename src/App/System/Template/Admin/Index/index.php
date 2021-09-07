@@ -1,8 +1,3 @@
-<be-head>
-<link type="text/css" rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/AdminTemplate/System/css/dashboard.css">
-<script type="text/javascript" language="javascript" src="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/AdminTemplate/System/js/dashboard.js"></script>
-</be-head>
-
 <be-center>
 <?php
 $my = \Be\Be::getAdminUser();
@@ -28,7 +23,7 @@ $configAdminUser = \Be\Be::getConfig('App.System.AdminUser');
 
         </el-col>
 
-        <el-col :span="4">
+        <el-col :span="3">
             <el-card shadow="hover" style="height: 180px; text-align:center;">
                 <div slot="header" class="clearfix">
                     <span>应用数</span>
@@ -41,10 +36,10 @@ $configAdminUser = \Be\Be::getConfig('App.System.AdminUser');
         </el-col>
 
 
-        <el-col :span="4">
+        <el-col :span="3">
             <el-card shadow="hover" style="height: 180px; text-align:center;">
                 <div slot="header" class="clearfix">
-                    <span>主题数</span>
+                    <span>前台主题数</span>
                 </div>
 
                 <el-link href="<?php echo beAdminUrl('System.Theme.themes'); ?>" style="font-size:36px; ">
@@ -53,11 +48,22 @@ $configAdminUser = \Be\Be::getConfig('App.System.AdminUser');
             </el-card>
         </el-col>
 
-
-        <el-col :span="4">
+        <el-col :span="3">
             <el-card shadow="hover" style="height: 180px; text-align:center;">
                 <div slot="header" class="clearfix">
-                    <span>用户数</span>
+                    <span>后台主题数</span>
+                </div>
+
+                <el-link href="<?php echo beAdminUrl('System.AdminTheme.themes'); ?>" style="font-size:36px; ">
+                    <?php echo $this->adminThemeCount;; ?>
+                </el-link>
+            </el-card>
+        </el-col>
+
+        <el-col :span="3">
+            <el-card shadow="hover" style="height: 180px; text-align:center;">
+                <div slot="header" class="clearfix">
+                    <span>管理员</span>
                 </div>
 
                 <el-link href="<?php echo beAdminUrl('System.AdminUser.users'); ?>" style="font-size:36px; ">

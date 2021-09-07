@@ -27,6 +27,20 @@ class AdminMenu
             $controllerDir = Be::getRuntime()->getRootPath() . $appProperty->getPath(). '/Controller/Admin';
             if (!file_exists($controllerDir) && !is_dir($controllerDir)) continue;
 
+            $app->url = '\'\'';
+            $className = 'Be\\App\\' . $appName . '\\Controller\\Admin\\Index';
+            if (class_exists($className)) {
+                $reflection = new \ReflectionClass($className);
+                $methods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
+                foreach ($methods as &$method) {
+                    $methodName = $method->getName();
+                    if ($methodName == 'index') {
+                        $app->url = 'beAdminUrl(\'' . $app->name . '.Index.index\')';
+                        break;
+                    }
+                }
+            }
+
             $controllers = scandir($controllerDir);
             foreach ($controllers as $controller) {
                 if ($controller == '.' || $controller == '..' || is_dir($controllerDir . '/' . $controller)) continue;
@@ -177,10 +191,11 @@ class AdminMenu
 
         foreach ($menus as $k => $v) {
             $app = $v['app'];
-            $code .= '    $this->addMenu(\'' . $app->key . '\', \'0\', \'' . $app->icon . '\',\'' . $app->label . '\', \'\', \'\');' . "\n";
+            $code .= '    $this->addMenu(\'' . $app->key . '\', \'0\', \'' . $app->icon . '\',\'' . $app->label . '\', ' . $app->url . ' , \'\');' . "\n";
             foreach ($v['groups'] as $key => $val) {
                 $group = $val['group'];
-                $code .= '    $this->addMenu(\'' . $group['key'] . '\',\'' . $app->key . '\',\'' . (isset($group['icon']) ? $group['icon'] : 'el-icon-folder') . '\',\'' . $group['label'] . '\', \'\', \'\');' . "\n";
+                $menu = current($val['menus']);
+                $code .= '    $this->addMenu(\'' . $group['key'] . '\',\'' . $app->key . '\',\'' . (isset($group['icon']) ? $group['icon'] : 'el-icon-folder') . '\',\'' . $group['label'] . '\', ' . $menu['url'] . ', \'\');' . "\n";
                 foreach ($val['menus'] as $menu) {
                     $code .= '    $this->addMenu(\'' . $menu['key'] . '\', \'' . $group['key'] . '\', \'' . (isset($menu['icon']) ? $menu['icon'] : 'el-icon-arrow-right') . '\', \'' . $menu['label'] . '\', ' . $menu['url'] . ', \'' . (isset($menu['target']) ? $menu['target'] : '') . '\');' . "\n";
                 }

@@ -1,7 +1,7 @@
 <be-head>
     <style type="text/css">
         <?php
-        if ($this->setting['layout'] == 'table') {
+        if ($this->setting['actualLayout'] == 'table') {
             ?>
             .el-table__row .el-divider__text, .el-link {
                 font-size: 12px;
@@ -9,13 +9,132 @@
                 margin-right: 4px;
             }
             <?php
-        } elseif ($this->setting['layout'] == 'card') {
+        } elseif ($this->setting['actualLayout'] == 'card') {
             ?>
+            .el-card__body {
+                font-size: 14px;
+                line-height: 25px;
+            }
+
+            <?php
+            if (isset($this->setting['card']['image'])) {
+                if ($this->setting['card']['image']['position'] == 'left') {
+                    ?>
+                    .card-lr {
+                        display: flex;
+                    }
+
+                    .card-lr-image {
+                        flex: 0 0 <?php echo $this->setting['card']['image']['maxWidth']; ?>px;
+                        height:<?php echo $this->setting['card']['image']['maxHeight']; ?>px;
+                        line-height:<?php echo $this->setting['card']['image']['maxHeight']; ?>px;
+                        overflow:hidden;
+                    }
+
+                    .card-lr-image a {
+                        display: block;
+                    }
+
+                    .card-lr-image img {
+                        width: 100%;
+                    }
+
+                    .card-lr-space {
+                        flex: 0 0 <?php echo $this->setting['card']['image']['space']; ?>px;
+                    }
+
+                    .card-lr-right {
+                        flex: 1 1 auto;
+                        position: relative;
+                    }
+
+                    .card-lr-right-items {
+                        position: absolute;
+                        width:100%; top: 0;
+                        bottom: 30px;
+                        overflow-y: auto;
+                    }
+
+                    .card-lr-right-operations {
+                        position: absolute;
+                        bottom: 0;
+                        height: 30px;
+                        line-height: 30px;
+                        <?php
+                        if (isset($this->setting['card']['operation']['position'])) {
+                            echo $this->setting['card']['operation']['position'] . ':0;';
+                        }
+                        ?>
+                    }
+                    <?php
+                } elseif ($this->setting['card']['image']['position'] == 'top') {
+                    ?>
+                    .card-tb {
+
+                    }
+
+                    .card-tb-image {
+                        <?php if (isset($this->setting['card']['image']['maxWidth'])) { ?>
+                            max-width: <?php echo $this->setting['card']['image']['maxWidth']; ?>px;;
+                        <?php } ?>
+
+                        <?php if (isset($this->setting['card']['image']['maxHeight'])) { ?>
+                            height: <?php echo $this->setting['card']['image']['maxHeight']; ?>px;;
+                            line-height: <?php echo $this->setting['card']['image']['maxHeight']; ?>px;
+                        <?php } ?>
+
+                        <?php if (isset($this->setting['card']['image']['maxWidth']) || isset($this->setting['card']['image']['maxHeight'])) { ?>
+                            overflow: hidden;
+                        <?php } ?>
+
+                        margin-bottom: <?php echo $this->setting['card']['image']['space']; ?>px;
+                    }
+
+                    .card-tb-image a {
+                        display: block;
+                    }
+
+                    .card-tb-image img {
+                        width: 100%;
+                    }
+
+                    .card-tb-items {
+
+                    }
+
+                    .card-tb-operations {
+                        <?php
+                        if (isset($this->setting['card']['operation']['position'])) {
+                            echo 'text-align:' . $this->setting['card']['operation']['position'] . ';';
+                        }
+                        ?>
+                    }
+                    <?php
+                }
+            } else {
+                ?>
+                .card-items {
+
+                }
+
+                .card-operations {
+                    <?php
+                    if (isset($this->setting['card']['operation']['position'])) {
+                        echo 'text-align:' . $this->setting['card']['operation']['position'] . ';';
+                    }
+                    ?>
+                }
+                <?php
+            }
+            ?>
+
+            .card-item {
+
+            }
 
             <?php
         }
-    ?>
-
+        ?>
     </style>
 </be-head>
 
@@ -192,6 +311,20 @@
                 echo $tabHtml;
             }
 
+            $toggleLayoutHtml = '';
+            if ($this->setting['layout'] == 'toggle') {
+                $toggleLayoutHtml = '<el-dropdown @command="toggleLayout" style="float: right;">';
+                $toggleLayoutHtml .= '<el-button size="mini" style="border: none">';
+                $toggleLayoutHtml .= '<i class="' . ($this->setting['actualLayout'] == 'table' ? 'el-icon-s-grid' : 'el-icon-menu') . '" style="font-size: 1.5rem;"></i>';
+                $toggleLayoutHtml .= '</el-button>';
+
+                $toggleLayoutHtml .= '<el-dropdown-menu slot="dropdown">';
+                $toggleLayoutHtml .= '<el-dropdown-item command="table"' . ($this->setting['actualLayout'] == 'table' ? ' disabled' : '') . '><i class="el-icon-s-grid" style="font-size: 1.2rem;"></i> 表格布局</el-dropdown-item>';
+                $toggleLayoutHtml .= '<el-dropdown-item command="card"' . ($this->setting['actualLayout'] == 'card' ? 'disabled' : '') . '><i class="el-icon-menu" style="font-size: 1.2rem;"></i> 卡片布局</el-dropdown-item>';
+                $toggleLayoutHtml .= '</el-dropdown-menu>';
+                $toggleLayoutHtml .= '</el-dropdown>';
+            }
+
             if (isset($this->setting['toolbar']['items']) && count($this->setting['toolbar']['items']) > 0) {
                 echo '<el-row id="toolbar-items" ref="toolbarItemsRef"><el-col :span="24">';
                 foreach ($this->setting['toolbar']['items'] as $item) {
@@ -223,14 +356,25 @@
                         $vueMethods = array_merge($vueMethods, $vueMethodsX);
                     }
                 }
+
+                if ($this->setting['layout'] == 'toggle') {
+                    echo $toggleLayoutHtml;
+                }
+
                 echo '</el-col></el-row>';
+            } else {
+                if ($this->setting['layout'] == 'toggle') {
+                    echo '<div>';
+                    echo $toggleLayoutHtml;
+                    echo '</div><div style="clear: right"></div>';
+                }
             }
 
             if ($tabHtml && ($tabPosition == 'beforeGrid')) {
                 echo $tabHtml;
             }
 
-            if ($this->setting['layout'] == 'table') {
+            if ($this->setting['actualLayout'] == 'table') {
                 ?>
                 <el-table<?php
                 $tableUi = [
@@ -258,13 +402,13 @@
                     <?php
                     $opHtml = null;
                     $opPosition = 'right';
-                    if (isset($this->setting['operation'])) {
+                    if (isset($this->setting['table']['operation'])) {
 
-                        $operationDriver = new \Be\AdminPlugin\Operation\Wrap($this->setting['operation']);
+                        $operationDriver = new \Be\AdminPlugin\Operation\TableWrap($this->setting['table']['operation']);
                         $opHtml = $operationDriver->getHtmlBefore();
 
-                        if (isset($this->setting['operation']['items'])) {
-                            foreach ($this->setting['operation']['items'] as $item) {
+                        if (isset($this->setting['table']['operation']['items'])) {
+                            foreach ($this->setting['table']['operation']['items'] as $item) {
                                 $driverClass = null;
                                 if (isset($item['driver'])) {
                                     if (substr($item['driver'], 0, 13) == 'OperationItem') {
@@ -326,31 +470,35 @@
                         }
                     }
 
-                    if (isset($this->setting['operation']) && $opPosition == 'right') {
+                    if (isset($this->setting['table']['operation']) && $opPosition == 'right') {
                         echo $opHtml;
                     }
                     ?>
                 </el-table>
                 <?php
-            } elseif ($this->setting['layout'] == 'card') {
+            } elseif ($this->setting['actualLayout'] == 'card') {
                 ?>
                 <div v-loading='loading'>
                     <el-row<?php
-                        foreach ($this->setting['card']['ui']['row'] as $k => $v) {
-                            if ($v === null) {
-                                echo ' ' . $k;
-                            } else {
-                                echo ' ' . $k . '="' . $v . '"';
+                        if (isset($this->setting['card']['ui']['row'])) {
+                            foreach ($this->setting['card']['ui']['row'] as $k => $v) {
+                                if ($v === null) {
+                                    echo ' ' . $k;
+                                } else {
+                                    echo ' ' . $k . '="' . $v . '"';
+                                }
                             }
                         }
                         ?> >
 
                         <el-col<?php
-                            foreach ($this->setting['card']['ui']['col'] as $k => $v) {
-                                if ($v === null) {
-                                    echo ' ' . $k;
-                                } else {
-                                    echo ' ' . $k . '="' . $v . '"';
+                            if (isset($this->setting['card']['ui']['col'])) {
+                                foreach ($this->setting['card']['ui']['col'] as $k => $v) {
+                                    if ($v === null) {
+                                        echo ' ' . $k;
+                                    } else {
+                                        echo ' ' . $k . '="' . $v . '"';
+                                    }
                                 }
                             }
                             ?> >
@@ -371,22 +519,36 @@
                                 if (isset($this->setting['card']['template'])) {
                                     echo $this->setting['card']['template'];
                                 } else {
-
                                     if (isset($this->setting['card']['image'])) {
                                         if ($this->setting['card']['image']['position'] == 'left') {
-                                            echo '<div style="display: flex">';
-                                            echo '<div style="flex: 0 0 ' . $this->setting['card']['image']['maxWidth'] . 'px;height:' . $this->setting['card']['image']['maxHeight'] . 'px;;line-height:' . $this->setting['card']['image']['maxHeight'] . 'px;">';
-                                            echo '<img :src="item.'. $this->setting['card']['image']['name'] .'" style="width: 100%;">';
+                                            echo '<div class="card-lr">';
+                                            echo '<div class="card-lr-image">';
+                                            echo '<a :href="item.'. $this->setting['card']['image']['name'] .'" target="_blank">';
+                                            echo '<img :src="item.'. $this->setting['card']['image']['name'] .'">';
+                                            echo '</a>';
                                             echo '</div>';
-                                            echo '<div style="flex: 0 0 ' . $this->setting['card']['image']['space'] . 'px;"></div>';
-                                            echo '<div style="flex: 1 1 auto;">';
-                                        } elseif ($this->setting['card']['image']['position'] == 'left') {
-                                            echo '<div style="width:' . $this->setting['card']['image']['maxWidth'] . 'px;margin-bottom: ' . $this->setting['card']['image']['space'] . 'px;">';
-                                            echo '<img :src="item.'. $this->setting['card']['image']['name'] .'" style="width:100%;max-height:' . $this->setting['card']['image']['maxHeight'] . 'px;">';
+                                            echo '<div class="card-lr-space"></div>';
+                                            echo '<div class="card-lr-right">';
+                                        } elseif ($this->setting['card']['image']['position'] == 'top') {
+                                            echo '<div class="card-tb-image">';
+                                            echo '<a :href="item.'. $this->setting['card']['image']['name'] .'" target="_blank">';
+                                            echo '<img :src="item.'. $this->setting['card']['image']['name'] .'">';
+                                            echo '</a>';
                                             echo '</div>';
                                         }
                                     }
 
+                                    $cssClass = null;
+                                    if (isset($this->setting['card']['image'])) {
+                                        if ($this->setting['card']['image']['position'] == 'left') {
+                                            $cssClass = 'card-lr-right-items';
+                                        } elseif ($this->setting['card']['image']['position'] == 'top') {
+                                            $cssClass = 'card-tb-items';
+                                        }
+                                    } else {
+                                        $cssClass = 'card-items';
+                                    }
+                                    echo '<div class="' . $cssClass . '">';
                                     if (isset($this->setting['card']['items'])) {
                                         foreach ($this->setting['card']['items'] as $item) {
                                             $driverClass = null;
@@ -412,6 +574,55 @@
                                             if ($vueMethodsX) {
                                                 $vueMethods = array_merge($vueMethods, $vueMethodsX);
                                             }
+                                        }
+                                    }
+                                    echo '</div>';
+
+                                    // 操作
+                                    if (isset($this->setting['card']['operation'])) {
+                                        if (isset($this->setting['card']['operation']['items'])) {
+                                            $cssClass = null;
+                                            if (isset($this->setting['card']['image'])) {
+                                                if ($this->setting['card']['image']['position'] == 'left') {
+                                                    $cssClass = 'card-lr-right-operations';
+                                                } elseif ($this->setting['card']['image']['position'] == 'top') {
+                                                    $cssClass = 'card-tb-operations';
+                                                }
+                                            } else {
+                                                $cssClass = 'card-operations';
+                                            }
+
+                                            echo '<div class="' . $cssClass . '">';
+                                            echo '<card-operation>';
+                                            echo '<template v-slot="{scope={row: item}}">';
+                                            foreach ($this->setting['card']['operation']['items'] as $item) {
+                                                $driverClass = null;
+                                                if (isset($item['driver'])) {
+                                                    if (substr($item['driver'], 0, 13) == 'OperationItem') {
+                                                        $driverClass = '\\Be\\AdminPlugin\\Operation\\Item\\' . $item['driver'];
+                                                    } else {
+                                                        $driverClass = $item['driver'];
+                                                    }
+                                                } else {
+                                                    $driverClass = \Be\AdminPlugin\Operation\Item\OperationItemLink::class;
+                                                }
+                                                $driver = new $driverClass($item);
+
+                                                echo $driver->getHtml();
+
+                                                $vueDataX = $driver->getVueData();
+                                                if ($vueDataX) {
+                                                    $vueData = \Be\Util\Arr::merge($vueData, $vueDataX);
+                                                }
+
+                                                $vueMethodsX = $driver->getVueMethods();
+                                                if ($vueMethodsX) {
+                                                    $vueMethods = array_merge($vueMethods, $vueMethodsX);
+                                                }
+                                            }
+                                            echo '</template>';
+                                            echo '</card-operation>';
+                                            echo '</div>';
                                         }
                                     }
 
@@ -515,6 +726,13 @@
     ?>
 
     <script>
+
+        <?php if ($this->setting['actualLayout'] == 'card') { ?>
+        Vue.component('card-operation', {
+            template: '<slot></slot>'
+        });
+        <?php } ?>
+
         var pageSizeKey = "<?php echo $this->url; ?>:pageSize";
         var pageSize = localStorage.getItem(pageSizeKey);
         if (pageSize == undefined || isNaN(pageSize)) {
@@ -523,7 +741,7 @@
             pageSize = Number(pageSize);
         }
 
-        var vueLists = new Vue({
+        var vueGrid = new Vue({
             el: '#app',
             data: {
                 formData: <?php echo json_encode($formData); ?>,
@@ -632,6 +850,17 @@
                     }
                     this.loadGridData();
                 },
+                <?php if ($this->setting['layout'] == 'toggle') { ?>
+                toggleLayout: function (command) {
+                    var url = "<?php echo $this->setting['form']['action']; ?>";
+                    if (url.indexOf("layout=") >=0 ) {
+                        url = url.replace(/layout=[a-z]+/, "layout=" + command);
+                    } else {
+                        url += (url.indexOf("?") >= 0 ? "&" : "?") + "layout=" + command;
+                    }
+                    window.location.href = url;
+                },
+                <?php } ?>
                 formAction: function (name, option) {
                     var data = {
                         formData: this.formData,
@@ -793,7 +1022,7 @@
                     ?>
                 },
                 resize: function () {
-                    <?php if ($this->setting['layout'] == 'table') { ?>
+                    <?php if ($this->setting['actualLayout'] == 'table') { ?>
                     var offset = this.total > 0 ? 55 : 15;
                     this.tableHeight = document.documentElement.clientHeight - this.$refs.tableRef.$el.offsetTop - offset;
                     <?php } ?>
@@ -835,7 +1064,7 @@
                 ?>
             },
             updated: function () {
-                <?php if ($this->setting['layout'] == 'table') { ?>
+                <?php if ($this->setting['actualLayout'] == 'table') { ?>
                 var _this = this;
                 this.$nextTick(function () {
                     _this.$refs['tableRef'].doLayout();
@@ -873,36 +1102,36 @@
         });
 
         function reload() {
-            vueLists.loadGridata();
+            vueGrid.loadGridata();
         }
 
         function close() {
-            vueLists.drawer.visible = false;
-            vueLists.dialog.visible = false;
+            vueGrid.drawer.visible = false;
+            vueGrid.dialog.visible = false;
         }
 
         function closeDrawer() {
-            vueLists.drawer.visible = false;
+            vueGrid.drawer.visible = false;
         }
 
         function closeDialog() {
-            vueLists.dialog.visible = false;
+            vueGrid.dialog.visible = false;
         }
 
         function closeAndReload() {
-            vueLists.drawer.visible = false;
-            vueLists.dialog.visible = false;
-            vueLists.loadGridata();
+            vueGrid.drawer.visible = false;
+            vueGrid.dialog.visible = false;
+            vueGrid.loadGridata();
         }
 
         function closeDrawerAndReload() {
-            vueLists.drawer.visible = false;
-            vueLists.loadGridata();
+            vueGrid.drawer.visible = false;
+            vueGrid.loadGridata();
         }
 
         function closeDialogAndReload() {
-            vueLists.dialog.visible = false;
-            vueLists.loadGridata();
+            vueGrid.dialog.visible = false;
+            vueGrid.loadGridata();
         }
 
     </script>

@@ -288,36 +288,36 @@ class AdminUser
                             },
                         ],
                     ],
-                    'exclude' => ['password', 'salt']
+                    'exclude' => ['password', 'salt'],
+                    'operation' => [
+                        'label' => '操作',
+                        'width' => '120',
+                        'items' => [
+                            [
+                                'label' => '编辑',
+                                'task' => 'edit',
+                                'target' => 'drawer',
+                                'ui' => [
+                                    'type' => 'primary'
+                                ]
+                            ],
+                            [
+                                'label' => '删除',
+                                'task' => 'fieldEdit',
+                                'confirm' => '确认要删除么？',
+                                'target' => 'ajax',
+                                'postData' => [
+                                    'field' => 'is_delete',
+                                    'value' => 1,
+                                ],
+                                'ui' => [
+                                    'type' => 'danger'
+                                ]
+                            ],
+                        ]
+                    ],
                 ],
 
-                'operation' => [
-                    'label' => '操作',
-                    'width' => '120',
-                    'items' => [
-                        [
-                            'label' => '编辑',
-                            'task' => 'edit',
-                            'target' => 'drawer',
-                            'ui' => [
-                                'type' => 'primary'
-                            ]
-                        ],
-                        [
-                            'label' => '删除',
-                            'task' => 'fieldEdit',
-                            'confirm' => '确认要删除么？',
-                            'target' => 'ajax',
-                            'postData' => [
-                                'field' => 'is_delete',
-                                'value' => 1,
-                            ],
-                            'ui' => [
-                                'type' => 'danger'
-                            ]
-                        ],
-                    ]
-                ],
 
             ],
 

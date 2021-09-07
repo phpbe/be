@@ -199,35 +199,33 @@ class AdminRole
                             'width' => '150',
                         ],
                     ],
-                ],
-
-                'operation' => [
-                    'label' => '操作',
-                    'width' => '120',
-                    'items' => [
-                        [
-                            'label' => '编辑',
-                            'task' => 'edit',
-                            'target' => 'drawer',
-                            'ui' => [
-                                'type' => 'primary'
-                            ]
-                        ],
-                        [
-                            'label' => '删除',
-                            'task' => 'fieldEdit',
-                            'target' => 'ajax',
-                            'postData' => [
-                                'field' => 'is_delete',
-                                'value' => 1,
+                    'operation' => [
+                        'label' => '操作',
+                        'width' => '120',
+                        'items' => [
+                            [
+                                'label' => '编辑',
+                                'task' => 'edit',
+                                'target' => 'drawer',
+                                'ui' => [
+                                    'type' => 'primary'
+                                ]
                             ],
-                            'ui' => [
-                                'type' => 'danger'
-                            ]
-                        ],
-                    ]
+                            [
+                                'label' => '删除',
+                                'task' => 'fieldEdit',
+                                'target' => 'ajax',
+                                'postData' => [
+                                    'field' => 'is_delete',
+                                    'value' => 1,
+                                ],
+                                'ui' => [
+                                    'type' => 'danger'
+                                ]
+                            ],
+                        ]
+                    ],
                 ],
-
             ],
 
             'detail' => [

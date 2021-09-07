@@ -2,7 +2,7 @@
 
 namespace Be\App\System\Controller\Admin;
 
-use Be\App\System\AdminService\AdminPlugin\Form\FormItemUEditor\Uploader;
+use Be\App\System\Service\Admin\AdminPlugin\Form\FormItemUEditor\Uploader;
 use Be\Be;
 use Be\Util\FileSystem\FileSize;
 use Be\Util\Net\FileUpload;

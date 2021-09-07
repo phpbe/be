@@ -17,8 +17,8 @@ class CardItemText extends CardItem
      */
     public function getHtml()
     {
-        $html = '<div class="">';
-        $html .= $this->label . ' ';
+        $html = '<div class="card-item">';
+        $html .= '<b>' . $this->label . '</b>：';
         $html .= '{{item.'.$this->name.'}}';
         $html .= '</div>';
 

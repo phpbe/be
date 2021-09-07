@@ -56,11 +56,14 @@ class AdminTheme
                     ],
                 ],
 
-                'layout' => 'card',
+                'layout' => 'toggle',
 
                 'card' => [
+                    'cols' => 2,
                     'image' => [
                         'name' => 'previewImageUrl',
+                        //'maxHeight' => '200',
+                        'position' => 'left'
                     ],
                     'items' => [
                         [
@@ -75,23 +78,20 @@ class AdminTheme
                             'name' => 'path',
                             'label' => '路径',
                         ],
-                        [
-                            'name' => 'is_enable',
-                            'label' => '启用/禁用',
-                            'driver' => TableItemSwitch::class,
-                            'target' => 'ajax',
-                            'action' => 'toggleEnable',
-                            'width' => '90',
-                        ],
-                        [
-                            'name' => 'is_default',
-                            'label' => '当前主题',
-                            'driver' => TableItemSwitch::class,
-                            'target' => 'ajax',
-                            'task' => 'toggleDefault',
-                            'width' => '90',
-                        ],
-                    ]
+                    ],
+
+                    'operation' => [
+                        'items' => [
+                            [
+                                'label' => '配置',
+                                'action' => 'goSetting',
+                                'target' => 'blank',
+                                'ui' => [
+                                    'type' => 'success'
+                                ]
+                            ],
+                        ]
+                    ],
                 ],
 
                 'table' => [
@@ -134,20 +134,20 @@ class AdminTheme
                             'width' => '90',
                         ],
                     ],
-                ],
-                'operation' => [
-                    'label' => '操作',
-                    'width' => '120',
-                    'items' => [
-                        [
-                            'label' => '配置',
-                            'action' => 'goSetting',
-                            'target' => 'blank',
-                            'ui' => [
-                                'type' => 'success'
-                            ]
-                        ],
-                    ]
+                    'operation' => [
+                        'label' => '操作',
+                        'width' => '120',
+                        'items' => [
+                            [
+                                'label' => '配置',
+                                'action' => 'goSetting',
+                                'target' => 'blank',
+                                'ui' => [
+                                    'type' => 'success'
+                                ]
+                            ],
+                        ]
+                    ],
                 ],
 
             ])->execute();

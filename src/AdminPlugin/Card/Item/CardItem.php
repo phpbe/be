@@ -212,14 +212,6 @@ abstract class CardItem
             }
         }
 
-        if (!isset($this->ui['table-column']['prop'])) {
-            $this->ui['table-column']['prop'] = $this->name;
-        }
-
-        if (!isset($this->ui['table-column']['label'])) {
-            $this->ui['table-column']['label'] = $this->label;
-        }
-
     }
 
 
