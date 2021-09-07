@@ -144,7 +144,7 @@
                                 _this.changing = 0;
                                 clearInterval(timer);
 
-                                _this.$http.post("<?php echo beAdminUrl('System.Theme.saveSectionItem', ['themeName' => $this->themeName, 'pageName' => $this->pageName, 'sectionType' => $this->sectionType, 'sectionKey' => $this->sectionKey, 'itemKey' => $this->itemKey]); ?>", {
+                                _this.$http.post("<?php echo beAdminUrl('System.' . $this->themeType . '.saveSectionItem', ['themeName' => $this->themeName, 'pageName' => $this->pageName, 'sectionType' => $this->sectionType, 'sectionKey' => $this->sectionKey, 'itemKey' => $this->itemKey]); ?>", {
                                     formData: _this.formData,
                                 }).then(function (response) {
                                     if (response.status == 200) {

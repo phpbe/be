@@ -1,6 +1,6 @@
 <be-head>
-    <script src="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/AdminTemplate/Theme/js/sortable/Sortable.min.js"></script>
-    <script src="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/AdminTemplate/Theme/js/vuedraggable/vuedraggable.umd.min.js"></script>
+    <script src="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/Template/Admin/ThemeEditor/js/sortable/Sortable.min.js"></script>
+    <script src="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/Template/Admin/ThemeEditor/js/vuedraggable/vuedraggable.umd.min.js"></script>
 
     <style>
         body {
@@ -234,7 +234,7 @@
                                     <i class="el-icon-question" style="color: #999;"></i>
                                 </el-tooltip>
 
-                                <el-link style="display: inline" href="<?php echo beAdminUrl('System.Theme.enableSectionType', ['themeName' => $this->themeName, 'pageName' => $this->pageName, 'sectionType' => $sectionType]); ?>">启用自定义配置</el-link>
+                                <el-link style="display: inline" href="<?php echo beAdminUrl('System.'.$this->themeType.'.enableSectionType', ['themeName' => $this->themeName, 'pageName' => $this->pageName, 'sectionType' => $sectionType]); ?>">启用自定义配置</el-link>
                             </li>
                         </ul>
                         <?php
@@ -342,7 +342,7 @@
                                     <i class="el-icon-question" style="color: #999;"></i>
                                 </el-tooltip>
 
-                                <el-link style="display: inline" href="<?php echo beAdminUrl('System.Theme.disableSectionType', ['themeName' => $this->themeName, 'pageName' => $this->pageName, 'sectionType' => $sectionType]); ?>">移除自定义配置</el-link>
+                                <el-link style="display: inline" href="<?php echo beAdminUrl('System.'.$this->themeType.'.disableSectionType', ['themeName' => $this->themeName, 'pageName' => $this->pageName, 'sectionType' => $sectionType]); ?>">移除自定义配置</el-link>
                             </li>
                             <?php
                         }
@@ -405,7 +405,7 @@
                 pageName : "<?php echo $this->pageName; ?>",
                 page : <?php echo json_encode($this->page); ?>,
                 toggle: <?php echo json_encode($toggle); ?>,
-                activeUrl: "<?php echo beAdminUrl('System.Theme.editSectionItem', ['themeName' => $this->themeName, 'pageName' => $this->pageName, 'sectionType' => $this->sectionType, 'sectionKey' => $this->sectionKey, 'sectionName' => $this->sectionName, 'itemKey' => $this->itemKey, 'itemName' => $this->itemName]); ?>",
+                activeUrl: "<?php echo beAdminUrl('System.'.$this->themeType.'.editSectionItem', ['themeName' => $this->themeName, 'pageName' => $this->pageName, 'sectionType' => $this->sectionType, 'sectionKey' => $this->sectionKey, 'sectionName' => $this->sectionName, 'itemKey' => $this->itemKey, 'itemName' => $this->itemName]); ?>",
                 previewUrl: "<?php echo $this->page['desktopPreviewUrl']; ?>",
                 previewUrlTag: "",
                 screen: "desktop"
@@ -454,7 +454,7 @@
                     var commands = command.split("-");
 
                     var _this = this;
-                    _this.$http.post("<?php echo beAdminUrl('System.Theme.addSection', ['themeName' => $this->themeName, 'pageName' => $this->pageName]); ?>", {
+                    _this.$http.post("<?php echo beAdminUrl('System.'.$this->themeType.'.addSection', ['themeName' => $this->themeName, 'pageName' => $this->pageName]); ?>", {
                         sectionType: commands[0],
                         sectionName: commands[1]
                     }).then(function (response) {
@@ -479,7 +479,7 @@
                         type: 'warning'
                     }).then(function () {
                         var loading = _this.$loading();
-                        _this.$http.post("<?php echo beAdminUrl('System.Theme.deleteSection', ['themeName' => $this->themeName, 'pageName' => $this->pageName]); ?>", {
+                        _this.$http.post("<?php echo beAdminUrl('System.'.$this->themeType.'.deleteSection', ['themeName' => $this->themeName, 'pageName' => $this->pageName]); ?>", {
                             sectionType: sectionType,
                             sectionKey: sectionKey
                         }).then(function (response) {
@@ -504,7 +504,7 @@
                     var loading = this.$loading();
 
                     var _this = this;
-                    _this.$http.post("<?php echo beAdminUrl('System.Theme.sortSection', ['themeName' => $this->themeName, 'pageName' => $this->pageName]); ?>", {
+                    _this.$http.post("<?php echo beAdminUrl('System.'.$this->themeType.'.sortSection', ['themeName' => $this->themeName, 'pageName' => $this->pageName]); ?>", {
                         sectionType: event.item.dataset.sectiontype,
                         oldIndex: event.oldIndex,
                         newIndex: event.newIndex,
@@ -559,7 +559,7 @@
                         type: 'warning'
                     }).then(function () {
                         var loading = _this.$loading();
-                        _this.$http.post("<?php echo beAdminUrl('System.Theme.deleteSectionItem', ['themeName' => $this->themeName, 'pageName' => $this->pageName]); ?>", {
+                        _this.$http.post("<?php echo beAdminUrl('System.'.$this->themeType.'.deleteSectionItem', ['themeName' => $this->themeName, 'pageName' => $this->pageName]); ?>", {
                             sectionType: sectionType,
                             sectionKey: sectionKey,
                             itemKey: itemKey
@@ -585,7 +585,7 @@
                     var loading = this.$loading();
 
                     var _this = this;
-                    _this.$http.post("<?php echo beAdminUrl('System.Theme.sortSectionItem', ['themeName' => $this->themeName, 'pageName' => $this->pageName]); ?>", {
+                    _this.$http.post("<?php echo beAdminUrl('System.'.$this->themeType.'.sortSectionItem', ['themeName' => $this->themeName, 'pageName' => $this->pageName]); ?>", {
                         sectionType: event.item.dataset.sectiontype,
                         sectionKey: event.item.dataset.sectionkey,
                         oldIndex: event.oldIndex,
