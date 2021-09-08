@@ -1,12 +1,12 @@
 <?php
 
-namespace Be\AdminPlugin\Table\Item;
+namespace Be\AdminPlugin\Card\Item;
 
 
 /**
  * 字段 链接
  */
-class TableItemLink extends TableItem
+class CardItemLink extends CardItem
 {
 
 
@@ -29,11 +29,11 @@ class TableItemLink extends TableItem
 
         if ($this->url) {
             if (!isset($this->ui['@click'])) {
-                $this->ui['@click'] = 'tableItemClick(\'' . $this->name . '\', scope.row)';
+                $this->ui['@click'] = 'cardItemClick(\'' . $this->name . '\', item)';
             }
         } else {
             if (!isset($this->ui['@click'])) {
-                $this->ui['@click'] = 'tableItemLinkClick(\'' . $this->name . '\', scope.row)';
+                $this->ui['@click'] = 'cardItemLinkClick(\'' . $this->name . '\', item)';
             }
         }
     }
@@ -45,24 +45,12 @@ class TableItemLink extends TableItem
      */
     public function getHtml()
     {
-        $html = '<el-table-column';
-        if (isset($this->ui['table-column'])) {
-            foreach ($this->ui['table-column'] as $k => $v) {
-                if ($v === null) {
-                    $html .= ' ' . $k;
-                } else {
-                    $html .= ' ' . $k . '="' . $v . '"';
-                }
-            }
+        $html = '<div class="card-item">';
+        if ($this->label) {
+            $html .= '<b>' . $this->label . '</b>：';
         }
-        $html .= '>';
-        $html .= '<template slot-scope="scope">';
         $html .= '<el-link';
         foreach ($this->ui as $k => $v) {
-            if ($k == 'table-column') {
-                continue;
-            }
-
             if ($v === null) {
                 $html .= ' ' . $k;
             } else {
@@ -70,10 +58,9 @@ class TableItemLink extends TableItem
             }
         }
         $html .= '>';
-        $html .= '{{scope.row.'.$this->name.'}}';
+        $html .= '{{item.'.$this->name.'}}';
         $html .= '</el-link>';
-        $html .= '</template>';
-        $html .= '</el-table-column>';
+        $html .= '</div>';
 
         return $html;
     }
@@ -86,7 +73,7 @@ class TableItemLink extends TableItem
     public function getVueData()
     {
         $vueData = [
-            'tableItems' => [
+            'cardItems' => [
                 $this->name => [
                     'url' => $this->url ?? '',
                     'confirm' => $this->confirm === null ? '' : $this->confirm,
@@ -96,9 +83,9 @@ class TableItemLink extends TableItem
         ];
 
         if ($this->target == 'dialog') {
-            $vueData['tableItems'][$this->name]['dialog'] = $this->dialog;
+            $vueData['cardItems'][$this->name]['dialog'] = $this->dialog;
         } elseif ($this->target == 'drawer') {
-            $vueData['tableItems'][$this->name]['drawer'] = $this->drawer;
+            $vueData['cardItems'][$this->name]['drawer'] = $this->drawer;
         }
 
         return $vueData;
@@ -112,8 +99,8 @@ class TableItemLink extends TableItem
     public function getVueMethods()
     {
         return [
-            'tableItemLinkClick' => 'function (name, row) {
-                var option = this.tableItems[name];
+            'cardItemLinkClick' => 'function (name, row) {
+                var option = this.cardItems[name];
                 var sUrl = option.url ? option.url:row[name]; 
                 if (option.confirm) {
                     var _this = this;

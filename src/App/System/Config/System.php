@@ -37,13 +37,6 @@ class System
     public $timezone = 'Asia/Shanghai';
 
     /**
-     * @BeConfigItem("主题",
-     *     driver="FormItemSelect",
-     *     keyValues = "return \Be\Be::getService('App.System.Admin.Theme')->getEnableThemeKeyValues();")
-     */
-    public $theme = 'Sample';
-
-    /**
      * @BeConfigItem("默认首页", driver="FormItemInput")
      */
     public $home = 'System.Index.index';

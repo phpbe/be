@@ -19,7 +19,6 @@ abstract class ThemeEditor
     {
         if ($this->availableThemes === null) {
             $themes = [];
-            $config = Be::getConfig('App.System.' . ($this->themeType == 'Theme' ? 'System' : 'Admin'));
             $configTheme = Be::getConfig('App.System.' . $this->themeType);
             foreach ($configTheme->available as $name) {
                 $themProperty = Be::getProperty($this->themeType  . '.' . $name);
@@ -29,7 +28,7 @@ abstract class ThemeEditor
                     'path' => $themProperty->getPath(),
                     'previewImageUrl' => $themProperty->getPreviewImageUrl(),
                     'is_enable' => in_array($name, $configTheme->enable) ? '1' : '0',
-                    'is_default' => $name == $config->theme ? '1' : '0',
+                    'is_default' => $name == $configTheme->default ? '1' : '0',
                 ];
             }
 
@@ -56,7 +55,6 @@ abstract class ThemeEditor
     {
         if ($this->enableThemes === null) {
             $themes = [];
-            $config = Be::getConfig('App.System.' . ($this->themeType == 'Theme' ? 'System' : 'Admin'));
             $configTheme = Be::getConfig('App.System.' . $this->themeType);
             foreach ($configTheme->enable as $name) {
                 $themProperty = Be::getProperty($this->themeType  . '.' . $name);
@@ -65,7 +63,7 @@ abstract class ThemeEditor
                     'label' => $themProperty->getLabel(),
                     'path' => $themProperty->getPath(),
                     'previewImageUrl' => $themProperty->getPreviewImageUrl(),
-                    'is_default' => $name == $config->theme ? '1' : '0',
+                    'is_default' => $name == $configTheme->default ? '1' : '0',
                 ];
             }
 
@@ -146,42 +144,47 @@ abstract class ThemeEditor
             }
         }
 
-        $configAdminTheme = Be::getConfig('App.System.'.$this->themeType);
+
+        $class = '\\Be\\App\\System\\Config\\' . $this->themeType;
+        $originalConfigTheme = new $class();
+
+        $configATheme = Be::getConfig('App.System.'.$this->themeType);
+        $configATheme->exclude = $originalConfigTheme->exclude;
 
         // 有效主题，先移除要排除的
         $availableThemes = [];
         foreach ($themes as $x) {
-            if (!in_array($x, $configAdminTheme->exclude)) {
+            if (!in_array($x, $configATheme->exclude)) {
                 $availableThemes[] = $x;
             }
         }
 
         // 移除已经不可用的主题
         $available = [];
-        foreach ($configAdminTheme->available as $x) {
+        foreach ($configATheme->available as $x) {
             if (in_array($x, $availableThemes)) {
                 $available[] = $x;
             }
         }
-        $configAdminTheme->available = $available;
+        $configATheme->available = $available;
 
         $enable = [];
-        foreach ($configAdminTheme->enable as $x) {
+        foreach ($configATheme->enable as $x) {
             if (in_array($x, $availableThemes)) {
                 $enable[] = $x;
             }
         }
-        $configAdminTheme->enable = $enable;
+        $configATheme->enable = $enable;
 
         // 检测新增的主题
         $n = 0;
         foreach ($availableThemes as $x) {
-            if (!in_array($x, $configAdminTheme->available)) {
-                $configAdminTheme->available[] = $x;
+            if (!in_array($x, $configATheme->available)) {
+                $configATheme->available[] = $x;
                 $n++;
             }
         }
-        ConfigHelper::update('App.System.'.$this->themeType, $configAdminTheme);
+        ConfigHelper::update('App.System.'.$this->themeType, $configATheme);
         return $n;
     }
 
@@ -196,38 +199,37 @@ abstract class ThemeEditor
      */
     public function toggleEnable($themeName, $enable)
     {
-        $configAdminTheme = Be::getConfig('App.System.'.$this->themeType);
+        $configTheme = Be::getConfig('App.System.'.$this->themeType);
 
         if ($enable) {
-            if (!in_array($themeName, $configAdminTheme->enable)) {
-                $configAdminTheme->enable[] = $themeName;
+            if (!in_array($themeName, $configTheme->enable)) {
+                $configTheme->enable[] = $themeName;
             }
         } else {
-            $config = Be::getConfig('App.System.' . ($this->themeType == 'Theme' ? 'System' : 'Admin'));
-            if ($config->theme == $themeName) {
+            if ($configTheme->default == $themeName) {
                 throw new ServiceException('正在使用中的主题不可禁用！');
             }
 
-            if (in_array($themeName, $configAdminTheme->enable)) {
+            if (in_array($themeName, $configTheme->enable)) {
                 $newEnable = [];
-                foreach($configAdminTheme->enable as $x) {
+                foreach($configTheme->enable as $x) {
                     if ($x == $themeName) {
                         continue;
                     }
                     $newEnable[] = $x;
                 }
-                $configAdminTheme->enable = $newEnable;
+                $configTheme->enable = $newEnable;
             }
         }
 
         $newEnable = [];
-        foreach($configAdminTheme->available as $x) {
-            if (in_array($x, $configAdminTheme->enable)) {
+        foreach($configTheme->available as $x) {
+            if (in_array($x, $configTheme->enable)) {
                 $newEnable[] = $x;
             }
         }
-        $configAdminTheme->enable = $newEnable;
-        ConfigHelper::update('App.System.'.$this->themeType, $configAdminTheme);
+        $configTheme->enable = $newEnable;
+        ConfigHelper::update('App.System.'.$this->themeType, $configTheme);
 
         return true;
     }
@@ -242,15 +244,14 @@ abstract class ThemeEditor
      */
     public function toggleDefault($themeName)
     {
-        $configAdminTheme = Be::getConfig('App.System.'.$this->themeType);
-        if (!in_array($themeName, $configAdminTheme->enable)) {
+        $configTheme = Be::getConfig('App.System.'.$this->themeType);
+        if (!in_array($themeName, $configTheme->enable)) {
             throw new ServiceException('该主题当前已被禁用，不可设为墨认主题！');
         }
 
-        $config = Be::getConfig('App.System.' . ($this->themeType == 'Theme' ? 'System' : 'Admin'));
-        if ($config->theme != $themeName) {
-            $config->theme = $themeName;
-            ConfigHelper::update('App.System.' . ($this->themeType == 'Theme' ? 'System' : 'Admin'), $config);
+        if ($configTheme->default != $themeName) {
+            $configTheme->default = $themeName;
+            ConfigHelper::update('App.System.'.$this->themeType, $configTheme);
         }
         return true;
     }

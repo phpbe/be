@@ -14,4 +14,7 @@ class Theme
     // 可用的
     public $enable = ['Sample'];
 
+    // 默认主题
+    public $default = 'Sample';
+
 }

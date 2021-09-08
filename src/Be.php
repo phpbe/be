@@ -832,7 +832,7 @@ abstract class Be
         $name = array_shift($parts);
 
         if ($theme === null) {
-            $theme = self::getConfig('App.System.System')->theme;
+            $theme = self::getConfig('App.System.Theme')->default;
         }
 
         $runtime = self::getRuntime();
@@ -875,7 +875,7 @@ abstract class Be
         $name = array_shift($parts);
 
         if ($theme === null) {
-            $theme = self::getConfig('App.System.Admin')->theme;
+            $theme = self::getConfig('App.System.AdminTheme')->default;
         }
 
         $runtime = self::getRuntime();

@@ -23,7 +23,11 @@ abstract class Property extends \Be\Property\Driver
 
 
     public function getPreviewImageUrl () {
-        return $this->getUrl() . '/' . $this->previewImage;
+        if ($this->previewImage) {
+            return $this->getUrl() . '/' . $this->previewImage;
+        } else {
+            return \Be\Be::getProperty('App.System')->getUrl() . '/Template/Admin/ThemeEditor/images/no-preview.jpg';
+        }
     }
 
 }

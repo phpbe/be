@@ -4,10 +4,11 @@ namespace Be\AdminPlugin\Card\Item;
 
 
 /**
- * 字段 文本
+ * 字段 自定义
  */
-class CardItemText extends CardItem
+class CardItemCustom extends CardItem
 {
+
 
 
     /**
@@ -18,14 +19,9 @@ class CardItemText extends CardItem
     public function getHtml()
     {
         $html = '<div class="card-item">';
-        if ($this->label) {
-            $html .= '<b>' . $this->label . '</b>：';
-        }
-        $html .= '{{item.'.$this->name.'}}';
+        $html .= '<div v-html="item.'.$this->name.'"></div>';
         $html .= '</div>';
-
         return $html;
     }
-
 
 }

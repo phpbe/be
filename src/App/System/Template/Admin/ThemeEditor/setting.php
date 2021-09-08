@@ -169,6 +169,7 @@
                 </div>
 
                 <div style="flex: 0 0 auto;">
+                    <?php if ($this->themeType == 'Theme') { ?>
                     <el-dropdown @command="toggleScreen">
                         <el-button size="mini" style="border: none">
                             <template v-if="screen === 'mobile'">
@@ -184,6 +185,7 @@
                             <el-dropdown-item command="desktop"><i class="el-icon-s-platform" style="font-size: 1.2rem;"></i> 桌面版</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
+                    <?php } ?>
                 </div>
 
             </div>
@@ -208,7 +210,7 @@
                                     <div style="display: flex">
                                         <div style="flex: 0 0 20px; height: 30px; line-height: 30px;">
                                             <?php
-                                            if ($section['items']) {
+                                            if (isset($section['items']) && $section['items']) {
                                                 ?>
                                                 <a href="javascript:void(0);">
                                                     <i class="el-icon-caret-right"></i>

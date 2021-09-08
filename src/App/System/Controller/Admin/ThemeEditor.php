@@ -2,6 +2,7 @@
 
 namespace Be\App\System\Controller\Admin;
 
+use Be\AdminPlugin\Card\Item\CardItemSwitch;
 use Be\AdminPlugin\Table\Item\TableItemImage;
 use Be\AdminPlugin\Table\Item\TableItemSwitch;
 use Be\Be;
@@ -79,6 +80,29 @@ class ThemeEditor
                             'name' => 'path',
                             'label' => '路径',
                         ],
+                        [
+                            'name' => 'is_enable',
+                            'label' => '',
+                            'driver' => CardItemSwitch::class,
+                            'target' => 'ajax',
+                            'action' => 'toggleEnable',
+                            'ui' => [
+                                'active-text' => '启用',
+                                'inactive-text' => '禁用'
+                            ]
+                        ],
+                        [
+                            'name' => 'is_default',
+                            'label' => '当前主题',
+                            'driver' => CardItemSwitch::class,
+                            'target' => 'ajax',
+                            'action' => 'toggleDefault',
+                            'ui' => [
+                                ':disabled' => 'item.is_default == \'1\'',
+                                'active-text' => '是',
+                                'inactive-text' => '否'
+                            ]
+                        ],
                     ],
 
                     'operation' => [
@@ -131,8 +155,11 @@ class ThemeEditor
                             'label' => '当前主题',
                             'driver' => TableItemSwitch::class,
                             'target' => 'ajax',
-                            'task' => 'toggleDefault',
+                            'action' => 'toggleDefault',
                             'width' => '90',
+                            'ui' => [
+                                ':disabled' => 'scope.row.is_default == \'1\'',
+                            ]
                         ],
                     ],
                     'operation' => [

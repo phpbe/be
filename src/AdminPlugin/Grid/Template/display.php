@@ -129,7 +129,8 @@
             ?>
 
             .card-item {
-
+                height: 30px;
+                line-height: 30px;
             }
 
             <?php
@@ -501,7 +502,7 @@
                                     }
                                 }
                             }
-                            ?> >
+                            ?> v-for="(item, itemKey) in gridData" style="margin-bottom: 15px;">
                             <el-card<?php
                                 foreach ($this->setting['card']['ui'] as $k => $v) {
                                     if ($k == 'row' || $k == 'col') {
@@ -514,7 +515,7 @@
                                         echo ' ' . $k . '="' . $v . '"';
                                     }
                                 }
-                                ?>  v-for="(item, itemKey) in gridData">
+                                ?>>
                                 <?php
                                 if (isset($this->setting['card']['template'])) {
                                     echo $this->setting['card']['template'];

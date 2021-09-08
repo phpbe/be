@@ -43,7 +43,7 @@ class Index
         $response->set('appCount', $serviceApp->getAppCount());
 
         $serviceTheme = Be::getService('App.System.Admin.Theme');
-        $response->set('themeCount', $serviceTheme->getThemeCount());
+        $response->set('themeCount', $serviceTheme->getAvailableThemeCount());
 
         $serviceAdminTheme = Be::getService('App.System.Admin.AdminTheme');
         $response->set('adminThemeCount', $serviceAdminTheme->getAvailableThemeCount());
