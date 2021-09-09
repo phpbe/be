@@ -50,7 +50,7 @@ class AdminUser
         } else {
             $my = Be::getAdminUser();
             if ($my->id > 0) {
-                $response->redirect(beAdminUrl('System.System.dashboard'));
+                $response->redirect(beAdminUrl('System.Index.index'));
                 return;
             }
 
@@ -240,7 +240,7 @@ class AdminUser
                             'driver' => TableItemAvatar::class,
                             'value' => function ($row) {
                                 if ($row['avatar'] == '') {
-                                    return Be::getProperty('App.System')->getUrl() . '/AdminTemplate/AdminUser/images/avatar.png';
+                                    return Be::getProperty('App.System')->getUrl() . '/Template/Admin/AdminUser/images/avatar.png';
                                 } else {
                                     return Be::getRequest()->getUploadUrl() . '/System/AdminUser/Avatar/' . $row['avatar'];
                                 }
@@ -334,7 +334,7 @@ class AdminUser
                             'driver' => DetailItemAvatar::class,
                             'value' => function ($row) {
                                 if ($row['avatar'] == '') {
-                                    return Be::getProperty('App.System')->getUrl() . '/AdminTemplate/AdminUser/images/avatar.png';
+                                    return Be::getProperty('App.System')->getUrl() . '/Template/Admin/AdminUser/images/avatar.png';
                                 } else {
                                     return Be::getRequest()->getUploadUrl() . '/System/AdminUser/Avatar/' . $row['avatar'];
                                 }
@@ -424,7 +424,7 @@ class AdminUser
                             'path' => '/System/AdminUser/Avatar/',
                             'maxWidth' => $configAdminUser->avatarWidth,
                             'maxHeight' => $configAdminUser->avatarHeight,
-                            'defaultValue' => Be::getProperty('App.System')->getUrl() . '/AdminTemplate/AdminUser/images/avatar.png',
+                            'defaultValue' => Be::getProperty('App.System')->getUrl() . '/Template/Admin/AdminUser/images/avatar.png',
                         ],
                         [
                             'name' => 'username',
@@ -499,7 +499,7 @@ class AdminUser
                             'path' => '/System/AdminUser/Avatar/',
                             'maxWidth' => $configAdminUser->avatarWidth,
                             'maxHeight' => $configAdminUser->avatarHeight,
-                            'defaultValue' => Be::getProperty('App.System')->getUrl() . '/AdminTemplate/AdminUser/images/avatar.png',
+                            'defaultValue' => Be::getProperty('App.System')->getUrl() . '/Template/Admin/AdminUser/images/avatar.png',
                         ],
                         [
                             'name' => 'username',

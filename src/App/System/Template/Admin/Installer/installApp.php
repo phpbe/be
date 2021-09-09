@@ -1,5 +1,5 @@
 <be-head>
-    <link type="text/css" rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/AdminTemplate/Installer/css/complete.css">
+    <link type="text/css" rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/Template/Admin/Installer/css/complete.css">
 </be-head>
 
 <be-center>

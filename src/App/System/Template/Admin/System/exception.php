@@ -1,11 +1,11 @@
 <be-head>
     <link type="text/css" rel="stylesheet"
-          href="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/AdminTemplate/System/css/exception.css">
+          href="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/Template/Admin/System/css/exception.css">
     <link rel="stylesheet"
-          href="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/AdminTemplate/System/google-code-prettify/prettify.css"
+          href="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/Template/Admin/System/google-code-prettify/prettify.css"
           type="text/css"/>
     <script type="text/javascript" language="javascript"
-            src="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/AdminTemplate/System/google-code-prettify/prettify.js"></script>
+            src="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/Template/Admin/System/google-code-prettify/prettify.js"></script>
     <style type="text/css">
         pre.prettyprint {
             background-color: #fff;

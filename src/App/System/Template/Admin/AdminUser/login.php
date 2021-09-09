@@ -1,5 +1,5 @@
 <be-head>
-<link type="text/css" rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/AdminTemplate/AdminUser/css/login.css" />
+<link type="text/css" rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/Template/Admin/AdminUser/css/login.css" />
 </be-head>
 
 <be-body>
@@ -32,7 +32,7 @@ $config = \Be\Be::getConfig('App.System.System');
 <?php
 $return = \Be\Be::getRequest()->get('return', '');
 if ($return=='') {
-    $return = beAdminUrl('System.System.dashboard');
+    $return = beAdminUrl('System.Index.index');
 } else {
     $return = base64_decode($return);
 }
