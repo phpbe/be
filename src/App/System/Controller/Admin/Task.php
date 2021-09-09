@@ -11,8 +11,8 @@ use Be\Be;
 class Task
 {
     /**
-     * @BeMenu("计划任务", icon="el-icon-timer", ordering="2.3")
-     * @BePermission("计划任务", ordering="2.3")
+     * @BeMenu("计划任务", icon="el-icon-timer", ordering="2.4")
+     * @BePermission("计划任务", ordering="2.4")
      */
     public function dashboard()
     {

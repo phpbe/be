@@ -12,7 +12,14 @@ class Cache
         [
             'name' => 'AdminRole',
             'label' => '角色缓存',
-            'description' => '角色资料、权限缓存',
+            'description' => '角色资料、角色权限缓存',
+            'type' => 'folder',
+            'icon' => 'el-icon-folder',
+        ],
+        [
+            'name' => 'AdminPermission',
+            'label' => '权限缓存',
+            'description' => '系统权限缓存',
             'type' => 'folder',
             'icon' => 'el-icon-folder',
         ],

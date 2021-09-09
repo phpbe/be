@@ -15,8 +15,8 @@ class Cache
 {
 
     /**
-     * @BeMenu("缓存", icon = "el-icon-fa fa-database", ordering="2.4")
-     * @BePermission("缓存列表", ordering="2.4")
+     * @BeMenu("缓存", icon = "el-icon-fa fa-database", ordering="2.5")
+     * @BePermission("缓存列表", ordering="2.5")
      */
     public function index()
     {
@@ -155,7 +155,7 @@ class Cache
     }
 
     /**
-     * @BePermission("删除缓存", ordering="2.41")
+     * @BePermission("删除缓存", ordering="2.51")
      */
     public function delete()
     {

@@ -32,7 +32,7 @@ class Theme
     /**
      * 发现
      *
-     * @BePermission("发现主题", ordering="2.22")
+     * @BePermission("发现前台主题", ordering="2.21")
      */
     public function discover()
     {
@@ -40,9 +40,9 @@ class Theme
     }
 
     /**
-     * 启用/禁用主题
+     * 启用/禁用前台主题
      *
-     * @BePermission("启用/禁用主题", ordering="2.22")
+     * @BePermission("启用/禁用前台主题", ordering="2.22")
      */
     public function toggleEnable()
     {
@@ -52,7 +52,7 @@ class Theme
     /**
      * 设置默认主题
      *
-     * @BePermission("设置默认主题", ordering="2.22")
+     * @BePermission("设置默认前台主题", ordering="2.23")
      */
     public function toggleDefault()
     {
@@ -62,7 +62,7 @@ class Theme
     /**
      * 配置主题
      *
-     * @BePermission("配置主题", ordering="2.22")
+     * @BePermission("配置前台主题", ordering="2.24")
      */
     public function goSetting()
     {
@@ -72,18 +72,28 @@ class Theme
     /**
      * 配置主题
      *
-     * @BePermission("配置主题", ordering="2.22")
+     * @BePermission("配置前台主题", ordering="2.24")
      */
     public function setting()
     {
         $this->themeEditor->setting();
     }
 
+    /**
+     * 启用 section type
+     *
+     * @BePermission("配置前台主题", ordering="2.24")
+     */
     public function enableSectionType()
     {
         $this->themeEditor->enableSectionType();
     }
 
+    /**
+     * 禁用 section type
+     *
+     * @BePermission("配置前台主题", ordering="2.24")
+     */
     public function disableSectionType()
     {
         $this->themeEditor->disableSectionType();
@@ -91,6 +101,8 @@ class Theme
 
     /**
      * 新增组件
+     *
+     * @BePermission("配置前台主题", ordering="2.24")
      */
     public function addSection()
     {
@@ -99,6 +111,8 @@ class Theme
 
     /**
      * 删除组件
+     *
+     * @BePermission("配置前台主题", ordering="2.24")
      */
     public function deleteSection()
     {
@@ -107,6 +121,8 @@ class Theme
 
     /**
      * 组件排序
+     *
+     * @BePermission("配置前台主题", ordering="2.24")
      */
     public function sortSection()
     {
@@ -115,6 +131,8 @@ class Theme
 
     /**
      * 新增组件子项
+     *
+     * @BePermission("配置前台主题", ordering="2.24")
      */
     public function addSectionItem()
     {
@@ -123,6 +141,8 @@ class Theme
 
     /**
      * 删除子组件
+     *
+     * @BePermission("配置前台主题", ordering="2.24")
      */
     public function deleteSectionItem()
     {
@@ -131,6 +151,8 @@ class Theme
 
     /**
      * 编辑组件子项
+     *
+     * @BePermission("配置前台主题", ordering="2.24")
      */
     public function editSectionItem()
     {
@@ -139,6 +161,8 @@ class Theme
 
     /**
      * 编辑组件子项保存
+     *
+     * @BePermission("配置前台主题", ordering="2.24")
      */
     public function saveSectionItem()
     {
@@ -147,6 +171,8 @@ class Theme
 
     /**
      * 组件排序
+     *
+     * @BePermission("配置前台主题", ordering="2.24")
      */
     public function sortSectionItem()
     {

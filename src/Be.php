@@ -965,6 +965,27 @@ abstract class Be
     }
 
     /**
+     * 获取后台权限信息
+     *
+     * @return \Be\AdminUser\AdminPermission
+     */
+    public static function getAdminPermission()
+    {
+        if (isset(self::$cache['adminPermission'])) return self::$cache['adminPermission'];
+
+        $path = self::getRuntime()->getCachePath() . '/AdminPermission/AdminPermission.php';
+        if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
+            $service = Be::getService('App.System.Admin.AdminPermission');
+            $service->updateAdminPermission();
+        }
+
+        $class = '\\Be\\Data\\Cache\\AdminPermission\\AdminPermission';
+        self::$cache['adminPermission'] = new $class();
+        return self::$cache['adminPermission'];
+    }
+
+
+    /**
      * 设置当前后台用户
      *
      * @param \stdClass | null $adminUser

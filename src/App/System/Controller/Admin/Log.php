@@ -248,7 +248,7 @@ class Log
             $log = $servicebeAdminOpLog->getlog($data['row']['year'], $data['row']['month'], $data['row']['day'], $data['row']['hash']);
             $response->set('title', '系统日志明细');
             $response->set('log', $log);
-            $response->display(null, 'Nude');
+            $response->display(null, 'Blank');
         } catch (\Exception $e) {
             $response->error($e->getMessage());
         }

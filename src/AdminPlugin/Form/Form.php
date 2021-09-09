@@ -18,7 +18,7 @@ class Form extends Driver
     public function setting($setting = [])
     {
         if (!isset($setting['theme'])) {
-            $setting['theme'] = 'Nude';
+            $setting['theme'] = 'Blank';
         }
 
         if (!isset($setting['form']['action'])) {

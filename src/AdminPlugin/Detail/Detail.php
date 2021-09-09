@@ -23,7 +23,7 @@ class Detail extends Driver
         }
 
         if (!isset($setting['theme'])) {
-            $setting['theme'] = 'Nude';
+            $setting['theme'] = 'Blank';
         }
 
         if (!isset($setting['form']['actions'])) {

@@ -225,7 +225,7 @@ class Swoole extends Driver
                     if (substr($uri, -1, 1) == '/') $uri = substr($uri, 0, -1);
 
                     // 是否后台功能
-                    if (substr($uri, 0, strlen($this->adminAlias) + 1) == $this->adminAlias . '/') {
+                    if (substr($uri, 0, strlen($this->adminAlias) + 1) == '/' . $this->adminAlias) {
                         $admin = true;
                         $uri = substr($uri, strlen($this->adminAlias) + 1);
                     }

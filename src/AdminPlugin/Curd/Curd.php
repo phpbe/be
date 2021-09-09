@@ -824,7 +824,7 @@ class Curd extends Driver
                         } else {
                             $driverClass = \Be\AdminPlugin\Form\Item\FormItemInput::class;
                         }
-                        $driver = new $driverClass($item);
+                        $driver = new $driverClass($item, $formData);
 
                         if ($driver->name == null) {
                             continue;

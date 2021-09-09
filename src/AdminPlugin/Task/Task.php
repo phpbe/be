@@ -753,7 +753,7 @@ class Task extends Driver
         }
         $response->set('configTask', $configTask);
 
-        $response->display('AdminPlugin.Task.cronHelp', 'Nude');
+        $response->display('AdminPlugin.Task.cronHelp', 'Blank');
     }
 
 }

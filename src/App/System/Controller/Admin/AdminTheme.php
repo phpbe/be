@@ -1,15 +1,6 @@
 <?php
 namespace Be\App\System\Controller\Admin;
 
-use Be\AdminPlugin\Form\Item\FormItemDatePickerRange;
-use Be\AdminPlugin\Table\Item\TableItemCustom;
-use Be\AdminPlugin\Table\Item\TableItemIcon;
-use Be\AdminPlugin\Table\Item\TableItemImage;
-use Be\AdminPlugin\Table\Item\TableItemSwitch;
-use Be\AdminPlugin\Table\Item\TableItemTag;
-use Be\Be;
-use Be\Db\Tuple;
-
 /**
  * @BeMenuGroup("管理")
  * @BePermissionGroup("管理")
@@ -36,7 +27,7 @@ class AdminTheme
     /**
      * 发现
      *
-     * @BePermission("发现主题", ordering="2.32")
+     * @BePermission("发现后台主题", ordering="2.31")
      */
     public function discover()
     {
@@ -46,7 +37,7 @@ class AdminTheme
     /**
      * 启用/禁用主题
      *
-     * @BePermission("启用/禁用主题", ordering="2.32")
+     * @BePermission("启用/禁用后台主题", ordering="2.32")
      */
     public function toggleEnable()
     {
@@ -56,7 +47,7 @@ class AdminTheme
     /**
      * 设置默认主题
      *
-     * @BePermission("设置默认主题", ordering="2.32")
+     * @BePermission("设置默认后台主题", ordering="2.33")
      */
     public function toggleDefault()
     {
@@ -66,7 +57,7 @@ class AdminTheme
     /**
      * 配置主题
      *
-     * @BePermission("配置主题", ordering="2.32")
+     * @BePermission("配置后台主题", ordering="2.34")
      */
     public function goSetting()
     {
@@ -76,18 +67,28 @@ class AdminTheme
     /**
      * 配置主题
      *
-     * @BePermission("配置主题", ordering="2.32")
+     * @BePermission("配置后台主题", ordering="2.34")
      */
     public function setting()
     {
         $this->themeEditor->setting();
     }
 
+    /**
+     * 启用 section type
+     *
+     * @BePermission("配置后台主题", ordering="2.34")
+     */
     public function enableSectionType()
     {
         $this->themeEditor->enableSectionType();
     }
 
+    /**
+     * 禁用 section type
+     *
+     * @BePermission("配置后台主题", ordering="2.34")
+     */
     public function disableSectionType()
     {
         $this->themeEditor->disableSectionType();
@@ -95,6 +96,8 @@ class AdminTheme
 
     /**
      * 新增组件
+     *
+     * @BePermission("配置后台主题", ordering="2.34")
      */
     public function addSection()
     {
@@ -103,6 +106,8 @@ class AdminTheme
 
     /**
      * 删除组件
+     *
+     * @BePermission("配置后台主题", ordering="2.34")
      */
     public function deleteSection()
     {
@@ -111,6 +116,8 @@ class AdminTheme
 
     /**
      * 组件排序
+     *
+     * @BePermission("配置后台主题", ordering="2.34")
      */
     public function sortSection()
     {
@@ -119,6 +126,8 @@ class AdminTheme
 
     /**
      * 新增组件子项
+     *
+     * @BePermission("配置后台主题", ordering="2.34")
      */
     public function addSectionItem()
     {
@@ -127,6 +136,8 @@ class AdminTheme
 
     /**
      * 删除子组件
+     *
+     * @BePermission("配置后台主题", ordering="2.34")
      */
     public function deleteSectionItem()
     {
@@ -135,6 +146,8 @@ class AdminTheme
 
     /**
      * 编辑组件子项
+     *
+     * @BePermission("配置后台主题", ordering="2.34")
      */
     public function editSectionItem()
     {
@@ -143,6 +156,8 @@ class AdminTheme
 
     /**
      * 编辑组件子项保存
+     *
+     * @BePermission("配置后台主题", ordering="2.34")
      */
     public function saveSectionItem()
     {
@@ -151,6 +166,8 @@ class AdminTheme
 
     /**
      * 组件排序
+     *
+     * @BePermission("配置后台主题", ordering="2.34")
      */
     public function sortSectionItem()
     {

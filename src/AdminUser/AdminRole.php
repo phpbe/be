@@ -9,7 +9,7 @@ abstract class AdminRole
 {
     public $name = '';
     public $permission = -1;
-    public $permissions = [];
+    public $permissionKeys = [];
 
     /**
      * 检测是否有权限访问指定控制器和任务
@@ -24,7 +24,8 @@ abstract class AdminRole
         if ($this->permission == 1) return true;
         if ($this->permission == 0) return false;
 
-        $key = $app . '.' . $controller . '.' . $action;
-        return in_array($key, $this->permissions);
+        $adminPermission = \Be\Be::getAdminPermission();
+        $perMissionKey = $adminPermission->getPermissionKey($app, $controller, $action);
+        return in_array($perMissionKey, $this->permissionKeys);
     }
 }
