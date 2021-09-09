@@ -40,7 +40,7 @@ class AdminPermission
         foreach ($permissionKeys as $k => $v) {
             $arr[] = '\'' . $k . '\'=>\'' . $v . '\'';
         }
-        $code .= '  public $keyValues = [' . implode(',', $arr) . '];' . "\n";
+        $code .= '  public $permissionKeys = [' . implode(',', $arr) . '];' . "\n";
         $code .= '}' . "\n";
 
         $path = Be::getRuntime()->getCachePath() . '/AdminPermission/AdminPermission.php';

@@ -249,7 +249,7 @@ class AdminRole
                             ],
                         ],
                         [
-                            'name' => 'permissions',
+                            'name' => 'permission_keys',
                             'label' => '自定义权限',
                             'driver' => DetailItemTree::class,
                             'ui' => [
@@ -258,7 +258,7 @@ class AdminRole
                                 ]
                             ],
                             'value' => function ($row) {
-                                return explode(',', $row['permissions']);
+                                return explode(',', $row['permission_keys']);
                             },
                             'treeData' => function () {
                                 return Be::getService('App.System.Admin.AdminPermission')->getPermissionTree();
@@ -307,7 +307,7 @@ class AdminRole
                             'value' => '-1',
                         ],
                         [
-                            'name' => 'permissions',
+                            'name' => 'permission_keys',
                             'label' => '自定义权限',
                             'driver' => FormItemTree::class,
                             'ui' => [
@@ -334,21 +334,21 @@ class AdminRole
                 'events' => [
                     'before' => function (Tuple &$tuple) {
                         if ($tuple->permission == '-1') {
-                            if (is_array($tuple->permissions)) {
-                                $permissions = [];
-                                foreach ($tuple->permissions as $permission) {
+                            if (is_array($tuple->permission_keys)) {
+                                $permissionKeys = [];
+                                foreach ($tuple->permission_keys as $permission) {
                                     $arr = explode('.', $permission);
                                     if (count($arr) == 3) {
-                                        $permissions[] = $permission;
+                                        $permissionKeys[] = $permission;
                                     }
                                 }
 
-                                $tuple->permissions = implode(',', $permissions);
+                                $tuple->permission_keys = implode(',', $permissionKeys);
                             } else {
-                                $tuple->permissions = '';
+                                $tuple->permission_keys = '';
                             }
                         } else {
-                            $tuple->permissions = '';
+                            $tuple->permission_keys = '';
                         }
 
                         $tuple->create_time = date('Y-m-d H:i:s');
@@ -377,7 +377,7 @@ class AdminRole
                             ],
                         ],
                         [
-                            'name' => 'permissions',
+                            'name' => 'permission_keys',
                             'label' => '自定义权限',
                             'driver' => FormItemTree::class,
                             'ui' => [
@@ -386,7 +386,7 @@ class AdminRole
                                 ]
                             ],
                             'value' => function ($row) {
-                                return explode(',', $row['permissions']);
+                                return explode(',', $row['permission_keys']);
                             },
                             'treeData' => function () {
                                 return Be::getService('App.System.Admin.AdminPermission')->getPermissionTree();
@@ -406,21 +406,21 @@ class AdminRole
                 'events' => [
                     'before' => function (Tuple &$tuple) {
                         if ($tuple->permission == '-1') {
-                            if (is_array($tuple->permissions)) {
-                                $permissions = [];
-                                foreach ($tuple->permissions as $permission) {
+                            if (is_array($tuple->permission_keys)) {
+                                $permissionKeys = [];
+                                foreach ($tuple->permission_keys as $permission) {
                                     $arr = explode('.', $permission);
                                     if (count($arr) == 3) {
-                                        $permissions[] = $permission;
+                                        $permissionKeys[] = $permission;
                                     }
                                 }
 
-                                $tuple->permissions = implode(',', $permissions);
+                                $tuple->permission_keys = implode(',', $permissionKeys);
                             } else {
-                                $tuple->permissions = '';
+                                $tuple->permission_keys = '';
                             }
                         } else {
-                            $tuple->permissions = '';
+                            $tuple->permission_keys = '';
                         }
 
                         $tuple->update_time = date('Y-m-d H:i:s');

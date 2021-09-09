@@ -82,7 +82,7 @@ CREATE TABLE `system_admin_role` (
   `name` varchar(60) NOT NULL DEFAULT '' COMMENT '角色名',
   `remark` varchar(200) NOT NULL DEFAULT '' COMMENT '备注',
   `permission` tinyint NOT NULL COMMENT '权限（0: 无权限/1: 所有权限/-1: 自定义权限）',
-  `permissions` text NOT NULL COMMENT '自定义权限',
+  `permission_keys` text NOT NULL COMMENT '自定义权限',
   `is_enable` tinyint NOT NULL DEFAULT '1' COMMENT '是否可用',
   `is_delete` tinyint NOT NULL DEFAULT '0' COMMENT '是否已删除',
   `ordering` int NOT NULL COMMENT '排序（越小越靠前）',
@@ -91,7 +91,7 @@ CREATE TABLE `system_admin_role` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户角色';
 
-INSERT INTO `system_admin_role` (`id`, `name`, `remark`, `permission`, `permissions`, `is_enable`, `is_delete`, `ordering`, `create_time`, `update_time`) VALUES
+INSERT INTO `system_admin_role` (`id`, `name`, `remark`, `permission`, `permission_keys`, `is_enable`, `is_delete`, `ordering`, `create_time`, `update_time`) VALUES
 (1, '超级管理员', '能执行所有操作', 1, '', 1, 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 CREATE TABLE `system_admin_user` (

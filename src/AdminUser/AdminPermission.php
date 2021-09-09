@@ -20,9 +20,9 @@ abstract class AdminPermission
      */
     public function getPermissionKey($app, $controller, $action)
     {
-        $key = $app . '.' . $controller . '.' . $action;
-        if (isset($this->permissionKeys[$key])) {
-            return $this->permissionKeys[$key];
+        $perMissionKey = $app . '.' . $controller . '.' . $action;
+        if (isset($this->permissionKeys[$perMissionKey])) {
+            return $this->permissionKeys[$perMissionKey];
         }
 
         return false;

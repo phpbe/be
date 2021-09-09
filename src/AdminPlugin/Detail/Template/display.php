@@ -44,7 +44,7 @@
                             $driverClass = $item['driver'];
                         }
                     } else {
-                        $driverClass = \Be\AdminPlugin\Detail\Item\DetailItem::class;
+                        $driverClass = \Be\AdminPlugin\Detail\Item\DetailItemText::class;
                     }
                     $driver = new $driverClass($item);
 

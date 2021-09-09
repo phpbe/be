@@ -12,14 +12,14 @@ class Watermark
 {
 
     /**
-     * @BeMenu("水印测试", icon = "el-icon-fa fa-image", ordering="3.2")
-     * @BePermission("水印测试", ordering="3.2")
+     * @BeMenu("水印测试", icon = "el-icon-fa fa-image", ordering="3.3")
+     * @BePermission("水印测试", ordering="3.3")
      */
     public function test()
     {
         $response = Be::getResponse();
 
-        $src = Be::getRuntime()->getRootPath() . Be::getProperty('App.System')->getPath() . '/AdminTemplate/Watermark/images/material.jpg';
+        $src = Be::getRuntime()->getRootPath() . Be::getProperty('App.System')->getPath() . '/Template/Admin/Watermark/images/material.jpg';
         $dst = Be::getRuntime()->getUploadPath() . '/System/Watermark/rendering.jpg';
 
         if (!file_exists($src)) $response->end($src . ' 不存在');

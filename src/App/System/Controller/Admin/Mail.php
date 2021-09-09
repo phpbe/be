@@ -13,8 +13,8 @@ class Mail
 {
 
     /**
-     * @BeMenu("发送邮件测试", icon="el-icon-fa fa-envelope-o", ordering="3.1")
-     * @BePermission("发送邮件测试", ordering="3.1")
+     * @BeMenu("发送邮件测试", icon="el-icon-fa fa-envelope-o", ordering="3.2")
+     * @BePermission("发送邮件测试", ordering="3.2")
      */
     public function test()
     {

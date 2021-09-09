@@ -78,7 +78,7 @@ class AdminRole
         $code .= '  public $name = \'' . $tuple->name . '\';' . "\n";
         $code .= '  public $permission = \'' . $tuple->permission . '\';' . "\n";
         if ($tuple->permission == -1) {
-            $code .= '  public $permissionKeys = [\'' . implode('\',\'', explode(',', $tuple->permissions)) . '\'];' . "\n";
+            $code .= '  public $permissionKeys = [\'' . implode('\',\'', explode(',', $tuple->permission_keys)) . '\'];' . "\n";
         } else {
             $code .= '  public $permissionKeys = [];' . "\n";
         }
@@ -97,7 +97,7 @@ class AdminRole
      */
     public function updateAdminRole0()
     {
-        $permissions = [];
+        $permissionKeys = [];
 
         $apps = Be::getService('App.System.Admin.App')->getApps();
         foreach ($apps as $app) {
@@ -138,14 +138,14 @@ class AdminRole
                     }
 
                     if ($permission == 1) {
-                        $permissions[] = $appName . '.' . $controller . '.' . $methodName;
+                        $permissionKeys[] = $appName . '.' . $controller . '.' . $methodName;
                     } else {
                         $methodComment = $method->getDocComment();
                         $methodComments = Annotation::parse($methodComment);
                         foreach ($methodComments as $key => $val) {
                             if ($key == 'BePermission') {
                                 if (is_array($val[0]) && isset($val[0]['value']) && $val[0]['value'] == '*') {
-                                    $permissions[] = $appName . '.' . $controller . '.' . $methodName;
+                                    $permissionKeys[] = $appName . '.' . $controller . '.' . $methodName;
                                 }
                                 break;
                             }
@@ -158,11 +158,15 @@ class AdminRole
         $code = '<?php' . "\n";
         $code .= 'namespace Be\\Data\\Cache\\AdminRole;' . "\n";
         $code .= "\n";
-        $code .= 'class AdminRole0 extends \\Be\\AdminUser\\AdminRole' . "\n";
+        $code .= 'class AdminRole0' . "\n";
         $code .= '{' . "\n";
         $code .= '  public $name = \'公共功能\';' . "\n";
         $code .= '  public $permission = \'-1\';' . "\n";
-        $code .= '  public $permissionKeys = [\'' . implode('\',\'', $permissions) . '\'];' . "\n";
+        $code .= '  public $permissionKeys = [\'' . implode('\',\'', $permissionKeys) . '\'];' . "\n";
+        $code .= '  public function hasPermission($app, $controller, $action)' . "\n";
+        $code .= '  {' . "\n";
+        $code .= '    return in_array($app . \'.\' . $controller . \'.\' . $action, $this->permissionKeys);' . "\n";
+        $code .= '  }' . "\n";
         $code .= '}' . "\n";
 
         $path = Be::getRuntime()->getCachePath() . '/AdminRole/AdminRole0.php';
