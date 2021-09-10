@@ -3,7 +3,7 @@ namespace Be\Theme\Sample\Config\Section;
 
 
 /**
- * @BeConfig("轮播图")
+ * @BeConfig("轮播图", icon="el-icon-video-play")
  */
 class Slider
 {

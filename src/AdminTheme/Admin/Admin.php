@@ -186,7 +186,7 @@ $themeUrl = \Be\Be::getProperty('AdminTheme.Admin')->getUrl();
                     您好：
                     <img src="<?php
                     if ($my->avatar == '') {
-                        echo \Be\Be::getProperty('App.System')->getUrl().'/AdminTemplate/AdminUser/images/avatar.png';
+                        echo \Be\Be::getProperty('App.System')->getUrl().'/Template/Admin/AdminUser/images/avatar.png';
                     } else {
                         echo \Be\Be::getRequest()->getUploadUrl().'/System/AdminUser/Avatar/'.$my->avatar;
                     }

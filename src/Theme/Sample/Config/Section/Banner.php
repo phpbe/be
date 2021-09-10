@@ -3,7 +3,7 @@ namespace Be\Theme\Sample\Config\Section;
 
 
 /**
- * @BeConfig("广告位")
+ * @BeConfig("广告位", icon="el-icon-menu")
  */
 class Banner
 {

@@ -3,7 +3,7 @@ namespace Be\Theme\Sample\Config\Section;
 
 
 /**
- * @BeConfig("图片背景和文字")
+ * @BeConfig("图片背景和文字", icon="el-icon-picture-outline")
  */
 class ImageWithTextOverlay
 {

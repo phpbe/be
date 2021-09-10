@@ -2,7 +2,7 @@
 namespace Be\Theme\Sample\Config\Section\Slider;
 
 /**
- * @BeConfig("图像子组件")
+ * @BeConfig("图像子组件", icon="el-icon-picture")
  */
 class Image
 {
