@@ -57,28 +57,37 @@ abstract class ThemeEditor
     {
         $themes = [];
 
-        $themePath = Be::getRuntime()->getRootPath() . '/vendor/be/be/src/'.$this->themeType;
-        $dirs = scandir($themePath);
-        foreach ($dirs as $dir) {
-            $propertyPath = $themePath . '/' . $dir . '/Property.php';
-            if (file_exists($propertyPath)) {
-                $content = file_get_contents($propertyPath);
-                preg_match('/namespace\s+Be\\\\'.$this->themeType.'\\\\(\w+)/i', $content, $matches);
-                if (isset($matches[1])) {
-                    $themes[] = $matches[1];
-                }
-            }
-        }
-
         $vendorPath = Be::getRuntime()->getRootPath() . '/vendor';
         $dirs = scandir($vendorPath);
         foreach ($dirs as $dir) {
-            if ($dir != '..' && $dir != '.' && $dir != 'be') {
+            if ($dir != '..' && $dir != '.') {
                 $subVendorPath = $vendorPath . '/' . $dir;
                 if (is_dir($subVendorPath)) {
                     $subDirs = scandir($subVendorPath);
                     foreach ($subDirs as $subDir) {
                         if ($subDir != '..' && $subDir != '.') {
+
+                            // 应用中包含的 AdminTheme 或 Theme
+                            $themePath = $subVendorPath . '/' . $subDir . '/'.$this->themeType;
+                            if (!file_exists($themePath)) {
+                                $themePath = $subVendorPath . '/' . $subDir . '/src/'.$this->themeType;
+                            }
+                            if (file_exists($themePath)) {
+                                $dirs = scandir($themePath);
+                                foreach ($dirs as $dir) {
+                                    $propertyPath = $themePath . '/' . $dir . '/Property.php';
+                                    if (file_exists($propertyPath)) {
+                                        $content = file_get_contents($propertyPath);
+                                        preg_match('/namespace\s+Be\\\\'.$this->themeType.'\\\\(\w+)/i', $content, $matches);
+                                        if (isset($matches[1])) {
+                                            $themes[] = $matches[1];
+                                        }
+                                    }
+                                }
+                                continue;
+                            }
+
+                            // 是否主题类型的包
                             $propertyPath = $subVendorPath . '/' . $subDir . '/src/Property.php';
                             if (!file_exists($propertyPath)) {
                                 $propertyPath = $subVendorPath . '/' . $subDir . '/Property.php';
