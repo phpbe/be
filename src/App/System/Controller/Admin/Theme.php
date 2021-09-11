@@ -40,16 +40,6 @@ class Theme
     }
 
     /**
-     * 启用/禁用前台主题
-     *
-     * @BePermission("启用/禁用前台主题", ordering="2.22")
-     */
-    public function toggleEnable()
-    {
-        $this->themeEditor->toggleEnable();
-    }
-
-    /**
      * 设置默认主题
      *
      * @BePermission("设置默认前台主题", ordering="2.23")

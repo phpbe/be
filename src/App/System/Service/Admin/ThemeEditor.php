@@ -13,11 +13,11 @@ abstract class ThemeEditor
     protected $themeType = 'Theme';
 
 
-    private $availableThemes = null;
+    private $themes = null;
 
-    public function getAvailableThemes()
+    public function getThemes()
     {
-        if ($this->availableThemes === null) {
+        if ($this->themes === null) {
             $themes = [];
             $configTheme = Be::getConfig('App.System.' . $this->themeType);
             foreach ($configTheme->available as $name) {
@@ -27,62 +27,25 @@ abstract class ThemeEditor
                     'label' => $themProperty->getLabel(),
                     'path' => $themProperty->getPath(),
                     'previewImageUrl' => $themProperty->getPreviewImageUrl(),
-                    'is_enable' => in_array($name, $configTheme->enable) ? '1' : '0',
                     'is_default' => $name == $configTheme->default ? '1' : '0',
                 ];
             }
 
-            $this->availableThemes = $themes;
+            $this->themes = $themes;
         }
 
-        return $this->availableThemes;
+        return $this->themes;
     }
 
-    public function getAvailableThemeKeyValues()
+    public function getThemeKeyValues()
     {
-        return array_column($this->getAvailableThemes(), 'label', 'name');
+        return array_column($this->getThemes(), 'label', 'name');
     }
 
-    public function getAvailableThemeCount()
+    public function getThemeCount()
     {
-        return count($this->getAvailableThemes());
+        return count($this->getThemes());
     }
-
-
-    private $enableThemes = null;
-
-    public function getEnableThemes()
-    {
-        if ($this->enableThemes === null) {
-            $themes = [];
-            $configTheme = Be::getConfig('App.System.' . $this->themeType);
-            foreach ($configTheme->enable as $name) {
-                $themProperty = Be::getProperty($this->themeType  . '.' . $name);
-                $themes[] = [
-                    'name' => $name,
-                    'label' => $themProperty->getLabel(),
-                    'path' => $themProperty->getPath(),
-                    'previewImageUrl' => $themProperty->getPreviewImageUrl(),
-                    'is_default' => $name == $configTheme->default ? '1' : '0',
-                ];
-            }
-
-            $this->enableThemes = $themes;
-        }
-
-        return $this->enableThemes;
-    }
-
-    public function getEnableThemeKeyValues()
-    {
-        return array_column($this->getEnableThemes(), 'label', 'name');
-    }
-
-    public function getEnableThemeCount()
-    {
-        return count($this->getEnableThemes());
-    }
-
 
     /**
      * 发现
@@ -182,14 +145,6 @@ abstract class ThemeEditor
         }
         $configATheme->available = $available;
 
-        $enable = [];
-        foreach ($configATheme->enable as $x) {
-            if (in_array($x, $availableThemes)) {
-                $enable[] = $x;
-            }
-        }
-        $configATheme->enable = $enable;
-
         // 检测新增的主题
         $n = 0;
         foreach ($availableThemes as $x) {
@@ -198,56 +153,14 @@ abstract class ThemeEditor
                 $n++;
             }
         }
+
+        if (!in_array($configATheme->default, $configATheme->available)) {
+            $configATheme->default = reset($configATheme->available);
+        }
+
         ConfigHelper::update('App.System.'.$this->themeType, $configATheme);
         return $n;
     }
-
-
-    /**
-     * 禁用应用
-     *
-     * @param string $themeName 应应用名
-     * @param bool $enable 禁用/应用
-     * @return bool
-     * @throws ServiceException
-     */
-    public function toggleEnable($themeName, $enable)
-    {
-        $configTheme = Be::getConfig('App.System.'.$this->themeType);
-
-        if ($enable) {
-            if (!in_array($themeName, $configTheme->enable)) {
-                $configTheme->enable[] = $themeName;
-            }
-        } else {
-            if ($configTheme->default == $themeName) {
-                throw new ServiceException('正在使用中的主题不可禁用！');
-            }
-
-            if (in_array($themeName, $configTheme->enable)) {
-                $newEnable = [];
-                foreach($configTheme->enable as $x) {
-                    if ($x == $themeName) {
-                        continue;
-                    }
-                    $newEnable[] = $x;
-                }
-                $configTheme->enable = $newEnable;
-            }
-        }
-
-        $newEnable = [];
-        foreach($configTheme->available as $x) {
-            if (in_array($x, $configTheme->enable)) {
-                $newEnable[] = $x;
-            }
-        }
-        $configTheme->enable = $newEnable;
-        ConfigHelper::update('App.System.'.$this->themeType, $configTheme);
-
-        return true;
-    }
-
 
     /**
      * 设为墨认主题
@@ -259,9 +172,6 @@ abstract class ThemeEditor
     public function toggleDefault($themeName)
     {
         $configTheme = Be::getConfig('App.System.'.$this->themeType);
-        if (!in_array($themeName, $configTheme->enable)) {
-            throw new ServiceException('该主题当前已被禁用，不可设为墨认主题！');
-        }
 
         if ($configTheme->default != $themeName) {
             $configTheme->default = $themeName;

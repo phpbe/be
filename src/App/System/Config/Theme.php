@@ -11,9 +11,6 @@ class Theme
     // 已发现可用主题
     public $available = ['Sample'];
 
-    // 可用的
-    public $enable = ['Sample'];
-
     // 默认主题
     public $default = 'Sample';
 

@@ -30,7 +30,7 @@ class ThemeEditor
         if ($request->isAjax()) {
             $postData = $request->json();
             $service = Be::getService('App.System.Admin.' . $this->themeType);
-            $themes = $service->getAvailableThemes();
+            $themes = $service->getThemes();
             $page = $postData['page'];
             $pageSize = $postData['pageSize'];
             $gridData = array_slice($themes, ($page - 1) * $pageSize, $pageSize);
@@ -81,19 +81,8 @@ class ThemeEditor
                             'label' => '路径',
                         ],
                         [
-                            'name' => 'is_enable',
-                            'label' => '',
-                            'driver' => CardItemSwitch::class,
-                            'target' => 'ajax',
-                            'action' => 'toggleEnable',
-                            'ui' => [
-                                'active-text' => '启用',
-                                'inactive-text' => '禁用'
-                            ]
-                        ],
-                        [
                             'name' => 'is_default',
-                            'label' => '当前主题',
+                            'label' => '启用',
                             'driver' => CardItemSwitch::class,
                             'target' => 'ajax',
                             'action' => 'toggleDefault',
@@ -143,16 +132,8 @@ class ThemeEditor
                             'align' => 'left',
                         ],
                         [
-                            'name' => 'is_enable',
-                            'label' => '启用/禁用',
-                            'driver' => TableItemSwitch::class,
-                            'target' => 'ajax',
-                            'action' => 'toggleEnable',
-                            'width' => '90',
-                        ],
-                        [
                             'name' => 'is_default',
-                            'label' => '当前主题',
+                            'label' => '启用',
                             'driver' => TableItemSwitch::class,
                             'target' => 'ajax',
                             'action' => 'toggleDefault',
@@ -199,34 +180,6 @@ class ThemeEditor
     }
 
     /**
-     * 启用/禁用主题
-     */
-    public function toggleEnable()
-    {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
-
-        $postData = $request->json();
-
-        if (!isset($postData['row']['name'])) {
-            $response->error('参数主题名缺失！');
-        }
-
-        $themeName = $postData['row']['name'];
-        $isEnable = $postData['row']['is_enable'];
-
-        try {
-            $serviceTheme = Be::getService('App.System.Admin.' . $this->themeType);
-            $serviceTheme->toggleEnable($themeName, $isEnable);
-
-            beAdminOpLog(($isEnable ? '启用' : '禁用') . ($this->themeType == 'Theme' ? '前台' : '后台') . '主题：' . $themeName);
-            $response->success(($isEnable ? '启用' : '禁用') . ($this->themeType == 'Theme' ? '前台' : '后台') . '主题成功！');
-        } catch (\Throwable $t) {
-            $response->error($t->getMessage());
-        }
-    }
-
-    /**
      * 设置默认主题
      */
     public function toggleDefault()
@@ -246,8 +199,8 @@ class ThemeEditor
             $serviceTheme = Be::getService('App.System.Admin.' . $this->themeType);
             $serviceTheme->toggleDefault($themeName);
 
-            beAdminOpLog('设置默认' . ($this->themeType == 'Theme' ? '前台' : '后台') . '主题：' . $themeName);
-            $response->success('设置默认' . ($this->themeType == 'Theme' ? '前台' : '后台') . '主题成功！');
+            beAdminOpLog('启用' . ($this->themeType == 'Theme' ? '前台' : '后台') . '主题：' . $themeName);
+            $response->success('启用' . ($this->themeType == 'Theme' ? '前台' : '后台') . '主题成功！');
         } catch (\Throwable $t) {
             $response->error($t->getMessage());
         }

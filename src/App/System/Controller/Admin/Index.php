@@ -43,10 +43,10 @@ class Index
         $response->set('appCount', $serviceApp->getAppCount());
 
         $serviceTheme = Be::getService('App.System.Admin.Theme');
-        $response->set('themeCount', $serviceTheme->getAvailableThemeCount());
+        $response->set('themeCount', $serviceTheme->getThemeCount());
 
         $serviceAdminTheme = Be::getService('App.System.Admin.AdminTheme');
-        $response->set('adminThemeCount', $serviceAdminTheme->getAvailableThemeCount());
+        $response->set('adminThemeCount', $serviceAdminTheme->getThemeCount());
 
         $recentLogs = Be::getTable('system_admin_op_log')
             ->where('admin_user_id', $my->id)

@@ -35,16 +35,6 @@ class AdminTheme
     }
 
     /**
-     * 启用/禁用主题
-     *
-     * @BePermission("启用/禁用后台主题", ordering="2.32")
-     */
-    public function toggleEnable()
-    {
-        $this->themeEditor->toggleEnable();
-    }
-
-    /**
      * 设置默认主题
      *
      * @BePermission("设置默认后台主题", ordering="2.33")
