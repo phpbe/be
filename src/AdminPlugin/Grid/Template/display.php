@@ -594,8 +594,8 @@
                                             }
 
                                             echo '<div class="' . $cssClass . '">';
-                                            echo '<card-operation>';
-                                            echo '<template v-slot="{scope={row: item}}">';
+                                            echo '<card-operation :data="item">';
+                                            echo '<template scope="scope">';
                                             foreach ($this->setting['card']['operation']['items'] as $item) {
                                                 $driverClass = null;
                                                 if (isset($item['driver'])) {
@@ -730,7 +730,17 @@
 
         <?php if ($this->setting['actualLayout'] == 'card') { ?>
         Vue.component('card-operation', {
-            template: '<slot></slot>'
+            template: '<slot :row="data"></slot>',
+            props: {
+                data: {
+                    type: Array,
+                    required: true
+                }
+            },
+            data() {
+                return {
+                }
+            }
         });
         <?php } ?>
 
