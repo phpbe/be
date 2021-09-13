@@ -319,7 +319,7 @@ class Swoole extends Driver
                         }
                     }
 
-                    $class = 'Be\\App\\' . $app . '\\AdminController\\' . $controller;
+                    $class = 'Be\\App\\' . $app . '\\Controller\\Admin\\' . $controller;
                     if (!class_exists($class)) {
                         $response->set('code', 404);
                         $response->error('控制器 ' . $app . '/' . $controller . ' 不存在！');
