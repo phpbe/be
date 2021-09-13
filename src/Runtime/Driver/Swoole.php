@@ -322,14 +322,14 @@ class Swoole extends Driver
                     $class = 'Be\\App\\' . $app . '\\Controller\\Admin\\' . $controller;
                     if (!class_exists($class)) {
                         $response->set('code', 404);
-                        $response->error('控制器 ' . $app . '/' . $controller . ' 不存在！');
+                        $response->error('后台控制器 ' . $app . '/' . $controller . ' 不存在！');
                     } else {
                         $instance = new $class();
                         if (method_exists($instance, $action)) {
                             $instance->$action();
                         } else {
                             $response->set('code', 404);
-                            $response->error('方法 ' . $action . ' 在控制器 ' . $class . ' 中不存在！');
+                            $response->error('后台控制器 ' . $class . ' 中不存在方法：' . $action . '！');
                         }
                     }
                 } else {
