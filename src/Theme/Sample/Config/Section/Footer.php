@@ -15,7 +15,7 @@ class Footer
 
     /**
      * @BeConfigItem("版权信息",
-     *     driver="FormItemInputTextarea"
+     *     driver="FormItemInputTextArea"
      * )
      */
     public $copyright = '';

@@ -52,7 +52,7 @@ class ImageWithText
 
     /**
      * @BeConfigItem("内容详细",
-     *     driver = "FormItemInputTextarea"
+     *     driver = "FormItemInputTextArea"
      * )
      */
     public $contentDescription = '详细...';
