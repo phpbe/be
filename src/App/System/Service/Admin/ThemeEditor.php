@@ -71,7 +71,14 @@ abstract class ThemeEditor
                             $themePath = $subVendorPath . '/' . $subDir . '/'.$this->themeType;
                             if (!file_exists($themePath)) {
                                 $themePath = $subVendorPath . '/' . $subDir . '/src/'.$this->themeType;
+                                if (!file_exists($themePath)) {
+                                    $themePath = $subVendorPath . '/' . $subDir . '/'.strtolower($this->themeType);
+                                    if (!file_exists($themePath)) {
+                                        $themePath = $subVendorPath . '/' . $subDir . '/src/'.strtolower($this->themeType);
+                                    }
+                                }
                             }
+
                             if (file_exists($themePath)) {
                                 $dirs = scandir($themePath);
                                 foreach ($dirs as $dir) {
