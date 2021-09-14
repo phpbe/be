@@ -116,6 +116,12 @@ abstract class ThemeEditor
         $themePath = Be::getRuntime()->getRootPath() . '/'.$this->themeType;
         if (!file_exists($themePath)) {
             $themePath = Be::getRuntime()->getRootPath() . '/src/'.$this->themeType;
+            if (!file_exists($themePath)) {
+                $themePath = $subVendorPath . '/' . $subDir . '/'.strtolower($this->themeType);
+                if (!file_exists($themePath)) {
+                    $themePath = $subVendorPath . '/' . $subDir . '/src/'.strtolower($this->themeType);
+                }
+            }
         }
 
         if (file_exists($themePath)) {
