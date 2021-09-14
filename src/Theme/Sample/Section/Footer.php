@@ -1,9 +1,15 @@
 <?php if ($sectionData['enable']) { ?>
 <style type="text/css">
     <?php
-    if ($sectionData['marginTop']) {
-        echo '#footer-' . $sectionType . '-' . $sectionKey . ' {margin-top: ' . $sectionData['marginTop'] . 'px;}';
+    echo '#footer-' . $sectionType . '-' . $sectionKey . ' {';
+    echo 'background-color: ' . $sectionData['backgroundColor'] . ';';
+    if ($sectionData['paddingTop']) {
+        echo 'padding-top: ' . $sectionData['paddingTop'] . 'px;';
     }
+    if ($sectionData['paddingBottom']) {
+        echo 'padding-bottom: ' . $sectionData['paddingBottom'] . 'px;';
+    }
+    echo '}';
     ?>
 </style>
 

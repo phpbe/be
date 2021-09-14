@@ -1,19 +1,19 @@
 <?php
 if ($sectionData['enable']) {
 
-    echo '<style type="text/css">';
-    if ($sectionData['marginTop']) {
-        echo '#banner-' . $sectionType . '-' . $sectionKey . ' {';
-        echo 'margin-top: ' . $sectionData['marginTop'] . 'px;';
-        echo '}';
-    }
+    $configTheme = \Be\Be::getConfig('Theme.Sample.Theme');
 
-    if ($sectionData['marginLeftRight']) {
-        echo '#banner-' . $sectionType . '-' . $sectionKey . ' {';
-        echo 'margin-left: ' . $sectionData['marginLeftRight'] . 'px;';
-        echo 'margin-right: ' . $sectionData['marginLeftRight'] . 'px;';
-        echo '}';
+    echo '<style type="text/css">';
+
+    echo '#banner-' . $sectionType . '-' . $sectionKey . ' {';
+    echo 'background-color: ' . $sectionData['backgroundColor'] . ';';
+    if ($sectionData['paddingTop']) {
+        echo 'padding-top: ' . $sectionData['paddingTop'] . 'px;';
     }
+    if ($sectionData['paddingBottom']) {
+        echo 'padding-bottom: ' . $sectionData['paddingBottom'] . 'px;';
+    }
+    echo '}';
 
     echo '#banner-' . $sectionType . '-' . $sectionKey . ' a img {';
     echo 'transition: all 0.7s ease;';
@@ -40,6 +40,7 @@ if ($sectionData['enable']) {
     echo 'justify-content: space-between;';
     if ($sectionData['spacing']) {
         echo 'margin-bottom: -' . $sectionData['spacing'] . 'px;';
+        echo 'overflow: hidden;';
     }
     echo '}';
 
@@ -70,6 +71,7 @@ if ($sectionData['enable']) {
     echo '</style>';
 
     echo '<div id="banner-' . $sectionType . '-' . $sectionKey . '">';
+    echo '<div class="container-md">';
     if (isset($sectionData['items']) && is_array($sectionData['items']) && count($sectionData['items']) > 0) {
         echo '<div class="banner-items">';
         foreach ($sectionData['items'] as $item) {
@@ -99,5 +101,6 @@ if ($sectionData['enable']) {
         }
         echo '</div>';
     }
+    echo '</div>';
     echo '</div>';
 }

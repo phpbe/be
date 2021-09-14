@@ -1,15 +1,15 @@
 <?php if ($sectionData['enable']) { ?>
 <style type="text/css">
     <?php
-    if ($sectionData['marginTop']) {
-        echo '#header-' . $sectionType . '-' . $sectionKey . ' {margin-top: ' . $sectionData['marginTop'] . 'px;}';
-    }
+    echo '#header-' . $sectionType . '-' . $sectionKey . ' {';
+    echo 'background-color: ' . $sectionData['backgroundColor'] . ';';
+    echo '}';
     ?>
 </style>
 
 <div id="header-<?php echo $sectionType . '-' . $sectionKey; ?>">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
+        <div class="container-md">
             <a class="navbar-brand" href="<?php echo beUrl(); ?>">
                 <?php
                 if ($sectionData['logoType'] == 'text') {

@@ -15,6 +15,21 @@ class ImageWithTextOverlay
     public $enable = 1;
 
     /**
+     * @BeConfigItem("宽度",
+     *     driver="FormItemSelect",
+     *     keyValues = "return ['default' => '默认', 'fullWidth' => '全屏'];"
+     * )
+     */
+    public $width = 'fullWidth';
+
+    /**
+     * @BeConfigItem("背景颜色",
+     *     driver="FormItemColorPicker"
+     * )
+     */
+    public $backgroundColor = '#fff';
+
+    /**
      * @BeConfigItem("图像",
      *     driver="FormItemImage",
      *     path = "/Theme/Sample/Section/ImageWithTextOverlay/image/")
@@ -124,22 +139,6 @@ class ImageWithTextOverlay
      * )
      */
     public $contentPositionBottom = -1;
-
-    /**
-     * @BeConfigItem("顶部外边距（像素）",
-     *     driver = "FormItemSlider"
-     *     ui="return [':min' => 0, ':max' => 100];"
-     * )
-     */
-    public $marginTop = 20;
-
-    /**
-     * @BeConfigItem("左右外边距（像素）",
-     *     driver = "FormItemSlider"
-     *     ui="return [':min' => 0, ':max' => 100];"
-     * )
-     */
-    public $marginLeftRight = 0;
 
 
 }

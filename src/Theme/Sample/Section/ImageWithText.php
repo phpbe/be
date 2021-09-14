@@ -4,13 +4,7 @@ if ($sectionData['enable']) {
     echo '<style type="text/css">';
 
     echo '#image-with-text-' . $sectionType . '-' . $sectionKey . ' {';
-    if ($sectionData['marginTop']) {
-        echo 'margin-top: ' . $sectionData['marginTop'] . 'px;';
-    }
-    if ($sectionData['marginLeftRight']) {
-        echo 'margin-left: ' . $sectionData['marginLeftRight'] . 'px;';
-        echo 'margin-right: ' . $sectionData['marginLeftRight'] . 'px;';
-    }
+    echo 'background-color: ' . $sectionData['backgroundColor'] . ';';
     echo '}';
 
     echo '#image-with-text-' . $sectionType . '-' . $sectionKey . ' .image-with-text-content {';
@@ -34,7 +28,7 @@ if ($sectionData['enable']) {
 
     // 电脑版，图像 50%, 内容 50%
     echo '@media only screen and (min-width: 769px) {';
-    echo '#image-with-text-' . $sectionType . '-' . $sectionKey . ' {';
+    echo '#image-with-text-' . $sectionType . '-' . $sectionKey . ' .image-with-text-container {';
     echo 'display: flex;';
     if ($sectionData['imagePosition'] == 'right') { // 图像居右
         echo 'flex-direction: row-reverse !important;';
@@ -92,6 +86,11 @@ if ($sectionData['enable']) {
 
     echo '<div id="image-with-text-' . $sectionType . '-' . $sectionKey . '">';
 
+    if ($sectionData['width'] == 'default') {
+        echo '<div class="container-md">';
+    }
+
+    echo '<div class="image-with-text-container">';
     echo '<div class="image-with-text-image">';
     if (!$sectionData['image']) {
         echo '<div class="no-image">600X300px+</div>';
@@ -115,6 +114,10 @@ if ($sectionData['enable']) {
     echo '</div>';
     echo '</div>';
     echo '</div>';
+    echo '</div>';
 
+    if ($sectionData['width'] == 'default') {
+        echo '</div>';
+    }
     echo '</div>';
 }

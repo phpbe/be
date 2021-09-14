@@ -27,10 +27,6 @@
             color: <?php echo $configTheme->bodyColor ?>;
         }
 
-        .full-width {
-            width: 100%;
-        }
-
         a {
             color: <?php echo $configTheme->linkColor ?>;
             text-decoration: none;
@@ -47,20 +43,6 @@
 </head>
 <body>
     <be-body>
-        <?php
-        $configTheme = \Be\Be::getConfig('Theme.Sample.Theme');
-        switch ($configTheme->width) {
-            case 'fullWidth':
-                echo '<div class="full-width">';
-                break;
-            case 'customWidth':
-                echo '<div style="width: '.$configTheme->customWidth.'px; margin: 0 auto;">';
-                break;
-            default:
-                echo '<div class="container-md">';
-        }
-        ?>
-
         <be-north>
             <?php
             $configPage = \Be\Be::getConfig('Theme.Sample.Page.Home');
@@ -91,19 +73,15 @@
             $configPage = \Be\Be::getConfig('Theme.Sample.Page.Home');
             if (isset($configPage->southSections) && count($configPage->southSections) > 0) {
                 $sectionType = 'south';
-                echo '<div class="border-top mt-4 pb-4">';
                 foreach ($configPage->southSections as $sectionKey => $sectionName) {
                     $sectionData = $configPage->southSectionsData[$sectionKey];
                     echo '<div id="be-section-'.$sectionType.'-'.$sectionKey.'">';
                     include \Be\Be::getRuntime()->getRootPath() . '/' . \Be\Be::getProperty('Theme.Sample')->getPath() . '/Section/'.$sectionName.'.php';
                     echo '</div>';
                 }
-                echo '</div>';
             }
             ?>
         </be-south>
-
-        </div>
     </be-body>
 </body>
 </html>

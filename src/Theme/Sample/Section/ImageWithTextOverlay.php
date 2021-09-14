@@ -4,14 +4,11 @@ if ($sectionData['enable']) {
     echo '<style type="text/css">';
 
     echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' {';
+    echo 'background-color: ' . $sectionData['backgroundColor'] . ';';
+    echo '}';
+
+    echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' .image-with-text-overlay-container {';
     echo 'position: relative;';
-    if ($sectionData['marginTop']) {
-        echo 'margin-top: ' . $sectionData['marginTop'] . 'px;';
-    }
-    if ($sectionData['marginLeftRight']) {
-        echo 'margin-left: ' . $sectionData['marginLeftRight'] . 'px;';
-        echo 'margin-right: ' . $sectionData['marginLeftRight'] . 'px;';
-    }
     echo '}';
 
     echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' .image-with-text-overlay-content {';
@@ -97,7 +94,11 @@ if ($sectionData['enable']) {
     echo '</style>';
 
     echo '<div id="image-with-text-overlay-' . $sectionType . '-' . $sectionKey . '">';
+    if ($sectionData['width'] == 'default') {
+        echo '<div class="container-md">';
+    }
 
+    echo '<div class="image-with-text-overlay-container">';
     echo '<div class="image-with-text-overlay-image">';
     if (!$sectionData['image']) {
         echo '<div class="no-image">1200X400px+</div>';
@@ -119,6 +120,9 @@ if ($sectionData['enable']) {
     echo '<a href="' . $sectionData['contentButtonLink'] . '" class="btn btn-primary btn-sm">' . $sectionData['contentButton'] . '</a>';
     echo '</div>';
     echo '</div>';
-
+    echo '</div>';
+    if ($sectionData['width'] == 'default') {
+        echo '</div>';
+    }
     echo '</div>';
 }

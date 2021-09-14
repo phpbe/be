@@ -4,9 +4,9 @@
 
 <style type="text/css">
     <?php
-    if ($sectionData['marginTop']) {
-        echo '#slider-' . $sectionType . '-' . $sectionKey . ' {margin-top: ' . $sectionData['marginTop'] . 'px;}';
-    }
+    echo '#slider-' . $sectionType . '-' . $sectionKey . ' {';
+    echo 'background-color: ' . $sectionData['backgroundColor'] . ';';
+    echo '}';
 
     if ($sectionData['pagination']) {
        echo '#slider-' . $sectionType . '-' . $sectionKey . ' .swiper-pagination-bullet-active {';

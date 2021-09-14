@@ -14,6 +14,22 @@ class Slider
     public $enable = 1;
 
     /**
+     * @BeConfigItem("宽度",
+     *     driver="FormItemSelect",
+     *     keyValues = "return ['default' => '默认', 'fullWidth' => '全屏'];"
+     * )
+     */
+    public $width = 'fullWidth';
+
+    /**
+     * @BeConfigItem("背景颜色",
+     *     driver="FormItemColorPicker",
+     *     ui="return ['form-item' => ['v-show' => 'formData.width == \'default\'']];"
+     * )
+     */
+    public $backgroundColor = '#fff';
+
+    /**
      * @BeConfigItem("自动揪放",
      *     driver = "FormItemSwitch")
      */
@@ -71,14 +87,6 @@ class Slider
      *     ui="return ['form-item' => ['v-show' => 'formData.navigation == 1']];")
      */
     public $navigationSize = 30;
-
-    /**
-     * @BeConfigItem("顶部外边距（像素）",
-     *     driver = "FormItemSlider"
-     *     ui="return [':min' => 0, ':max' => 100];"
-     * )
-     */
-    public $marginTop = 20;
 
     /**
      * @BeConfigItem("子项",

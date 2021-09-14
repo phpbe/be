@@ -425,13 +425,14 @@
                     }
                 },
                 reloadPreviewFrame: function() {
-                    var randomParam = this.previewUrl.indexOf('?') == -1 ? '?' : '&';
-                    randomParam += "_=" + Math.random();
+                    var randomParam;
                     switch (this.screen) {
                         case "desktop":
+                            randomParam = (this.page.desktopPreviewUrl.indexOf('?') == -1 ? '?_=' : '&_=') + Math.random();
                             this.previewUrl = this.page.desktopPreviewUrl + randomParam + this.previewUrlTag;
                             break;
                         case "mobile":
+                            randomParam = (this.page.mobilePreviewUrl.indexOf('?') == -1 ? '?_=' : '&_=') + Math.random();
                             this.previewUrl = this.page.mobilePreviewUrl + randomParam + this.previewUrlTag;
                             break;
                     }

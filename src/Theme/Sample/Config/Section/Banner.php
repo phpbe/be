@@ -15,28 +15,27 @@ class Banner
     public $enable = 1;
 
     /**
-     * @BeConfigItem("鼠标悬停效果",
-     *     driver = "FormItemSelect",
-     *     keyValues = "return ['none' => '无', 'scale' => '放大', 'rotateScale' => '旋转放大'];"
+     * @BeConfigItem("背景颜色",
+     *     driver = "FormItemColorPicker"
      * )
      */
-    public $hoverEffect = 'rotateScale';
+    public $backgroundColor = '#f5f5f5';
 
     /**
-     * @BeConfigItem("顶部外边距（像素）",
+     * @BeConfigItem("顶部内边距（像素）",
      *     driver = "FormItemSlider"
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
-    public $marginTop = 20;
+    public $paddingTop = 40;
 
     /**
-     * @BeConfigItem("左右外边距（像素）",
+     * @BeConfigItem("底部内边距（像素）",
      *     driver = "FormItemSlider"
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
-    public $marginLeftRight = 0;
+    public $paddingBottom = 40;
 
     /**
      * @BeConfigItem("内部间距（像素）",
@@ -44,7 +43,15 @@ class Banner
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
-    public $spacing = 30;
+    public $spacing = 40;
+
+    /**
+     * @BeConfigItem("鼠标悬停效果",
+     *     driver = "FormItemSelect",
+     *     keyValues = "return ['none' => '无', 'scale' => '放大', 'rotateScale' => '旋转放大'];"
+     * )
+     */
+    public $hoverEffect = 'scale';
 
     /**
      * @BeConfigItem("子项",
