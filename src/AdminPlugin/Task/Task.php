@@ -275,39 +275,38 @@ class Task extends Driver
                             },
                         ],
                     ],
-                ],
 
-                'operation' => [
-                    'label' => '操作',
-                    'width' => '150',
-                    'items' => [
-                        [
-                            'label' => '编辑',
-                            'task' => 'edit',
-                            'target' => 'drawer',
-                            'ui' => [
-                                'type' => 'primary'
-                            ]
-                        ],
-                        [
-                            'label' => '运行',
-                            'task' => 'run',
-                            'target' => 'ajax',
-                            'ui' => [
-                                'type' => 'success'
-                            ]
-                        ],
-                        [
-                            'label' => '日志',
-                            'task' => 'showLogs',
-                            'target' => 'blank',
-                            'ui' => [
-                                'type' => 'info'
-                            ]
-                        ],
-                    ]
+                    'operation' => [
+                        'label' => '操作',
+                        'width' => '150',
+                        'items' => [
+                            [
+                                'label' => '编辑',
+                                'task' => 'edit',
+                                'target' => 'drawer',
+                                'ui' => [
+                                    'type' => 'primary'
+                                ]
+                            ],
+                            [
+                                'label' => '运行',
+                                'task' => 'run',
+                                'target' => 'ajax',
+                                'ui' => [
+                                    'type' => 'success'
+                                ]
+                            ],
+                            [
+                                'label' => '日志',
+                                'task' => 'showLogs',
+                                'target' => 'blank',
+                                'ui' => [
+                                    'type' => 'info'
+                                ]
+                            ],
+                        ]
+                    ],
                 ],
-
             ],
 
             'detail' => [
