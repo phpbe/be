@@ -39,19 +39,19 @@ class Theme
      * @BeConfigItem("页面字体颜色",
      *     driver="FormItemColorPicker")
      */
-    public $bodyColor = '#505050';
+    public $bodyColor = '#333';
 
     /**
      * @BeConfigItem("超链接颜色",
      *     driver="FormItemColorPicker")
      */
-    public $linkColor = '#0688E2';
+    public $linkColor = '#333';
 
     /**
      * @BeConfigItem("超链接悬停颜色",
      *     driver="FormItemColorPicker")
      */
-    public $linkHoverColor = '#FF5621';
+    public $linkHoverColor = '#333';
 
 
 }

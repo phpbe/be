@@ -33,10 +33,12 @@
 
         a {
             color: <?php echo $configTheme->linkColor ?>;
+            text-decoration: none;
         }
 
         a:hover {
             color: <?php echo $configTheme->linkHoverColor ?>;
+            text-decoration: underline;
         }
     </style>
 
