@@ -16,7 +16,7 @@ if ($sectionData['enable']) {
     }
 
     echo '#banner-' . $sectionType . '-' . $sectionKey . ' a img {';
-    echo 'transition: all 0.3s ease;';
+    echo 'transition: all 0.7s ease;';
     echo '}';
 
     if ($sectionData['hoverEffect'] != 'none') {

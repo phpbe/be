@@ -3,10 +3,83 @@
 namespace Be\App\System\Service;
 
 use Be\Be;
+use Be\Task\Annotation\BeTask;
 use Be\Task\TaskHelper;
 
 class Task
 {
+
+    /**
+     * 发现新的计划任务
+     *
+     * @param $appName
+     */
+    public function discover($appName)
+    {
+        $n = 0;
+        $db = Be::getDb();
+
+        $sql = 'SELECT * FROM system_task WHERE app=' . $db->quoteValue($appName);
+        $dbTasks = $db->getKeyObjects($sql, null, 'name');
+
+        $dir = Be::getRuntime()->getRootPath() . Be::getProperty('App.' . $appName)->getPath() . '/Task';
+        if (file_exists($dir) && is_dir($dir)) {
+            $fileNames = scandir($dir);
+            foreach ($fileNames as $fileName) {
+                if ($fileName != '.' && $fileName != '..' && is_file($dir . '/' . $fileName)) {
+                    $taskName = substr($fileName, 0, -4);
+                    $className = '\\Be\\App\\' . $appName . '\\Task\\' . $taskName;
+                    if (class_exists($className)) {
+                        $reflection = new \ReflectionClass($className);
+                        $classComment = $reflection->getDocComment();
+                        $parseClassComments = \Be\Util\Annotation::parse($classComment);
+                        if (isset($parseClassComments['BeTask'][0])) {
+                            $annotation = new BeTask($parseClassComments['BeTask'][0]);
+                            $task = $annotation->toArray();
+
+                            $schedule = $task['schedule'] ?? '';
+                            $scheduleLock = 0;
+                            $defaultProperties = $reflection->getDefaultProperties();
+                            if (isset($defaultProperties['schedule']) && $defaultProperties['schedule']) {
+                                $schedule = $defaultProperties['schedule'];
+                                $scheduleLock = 1;
+                            }
+
+                            if (isset($dbTasks[$taskName])) {
+                                $data = [
+                                    'id' => $dbTasks[$taskName]->id,
+                                    'name' => $taskName,
+                                    'label' => $task['value'] ?? '',
+                                    'schedule' => $schedule,
+                                    'schedule_lock' => $scheduleLock,
+                                    'is_delete' => 0,
+                                    'update_time' => date('Y-m-d H:i:s'),
+                                ];
+                                $db->update('system_task', $data, 'id');
+                            } else {
+                                $data = [
+                                    'app' => $appName,
+                                    'name' => $taskName,
+                                    'label' => $task['value'] ?? '',
+                                    'schedule' => $schedule,
+                                    'schedule_lock' => $scheduleLock,
+                                    'is_enable' => 0,
+                                    'is_delete' => 0,
+                                    'last_execute_time' => '0000-00-00 00:00:00',
+                                    'create_time' => date('Y-m-d H:i:s'),
+                                    'update_time' => date('Y-m-d H:i:s'),
+                                ];
+                                $db->insert('system_task', $data);
+                                $n++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $n;
+    }
+
 
     /**
      * 触发启动指定的计划任务
