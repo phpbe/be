@@ -56,8 +56,9 @@ abstract class ThemeEditor
     public function discover()
     {
         $themes = [];
+        $rootPath = Be::getRuntime()->getRootPath();
 
-        $vendorPath = Be::getRuntime()->getRootPath() . '/vendor';
+        $vendorPath = $rootPath . '/vendor';
         $dirs = scandir($vendorPath);
         foreach ($dirs as $dir) {
             if ($dir != '..' && $dir != '.') {
@@ -113,13 +114,13 @@ abstract class ThemeEditor
             }
         }
 
-        $themePath = Be::getRuntime()->getRootPath() . '/'.$this->themeType;
+        $themePath = $rootPath . '/'.$this->themeType;
         if (!file_exists($themePath)) {
-            $themePath = Be::getRuntime()->getRootPath() . '/src/'.$this->themeType;
+            $themePath = $rootPath . '/src/'.$this->themeType;
             if (!file_exists($themePath)) {
-                $themePath = $subVendorPath . '/' . $subDir . '/'.strtolower($this->themeType);
+                $themePath = $rootPath . '/'.strtolower($this->themeType);
                 if (!file_exists($themePath)) {
-                    $themePath = $subVendorPath . '/' . $subDir . '/src/'.strtolower($this->themeType);
+                    $themePath = $rootPath . '/src/'.strtolower($this->themeType);
                 }
             }
         }
