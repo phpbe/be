@@ -305,6 +305,10 @@ abstract class ThemeEditor
         $configPageInstance = Be::getConfig($this->themeType . '.' . $themeName . '.Page.' . $pageName);
 
         $className = '\\Be\\' . $this->themeType . '\\' . $themeName . '\\Config\\Section\\' . $sectionName;
+        if (!class_exists($className)) {
+            return [];
+        }
+
         $sectionInstance = new $className();
 
         if (isset($sectionInstance->items)) {
