@@ -10,27 +10,39 @@ if ($sectionData['enable']) {
     // 手机端
     echo '@media (max-width: 768px) {';
     echo '#group-of-icon-with-text-' . $sectionType . '-' . $sectionKey . ' {';
-    echo 'padding-top: ' . $sectionData['paddingMobile'] . 'px;';
-    echo 'padding-bottom: ' . $sectionData['paddingMobile'] . 'px;';
+    if ($sectionData['paddingTopMobile']) {
+        echo 'padding-top: ' . $sectionData['paddingTopMobile'] . 'px;';
+    }
+    if ($sectionData['paddingBottomMobile']) {
+        echo 'padding-bottom: ' . $sectionData['paddingBottomMobile'] . 'px;';
+    }
     echo '}';
     echo '}';
 
     // 平析端
     echo '@media (min-width: 768px) {';
     echo '#group-of-icon-with-text-' . $sectionType . '-' . $sectionKey . ' {';
-    echo 'padding-top: ' . $sectionData['paddingTablet'] . 'px;';
-    echo 'padding-bottom: ' . $sectionData['paddingTablet'] . 'px;';
+    if ($sectionData['paddingTopTablet']) {
+        echo 'padding-top: ' . $sectionData['paddingTopTablet'] . 'px;';
+    }
+    if ($sectionData['paddingBottomTablet']) {
+        echo 'padding-bottom: ' . $sectionData['paddingBottomTablet'] . 'px;';
+    }
     echo '}';
     echo '}';
 
     // 电脑端
     echo '@media (min-width: 992px) {';
     echo '#group-of-icon-with-text-' . $sectionType . '-' . $sectionKey . ' {';
-    echo 'padding-top: ' . $sectionData['paddingDesktop'] . 'px;';
-    echo 'padding-bottom: ' . $sectionData['paddingDesktop'] . 'px;';
+    if ($sectionData['paddingTopDesktop']) {
+        echo 'padding-top: ' . $sectionData['paddingTopDesktop'] . 'px;';
+    }
+    if ($sectionData['paddingBottomDesktop']) {
+        echo 'padding-bottom: ' . $sectionData['paddingBottomDesktop'] . 'px;';
+    }
     echo '}';
     echo '}';
-
+    
     echo '#group-of-icon-with-text-' . $sectionType . '-' . $sectionKey . ' .group-of-icon-with-text-items {';
     echo 'display: flex;';
     echo 'flex-wrap: wrap;';
