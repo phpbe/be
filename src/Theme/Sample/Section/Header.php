@@ -9,7 +9,7 @@
 
 <div id="header-<?php echo $sectionType . '-' . $sectionKey; ?>">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-md">
+        <div class="be-container">
             <a class="navbar-brand" href="<?php echo beUrl(); ?>">
                 <?php
                 if ($sectionData['logoType'] == 'text') {

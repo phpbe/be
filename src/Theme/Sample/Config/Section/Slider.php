@@ -14,22 +14,6 @@ class Slider
     public $enable = 1;
 
     /**
-     * @BeConfigItem("宽度",
-     *     driver="FormItemSelect",
-     *     keyValues = "return ['default' => '默认', 'fullWidth' => '全屏'];"
-     * )
-     */
-    public $width = 'fullWidth';
-
-    /**
-     * @BeConfigItem("背景颜色",
-     *     driver="FormItemColorPicker",
-     *     ui="return ['form-item' => ['v-show' => 'formData.width == \'default\'']];"
-     * )
-     */
-    public $backgroundColor = '#fff';
-
-    /**
      * @BeConfigItem("自动揪放",
      *     driver = "FormItemSwitch")
      */
@@ -93,6 +77,7 @@ class Slider
      *     driver = "FormItemsMixedConfigs",
      *     items = "return [
      *          \Be\Theme\Sample\Config\Section\Slider\Image::class,
+     *          \Be\Theme\Sample\Config\Section\Slider\ImageWithTextOverlay::class,
      *     ]"
      * )
      */

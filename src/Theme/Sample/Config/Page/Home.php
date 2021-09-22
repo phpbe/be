@@ -18,7 +18,7 @@ class Home
         ]
     ];
 
-    public $middleSections = ['Slider', 'Banner'];
+    public $middleSections = ['Slider', 'Images'];
     public $middleSectionsData = [
         [
             'enable' => 1,

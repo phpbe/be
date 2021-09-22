@@ -7,13 +7,93 @@ if ($sectionData['enable']) {
     echo 'background-color: ' . $sectionData['backgroundColor'] . ';';
     echo '}';
 
+    // 手机版，电脑版上传不同的图片
+    echo '@media (max-width: 768px) {';
+    echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' .image-with-text-overlay-image {';
+    echo 'display:none;';
+    echo '}';
+    echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' .image-with-text-overlay-image-mobile {';
+    echo 'display:block;';
+    echo '}';
+    echo '}';
+    // 手机版，电脑版上传不同的图片
+    echo '@media (min-width: 768px) {';
+    echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' .image-with-text-overlay-image {';
+    echo 'display:block;';
+    echo '}';
+    echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' .image-with-text-overlay-image-mobile {';
+    echo 'display:none;';
+    echo '}';
+    echo '}';
+
+    echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' .image-with-text-overlay-image img {';
+    echo 'width: 100%;';
+    echo 'min-width: 1024px;';
+    echo '}';
+
+    echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' .image-with-text-overlay-image-mobile img {';
+    echo 'width: 100%;';
+    echo '}';
+
+    echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' .image-with-text-overlay-image .no-image,';
+    echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' .image-with-text-overlay-image-mobile .no-image {';
+    echo 'width: 100%;';
+    echo 'height: 400px;';
+    echo 'line-height: 400px;';
+    echo 'color: #fff;';
+    echo 'font-size: 24px;';
+    echo 'text-align: center;';
+    echo 'text-shadow:  5px 5px 5px #999;';
+    echo 'background-color: rgba(35, 35, 35, 0.2);';
+    echo '}';
+
     echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' .image-with-text-overlay-container {';
     echo 'position: relative;';
+    echo 'overflow: hidden;';
     echo '}';
+
+    if ($sectionData['width'] == 'fullWidth') {
+        echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' .image-with-text-overlay-content-container {';
+        echo 'position: absolute;';
+        echo 'padding-left: 0.75rem;';
+        echo 'padding-right: 0.75rem;';
+        echo 'width: 100%;';
+        echo 'z-index; 2;';
+        echo 'top: 0;';
+        echo 'bottom: 0;';
+        echo '}';
+        echo '@media (max-width: 768px) {';
+        echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' .image-with-text-overlay-content-container {';
+        echo '}';
+        echo '}';
+        echo '@media (min-width: 768px) {';
+        echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' .image-with-text-overlay-content-container {';
+        echo 'max-width: 720px;';
+        echo 'left: calc((100% - 720px) / 2);';
+        echo '}';
+        echo '}';
+        echo '@media (min-width: 992px) {';
+        echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' .image-with-text-overlay-content-container {';
+        echo 'max-width: 960px;';
+        echo 'left: calc((100% - 960px) / 2);';
+        echo '}';
+        echo '}';
+        echo '@media (min-width: 1200px) {';
+        echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' .image-with-text-overlay-content-container {';
+        echo 'max-width: 1140px;';
+        echo 'left: calc((100% - 1140px) / 2);';
+        echo '}';
+        echo '}';
+        echo '@media (min-width: 1400px) {';
+        echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' .image-with-text-overlay-content-container {';
+        echo 'max-width: 1320px;';
+        echo 'left: calc((100% - 1320px) / 2);';
+        echo '}';
+        echo '}';
+    }
 
     echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' .image-with-text-overlay-content {';
     echo 'position: absolute;';
-    echo 'z-index; 2;';
     echo 'max-width: ' . $sectionData['contentWidth'] . 'px;';
     echo '}';
 
@@ -59,21 +139,6 @@ if ($sectionData['enable']) {
     echo '}';
     echo '}';
 
-    echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' .image-with-text-overlay-image img {';
-    echo 'width: 100%;';
-    echo '}';
-
-    echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' .image-with-text-overlay-image .no-image {';
-    echo 'width: 100%;';
-    echo 'height: 400px;';
-    echo 'line-height: 400px;';
-    echo 'color: #fff;';
-    echo 'font-size: 24px;';
-    echo 'text-align: center;';
-    echo 'text-shadow:  5px 5px 5px #999;';
-    echo 'background-color: rgba(35, 35, 35, 0.2);';
-    echo '}';
-
     echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' .image-with-text-overlay-title {';
     echo 'text-align: center;';
     echo 'font-size: ' . $sectionData['contentTitleFontSize'] . 'px;';
@@ -91,14 +156,25 @@ if ($sectionData['enable']) {
     echo 'text-align: center;';
     echo '}';
 
+    echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' .image-with-text-overlay-button .be-btn {';
+    echo 'background-color: transparent;';
+    echo 'color: ' . $sectionData['contentButtonColor'] . ';';
+    echo 'border-color: ' . $sectionData['contentButtonColor'] . ';';
+    echo '}';
+
+    echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' .image-with-text-overlay-button .be-btn:hover {';
+    echo 'background-color: ' . $sectionData['contentButtonColor'] . ';';
+    echo 'color: #333;';
+    echo '}';
+
     echo '</style>';
 
     echo '<div id="image-with-text-overlay-' . $sectionType . '-' . $sectionKey . '">';
     if ($sectionData['width'] == 'default') {
-        echo '<div class="container-md">';
+        echo '<div class="be-container">';
     }
-
     echo '<div class="image-with-text-overlay-container">';
+
     echo '<div class="image-with-text-overlay-image">';
     if (!$sectionData['image']) {
         echo '<div class="no-image">1200X400px+</div>';
@@ -112,14 +188,34 @@ if ($sectionData['enable']) {
         echo '">';
     }
     echo '</div>';
+    echo '<div class="image-with-text-overlay-image-mobile">';
+    if (!$sectionData['imageMobile']) {
+        echo '<div class="no-image">720X400px+</div>';
+    } else {
+        echo '<img src="';
+        if (strpos($sectionData['imageMobile'], '/') === false) {
+            echo \Be\Be::getRequest()->getUploadUrl() . '/Theme/Sample/Section/ImageWithTextOverlay/imageMobile/' . $sectionData['imageMobile'];
+        } else {
+            echo $sectionData['imageMobile'];
+        }
+        echo '">';
+    }
+    echo '</div>';
 
+    if ($sectionData['width'] == 'fullWidth') {
+        echo '<div class="image-with-text-overlay-content-container">';
+    }
     echo '<div class="image-with-text-overlay-content">';
     echo '<h2 class="image-with-text-overlay-title">' . $sectionData['contentTitle'] . '</h2>';
     echo '<div class="image-with-text-overlay-description">' . $sectionData['contentDescription'] . '</div>';
     echo '<div class="image-with-text-overlay-button">';
-    echo '<a href="' . $sectionData['contentButtonLink'] . '" class="btn btn-primary btn-sm">' . $sectionData['contentButton'] . '</a>';
+    echo '<a href="' . $sectionData['contentButtonLink'] . '" class="be-btn be-btn-large">' . $sectionData['contentButton'] . '</a>';
     echo '</div>';
     echo '</div>';
+    if ($sectionData['width'] == 'fullWidth') {
+        echo '</div>';
+    }
+
     echo '</div>';
     if ($sectionData['width'] == 'default') {
         echo '</div>';

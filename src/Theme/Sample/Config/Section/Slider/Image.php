@@ -15,9 +15,16 @@ class Image
     /**
      * @BeConfigItem("图像",
      *     driver="FormItemImage",
-     *     path = "/Theme/Sample/Section/Slider/Image/")
+     *     path = "/Theme/Sample/Section/Slider/image/")
      */
     public $image = '';
+
+    /**
+     * @BeConfigItem("手机版图像",
+     *     driver="FormItemImage",
+     *     path = "/Theme/Sample/Section/Slider/imageMobile/")
+     */
+    public $imageMobile = '';
 
     /**
      * @BeConfigItem("链接",

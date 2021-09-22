@@ -1,5 +1,5 @@
 <?php
-namespace Be\Theme\Sample\Config\Section\Banner;
+namespace Be\Theme\Sample\Config\Section\Images;
 
 /**
  * @BeConfig("图像子组件", icon="el-icon-picture")
@@ -15,7 +15,7 @@ class Image
     /**
      * @BeConfigItem("图像",
      *     driver="FormItemImage",
-     *     path = "/Theme/Sample/Section/Banner/Image/")
+     *     path = "/Theme/Sample/Section/Images/Image/image/")
      */
     public $image = '';
 

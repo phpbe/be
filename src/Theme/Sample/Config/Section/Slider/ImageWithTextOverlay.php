@@ -1,9 +1,9 @@
 <?php
-namespace Be\Theme\Sample\Config\Section;
+namespace Be\Theme\Sample\Config\Section\Slider;
 
 
 /**
- * @BeConfig("图像背景和文字", icon="el-icon-picture-outline")
+ * @BeConfig("图像和文字子组件", icon="el-icon-picture-outline")
  */
 class ImageWithTextOverlay
 {
@@ -15,31 +15,16 @@ class ImageWithTextOverlay
     public $enable = 1;
 
     /**
-     * @BeConfigItem("宽度",
-     *     driver="FormItemSelect",
-     *     keyValues = "return ['default' => '默认', 'fullWidth' => '全屏'];"
-     * )
-     */
-    public $width = 'fullWidth';
-
-    /**
-     * @BeConfigItem("背景颜色",
-     *     driver="FormItemColorPicker"
-     * )
-     */
-    public $backgroundColor = '#fff';
-
-    /**
      * @BeConfigItem("图像",
      *     driver="FormItemImage",
-     *     path = "/Theme/Sample/Section/ImageWithTextOverlay/image/")
+     *     path = "/Theme/Sample/Section/Slider/ImageWithTextOverlay/image/")
      */
     public $image = '';
 
     /**
      * @BeConfigItem("手机版图像",
      *     driver="FormItemImage",
-     *     path = "/Theme/Sample/Section/ImageWithTextOverlay/imageMobile/")
+     *     path = "/Theme/Sample/Section/Slider/ImageWithTextOverlay/imageMobile/")
      */
     public $imageMobile = '';
 
@@ -136,7 +121,6 @@ class ImageWithTextOverlay
      * )
      */
     public $contentPositionRight = 30;
-
 
     /**
      * @BeConfigItem("内容区位置顶部边距（像素，小于0时不生效）",

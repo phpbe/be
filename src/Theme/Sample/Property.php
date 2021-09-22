@@ -12,7 +12,7 @@ class Property extends \Be\Theme\Property
             'url' => ['System.Index.index'],
             'sections' => [
                 'north' => ['Header'],
-                'middle' => ['Slider', 'Banner', 'ImageWithTextOverlay', 'ImageWithText'],
+                'middle' => ['Slider', 'GroupOfIconWithText', 'Images', 'ImageWithTextOverlay', 'ImageWithText', 'Image'],
                 'south' => ['Footer'],
             ],
         ],

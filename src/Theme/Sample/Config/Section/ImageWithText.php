@@ -3,7 +3,7 @@ namespace Be\Theme\Sample\Config\Section;
 
 
 /**
- * @BeConfig("图片和文字", icon="el-icon-picture")
+ * @BeConfig("图像和文字", icon="el-icon-picture")
  */
 class ImageWithText
 {
@@ -35,6 +35,13 @@ class ImageWithText
      *     path = "/Theme/Sample/Section/ImageWithText/image/")
      */
     public $image = '';
+
+    /**
+     * @BeConfigItem("手机版图像",
+     *     driver="FormItemImage",
+     *     path = "/Theme/Sample/Section/ImageWithText/imageMobile/")
+     */
+    public $imageMobile = '';
 
     /**
      * @BeConfigItem("图像位置",
@@ -99,6 +106,13 @@ class ImageWithText
      * )
      */
     public $contentButtonLink = '#';
+
+    /**
+     * @BeConfigItem("内容按钮颜色",
+     *     driver = "FormItemColorPicker"
+     * )
+     */
+    public $contentButtonColor = '#FFF';
 
     /**
      * @BeConfigItem("内容背景颜色",

@@ -87,7 +87,7 @@ if ($sectionData['enable']) {
     echo '<div id="image-with-text-' . $sectionType . '-' . $sectionKey . '">';
 
     if ($sectionData['width'] == 'default') {
-        echo '<div class="container-md">';
+        echo '<div class="be-container">';
     }
 
     echo '<div class="image-with-text-container">';
@@ -97,7 +97,7 @@ if ($sectionData['enable']) {
     } else {
         echo '<img src="';
         if (strpos($sectionData['image'], '/') === false) {
-            echo \Be\Be::getRequest()->getUploadUrl() . '/Theme/Sample/Section/ImageWithTextOverlay/image/' . $sectionData['image'];
+            echo \Be\Be::getRequest()->getUploadUrl() . '/Theme/Sample/Section/ImageWithText/image/' . $sectionData['image'];
         } else {
             echo $sectionData['image'];
         }
@@ -110,7 +110,7 @@ if ($sectionData['enable']) {
     echo '<h2 class="image-with-text-title">' . $sectionData['contentTitle'] . '</h2>';
     echo '<div class="image-with-text-description">' . $sectionData['contentDescription'] . '</div>';
     echo '<div class="image-with-text-button">';
-    echo '<a href="' . $sectionData['contentButtonLink'] . '" class="btn btn-primary btn-sm">' . $sectionData['contentButton'] . '</a>';
+    echo '<a href="' . $sectionData['contentButtonLink'] . '" class="be-btn">' . $sectionData['contentButton'] . '</a>';
     echo '</div>';
     echo '</div>';
     echo '</div>';
