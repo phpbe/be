@@ -44,12 +44,14 @@
     </style>
 
     <div id="footer-<?php echo $sectionType . '-' . $sectionKey; ?>">
-        <div class="text-center">
-            <?php
-            if (isset($sectionData['copyright'])) {
-                echo $sectionData['copyright'];
-            }
-            ?>
+        <div class="be-container">
+            <div class="text-center">
+                <?php
+                if (isset($sectionData['copyright'])) {
+                    echo $sectionData['copyright'];
+                }
+                ?>
+            </div>
         </div>
     </div>
 <?php } ?>
