@@ -8,7 +8,7 @@
     <head>
         <meta charset="utf-8"/>
         <title><?php echo $this->title; ?></title>
-        <base href="<?php echo beUrl(); ?>/" />
+        <base href="<?php echo beUrl(); ?>/">
         <script>var beUrl = "<?php echo beUrl(); ?>"; </script>
 
         <script src="<?php echo $adminThemeUrl; ?>/js/vue-2.6.11.min.js"></script>
