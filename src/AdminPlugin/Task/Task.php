@@ -64,7 +64,7 @@ class Task extends Driver
         $toolbarItems = [
             [
                 'label' => '发现',
-                'action' => 'discover',
+                'task' => 'discover',
                 'target' => 'ajax',
                 'ui' => [
                     'type' => 'primary',
@@ -151,7 +151,6 @@ class Task extends Driver
                                 '1' => '启用',
                                 '0' => '禁用',
                             ],
-                            'nullValue' => '-1',
                         ],
                         [
                             'name' => 'last_execute_time',
