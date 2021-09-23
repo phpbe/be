@@ -117,13 +117,8 @@ if ($sectionData['enable']) {
     // 手机端
     echo '@media (max-width: 768px) {';
     echo '#images-' . $sectionType . '-' . $sectionKey . ' .images-item {';
-    if ($cols == 3) {
-        $width = 'calc((100% - ' . $sectionData['spacingMobile'] . 'px)/2)';
-        echo 'width: ' . $width . ' !important;';
-    } else {
-        $width = $cols == 1 ? '100%;' : ('calc((100% - ' . ($sectionData['spacingMobile'] * ($cols - 1)) . 'px)/' . $cols . ')');
-        echo 'width: ' . $width . ';';
-    }
+    $width = $cols == 1 ? '100%;' : ('calc((100% - ' . $sectionData['spacingMobile'] . 'px)/2)');
+    echo 'width: ' . $width . ';';
     if ($sectionData['spacingMobile']) {
         echo 'margin-bottom: ' . $sectionData['spacingMobile'] . 'px;';
     }

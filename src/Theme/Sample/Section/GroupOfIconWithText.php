@@ -99,12 +99,8 @@ if ($sectionData['enable']) {
     // 手机端
     echo '@media (max-width: 768px) {';
     echo '#group-of-icon-with-text-' . $sectionType . '-' . $sectionKey . ' .group-of-icon-with-text-item {';
-    if ($cols >= 2) {
-        $width = 'calc((100% - ' . $sectionData['spacingMobile'] . 'px)/2)';
-        echo 'width: ' . $width . ';';
-    } else {
-        echo 'width:100%;';
-    }
+    $width = $cols == 1 ? '100%;' : ('calc((100% - ' . $sectionData['spacingMobile'] . 'px)/2)');
+    echo 'width: ' . $width . ';';
     if ($sectionData['spacingMobile']) {
         echo 'margin-bottom: ' . $sectionData['spacingMobile'] . 'px;';
     }
