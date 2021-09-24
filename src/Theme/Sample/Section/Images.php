@@ -70,36 +70,35 @@ if ($sectionData['enable']) {
     echo 'justify-content: space-between;';
     echo '}';
 
-
     // 手机端
-    echo '@media (max-width: 768px) {';
-    echo '#images-' . $sectionType . '-' . $sectionKey . ' .images-items {';
     if ($sectionData['spacingMobile']) {
+        echo '@media (max-width: 768px) {';
+        echo '#images-' . $sectionType . '-' . $sectionKey . ' .images-items {';
         echo 'margin-bottom: -' . $sectionData['spacingMobile'] . 'px;';
         echo 'overflow: hidden;';
+        echo '}';
+        echo '}';
     }
-    echo '}';
-    echo '}';
 
     // 平析端
-    echo '@media (min-width: 768px) {';
-    echo '#images-' . $sectionType . '-' . $sectionKey . ' .images-items {';
     if ($sectionData['spacingTablet']) {
+        echo '@media (min-width: 768px) {';
+        echo '#images-' . $sectionType . '-' . $sectionKey . ' .images-items {';
         echo 'margin-bottom: -' . $sectionData['spacingTablet'] . 'px;';
         echo 'overflow: hidden;';
+        echo '}';
+        echo '}';
     }
-    echo '}';
-    echo '}';
 
     // 电脑端
-    echo '@media (min-width: 992px) {';
-    echo '#images-' . $sectionType . '-' . $sectionKey . ' .images-items {';
     if ($sectionData['spacingDesktop']) {
+        echo '@media (min-width: 992px) {';
+        echo '#images-' . $sectionType . '-' . $sectionKey . ' .images-items {';
         echo 'margin-bottom: -' . $sectionData['spacingDesktop'] . 'px;';
         echo 'overflow: hidden;';
+        echo '}';
+        echo '}';
     }
-    echo '}';
-    echo '}';
 
     $counter = 0;
     foreach ($sectionData['items'] as $item) {
