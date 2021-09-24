@@ -88,7 +88,7 @@
             max-width: 100%;
             transition: all .3s ease;
             border-radius: 2rem;
-            padding: 0.4rem 1rem;
+            padding: 0.2rem 1.5rem;
             min-width: 5rem;
             text-decoration: none;
         }
@@ -102,21 +102,21 @@
 
         .be-btn-mini {
             font-size: 0.6rem !important;
-            padding: 0.2rem 0.6rem !important;
+            padding: 0.05rem 1rem !important;
             border-radius: 1rem !important;
             min-width: 3rem;
         }
 
         .be-btn-small {
             font-size: 0.8rem !important;
-            padding: 0.3rem 0.8rem !important;
+            padding: 0.1rem 1.2rem !important;
             border-radius: 1.5rem !important;
             min-width: 4rem;
         }
 
         .be-btn-large {
             font-size: 1.2rem !important;
-            padding: 0.5rem 1.2rem !important;
+            padding: 0.3rem 2rem !important;
             border-radius: 2.5rem !important;
             min-width: 6rem;
         }
