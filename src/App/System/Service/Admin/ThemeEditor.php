@@ -10,8 +10,8 @@ use Be\Config\ConfigHelper;
 
 abstract class ThemeEditor
 {
-    protected $themeType = 'Theme';
 
+    protected $themeType = 'Theme';
 
     private $themes = null;
 
@@ -21,6 +21,8 @@ abstract class ThemeEditor
             $themes = [];
             $configTheme = Be::getConfig('App.System.' . $this->themeType);
             foreach ($configTheme->available as $name) {
+                $propertyClass = '\\Be\\' . $this->themeType . '\\' . $name . '\\Property';
+                if (!class_exists($propertyClass)) continue;
                 $themProperty = Be::getProperty($this->themeType  . '.' . $name);
                 $themes[] = [
                     'name' => $name,
