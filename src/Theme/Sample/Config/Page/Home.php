@@ -14,7 +14,15 @@ class Home
             'logoType' => 'text',
             'logoText' => 'Beyond Exception',
             'logoImage' => '',
-            'marginTop' => 0,
+            'logoImageMaxWidth' => 0,
+            'logoImageMaxHeight' => 0,
+            'backgroundColor' => '#FFFFFF',
+            'paddingTopDesktop' => 40,
+            'paddingTopTablet' => 30,
+            'paddingTopMobile' => 20,
+            'paddingBottomDesktop' => 40,
+            'paddingBottomTablet' => 30,
+            'paddingBottomMobile' => 20,
         ]
     ];
 
@@ -31,17 +39,30 @@ class Home
             'navigation' => 1,
             'navigationColor' => '#FF6600',
             'navigationSize' => 30,
-            'marginTop' => 0,
+            'backgroundColor' => '#FFFFFF',
+            'paddingTopDesktop' => 40,
+            'paddingTopTablet' => 30,
+            'paddingTopMobile' => 20,
+            'paddingBottomDesktop' => 40,
+            'paddingBottomTablet' => 30,
+            'paddingBottomMobile' => 20,
             'items' => [
 
             ]
         ],
         [
             'enable' => 1,
+            'backgroundColor' => '#FFFFFF',
             'hoverEffect' => 'rotateScale',
-            'marginTop' => 20,
-            'marginLeftRight' => 0,
-            'spacing' => 30,
+            'paddingTopDesktop' => 40,
+            'paddingTopTablet' => 30,
+            'paddingTopMobile' => 20,
+            'paddingBottomDesktop' => 40,
+            'paddingBottomTablet' => 30,
+            'paddingBottomMobile' => 20,
+            'spacingDesktop' => 40,
+            'spacingTablet' => 30,
+            'spacingMobile' => 20,
             'items' => [
 
             ]
@@ -53,7 +74,13 @@ class Home
         [
             'enable' => 1,
             'copyright' => 'Copyright©2020-2021 BE版权所有',
-            'marginTop' => 20,
+            'backgroundColor' => '#FFFFFF',
+            'paddingTopDesktop' => 40,
+            'paddingTopTablet' => 30,
+            'paddingTopMobile' => 20,
+            'paddingBottomDesktop' => 40,
+            'paddingBottomTablet' => 30,
+            'paddingBottomMobile' => 20,
         ]
     ];
 

@@ -154,5 +154,52 @@ class ImageWithTextOverlay
      */
     public $contentPositionBottom = -1;
 
+    /**
+     * @BeConfigItem("顶部内边距 - 电脑端（像素）",
+     *     driver = "FormItemSlider"
+     *     ui="return [':min' => 0, ':max' => 100];"
+     * )
+     */
+    public $paddingTopDesktop = 40;
+
+    /**
+     * @BeConfigItem("顶部内边距 - 平板端（像素）",
+     *     driver = "FormItemSlider"
+     *     ui="return [':min' => 0, ':max' => 100];"
+     * )
+     */
+    public $paddingTopTablet = 30;
+
+    /**
+     * @BeConfigItem("顶部内边距 - 手机端（像素）",
+     *     driver = "FormItemSlider"
+     *     ui="return [':min' => 0, ':max' => 100];"
+     * )
+     */
+    public $paddingTopMobile = 20;
+
+    /**
+     * @BeConfigItem("底部内边距 - 电脑端（像素）",
+     *     driver = "FormItemSlider"
+     *     ui="return [':min' => 0, ':max' => 100];"
+     * )
+     */
+    public $paddingBottomDesktop = 40;
+
+    /**
+     * @BeConfigItem("底部内边距 - 平板端（像素）",
+     *     driver = "FormItemSlider"
+     *     ui="return [':min' => 0, ':max' => 100];"
+     * )
+     */
+    public $paddingBottomTablet = 30;
+
+    /**
+     * @BeConfigItem("底部内边距 - 手机端（像素）",
+     *     driver = "FormItemSlider"
+     *     ui="return [':min' => 0, ':max' => 100];"
+     * )
+     */
+    public $paddingBottomMobile = 20;
 
 }

@@ -14,18 +14,18 @@ class Footer
     public $enable = 1;
 
     /**
-     * @BeConfigItem("背景颜色",
-     *     driver="FormItemColorPicker"
-     * )
-     */
-    public $backgroundColor = '#fff';
-
-    /**
      * @BeConfigItem("版权信息",
      *     driver="FormItemInputTextArea"
      * )
      */
     public $copyright = '';
+
+    /**
+     * @BeConfigItem("背景颜色",
+     *     driver="FormItemColorPicker"
+     * )
+     */
+    public $backgroundColor = '#fff';
 
     /**
      * @BeConfigItem("顶部内边距 - 电脑端（像素）",
