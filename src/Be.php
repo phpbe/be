@@ -127,9 +127,18 @@ abstract class Be
      */
     public static function getConfig(string $name)
     {
-        if (isset(self::$cache['config'][$name])) return self::$cache['config'][$name];
-        self::$cache['config'][$name] = self::newConfig($name);
-        return self::$cache['config'][$name];
+        if (self::getRuntime()->getMode() == 'Swoole') {
+            $cid = \Swoole\Coroutine::getCid();
+            if (!isset(self::$cache[$cid]['config'][$name])) {
+                return self::$cache[$cid]['config'][$name] = self::newConfig($name);
+            }
+            return self::$cache[$cid]['config'][$name];
+        } else {
+            if (!isset(self::$cache['config'][$name])) {
+                self::$cache['config'][$name] = self::newConfig($name);
+            }
+            return self::$cache['config'][$name];
+        }
     }
 
     /**
@@ -336,8 +345,9 @@ abstract class Be
             self::$cache[$cid]['redis'][$name] = $driver;
             return self::$cache[$cid]['redis'][$name];
         } else {
-            if (isset(self::$cache['redis'][$name])) return self::$cache['redis'][$name];
-            self::$cache['redis'][$name] = self::newRedis($name);
+            if (!isset(self::$cache['redis'][$name])) {
+                self::$cache['redis'][$name] = self::newRedis($name);
+            }
             return self::$cache['redis'][$name];
         }
     }
@@ -369,14 +379,14 @@ abstract class Be
     {
         if (self::getRuntime()->getMode() == 'Swoole') {
             $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['es'])) return self::$cache[$cid]['es'];
-            self::$cache[$cid]['es'] = self::newEs();
+            if (isset(self::$cache[$cid]['es'])) {
+                self::$cache[$cid]['es'] = self::newEs();
+            }
             return self::$cache[$cid]['es'];
         } else {
-            if (isset(self::$cache['es'])) {
-                return self::$cache['es'];
+            if (!isset(self::$cache['es'])) {
+                self::$cache['es'] = self::newEs();
             }
-            self::$cache['es'] = self::newEs();
             return self::$cache['es'];
         }
     }
@@ -520,14 +530,14 @@ abstract class Be
     {
         if (self::getRuntime()->getMode() == 'Swoole') {
             $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['tuple'][$db][$name])) return self::$cache[$cid]['tuple'][$db][$name];
-            self::$cache[$cid]['tuple'][$db][$name] = self::newTuple($name, $db);
+            if (!isset(self::$cache[$cid]['tuple'][$db][$name])) {
+                self::$cache[$cid]['tuple'][$db][$name] = self::newTuple($name, $db);
+            }
             return self::$cache[$cid]['tuple'][$db][$name];
         } else {
-            if (isset(self::$cache['tuple'][$db][$name])) {
-                return self::$cache['tuple'][$db][$name];
+            if (!isset(self::$cache['tuple'][$db][$name])) {
+                self::$cache['tuple'][$db][$name] = self::newTuple($name, $db);
             }
-            self::$cache['tuple'][$db][$name] = self::newTuple($name, $db);
             return self::$cache['tuple'][$db][$name];
         }
     }
@@ -562,14 +572,14 @@ abstract class Be
     {
         if (self::getRuntime()->getMode() == 'Swoole') {
             $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['table'][$db][$name])) return self::$cache[$cid]['table'][$db][$name];
-            self::$cache[$cid]['table'][$db][$name] = self::newTable($name, $db);
+            if (!isset(self::$cache[$cid]['table'][$db][$name])) {
+                self::$cache[$cid]['table'][$db][$name] = self::newTable($name, $db);
+            }
             return self::$cache[$cid]['table'][$db][$name];
         } else {
-            if (isset(self::$cache['table'][$db][$name])) {
-                return self::$cache['table'][$db][$name];
+            if (!isset(self::$cache['table'][$db][$name])) {
+                self::$cache['table'][$db][$name] = self::newTable($name, $db);
             }
-            self::$cache['table'][$db][$name] = self::newTable($name, $db);
             return self::$cache['table'][$db][$name];
         }
     }
@@ -625,14 +635,14 @@ abstract class Be
     {
         if (self::getRuntime()->getMode() == 'Swoole') {
             $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['mongoDb'][$name])) return self::$cache[$cid]['mongoDb'][$name];
-            self::$cache[$cid]['mongoDb'][$name] = self::newMongoDb($name);
+            if (!isset(self::$cache[$cid]['mongoDb'][$name])) {
+                self::$cache[$cid]['mongoDb'][$name] = self::newMongoDb($name);
+            }
             return self::$cache[$cid]['mongoDb'][$name];
         } else {
-            if (isset(self::$cache['mongoDb'][$name])) {
-                return self::$cache['mongoDb'][$name];
+            if (!isset(self::$cache['mongoDb'][$name])) {
+                self::$cache['mongoDb'][$name] = self::newMongoDb($name);
             }
-            self::$cache['mongoDb'][$name] = self::newMongoDb($name);
             return self::$cache['mongoDb'][$name];
         }
     }
@@ -663,14 +673,14 @@ abstract class Be
     {
         if (self::getRuntime()->getMode() == 'Swoole') {
             $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['service'][$name])) return self::$cache[$cid]['service'][$name];
-            self::$cache[$cid]['service'][$name] = self::newService($name);
+            if (!isset(self::$cache[$cid]['service'][$name])) {
+                self::$cache[$cid]['service'][$name] = self::newService($name);
+            }
             return self::$cache[$cid]['service'][$name];
         } else {
-            if (isset(self::$cache['service'][$name])) {
-                return self::$cache['service'][$name];
+            if (!isset(self::$cache['service'][$name])) {
+                self::$cache['service'][$name] = self::newService($name);
             }
-            self::$cache['service'][$name] = self::newService($name);
             return self::$cache['service'][$name];
         }
     }
@@ -705,14 +715,14 @@ abstract class Be
     {
         if (self::getRuntime()->getMode() == 'Swoole') {
             $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['lib'][$name])) return self::$cache[$cid]['lib'][$name];
-            self::$cache[$cid]['lib'][$name] = self::newLib($name);
+            if (!isset(self::$cache[$cid]['lib'][$name])) {
+                self::$cache[$cid]['lib'][$name] = self::newLib($name);
+            }
             return self::$cache[$cid]['lib'][$name];
         } else {
-            if (isset(self::$cache['lib'][$name])) {
-                return self::$cache['lib'][$name];
+            if (!isset(self::$cache['lib'][$name])) {
+                self::$cache['lib'][$name] = self::newLib($name);
             }
-            self::$cache['lib'][$name] = self::newLib($name);
             return self::$cache['lib'][$name];
         }
     }
@@ -748,14 +758,14 @@ abstract class Be
     {
         if (self::getRuntime()->getMode() == 'Swoole') {
             $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['plugin'][$name])) return self::$cache[$cid]['plugin'][$name];
-            self::$cache[$cid]['plugin'][$name] = self::newPlugin($name);
+            if (!isset(self::$cache[$cid]['plugin'][$name])) {
+                self::$cache[$cid]['plugin'][$name] = self::newPlugin($name);
+            }
             return self::$cache[$cid]['plugin'][$name];
         } else {
-            if (isset(self::$cache['plugin'][$name])) {
-                return self::$cache['plugin'][$name];
+            if (!isset(self::$cache['plugin'][$name])) {
+                self::$cache['plugin'][$name] = self::newPlugin($name);
             }
-            self::$cache['plugin'][$name] = self::newPlugin($name);
             return self::$cache['plugin'][$name];
         }
     }
@@ -788,14 +798,14 @@ abstract class Be
     {
         if (self::getRuntime()->getMode() == 'Swoole') {
             $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['adminPlugin'][$name])) return self::$cache[$cid]['adminPlugin'][$name];
-            self::$cache[$cid]['adminPlugin'][$name] = self::newAdminPlugin($name);
+            if (!isset(self::$cache[$cid]['adminPlugin'][$name])) {
+                self::$cache[$cid]['adminPlugin'][$name] = self::newAdminPlugin($name);
+            }
             return self::$cache[$cid]['adminPlugin'][$name];
         } else {
-            if (isset(self::$cache['adminPlugin'][$name])) {
-                return self::$cache['adminPlugin'][$name];
+            if (!isset(self::$cache['adminPlugin'][$name])) {
+                self::$cache['adminPlugin'][$name] = self::newAdminPlugin($name);
             }
-            self::$cache['adminPlugin'][$name] = self::newAdminPlugin($name);
             return self::$cache['adminPlugin'][$name];
         }
     }
@@ -838,9 +848,13 @@ abstract class Be
         $runtime = self::getRuntime();
         if ($runtime->getMode() == 'Swoole') {
             $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['template'][$theme][$template])) return self::$cache[$cid]['template'][$theme][$template];
+            if (isset(self::$cache[$cid]['template'][$theme][$template])) {
+                return self::$cache[$cid]['template'][$theme][$template];
+            }
         } else {
-            if (isset(self::$cache['template'][$theme][$template])) return self::$cache['template'][$theme][$template];
+            if (isset(self::$cache['template'][$theme][$template])) {
+                return self::$cache['template'][$theme][$template];
+            }
         }
 
         $path = $runtime->getCachePath() . '/Template/' . $theme . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
@@ -881,9 +895,13 @@ abstract class Be
         $runtime = self::getRuntime();
         if ($runtime->getMode() == 'Swoole') {
             $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['adminTemplate'][$theme][$template])) return self::$cache[$cid]['adminTemplate'][$theme][$template];
+            if (isset(self::$cache[$cid]['adminTemplate'][$theme][$template])) {
+                return self::$cache[$cid]['adminTemplate'][$theme][$template];
+            }
         } else {
-            if (isset(self::$cache['adminTemplate'][$theme][$template])) return self::$cache['adminTemplate'][$theme][$template];
+            if (isset(self::$cache['adminTemplate'][$theme][$template])) {
+                return self::$cache['adminTemplate'][$theme][$template];
+            }
         }
 
         $path = $runtime->getCachePath() . '/AdminTemplate/' . $theme . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
