@@ -4,6 +4,8 @@
 
 <style type="text/css">
     <?php
+    $configTheme = \Be\Be::getConfig('Theme.Sample.Theme');
+
     echo '#slider-' . $sectionType . '-' . $sectionKey . ' {';
     echo 'background-color: ' . $sectionData['backgroundColor'] . ';';
     echo '}';
@@ -46,14 +48,14 @@
 
     if ($sectionData['pagination']) {
        echo '#slider-' . $sectionType . '-' . $sectionKey . ' .swiper-pagination-bullet-active {';
-       echo 'background-color: ' . $sectionData['paginationColor'] . ';';
+       echo 'background-color: ' . $configTheme->mainColor . ';';
        echo '}';
     }
 
     if ($sectionData['navigation']) {
         echo '#slider-' . $sectionType . '-' . $sectionKey . ' .swiper-button-prev, ';
         echo '#slider-' . $sectionType . '-' . $sectionKey . ' .swiper-button-next {';
-        echo 'color: ' . $sectionData['navigationColor'] . ';';
+        echo 'color: ' . $configTheme->mainColor . ';';
         echo 'width: ' . ($sectionData['navigationSize'] / 44 * 27) . 'px;';
         echo 'height: ' . $sectionData['navigationSize'] . 'px;';
         echo 'margin-top: -' . ($sectionData['navigationSize'] / 2) . 'px;';

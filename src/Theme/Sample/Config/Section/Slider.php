@@ -46,27 +46,13 @@ class Slider
     public $pagination = 1;
 
     /**
-     * @BeConfigItem("分页器颜色",
-     *     driver = "FormItemColorPicker",
-     *     ui="return ['form-item' => ['v-show' => 'formData.pagination == 1']];")
-     */
-    public $paginationColor = '#FF6600';
-
-    /**
      * @BeConfigItem("显示前进后退按钮",
      *     driver = "FormItemSwitch")
      */
     public $navigation = 1;
 
     /**
-     * @BeConfigItem("前进后退按钮颜色",
-     *     driver = "FormItemColorPicker",
-     *     ui="return ['form-item' => ['v-show' => 'formData.navigation == 1']];")
-     */
-    public $navigationColor = '#FF6600';
-
-    /**
-     * @BeConfigItem("前进后退按钮大像（像素）",
+     * @BeConfigItem("前进后退按钮大小（像素）",
      *     driver = "FormItemInputNumberInt",
      *     ui="return ['form-item' => ['v-show' => 'formData.navigation == 1']];")
      */

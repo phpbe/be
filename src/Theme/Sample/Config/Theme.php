@@ -8,6 +8,12 @@ class Theme
 {
 
     /**
+     * @BeConfigItem("主色调",
+     *     driver="FormItemColorPicker")
+     */
+    public $mainColor = '#fd6506';
+
+    /**
      * @BeConfigItem("页面字体大小",
      *     driver="FormItemInputNumberInt")
      */
