@@ -174,6 +174,8 @@ class ThemeEditor
             $serviceTheme = Be::getService('App.System.Admin.' . $this->themeType);
             $n = $serviceTheme->discover();
             $response->success('发现 ' . $n . ' 个新' . ($this->themeType == 'Theme' ? '前台' : '后台') . '主题！');
+
+            Be::getRuntime()->reload();
         } catch (\Throwable $t) {
             $response->error($t->getMessage());
         }
@@ -201,6 +203,9 @@ class ThemeEditor
 
             beAdminOpLog('启用' . ($this->themeType == 'Theme' ? '前台' : '后台') . '主题：' . $themeName);
             $response->success('启用' . ($this->themeType == 'Theme' ? '前台' : '后台') . '主题成功！');
+
+            Be::getRuntime()->reload();
+
         } catch (\Throwable $t) {
             $response->error($t->getMessage());
         }
@@ -280,6 +285,8 @@ class ThemeEditor
 
         $url = beAdminUrl('System.' . $this->themeType . '.setting', ['themeName' => $themeName, 'pageName' => $pageName]);
         $response->redirect($url);
+
+        Be::getRuntime()->reload();
     }
 
     public function disableSectionType()
@@ -297,6 +304,8 @@ class ThemeEditor
 
         $url = beAdminUrl('System.' . $this->themeType . '.setting', ['themeName' => $themeName, 'pageName' => $pageName]);
         $response->redirect($url);
+
+        Be::getRuntime()->reload();
     }
 
     /**
@@ -320,6 +329,8 @@ class ThemeEditor
         $response->set('page', $page);
 
         $response->success('保存成功！');
+
+        Be::getRuntime()->reload();
     }
 
     /**
@@ -343,6 +354,8 @@ class ThemeEditor
         $response->set('page', $page);
 
         $response->success('保存成功！');
+
+        Be::getRuntime()->reload();
     }
 
     /**
@@ -368,6 +381,8 @@ class ThemeEditor
         $response->set('page', $page);
 
         $response->success('保存成功！');
+
+        Be::getRuntime()->reload();
     }
 
     /**
@@ -395,6 +410,8 @@ class ThemeEditor
         $response->set('page', $page);
 
         $response->success('保存成功！');
+
+        Be::getRuntime()->reload();
     }
 
     /**
@@ -420,6 +437,8 @@ class ThemeEditor
         $response->set('page', $page);
 
         $response->success('保存成功！');
+
+        Be::getRuntime()->reload();
     }
 
     /**
@@ -485,6 +504,8 @@ class ThemeEditor
         $service->saveSectionItem($themeName, $pageName, $sectionType, $sectionKey, $itemKey, $formData);
 
         $response->success('保存成功！');
+
+        Be::getRuntime()->reload();
     }
 
     /**
@@ -511,6 +532,8 @@ class ThemeEditor
         $response->set('page', $page);
 
         $response->success('保存成功！');
+
+        Be::getRuntime()->reload();
     }
 
 }

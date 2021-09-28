@@ -237,8 +237,7 @@ class Config extends Driver
 
             $code .= "}\n";
 
-            $runtime = Be::getRuntime();
-            $path = $runtime->getDataPath() . '/App/' . $appName . '/Config/' . $configName . '.php';
+            $path = Be::getRuntime()->getDataPath() . '/App/' . $appName . '/Config/' . $configName . '.php';
             $dir = dirname($path);
             if (!is_dir($dir)) mkdir($dir, 0755, true);
             file_put_contents($path, $code, LOCK_EX);
@@ -254,9 +253,7 @@ class Config extends Driver
             $response->success('保存成功，系统将自动重载！');
 
             // 重启系统
-            if ($runtime->getMode() == 'Swoole') {
-                $runtime->reload();
-            }
+            Be::getRuntime()->reload();
 
         } catch (\Throwable $t) {
             $response->error('保存失败：' . $t->getMessage());
@@ -275,8 +272,7 @@ class Config extends Driver
                 throw new AdminPluginException('参数（configName）缺失！');
             }
 
-            $runtime = Be::getRuntime();
-            $path = $runtime->getDataPath() . '/App/' . $appName . '/Config/' . $configName . '.php';
+            $path = Be::getRuntime()->getDataPath() . '/App/' . $appName . '/Config/' . $configName . '.php';
             if (file_exists($path)) @unlink($path);
 
             // 更新 config 实例
@@ -302,9 +298,7 @@ class Config extends Driver
             $response->success('恢复默认值成功，系统将自动重载！');
 
             // 重启系统
-            if ($runtime->getMode() == 'Swoole') {
-                $runtime->reload();
-            }
+            Be::getRuntime()->reload();
 
         } catch (\Throwable $t) {
             $response->error('恢复默认值失败：' . $t->getMessage());

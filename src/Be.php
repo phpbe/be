@@ -127,18 +127,10 @@ abstract class Be
      */
     public static function getConfig(string $name)
     {
-        if (self::getRuntime()->getMode() == 'Swoole') {
-            $cid = \Swoole\Coroutine::getCid();
-            if (!isset(self::$cache[$cid]['config'][$name])) {
-                return self::$cache[$cid]['config'][$name] = self::newConfig($name);
-            }
-            return self::$cache[$cid]['config'][$name];
-        } else {
-            if (!isset(self::$cache['config'][$name])) {
-                self::$cache['config'][$name] = self::newConfig($name);
-            }
-            return self::$cache['config'][$name];
+        if (!isset(self::$cache['config'][$name])) {
+            self::$cache['config'][$name] = self::newConfig($name);
         }
+        return self::$cache['config'][$name];
     }
 
     /**

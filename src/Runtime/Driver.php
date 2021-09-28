@@ -127,4 +127,23 @@ abstract class Driver
 
     abstract function execute();
 
+
+    public function stop()
+    {
+    }
+
+    public function reload()
+    {
+    }
+
+    public function task($data)
+    {
+    }
+
+    public function getSwooleHttpServer()
+    {
+        return null;
+    }
+
+
 }
