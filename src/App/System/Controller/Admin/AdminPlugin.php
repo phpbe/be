@@ -108,15 +108,6 @@ class AdminPlugin
             $libImage = Be::getLib('Image');
             $libImage->open($file['tmp_name']);
             if ($libImage->isImage()) {
-                $maxWidth = $request->post('maxWidth', 0, 'int');
-                $maxHeight = $request->post('maxHeight', 0, 'int');
-
-                if ($maxWidth > 0 && $maxHeight> 0) {
-                    if ($libImage->getWidth() > $maxWidth || $libImage->getheight() > $maxHeight) {
-                        $libImage->resize($maxWidth, $maxHeight, 'center');
-                    }
-                }
-
                 $newImageName = date('YmdHis') . '-' . \Be\Util\Random::simple(10) . '.' . $libImage->getType();
                 $newImagePath = Be::getRuntime()->getUploadPath() . '/tmp/' . $newImageName;
 
@@ -126,15 +117,29 @@ class AdminPlugin
                     @chmod($dir, 0755);
                 }
 
-                if ($libImage->save($newImagePath)) {
-                    $newImageUrl = Be::getRequest()->getUploadUrl(). '/tmp/' . $newImageName;
-                    $response->set('newValue', $newImageName);
-                    $response->set('url', $newImageUrl);
-                    $response->set('success', true);
-                    $response->set('message', '上传成功！');
-                    $response->json();
-                    return;
+                $resize = false;
+                $maxWidth = $request->post('maxWidth', 0, 'int');
+                $maxHeight = $request->post('maxHeight', 0, 'int');
+                if ($maxWidth > 0 && $maxHeight> 0) {
+                    if ($libImage->getWidth() > $maxWidth || $libImage->getheight() > $maxHeight) {
+                        $libImage->resize($maxWidth, $maxHeight, 'center');
+                        $resize = true;
+                    }
                 }
+
+                if ($resize) {
+                    $libImage->save($newImagePath);
+                } else {
+                    move_uploaded_file($file['tmp_name'], $newImagePath);
+                }
+
+                $newImageUrl = Be::getRequest()->getUploadUrl(). '/tmp/' . $newImageName;
+                $response->set('newValue', $newImageName);
+                $response->set('url', $newImageUrl);
+                $response->set('success', true);
+                $response->set('message', '上传成功！');
+                $response->json();
+                return;
             } else {
                 $response->set('success', false);
                 $response->set('message', '您上传的不是有效的图像文件！');
@@ -184,16 +189,8 @@ class AdminPlugin
             $libImage = Be::getLib('Image');
             $libImage->open($file['tmp_name']);
             if ($libImage->isImage()) {
-                $maxWidth = $request->post('maxWidth', 0, 'int');
-                $maxHeight = $request->post('maxHeight', 0, 'int');
+
                 $filename = $request->post('filename', '');
-
-                if ($maxWidth > 0 && $maxHeight> 0) {
-                    if ($libImage->getWidth() > $maxWidth || $libImage->getheight() > $maxHeight) {
-                        $libImage->resize($maxWidth, $maxHeight, 'scale');
-                    }
-                }
-
                 $newImageName = null;
                 if ($filename) {
                     if (strpos($filename, '{datetime}') !== false) {
@@ -217,15 +214,28 @@ class AdminPlugin
                     @chmod($dir, 0755);
                 }
 
-                if ($libImage->save($newImagePath)) {
-                    $newImageUrl = Be::getRequest()->getUploadUrl(). '/tmp/' . $newImageName;
-                    $response->set('newValue', $newImageName);
-                    $response->set('url', $newImageUrl);
-                    $response->set('success', true);
-                    $response->set('message', '上传成功！');
-                    $response->json();
-                    return;
+                $resize = false;
+                $maxWidth = $request->post('maxWidth', 0, 'int');
+                $maxHeight = $request->post('maxHeight', 0, 'int');
+                if ($maxWidth > 0 && $maxHeight> 0) {
+                    if ($libImage->getWidth() > $maxWidth || $libImage->getheight() > $maxHeight) {
+                        $libImage->resize($maxWidth, $maxHeight, 'scale');
+                    }
                 }
+
+                if ($resize) {
+                    $libImage->save($newImagePath);
+                } else {
+                    move_uploaded_file($file['tmp_name'], $newImagePath);
+                }
+
+                $newImageUrl = Be::getRequest()->getUploadUrl(). '/tmp/' . $newImageName;
+                $response->set('newValue', $newImageName);
+                $response->set('url', $newImageUrl);
+                $response->set('success', true);
+                $response->set('message', '上传成功！');
+                $response->json();
+                return;
             } else {
                 $response->set('success', false);
                 $response->set('message', '您上传的不是有效的图像文件！');

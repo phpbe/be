@@ -14,7 +14,7 @@ class Slider
     public $enable = 1;
 
     /**
-     * @BeConfigItem("自动揪放",
+     * @BeConfigItem("自动播放",
      *     driver = "FormItemSwitch")
      */
     public $autoplay = 1;
