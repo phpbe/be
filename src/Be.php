@@ -379,7 +379,7 @@ abstract class Be
     {
         if (self::getRuntime()->getMode() == 'Swoole') {
             $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['es'])) {
+            if (!isset(self::$cache[$cid]['es'])) {
                 self::$cache[$cid]['es'] = self::newEs();
             }
             return self::$cache[$cid]['es'];
