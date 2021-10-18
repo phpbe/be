@@ -12,6 +12,7 @@ CREATE TABLE `system_app` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='应用';
 
+
 CREATE TABLE `system_mail_queue` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
   `to_email` varchar(60) NOT NULL COMMENT '收件人邮箱',
@@ -30,6 +31,22 @@ CREATE TABLE `system_mail_queue` (
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='发送邮件队列';
+
+CREATE TABLE IF NOT EXISTS `system_menu` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  `parent_id` int(11) NOT NULL,
+  `name` varchar(120) NOT NULL COMMENT '名称',
+  `route` varchar(240) NOT NULL COMMENT '路由',
+  `params` varchar(240) NOT NULL COMMENT '路由参数',
+  `url` varchar(240) NOT NULL COMMENT '指定网址',
+  `target` varchar(7) NOT NULL COMMENT '打开方式',
+  `is_home` tinyint NOT NULL DEFAULT '0' COMMENT '是否首页',
+  `is_enable` tinyint NOT NULL DEFAULT '1' COMMENT '是否可用',
+  `is_delete` tinyint NOT NULL DEFAULT '0' COMMENT '是否已删除',
+  `ordering` int NOT NULL COMMENT '排序（越小越靠前）',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='菜单';
+
 
 CREATE TABLE `system_task` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',

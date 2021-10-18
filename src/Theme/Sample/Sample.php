@@ -19,10 +19,10 @@
     $configTheme = \Be\Be::getConfig('Theme.Sample.Theme');
     ?>
     <style type="text/css">
-        body {
-            font-size: <?php echo $configTheme->bodyFontSize ?>px;
-            background-color: <?php echo $configTheme->bodyBackgroundColor ?>;
-            color: <?php echo $configTheme->bodyColor ?>;
+        html {
+            font-size: <?php echo $configTheme->pageFontSize ?>px;
+            background-color: <?php echo $configTheme->pageBackgroundColor ?>;
+            color: <?php echo $configTheme->pageColor ?>;
         }
 
         a {

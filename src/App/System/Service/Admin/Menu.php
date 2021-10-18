@@ -15,7 +15,11 @@ class Menu
      */
     public function getMenus()
     {
-        return [];
+        if ($this->menus === null) {
+            $sql = 'SELECT * FROM system_menu WHERE is_enable = 1 AND is_delete = 0 ORDER BY ordering ASC';
+            $this->menus = Be::getDb()->getObjects($sql);
+        }
+        return $this->menus;
     }
 
     /**
@@ -34,16 +38,9 @@ class Menu
         $code .= '  {' . "\n";
 
         foreach ($menus as $k => $v) {
-            $app = $v['app'];
-            $code .= '    $this->addMenu(\'' . $app->key . '\', \'0\', \'' . $app->icon . '\',\'' . $app->label . '\', \'\', \'\');' . "\n";
-            foreach ($v['groups'] as $key => $val) {
-                $group = $val['group'];
-                $code .= '    $this->addMenu(\'' . $group['key'] . '\',\'' . $app->key . '\',\'' . (isset($group['icon']) ? $group['icon'] : 'el-icon-folder') . '\',\'' . $group['label'] . '\', \'\', \'\');' . "\n";
-                foreach ($val['menus'] as $menu) {
-                    $code .= '    $this->addMenu(\'' . $menu['key'] . '\', \'' . $group['key'] . '\', \'' . (isset($menu['icon']) ? $menu['icon'] : 'el-icon-arrow-right') . '\', \'' . $menu['label'] . '\', ' . $menu['url'] . ', \'' . (isset($menu['target']) ? $menu['target'] : '') . '\');' . "\n";
-                }
-            }
+            $code .= '    $this->addMenu(\'' . $v->id . '\', \'' . $v->parent_id . '\', \'\',\'' . $v->name . '\', \'' . $v->url . '\', \'' . $v->target . '\');' . "\n";
         }
+
         $code .= '  }' . "\n";
         $code .= '}' . "\n";
 

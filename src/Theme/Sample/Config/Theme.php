@@ -17,19 +17,19 @@ class Theme
      * @BeConfigItem("页面字体大小",
      *     driver="FormItemInputNumberInt")
      */
-    public $bodyFontSize = 12;
+    public $pageFontSize = 12;
 
     /**
      * @BeConfigItem("页面背景颜色",
      *     driver="FormItemColorPicker")
      */
-    public $bodyBackgroundColor = '#FFFFFF';
+    public $pageBackgroundColor = '#FFFFFF';
 
     /**
      * @BeConfigItem("页面字体颜色",
      *     driver="FormItemColorPicker")
      */
-    public $bodyColor = '#333333';
+    public $pageColor = '#333333';
 
     /**
      * @BeConfigItem("超链接颜色",
