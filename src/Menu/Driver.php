@@ -10,29 +10,25 @@ abstract class Driver
     protected $menus = [];
     protected $menuTree = null;
 
-    public function __construct()
-    {
-
-    }
-
-
     /**
      * 添加菜单项
      *
      * @param int $menuId 菜单编号
      * @param int $parentId 父级菜单编号， 等于0时为顶级菜单
-     * @param string $icon 图标
      * @param string $label 中文名称
+     * @param string $route 路由
+     * @param string $params 路由参数
      * @param string $url 网址
      * @param string $target 打开方式
      */
-    public function addMenu($menuId, $parentId, $icon, $label, $url, $target = '_self')
+    public function addMenu($menuId, $parentId,  $label, $route, $params = [], $url = '', $target = '_self')
     {
         $menu = new \stdClass();
         $menu->id = $menuId;
         $menu->parentId = $parentId;
-        $menu->icon = $icon;
         $menu->label = $label;
+        $menu->route = $route;
+        $menu->params = $params;
         $menu->url = $url;
         $menu->target = $target;
 

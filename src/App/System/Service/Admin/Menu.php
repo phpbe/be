@@ -38,7 +38,14 @@ class Menu
         $code .= '  {' . "\n";
 
         foreach ($menus as $k => $v) {
-            $code .= '    $this->addMenu(\'' . $v->id . '\', \'' . $v->parent_id . '\', \'\',\'' . $v->name . '\', \'' . $v->url . '\', \'' . $v->target . '\');' . "\n";
+            $params = [];
+            if ($v->params) {
+                parse_str($v->params, $parsedParams);
+                if ($parsedParams) {
+                    $params = $parsedParams;
+                }
+            }
+            $code .= '    $this->addMenu(\'' . $v->id . '\', \'' . $v->parent_id . '\', \'' . $v->name . '\', \'' . $v->route . '\', ' . var_export($params) . ', \'' . $v->url . '\', \'' . $v->target . '\');' . "\n";
         }
 
         $code .= '  }' . "\n";

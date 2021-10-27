@@ -10,12 +10,6 @@ abstract class Driver
     protected $menus = [];
     protected $menuTree = null;
 
-    public function __construct()
-    {
-
-    }
-
-
     /**
      * 添加菜单项
      *
