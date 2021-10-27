@@ -45,7 +45,7 @@ class Menu
                     $params = $parsedParams;
                 }
             }
-            $code .= '    $this->addMenu(\'' . $v->id . '\', \'' . $v->parent_id . '\', \'' . $v->name . '\', \'' . $v->route . '\', ' . var_export($params) . ', \'' . $v->url . '\', \'' . $v->target . '\');' . "\n";
+            $code .= '    $this->addMenu(\'' . $v->id . '\', \'' . $v->parent_id . '\', \'' . $v->name . '\', \'' . $v->route . '\', ' . var_export($params, true) . ', \'' . $v->url . '\', \'' . $v->target . '\');' . "\n";
         }
 
         $code .= '  }' . "\n";
