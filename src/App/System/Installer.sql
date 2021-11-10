@@ -10,7 +10,7 @@ CREATE TABLE `system_app` (
   `update_time` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='应用';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='应用';
 
 
 CREATE TABLE `system_mail_queue` (
@@ -30,7 +30,7 @@ CREATE TABLE `system_mail_queue` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='发送邮件队列';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='发送邮件队列';
 
 CREATE TABLE IF NOT EXISTS `system_menu` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `system_menu` (
   `is_delete` tinyint NOT NULL DEFAULT '0' COMMENT '是否已删除',
   `ordering` int NOT NULL COMMENT '排序（越小越靠前）',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='菜单';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='菜单';
 
 
 CREATE TABLE `system_task` (
@@ -64,7 +64,7 @@ CREATE TABLE `system_task` (
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `app` (`app`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='计划任务';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='计划任务';
 
 CREATE TABLE `system_task_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
@@ -78,7 +78,7 @@ CREATE TABLE `system_task_log` (
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `task_id` (`task_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='抽取数据';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='抽取数据';
 
 CREATE TABLE `system_admin_op_log` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '自增编号',
@@ -92,7 +92,7 @@ CREATE TABLE `system_admin_op_log` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`),
   KEY `admin_user_id` (`admin_user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统后台操作日志';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统后台操作日志';
 
 CREATE TABLE `system_admin_role` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '自增编号',
@@ -106,7 +106,7 @@ CREATE TABLE `system_admin_role` (
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户角色';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户角色';
 
 INSERT INTO `system_admin_role` (`id`, `name`, `remark`, `permission`, `permission_keys`, `is_enable`, `is_delete`, `ordering`, `create_time`, `update_time`) VALUES
 (1, '超级管理员', '能执行所有操作', 1, '', 1, 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
@@ -133,7 +133,7 @@ CREATE TABLE `system_admin_user` (
   `update_time` timestamp on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户';
 
 INSERT INTO `system_admin_user` (`id`, `username`, `password`, `salt`, `admin_role_id`, `avatar`, `email`, `name`, `gender`, `phone`, `mobile`, `last_login_time`, `this_login_time`, `last_login_ip`, `this_login_ip`, `is_enable`, `is_delete`, `create_time`, `update_time`) VALUES
 (1, 'admin', 'a2ad3e6e3acf5b182324ed782f8a0556d43e59dd', 'ybFD7uzKMH8yvPHvuPNNT0vDv7uF2811', 1, '', 'be@phpbe.com', '管理员', 0, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '127.0.0.1', '127.0.0.1', 1, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
@@ -146,5 +146,5 @@ CREATE TABLE `system_admin_user_login_log` (
   `ip` varchar(15) NOT NULL DEFAULT '' COMMENT 'IP',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户登录日志';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户登录日志';
 
