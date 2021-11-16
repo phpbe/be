@@ -159,6 +159,7 @@ class AdminRole
                             'name' => 'id',
                             'label' => 'ID',
                             'width' => '60',
+                            'sortable' => true,
                         ],
                         [
                             'name' => 'name',
@@ -197,6 +198,7 @@ class AdminRole
                             'name' => 'create_time',
                             'label' => '创建时间',
                             'width' => '150',
+                            'sortable' => true,
                         ],
                     ],
                     'operation' => [

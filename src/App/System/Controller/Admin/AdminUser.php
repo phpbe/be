@@ -233,6 +233,7 @@ class AdminUser
                             'name' => 'id',
                             'label' => 'ID',
                             'width' => '60',
+                            'sortable' => true,
                         ],
                         [
                             'name' => 'avatar',
@@ -257,6 +258,7 @@ class AdminUser
                             'task' => 'detail',
                             'target' => 'drawer',
                             'width' => '120',
+                            'sortable' => true,
                         ],
                         [
                             'name' => 'admin_role_id',
@@ -275,6 +277,7 @@ class AdminUser
                             'name' => 'create_time',
                             'label' => '创建时间',
                             'width' => '150',
+                            'sortable' => true,
                         ],
                         [
                             'name' => 'is_enable',

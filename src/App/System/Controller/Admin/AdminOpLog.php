@@ -86,6 +86,7 @@ class AdminOpLog
                             'name' => 'id',
                             'label' => 'ID',
                             'width' => '80',
+                            'sortable' => true,
                         ],
                         [
                             'name' => 'admin_user_id',
@@ -121,6 +122,7 @@ class AdminOpLog
                             'name' => 'create_time',
                             'label' => '创建时间',
                             'width' => '150',
+                            'sortable' => true,
                         ],
                     ],
                     'operation' => [
