@@ -6,8 +6,8 @@ use Be\Be;
 use Be\Response\Driver;
 
 /**
- * Class Driver
- * @package Be\System\Response
+ * Class Common
+ * @package Be\Response\Driver
  */
 class Common extends Driver
 {

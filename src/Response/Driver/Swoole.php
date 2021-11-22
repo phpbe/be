@@ -6,8 +6,8 @@ use Be\Be;
 use Be\Response\Driver;
 
 /**
- * Class Driver
- * @package Be\System\Response
+ * Class Swoole
+ * @package Be\Response\Driver
  */
 class Swoole extends Driver
 {

@@ -7,7 +7,7 @@ use Be\Be;
 
 /**
  * Class Driver
- * @package Be\System\Response
+ * @package Be\Response
  */
 abstract class Driver
 {

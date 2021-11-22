@@ -5,7 +5,8 @@ namespace Be\Request\Driver;
 use Be\Request\Driver;
 
 /**
- * Request
+ * Class Swoole
+ * @package Be\Request\Driver
  */
 class Swoole extends Driver
 {

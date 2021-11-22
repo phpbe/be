@@ -400,7 +400,7 @@ class Installer
             }
 
             $response->set('appProperties', $appProperties);
-            $response->display('App.System.Installer.installApp', 'Installer');
+            $response->display('App.System.Admin.Installer.installApp', 'Installer');
         }
     }
 
@@ -523,7 +523,7 @@ class Installer
         $response->set('steps', $this->steps);
         $response->set('step', 4);
         $response->set('url', beAdminUrl());
-        $response->display('App.System.Installer.complete', 'Installer');
+        $response->display('App.System.Admin.Installer.complete', 'Installer');
 
         $config = Be::getConfig('App.System.System');
         $config->installable = false;

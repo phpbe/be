@@ -5,7 +5,8 @@ namespace Be\Request\Driver;
 use Be\Request\Driver;
 
 /**
- * Request
+ * Class Common
+ * @package Be\Request\Driver
  */
 class Common extends Driver
 {

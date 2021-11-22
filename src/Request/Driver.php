@@ -5,7 +5,8 @@ namespace Be\Request;
 use Be\Be;
 
 /**
- * Request
+ * Class Driver
+ * @package Be\Request
  */
 abstract class Driver
 {
