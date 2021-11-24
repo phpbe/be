@@ -1,18 +1,5 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 
-CREATE TABLE `system_app` (
-  `id` int NOT NULL AUTO_INCREMENT COMMENT '自增ID',
-  `name` varchar(60) NOT NULL DEFAULT '' COMMENT '应用名',
-  `label` varchar(60) NOT NULL DEFAULT '' COMMENT '应用中文标识',
-  `icon` varchar(60) NOT NULL DEFAULT '' COMMENT '应用图标',
-  `ordering` INT NOT NULL DEFAULT '0' COMMENT '排序',
-  `install_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '安装时间',
-  `update_time` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='应用';
-
-
 CREATE TABLE `system_mail_queue` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
   `to_email` varchar(60) NOT NULL COMMENT '收件人邮箱',

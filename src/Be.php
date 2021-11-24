@@ -1002,7 +1002,7 @@ abstract class Be
      */
     public static function setAdminUser($adminUser = null)
     {
-        Be::getSession()->set('_adminUser', $adminUser);
+        Be::getSession()->set('be-adminUser', $adminUser);
         if (self::getRuntime()->getMode() == 'Swoole') {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['adminUser'])) {
@@ -1036,7 +1036,7 @@ abstract class Be
                 return self::$cache[$cid]['adminUser'];
             }
 
-            $user = Be::getSession()->get('_adminUser');
+            $user = Be::getSession()->get('be-adminUser');
             self::$cache[$cid]['adminUser'] = new \Be\AdminUser\AdminUser($user);
             return self::$cache[$cid]['adminUser'];
         } else {
@@ -1044,7 +1044,7 @@ abstract class Be
                 return self::$cache['adminUser'];
             }
 
-            $user = Be::getSession()->get('_adminUser');
+            $user = Be::getSession()->get('be-adminUser');
             self::$cache['adminUser'] = new \Be\AdminUser\AdminUser($user);
             return self::$cache['adminUser'];
         }
@@ -1057,7 +1057,7 @@ abstract class Be
      */
     public static function setUser($user = null)
     {
-        Be::getSession()->set('_user', $user);
+        Be::getSession()->set('be-user', $user);
         if (self::getRuntime()->getMode() == 'Swoole') {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['user'])) {
@@ -1091,7 +1091,7 @@ abstract class Be
                 return self::$cache[$cid]['user'];
             }
 
-            $user = Be::getSession()->get('_user');
+            $user = Be::getSession()->get('be-user');
             self::$cache[$cid]['user'] = new \Be\User\User($user);
             return self::$cache[$cid]['user'];
         } else {
@@ -1099,7 +1099,7 @@ abstract class Be
                 return self::$cache['user'];
             }
 
-            $user = Be::getSession()->get('_user');
+            $user = Be::getSession()->get('be-user');
             self::$cache['user'] = new \Be\User\User($user);
             return self::$cache['user'];
         }

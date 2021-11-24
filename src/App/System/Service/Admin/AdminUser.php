@@ -39,7 +39,7 @@ class AdminUser
         $response = Be::getResponse();
         $session = Be::getSession();
 
-        $timesKey = '_adminUser:login:ip:' . $ip;
+        $timesKey = 'be-adminUserLoginIp-' . $ip;
         $times = $session->get($timesKey);
         if (!$times) $times = 0;
         $times++;
@@ -136,7 +136,7 @@ class AdminUser
             $this->makeLogin($tupleAdminUser);
 
             $adminRememberMe = $username . '|' . base64_encode($this->rc4($password, $tupleAdminUser->salt));
-            $response->cookie('_adminRememberMe', $adminRememberMe, time() + 30 * 86400, '/', '', false, true);
+            $response->cookie('be-adminUserRememberMe', $adminRememberMe, time() + 30 * 86400, '/', '', false, true);
 
             $tupleAdminUserLoginLog->success = 1;
             $tupleAdminUserLoginLog->description = '登陆成功！';
@@ -192,7 +192,7 @@ class AdminUser
     public function rememberMe()
     {
         $request = Be::getRequest();
-        $rememberMe = $request->cookie('_adminRememberMe', null);
+        $rememberMe = $request->cookie('be-adminUserRememberMe', null);
         if ($rememberMe) {
             $rememberMe = explode('|', $rememberMe);
             if (count($rememberMe) != 2) return;
@@ -220,7 +220,7 @@ class AdminUser
     public function logout()
     {
         Be::getSession()->wipe();
-        Be::getResponse()->cookie('_adminRememberMe', '', -1);
+        Be::getResponse()->cookie('be-adminUserRememberMe', '', -1);
     }
 
     /**
