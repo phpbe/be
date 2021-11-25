@@ -37,9 +37,6 @@ class Common extends Driver
 
             // 从网址中提取出 路径
             if ($configSystem->urlRewrite) {
-
-                //print_r($_SERVER);
-
                 /*
                  * REQUEST_URI 可能值为：[/path]/{app}/{controller}/{action}[/{k-v}].html?[k=v]
                  * 需要解析的有效部分为： {app}/{controller}/{action}[/{k-v}]
@@ -64,9 +61,9 @@ class Common extends Driver
                     $uri = substr($uri, 0, strrpos($uri, '?'));
                 }
 
-                // 移除 .html
+                // 移除网址后缀 如：.html
                 $lenSefSuffix = strlen($configSystem->urlSuffix);
-                if (substr($uri, -$lenSefSuffix, $lenSefSuffix) == $configSystem->urlSuffix) {
+                if ($lenSefSuffix > 0 && substr($uri, -$lenSefSuffix, $lenSefSuffix) == $configSystem->urlSuffix) {
                     $uri = substr($uri, 0, strrpos($uri, $configSystem->urlSuffix));
                 }
 

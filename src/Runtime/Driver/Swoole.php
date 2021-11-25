@@ -214,9 +214,9 @@ class Swoole extends Driver
                 // 从网址中提取出 路径
                 if ($configSystem->urlRewrite) {
 
-                    // 移除 .html
+                    // 移除网址后缀 如：.html
                     $lenSefSuffix = strlen($configSystem->urlSuffix);
-                    if (substr($uri, -$lenSefSuffix, $lenSefSuffix) == $configSystem->urlSuffix) {
+                    if ($lenSefSuffix > 0 && substr($uri, -$lenSefSuffix, $lenSefSuffix) == $configSystem->urlSuffix) {
                         $uri = substr($uri, 0, strrpos($uri, $configSystem->urlSuffix));
                     }
 
