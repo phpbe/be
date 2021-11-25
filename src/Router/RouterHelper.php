@@ -45,45 +45,46 @@ class RouterHelper
         $configSystem = Be::getConfig('App.System.System');
         $configRouter = Be::getConfig('App.System.Router');
 
-        $route2uriKey = 'route2uri:' . $route;
-        if ($configRouter->cache) {
-            if ($params) {
-                $route2uriKey .= ':' . md5(json_encode($params));
-            }
-
-            if (isset(self::$cache[$route2uriKey])) {
-                return $rootUrl . self::$cache[$route2uriKey] . $configSystem->urlSuffix;
-            }
-        } else {
-            if (!$params) {
-                if (isset(self::$cache[$route2uriKey])) {
-                    return $rootUrl . self::$cache[$route2uriKey] . $configSystem->urlSuffix;
-                }
-            } else {
-                $route2uriKey .= ':' . md5(json_encode($params));
-            }
-        }
-
+        $route2uriKey = null;
         $uri = null;
+
         $parts = explode('.', $route);
         $appName = $parts[0];
         $controllerName = $parts[1];
         $actionName = $parts[2];
         $router = self::getRouter($appName, $controllerName);
         if ($router) {
+            $route2uriKey = 'route2uri:' . $route;
+            if ($configRouter->cache) {
+                if ($params) {
+                    $route2uriKey .= ':' . md5(json_encode($params));
+                }
+
+                if (isset(self::$cache[$route2uriKey])) {
+                    return $rootUrl . self::$cache[$route2uriKey] . $configSystem->urlSuffix;
+                }
+            } else {
+                if (!$params) {
+                    if (isset(self::$cache[$route2uriKey])) {
+                        return $rootUrl . self::$cache[$route2uriKey] . $configSystem->urlSuffix;
+                    }
+                } else {
+                    $route2uriKey .= ':' . md5(json_encode($params));
+                }
+            }
+
             if (method_exists($router, $actionName)) {
                 $uri = $router->$actionName($params);
             }
-        }
-
-        if (!$uri) {
+        } else {
             $urlParams = '';
             if (count($params)) {
                 foreach ($params as $key => $val) {
                     $urlParams .= '/' . $key . '-' . $val;
                 }
             }
-            $uri = str_replace('.', '/', $route) . $urlParams;
+
+            return $rootUrl . str_replace('.', '/', $route) . $urlParams . $configSystem->urlSuffix;
         }
 
         // 存入 REDIS
@@ -103,10 +104,10 @@ class RouterHelper
         }
 
         if ($configRouter->cache) {
-            self::$cache[$route] = $uri;
+            self::$cache[$route2uriKey] = $uri;
         } else {
             if (!$params) {
-                self::$cache[$route] = $uri;
+                self::$cache[$route2uriKey] = $uri;
             }
         }
 
@@ -134,17 +135,19 @@ class RouterHelper
 
         $redis = Be::getRedis($configRouter->redis);
         $routeJson = $redis->get($uri2routeKey);
-        $route = json_decode($routeJson, true);
-
-        if ($configRouter->cache) {
-            if ($route) {
-                self::$cache[$uri2routeKey] = $route;
-            } else {
-                self::$cache[$uri2routeKey] = [];
+        if ($routeJson) {
+            $route = json_decode($routeJson, true);
+            if ($configRouter->cache) {
+                if ($route) {
+                    self::$cache[$uri2routeKey] = $route;
+                    return $route;
+                } else {
+                    self::$cache[$uri2routeKey] = [];
+                }
             }
         }
 
-        return $route;
+        return [];
     }
 
 }

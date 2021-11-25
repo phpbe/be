@@ -1,5 +1,5 @@
 <be-head>
-<link type="text/css" rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/Template/Admin/AdminUser/css/login.css" />
+<link type="text/css" rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/Template/Admin/AdminUserLogin/css/login.css" />
 </be-head>
 
 <be-body>
@@ -51,7 +51,7 @@ if ($return=='') {
             login: function() {
                 var _this = this;
                 _this.loginLoading = true;
-                this.$http.post("<?php echo beAdminUrl('System.AdminUser.login'); ?>", _this.formData)
+                this.$http.post("<?php echo beAdminUrl('System.AdminUserLogin.login'); ?>", _this.formData)
                     .then(function (response) {
                         _this.loginLoading = false;
                         if (response.status == 200) {

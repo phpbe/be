@@ -79,10 +79,11 @@ class Common extends Driver
                     $uri = substr($uri, strlen($this->adminAlias) + 1);
                 }
 
+                $routeParsed = false;
                 if (!$admin && $configSystem->urlRewrite === '2') {
                     // 移除开头的 /
-                    if (substr($uri, 0, 1) == '/') $uri = substr($uri, 1);
-                    $decodedRoute = \Be\Router\RouterHelper::decode($uri);
+                    $routeUri = (substr($uri, 0, 1) == '/') ? substr($uri, 1) : $uri;
+                    $decodedRoute = \Be\Router\RouterHelper::decode($routeUri);
                     if ($decodedRoute) {
                         $routes = explode('.', $decodedRoute[0]);
                         $len = count($routes);
@@ -98,8 +99,12 @@ class Common extends Driver
                                 $_GET[$key] = $_REQUEST[$key] = $val;
                             }
                         }
+
+                        $routeParsed = true;
                     }
-                } else {
+                }
+
+                if (!$routeParsed) {
                     // /{app}/{controller}/{action}[/{k-v}]
                     $uris = explode('/', $uri);
                     $len = count($uris);

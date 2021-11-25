@@ -6,9 +6,8 @@ use Be\Be;
 /**
  * Class System
  * @package Be\App\System\Controller
- * @BePermissionGroup("*")
  */
-class System extends Auth
+class System
 {
 
     /**

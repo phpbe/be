@@ -2,16 +2,25 @@
 
 namespace Be\App\System\Controller\Admin;
 
+use Be\App\ControllerException;
 use Be\App\System\Service\Admin\AdminPlugin\Form\FormItemUEditor\Uploader;
 use Be\Be;
 use Be\Util\FileSystem\FileSize;
 use Be\Util\Net\FileUpload;
 
 /**
- * @BePermissionGroup("*")
+ * 后台组件相关功能
  */
-class AdminPlugin extends Auth
+class AdminPlugin
 {
+
+    public function __construct()
+    {
+        $my = Be::getAdminUser();
+        if ($my->id == 0) {
+            throw new ControllerException('登录超时，请重新登录！');
+        }
+    }
 
     public function uploadFile()
     {

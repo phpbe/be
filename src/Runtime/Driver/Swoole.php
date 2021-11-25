@@ -203,7 +203,6 @@ class Swoole extends Driver
             Be::getSession()->start();
 
             try {
-
                 // 检查网站配置， 是否暂停服务
                 $configSystem = Be::getConfig('App.System.System');
 
@@ -230,7 +229,7 @@ class Swoole extends Driver
                         $uri = substr($uri, strlen($this->adminAlias) + 1);
                     }
 
-
+                    $routeParsed = false;
                     if (!$admin && $configSystem->urlRewrite === '2') {
                         // 移除开头的 /
                         if (substr($uri, 0, 1) == '/') $uri = substr($uri, 1);
@@ -250,8 +249,12 @@ class Swoole extends Driver
                                     $_GET[$key] = $_REQUEST[$key] = $val;
                                 }
                             }
+
+                            $routeParsed = true;
                         }
-                    } else {
+                    }
+
+                    if (!$routeParsed) {
                         // /{app}/{controller}/{action}[/{k-v}]
                         $uris = explode('/', $uri);
                         $len = count($uris);

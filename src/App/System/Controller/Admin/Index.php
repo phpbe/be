@@ -6,9 +6,8 @@ use Be\Be;
 /**
  * Class Index
  * @package Be\App\System\Controller
- * @BePermissionGroup("*")
  */
-class Index extends Auth
+class Index
 {
 
     /**
@@ -24,7 +23,7 @@ class Index extends Auth
 
         $my = Be::getAdminUser();
         if ($my->id == 0) {
-            $response->redirect(beAdminUrl('System.AdminUser.login'));
+            $response->redirect(beAdminUrl('System.AdminUserLogin.login'));
             return;
         }
 
