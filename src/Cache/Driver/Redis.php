@@ -46,7 +46,7 @@ class Redis implements Driver
      */
     public function get($key)
     {
-        $value = $this->redis->get('cache:' . $key);
+        $value = $this->redis->get('be:cache:' . $key);
         if (is_bool($value) || is_numeric($value)) return $value;
         return unserialize($value);
     }
@@ -63,7 +63,7 @@ class Redis implements Driver
 
         $prefixedKeys = array();
         foreach ($keys as $key) {
-            $prefixedKeys[] = 'cache:' . $key;
+            $prefixedKeys[] = 'be:cache:' . $key;
         }
 
         $values = $this->redis->mget($prefixedKeys);
@@ -92,9 +92,9 @@ class Redis implements Driver
         }
 
         if ($expire > 0) {
-            return $this->redis->setex('cache:' . $key, $expire, $value);
+            return $this->redis->setex('be:cache:' . $key, $expire, $value);
         } else {
-            return $this->redis->set('cache:' . $key, $value);
+            return $this->redis->set('be:cache:' . $key, $value);
         }
     }
 
@@ -110,9 +110,9 @@ class Redis implements Driver
         $formattedValues = array();
         foreach ($values as $key => $value) {
             if (!is_bool($value) && !is_numeric($value)) {
-                $formattedValues['cache:' . $key] = $value;
+                $formattedValues['be:cache:' . $key] = $value;
             } else {
-                $formattedValues['cache:' . $key] = serialize($value);
+                $formattedValues['be:cache:' . $key] = serialize($value);
             }
         }
 
@@ -136,7 +136,7 @@ class Redis implements Driver
      */
     public function has($key)
     {
-        return $this->redis->exists('cache:' . $key) ? true : false;
+        return $this->redis->exists('be:cache:' . $key) ? true : false;
     }
 
     /**
@@ -147,7 +147,7 @@ class Redis implements Driver
      */
     public function delete($key)
     {
-        return $this->redis->del('cache:' . $key);
+        return $this->redis->del('be:cache:' . $key);
     }
 
     /**
@@ -159,7 +159,7 @@ class Redis implements Driver
      */
     public function increment($key, $step = 1)
     {
-        return $this->redis->incrby('cache:' . $key, $step);
+        return $this->redis->incrby('be:cache:' . $key, $step);
     }
 
     /**
@@ -171,7 +171,7 @@ class Redis implements Driver
      */
     public function decrement($key, $step = 1)
     {
-        return $this->redis->decrby('cache:' . $key, $step);
+        return $this->redis->decrby('be:cache:' . $key, $step);
     }
 
     /**
@@ -194,7 +194,7 @@ class Redis implements Driver
      */
     public function proxy($name, $callable, $expire = 0)
     {
-        $key = 'cache:proxy:' . $name;
+        $key = 'be:cache:proxy:' . $name;
         if ($this->redis->exists($key)) {
             $value = $this->redis->get($key);
             if (is_bool($value) || is_numeric($value)) return $value;
@@ -205,9 +205,9 @@ class Redis implements Driver
         if (!is_bool($value) && !is_numeric($value)) $value = serialize($value);
 
         if ($expire > 0) {
-            $this->redis->setex('cache:proxy:' . $key, $expire, $value);
+            $this->redis->setex($key, $expire, $value);
         } else {
-            $this->redis->set('cache:proxy:' . $key, $value);
+            $this->redis->set($key, $value);
         }
 
         return $value;

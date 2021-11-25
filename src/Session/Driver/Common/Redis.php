@@ -135,7 +135,7 @@ class Redis extends \SessionHandler implements Driver
 	 * @return string
 	 */
 	public function read($sessionId) {
-        $sessionData = $this->redis->get('session:'.$sessionId);
+        $sessionData = $this->redis->get('be:session:'.$sessionId);
         if (!$sessionData) $sessionData = '';
         return $sessionData;
 	}
@@ -148,7 +148,7 @@ class Redis extends \SessionHandler implements Driver
 	 * @return bool
 	 */
 	public function write($sessionId, $sessionData) {
-		return $this->redis->setex('session:'.$sessionId, $this->expire, $sessionData);
+		return $this->redis->setex('be:session:'.$sessionId, $this->expire, $sessionData);
 	}
 	/**
 	 * 销毁 session
@@ -157,7 +157,7 @@ class Redis extends \SessionHandler implements Driver
 	 * @return bool
 	 */
 	public function destroy($sessionId) {
-		$this->redis->del('session:'.$sessionId);
+		$this->redis->del('be:session:'.$sessionId);
 		return true;
 	}
 

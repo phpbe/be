@@ -54,7 +54,7 @@ class RouterHelper
         $actionName = $parts[2];
         $router = self::getRouter($appName, $controllerName);
         if ($router) {
-            $route2uriKey = 'route2uri:' . $route;
+            $route2uriKey = 'be:route2uri:' . $route;
             if ($configRouter->cache) {
                 if ($params) {
                     $route2uriKey .= ':' . md5(json_encode($params));
@@ -94,13 +94,13 @@ class RouterHelper
             // 更新 REDIS 中的网址
             if ($uri != $redisUri) {
                 $redis->set($route2uriKey, $uri);
-                $redis->set('uri2route:' . $uri, json_encode([$route, $params]));
-                $redis->del('uri2route:' . $redisUri);
+                $redis->set('be:uri2route:' . $uri, json_encode([$route, $params]));
+                $redis->del('be:uri2route:' . $redisUri);
             }
         } else {
             // 写入 Redis 网址
             $redis->set($route2uriKey, $uri);
-            $redis->set('uri2route:' . $uri, json_encode([$route, $params]));
+            $redis->set('be:uri2route:' . $uri, json_encode([$route, $params]));
         }
 
         if ($configRouter->cache) {
@@ -125,7 +125,7 @@ class RouterHelper
     {
         $configRouter = Be::getConfig('App.System.Router');
 
-        $uri2routeKey = 'uri2route:' . $uri;
+        $uri2routeKey = 'be:uri2route:' . $uri;
 
         if ($configRouter->cache) {
             if (isset(self::$cache[$uri2routeKey])) {

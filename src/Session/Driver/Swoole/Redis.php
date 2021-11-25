@@ -19,7 +19,7 @@ class Redis extends Driver
     {
         if ($this->data === null) {
             $this->redis = Be::getRedis(Be::getConfig('App.System.Session')->redis);
-            $data = $this->redis->get('session:' . $this->id);
+            $data = $this->redis->get('be:session:' . $this->id);
             if ($data) {
                 $data = unserialize($data);
             } else {
@@ -32,7 +32,7 @@ class Redis extends Driver
     public function write()
     {
         if ($this->data !== null) {
-            $this->redis->setex('session:' . $this->id, $this->expire, serialize($this->data));
+            $this->redis->setex('be:session:' . $this->id, $this->expire, serialize($this->data));
         }
     }
 
@@ -51,7 +51,7 @@ class Redis extends Driver
     public function wipe()
     {
         $this->data = null;
-        return $this->redis->del('session:' . $this->id);
+        return $this->redis->del('be:session:' . $this->id);
     }
 
 }
