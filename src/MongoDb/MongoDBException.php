@@ -4,6 +4,6 @@ namespace Be\MongoDB;
 /**
  * MongoDB 异常类
  */
-class MongoDBException extends \Exception
+class MongoDBException extends \Be\Exception
 {
 }

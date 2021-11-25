@@ -5,13 +5,15 @@ namespace Be\App\System\Controller\Admin;
  * @BeMenuGroup("管理")
  * @BePermissionGroup("管理")
  */
-class AdminTheme
+class AdminTheme extends Auth
 {
 
     private $themeEditor = null;
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->themeEditor = new ThemeEditor('AdminTheme');
     }
 

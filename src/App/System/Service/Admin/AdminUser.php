@@ -202,11 +202,11 @@ class AdminUser
             $tupleAdminUser = Be::newTuple('system_admin_user');
             try {
                 $tupleAdminUser->loadBy('username', $username);
-
-                $password = base64_decode($rememberMe[1]);
-                $password = $this->rc4($password, $tupleAdminUser->salt);
-
-                $this->login($username, $password, $request->getIp());
+                if ($tupleAdminUser->is_delete == 0 && $tupleAdminUser->is_enable == 1) {
+                    $password = base64_decode($rememberMe[1]);
+                    $password = $this->rc4($password, $tupleAdminUser->salt);
+                    $this->login($username, $password, $request->getIp());
+                }
             } catch (\Exception $e) {
                 return;
             }

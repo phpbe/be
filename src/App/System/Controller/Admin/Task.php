@@ -8,7 +8,7 @@ use Be\Be;
  * @BeMenuGroup("管理")
  * @BePermissionGroup("管理")
  */
-class Task
+class Task extends Auth
 {
     /**
      * @BeMenu("计划任务", icon="el-icon-timer", ordering="2.4")

@@ -4,6 +4,6 @@ namespace Be\Lib;
 /**
  * 库异常
  */
-class LibException extends \Exception
+class LibException extends \Be\Exception
 {
 }

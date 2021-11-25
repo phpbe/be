@@ -22,7 +22,7 @@ use Be\AdminPlugin\AdminPluginException;
  * @BeMenuGroup("管理员")
  * @BePermissionGroup("管理员")
  */
-class AdminRole
+class AdminRole extends Auth
 {
 
     /**

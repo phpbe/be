@@ -59,11 +59,6 @@ class AdminRole
      */
     public function updateAdminRole($roleId)
     {
-        if ($roleId == 0) {
-            $this->updateAdminRole0();
-            return;
-        }
-
         $tuple = Be::newTuple('system_admin_role');
         $tuple->load($roleId);
         if (!$tuple->id) {
@@ -85,91 +80,6 @@ class AdminRole
         $code .= '}' . "\n";
 
         $path = Be::getRuntime()->getCachePath() . '/AdminRole/AdminRole' . $roleId . '.php';
-        $dir = dirname($path);
-        if (!is_dir($dir)) mkdir($dir, 0777, true);
-
-        file_put_contents($path, $code, LOCK_EX);
-        @chmod($path, 0755);
-    }
-
-    /**
-     * 公共用户权限
-     */
-    public function updateAdminRole0()
-    {
-        $permissionKeys = [];
-
-        $apps = Be::getService('App.System.Admin.App')->getApps();
-        foreach ($apps as $app) {
-            $appName = $app->name;
-            $appProperty = Be::getProperty('App.' . $appName);
-            $controllerDir = Be::getRuntime()->getRootPath() . $appProperty->getPath() . '/Controller/Admin';
-            if (!file_exists($controllerDir) && !is_dir($controllerDir)) continue;
-            $controllers = scandir($controllerDir);
-            foreach ($controllers as $controller) {
-                if ($controller == '.' || $controller == '..' || is_dir($controllerDir . '/' . $controller)) continue;
-
-                $controller = substr($controller, 0, -4);
-                $className = 'Be\\App\\' . $appName . '\\Controller\\Admin\\' . $controller;
-                if (!class_exists($className)) continue;
-
-                $reflection = new \ReflectionClass($className);
-                $classMenuGroup = [];
-
-                // 类注释
-                $classComment = $reflection->getDocComment();
-                $parseClassComments = Annotation::parse($classComment);
-
-                $permission = 0;
-                foreach ($parseClassComments as $key => $val) {
-                    if ($key == 'BePermissionGroup') {
-                        if (is_array($val[0]) && isset($val[0]['value']) && $val[0]['value'] == '*') {
-                            $permission = 1;
-                            break;
-                        }
-                    }
-                }
-
-                $methods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
-                foreach ($methods as &$method) {
-                    $methodName = $method->getName();
-                    if (substr($methodName, 0, 1) == '_') {
-                        continue;
-                    }
-
-                    if ($permission == 1) {
-                        $permissionKeys[] = $appName . '.' . $controller . '.' . $methodName;
-                    } else {
-                        $methodComment = $method->getDocComment();
-                        $methodComments = Annotation::parse($methodComment);
-                        foreach ($methodComments as $key => $val) {
-                            if ($key == 'BePermission') {
-                                if (is_array($val[0]) && isset($val[0]['value']) && $val[0]['value'] == '*') {
-                                    $permissionKeys[] = $appName . '.' . $controller . '.' . $methodName;
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        $code = '<?php' . "\n";
-        $code .= 'namespace Be\\Data\\Cache\\AdminRole;' . "\n";
-        $code .= "\n";
-        $code .= 'class AdminRole0' . "\n";
-        $code .= '{' . "\n";
-        $code .= '  public $name = \'公共功能\';' . "\n";
-        $code .= '  public $permission = \'-1\';' . "\n";
-        $code .= '  public $permissionKeys = [\'' . implode('\',\'', $permissionKeys) . '\'];' . "\n";
-        $code .= '  public function hasPermission($app, $controller, $action)' . "\n";
-        $code .= '  {' . "\n";
-        $code .= '    return in_array($app . \'.\' . $controller . \'.\' . $action, $this->permissionKeys);' . "\n";
-        $code .= '  }' . "\n";
-        $code .= '}' . "\n";
-
-        $path = Be::getRuntime()->getCachePath() . '/AdminRole/AdminRole0.php';
         $dir = dirname($path);
         if (!is_dir($dir)) mkdir($dir, 0777, true);
 

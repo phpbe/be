@@ -8,7 +8,7 @@ use Be\Be;
  * @BeMenuGroup("系统配置")
  * @BePermissionGroup("系统配置")
  */
-class Watermark
+class Watermark extends Auth
 {
 
     /**

@@ -13,7 +13,7 @@ use Be\Response;
  * @BeMenuGroup("管理员")
  * @BePermissionGroup("管理员")
  */
-class AdminUserLoginLog
+class AdminUserLoginLog extends Auth
 {
 
     /**

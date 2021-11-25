@@ -4,7 +4,7 @@ namespace Be\App\System\Controller\Admin;
 use Be\Be;
 
 // 文件管理器
-class FileManager
+class FileManager extends Auth
 {
 
     public function browser()

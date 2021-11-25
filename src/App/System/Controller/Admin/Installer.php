@@ -14,8 +14,6 @@ use Be\Util\Random;
 
 /**
  * 安装器
- *
- * @BePermissionGroup("*")
  */
 class Installer
 {

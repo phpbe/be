@@ -10,7 +10,7 @@ use Be\Util\Net\FileUpload;
 /**
  * @BePermissionGroup("*")
  */
-class AdminPlugin
+class AdminPlugin extends Auth
 {
 
     public function uploadFile()

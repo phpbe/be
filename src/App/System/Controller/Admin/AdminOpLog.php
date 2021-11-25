@@ -10,7 +10,7 @@ use Be\Be;
  * @BeMenuGroup("日志", icon="el-icon-tickets", ordering="4")
  * @BePermissionGroup("日志", ordering="4")
  */
-class AdminOpLog
+class AdminOpLog extends Auth
 {
 
     /**

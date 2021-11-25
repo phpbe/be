@@ -10,13 +10,15 @@ use Be\Db\Tuple;
  * @BeMenuGroup("管理")
  * @BePermissionGroup("管理")
  */
-class Theme
+class Theme extends Auth
 {
 
     private $themeEditor = null;
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->themeEditor = new ThemeEditor('Theme');
     }
 

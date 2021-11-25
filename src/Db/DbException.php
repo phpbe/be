@@ -4,6 +4,6 @@ namespace Be\Db;
 /**
  * 错误异常
  */
-class DbException extends \Exception
+class DbException extends \Be\Exception
 {
 }

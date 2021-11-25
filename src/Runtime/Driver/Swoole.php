@@ -230,28 +230,52 @@ class Swoole extends Driver
                         $uri = substr($uri, strlen($this->adminAlias) + 1);
                     }
 
-                    // /{action}[/{k-v}]
-                    $uris = explode('/', $uri);
-                    $len = count($uris);
-                    if ($len > 3) {
-                        $app = $uris[1];
-                        $controller = $uris[2];
-                        $action = $uris[3];
-                    }
 
-                    if ($len > 4) {
-                        /**
-                         * 把网址按以下规则匹配
-                         * /{action}/{参数名1}-{参数值1}/{参数名2}-{参数值2}/{参数名3}-{参数值3}
-                         * 其中{参数名}-{参数值} 值对不限数量
-                         */
-                        for ($i = 4; $i < $len; $i++) {
-                            $pos = strpos($uris[$i], '-');
-                            if ($pos !== false) {
-                                $key = substr($uris[$i], 0, $pos);
-                                $val = substr($uris[$i], $pos + 1);
+                    if (!$admin && $configSystem->urlRewrite === '2') {
+                        // 移除开头的 /
+                        if (substr($uri, 0, 1) == '/') $uri = substr($uri, 1);
+                        $decodedRoute = \Be\Router\RouterHelper::decode($uri);
+                        if ($decodedRoute) {
+                            $routes = explode('.', $decodedRoute[0]);
+                            $len = count($routes);
+                            if ($len > 3) {
+                                $app = $routes[1];
+                                $controller = $routes[2];
+                                $action = $routes[3];
+                            }
 
-                                $swooleRequest->get[$key] = $swooleRequest->request[$key] = $val;
+                            $params = $decodedRoute[1];
+                            if ($params) {
+                                foreach ($params as $key => $val) {
+                                    $_GET[$key] = $_REQUEST[$key] = $val;
+                                }
+                            }
+                        }
+                    } else {
+                        // /{app}/{controller}/{action}[/{k-v}]
+                        $uris = explode('/', $uri);
+                        $len = count($uris);
+
+                        if ($len > 3) {
+                            $app = $uris[1];
+                            $controller = $uris[2];
+                            $action = $uris[3];
+                        }
+
+                        if ($len > 4) {
+                            /**
+                             * 把网址按以下规则匹配
+                             * /{app}/{controller}/{action}/{参数名1}-{参数值1}/{参数名2}-{参数值2}/{参数名3}-{参数值3}
+                             * 其中{参数名}-{参数值} 值对不限数量
+                             */
+                            for ($i = 4; $i < $len; $i++) {
+                                $pos = strpos($uris[$i], '-');
+                                if ($pos !== false) {
+                                    $key = substr($uris[$i], 0, $pos);
+                                    $val = substr($uris[$i], $pos + 1);
+
+                                    $swooleRequest->get[$key] = $swooleRequest->request[$key] = $val;
+                                }
                             }
                         }
                     }
@@ -273,7 +297,8 @@ class Swoole extends Driver
                         $controller = $routes[1];
                         $action = $routes[2];
                     } else {
-                        $response->error('路由参数（' . $route . '）无法识别！');
+                        $response->set('code', 404);
+                        $response->error('Route (' . $route . ') is unable to identify!');
                         Be::gc();
                         return true;
                     }
@@ -281,77 +306,38 @@ class Swoole extends Driver
 
                 $request->setRoute($app, $controller, $action);
 
-                if ($admin) {
-                    // 校验权限
-                    $adminRole0 = Be::getAdminRole(0);
-                    if (!$adminRole0->hasPermission($app, $controller, $action)) {
-                        $my = Be::getAdminUser();
-                        if ($my->id == 0) {
-                            Be::getService('App.System.Admin.AdminUser')->rememberMe();
-                            $my = Be::getAdminUser();
-                        }
-
-                        // 访问的不是公共内容，且未登录，跳转到登录页面
-                        if ($my->id == 0) {
-                            $return = $request->get('return', base64_encode($request->getUrl()));
-                            $redirectUrl = beAdminUrl('System.AdminUser.login', ['return' => $return]);
-                            $response->error('登录超时，请重新登录！', $redirectUrl);
-                            Be::gc();
-                            return true;
-                        } else {
-                            if (!$my->hasPermission($app, $controller, $action)) {
-                                $response->error('您没有权限操作该功能！');
-                                Be::gc();
-                                return true;
-                            }
-
-                            // 已登录用户，IP锁定功能校验
-                            $configAdminUser = Be::getConfig('App.System.AdminUser');
-                            if ($configAdminUser->ipLock) {
-                                if ($my->this_login_ip != $request->getIp()) {
-                                    Be::getService('App.System.Admin.AdminUser')->logout();
-                                    $redirectUrl = beAdminUrl('System.AdminUser.login');
-                                    $response->error('检测到您的账号在其它地点（' . $my->this_login_ip . ' ' . $my->this_login_time . '）登录！', $redirectUrl);
-                                    Be::gc();
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-
-                    $class = 'Be\\App\\' . $app . '\\Controller\\Admin\\' . $controller;
-                    if (!class_exists($class)) {
-                        $response->set('code', 404);
-                        $response->error('后台控制器 ' . $app . '/' . $controller . ' 不存在！');
-                    } else {
-                        $instance = new $class();
-                        if (method_exists($instance, $action)) {
-                            $instance->$action();
-                        } else {
-                            $response->set('code', 404);
-                            $response->error('后台控制器 ' . $class . ' 中不存在方法：' . $action . '！');
-                        }
-                    }
+                $class = 'Be\\App\\' . $app . '\\Controller\\' . ($admin ? 'Admin\\' : '') . $controller;
+                if (!class_exists($class)) {
+                    $response->set('code', 404);
+                    $response->error('Controller ' . $app . '/' . $controller . ' doesn\'t exist!');
                 } else {
-                    $class = 'Be\\App\\' . $app . '\\Controller\\' . $controller;
-                    if (!class_exists($class)) {
-                        $response->set('code', 404);
-                        $response->error('Controller ' . $app . '/' . $controller . ' doesn\'t exist!');
+                    $instance = new $class();
+                    if (method_exists($instance, $action)) {
+                        $instance->$action();
                     } else {
-                        $instance = new $class();
-                        if (method_exists($instance, $action)) {
-                            $instance->$action();
-                        } else {
-                            $response->set('code', 404);
-                            $response->error('Undefined action ' . $action . ' of class ' . $class . '!');
-                        }
+                        $response->set('code', 404);
+                        $response->error('Undefined action ' . $action . ' of class ' . $class . '!');
                     }
                 }
 
             } catch (\Throwable $t) {
-                $logId = Be::getLog()->emergency($t);
-                $response->set('logId', $logId);
-                $response->exception($t);
+
+                if ($t instanceof \Be\Exception) {
+                    /**
+                     * @var \Be\Exception $t
+                     */
+                    $code = $t->getCode();
+                    if ($code != 0) {
+                        $logId = Be::getLog()->emergency($t);
+                        $response->set('logId', $logId);
+                        $response->set('code', $t->getCode());
+                    }
+                    $response->error($t->getMessage(), $t->getRedirectUrl());
+                } else {
+                    $logId = Be::getLog()->emergency($t);
+                    $response->set('logId', $logId);
+                    $response->exception($t);
+                }
             }
 
             Be::gc();

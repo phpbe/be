@@ -8,7 +8,7 @@ use Be\Be;
  * @BeMenuGroup("系统配置", icon="el-icon-setting", ordering="3")
  * @BePermissionGroup("系统配置", icon="el-icon-setting", ordering="3")
  */
-class Config
+class Config extends Auth
 {
 
     /**

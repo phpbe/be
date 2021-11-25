@@ -8,7 +8,7 @@ use Be\Be;
  * @BeMenuGroup("管理", icon="el-icon-fa fa-cube", ordering="2")
  * @BePermissionGroup("管理", ordering="2")
  */
-class App
+class App extends Auth
 {
 
     /**

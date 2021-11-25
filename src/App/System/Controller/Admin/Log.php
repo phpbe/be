@@ -9,7 +9,7 @@ use Be\Be;
  * @BeMenuGroup("日志")
  * @BePermissionGroup("系统日志")
  */
-class Log
+class Log extends Auth
 {
 
     /**

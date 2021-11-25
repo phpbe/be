@@ -7,9 +7,11 @@ namespace Be\App\System\Config;
 class System
 {
     /**
-     * @BeConfigItem("是否开启伪静态", driver="FormItemSwitch")
+     * @BeConfigItem("是否开启伪静态"
+     *     driver = "FormItemSelect",
+     *     keyValues = "return ['0' => '不启用', '1' => '简单伪静态', '2' => '路由器伪静态'];")
      */
-    public $urlRewrite = 0;
+    public $urlRewrite = '0';
 
     /**
      * @BeConfigItem("伪静态页后辍", driver="FormItemInput")

@@ -11,7 +11,7 @@ use Be\Be;
  * @BeMenuGroup("管理")
  * @BePermissionGroup("管理")
  */
-class Cache
+class Cache extends Auth
 {
 
     /**

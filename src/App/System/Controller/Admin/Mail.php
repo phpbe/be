@@ -9,7 +9,7 @@ use Be\Be;
  * @BeMenuGroup("系统配置")
  * @BePermissionGroup("系统配置")
  */
-class Mail
+class Mail extends Auth
 {
 
     /**

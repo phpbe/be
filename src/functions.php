@@ -21,7 +21,7 @@ function beUrl($route = null, $params = [])
     }
 
     $configSystem = \Be\Be::getConfig('App.System.System');
-    if ($configSystem->urlRewrite) {
+    if ($configSystem->urlRewrite == 1) {
         $urlParams = '';
         if (count($params)) {
             foreach ($params as $key => $val) {
@@ -29,6 +29,8 @@ function beUrl($route = null, $params = [])
             }
         }
         return $request->getRootUrl() . '/' . str_replace('.', '/', $route) . $urlParams . $configSystem->urlSuffix;
+    } elseif ($configSystem->urlRewrite == 2) {
+        return \Be\Router\RouterHelper::encode($route, $params);
     } else {
         return $request->getRootUrl() . '/?route=' . $route . (count($params) > 0 ? '&' . http_build_query($params) : '');
     }
