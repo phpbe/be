@@ -137,13 +137,14 @@ class RouterHelper
         $routeJson = $redis->get($uri2routeKey);
         if ($routeJson) {
             $route = json_decode($routeJson, true);
-            if ($configRouter->cache) {
-                if ($route) {
+            if ($route) {
+                if ($configRouter->cache) {
                     self::$cache[$uri2routeKey] = $route;
-                    return $route;
-                } else {
-                    self::$cache[$uri2routeKey] = [];
                 }
+                return $route;
+            } else {
+                self::$cache[$uri2routeKey] = [];
+                return [];
             }
         }
 

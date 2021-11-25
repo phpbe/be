@@ -236,12 +236,9 @@ class Swoole extends Driver
                         $decodedRoute = \Be\Router\RouterHelper::decode($uri);
                         if ($decodedRoute) {
                             $routes = explode('.', $decodedRoute[0]);
-                            $len = count($routes);
-                            if ($len > 3) {
-                                $app = $routes[1];
-                                $controller = $routes[2];
-                                $action = $routes[3];
-                            }
+                            $app = $routes[0] ?? '';
+                            $controller = $routes[1] ?? '';
+                            $action = $routes[2] ?? '';
 
                             $params = $decodedRoute[1];
                             if ($params) {
