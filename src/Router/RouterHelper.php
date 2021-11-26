@@ -44,7 +44,7 @@ class RouterHelper
      * @param string $app 应用名
      * @param string $router 路由器名称
      */
-    private static function updateRouter(string $app, string $router)
+    public static function updateRouter(string $app, string $router)
     {
         $code = '<?php' . "\n";
         $code .= 'namespace Be\\Data\\Cache\\App\\' . $app . '\\Router;' . "\n";
