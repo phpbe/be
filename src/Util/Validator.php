@@ -71,7 +71,7 @@ class Validator
 
         if (isset($check['letter']) && $check['letter']) {
             if (!preg_match('/[A-Za-z]/', $password)) {
-                throw new UtilException('密码中需包含小写字母！');
+                throw new UtilException('密码中需包含字母！');
             }
         }
 
