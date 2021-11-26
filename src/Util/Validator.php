@@ -34,7 +34,7 @@ class Validator
      *
      * @param string $password 密码
      * @param array $check 检查项
-     * @return bool
+     * @throws UtilException
      */
     public static function checkPasswordSecure(string $password, array $check = null)
     {
@@ -86,8 +86,6 @@ class Validator
                 throw new UtilException('密码中需包含特殊符号！');
             }
         }
-
-        return true;
     }
 
     /**
