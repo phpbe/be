@@ -28,7 +28,7 @@ class AdminMenu
             if (!file_exists($controllerDir) && !is_dir($controllerDir)) continue;
 
             $app->url = '\'\'';
-            $className = 'Be\\App\\' . $appName . '\\Controller\\Admin\\Index';
+            $className = '\\Be\\App\\' . $appName . '\\Controller\\Admin\\Index';
             if (class_exists($className)) {
                 $reflection = new \ReflectionClass($className);
                 $methods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
@@ -46,7 +46,7 @@ class AdminMenu
                 if ($controller == '.' || $controller == '..' || is_dir($controllerDir . '/' . $controller)) continue;
 
                 $controller = substr($controller, 0, -4);
-                $className = 'Be\\App\\' . $appName . '\\Controller\\Admin\\' . $controller;
+                $className = '\\Be\\App\\' . $appName . '\\Controller\\Admin\\' . $controller;
                 if (!class_exists($className)) continue;
 
                 $reflection = new \ReflectionClass($className);

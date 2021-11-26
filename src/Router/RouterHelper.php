@@ -3,6 +3,7 @@
 namespace Be\Router;
 
 use Be\Be;
+use Be\Util\Annotation;
 
 class RouterHelper
 {
@@ -25,10 +26,73 @@ class RouterHelper
             if (class_exists($class)) {
                 self::$cache[$key] = new $class();
             } else {
-                self::$cache[$key] = false;
+                $path = Be::getRuntime()->getCachePath() . '/App/' . $app . '/Router/' . $router . '.php';
+                if (Be::getConfig('App.System.System')->developer || !file_exists($path)) {
+                    self::updateRouter($app, $router);
+                }
+
+                $class = '\\Be\\Data\\Cache\\App\\' . $app . '\\Router\\' . $router;
+                self::$cache[$key] = new $class();
             }
         }
         return self::$cache[$key];
+    }
+
+    /**
+     * 跟据注解自动生成路由器
+     *
+     * @param string $app 应用名
+     * @param string $router 路由器名称
+     */
+    private static function updateRouter(string $app, string $router)
+    {
+        $code = '<?php' . "\n";
+        $code .= 'namespace Be\\Data\\Cache\\App\\' . $app . '\\Router;' . "\n";
+        $code .= "\n";
+        $code .= 'class ' . $router . "\n";
+        $code .= '{' . "\n";
+
+        $controllerClassName = '\\Be\\App\\' . $app . '\\Controller\\' . $router;
+        $reflection = new \ReflectionClass($controllerClassName);
+        $methods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
+        foreach ($methods as &$method) {
+            $methodName = $method->getName();
+            $methodComment = $method->getDocComment();
+            $methodComments = Annotation::parse($methodComment);
+            foreach ($methodComments as $key => $val) {
+                if ($key == 'BeRoute' || $key == 'BeRouteWithParams') {
+                    if (is_array($val[0]) && isset($val[0]['value'])) {
+                        $code .= '  public function ' . $methodName . '(';
+                        if ($key == 'BeRouteWithParams') {
+                            $code .= 'array $params = []';
+                        }
+                        $code .= ')' . "\n";
+                        $code .= '  {' . "\n";
+
+                        $value = $val[0]['value'];
+                        if (substr($value, 0, 7) == 'return ') {
+                            if (substr($value, -1) != ';') {
+                                $value .= ';';
+                            }
+                            $code .= '    '. $value . "\n";
+                        } else {
+                            $code .= '    return \''. $val[0]['value'] .'\';' . "\n";
+                        }
+
+                        $code .= '  }' . "\n";
+                    }
+                }
+            }
+        }
+
+        $code .= '}' . "\n";
+
+        $path = Be::getRuntime()->getCachePath() . '/App/' . $app . '/Router/' . $router . '.php';
+        $dir = dirname($path);
+        if (!is_dir($dir)) mkdir($dir, 0777, true);
+
+        file_put_contents($path, $code, LOCK_EX);
+        @chmod($path, 0755);
     }
 
     /**
