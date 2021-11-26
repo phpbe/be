@@ -1,5 +1,8 @@
 <?php
+
 namespace Be\Util;
+
+use Be\Session\UtilException;
 
 class Validator
 {
@@ -24,6 +27,120 @@ class Validator
     public static function isEmail($email)
     {
         return filter_var($email, FILTER_VALIDATE_EMAIL);
+    }
+
+    /**
+     * 密码是否安体
+     *
+     * @param string $password 密码
+     * @param array $check 检查项
+     * @return bool
+     */
+    public static function checkPasswordSecure(string $password, array $check = null)
+    {
+        if ($check === null) {
+            $check = [
+                'length' => 8,  // 长度是否大于 8 位
+                'uppercase' => false, // 包含大写字母
+                'lowercase' => false, // 包含小写字母
+                'letter' => true, // 包含字母
+                'number' => true, // 包含数字
+                'specialChar' => false, // 包含特殊字符
+            ];
+        }
+
+        if (!isset($check['length'])) {
+            $check['length'] = 8;
+        }
+
+        if (strlen($password) < $check['length']) {
+            throw new UtilException('密码长度最少' . $check['length'] . '位！');
+        }
+
+        if (isset($check['uppercase']) && $check['uppercase']) {
+            if (!preg_match('/[A-Z]/', $password)) {
+                throw new UtilException('密码中需包含大写字母！');
+            }
+        }
+
+        if (isset($check['uppercase']) && $check['uppercase']) {
+            if (!preg_match('/[a-z]/', $password)) {
+                throw new UtilException('密码中需包含小写字母！');
+            }
+        }
+
+        if (isset($check['letter']) && $check['letter']) {
+            if (!preg_match('/[A-Za-z]/', $password)) {
+                throw new UtilException('密码中需包含小写字母！');
+            }
+        }
+
+        if (isset($check['number']) && $check['number']) {
+            if (!preg_match('/[0-9]/', $password)) {
+                throw new UtilException('密码中需包含数字！');
+            }
+        }
+
+        if (isset($check['specialChar']) && $check['specialChar']) {
+            if (!preg_match('/[~!@#$%^&*()\-_=+{};:<,.>?]/', $password)) {
+                throw new UtilException('密码中需包含特殊符号！');
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * 密码是否安体
+     *
+     * @param string $password 密码
+     * @param array $check 检查项
+     * @return bool
+     */
+    public static function isPasswordSecure(string $password, array $check = null)
+    {
+        try {
+            self::checkPasswordSecure($password, $check);
+        } catch (\Throwable $t) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * 获取密码安全分值
+     *
+     * @param string $password 密码
+     * @return bool
+     */
+    public static function getPasswordSecureScore(string $password)
+    {
+        $score = 0;
+        if (!preg_match('/[A-Z]/', $password)) {
+            $score++;
+        }
+
+        if (!preg_match('/[a-z]/', $password)) {
+            $score++;
+        }
+
+        if (!preg_match('/[0-9]/', $password)) {
+            $score++;
+        }
+
+        if (!preg_match('/[~!@#$%^&*()\-_=+{};:<,.>?]/', $password)) {
+            $score++;
+        }
+
+        $len = strlen($password);
+        if ($len >= 8) {
+            $score++;
+        } elseif ($len > 0) {
+            $score = (int) ($score * pow(0.8, 8 - $len));
+        }
+
+        return $score;
     }
 
     /**

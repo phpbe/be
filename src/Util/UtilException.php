@@ -1,9 +1,9 @@
 <?php
-namespace Be\Util;
+namespace Be\Session;
 
 /**
- * 工具异常
+ * 工具类异常
  */
-class UtilException extends \Exception
+class UtilException extends \Be\Exception
 {
 }
