@@ -240,9 +240,8 @@ class Swoole extends Driver
                             $controller = $routes[1] ?? '';
                             $action = $routes[2] ?? '';
 
-                            $params = $decodedRoute[1];
-                            if ($params) {
-                                foreach ($params as $key => $val) {
+                            if (isset($decodedRoute[1])) {
+                                foreach ($decodedRoute[1] as $key => $val) {
                                     $_GET[$key] = $_REQUEST[$key] = $val;
                                 }
                             }
