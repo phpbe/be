@@ -26,12 +26,12 @@ class RouterHelper
             if (class_exists($class)) {
                 self::$cache[$key] = new $class();
             } else {
-                $path = Be::getRuntime()->getCachePath() . '/App/' . $app . '/Router/' . $router . '.php';
+                $path = Be::getRuntime()->getCachePath() . '/Router/' . $app . '/' . $router . '.php';
                 if (Be::getConfig('App.System.System')->developer || !file_exists($path)) {
                     self::updateRouter($app, $router);
                 }
 
-                $class = '\\Be\\Data\\Cache\\App\\' . $app . '\\Router\\' . $router;
+                $class = '\\Be\\Data\\Cache\\Router\\' . $app . '\\' . $router;
                 self::$cache[$key] = new $class();
             }
         }
@@ -47,7 +47,7 @@ class RouterHelper
     public static function updateRouter(string $app, string $router)
     {
         $code = '<?php' . "\n";
-        $code .= 'namespace Be\\Data\\Cache\\App\\' . $app . '\\Router;' . "\n";
+        $code .= 'namespace Be\\Data\\Cache\\Router\\' . $app . ';' . "\n";
         $code .= "\n";
         $code .= 'class ' . $router . "\n";
         $code .= '{' . "\n";
@@ -87,7 +87,7 @@ class RouterHelper
 
         $code .= '}' . "\n";
 
-        $path = Be::getRuntime()->getCachePath() . '/App/' . $app . '/Router/' . $router . '.php';
+        $path = Be::getRuntime()->getCachePath() . '/Router/' . $app . '/' . $router . '.php';
         $dir = dirname($path);
         if (!is_dir($dir)) mkdir($dir, 0777, true);
 

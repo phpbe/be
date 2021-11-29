@@ -67,7 +67,7 @@ class AdminUser
      * @return bool
      */
     public function isGuest() {
-        return $this->id == 0;
+        return !$this->id;
     }
 
 }
