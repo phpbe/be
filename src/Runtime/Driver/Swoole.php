@@ -215,13 +215,15 @@ class Swoole extends Driver
                 if ($configSystem->urlRewrite) {
 
                     // 移除网址后缀 如：.html
-                    $lenSefSuffix = strlen($configSystem->urlSuffix);
-                    if ($lenSefSuffix > 0 && substr($uri, -$lenSefSuffix, $lenSefSuffix) == $configSystem->urlSuffix) {
-                        $uri = substr($uri, 0, strrpos($uri, $configSystem->urlSuffix));
+                    if ($configSystem->urlRewrite == '1') {
+                        $lenSefSuffix = strlen($configSystem->urlSuffix);
+                        if ($lenSefSuffix > 0 && substr($uri, -$lenSefSuffix, $lenSefSuffix) == $configSystem->urlSuffix) {
+                            $uri = substr($uri, 0, strrpos($uri, $configSystem->urlSuffix));
+                        }
                     }
 
                     // 移除结尾的 /
-                    if (substr($uri, -1, 1) == '/') $uri = substr($uri, 0, -1);
+                    //if (substr($uri, -1, 1) == '/') $uri = substr($uri, 0, -1);
 
                     // 是否后台功能
                     if (substr($uri, 0, strlen($this->adminAlias) + 1) == '/' . $this->adminAlias) {
@@ -231,9 +233,7 @@ class Swoole extends Driver
 
                     $routeParsed = false;
                     if (!$admin && $configSystem->urlRewrite === '2') {
-                        // 移除开头的 /
-                        if (substr($uri, 0, 1) == '/') $uri = substr($uri, 1);
-                        $decodedRoute = \Be\Router\RouterHelper::decode($uri);
+                        $decodedRoute = \Be\Router\Helper::decode($uri);
                         if ($decodedRoute) {
                             $routes = explode('.', $decodedRoute[0]);
                             $app = $routes[0] ?? '';

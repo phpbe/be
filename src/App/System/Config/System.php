@@ -9,12 +9,14 @@ class System
     /**
      * @BeConfigItem("是否开启伪静态"
      *     driver = "FormItemSelect",
-     *     keyValues = "return ['0' => '不启用', '1' => '简单伪静态', '2' => '路由器伪静态'];")
+     *     keyValues = "return ['0' => '不启用', '1' => '简单', '2' => '路由器'];")
      */
     public $urlRewrite = '0';
 
     /**
-     * @BeConfigItem("伪静态页后辍", driver="FormItemInput")
+     * @BeConfigItem("伪静态页后辍",
+     *     driver="FormItemInput",
+     *     ui="return ['form-item' => ['v-show' => 'formData.urlRewrite == \'1\'']];")
      */
     public $urlSuffix = '.html';
 

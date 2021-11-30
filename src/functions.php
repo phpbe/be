@@ -30,7 +30,7 @@ function beUrl($route = null, array $params = null)
         }
         return $request->getRootUrl() . '/' . str_replace('.', '/', $route) . $urlParams . $configSystem->urlSuffix;
     } elseif ($configSystem->urlRewrite == 2) {
-        return \Be\Router\RouterHelper::encode($route, $params);
+        return \Be\Router\Helper::encode($route, $params);
     } else {
         return $request->getRootUrl() . '/?route=' . $route . ($params !== null ? '&' . http_build_query($params) : '');
     }
