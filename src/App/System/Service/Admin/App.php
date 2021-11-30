@@ -66,13 +66,6 @@ class App
      */
     public function install($appName)
     {
-        try {
-            $exist = Be::getTuple('system_app')->loadBy('name', $appName);
-            throw new ServiceException('应用已于' . $exist->install_time . '安装过！');
-        } catch (\Throwable $t) {
-
-        }
-
         $class = '\\Be\\App\\' . $appName . '\\Installer';
         if (class_exists($class)) {
             /**
@@ -86,7 +79,7 @@ class App
         $names = $configApp->names;
         $names[] = $appName;
         $configApp->names = array_unique($names);
-        ConfigHelper::update('System.App', $configApp);
+        ConfigHelper::update('App.System.App', $configApp);
 
         return true;
     }
@@ -119,7 +112,7 @@ class App
             $newNames[] = $name;
         }
         $configApp->names = array_unique($newNames);
-        ConfigHelper::update('System.App', $configApp);
+        ConfigHelper::update('App.System.App', $configApp);
 
         return true;
     }

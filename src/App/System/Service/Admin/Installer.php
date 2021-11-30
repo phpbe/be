@@ -99,7 +99,7 @@ class Installer
             $names = $configApp->names;
             $names[] = $app;
             $configApp->names = array_unique($names);
-            ConfigHelper::update('System.App', $configApp);
+            ConfigHelper::update('App.System.App', $configApp);
         }
     }
 
@@ -128,7 +128,7 @@ class Installer
                 $newNames[] = $name;
             }
             $configApp->names = array_unique($newNames);
-            ConfigHelper::update('System.App', $configApp);
+            ConfigHelper::update('App.System.App', $configApp);
         }
     }
 

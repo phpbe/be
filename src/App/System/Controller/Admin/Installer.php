@@ -161,7 +161,7 @@ class Installer
                     }
                 }
 
-                ConfigHelper::update('System.Db', $configDb);
+                ConfigHelper::update('App.System.Db', $configDb);
 
                 $response->set('success', true);
                 $response->set('redirectUrl', beAdminUrl('System.Installer.installApp'));
@@ -525,7 +525,7 @@ class Installer
 
         $config = Be::getConfig('App.System.System');
         $config->installable = false;
-        ConfigHelper::update('System.System', $config);
+        ConfigHelper::update('App.System.System', $config);
 
         if (Be::getRuntime()->getMode() == 'Swoole') {
             Be::getRuntime()->reload();
