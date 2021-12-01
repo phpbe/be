@@ -199,26 +199,26 @@ class Helper
 
         if (count($staticMapping) > 0) {
             $code .= '  public $static = true;' . "\n";
-            $code .= '  public $staticMapping = [';
+            $code .= '  public $staticMapping = [' . "\n";
             foreach ($staticMapping as $key => $val) {
-                $code .= '\'' . $key . '\'=>\'' . $val . '\',';
+                $code .= '    \'' . $key . '\' => \'' . $val . '\',' . "\n";
             }
-            $code .= '];' . "\n";
+            $code .= '  ];' . "\n\n";
         } else {
             $code .= '  public $static = false;' . "\n";
-            $code .= '  public $staticMapping = null;' . "\n";
+            $code .= '  public $staticMapping = null;' . "\n\n";
         }
 
         if (count($regularMapping) > 0) {
             $code .= '  public $regular = true;' . "\n";
-            $code .= '  public $regularMapping = [';
+            $code .= '  public $regularMapping = [' . "\n";
             foreach ($regularMapping as $key => $val) {
-                $code .= '\'' . $key . '\'=>[\'' . $val[0] . '\',[\''.implode('\',\'', $val[1]).'\']],';
+                $code .= '    \'' . $key . '\' => [\'' . $val[0] . '\', [\''.implode('\', \'', $val[1]).'\']],' . "\n";
             }
-            $code .= '];' . "\n";
+            $code .= '  ];' . "\n\n";
         } else {
             $code .= '  public $regular = false;' . "\n";
-            $code .= '  public $regularMapping = null;' . "\n";
+            $code .= '  public $regularMapping = null;' . "\n\n";
         }
 
         if ($hashmap) {
