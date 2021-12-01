@@ -57,31 +57,31 @@ class Validator
 
         if (isset($check['uppercase']) && $check['uppercase']) {
             if (!preg_match('/[A-Z]/', $password)) {
-                throw new UtilException('密码中需包含大写字母！');
+                throw new UtilException('密码中须包含大写字母！');
             }
         }
 
         if (isset($check['uppercase']) && $check['uppercase']) {
             if (!preg_match('/[a-z]/', $password)) {
-                throw new UtilException('密码中需包含小写字母！');
+                throw new UtilException('密码中须包含小写字母！');
             }
         }
 
         if (isset($check['letter']) && $check['letter']) {
             if (!preg_match('/[A-Za-z]/', $password)) {
-                throw new UtilException('密码中需包含字母！');
+                throw new UtilException('密码中须包含字母！');
             }
         }
 
         if (isset($check['number']) && $check['number']) {
             if (!preg_match('/[0-9]/', $password)) {
-                throw new UtilException('密码中需包含数字！');
+                throw new UtilException('密码中须包含数字！');
             }
         }
 
         if (isset($check['specialChar']) && $check['specialChar']) {
             if (!preg_match('/[~!@#$%^&*()\-_=+{};:<,.>?]/', $password)) {
-                throw new UtilException('密码中需包含特殊符号！');
+                throw new UtilException('密码中须包含特殊符号！');
             }
         }
     }
