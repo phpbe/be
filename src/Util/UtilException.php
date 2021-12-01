@@ -1,5 +1,5 @@
 <?php
-namespace Be\Session;
+namespace Be\Util;
 
 /**
  * 工具类异常

@@ -2,8 +2,6 @@
 
 namespace Be\Util;
 
-use Be\Session\UtilException;
-
 class Validator
 {
 
