@@ -301,6 +301,11 @@ class Helper
                     self::$cache[$route2uriKey] = $uri; // 路由到网址缓存
                     self::$cache[$uri2routeKey] = [$route, $params]; // 网址到路由缓存
                 }
+            } elseif ($router->$actionName == 'static') {
+                // 静态路由有参数时，将参数以 GET 方式拼接到网址中
+                if ($params !== null) {
+                    return $rootUrl . $uri . '?' . http_build_query($params);
+                }
             }
 
             return $rootUrl . $uri;
