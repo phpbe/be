@@ -19,11 +19,12 @@
                 $redirectUrl = $this->redirect['url'];
                 $redirectMessage = $this->redirect['message'];
                 if (!$redirectMessage) {
-                    $redirectMessage = 'Redirect to {url} after {timeout} seconds.';
+                    $redirectMessage = 'Redirect to {link} after {timeout} seconds.';
                 }
 
                 foreach ([
-                             '{url}' => '<a href="' . $redirectUrl . '">' . $redirectUrl . '</a>',
+                             '{url}' => $redirectUrl,
+                             '{link}' => '<a href="' . $redirectUrl . '">' . $redirectUrl . '</a>',
                              '{timeout}' => '<span id="redirect-timeout">' . $redirectTimeout . '</span>',
                          ] as $key => $val) {
                     $redirectMessage = str_replace($key, $val, $redirectMessage);

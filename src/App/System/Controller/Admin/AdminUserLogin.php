@@ -53,7 +53,7 @@ class AdminUserLogin
             $redirectUrl = beAdminUrl('System.AdminUser.login');
             $redirect = [
                 'url' => $redirectUrl,
-                'message' => '{timeout} 秒后跳转到 <a href="' . $redirectUrl . '">登录页</a>',
+                'message' => '{timeout} 秒后跳转到 <a href="{url}">登录页</a>',
                 'timeout' => 3,
             ];
 

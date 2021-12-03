@@ -30,7 +30,7 @@ class Mail extends Auth
             $redirectUrl = beAdminUrl('System.Mail.test', ['toEmail' => $toEmail]);
             $redirect = [
                 'url' => $redirectUrl,
-                'message' => '{timeout} 秒后跳转到 {url}',
+                'message' => '{timeout} 秒后跳转到 {link}',
                 'timeout' => 3,
             ];
 

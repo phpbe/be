@@ -22,11 +22,12 @@
                 $redirectUrl = $this->redirect['url'];
                 $redirectMessage = $this->redirect['message'];
                 if (!$redirectMessage) {
-                    $redirectMessage = '{timeout} 秒后跳转到：{url}';
+                    $redirectMessage = '{timeout} 秒后跳转到：{link}';
                 }
 
                 foreach ([
-                             '{url}' => '<el-link type="primary" href="' . $redirectUrl . '">' . $redirectUrl . '</el-link>',
+                             '{url}' => $redirectUrl,
+                             '{link}' => '<el-link type="primary" href="' . $redirectUrl . '">' . $redirectUrl . '</el-link>',
                              '{timeout}' => '<span>{{redirectTimeout}}</span>',
                          ] as $key => $val) {
                     $redirectMessage = str_replace($key, $val, $redirectMessage);

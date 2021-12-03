@@ -25,6 +25,7 @@
 
                 foreach ([
                              '{url}' => $redirectUrl,
+                             '{link}' => '<a href="' . $redirectUrl . '">' . $redirectUrl . '</a>',
                              '{timeout}' => '<span id="redirect-timeout">' . $redirectTimeout . '</span>',
                          ] as $key => $val) {
                     $redirectMessage = str_replace($key, $val, $redirectMessage);

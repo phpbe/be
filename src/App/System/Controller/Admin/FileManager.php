@@ -105,7 +105,7 @@ class FileManager extends Auth
         $redirectUrl = beAdminUrl('System.FileManager.browser');
         $redirect = [
             'url' => $redirectUrl,
-            'message' => '{timeout} 秒后跳转到 {url}',
+            'message' => '{timeout} 秒后跳转到 {link}',
             'timeout' => 3,
         ];
 
@@ -128,7 +128,7 @@ class FileManager extends Auth
         $redirectUrl = beAdminUrl('System.FileManager.browser');
         $redirect = [
             'url' => $redirectUrl,
-            'message' => '{timeout} 秒后跳转到 {url}',
+            'message' => '{timeout} 秒后跳转到 {link}',
             'timeout' => 3,
         ];
 
@@ -152,7 +152,7 @@ class FileManager extends Auth
         $redirectUrl = beAdminUrl('System.FileManager.browser');
         $redirect = [
             'url' => $redirectUrl,
-            'message' => '{timeout} 秒后跳转到 {url}',
+            'message' => '{timeout} 秒后跳转到 {link}',
             'timeout' => 3,
         ];
 
@@ -175,7 +175,7 @@ class FileManager extends Auth
         $redirectUrl = beAdminUrl('System.FileManager.browser');
         $redirect = [
             'url' => $redirectUrl,
-            'message' => '{timeout} 秒后跳转到 {url}',
+            'message' => '{timeout} 秒后跳转到 {link}',
             'timeout' => 3,
         ];
 
@@ -260,7 +260,7 @@ class FileManager extends Auth
         $redirectUrl = beAdminUrl('System.FileManager.browser');
         $redirect = [
             'url' => $redirectUrl,
-            'message' => '{timeout} 秒后跳转到 {url}',
+            'message' => '{timeout} 秒后跳转到 {link}',
             'timeout' => 3,
         ];
 
@@ -284,7 +284,7 @@ class FileManager extends Auth
         $redirectUrl = beAdminUrl('System.FileManager.browser');
         $redirect = [
             'url' => $redirectUrl,
-            'message' => '{timeout} 秒后跳转到 {url}',
+            'message' => '{timeout} 秒后跳转到 {link}',
             'timeout' => 3,
         ];
 
