@@ -1,0 +1,36 @@
+.be-tab {
+
+}
+
+.be-tab-nav {
+    display: flex;
+    border-bottom: #ddd 1px solid;
+}
+
+.be-tab-nav a {
+    display: block;
+    border: 1px solid transparent;
+    padding: .5rem 1rem;
+    cursor: pointer;
+    margin-bottom: -1px;
+    text-decoration: none;
+}
+
+.be-center.be-tab-nav a:hover {
+    text-decoration: none;
+}
+
+.be-tab-nav-active {
+    border-color: #ddd !important;
+    border-bottom-color: #fff !important;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+}
+
+.be-tab-pane {
+    display: none;
+}
+
+.be-tab-pane-active {
+    display: block;
+}

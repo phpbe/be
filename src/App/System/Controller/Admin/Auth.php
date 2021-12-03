@@ -31,7 +31,12 @@ class Auth
         if ($my->id == 0) {
             $return = $request->get('return', base64_encode($request->getUrl()));
             $redirectUrl = beAdminUrl('System.AdminUserLogin.login', ['return' => $return]);
-            throw new ControllerException('登录超时，请重新登录！', 0, $redirectUrl);
+            $redirect = [
+                'url' => $redirectUrl,
+                'message' => '{timeout} 秒后跳转到 <a href="' . $redirectUrl . '">登录页</a>',
+                'timeout' => 3,
+            ];
+            throw new ControllerException('登录超时，请重新登录！', 0, $redirect);
         } else {
             if (!$my->hasPermission($appName, $controllerName, $actionName)) {
                 throw new ControllerException('您没有权限操作该功能！');
@@ -43,7 +48,12 @@ class Auth
                 if ($my->this_login_ip != $request->getIp()) {
                     Be::getService('App.System.Admin.AdminUser')->logout();
                     $redirectUrl = beAdminUrl('System.AdminUserLogin.login');
-                    throw new ControllerException('检测到您的账号在其它地点（' . $my->this_login_ip . ' ' . $my->this_login_time . '）登录！', 0, $redirectUrl);
+                    $redirect = [
+                        'url' => $redirectUrl,
+                        'message' => '{timeout} 秒后跳转到 <a href="' . $redirectUrl . '">登录页</a>',
+                        'timeout' => 3,
+                    ];
+                    throw new ControllerException('检测到您的账号在其它地点（' . $my->this_login_ip . ' ' . $my->this_login_time . '）登录！', 0, $redirect);
                 }
             }
         }

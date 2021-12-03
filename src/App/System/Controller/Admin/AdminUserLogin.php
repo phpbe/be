@@ -49,7 +49,15 @@ class AdminUserLogin
         $response = Be::getResponse();
         try {
             Be::getService('App.System.Admin.AdminUser')->logout();
-            $response->success('成功退出！', beAdminUrl('System.AdminUser.login'));
+
+            $redirectUrl = beAdminUrl('System.AdminUser.login');
+            $redirect = [
+                'url' => $redirectUrl,
+                'message' => '{timeout} 秒后跳转到 <a href="' . $redirectUrl . '">登录页</a>',
+                'timeout' => 3,
+            ];
+
+            $response->success('成功退出！', $redirect);
         } catch (\Exception $e) {
             $response->error($e->getMessage());
         }

@@ -13,14 +13,27 @@
             <?php echo $this->message; ?>
         </div>
 
+
         <?php
-        if (isset($this->redirectUrl) && isset($this->redirectTimeout) && $this->redirectTimeout > 0 )
+        if (isset($this->redirect))
         {
-            ?>
-            <div class="success-timer">
-                <span>{{redirectTimer}}</span> 秒后跳转到：<el-link type="primary" href="<?php echo $this->redirectUrl; ?>"><?php echo $this->redirectUrl; ?></el-link>
-            </div>
-            <?php
+            $redirectTimeout = $this->redirect['timeout'];
+            if ($redirectTimeout > 0) {
+                $redirectUrl = $this->redirect['url'];
+                $redirectMessage = $this->redirect['message'];
+                if (!$redirectMessage) {
+                    $redirectMessage = '{timeout} 秒后跳转到：{url}';
+                }
+
+                foreach ([
+                             '{url}' => '<el-link type="primary" href="' . $redirectUrl . '">' . $redirectUrl . '</el-link>',
+                             '{timeout}' => '<span>{{redirectTimeout}}</span>',
+                         ] as $key => $val) {
+                    $redirectMessage = str_replace($key, $val, $redirectMessage);
+                }
+
+                echo '<div class="success">' . $redirectMessage . '</div>';
+            }
         }
         ?>
     </div>
@@ -29,25 +42,27 @@
         new Vue({
             el: '#app',
             data: {
-                redirectTimer: <?php echo isset($this->redirectTimeout) ? $this->redirectTimeout : 0; ?>
+                redirectTimeout: <?php echo isset($this->redirect) ? $this->redirect['timeout'] : 0; ?>
             },
             created: function () {
                 <?php
-                if (isset($this->redirectUrl)) {
-                    if (isset($this->redirectTimeout) && $this->redirectTimeout > 0) {
+                if (isset($this->redirect)) {
+                    $redirectUrl = $this->redirect['url'];
+                    $redirectTimeout = $this->redirect['timeout'];
+                    if ($redirectTimeout > 0) {
                         ?>
                         var _this = this;
                         var timer = setInterval(function () {
-                            _this.redirectTimer--;
-                            if (_this.redirectTimer <= 0) {
+                            _this.redirectTimeout--;
+                            if (_this.redirectTimeout <= 0) {
                                 clearInterval(timer);
-                                window.location.href = "<?php echo $this->redirectUrl; ?>";
+                                window.location.href = "<?php echo $redirectUrl; ?>";
                             }
                         }, 1000);
                         <?php
                     } else {
                         ?>
-                        window.location.href = "<?php echo $this->redirectUrl; ?>";
+                        window.location.href = "<?php echo $redirectUrl; ?>";
                         <?php
                     }
                 }

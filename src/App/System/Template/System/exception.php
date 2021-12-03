@@ -1,6 +1,12 @@
 <be-head>
-    <link rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/Template/System/google-code-prettify/prettify.css" type="text/css"/>
-    <script type="text/javascript" src="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/Template/System/google-code-prettify/prettify.js"></script>
+    <?php
+    $appUrl = \Be\Be::getProperty('App.System')->getUrl();
+    ?>
+    <link rel="stylesheet" href="<?php echo $appUrl; ?>/Template/System/css/be-tab.css" type="text/css"/>
+    <script type="text/javascript" src="<?php echo $appUrl; ?>/Template/System/js/be-tab.js"></script>
+
+    <link rel="stylesheet" href="<?php echo $appUrl; ?>/Template/System/google-code-prettify/prettify.css" type="text/css"/>
+    <script type="text/javascript" src="<?php echo $appUrl; ?>/Template/System/google-code-prettify/prettify.js"></script>
     <style type="text/css">
         pre.prettyprint {
             background-color: #fff;
@@ -13,51 +19,60 @@
 </be-head>
 
 <be-body>
-    <div class="p-2">
+    <div class="be-p-100">
     <?php
     $configSystem = \Be\Be::getConfig('App.System.System');
     if ($configSystem->developer) {
         $request = \Be\Be::getRequest();
         ?>
 
-        <div class="alert alert-danger d-flex align-items-center" role="alert">
-            <div class="fs-2 text-danger pe-3">
-                <i class="bi bi-x-circle-fill"></i>
-            </div>
-            <div>
-                <div><?php echo htmlspecialchars($this->e->getMessage()); ?></div>
-                <?php if (isset($this->logId)) { echo '<div>#' . $this->logId . '</div>';} ?>
+        <div class="be-p-50" style="background-color: #fff4f2; border: #ffe0d8 1px solid; color: #842029; ">
+            <div class="be-row">
+                <div class="be-col-auto">
+                    <div class="be-c-red be-p-50 be-pr-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="be-col">
+                    <div><?php echo htmlspecialchars($this->e->getMessage()); ?></div>
+                    <?php if (isset($this->logId)) { echo '<div>#' . $this->logId . '</div>';} ?>
+                </div>
             </div>
         </div>
 
-        <nav>
-            <div class="nav nav-tabs">
-                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-trace" type="button">错误跟踪信息</button>
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-server" type="button">$_SERVER</button>
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-get" type="button">$_GET</button>
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-post" type="button">$_POST</button>
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-request" type="button">$_REQUEST</button>
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-cookie" type="button">$_COOKIE</button>
+
+        <div class="be-tab be-mt-150">
+
+            <div class="be-tab-nav">
+                <a class="be-tab-nav-active" data-be-target="#be-tab-pane-trace">错误跟踪信息</a>
+                <a data-be-target="#be-tab-pane-server">$_SERVER</a>
+                <a data-be-target="#be-tab-pane-get">$_GET</a>
+                <a data-be-target="#be-tab-pane-post">$_POST</a>
+                <a data-be-target="#be-tab-pane-request">$_REQUEST</a>
+                <a data-be-target="#be-tab-pane-cookie">$_COOKIE</a>
             </div>
-        </nav>
-        <div class="tab-content">
-            <div class="tab-pane fade show active" id="tab-trace">
-                <pre class="prettyprint linenums"><?php print_r($this->e->getTrace()); ?></pre>
-            </div>
-            <div class="tab-pane fade" id="tab-server">
-                <pre class="prettyprint linenums"><?php print_r($request->server()) ?></pre>
-            </div>
-            <div class="tab-pane fade" id="tab-get">
-                <pre class="prettyprint linenums"><?php print_r($request->get()) ?></pre>
-            </div>
-            <div class="tab-pane fade" id="tab-post">
-                <pre class="prettyprint linenums"><?php print_r($request->post()) ?></pre>
-            </div>
-            <div class="tab-pane fade" id="tab-request">
-                <pre class="prettyprint linenums"><?php print_r($request->request()) ?></pre>
-            </div>
-            <div class="tab-pane fade" id="tab-cookie">
-                <pre class="prettyprint linenums"><?php print_r($request->cookie()) ?></pre>
+
+            <div class="be-tab-content">
+                <div class="be-tab-pane" id="be-tab-pane-trace">
+                    <pre class="prettyprint linenums"><?php print_r($this->e->getTrace()); ?></pre>
+                </div>
+                <div class="be-tab-pane" id="be-tab-pane-server">
+                    <pre class="prettyprint linenums"><?php print_r($request->server()) ?></pre>
+                </div>
+                <div class="be-tab-pane" id="be-tab-pane-get">
+                    <pre class="prettyprint linenums"><?php print_r($request->get()) ?></pre>
+                </div>
+                <div class="be-tab-pane" id="be-tab-pane-post">
+                    <pre class="prettyprint linenums"><?php print_r($request->post()) ?></pre>
+                </div>
+                <div class="be-tab-pane" id="be-tab-pane-request">
+                    <pre class="prettyprint linenums"><?php print_r($request->request()) ?></pre>
+                </div>
+                <div class="be-tab-pane" id="be-tab-pane-cookie">
+                    <pre class="prettyprint linenums"><?php print_r($request->cookie()) ?></pre>
+                </div>
             </div>
         </div>
 
@@ -70,11 +85,13 @@
         <?php
     } else {
         ?>
-        <div class="text-center display-1 text-danger mt-5">
-            <i class="bi bi-exclamation-triangle-fill"></i>
+        <div class="be-ta-center be-c-red be-mt-300">
+            <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+            </svg>
         </div>
 
-        <div class="text-center fs-4 mt-5">
+        <div class="be-ta-center be-fs-150 be-mt-300">
             <?php echo $this->e->getMessage(); ?>
         </div>
         <?php

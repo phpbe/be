@@ -101,13 +101,19 @@ class FileManager extends Auth
         $response = Be::getResponse();
 
         $dirName = $request->post('dirName', '');
-        $return = beAdminUrl('System.FileManager.browser');
+
+        $redirectUrl = beAdminUrl('System.FileManager.browser');
+        $redirect = [
+            'url' => $redirectUrl,
+            'message' => '{timeout} 秒后跳转到 {url}',
+            'timeout' => 3,
+        ];
 
         $serviceSystemFileManager = Be::getService('App.System.Admin.FileManager');
         if ($serviceSystemFileManager->createDir($dirName)) {
-            $response->success('创建文件夹(' . $dirName . ')成功！', $return);
+            $response->success('创建文件夹(' . $dirName . ')成功！', $redirect);
         } else {
-            $response->error($serviceSystemFileManager->getError(), $return);
+            $response->error($serviceSystemFileManager->getError(), $redirect);
         }
     }
 
@@ -118,13 +124,19 @@ class FileManager extends Auth
         $response = Be::getResponse();
 
         $dirName = $request->get('dirName', '');
-        $return = beAdminUrl('System.FileManager.browser');
+
+        $redirectUrl = beAdminUrl('System.FileManager.browser');
+        $redirect = [
+            'url' => $redirectUrl,
+            'message' => '{timeout} 秒后跳转到 {url}',
+            'timeout' => 3,
+        ];
 
         $serviceSystemFileManager = Be::getService('App.System.Admin.FileManager');
         if ($serviceSystemFileManager->deleteDir($dirName)) {
-            $response->success('删除文件夹(' . $dirName . ')成功！', $return);
+            $response->success('删除文件夹(' . $dirName . ')成功！', $redirect);
         } else {
-            $response->error($serviceSystemFileManager->getError(), $return);
+            $response->error($serviceSystemFileManager->getError(), $redirect);
         }
     }
 
@@ -136,13 +148,19 @@ class FileManager extends Auth
 
         $oldDirName = $request->post('oldDirName', '');
         $newDirName = $request->post('newDirName', '');
-        $return = beAdminUrl('System.FileManager.browser');
+
+        $redirectUrl = beAdminUrl('System.FileManager.browser');
+        $redirect = [
+            'url' => $redirectUrl,
+            'message' => '{timeout} 秒后跳转到 {url}',
+            'timeout' => 3,
+        ];
 
         $serviceSystemFileManager = Be::getService('App.System.Admin.FileManager');
         if ($serviceSystemFileManager->editDirName($oldDirName, $newDirName)) {
-            $response->success('重命名文件夹成功！', $return);
+            $response->success('重命名文件夹成功！', $redirect);
         } else {
-            $response->error($serviceSystemFileManager->getError(), $return);
+            $response->error($serviceSystemFileManager->getError(), $redirect);
         }
     }
 
@@ -154,7 +172,12 @@ class FileManager extends Auth
 
         $configSystem = Be::getConfig('App.System.System');
 
-        $return = beAdminUrl('System.FileManager.browser');
+        $redirectUrl = beAdminUrl('System.FileManager.browser');
+        $redirect = [
+            'url' => $redirectUrl,
+            'message' => '{timeout} 秒后跳转到 {url}',
+            'timeout' => 3,
+        ];
 
         $file = $_FILES['file'];
         if ($file['error'] == 0) {
@@ -162,17 +185,17 @@ class FileManager extends Auth
 
             $type = strtolower(substr(strrchr($fileName, '.'), 1));
             if (!in_array($type, $configSystem->allowUploadFileTypes)) {
-                $response->error('不允许上传(' . $type . ')格式的文件！', $return);
+                $response->error('不允许上传(' . $type . ')格式的文件！', $redirect);
             }
 
             if (strpos($fileName, '/') !== false) {
-                $response->error('文件名称不合法！', $return);
+                $response->error('文件名称不合法！', $redirect);
             }
 
             $serviceSystemFileManager = Be::getService('App.System.Admin.FileManager');
             $absPath = $serviceSystemFileManager->getAbsPath();
             if ($absPath == false) {
-                $response->error($serviceSystemFileManager->getError(), $return);
+                $response->error($serviceSystemFileManager->getError(), $redirect);
             }
 
             $dstPath = $absPath . '/' . $fileName;
@@ -198,12 +221,12 @@ class FileManager extends Auth
                 }
 
                 if ($rename == false) {
-                    $response->success('上传文件成功！', $return);
+                    $response->success('上传文件成功！', $redirect);
                 } else {
-                    $response->success('有同名文件，新上传的文件已更名为：' . $rename . '！', $return);
+                    $response->success('有同名文件，新上传的文件已更名为：' . $rename . '！', $redirect);
                 }
             } else {
-                $response->error('上传失败！', $return);
+                $response->error('上传失败！', $redirect);
             }
         } else {
 
@@ -222,7 +245,7 @@ class FileManager extends Auth
                 $error = '错误代码：' . $file['error'];
             }
 
-            $response->error('上传失败' . '(' . $error . ')', $return);
+            $response->error('上传失败' . '(' . $error . ')', $redirect);
         }
     }
 
@@ -233,13 +256,19 @@ class FileManager extends Auth
         $response = Be::getResponse();
 
         $fileName = $request->get('fileName', '');
-        $return = beAdminUrl('System.FileManager.browser');
+
+        $redirectUrl = beAdminUrl('System.FileManager.browser');
+        $redirect = [
+            'url' => $redirectUrl,
+            'message' => '{timeout} 秒后跳转到 {url}',
+            'timeout' => 3,
+        ];
 
         $serviceSystemFileManager = Be::getService('App.System.Admin.FileManager');
         if ($serviceSystemFileManager->deleteFile($fileName)) {
-            $response->success('删除文件(' . $fileName . ')成功！', $return);
+            $response->success('删除文件(' . $fileName . ')成功！', $redirect);
         } else {
-            $response->error($serviceSystemFileManager->getError(), $return);
+            $response->error($serviceSystemFileManager->getError(), $redirect);
         }
     }
 
@@ -252,11 +281,18 @@ class FileManager extends Auth
         $oldFileName = $request->post('oldFileName', '');
         $newFileName = $request->post('newFileName', '');
 
+        $redirectUrl = beAdminUrl('System.FileManager.browser');
+        $redirect = [
+            'url' => $redirectUrl,
+            'message' => '{timeout} 秒后跳转到 {url}',
+            'timeout' => 3,
+        ];
+
         $serviceSystemFileManager = Be::getService('App.System.Admin.FileManager');
         if ($serviceSystemFileManager->editFileName($oldFileName, $newFileName)) {
-            $response->success('重命名文件成功！', beAdminUrl('System.FileManager.browser'));
+            $response->success('重命名文件成功！', $redirect);
         } else {
-            $response->error($serviceSystemFileManager->getError(), beAdminUrl('System.FileManager.browser'));
+            $response->error($serviceSystemFileManager->getError(), $redirect);
         }
 
     }

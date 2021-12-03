@@ -5,9 +5,10 @@ namespace Be;
 use Be\Runtime\RuntimeException;
 
 /**
- *  BE系统资源工厂
- * @package Be\Mf
+ * BE系统资源工厂
  *
+ * Class Be
+ * @package Be
  */
 abstract class Be
 {

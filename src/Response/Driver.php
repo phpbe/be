@@ -139,23 +139,25 @@ abstract class Driver
      * 成功
      *
      * @param string $message 消息
-     * @param string $redirectUrl 跳转网址
-     * @param int $redirectTimeout 跳转超时时长
+     * @param array $redirect 跳转
      */
-    public function success(string $message, string $redirectUrl = null, int $redirectTimeout = 3)
+    public function success(string $message, array $redirect = null)
     {
-        $this->set('success', true);
-        $this->set('message', $message);
-
-        if ($redirectUrl !== null) {
-            $this->set('redirectUrl', $redirectUrl);
-            if ($redirectTimeout > 0) $this->set('redirectTimeout', $redirectTimeout);
-        }
-    
         $request = Be::getRequest();
         if ($request->isAjax()) {
+            $this->set('success', true);
+            $this->set('message', $message);
+            if ($redirect !== null) {
+                $this->set('redirectUrl', $redirect['url']);
+            }
+
             $this->json();
         } else {
+            $this->set('message', $message);
+            if ($redirect !== null) {
+                $this->set('redirect', $redirect);
+            }
+
             if ($request->isAdmin()) {
                 $this->display('App.System.Admin.System.success', 'Blank');
             } else {
@@ -168,23 +170,25 @@ abstract class Driver
      * 失败
      *
      * @param string $message 消息
-     * @param string $redirectUrl 跳转网址
-     * @param int $redirectTimeout 跳转超时时长
+     * @param array $redirect 跳转
      */
-    public function error(string $message, string $redirectUrl = null, int $redirectTimeout = 3)
+    public function error(string $message, array $redirect = null)
     {
-        $this->set('success', false);
-        $this->set('message', $message);
-
-        if ($redirectUrl !== null) {
-            $this->set('redirectUrl', $redirectUrl);
-            if ($redirectTimeout > 0) $this->set('redirectTimeout', $redirectTimeout);
-        }
-
         $request = Be::getRequest();
         if ($request->isAjax()) {
+            $this->set('success', false);
+            $this->set('message', $message);
+            if ($redirect !== null) {
+                $this->set('redirectUrl', $redirect['url']);
+            }
+
             $this->json();
         } else {
+            $this->set('message', $message);
+            if ($redirect !== null) {
+                $this->set('redirect', $redirect);
+            }
+
             if ($request->isAdmin()) {
                 $this->display('App.System.Admin.System.error', 'Blank');
             } else {
@@ -231,8 +235,8 @@ abstract class Driver
         }
 
         $session = Be::getSession();
-        $session->set('_history_url_'.$historyKey, $request->server('REQUEST_URI'));
-        $session->set('_history_post_'.$historyKey, serialize($request->post()));
+        $session->set('be-historyUrl-' . $historyKey, $request->getUrl());
+        $session->set('be-historyPostData-' . $historyKey, serialize($request->post()));
     }
 
     /**
@@ -240,36 +244,40 @@ abstract class Driver
      *
      * @param string $message 消息
      * @param string $historyKey 历史节点键名
-     * @param int $redirectTimeout 跳转超时时长
+     * @param array $redirect 跳转
      */
-    public function successAndBack(string $message, string $historyKey = null, int $redirectTimeout = 3)
+    public function successAndBack(string $message, string $historyKey = null, array $redirect = [])
     {
         $request = Be::getRequest();
         if ($historyKey === null) {
             $historyKey = $request->getAppName() . '.' . $request->getControllerName();
         }
 
-        $this->set('success', true);
         $this->set('message', $message);
         $this->set('historyKey', $historyKey);
 
         $session = Be::getSession();
         $historyUrl = null;
-        if ($session->has('_history_url_'.$historyKey)) {
-            $historyUrl = $session->get('_history_url_'.$historyKey);
+        if ($session->has('be-historyUrl-' . $historyKey)) {
+            $historyUrl = $session->get('be-historyUrl-' . $historyKey);
         }
-        if (!$historyUrl) $historyUrl = $request->server('HTTP_REFERER');
+        if (!$historyUrl) $historyUrl = $request->getReferer();
         if (!$historyUrl) $historyUrl = './';
 
-        $historyPost = null;
-        if ($session->has('_history_post_'.$historyKey)) {
-            $historyPost = $session->get('_history_post_'.$historyKey);
-            if ($historyPost) $historyPost = unserialize($historyPost);
+        $this->set('historyUrl', $historyUrl);
+
+        $historyPostData = null;
+        if ($session->has('be-historyPostData-' . $historyKey)) {
+            $historyPostData = $session->get('be-historyPostData-' . $historyKey);
+            if ($historyPostData) $historyPostData = unserialize($historyPostData);
         }
 
-        $this->set('historyUrl', $historyUrl);
-        $this->set('historyPost', $historyPost);
-        $this->set('redirectTimeout', $redirectTimeout);
+        $this->set('historyPostData', $historyPostData);
+
+        if ($redirect !== null) {
+            $redirect['url'] = $historyUrl;
+            $this->set('redirect', $redirect);
+        }
 
         if ($request->isAdmin()) {
             $this->display('App.System.Admin.System.successAndBack', 'Blank');
@@ -283,36 +291,40 @@ abstract class Driver
      *
      * @param string $message 消息
      * @param string $historyKey 历史节点键名
-     * @param int $redirectTimeout 跳转超时时长
+     * @param array $redirect 跳转
      */
-    public function errorAndBack(string $message, string $historyKey = null, int $redirectTimeout = 3)
+    public function errorAndBack(string $message, string $historyKey = null, array $redirect = null)
     {
         $request = Be::getRequest();
         if ($historyKey === null) {
             $historyKey = $request->getAppName() . '.' . $request->getControllerName();
         }
 
-        $this->set('success', false);
         $this->set('message', $message);
         $this->set('historyKey', $historyKey);
 
         $session = Be::getSession();
         $historyUrl = null;
-        if ($session->has('_history_url_'.$historyKey)) {
-            $historyUrl = $session->get('_history_url_'.$historyKey);
+        if ($session->has('be-historyUrl-' . $historyKey)) {
+            $historyUrl = $session->get('be-historyUrl-' . $historyKey);
         }
-        if (!$historyUrl) $historyUrl = $request->server('HTTP_REFERER');
+        if (!$historyUrl) $historyUrl = $request->getReferer();
         if (!$historyUrl) $historyUrl = './';
 
-        $historyPost = null;
-        if ($session->has('_history_post_'.$historyKey)) {
-            $historyPost = $session->get('_history_post_'.$historyKey);
-            if ($historyPost) $historyPost = unserialize($historyPost);
+        $this->set('historyUrl', $historyUrl);
+
+        $historyPostData = null;
+        if ($session->has('be-historyPostData-' . $historyKey)) {
+            $historyPostData = $session->get('be-historyPostData-' . $historyKey);
+            if ($historyPostData) $historyPostData = unserialize($historyPostData);
         }
 
-        $this->set('historyUrl', $historyUrl);
-        $this->set('historyPost', $historyPost);
-        $this->set('redirectTimeout', $redirectTimeout);
+        $this->set('historyPostData', $historyPostData);
+
+        if ($redirect !== null) {
+            $redirect['url'] = $historyUrl;
+            $this->set('redirect', $redirect);
+        }
 
         if ($request->isAdmin()) {
             $this->display('App.System.Admin.System.errorAndBack', 'Blank');
@@ -336,7 +348,8 @@ abstract class Driver
      * @param string $theme 主题名
      * @return  string
      */
-    public function fetch(string $template, string $theme = null) {
+    public function fetch(string $template, string $theme = null)
+    {
         ob_start();
         ob_clean();
         $templateInstance = Be::getRequest()->isAdmin() ? Be::getAdminTemplate($template, $theme) : Be::getTemplate($template, $theme);

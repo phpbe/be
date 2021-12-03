@@ -21,7 +21,7 @@ function beUrl($route = null, array $params = null)
     }
 
     $configSystem = \Be\Be::getConfig('App.System.System');
-    if ($configSystem->urlRewrite == 1) {
+    if ($configSystem->urlRewrite === '1') {
         $urlParams = '';
         if ($params !== null) {
             foreach ($params as $key => $val) {
@@ -29,7 +29,7 @@ function beUrl($route = null, array $params = null)
             }
         }
         return $request->getRootUrl() . '/' . str_replace('.', '/', $route) . $urlParams . $configSystem->urlSuffix;
-    } elseif ($configSystem->urlRewrite == 2) {
+    } elseif ($configSystem->urlRewrite === '2') {
         return \Be\Router\Helper::encode($route, $params);
     } else {
         return $request->getRootUrl() . '/?route=' . $route . ($params !== null ? '&' . http_build_query($params) : '');
@@ -68,7 +68,7 @@ function beAdminUrl($route = null, array $params = null)
                 $urlParams .= '/' . $key . '-' . $val;
             }
         }
-        return $request->getRootUrl() . '/' . $adminAlias . '/' . str_replace('.', '/', $route) . $urlParams . $configSystem->urlSuffix;
+        return $request->getRootUrl() . '/' . $adminAlias . '/' . str_replace('.', '/', $route) . $urlParams . ($configSystem->urlRewrite === '1' ? $configSystem->urlSuffix : '');
     } else {
         return $request->getRootUrl() . '/?admin=1&route=' . $route . ($params !== null ? '&' . http_build_query($params) : '');
     }

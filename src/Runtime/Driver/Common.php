@@ -176,7 +176,7 @@ class Common extends Driver
                     $response->set('logId', $logId);
                     $response->set('code', $t->getCode());
                 }
-                $response->error($t->getMessage(), $t->getRedirectUrl());
+                $response->error($t->getMessage(), $t->getRedirect());
             } else {
                 $logId = Be::getLog()->emergency($t);
                 $response->set('logId', $logId);

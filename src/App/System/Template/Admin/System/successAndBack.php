@@ -14,20 +14,32 @@
         </div>
 
         <?php
-        if (isset($this->redirectTimeout) && $this->redirectTimeout > 0)
+        if (isset($this->redirect))
         {
-            ?>
-            <div class="success-timer">
-                <span>{{redirectTimer}}</span> 秒后返回
-            </div>
-            <?php
+            $redirectTimeout = $this->redirect['timeout'];
+            if ($redirectTimeout > 0) {
+                $redirectUrl = $this->redirect['url'];
+                $redirectMessage = $this->redirect['message'];
+                if (!$redirectMessage) {
+                    $redirectMessage = '{timeout} 秒后返回';
+                }
+
+                foreach ([
+                             '{url}' => '<el-link type="primary" href="' . $redirectUrl . '">' . $redirectUrl . '</el-link>',
+                             '{timeout}' => '<span>{{redirectTimeout}}</span>',
+                         ] as $key => $val) {
+                    $redirectMessage = str_replace($key, $val, $redirectMessage);
+                }
+
+                echo '<div class="success">' . $redirectMessage . '</div>';
+            }
         }
         ?>
 
         <form action="<?php echo $this->historyUrl; ?>" id="form-history" method="post">
             <?php
-            if (is_array($this->historyPost) && count($this->historyPost) > 0) {
-                foreach ($this->historyPost as $key => $val) {
+            if ($this->historyPostData && is_array($this->historyPostData) && count($this->historyPostData) > 0) {
+                foreach ($this->historyPostData as $key => $val) {
                     echo '<input type="hidden" name="' . $key . '" value="' . $val . '"/>';
                 }
             }
@@ -39,25 +51,30 @@
         new Vue({
             el: '#app',
             data: {
-                redirectTimer: <?php echo isset($this->redirectTimeout) ? $this->redirectTimeout : 0; ?>
+                redirectTimeout: <?php echo isset($this->redirect) ? $this->redirect['timeout'] : 0; ?>
             },
             created: function () {
                 <?php
-                if (isset($this->redirectTimeout) && $this->redirectTimeout > 0) {
-                    ?>
-                    var _this = this;
-                    var timer = setInterval(function () {
-                        _this.redirectTimer--;
-                        if (_this.redirectTimer <= 0) {
-                            clearInterval(timer);
-                            document.getElementById("form-history").submit();
-                        }
-                    }, 1000);
-                    <?php
+                if (isset($this->redirect))
+                {
+                $redirectUrl = $this->redirect['url'];
+                $redirectTimeout = $this->redirect['timeout'];
+                if ($redirectTimeout > 0) {
+                ?>
+                var _this = this;
+                var timer = setInterval(function () {
+                    _this.redirectTimeout--;
+                    if (_this.redirectTimeout <= 0) {
+                        clearInterval(timer);
+                        document.getElementById("form-history").submit();
+                    }
+                }, 1000);
+                <?php
+                }
                 } else {
-                    ?>
-                    document.getElementById("form-history").submit();
-                    <?php
+                ?>
+                document.getElementById("form-history").submit();
+                <?php
                 }
                 ?>
             }
