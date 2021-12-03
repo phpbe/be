@@ -232,6 +232,11 @@ abstract class Driver
     }
 
     /**
+     * 获取来源网址
+     */
+    abstract function getReferer();
+
+    /**
      * 获取当前执行的是否后台功能
      *
      * @return bool

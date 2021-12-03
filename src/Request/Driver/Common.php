@@ -132,7 +132,7 @@ class Common extends Driver
     public function isMobile()
     {
         if (isset($_GET['_isMobile'])) {
-            return $_GET['_isMobile'] ? true: false;
+            return $_GET['_isMobile'] ? true : false;
         }
 
         if (empty($_SERVER['HTTP_USER_AGENT'])) {
@@ -201,6 +201,7 @@ class Common extends Driver
     }
 
     protected $rootUrl = null;
+
     /**
      * 获取当前请求的完整网址
      */
@@ -225,6 +226,13 @@ class Common extends Driver
         return $this->rootUrl;
     }
 
+    /**
+     * 获取来源网址
+     */
+    public function getReferer()
+    {
+        return $_SERVER['HTTP_REFERER'] ?? '';
+    }
 
 }
 

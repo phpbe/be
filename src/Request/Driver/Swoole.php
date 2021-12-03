@@ -198,6 +198,14 @@ class Swoole extends Driver
     }
 
     /**
+     * 获取来源网址
+     */
+    public function getReferer()
+    {
+        return $this->request->header['referer'] ?? '';
+    }
+
+    /**
      * 获取原生 Request 对像
      *
      * @return \Swoole\Http\Request
