@@ -29,12 +29,22 @@ class Auth
 
         // 校验权限
         if ($my->id == 0) {
-            $redirectUrl = beAdminUrl('System.AdminUserLogin.login', ['return' => base64_encode($request->getUrl())]);
-            $redirect = [
-                'url' => $redirectUrl,
-                'message' => '{timeout} 秒后跳转到 <a href="{url}">登录页</a>',
-                'timeout' => 3,
-            ];
+
+            $redirect = null;
+            if ($request->isAjax()) {
+                $redirectUrl = beUrl('System.AdminUserLogin.login');
+                $redirect = [
+                    'url' => $redirectUrl,
+                ];
+            } else {
+                $redirectUrl = beUrl('System.AdminUserLogin.login', ['return' => base64_encode($request->getUrl())]);
+                $redirect = [
+                    'url' => $redirectUrl,
+                    'message' => '{timeout} 秒后跳转到 <a href="{url}">登录页</a>',
+                    'timeout' => 3,
+                ];
+            }
+
             throw new ControllerException('登录超时，请重新登录！', 0, $redirect);
         } else {
             if (!$my->hasPermission($appName, $controllerName, $actionName)) {
@@ -46,12 +56,21 @@ class Auth
             if ($configAdminUser->ipLock) {
                 if ($my->this_login_ip != $request->getIp()) {
                     Be::getService('App.System.Admin.AdminUser')->logout();
+
                     $redirectUrl = beAdminUrl('System.AdminUserLogin.login');
-                    $redirect = [
-                        'url' => $redirectUrl,
-                        'message' => '{timeout} 秒后跳转到 <a href="{url}">登录页</a>',
-                        'timeout' => 3,
-                    ];
+                    $redirect = null;
+                    if ($request->isAjax()) {
+                        $redirect = [
+                            'url' => $redirectUrl,
+                        ];
+                    } else {
+                        $redirect = [
+                            'url' => $redirectUrl,
+                            'message' => '{timeout} 秒后跳转到 <a href="{url}">登录页</a>',
+                            'timeout' => 3,
+                        ];
+                    }
+
                     throw new ControllerException('检测到您的账号在其它地点（' . $my->this_login_ip . ' ' . $my->this_login_time . '）登录！', 0, $redirect);
                 }
             }
