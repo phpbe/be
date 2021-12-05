@@ -174,7 +174,7 @@ abstract class Tuple
         $db = Be::getDb($this->_dbName);
         if (is_array($this->_primaryKey)) {
             $db->insert($this->_tableName, $this);
-            $tableProperty = Be::getTableProperty($this->_tableName);
+            $tableProperty = Be::getTableProperty($this->_tableName, $this->_dbName);
             foreach ($this->_primaryKey as $primaryKey) {
                 $field = $tableProperty->getField($primaryKey);
                 if (isset($field['autoIncrement']) && $field['autoIncrement']) {
@@ -185,7 +185,7 @@ abstract class Tuple
         } else {
             $primaryKey = $this->_primaryKey;
             $db->insert($this->_tableName, $this);
-            $tableProperty = Be::getTableProperty($this->_tableName);
+            $tableProperty = Be::getTableProperty($this->_tableName, $this->_dbName);
             $field = $tableProperty->getField($primaryKey);
             if (isset($field['autoIncrement']) && $field['autoIncrement']) {
                 $this->$primaryKey = $db->getLastInsertId();
@@ -263,7 +263,7 @@ abstract class Tuple
                 $db->update($this->_tableName, $this, $this->_primaryKey);
             } else {
                 $db->insert($this->_tableName, $this);
-                $tableProperty = Be::getTableProperty($this->_tableName);
+                $tableProperty = Be::getTableProperty($this->_tableName, $this->_dbName);
                 foreach ($this->_primaryKey as $primaryKey) {
                     $field = $tableProperty->getField($primaryKey);
                     if (isset($field['autoIncrement']) && $field['autoIncrement']) {
@@ -278,7 +278,7 @@ abstract class Tuple
                 $db->update($this->_tableName, $this, $this->_primaryKey);
             } else {
                 $db->insert($this->_tableName, $this);
-                $tableProperty = Be::getTableProperty($this->_tableName);
+                $tableProperty = Be::getTableProperty($this->_tableName, $this->_dbName);
                 $field = $tableProperty->getField($primaryKey);
                 if (isset($field['autoIncrement']) && $field['autoIncrement']) {
                     $this->$primaryKey = $db->getLastInsertId();
