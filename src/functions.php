@@ -56,7 +56,7 @@ function beAdminUrl($route = null, array $params = null)
             if ($configSystem->urlRewrite) {
                 return $request->getRootUrl() . '/' . $adminAlias;
             } else {
-                return $request->getRootUrl() . '/?admin=1';
+                return $request->getRootUrl() . '/?' . $adminAlias . '=1';
             }
         }
     }
@@ -70,7 +70,7 @@ function beAdminUrl($route = null, array $params = null)
         }
         return $request->getRootUrl() . '/' . $adminAlias . '/' . str_replace('.', '/', $route) . $urlParams . ($configSystem->urlRewrite === '1' ? $configSystem->urlSuffix : '');
     } else {
-        return $request->getRootUrl() . '/?admin=1&route=' . $route . ($params !== null ? '&' . http_build_query($params) : '');
+        return $request->getRootUrl() . '/?' . $adminAlias . '=1&route=' . $route . ($params !== null ? '&' . http_build_query($params) : '');
     }
 }
 
