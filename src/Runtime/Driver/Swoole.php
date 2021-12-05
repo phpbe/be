@@ -280,7 +280,7 @@ class Swoole extends Driver
                     }
                 }
 
-                if ($admin === null) $admin = $request->request('admin', false);
+                if ($admin === null) $admin = $request->request($this->adminAlias, false);
                 if ($admin) $request->setAdmin($admin);
 
                 // 默认访问控制台页面
