@@ -153,10 +153,16 @@ abstract class Driver
 
             $this->json();
         } else {
-            $this->set('message', $message);
             if ($redirect !== null) {
+                if (isset($redirect['timeout']) && $redirect['timeout'] === 0) {
+                    $this->redirect($redirect['url']);
+                    return;
+                }
+
                 $this->set('redirect', $redirect);
             }
+
+            $this->set('message', $message);
 
             if ($request->isAdmin()) {
                 $this->display('App.System.Admin.System.success', 'Blank');
@@ -184,10 +190,16 @@ abstract class Driver
 
             $this->json();
         } else {
-            $this->set('message', $message);
             if ($redirect !== null) {
+                if (isset($redirect['timeout']) && $redirect['timeout'] === 0) {
+                    $this->redirect($redirect['url']);
+                    return;
+                }
+
                 $this->set('redirect', $redirect);
             }
+
+            $this->set('message', $message);
 
             if ($request->isAdmin()) {
                 $this->display('App.System.Admin.System.error', 'Blank');
