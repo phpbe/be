@@ -89,10 +89,10 @@ class Curd extends Driver
 
                     $table->orderBy($orderBy, $orderByDir);
                 } else {
-                    if (isset($this->setting['Grid']['orderBy'])) {
-                        $orderBy = $this->setting['Grid']['orderBy'];
-                        if (isset($this->setting['Grid']['orderByDir'])) {
-                            $orderByDir = $this->setting['Grid']['orderByDir'];
+                    if (isset($this->setting['grid']['orderBy'])) {
+                        $orderBy = $this->setting['grid']['orderBy'];
+                        if (isset($this->setting['grid']['orderByDir'])) {
+                            $orderByDir = $this->setting['grid']['orderByDir'];
                             $table->orderBy($orderBy, $orderByDir);
                         } else {
                             $table->orderBy($orderBy);
@@ -110,7 +110,7 @@ class Curd extends Driver
                 foreach ($rows as $row) {
                     $formattedRow = [];
 
-                    foreach ($this->setting['Grid']['table']['items'] as $item) {
+                    foreach ($this->setting['grid']['table']['items'] as $item) {
                         if (!isset($item['name'])) {
                             continue;
                         }
@@ -150,9 +150,9 @@ class Curd extends Driver
                             continue;
                         }
 
-                        if (isset($this->setting['Grid']['table']['exclude']) &&
-                            is_array($this->setting['Grid']['table']['exclude']) &&
-                            in_array($k, $this->setting['Grid']['table']['exclude'])
+                        if (isset($this->setting['grid']['table']['exclude']) &&
+                            is_array($this->setting['grid']['table']['exclude']) &&
+                            in_array($k, $this->setting['grid']['table']['exclude'])
                         ) {
                             continue;
                         }
@@ -176,7 +176,7 @@ class Curd extends Driver
             }
 
         } else {
-            $setting = $this->setting['Grid'];
+            $setting = $this->setting['grid'];
 
             Be::getAdminPlugin('Grid')
                 ->setting($setting)
@@ -202,17 +202,17 @@ class Curd extends Driver
         $setting['db'] = $this->setting['db'];
         $setting['table'] = $this->setting['table'];
 
-        if (!isset($setting['Grid']['title']) && isset($this->setting['Grid']['title'])) {
-            $setting['title'] = $this->setting['Grid']['title'] . ' - 导入';
+        if (!isset($setting['grid']['title']) && isset($this->setting['grid']['title'])) {
+            $setting['title'] = $this->setting['grid']['title'] . ' - 导入';
         }
 
-        if (!isset($setting['Grid']['theme']) && isset($this->setting['Grid']['theme'])) {
-            $setting['theme'] = $this->setting['Grid']['theme'];
+        if (!isset($setting['grid']['theme']) && isset($this->setting['grid']['theme'])) {
+            $setting['theme'] = $this->setting['grid']['theme'];
         }
 
         if (!isset($setting['mapping']['items'])) {
             $mappingItems = [];
-            foreach ($this->setting['Grid']['table']['items'] as $item) {
+            foreach ($this->setting['grid']['table']['items'] as $item) {
                 $mappingItems[] = [
                     'name' => $item['name'],
                     'label' => $item['label'],
@@ -247,17 +247,17 @@ class Curd extends Driver
 
         $setting = $this->setting['import'] ?? [];
 
-        if (!isset($setting['Grid']['title']) && isset($this->setting['Grid']['title'])) {
-            $setting['title'] = $this->setting['Grid']['title'] . ' - 导入模板';
+        if (!isset($setting['grid']['title']) && isset($this->setting['grid']['title'])) {
+            $setting['title'] = $this->setting['grid']['title'] . ' - 导入模板';
         }
 
-        if (!isset($setting['Grid']['theme']) && isset($this->setting['Grid']['theme'])) {
-            $setting['theme'] = $this->setting['Grid']['theme'];
+        if (!isset($setting['grid']['theme']) && isset($this->setting['grid']['theme'])) {
+            $setting['theme'] = $this->setting['grid']['theme'];
         }
 
         if (!isset($setting['mapping']['items'])) {
             $mappingItems = [];
-            foreach ($this->setting['Grid']['table']['items'] as $item) {
+            foreach ($this->setting['grid']['table']['items'] as $item) {
                 $mappingItems[] = [
                     'name' => $item['name'],
                     'label' => $item['label'],
@@ -293,8 +293,8 @@ class Curd extends Driver
             $filename = null;
             if (isset($this->setting['export']['title'])) {
                 $filename = $this->setting['export']['title'];
-            } elseif (isset($this->setting['Grid']['title'])) {
-                $filename = $this->setting['Grid']['title'];
+            } elseif (isset($this->setting['grid']['title'])) {
+                $filename = $this->setting['grid']['title'];
             }
             $filename .= '（' . date('YmdHis') . '）';
             $filename .= ($exportDriver == 'csv' ? '.csv' : '.xls');
@@ -305,7 +305,7 @@ class Curd extends Driver
             if (isset($this->setting['export']['items'])) {
                 $fields = $this->setting['export']['items'];
             } else {
-                $fields = $this->setting['Grid']['table']['items'];
+                $fields = $this->setting['grid']['table']['items'];
             }
 
             $headers = [];
@@ -381,8 +381,8 @@ class Curd extends Driver
             $content = null;
             if (isset($this->setting['export']['title'])) {
                 $content = $this->setting['export']['title'] . '（' . $exportDriver . '）';
-            } elseif (isset($this->setting['Grid']['title'])) {
-                $content = '导出 ' . $this->setting['Grid']['title'] . '（' . $exportDriver . '）';
+            } elseif (isset($this->setting['grid']['title'])) {
+                $content = '导出 ' . $this->setting['grid']['title'] . '（' . $exportDriver . '）';
             } else {
                 $content = '导出 ' . $exportDriver;
             }
@@ -408,13 +408,13 @@ class Curd extends Driver
         $db = Be::getDb($this->setting['db']);
         $table = Be::newTable($this->setting['table'], $this->setting['db']);
 
-        if (isset($this->setting['Grid']['filter']) && count($this->setting['Grid']['filter']) > 0) {
-            foreach ($this->setting['Grid']['filter'] as $filter) {
+        if (isset($this->setting['grid']['filter']) && count($this->setting['grid']['filter']) > 0) {
+            foreach ($this->setting['grid']['filter'] as $filter) {
                 $table->where($filter);
             }
         }
 
-        if (isset($this->setting['Grid']['tab'])) {
+        if (isset($this->setting['grid']['tab'])) {
             if (isset($item['buildSql']) && $item['buildSql'] instanceof \Closure) {
                 $buildSql = $item['buildSql'];
                 $sql = $buildSql($this->setting['db'], $formData);
@@ -422,7 +422,7 @@ class Curd extends Driver
                     $table->where($sql);
                 }
             } else {
-                $driver = new \Be\AdminPlugin\Tab\Driver($this->setting['Grid']['tab']);
+                $driver = new \Be\AdminPlugin\Tab\Driver($this->setting['grid']['tab']);
                 $driver->submit($formData);
                 if ($driver->newValue !== '') {
                     $sql = $db->quoteKey($driver->name) . ' = ' . $db->quoteValue($driver->newValue);
@@ -431,8 +431,8 @@ class Curd extends Driver
             }
         }
 
-        if (isset($this->setting['Grid']['form']['items']) && count($this->setting['Grid']['form']['items']) > 0) {
-            foreach ($this->setting['Grid']['form']['items'] as $item) {
+        if (isset($this->setting['grid']['form']['items']) && count($this->setting['grid']['form']['items']) > 0) {
+            foreach ($this->setting['grid']['form']['items'] as $item) {
 
                 $driverClass = null;
                 if (isset($item['driver'])) {
@@ -579,7 +579,7 @@ class Curd extends Driver
             } else {
                 $fields = [];
 
-                $listFields = $this->setting['Grid']['form']['items'];
+                $listFields = $this->setting['grid']['form']['items'];
                 foreach ($listFields as &$item) {
                     if (!isset($item['label'])) {
                         continue;
@@ -978,8 +978,8 @@ class Curd extends Driver
         $field = $postData['postData']['field'];
 
         $fieldLabel = '';
-        if (isset($this->setting['Grid']['field']['items'])) {
-            foreach ($this->setting['Grid']['field']['items'] as $fieldItem) {
+        if (isset($this->setting['grid']['field']['items'])) {
+            foreach ($this->setting['grid']['field']['items'] as $fieldItem) {
                 if ($fieldItem['name'] == $field) {
                     $fieldLabel = $fieldItem['label'];
                     break;

@@ -48,7 +48,7 @@ class AdminUser extends Auth
             'label' => '用户管理',
             'table' => 'system_admin_user',
 
-            'Grid' => [
+            'grid' => [
                 'title' => '用户列表',
 
                 'filter' => [

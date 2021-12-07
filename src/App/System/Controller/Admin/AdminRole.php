@@ -36,7 +36,7 @@ class AdminRole extends Auth
             'label' => '角色管理',
             'table' => 'system_admin_role',
 
-            'Grid' => [
+            'grid' => [
                 'title' => '角色管理',
 
                 'filter' => [

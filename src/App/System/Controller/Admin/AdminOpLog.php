@@ -27,7 +27,7 @@ class AdminOpLog extends Auth
         Be::getAdminPlugin('Curd')->setting([
             'label' => '后台操作日志',
             'table' => 'system_admin_op_log',
-            'Grid' => [
+            'grid' => [
                 'title' => '操作日志',
                 'orderBy' => 'create_time',
                 'orderByDir' => 'DESC',

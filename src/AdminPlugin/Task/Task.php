@@ -125,7 +125,7 @@ class Task extends Driver
             'label' => '计划任务',
             'table' => 'system_task',
 
-            'Grid' => [
+            'grid' => [
                 'title' => '计划任务',
 
                 'filter' => [
@@ -468,7 +468,7 @@ class Task extends Driver
             'label' => '计划任务日志',
             'table' => 'system_task_log',
 
-            'Grid' => [
+            'grid' => [
                 'title' => '计划任务日志列表',
                 'orderBy' => 'id',
                 'orderByDir' => 'DESC',
@@ -610,7 +610,7 @@ class Task extends Driver
             'label' => '计划任务日志',
             'table' => 'system_task_log',
 
-            'Grid' => [],
+            'grid' => [],
 
             'detail' => [
                 'form' => [

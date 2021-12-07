@@ -146,10 +146,10 @@ class Report extends Driver
                         $sqlData .= ' ' . $orderBySql;
                     }
                 } else {
-                    if (isset($this->setting['Grid']['orderBy'])) {
-                        $orderBy = $this->setting['Grid']['orderBy'];
-                        if (isset($this->setting['Grid']['orderByDir'])) {
-                            $orderByDir = $this->setting['Grid']['orderByDir'];
+                    if (isset($this->setting['grid']['orderBy'])) {
+                        $orderBy = $this->setting['grid']['orderBy'];
+                        if (isset($this->setting['grid']['orderByDir'])) {
+                            $orderByDir = $this->setting['grid']['orderByDir'];
                             $orderBySql = ' ORDER BY ' . $orderBy . ' ' . $orderByDir;
                         } else {
                             $orderBySql = ' ORDER BY ' . $orderBy;
@@ -184,7 +184,7 @@ class Report extends Driver
                 foreach ($rows as $row) {
                     $formattedRow = [];
 
-                    foreach ($this->setting['Grid']['table']['items'] as $item) {
+                    foreach ($this->setting['grid']['table']['items'] as $item) {
                         $itemName = $item['name'];
                         $itemValue = '';
                         if (isset($item['value'])) {
@@ -221,9 +221,9 @@ class Report extends Driver
                             continue;
                         }
 
-                        if (isset($this->setting['Grid']['table']['exclude']) &&
-                            is_array($this->setting['Grid']['table']['exclude']) &&
-                            in_array($k, $this->setting['Grid']['table']['exclude'])
+                        if (isset($this->setting['grid']['table']['exclude']) &&
+                            is_array($this->setting['grid']['table']['exclude']) &&
+                            in_array($k, $this->setting['grid']['table']['exclude'])
                         ) {
                             continue;
                         }
@@ -247,7 +247,7 @@ class Report extends Driver
             }
 
         } else {
-            $setting = $this->setting['Grid'];
+            $setting = $this->setting['grid'];
 
             Be::getAdminPlugin('Grid')
                 ->setting($setting)
@@ -319,8 +319,8 @@ class Report extends Driver
             $filename = null;
             if (isset($this->setting['export']['title'])) {
                 $filename = $this->setting['export']['title'];
-            } elseif (isset($this->setting['Grid']['title'])) {
-                $filename = $this->setting['Grid']['title'];
+            } elseif (isset($this->setting['grid']['title'])) {
+                $filename = $this->setting['grid']['title'];
             }
             $filename .= '（' . date('YmdHis') . '）';
             $filename .= ($exportDriver == 'csv' ? '.csv' : '.xls');
@@ -331,7 +331,7 @@ class Report extends Driver
             if (isset($this->setting['export']['items'])) {
                 $fields = $this->setting['export']['items'];
             } else {
-                $fields = $this->setting['Grid']['table']['items'];
+                $fields = $this->setting['grid']['table']['items'];
             }
 
             $headers = [];
@@ -407,8 +407,8 @@ class Report extends Driver
             $content = null;
             if (isset($this->setting['export']['title'])) {
                 $content = $this->setting['export']['title'] . '（' . $exportDriver . '）';
-            } elseif (isset($this->setting['Grid']['title'])) {
-                $content = '导出 ' . $this->setting['Grid']['title'] . '（' . $exportDriver . '）';
+            } elseif (isset($this->setting['grid']['title'])) {
+                $content = '导出 ' . $this->setting['grid']['title'] . '（' . $exportDriver . '）';
             } else {
                 $content = '导出 ' . $exportDriver;
             }
@@ -435,8 +435,8 @@ class Report extends Driver
 
         $wheres = [];
 
-        if (isset($this->setting['Grid']['filter']) && count($this->setting['Grid']['filter']) > 0) {
-            foreach ($this->setting['Grid']['filter'] as $filter) {
+        if (isset($this->setting['grid']['filter']) && count($this->setting['grid']['filter']) > 0) {
+            foreach ($this->setting['grid']['filter'] as $filter) {
                 if (is_array($filter)) {
                     $n = count($filter);
                     if ($n == 2) {
@@ -450,7 +450,7 @@ class Report extends Driver
             }
         }
 
-        if (isset($this->setting['Grid']['tab'])) {
+        if (isset($this->setting['grid']['tab'])) {
             if (isset($item['buildSql']) && $item['buildSql'] instanceof \Closure) {
                 $buildSql = $item['buildSql'];
                 $sql = $buildSql($this->setting['db'], $formData);
@@ -458,12 +458,12 @@ class Report extends Driver
                     $wheres[] = $sql;
                 }
             } else {
-                $driver = new \Be\AdminPlugin\Tab\Driver($this->setting['Grid']['tab']);
+                $driver = new \Be\AdminPlugin\Tab\Driver($this->setting['grid']['tab']);
                 $driver->submit($formData);
                 if ($driver->newValue !== '') {
                     $sql = '';
-                    if (isset($this->setting['Grid']['tab']['table'])) {
-                        $sql .= $db->quoteKey($this->setting['Grid']['tab']['table']) . '.';
+                    if (isset($this->setting['grid']['tab']['table'])) {
+                        $sql .= $db->quoteKey($this->setting['grid']['tab']['table']) . '.';
                     }
                     $sql .= $db->quoteKey($driver->name) . ' = ' . $db->quoteValue($driver->newValue);
                     $wheres[] = $sql;
@@ -472,8 +472,8 @@ class Report extends Driver
         }
 
         // 表单搜索
-        if (isset($this->setting['Grid']['form']['items']) && count($this->setting['Grid']['form']['items']) > 0) {
-            foreach ($this->setting['Grid']['form']['items'] as $item) {
+        if (isset($this->setting['grid']['form']['items']) && count($this->setting['grid']['form']['items']) > 0) {
+            foreach ($this->setting['grid']['form']['items'] as $item) {
 
                 $driverClass = null;
                 if (isset($item['driver'])) {
