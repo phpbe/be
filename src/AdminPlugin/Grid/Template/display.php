@@ -3,7 +3,8 @@
         <?php
         if ($this->setting['actualLayout'] == 'table') {
             ?>
-            .el-table__row .el-divider__text, .el-link {
+            .el-table__row .el-divider__text,
+            .el-table .el-link {
                 font-size: 12px;
                 margin-left: 4px;
                 margin-right: 4px;
