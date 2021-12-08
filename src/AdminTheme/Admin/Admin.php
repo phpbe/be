@@ -41,7 +41,7 @@
             <div class="be-north" id="be-north" v-cloak>
 
                 <div class="be-row">
-                    <div class="be-col be-pl-50">
+                    <div class="be-col be-pl-200">
                         <?php
                         $adminMenu = \Be\Be::getAdminMenu();
                         $adminMenuTree = $adminMenu->getMenuTree()
