@@ -71,7 +71,7 @@ class AdminRole extends Auth
                             'target' => 'drawer', // 'ajax - ajax请求 / dialog - 对话框窗口 / drawer - 抽屉 / self - 当前页面 / blank - 新页面'
                             'ui' => [
                                 'icon' => 'el-icon-fa fa-user-plus',
-                                'type' => 'success',
+                                'type' => 'primary',
                             ]
                         ],
                         [
@@ -84,7 +84,7 @@ class AdminRole extends Auth
                             'target' => 'ajax',
                             'ui' => [
                                 'icon' => 'el-icon-fa fa-check',
-                                'type' => 'primary',
+                                'type' => 'success',
                             ]
                         ],
                         [
@@ -210,7 +210,7 @@ class AdminRole extends Auth
                                 'task' => 'edit',
                                 'target' => 'drawer',
                                 'ui' => [
-                                    'type' => 'primary'
+                                    'type' => 'success'
                                 ]
                             ],
                             [

@@ -43,7 +43,7 @@ class App extends Auth
 
             Be::getAdminPlugin('Grid')
                 ->setting([
-                    'title' => '已安装的应用列表',
+                    'title' => '应用管理',
 
                     'toolbar' => [
 

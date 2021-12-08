@@ -3,7 +3,7 @@
 $my = \Be\Be::getAdminUser();
 $configAdminUser = \Be\Be::getConfig('App.System.AdminUser');
 ?>
-<div id="app">
+<div id="app" style="padding: 30px" v-cloak>
 
     <el-row :gutter="20">
         <el-col :span="12">

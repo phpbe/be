@@ -21,16 +21,16 @@ use Be\Be;
  * Class AdminUser
  * @package App\System\Controller
  *
- * @BeMenuGroup("管理员", icon="el-icon-fa fa-user", ordering="1")
+ * @BeMenuGroup("管理员", icon="el-icon-user-solid", ordering="1")
  * @BePermissionGroup("管理员", ordering="1")
  */
 class AdminUser extends Auth
 {
 
     /**
-     * 用户管理
+     * 管理员管理
      *
-     * @BeMenu("管理员管理", icon="el-icon-fa fa-users", ordering="1.1")
+     * @BeMenu("管理员管理", icon="el-icon-user-solid", ordering="1.1")
      * @BePermission("管理员管理", ordering="1.1")
      */
     public function adminUsers()
@@ -45,11 +45,11 @@ class AdminUser extends Auth
 
         Be::getAdminPlugin('Curd')->setting([
 
-            'label' => '用户管理',
+            'label' => '管理员管理',
             'table' => 'system_admin_user',
 
             'grid' => [
-                'title' => '用户列表',
+                'title' => '管理员管理',
 
                 'filter' => [
                     ['is_delete', '=', '0'],
@@ -110,7 +110,7 @@ class AdminUser extends Auth
                             'target' => 'ajax',
                             'ui' => [
                                 'icon' => 'el-icon-fa fa-check',
-                                'type' => 'primary',
+                                'type' => 'success',
                             ]
                         ],
                         [
@@ -253,7 +253,7 @@ class AdminUser extends Auth
                                 'task' => 'edit',
                                 'target' => 'drawer',
                                 'ui' => [
-                                    'type' => 'primary'
+                                    'type' => 'success'
                                 ]
                             ],
                             [

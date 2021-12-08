@@ -54,7 +54,7 @@ class Form extends Driver
                 if (isset($item['name'])) {
                     $name = $item['name'];
                     if (isset($row[$name])) {
-                        $item['value'] = (string) $row[$name];
+                        $item['value'] = (string)$row[$name];
                     }
                 }
             }
@@ -70,6 +70,7 @@ class Form extends Driver
         $response = Be::getResponse();
         $response->set('setting', $this->setting);
         $response->set('row', $this->row);
+        $response->set('title', $this->setting['title'] ?? '');
         $response->display('AdminPlugin.Form.display', $this->setting['theme']);
     }
 

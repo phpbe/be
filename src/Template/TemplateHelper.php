@@ -148,6 +148,13 @@ class TemplateHelper
                             $templateNoTags = false;
                         }
 
+                        $pattern = '/<be-center-body>(.*?)<\/be-center-body>/s';
+                        if (preg_match($pattern, $contentTemplate, $matches)) { // 查找替换 center
+                            $codeCenter = $matches[1];
+                            $codeHtml = preg_replace($pattern, $codeCenter, $codeHtml);
+                            $templateNoTags = false;
+                        }
+
                         $pattern = '/<be-east>(.*?)<\/be-east>/s';
                         if (preg_match($pattern, $contentTemplate, $matches)) { // 查找替换 east
                             $codeEast = $matches[1];
@@ -196,7 +203,7 @@ class TemplateHelper
                 $codePre = $codePreTheme . "\n";
             }
 
-            $pattern = '/<\?php(.*?)\?>\s+<be-(?:html|head|body|north|middle|west|center|east|south)>/s';
+            $pattern = '/<\?php(.*?)\?>\s+<be-(?:html|head|body|north|middle|west|center|center-body|east|south)>/s';
             if (preg_match($pattern, $contentTemplate, $matches)) {
                 $codePreTemplate = trim($matches[1]);
                 $codePreTemplate = preg_replace('/use\s+(.+);/', '', $codePreTemplate);
@@ -206,12 +213,12 @@ class TemplateHelper
             }
         }
 
-        $pattern = '/<be-(?:html|head|body|north|middle|west|center|east|south)>/s';
+        $pattern = '/<be-(?:html|head|body|north|middle|west|center|center-body|east|south)>/s';
         if (preg_match($pattern, $codeHtml, $matches)) {
             $codeHtml = preg_replace($pattern, '', $codeHtml);
         }
 
-        $pattern = '/<\/be-(?:html|head|body|north|middle|west|center|east|south)>/s';
+        $pattern = '/<\/be-(?:html|head|body|north|middle|west|center|center-body|east|south)>/s';
         if (preg_match($pattern, $codeHtml, $matches)) {
             $codeHtml = preg_replace($pattern, '', $codeHtml);
         }

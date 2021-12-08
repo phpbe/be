@@ -81,7 +81,7 @@ class Task extends Driver
                 'target' => 'ajax',
                 'ui' => [
                     'icon' => 'el-icon-fa fa-check',
-                    'type' => 'primary',
+                    'type' => 'success',
                 ]
             ],
             [
@@ -236,7 +236,7 @@ class Task extends Driver
                                 'task' => 'edit',
                                 'target' => 'drawer',
                                 'ui' => [
-                                    'type' => 'primary'
+                                    'type' => 'success'
                                 ]
                             ],
                             [
@@ -244,7 +244,7 @@ class Task extends Driver
                                 'task' => 'run',
                                 'target' => 'ajax',
                                 'ui' => [
-                                    'type' => 'success'
+                                    'type' => 'warning'
                                 ]
                             ],
                             [

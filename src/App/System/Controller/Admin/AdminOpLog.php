@@ -28,7 +28,7 @@ class AdminOpLog extends Auth
             'label' => '后台操作日志',
             'table' => 'system_admin_op_log',
             'grid' => [
-                'title' => '操作日志',
+                'title' => '后台操作日志',
                 'orderBy' => 'create_time',
                 'orderByDir' => 'DESC',
                 'form' => [

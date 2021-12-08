@@ -1,4 +1,4 @@
-<be-center>
+<be-center-body>
     <?php
     $js = [];
     $css = [];
@@ -73,8 +73,8 @@
                                     }
                                     ?>
                                     <el-form-item>
-                                        <el-button type="success" icon="el-icon-check" @click="saveConfig">保存</el-button>
-                                        <el-button type="danger" icon="el-icon-close" @click="resetConfig">恢复默认值</el-button>
+                                        <el-button type="primary" icon="el-icon-check" @click="saveConfig">保存</el-button>
+                                        <el-button type="warning" icon="el-icon-close" @click="resetConfig">恢复默认值</el-button>
                                         <?php if (isset($config['test'])) { ?>
                                             <el-button icon="el-icon-view" @click="window.open('<?php echo $config['test']; ?>');">测试</el-button>
                                         <?php } ?>
@@ -219,4 +219,4 @@
             ?>
         });
     </script>
-</be-center>
+</be-center-body>

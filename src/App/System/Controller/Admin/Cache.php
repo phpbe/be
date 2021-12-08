@@ -33,6 +33,7 @@ class Cache extends Auth
             $response->json();
         } else {
             Be::getAdminPlugin('Grid')->setting([
+                'title' => '缓存',
                 'pageSize' => 10,
                 'toolbar' => [
                     'items' => [
@@ -60,6 +61,9 @@ class Cache extends Auth
                             'name' => 'name',
                             'label' => '缓存类型',
                             'driver' => TableItemTag::class,
+                            'ui' => [
+                                'type' => 'success',
+                                ],
                             'width' => '120',
                             'align' => 'left',
                         ],

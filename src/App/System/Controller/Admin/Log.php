@@ -90,6 +90,7 @@ class Log extends Auth
             }
 
             Be::getAdminPlugin('Grid')->setting([
+                'title' => '系统日志',
                 'pageSize' => 10,
                 'form' => [
                     'items' => [
@@ -215,7 +216,8 @@ class Log extends Auth
                                     'width' => '75%',
                                 ],
                                 'ui' => [
-                                    'type' => 'primary'
+                                    'icon' => 'el-icon-search',
+                                    'type' => 'success'
                                 ]
                             ],
                         ]

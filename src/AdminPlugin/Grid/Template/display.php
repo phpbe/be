@@ -140,7 +140,7 @@
     </style>
 </be-head>
 
-<be-center>
+<be-center-body>
     <?php
     $js = [];
     $css = [];
@@ -1036,7 +1036,9 @@
                 resize: function () {
                     <?php if ($this->setting['actualLayout'] == 'table') { ?>
                     var offset = this.total > 0 ? 55 : 15;
-                    this.tableHeight = document.documentElement.clientHeight - this.$refs.tableRef.$el.offsetTop - offset;
+                    var rect = this.$refs.tableRef.$el.getBoundingClientRect();
+                    //console.log(rect);
+                    this.tableHeight = Math.max(document.documentElement.clientHeight - rect.top - offset, 100);
                     <?php } ?>
                 }
                 <?php
@@ -1147,4 +1149,4 @@
         }
 
     </script>
-</be-center>
+</be-center-body>

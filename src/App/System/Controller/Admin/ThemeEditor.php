@@ -42,7 +42,7 @@ class ThemeEditor
             $response->json();
         } else {
             Be::getAdminPlugin('Grid')->setting([
-                'title' => ($this->themeType == 'Theme' ? '前台' : '后台') . '主题列表',
+                'title' => ($this->themeType == 'Theme' ? '前台' : '后台') . '主题管理',
                 'pageSize' => 10,
                 'toolbar' => [
                     'items' => [

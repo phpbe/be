@@ -45,6 +45,7 @@ class Mail extends Auth
 
         } else {
             Be::getAdminPlugin('Form')->setting([
+                'title' => '发送邮件测试',
                 'form' => [
                     'items' => [
                         [

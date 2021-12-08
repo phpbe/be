@@ -37,7 +37,7 @@ class Watermark extends Auth
         $serviceWatermark = Be::getService('App.System.Watermark');
         $serviceWatermark->mark($dst);
 
-        $response->set('title', '水印预览');
+        $response->set('title', '水印测试');
         $response->display();
     }
 

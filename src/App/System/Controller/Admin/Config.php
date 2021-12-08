@@ -17,7 +17,7 @@ class Config extends Auth
      */
     public function dashboard()
     {
-        Be::getAdminPlugin('Config')->setting(['appName' => 'System'])->execute();
+        Be::getAdminPlugin('Config')->setting(['appName' => 'System', 'title' => '系统配置'])->execute();
     }
 
 

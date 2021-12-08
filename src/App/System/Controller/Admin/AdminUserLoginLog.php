@@ -25,10 +25,10 @@ class AdminUserLoginLog extends Auth
     public function logs()
     {
         Be::getAdminPlugin('Curd')->setting([
-            'label' => '用户登录日志',
+            'label' => '管理员登录日志',
             'table' => 'system_admin_user_login_log',
             'grid' => [
-                'title' => '用户登录日志',
+                'title' => '管理员登录日志',
                 'orderBy' => 'create_time',
                 'orderByDir' => 'DESC',
                 'form' => [

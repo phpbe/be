@@ -23,6 +23,9 @@ class Config extends Driver
         $response = Be::getResponse();
 
         $appName = isset($this->setting['appName']) ? $this->setting['appName'] : $request->getAppName();
+        $appProperty = Be::getProperty('App.' . $appName);
+
+        $response->set('title', $this->setting['title'] ?? ($appProperty->getLabel() . '配置'));
 
         $configs = [];
         $dir = Be::getRuntime()->getRootPath() . Be::getProperty('App.' . $appName)->getPath() . '/Config';
