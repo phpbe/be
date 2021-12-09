@@ -9,13 +9,15 @@ use Be\AdminPlugin\AdminPluginException;
  */
 class Driver
 {
-    public $name = null; // 键名
-    public $label = ''; // 配置项中文名称
-    public $value = ''; // 值
-    public $keyValues = null; // 可选值键值对
-    public $ui = []; // UI界面参数
+    protected $name = null; // 键名
+    protected $label = ''; // 配置项中文名称
+    protected $value = ''; // 值
+    protected $nullValue = ''; // 空值
+    protected $defaultValue = ''; // 默认址
+    protected $keyValues = null; // 可选值键值对
+    protected $ui = []; // UI界面参数
 
-    public $newValue = null; // 新值
+    protected $newValue = ''; // 新值，提交后生成
 
     /**
      * 构造函数
@@ -51,6 +53,15 @@ class Driver
                 $this->value = (string)$value();
             } else {
                 $this->value = (string)$value;
+            }
+        }
+
+        if (isset($params['nullValue'])) {
+            $nullValue = $params['nullValue'];
+            if ($nullValue instanceof \Closure) {
+                $this->nullValue = $nullValue();
+            } else {
+                $this->nullValue = $nullValue;
             }
         }
 
@@ -151,6 +162,15 @@ class Driver
         ];
     }
 
+    public function __get($property)
+    {
+        if (isset($this->$property)) {
+            return ($this->$property);
+        } else {
+            return null;
+        }
+    }
+
     /**
      * 提交处理
      *
@@ -159,8 +179,10 @@ class Driver
      */
     public function submit($data)
     {
-        if (isset($data[$this->name])) {
+        if (isset($data[$this->name]) && $data[$this->name] !== $this->nullValue) {
             $this->newValue = $data[$this->name];
+        } else {
+            $this->newValue = $this->nullValue;
         }
     }
 

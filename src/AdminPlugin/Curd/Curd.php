@@ -424,7 +424,7 @@ class Curd extends Driver
             } else {
                 $driver = new \Be\AdminPlugin\Tab\Driver($this->setting['grid']['tab']);
                 $driver->submit($formData);
-                if ($driver->newValue !== '') {
+                if ($driver->newValue !== $driver->nullValue) {
                     $sql = $db->quoteKey($driver->name) . ' = ' . $db->quoteValue($driver->newValue);
                     $table->where($sql);
                 }
