@@ -172,6 +172,20 @@ abstract class Tuple
     public function insert()
     {
         $db = Be::getDb($this->_dbName);
+
+        if (is_array($this->_primaryKey)) {
+            foreach ($this->_primaryKey as $primaryKey) {
+                if (strtolower($this->$primaryKey) == 'uuid()') {
+                    $this->$primaryKey = $db->getValue('SELECT UUID()');
+                }
+            }
+        } else {
+            $primaryKey = $this->_primaryKey;
+            if (strtolower($this->$primaryKey) == 'uuid()') {
+                $this->$primaryKey = $db->getValue('SELECT UUID()');
+            }
+        }
+
         if (is_array($this->_primaryKey)) {
             $db->insert($this->_tableName, $this);
             $tableProperty = Be::getTableProperty($this->_tableName, $this->_dbName);
@@ -228,19 +242,6 @@ abstract class Tuple
     }
 
     /**
-     * 替换数据到数据库
-     * 仅支持 MYSQL，底层用 replace into 实现
-     *
-     * @return Tuple | mixed
-     * @throws TupleException
-     */
-    public function replace()
-    {
-        Be::getDb($this->_dbName)->replace($this->_tableName, $this);
-        return $this;
-    }
-
-    /**
      * 保存数据到数据库
      * 跟据主键是否有值自动识别插入或更新
      *
@@ -249,42 +250,62 @@ abstract class Tuple
     public function save()
     {
         $db = Be::getDb($this->_dbName);
+
+        $insert = false;
         if ($this->_primaryKey === null) {
-            $db->insert($this->_tableName, $this);
-        } elseif (is_array($this->_primaryKey)) {
-            $update = true;
-            foreach ($this->_primaryKey as $primaryKey) {
-                if (!$this->$primaryKey) {
-                    $update = false;
-                    break;
+            $insert = true;
+        } else {
+            if (is_array($this->_primaryKey)) {
+                foreach ($this->_primaryKey as $primaryKey) {
+                    if (!$this->$primaryKey) {
+                        $insert = true;
+                        break;
+                    }
+
+                    if (strtolower($this->$primaryKey) == 'uuid()') {
+                        $this->$primaryKey = $db->getValue('SELECT UUID()');
+                        $insert = true;
+                        break;
+                    }
+                }
+            } else {
+                $primaryKey = $this->_primaryKey;
+                if ($this->$primaryKey) {
+                    if (strtolower($this->$primaryKey) == 'uuid()') {
+                        $this->$primaryKey = $db->getValue('SELECT UUID()');
+                        $insert = true;
+                    }
+                } else {
+                    $insert = true;
                 }
             }
-            if ($update) {
-                $db->update($this->_tableName, $this, $this->_primaryKey);
-            } else {
-                $db->insert($this->_tableName, $this);
+        }
+
+        if ($insert) {
+            $db->insert($this->_tableName, $this);
+
+            if ($this->_primaryKey !== null) {
                 $tableProperty = Be::getTableProperty($this->_tableName, $this->_dbName);
-                foreach ($this->_primaryKey as $primaryKey) {
+                if (is_array($this->_primaryKey)) {
+                    foreach ($this->_primaryKey as $primaryKey) {
+                        $field = $tableProperty->getField($primaryKey);
+                        if (isset($field['autoIncrement']) && $field['autoIncrement']) {
+                            $this->$primaryKey = $db->getLastInsertId();
+                            break;
+                        }
+                    }
+                } else {
+                    $primaryKey = $this->_primaryKey;
                     $field = $tableProperty->getField($primaryKey);
                     if (isset($field['autoIncrement']) && $field['autoIncrement']) {
                         $this->$primaryKey = $db->getLastInsertId();
-                        break;
                     }
                 }
             }
         } else {
-            $primaryKey = $this->_primaryKey;
-            if ($this->$primaryKey) {
-                $db->update($this->_tableName, $this, $this->_primaryKey);
-            } else {
-                $db->insert($this->_tableName, $this);
-                $tableProperty = Be::getTableProperty($this->_tableName, $this->_dbName);
-                $field = $tableProperty->getField($primaryKey);
-                if (isset($field['autoIncrement']) && $field['autoIncrement']) {
-                    $this->$primaryKey = $db->getLastInsertId();
-                }
-            }
+            $db->update($this->_tableName, $this, $this->_primaryKey);
         }
+
         return $this;
     }
 
