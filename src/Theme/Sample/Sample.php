@@ -147,7 +147,10 @@
         <be-middle>
             <div class="be-middle">
                 <be-center>
-                    <div class="be-center"></div>
+                    <div class="be-center">
+                        <div class="be-center-title"><?php echo $this->title; ?></div>
+                        <div class="be-center-body"><be-center-body></be-center-body></div>
+                    </div>
                 </be-center>
             </div>
         </be-middle>

@@ -37,8 +37,11 @@
 <body>
     <be-body>
     <div class="be-body">
-        <be-center>
-        </be-center>
+        <be-middle>
+            <be-center>
+                <be-center-body></be-center-body>
+            </be-center>
+        </be-middle>
     </div>
     </be-body>
 </body>
