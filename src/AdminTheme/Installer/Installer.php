@@ -18,8 +18,8 @@
 
         <script src="<?php echo $adminThemeUrl; ?>/js/vue-cookies-1.5.13.js"></script>
 
-        <link rel="stylesheet" href="<?php echo $adminThemeUrl; ?>/css/element-ui-2.13.2.css">
-        <script src="<?php echo $adminThemeUrl; ?>/js/element-ui-2.13.2.js"></script>
+        <link rel="stylesheet" href="<?php echo $adminThemeUrl; ?>/css/element-ui-2.15.7-f60.css">
+        <script src="<?php echo $adminThemeUrl; ?>/js/element-ui-2.15.7.js"></script>
 
         <link rel="stylesheet" href="<?php echo $adminThemeUrl; ?>/css/font-awesome-4.7.0.min.css"/>
 
@@ -57,8 +57,9 @@
                 <?php
             }
             ?>
-
-            <be-center></be-center>
+            <be-center>
+                <be-center-body></be-center-body>
+            </be-center>
         </div>
         <?php
         if (isset($this->steps) && is_array($this->steps) && count($this->steps) > 0) {
