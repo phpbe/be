@@ -186,6 +186,24 @@ class Swoole extends Driver
      */
     public function getIp(bool $detectProxy = true)
     {
+        if ($detectProxy) {
+            if (isset($this->request->header['x-forwarded-for'])) {
+                $xForwardedFor = $this->request->header['x-forwarded-for'];
+
+                $ip = null;
+                $pos = strpos($xForwardedFor, ',');
+                if ($pos === false) {
+                    $ip = $xForwardedFor;
+                } else {
+                    $ip = substr($xForwardedFor, 0, $pos);
+                }
+
+                if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+                    return $ip;
+                }
+            }
+        }
+
         return $this->request->server['remote_addr'];
     }
 

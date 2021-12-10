@@ -182,13 +182,14 @@ class Common extends Driver
     {
         if ($detectProxy) {
             if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-                $pos = strpos($_SERVER['HTTP_X_FORWARDED_FOR'], ',');
+                $xForwardedFor = $_SERVER['HTTP_X_FORWARDED_FOR'];
 
                 $ip = null;
-                if (false !== $pos) {
-                    $ip = substr($_SERVER['HTTP_X_FORWARDED_FOR'], 0, $pos);
+                $pos = strpos($xForwardedFor, ',');
+                if ($pos === false) {
+                    $ip = $xForwardedFor;
                 } else {
-                    $ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
+                    $ip = substr($xForwardedFor, 0, $pos);
                 }
 
                 if (!filter_var($ip, FILTER_VALIDATE_IP)) {
