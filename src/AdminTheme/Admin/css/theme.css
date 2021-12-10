@@ -1,5 +1,12 @@
 html {
     font-size: 14px;
+    background-color: #fff;
+    color: #333;
+}
+
+body {
+    margin: 0;
+    padding: 0;
 }
 
 [v-cloak] {display: none;}

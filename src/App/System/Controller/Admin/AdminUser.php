@@ -201,7 +201,7 @@ class AdminUser extends Auth
                             'ui' => [
                                 ':size' => '32',
                             ],
-                            'width' => '50',
+                            'width' => '60',
                         ],
                         [
                             'name' => 'username',
