@@ -51,6 +51,9 @@ class Redis extends Driver
     public function wipe()
     {
         $this->data = null;
+        if ($this->redis === null) {
+            $this->redis = Be::getRedis(Be::getConfig('App.System.Session')->redis);
+        }
         return $this->redis->del('be:session:' . $this->id);
     }
 
