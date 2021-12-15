@@ -33,8 +33,11 @@ class FormItemFile extends FormItem
         }
         $this->path = $params['path'];
 
-        $configSystem = Be::getConfig('App.System.System');
-        $this->maxSize = $configSystem->uploadMaxSize;
+        if (isset($params['uploadMaxSize'])) {
+            $this->maxSize = $params['uploadMaxSize'];
+        } else {
+            $this->maxSize = Be::getConfig('App.System.System')->uploadMaxSize;
+        }
         $this->maxSizeInt = FileSize::string2Int($this->maxSize);
 
         // 允许上传的文件类型

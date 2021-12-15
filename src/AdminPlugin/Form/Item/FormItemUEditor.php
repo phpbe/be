@@ -142,7 +142,8 @@ class FormItemUEditor extends FormItem
         return [
             'formItems' => [
                 $this->name => [
-                    'uEditor' => false,
+                    'instance' => false,
+                    'ready' => false,
                 ]
             ]
         ];
@@ -155,7 +156,7 @@ class FormItemUEditor extends FormItem
      */
     public function getVueHooks()
     {
-        $mountedCode = 'this.formItems.' . $this->name . '.uEditor = UE.getEditor(this.$refs.refFormItemUEditor_' . $this->name . ',' . json_encode($this->option) . ');';
+        $mountedCode = 'this.formItems.' . $this->name . '.instance = UE.getEditor(this.$refs.refFormItemUEditor_' . $this->name . ',' . json_encode($this->option) . ');';
 
         $updatedCode = 'this.formData.' . $this->name . ' = this.formItems.' . $this->name . '.uEditor.getContent();';
         return [

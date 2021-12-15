@@ -41,12 +41,19 @@ class FormItemAvatar extends FormItem
         }
         $this->path = $params['path'];
 
-        $configSystem = Be::getConfig('App.System.System');
-        $this->maxSize = $configSystem->uploadMaxSize;
+        if (isset($params['uploadMaxSize'])) {
+            $this->maxSize = $params['uploadMaxSize'];
+        } else {
+            $this->maxSize = Be::getConfig('App.System.System')->uploadMaxSize;
+        }
         $this->maxSizeInt = FileSize::string2Int($this->maxSize);
 
         // 允许上传的图像类型
-        $this->allowUploadImageTypes = $configSystem->allowUploadImageTypes;
+        if (isset($params['allowUploadImageTypes'])) {
+            $this->allowUploadImageTypes = $params['allowUploadImageTypes'];
+        } else {
+            $this->allowUploadImageTypes = Be::getConfig('App.System.System')->allowUploadImageTypes;
+        }
 
         // 最大宽度
         if (isset($params['maxWidth']) && is_numeric($params['maxWidth']) && $params['maxWidth'] > 0) {
