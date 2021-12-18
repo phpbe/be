@@ -129,7 +129,7 @@ class FormItemAvatar extends FormItem
     public function getHtml()
     {
         if (!isset($this->ui['action'])) {
-            $this->ui['action'] = beAdminUrl('System.Plugin.uploadAvatar');
+            $this->ui['action'] = beAdminUrl('System.AdminPlugin.uploadAvatar');
         }
 
         $html = '<el-form-item';
