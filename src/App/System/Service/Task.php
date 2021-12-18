@@ -65,7 +65,7 @@ class Task
                                     'schedule_lock' => $scheduleLock,
                                     'is_enable' => 0,
                                     'is_delete' => 0,
-                                    'last_execute_time' => '0000-00-00 00:00:00',
+                                    //'last_execute_time' => null,
                                     'create_time' => date('Y-m-d H:i:s'),
                                     'update_time' => date('Y-m-d H:i:s'),
                                 ];
@@ -202,7 +202,7 @@ class Task
                 $taskLog->status = 'RUNNING';
                 $taskLog->message = '';
                 $taskLog->trigger = $trigger;
-                $taskLog->complete_time = '0000-00-00 00:00:00';
+                //$taskLog->complete_time = null;
                 $taskLog->create_time = $now;
                 $taskLog->update_time = $now;
                 $taskLogId = $db->insert('system_task_log', $taskLog);
