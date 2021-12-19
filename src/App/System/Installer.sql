@@ -123,7 +123,7 @@ CREATE TABLE `system_admin_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户';
 
 INSERT INTO `system_admin_user` (`id`, `username`, `password`, `salt`, `admin_role_id`, `avatar`, `email`, `name`, `gender`, `phone`, `mobile`, `last_login_time`, `this_login_time`, `last_login_ip`, `this_login_ip`, `is_enable`, `is_delete`, `create_time`, `update_time`) VALUES
-(1, 'admin', 'a2ad3e6e3acf5b182324ed782f8a0556d43e59dd', 'ybFD7uzKMH8yvPHvuPNNT0vDv7uF2811', 1, '', 'be@phpbe.com', '管理员', 0, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '127.0.0.1', '127.0.0.1', 1, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+(1, 'admin', 'a2ad3e6e3acf5b182324ed782f8a0556d43e59dd', 'ybFD7uzKMH8yvPHvuPNNT0vDv7uF2811', 1, '', 'be@phpbe.com', '管理员', 0, '', '', NULL, NULL, '', '', 1, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 CREATE TABLE `system_admin_user_login_log` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '自增编号',

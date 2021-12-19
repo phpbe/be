@@ -446,6 +446,7 @@ class Installer
                                 'name' => 'username',
                                 'label' => '超级管理员账号',
                                 'required' => true,
+                                'value' => 'admin',
                             ],
                             [
                                 'name' => 'password',
