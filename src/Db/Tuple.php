@@ -189,9 +189,11 @@ abstract class Tuple
         $tableProperty = Be::getTableProperty($this->_tableName, $this->_dbName);
         $fields = $tableProperty->getFields();
         foreach ($fields as $field) {
-            $fieldName = $field['name'];
-            if ($this->$fieldName === 'CURRENT_TIMESTAMP') {
-                $this->$fieldName = date('Y-m-d H:i:s');
+            if ($field['type'] === 'timestamp' || $field['type'] === 'datetime') {
+                $fieldName = $field['name'];
+                if ($this->$fieldName === 'CURRENT_TIMESTAMP') {
+                    $this->$fieldName = date('Y-m-d H:i:s');
+                }
             }
         }
 
@@ -293,9 +295,11 @@ abstract class Tuple
             $tableProperty = Be::getTableProperty($this->_tableName, $this->_dbName);
             $fields = $tableProperty->getFields();
             foreach ($fields as $field) {
-                $fieldName = $field['name'];
-                if ($this->$fieldName === 'CURRENT_TIMESTAMP') {
-                    $this->$fieldName = date('Y-m-d H:i:s');
+                if ($field['type'] === 'timestamp' || $field['type'] === 'datetime') {
+                    $fieldName = $field['name'];
+                    if ($this->$fieldName === 'CURRENT_TIMESTAMP') {
+                        $this->$fieldName = date('Y-m-d H:i:s');
+                    }
                 }
             }
 
