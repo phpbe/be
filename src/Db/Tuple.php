@@ -186,9 +186,17 @@ abstract class Tuple
             }
         }
 
+        $tableProperty = Be::getTableProperty($this->_tableName, $this->_dbName);
+        $fields = $tableProperty->getFields();
+        foreach ($fields as $field) {
+            $fieldName = $field['name'];
+            if ($this->$fieldName === 'CURRENT_TIMESTAMP') {
+                $this->$fieldName = date('Y-m-d H:i:s');
+            }
+        }
+
         if (is_array($this->_primaryKey)) {
             $db->insert($this->_tableName, $this);
-            $tableProperty = Be::getTableProperty($this->_tableName, $this->_dbName);
             foreach ($this->_primaryKey as $primaryKey) {
                 $field = $tableProperty->getField($primaryKey);
                 if (isset($field['autoIncrement']) && $field['autoIncrement']) {
@@ -199,7 +207,6 @@ abstract class Tuple
         } else {
             $primaryKey = $this->_primaryKey;
             $db->insert($this->_tableName, $this);
-            $tableProperty = Be::getTableProperty($this->_tableName, $this->_dbName);
             $field = $tableProperty->getField($primaryKey);
             if (isset($field['autoIncrement']) && $field['autoIncrement']) {
                 $this->$primaryKey = $db->getLastInsertId();
@@ -282,10 +289,19 @@ abstract class Tuple
         }
 
         if ($insert) {
+
+            $tableProperty = Be::getTableProperty($this->_tableName, $this->_dbName);
+            $fields = $tableProperty->getFields();
+            foreach ($fields as $field) {
+                $fieldName = $field['name'];
+                if ($this->$fieldName === 'CURRENT_TIMESTAMP') {
+                    $this->$fieldName = date('Y-m-d H:i:s');
+                }
+            }
+
             $db->insert($this->_tableName, $this);
 
             if ($this->_primaryKey !== null) {
-                $tableProperty = Be::getTableProperty($this->_tableName, $this->_dbName);
                 if (is_array($this->_primaryKey)) {
                     foreach ($this->_primaryKey as $primaryKey) {
                         $field = $tableProperty->getField($primaryKey);
