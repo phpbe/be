@@ -98,7 +98,7 @@ class Task
                 $taskLog->status = 'RUNNING';
                 $taskLog->message = '';
                 $taskLog->trigger = $trigger;
-                $taskLog->complete_time = '0000-00-00 00:00:00';
+                //$taskLog->complete_time = null;
                 $taskLog->create_time = $now;
                 $taskLog->update_time = $now;
                 $taskLogId = $db->insert('system_task_log', $taskLog);
