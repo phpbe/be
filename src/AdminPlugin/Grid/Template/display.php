@@ -402,7 +402,13 @@
                 }
                 ?>>
                     <template slot="empty">
-                        <el-empty description="暂无数据"></el-empty>
+                        <?php
+                        if (isset($this->setting['table']['empty']) && is_string($this->setting['table']['empty'])) {
+                            echo $this->setting['table']['empty'];
+                        } else {
+                            echo '<el-empty description="暂无数据"></el-empty>';
+                        }
+                        ?>
                     </template>
 
                     <?php
