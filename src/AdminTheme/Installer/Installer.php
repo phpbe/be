@@ -1,5 +1,6 @@
 <be-html>
     <?php
+    $beUrl = beUrl();
     $adminThemeUrl = \Be\Be::getProperty('AdminTheme.Admin')->getUrl();
     $themeUrl = \Be\Be::getProperty('AdminTheme.Installer')->getUrl();
     ?>
@@ -8,8 +9,10 @@
     <head>
         <meta charset="utf-8"/>
         <title><?php echo $this->title; ?></title>
-        <base href="<?php echo beUrl(); ?>/">
-        <script>var beUrl = "<?php echo beUrl(); ?>"; </script>
+        <base href="<?php echo $beUrl; ?>/">
+        <script>var beUrl = "<?php echo $beUrl; ?>"; </script>
+
+        <script src="<?php echo $adminThemeUrl; ?>/js/jquery-1.12.4.min.js"></script>
 
         <script src="<?php echo $adminThemeUrl; ?>/js/vue-2.6.11.min.js"></script>
 
@@ -23,6 +26,7 @@
 
         <link rel="stylesheet" href="<?php echo $adminThemeUrl; ?>/css/font-awesome-4.7.0.min.css"/>
 
+        <link rel="stylesheet" href="<?php echo $beUrl; ?>/vendor/be/scss/src/be.css" />
         <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/theme.css"/>
 
         <be-head>

@@ -21,6 +21,7 @@
         <script src="<?php echo $themeUrl; ?>/js/vue-2.6.11.min.js"></script>
 
         <script src="<?php echo $themeUrl; ?>/js/axios-0.19.0.min.js"></script>
+        <script>Vue.prototype.$http = axios;</script>
 
         <script src="<?php echo $themeUrl; ?>/js/vue-cookies-1.5.13.js"></script>
 
@@ -31,11 +32,12 @@
         <?php
     } else {
         ?>
-        <script src="https://www.unpkg.com/jquery@1.12.4/dist/jquery.min.js"></script>
+        <script src="https://unpkg.com/jquery@1.12.4/dist/jquery.min.js"></script>
 
         <script src="https://unpkg.com/vue@2.6.11/dist/vue.min.js"></script>
 
         <script src="https://unpkg.com/axios@0.19.0/dist/axios.min.js"></script>
+        <script>Vue.prototype.$http = axios;</script>
 
         <script src="https://unpkg.com/vue-cookies@1.5.13/vue-cookies.js"></script>
 
@@ -46,7 +48,6 @@
         <?php
     }
     ?>
-    <script>Vue.prototype.$http = axios;</script>
 
     <link rel="stylesheet" href="<?php echo $beUrl; ?>/vendor/be/scss/src/be.css" />
     <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/theme.css" />

@@ -1,5 +1,5 @@
 <?php
-namespace Be\AdminTheme\Admin\Config;
+namespace Be\AdminTheme\Blank\Config;
 
 /**
  * @BeConfig("主题")
