@@ -116,9 +116,25 @@ class DbHelper
 
         foreach ($fields as $field) {
             if ($field['isNumber']) {
-                $code .= '    public $' . $field['name'] . ' = ' . $field['default'] . ';';
+                if ($field['default'] === null) {
+                    if ($field['nullAble']) {
+                        $code .= '    public $' . $field['name'] . ' = null;';
+                    } else {
+                        $code .= '    public $' . $field['name'] . ' = 0;';
+                    }
+                } else {
+                    $code .= '    public $' . $field['name'] . ' = ' . $field['default'] . ';';
+                }
             } else {
-                $code .= '    public $' . $field['name'] . ' = ' . ($field['default'] === null ? 'null' : ('\'' . $field['default'] . '\'')) . ';';
+                if ($field['default'] === null) {
+                    if ($field['nullAble']) {
+                        $code .= '    public $' . $field['name'] . ' = null;';
+                    } else {
+                        $code .= '    public $' . $field['name'] . ' = \'\';';
+                    }
+                } else {
+                    $code .= '    public $' . $field['name'] . ' = \'' . $field['default'] . '\';';
+                }
             }
 
             if ($field['comment']) $code .= ' // ' . $field['comment'];

@@ -7,28 +7,48 @@
 
     <?php
     $beUrl = beUrl();
+    $configTheme = \Be\Be::getConfig('AdminTheme.Admin.Theme');
+    $themeUrl = \Be\Be::getProperty('AdminTheme.Admin')->getUrl();
     ?>
     <base href="<?php echo $beUrl; ?>/" >
     <script>var beUrl = "<?php echo $beUrl; ?>"; </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
-    <link rel="stylesheet" href="<?php echo $beUrl; ?>/vendor/be/scss/src/be.css" />
-
     <?php
-    $themeUrl = \Be\Be::getProperty('AdminTheme.Admin')->getUrl();
-    ?>
-    <script src="<?php echo $themeUrl; ?>/js/vue-2.6.11.min.js"></script>
+    if ($configTheme->localAssetLib) {
+        ?>
+        <script src="<?php echo $themeUrl; ?>/js/jquery-1.12.4.min.js"></script>
 
-    <script src="<?php echo $themeUrl; ?>/js/axios-0.19.0.min.js"></script>
+        <script src="<?php echo $themeUrl; ?>/js/vue-2.6.11.min.js"></script>
+
+        <script src="<?php echo $themeUrl; ?>/js/axios-0.19.0.min.js"></script>
+
+        <script src="<?php echo $themeUrl; ?>/js/vue-cookies-1.5.13.js"></script>
+
+        <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/element-ui-2.15.7.css">
+        <script src="<?php echo $themeUrl; ?>/js/element-ui-2.15.7.js"></script>
+
+        <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/font-awesome-4.7.0.min.css" />
+        <?php
+    } else {
+        ?>
+        <script src="https://www.unpkg.com/jquery@1.12.4/dist/jquery.min.js"></script>
+
+        <script src="https://unpkg.com/vue@2.6.11/dist/vue.min.js"></script>
+
+        <script src="https://unpkg.com/axios@0.19.0/dist/axios.min.js"></script>
+
+        <script src="https://unpkg.com/vue-cookies@1.5.13/vue-cookies.js"></script>
+
+        <link rel="stylesheet" href="https://unpkg.com/element-ui@2.15.7/lib/theme-chalk/index.css">
+        <script src="https://unpkg.com/element-ui@2.15.7/lib/index.js"></script>
+
+        <link rel="stylesheet" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css" />
+        <?php
+    }
+    ?>
     <script>Vue.prototype.$http = axios;</script>
 
-    <script src="<?php echo $themeUrl; ?>/js/vue-cookies-1.5.13.js"></script>
-
-    <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/element-ui-2.15.7-f60.css">
-    <script src="<?php echo $themeUrl; ?>/js/element-ui-2.15.7.js"></script>
-
-    <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/font-awesome-4.7.0.min.css" />
-
+    <link rel="stylesheet" href="<?php echo $beUrl; ?>/vendor/be/scss/src/be.css" />
     <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/theme.css" />
     <be-head>
     </be-head>

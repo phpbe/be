@@ -235,16 +235,13 @@ class Task extends Driver
                                 'label' => '编辑',
                                 'task' => 'edit',
                                 'target' => 'drawer',
-                                'ui' => [
-                                    'type' => 'success'
-                                ]
                             ],
                             [
                                 'label' => '运行',
                                 'task' => 'run',
                                 'target' => 'ajax',
                                 'ui' => [
-                                    'type' => 'warning'
+                                    'type' => 'success'
                                 ]
                             ],
                             [

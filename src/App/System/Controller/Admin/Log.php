@@ -217,7 +217,6 @@ class Log extends Auth
                                 ],
                                 'ui' => [
                                     'icon' => 'el-icon-search',
-                                    'type' => 'success'
                                 ]
                             ],
                         ]

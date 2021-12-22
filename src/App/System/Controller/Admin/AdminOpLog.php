@@ -134,7 +134,6 @@ class AdminOpLog extends Auth
                                 'task' => 'detail',
                                 'ui' => [
                                     'icon' => 'el-icon-search',
-                                    'type' => 'success'
                                 ]
                             ],
                         ]

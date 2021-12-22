@@ -100,9 +100,6 @@ class ThemeEditor
                                 'label' => '配置',
                                 'action' => 'goSetting',
                                 'target' => 'blank',
-                                'ui' => [
-                                    'type' => 'success'
-                                ]
                             ],
                         ]
                     ],
@@ -151,9 +148,6 @@ class ThemeEditor
                                 'label' => '配置',
                                 'action' => 'goSetting',
                                 'target' => 'blank',
-                                'ui' => [
-                                    'type' => 'success'
-                                ]
                             ],
                         ]
                     ],

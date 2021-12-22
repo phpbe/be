@@ -188,7 +188,7 @@ body {
 .be-north-popup-menu .el-submenu.is-active .el-submenu__title span,
 .be-north-popup-menu .el-menu-item.is-active i,
 .be-north-popup-menu .el-menu-item.is-active span {
-    color: #f60;
+    /*color: #409EFF;*/
 }
 
 .be-middle {

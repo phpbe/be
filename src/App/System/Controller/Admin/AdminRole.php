@@ -209,9 +209,6 @@ class AdminRole extends Auth
                                 'label' => '编辑',
                                 'task' => 'edit',
                                 'target' => 'drawer',
-                                'ui' => [
-                                    'type' => 'success'
-                                ]
                             ],
                             [
                                 'label' => '删除',
