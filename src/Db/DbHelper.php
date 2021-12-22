@@ -115,23 +115,11 @@ class DbHelper
         $code .= '    protected $_primaryKey = ' . var_export($tableProperty->getPrimaryKey(), true) . '; // 主键' . "\n";
 
         foreach ($fields as $field) {
-            if ($field['isNumber']) {
-                if ($field['default'] === null) {
-                    if ($field['nullAble']) {
-                        $code .= '    public $' . $field['name'] . ' = null;';
-                    } else {
-                        $code .= '    public $' . $field['name'] . ' = 0;';
-                    }
-                } else {
-                    $code .= '    public $' . $field['name'] . ' = ' . $field['default'] . ';';
-                }
+            if ($field['default'] === null) {
+                $code .= '    public $' . $field['name'] . ' = null;';
             } else {
-                if ($field['default'] === null) {
-                    if ($field['nullAble']) {
-                        $code .= '    public $' . $field['name'] . ' = null;';
-                    } else {
-                        $code .= '    public $' . $field['name'] . ' = \'\';';
-                    }
+                if ($field['isNumber']) {
+                    $code .= '    public $' . $field['name'] . ' = ' . $field['default'] . ';';
                 } else {
                     $code .= '    public $' . $field['name'] . ' = \'' . $field['default'] . '\';';
                 }
