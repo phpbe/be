@@ -93,7 +93,7 @@ class Config extends Driver
                 if ($configItem) {
 
                     $configItem['name'] = $itemName;
-                    $configItem['value'] = $configInstance->$itemName;
+                    $configItem['value'] = $configInstance->$itemName ?? $originalConfigInstance->$itemName;
 
                     $driverClass = null;
                     if (isset($configItem['driver'])) {
@@ -145,6 +145,7 @@ class Config extends Driver
             if (!class_exists($className)) {
                 throw new AdminPluginException('配置项（' . $className . '）不存在！');
             }
+            $configInstance = Be::getConfig('App.' . $appName . '.' . $configName);
             $originalConfigInstance = new $className();
 
             $newValues = [];
@@ -153,10 +154,6 @@ class Config extends Driver
             $properties = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC);
             foreach ($properties as $property) {
                 $itemName = $property->getName();
-                if (!isset($formData[$itemName])) {
-                    throw new AdminPluginException('参数 (' . $itemName . ') 缺失！');
-                }
-
                 $itemComment = $property->getDocComment();
                 $parseItemComments = \Be\Util\Annotation::parse($itemComment);
 
@@ -176,6 +173,10 @@ class Config extends Driver
                 }
 
                 if ($configItem) {
+                    if (!isset($formData[$itemName])) {
+                        throw new AdminPluginException('参数 (' . $itemName . ') 缺失！');
+                    }
+
                     $configItem['name'] = $itemName;
 
                     $driverClass = null;
@@ -225,17 +226,14 @@ class Config extends Driver
                     }
 
                     $newValueStrings[$itemName] = $newValueString;
+                } else {
+                    $newValues[$itemName] = $configInstance->$itemName ?? $originalConfigInstance->$itemName;
+                    $newValueStrings[$itemName] = var_export($configInstance->$itemName ?? $originalConfigInstance->$itemName, true);
                 }
             }
 
-            $instance = Be::getConfig('App.' . $appName . '.' . $configName);
-            $vars = get_object_vars($instance);
-            foreach ($vars as $k => $v) {
-                if (isset($newValueStrings[$k])) {
-                    $code .= '  public $' . $k . ' = ' . $newValueStrings[$k] . ';' . "\n";
-                } else {
-                    $code .= '  public $' . $k . ' = ' . var_export($v, true) . ';' . "\n";
-                }
+            foreach ($newValueStrings as $k => $v) {
+                $code .= '  public $' . $k . ' = ' . $newValueStrings[$k] . ';' . "\n";
             }
 
             $code .= "}\n";
@@ -247,10 +245,8 @@ class Config extends Driver
             @chmod($path, 0755);
 
             // 更新 config 实例
-            foreach ($vars as $k => $v) {
-                if (isset($newValues[$k])) {
-                    $instance->$k = $newValues[$k];
-                }
+            foreach ($newValues as $k => $v) {
+                $configInstance->$k = $newValues[$k];
             }
 
             $response->success('保存成功，系统将自动重载！');
