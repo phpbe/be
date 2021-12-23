@@ -30,7 +30,7 @@ class Common extends Driver
             // 默认时区
             date_default_timezone_set($configSystem->timezone);
 
-            $admin = null;
+            $admin = $request->request($this->adminAlias, false);
             $app = null;
             $controller = null;
             $action = null;
@@ -126,7 +126,6 @@ class Common extends Driver
                 }
             }
 
-            if ($admin === null) $admin = $request->request($this->adminAlias, false);
             if ($admin) $request->setAdmin($admin);
 
             // 默认访问控制台页面

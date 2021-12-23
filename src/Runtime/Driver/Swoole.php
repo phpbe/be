@@ -127,12 +127,12 @@ class Swoole extends Driver
         Be::initRedisPools();
 
         if ($configServer->clearCacheOnStart) {
-            $dir = Be::getRuntime()->getCachePath() . '/*';
+            $dir = Be::getRuntime()->getCachePath();
             \Be\Util\FileSystem\Dir::rm($dir);
         } else {
             $sessionConfig = Be::getConfig('App.System.Session');
             if ($sessionConfig->driver == 'File') {
-                $dir = Be::getRuntime()->getCachePath() . '/session/*';
+                $dir = Be::getRuntime()->getCachePath() . '/session';
                 \Be\Util\FileSystem\Dir::rm($dir);
             }
         }
@@ -206,7 +206,7 @@ class Swoole extends Driver
                 // 检查网站配置， 是否暂停服务
                 $configSystem = Be::getConfig('App.System.System');
 
-                $admin = null;
+                $admin = $request->request($this->adminAlias, false);
                 $app = null;
                 $controller = null;
                 $action = null;
@@ -280,7 +280,6 @@ class Swoole extends Driver
                     }
                 }
 
-                if ($admin === null) $admin = $request->request($this->adminAlias, false);
                 if ($admin) $request->setAdmin($admin);
 
                 // 默认访问控制台页面
