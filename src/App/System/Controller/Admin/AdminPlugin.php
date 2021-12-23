@@ -265,7 +265,7 @@ class AdminPlugin
         $response = Be::getResponse();
         $action = $request->get('action');
 
-        $path = Be::getRuntime()->getRootPath() .  Be::getProperty('App.System')->getPath() . '/AdminService/AdminPlugin/Form/FormItemUEditor/config.json';
+        $path = Be::getRuntime()->getRootPath() .  Be::getProperty('App.System')->getPath() . '/Service/Admin/AdminPlugin/Form/FormItemUEditor/config.json';
         $CONFIG = json_decode(preg_replace("/\/\*[\s\S]+?\*\//", "", file_get_contents($path)), true);
 
         switch ($action) {

@@ -150,6 +150,7 @@ class AdminUser
         } catch (\Exception $e) {
             $db->rollback();
 
+            $tupleAdminUserLoginLog->success = 0;
             $tupleAdminUserLoginLog->description = $e->getMessage();
             $tupleAdminUserLoginLog->save();
             throw $e;

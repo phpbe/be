@@ -128,7 +128,7 @@ INSERT INTO `system_admin_user` (`id`, `username`, `password`, `salt`, `admin_ro
 CREATE TABLE `system_admin_user_login_log` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '自增编号',
   `username` varchar(120) NOT NULL DEFAULT '' COMMENT '用户名',
-  `success` tinyint NOT NULL COMMENT '是否登录成功（0-不成功/1-成功）',
+  `success` tinyint NOT NULL DEFAULT '0' COMMENT '是否登录成功（0-不成功/1-成功）',
   `description` varchar(240) NOT NULL DEFAULT '' COMMENT '描述',
   `ip` varchar(15) NOT NULL DEFAULT '' COMMENT 'IP',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
