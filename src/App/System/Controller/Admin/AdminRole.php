@@ -197,7 +197,7 @@ class AdminRole extends Auth
                         [
                             'name' => 'create_time',
                             'label' => '创建时间',
-                            'width' => '150',
+                            'width' => '180',
                             'sortable' => true,
                         ],
                     ],

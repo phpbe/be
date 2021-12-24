@@ -171,7 +171,7 @@
                 <div style="flex: 0 0 auto;">
                     <?php if ($this->themeType == 'Theme') { ?>
                     <el-dropdown @command="toggleScreen">
-                        <el-button size="mini" style="border: none">
+                        <el-button size="medium" style="border: none">
                             <template v-if="screen === 'mobile'">
                                 <i class="el-icon-mobile-phone" style="font-size: 1.5rem;"></i>
                             </template>

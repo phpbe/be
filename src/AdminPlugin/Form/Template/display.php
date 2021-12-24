@@ -13,7 +13,7 @@
         $formUi = [
             ':model' => 'formData',
             'ref' => 'formRef',
-            'size' => 'mini',
+            'size' => 'medium',
             'label-width' => '150px',
         ];
 

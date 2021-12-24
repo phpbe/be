@@ -127,7 +127,7 @@ class FormItemFile extends FormItem
             }
         }
         $html .= '>';
-        $html .= '<el-button size="mini" type="primary"><i class="el-icon-upload2"></i> 选择文件</el-button>';
+        $html .= '<el-button size="medium" type="primary"><i class="el-icon-upload2"></i> 选择文件</el-button>';
         $html .= '<div class="el-upload__tip" slot="tip">' . $this->description . '</div>';
         $html .= '</el-upload>';
         $html .= '</el-form-item>';

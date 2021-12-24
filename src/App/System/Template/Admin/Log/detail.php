@@ -23,7 +23,7 @@
 
         <el-tabs v-model="activeTab">
             <el-tab-pane label="错误基本信息" name="tab-base">
-                <el-form label-width="120px" size="mini" style="padding-top: 12px;">
+                <el-form label-width="120px" size="medium" style="padding-top: 12px;">
                     <el-form-item label="错误编号">
                         <?php echo $this->log['extra']['hash']; ?>
                     </el-form-item>

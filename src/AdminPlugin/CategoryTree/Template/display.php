@@ -19,13 +19,13 @@
             <span>
               <el-button
                       type="text"
-                      size="mini"
+                      size="medium"
                       @click="() => append(data)">
                 新增子节点
               </el-button>
               <el-button
                       type="text"
-                      size="mini"
+                      size="medium"
                       @click="() => remove(node, data)">
                 删除
               </el-button>

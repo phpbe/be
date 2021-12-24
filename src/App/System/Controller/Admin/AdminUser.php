@@ -199,9 +199,9 @@ class AdminUser extends Auth
                                 }
                             },
                             'ui' => [
-                                ':size' => '32',
+                                ':size' => '60',
                             ],
-                            'width' => '60',
+                            'width' => '80',
                         ],
                         [
                             'name' => 'username',
@@ -228,7 +228,7 @@ class AdminUser extends Auth
                         [
                             'name' => 'create_time',
                             'label' => '创建时间',
-                            'width' => '150',
+                            'width' => '180',
                             'sortable' => true,
                         ],
                         [

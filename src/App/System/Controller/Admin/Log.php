@@ -196,12 +196,12 @@ class Log extends Auth
                         [
                             'name' => 'create_time',
                             'label' => '产生时间',
-                            'width' => '150',
+                            'width' => '180',
                         ],
                         [
                             'name' => 'record_time',
                             'label' => '首次产生时间',
-                            'width' => '150',
+                            'width' => '180',
                         ],
                     ],
                     'operation' => [

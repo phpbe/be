@@ -216,7 +216,7 @@ class Installer
                             [
                                 'name' => 'testDb',
                                 'driver' => FormItemCustom::class,
-                                'html' => '<el-form-item><el-button type="success" @click="testDb" v-loading="testDbLoading" size="mini" plain>测试连接，并获取库名列表</el-button></el-form-item>'
+                                'html' => '<el-form-item><el-button type="success" @click="testDb" v-loading="testDbLoading" size="medium" plain>测试连接，并获取库名列表</el-button></el-form-item>'
                             ],
                             [
                                 'name' => 'name',

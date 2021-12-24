@@ -4,7 +4,7 @@
 
 <be-center>
     <div id="app" v-cloak>
-        <el-form size="mini" label-width="150px" ref="formRef">
+        <el-form size="medium" label-width="150px" ref="formRef">
             <div style="padding: 20px 0">
                 <el-table :data="tableData" ref="tableRef" @selection-change="selectionChange">
                     <el-table-column type="selection" width="50"></el-table-column>

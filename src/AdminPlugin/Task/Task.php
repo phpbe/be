@@ -211,7 +211,7 @@ class Task extends Driver
                         [
                             'name' => 'last_execute_time',
                             'label' => '最后执行时间',
-                            'width' => '150',
+                            'width' => '180',
                             'sortable' => true,
                         ],
                         [

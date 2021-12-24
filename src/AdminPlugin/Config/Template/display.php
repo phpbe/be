@@ -19,7 +19,7 @@
                         if (count($this->configItemDrivers)) {
                             ?>
                             <div style="max-width: 800px;">
-                                <el-form size="small" label-width="200px" :disabled="loading">
+                                <el-form size="medium" label-width="200px" :disabled="loading">
                                     <?php
                                     foreach ($this->configItemDrivers as $driver) {
 

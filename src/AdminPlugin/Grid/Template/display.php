@@ -5,10 +5,15 @@
             ?>
             .el-table__row .el-divider__text,
             .el-table .el-link {
-                font-size: 12px;
                 margin-left: 4px;
                 margin-right: 4px;
             }
+
+            .el-table th.el-table__cell {
+                color: #666;
+                background-color: #EBEEF5;
+            }
+
             <?php
         } elseif ($this->setting['actualLayout'] == 'card') {
             ?>
@@ -156,7 +161,7 @@
         <el-form<?php
         $formUi = [
             ':inline' => 'true',
-            'size' => 'mini',
+            'size' => 'medium',
         ];
         if (isset($this->setting['form']['ui'])) {
             $formUi = array_merge($formUi, $this->setting['form']['ui']);
@@ -316,7 +321,7 @@
             $toggleLayoutHtml = '';
             if ($this->setting['layout'] == 'toggle') {
                 $toggleLayoutHtml = '<el-dropdown @command="toggleLayout" style="float: right;">';
-                $toggleLayoutHtml .= '<el-button size="mini" style="border: none">';
+                $toggleLayoutHtml .= '<el-button size="medium" style="border: none">';
                 $toggleLayoutHtml .= '<i class="' . ($this->setting['actualLayout'] == 'table' ? 'el-icon-s-grid' : 'el-icon-menu') . '" style="font-size: 1.5rem;"></i>';
                 $toggleLayoutHtml .= '</el-button>';
 
@@ -383,7 +388,7 @@
                     ':data' => 'gridData',
                     'ref' => 'tableRef',
                     'v-loading' => 'loading',
-                    'size' => 'mini',
+                    'size' => 'medium',
                     ':height' => 'tableHeight',
                     ':default-sort' => '{prop:orderBy,order:orderByDir}',
                     '@sort-change' => 'sort',

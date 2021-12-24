@@ -17,8 +17,8 @@ $configAdminUser = \Be\Be::getConfig('App.System.AdminUser');
                 }
                 ?>"></el-image>
 
-                <div style="font-size:14px; font-weight: bold;"><?php echo $this->adminUser->name; ?>（<?php echo $my->getRoleName(); ?>）</div>
-                <div style="color: #999;font-size: 12px;">上次登陆时间：<?php echo $this->adminUser->last_login_time; ?></div>
+                <div class="be-fw-bold"><?php echo $this->adminUser->name; ?>（<?php echo $my->getRoleName(); ?>）</div>
+                <div class="be-c-999">上次登陆时间：<?php echo $this->adminUser->last_login_time; ?></div>
             </el-card>
 
         </el-col>
@@ -86,7 +86,7 @@ $configAdminUser = \Be\Be::getConfig('App.System.AdminUser');
                     <el-button style="float: right; padding: 3px 0" type="text" @click="window.location.href='<?php echo beAdminUrl('System.SystemLog.logs')?>'">更多..</el-button>
                 </div>
 
-                <el-table :data="recentLogs" stripe size="mini">
+                <el-table :data="recentLogs" stripe size="medium">
                     <el-table-column
                             prop="create_time"
                             label="时间"
@@ -114,7 +114,7 @@ $configAdminUser = \Be\Be::getConfig('App.System.AdminUser');
                     <el-button style="float: right; padding: 3px 0" type="text" @click="window.location.href='<?php echo beAdminUrl('System.UserLoginLog.logs')?>'">更多..</el-button>
                 </div>
 
-                <el-table :data="recentLoginLogs" stripe size="mini">
+                <el-table :data="recentLoginLogs" stripe size="medium">
                     <el-table-column
                             prop="create_time"
                             label="时间"

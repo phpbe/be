@@ -12,7 +12,7 @@
         <el-form<?php
             $formUi = [
                 'ref' => 'formRef',
-                'size' => 'mini',
+                'size' => 'medium',
                 'label-width' => '150px',
             ];
 
