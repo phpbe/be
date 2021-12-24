@@ -32,12 +32,12 @@ class Auth
 
             $redirect = null;
             if ($request->isAjax()) {
-                $redirectUrl = beUrl('System.AdminUserLogin.login');
+                $redirectUrl = beAdminUrl('System.AdminUserLogin.login');
                 $redirect = [
                     'url' => $redirectUrl,
                 ];
             } else {
-                $redirectUrl = beUrl('System.AdminUserLogin.login', ['return' => base64_encode($request->getUrl())]);
+                $redirectUrl = beAdminUrl('System.AdminUserLogin.login', ['return' => base64_encode($request->getUrl())]);
                 $redirect = [
                     'url' => $redirectUrl,
                     'message' => '{timeout} 秒后跳转到 <a href="{url}">登录页</a>',
