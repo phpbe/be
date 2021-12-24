@@ -5,14 +5,14 @@ use Be\AdminPlugin\Table\Item\TableItemIcon;
 use Be\Be;
 
 /**
- * @BeMenuGroup("管理", icon="el-icon-fa fa-cube", ordering="2")
+ * @BeMenuGroup("管理", icon="el-icon-monitor", ordering="2")
  * @BePermissionGroup("管理", ordering="2")
  */
 class App extends Auth
 {
 
     /**
-     * @BeMenu("应用", icon="el-icon-fa fa-cubes", ordering="2.1")
+     * @BeMenu("应用", icon="el-icon-files", ordering="2.1")
      * @BePermission("应用列表", ordering="2.1")
      */
     public function apps()
