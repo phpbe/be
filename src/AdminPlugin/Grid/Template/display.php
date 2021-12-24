@@ -12,6 +12,12 @@
             .el-table th.el-table__cell {
                 color: #666;
                 background-color: #EBEEF5;
+                padding: 6px 0;
+            }
+
+            .el-table__cell .el-avatar,
+            .el-table__cell .el-image {
+                display: block;
             }
 
             <?php
