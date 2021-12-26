@@ -12,6 +12,7 @@ use Be\AdminPlugin\Table\Item\TableItemLink;
 use Be\AdminPlugin\Table\Item\TableItemSelection;
 use Be\AdminPlugin\Table\Item\TableItemSwitch;
 use Be\AdminPlugin\Toolbar\Item\ToolbarItemButtonDropDown;
+use Be\AdminPlugin\Toolbar\Item\ToolbarItemDropDown;
 use Be\Be;
 use Be\Db\Tuple;
 use Be\AdminPlugin\AdminPluginException;
@@ -61,63 +62,13 @@ class AdminRole extends Auth
                     ],
                 ],
 
-
-                'toolbar' => [
-
+                'titleToolbar' => [
                     'items' => [
                         [
-                            'label' => '新建角色',
-                            'task' => 'create',
-                            'target' => 'drawer', // 'ajax - ajax请求 / dialog - 对话框窗口 / drawer - 抽屉 / self - 当前页面 / blank - 新页面'
-                            'ui' => [
-                                'icon' => 'el-icon-fa fa-user-plus',
-                                'type' => 'primary',
-                            ]
-                        ],
-                        [
-                            'label' => '启用',
-                            'task' => 'fieldEdit',
-                            'postData' => [
-                                'field' => 'is_enable',
-                                'value' => '1',
-                            ],
-                            'target' => 'ajax',
-                            'ui' => [
-                                'icon' => 'el-icon-fa fa-check',
-                                'type' => 'success',
-                            ]
-                        ],
-                        [
-                            'label' => '禁用',
-                            'task' => 'fieldEdit',
-                            'postData' => [
-                                'field' => 'is_enable',
-                                'value' => '0',
-                            ],
-                            'target' => 'ajax',
-                            'ui' => [
-                                'icon' => 'el-icon-fa fa-lock',
-                                'type' => 'warning',
-                            ]
-                        ],
-                        [
-                            'label' => '删除',
-                            'task' => 'fieldEdit',
-                            'target' => 'ajax',
-                            'postData' => [
-                                'field' => 'is_delete',
-                                'value' => '1',
-                            ],
-                            'ui' => [
-                                'icon' => 'el-icon-delete',
-                                'type' => 'danger'
-                            ]
-                        ],
-                        [
                             'label' => '导出',
-                            'driver' => ToolbarItemButtonDropDown::class,
+                            'driver' => ToolbarItemDropDown::class,
                             'ui' => [
-                                'icon' => 'el-icon-fa fa-download',
+                                'icon' => 'el-icon-download',
                             ],
                             'menus' => [
                                 [
@@ -142,6 +93,64 @@ class AdminRole extends Auth
                                         'icon' => 'el-icon-fa fa-file-excel-o',
                                     ],
                                 ],
+                            ]
+                        ],
+                    ]
+                ],
+
+                'titleRightToolbar' => [
+                    'items' => [
+                        [
+                            'label' => '新建角色',
+                            'task' => 'create',
+                            'target' => 'drawer', // 'ajax - ajax请求 / dialog - 对话框窗口 / drawer - 抽屉 / self - 当前页面 / blank - 新页面'
+                            'ui' => [
+                                'icon' => 'el-icon-plus',
+                                'type' => 'primary',
+                            ]
+                        ],
+                    ]
+                ],
+
+                'tableToolbar' => [
+                    'items' => [
+                        [
+                            'label' => '批量启用',
+                            'task' => 'fieldEdit',
+                            'postData' => [
+                                'field' => 'is_enable',
+                                'value' => '1',
+                            ],
+                            'target' => 'ajax',
+                            'ui' => [
+                                'icon' => 'el-icon-check',
+                                'type' => 'success',
+                            ]
+                        ],
+                        [
+                            'label' => '批量禁用',
+                            'task' => 'fieldEdit',
+                            'postData' => [
+                                'field' => 'is_enable',
+                                'value' => '0',
+                            ],
+                            'target' => 'ajax',
+                            'ui' => [
+                                'icon' => 'el-icon-close',
+                                'type' => 'warning',
+                            ]
+                        ],
+                        [
+                            'label' => '批量删除',
+                            'task' => 'fieldEdit',
+                            'target' => 'ajax',
+                            'postData' => [
+                                'field' => 'is_delete',
+                                'value' => '1',
+                            ],
+                            'ui' => [
+                                'icon' => 'el-icon-delete',
+                                'type' => 'danger'
                             ]
                         ],
                     ]

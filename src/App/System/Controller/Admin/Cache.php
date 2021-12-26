@@ -43,6 +43,7 @@ class Cache extends Auth
                             'confirm' => '确认要清除所有缓存么？',
                             'target' => 'ajax',
                             'ui' => [
+                                'icon' => 'el-icon-delete',
                                 'type' => 'danger'
                             ]
                         ],

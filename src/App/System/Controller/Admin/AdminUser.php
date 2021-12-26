@@ -2,6 +2,7 @@
 
 namespace Be\App\System\Controller\Admin;
 
+use Be\AdminPlugin\Toolbar\Item\ToolbarItemDropDown;
 use Be\Db\Tuple;
 use Be\Util\Random;
 use Be\AdminPlugin\Table\Item\TableItemLink;
@@ -45,7 +46,7 @@ class AdminUser extends Auth
 
         Be::getAdminPlugin('Curd')->setting([
 
-            'label' => '管理员管理',
+            'label' => '管理员',
             'table' => 'system_admin_user',
 
             'grid' => [
@@ -87,63 +88,13 @@ class AdminUser extends Auth
                     ],
                 ],
 
-
-                'toolbar' => [
-
+                'titleToolbar' => [
                     'items' => [
                         [
-                            'label' => '新建用户',
-                            'task' => 'create',
-                            'target' => 'drawer', // 'ajax - ajax请求 / dialog - 对话框窗口 / drawer - 抽屉 / self - 当前页面 / blank - 新页面'
-                            'ui' => [
-                                'icon' => 'el-icon-fa fa-user-plus',
-                                'type' => 'primary',
-                            ]
-                        ],
-                        [
-                            'label' => '启用',
-                            'task' => 'fieldEdit',
-                            'postData' => [
-                                'field' => 'is_enable',
-                                'value' => '1',
-                            ],
-                            'target' => 'ajax',
-                            'ui' => [
-                                'icon' => 'el-icon-fa fa-check',
-                                'type' => 'success',
-                            ]
-                        ],
-                        [
-                            'label' => '禁用',
-                            'task' => 'fieldEdit',
-                            'postData' => [
-                                'field' => 'is_enable',
-                                'value' => '0',
-                            ],
-                            'target' => 'ajax',
-                            'ui' => [
-                                'icon' => 'el-icon-fa fa-lock',
-                                'type' => 'warning',
-                            ]
-                        ],
-                        [
-                            'label' => '删除',
-                            'task' => 'fieldEdit',
-                            'target' => 'ajax',
-                            'postData' => [
-                                'field' => 'is_delete',
-                                'value' => '1',
-                            ],
-                            'ui' => [
-                                'icon' => 'el-icon-delete',
-                                'type' => 'danger'
-                            ]
-                        ],
-                        [
                             'label' => '导出',
-                            'driver' => ToolbarItemButtonDropDown::class,
+                            'driver' => ToolbarItemDropDown::class,
                             'ui' => [
-                                'icon' => 'el-icon-fa fa-download',
+                                'icon' => 'el-icon-download',
                             ],
                             'menus' => [
                                 [
@@ -153,9 +104,6 @@ class AdminUser extends Auth
                                         'driver' => 'csv',
                                     ],
                                     'target' => 'blank',
-                                    'ui' => [
-                                        'icon' => 'el-icon-fa fa-file-text-o',
-                                    ],
                                 ],
                                 [
                                     'label' => 'EXCEL',
@@ -164,13 +112,68 @@ class AdminUser extends Auth
                                         'driver' => 'excel',
                                     ],
                                     'target' => 'blank',
-                                    'ui' => [
-                                        'icon' => 'el-icon-fa fa-file-excel-o',
-                                    ],
                                 ],
-                            ]
+                            ],
                         ],
-                    ]
+                    ],
+                ],
+
+                'titleRightToolbar' => [
+                    'items' => [
+                        [
+                            'label' => '新增管理员',
+                            'task' => 'create',
+                            'target' => 'drawer', // 'ajax - ajax请求 / dialog - 对话框窗口 / drawer - 抽屉 / self - 当前页面 / blank - 新页面'
+                            'ui' => [
+                                'icon' => 'el-icon-plus',
+                                'type' => 'primary',
+                            ],
+                        ],
+                    ],
+                ],
+
+                'tableToolbar' => [
+                    'items' => [
+                        [
+                            'label' => '批量启用',
+                            'task' => 'fieldEdit',
+                            'postData' => [
+                                'field' => 'is_enable',
+                                'value' => '1',
+                            ],
+                            'target' => 'ajax',
+                            'ui' => [
+                                'icon' => 'el-icon-check',
+                                'type' => 'success',
+                            ],
+                        ],
+                        [
+                            'label' => '批量禁用',
+                            'task' => 'fieldEdit',
+                            'postData' => [
+                                'field' => 'is_enable',
+                                'value' => '0',
+                            ],
+                            'target' => 'ajax',
+                            'ui' => [
+                                'icon' => 'el-icon-close',
+                                'type' => 'warning',
+                            ],
+                        ],
+                        [
+                            'label' => '批量删除',
+                            'task' => 'fieldEdit',
+                            'target' => 'ajax',
+                            'postData' => [
+                                'field' => 'is_delete',
+                                'value' => '1',
+                            ],
+                            'ui' => [
+                                'icon' => 'el-icon-delete',
+                                'type' => 'danger'
+                            ],
+                        ],
+                    ],
                 ],
 
                 'table' => [
@@ -198,10 +201,7 @@ class AdminUser extends Auth
                                     return Be::getRequest()->getUploadUrl() . '/System/AdminUser/Avatar/' . $row['avatar'];
                                 }
                             },
-                            'ui' => [
-                                ':size' => '60',
-                            ],
-                            'width' => '80',
+                            'width' => '60',
                         ],
                         [
                             'name' => 'username',

@@ -44,7 +44,7 @@ class ThemeEditor
             Be::getAdminPlugin('Grid')->setting([
                 'title' => ($this->themeType == 'Theme' ? '前台' : '后台') . '主题管理',
                 'pageSize' => 10,
-                'toolbar' => [
+                'titleRightToolbar' => [
                     'items' => [
                         [
                             'label' => '发现',

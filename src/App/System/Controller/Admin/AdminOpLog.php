@@ -4,6 +4,7 @@ namespace Be\App\System\Controller\Admin;
 
 use Be\AdminPlugin\Form\Item\FormItemDatePickerRange;
 use Be\AdminPlugin\Form\Item\FormItemSelect;
+use Be\AdminPlugin\Toolbar\Item\ToolbarItemDropDown;
 use Be\Be;
 
 /**
@@ -57,6 +58,36 @@ class AdminOpLog extends Auth
                     ],
                 ],
 
+                'titleToolbar' => [
+                    'items' => [
+                        [
+                            'label' => '导出',
+                            'driver' => ToolbarItemDropDown::class,
+                            'ui' => [
+                                'icon' => 'el-icon-download',
+                            ],
+                            'menus' => [
+                                [
+                                    'label' => 'CSV',
+                                    'task' => 'export',
+                                    'postData' => [
+                                        'driver' => 'csv',
+                                    ],
+                                    'target' => 'blank',
+                                ],
+                                [
+                                    'label' => 'EXCEL',
+                                    'task' => 'export',
+                                    'postData' => [
+                                        'driver' => 'excel',
+                                    ],
+                                    'target' => 'blank',
+                                ],
+                            ]
+                        ],
+                    ]
+                ],
+
                 'toolbar' => [
                     'items' => [
                         [
@@ -68,14 +99,6 @@ class AdminOpLog extends Auth
                                 'icon' => 'el-icon-delete',
                                 'type' => 'danger'
                             ],
-                        ],
-                        [
-                            'label' => '导出',
-                            'task' => 'export',
-                            'target' => 'blank',
-                            'ui' => [
-                                'icon' => 'el-icon-fa fa-download',
-                            ]
                         ],
                     ]
                 ],

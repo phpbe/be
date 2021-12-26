@@ -45,8 +45,7 @@ class App extends Auth
                 ->setting([
                     'title' => '应用管理',
 
-                    'toolbar' => [
-
+                    'titleRightToolbar' => [
                         'items' => [
                             [
                                 'label' => '安装',

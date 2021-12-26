@@ -2,6 +2,7 @@
 
 namespace Be\AdminPlugin\Task;
 
+use Be\AdminPlugin\Toolbar\Item\ToolbarItemLink;
 use Be\Config\ConfigHelper;
 use Be\Db\Tuple;
 use Be\Util\Datetime;
@@ -60,58 +61,11 @@ class Task extends Driver
             $this->loaded[$appName] = 1;
         }
 
-
-        $toolbarItems = [
-            [
-                'label' => '发现',
-                'task' => 'discover',
-                'target' => 'ajax',
-                'ui' => [
-                    'type' => 'primary',
-                    'icon' => 'el-icon-search'
-                ]
-            ],
-            [
-                'label' => '启用',
-                'task' => 'fieldEdit',
-                'postData' => [
-                    'field' => 'is_enable',
-                    'value' => '1',
-                ],
-                'target' => 'ajax',
-                'ui' => [
-                    'icon' => 'el-icon-fa fa-check',
-                    'type' => 'success',
-                ]
-            ],
-            [
-                'label' => '禁用',
-                'task' => 'fieldEdit',
-                'postData' => [
-                    'field' => 'is_enable',
-                    'value' => '0',
-                ],
-                'target' => 'ajax',
-                'ui' => [
-                    'icon' => 'el-icon-fa fa-lock',
-                    'type' => 'warning',
-                ]
-            ],
-            [
-                'label' => '删除一个月前运行日志',
-                'task' => 'deleteLogs',
-                'target' => 'ajax',
-                'confirm' => '本操作为物理删除，不可恢复，确认要删除么？',
-                'ui' => [
-                    'icon' => 'el-icon-fa fa-remove',
-                    'type' => 'danger',
-                ]
-            ],
-        ];
-
+        $titleToolbarItems = [];
         if (Be::getRuntime()->getMode() == 'Common') {
-            $toolbarItems[] = [
+            $titleToolbarItems[] = [
                 'label' => '定时任务配置说明',
+                'driver' => ToolbarItemLink::class,
                 'task' => 'cronHelp',
                 'ui' => [
                     'icon' => 'el-icon-question',
@@ -160,8 +114,68 @@ class Task extends Driver
                     ],
                 ],
 
+                'titleToolbar' => [
+                    'items' => $titleToolbarItems,
+                ],
+
+                'titleRightToolbar' => [
+                    'items' => [
+                        [
+                            'label' => '发现',
+                            'task' => 'discover',
+                            'target' => 'ajax',
+                            'ui' => [
+                                'type' => 'primary',
+                                'icon' => 'el-icon-search'
+                            ]
+                        ],
+                    ],
+                ],
+
                 'toolbar' => [
-                    'items' => $toolbarItems,
+                    'items' => [
+                        [
+                            'label' => '删除一个月前运行日志',
+                            'task' => 'deleteLogs',
+                            'target' => 'ajax',
+                            'confirm' => '本操作为物理删除，不可恢复，确认要删除么？',
+                            'ui' => [
+                                'icon' => 'el-icon-delete',
+                                'type' => 'danger',
+                            ]
+                        ],
+                    ],
+                ],
+
+                'tableToolbar' => [
+                    'items' => [
+                        [
+                            'label' => '批量启用',
+                            'task' => 'fieldEdit',
+                            'postData' => [
+                                'field' => 'is_enable',
+                                'value' => '1',
+                            ],
+                            'target' => 'ajax',
+                            'ui' => [
+                                'icon' => 'el-icon-check',
+                                'type' => 'success',
+                            ]
+                        ],
+                        [
+                            'label' => '批量禁用',
+                            'task' => 'fieldEdit',
+                            'postData' => [
+                                'field' => 'is_enable',
+                                'value' => '0',
+                            ],
+                            'target' => 'ajax',
+                            'ui' => [
+                                'icon' => 'el-icon-close',
+                                'type' => 'warning',
+                            ]
+                        ],
+                    ],
                 ],
 
                 'table' => [
