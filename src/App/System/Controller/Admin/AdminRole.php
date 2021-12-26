@@ -78,9 +78,6 @@ class AdminRole extends Auth
                                         'driver' => 'csv',
                                     ],
                                     'target' => 'blank',
-                                    'ui' => [
-                                        'icon' => 'el-icon-fa fa-file-text-o',
-                                    ],
                                 ],
                                 [
                                     'label' => 'EXCEL',
@@ -89,9 +86,6 @@ class AdminRole extends Auth
                                         'driver' => 'excel',
                                     ],
                                     'target' => 'blank',
-                                    'ui' => [
-                                        'icon' => 'el-icon-fa fa-file-excel-o',
-                                    ],
                                 ],
                             ]
                         ],
@@ -135,6 +129,7 @@ class AdminRole extends Auth
                                 'value' => '0',
                             ],
                             'target' => 'ajax',
+                            'confirm' => '确认要禁用么？',
                             'ui' => [
                                 'icon' => 'el-icon-close',
                                 'type' => 'warning',
@@ -144,6 +139,7 @@ class AdminRole extends Auth
                             'label' => '批量删除',
                             'task' => 'fieldEdit',
                             'target' => 'ajax',
+                            'confirm' => '确认要删除么？',
                             'postData' => [
                                 'field' => 'is_delete',
                                 'value' => '1',

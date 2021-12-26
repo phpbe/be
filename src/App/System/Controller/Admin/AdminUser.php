@@ -155,6 +155,7 @@ class AdminUser extends Auth
                                 'value' => '0',
                             ],
                             'target' => 'ajax',
+                            'confirm' => '确认要禁用么？',
                             'ui' => [
                                 'icon' => 'el-icon-close',
                                 'type' => 'warning',
@@ -164,6 +165,7 @@ class AdminUser extends Auth
                             'label' => '批量删除',
                             'task' => 'fieldEdit',
                             'target' => 'ajax',
+                            'confirm' => '确认要删除么？',
                             'postData' => [
                                 'field' => 'is_delete',
                                 'value' => '1',

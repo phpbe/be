@@ -170,6 +170,7 @@ class Task extends Driver
                                 'value' => '0',
                             ],
                             'target' => 'ajax',
+                            'confirm' => '确认要禁用么？',
                             'ui' => [
                                 'icon' => 'el-icon-close',
                                 'type' => 'warning',
