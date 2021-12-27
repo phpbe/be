@@ -9,7 +9,6 @@ namespace Be\AdminPlugin\Operation\Item;
 class OperationItemButton extends OperationItem
 {
 
-
     /**
      * 构造函数
      *
@@ -36,7 +35,21 @@ class OperationItemButton extends OperationItem
      */
     public function getHtml()
     {
-        $html = '<el-button';
+        $html = '';
+
+        if ($this->tooltip !== null) {
+            $html .= '<el-tooltip';
+            foreach ($this->tooltip as $k => $v) {
+                if ($v === null) {
+                    $html .= ' ' . $k;
+                } else {
+                    $html .= ' ' . $k . '="' . $v . '"';
+                }
+            }
+            $html .= '>';
+        }
+
+        $html .= '<el-button';
         foreach ($this->ui as $k => $v) {
             if ($v === null) {
                 $html .= ' ' . $k;
@@ -47,6 +60,10 @@ class OperationItemButton extends OperationItem
         $html .= '>';
         $html .= '<span>' . $this->label . '</span>';
         $html .= '</el-button>';
+
+        if ($this->tooltip !== null) {
+            $html .= '</el-tooltip>';
+        }
 
         return $html;
     }

@@ -14,6 +14,7 @@ abstract class OperationItem
     public $label = ''; // 配置项中文名称
     public $value = ''; // 值
     public $ui = []; // UI界面参数
+    public $tooltip = null; // 提示
 
     public $url = ''; // 网址
     public $postData = []; // 有后端请求时的附加上的数据
@@ -93,6 +94,22 @@ abstract class OperationItem
                 $this->ui = $ui();
             } else {
                 $this->ui = $ui;
+            }
+        }
+
+        if (isset($params['tooltip'])) {
+            $tooltip = $params['tooltip'];
+            if ($tooltip instanceof \Closure) {
+                $tooltip = $tooltip();
+            }
+
+            if (is_array($tooltip) && isset($tooltip['content'])) {
+                $this->tooltip = $tooltip;
+            } elseif (is_string($tooltip)) {
+                $this->tooltip  = [
+                    'placement' => 'top',
+                    'content' => $tooltip,
+                ];
             }
         }
 

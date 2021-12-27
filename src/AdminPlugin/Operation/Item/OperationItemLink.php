@@ -46,7 +46,21 @@ class OperationItemLink extends OperationItem
      */
     public function getHtml()
     {
-        $html = '<el-link';
+        $html = '';
+
+        if ($this->tooltip !== null) {
+            $html .= '<el-tooltip';
+            foreach ($this->tooltip as $k => $v) {
+                if ($v === null) {
+                    $html .= ' ' . $k;
+                } else {
+                    $html .= ' ' . $k . '="' . $v . '"';
+                }
+            }
+            $html .= '>';
+        }
+
+        $html .= '<el-link';
         foreach ($this->ui as $k => $v) {
             if ($v === null) {
                 $html .= ' ' . $k;
@@ -57,6 +71,10 @@ class OperationItemLink extends OperationItem
         $html .= '>';
         $html .= $this->label;
         $html .= '</el-link>';
+
+        if ($this->tooltip !== null) {
+            $html .= '</el-tooltip>';
+        }
 
         return $html;
     }

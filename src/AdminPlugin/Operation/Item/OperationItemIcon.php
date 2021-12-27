@@ -30,7 +30,21 @@ class OperationItemIcon extends OperationItem
      */
     public function getHtml()
     {
-        $html = '<el-icon';
+        $html = '';
+
+        if ($this->tooltip !== null) {
+            $html .= '<el-tooltip';
+            foreach ($this->tooltip as $k => $v) {
+                if ($v === null) {
+                    $html .= ' ' . $k;
+                } else {
+                    $html .= ' ' . $k . '="' . $v . '"';
+                }
+            }
+            $html .= '>';
+        }
+
+        $html .= '<el-icon';
         if (isset($this->ui)) {
             foreach ($this->ui as $k => $v) {
                 if ($v === null) {
@@ -42,6 +56,10 @@ class OperationItemIcon extends OperationItem
         }
         $html .= '>';
         $html .= '</el-icon>';
+
+        if ($this->tooltip !== null) {
+            $html .= '</el-tooltip>';
+        }
 
         return $html;
     }
