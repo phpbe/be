@@ -16,6 +16,7 @@ class Swoole extends Driver
      */
     private $request = null;
 
+
     public function __construct(\Swoole\Http\Request $request)
     {
         $this->request = $request;
@@ -170,13 +171,23 @@ class Swoole extends Driver
      */
     public function getUrl()
     {
-        $url = 'http://';
-        $url .= $this->request->header['host'];
-        $url .= $this->request->server['request_uri'];
-        if ($this->request->server['query_string']) {
-            $url .= '?' . $this->request->server['query_string'];
+        if ($this->url === null) {
+            $url = null;
+            if (isset($this->request->header['scheme']) && ($this->request->header['scheme'] === 'http' || $this->request->header['scheme'] === 'https')) {
+                $url = $this->request->header['scheme'] . '://';
+            } else {
+                $url = 'http://';
+            }
+            $url .= $this->request->header['host'];
+            $url .= $this->request->server['request_uri'];
+            if ($this->request->server['query_string']) {
+                $url .= '?' . $this->request->server['query_string'];
+            }
+
+            $this->url = $url;
         }
-        return $url;
+
+        return $this->url;
     }
 
     /**
@@ -198,7 +209,7 @@ class Swoole extends Driver
                     $ip = substr($xForwardedFor, 0, $pos);
                 }
 
-                if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+                if (filter_var($ip, FILTER_VALIDATE_IP)) {
                     return $ip;
                 }
             }
@@ -212,7 +223,19 @@ class Swoole extends Driver
      */
     public function getRootUrl()
     {
-        return 'http://' . $this->request->header['host'];
+        if ($this->rootUrl === null) {
+            $rootUrl = null;
+            if (isset($this->request->header['scheme']) && ($this->request->header['scheme'] === 'http' || $this->request->header['scheme'] === 'https')) {
+                $rootUrl = $this->request->header['scheme'] . '://';
+            } else {
+                $rootUrl = 'http://';
+            }
+            $rootUrl .= $this->request->header['host'];
+
+            $this->rootUrl = $rootUrl;
+        }
+
+        return $this->rootUrl;
     }
 
     /**

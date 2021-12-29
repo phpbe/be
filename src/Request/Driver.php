@@ -18,6 +18,9 @@ abstract class Driver
 
     protected $json = null;
 
+    protected $url = null;
+    protected $rootUrl = null;
+
     /**
      * 获取 $_GET 数据
      * @param string $name 参数量

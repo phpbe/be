@@ -155,16 +155,19 @@ class Common extends Driver
         return $_SERVER['REQUEST_METHOD'];
     }
 
-
-    protected $url = null;
-
     /**
      * 获取当前请求的完整网址
      */
     public function getUrl()
     {
         if ($this->url === null) {
-            $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https://' : 'http://';
+            $url = null;
+            if (isset($_SERVER['HTTP_SCHEME']) && ($_SERVER['HTTP_SCHEME'] === 'http' || $_SERVER['HTTP_SCHEME'] === 'https')) {
+                $url = $_SERVER['HTTP_SCHEME'] . '://';
+            } else {
+                $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https://' : 'http://';
+            }
+
             $url .= isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ($_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT']));
             $url .= $_SERVER['REQUEST_URI'];
             $this->url = $url;
@@ -192,7 +195,7 @@ class Common extends Driver
                     $ip = substr($xForwardedFor, 0, $pos);
                 }
 
-                if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+                if (filter_var($ip, FILTER_VALIDATE_IP)) {
                     return $ip;
                 }
             }
@@ -201,15 +204,19 @@ class Common extends Driver
         return $_SERVER['REMOTE_ADDR'];
     }
 
-    protected $rootUrl = null;
-
     /**
      * 获取当前请求的完整网址
      */
     public function getRootUrl()
     {
         if ($this->rootUrl === null) {
-            $rootUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https://' : 'http://';
+            $rootUrl = null;
+            if (isset($_SERVER['HTTP_SCHEME']) && ($_SERVER['HTTP_SCHEME'] === 'http' || $_SERVER['HTTP_SCHEME'] === 'https')) {
+                $rootUrl = $_SERVER['HTTP_SCHEME'] . '://';
+            } else {
+                $rootUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https://' : 'http://';
+            }
+
             $rootUrl .= isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ($_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT']));
 
             $scriptName = $_SERVER['SCRIPT_NAME'];
