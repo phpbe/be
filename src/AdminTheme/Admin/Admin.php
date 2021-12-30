@@ -50,7 +50,7 @@
     ?>
 
     <link rel="stylesheet" href="<?php echo $beUrl; ?>/vendor/be/scss/src/be.css" />
-    <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/theme.css" />
+    <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/theme.css?v=202112300123" />
     <be-head>
     </be-head>
 </head>
@@ -151,7 +151,7 @@
                             </span>
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item icon="el-icon-switch-button">
-                                    <el-link href="<?php echo beAdminUrl('System.AdminUser.logout'); ?>" :underline="false">退出登录</el-link>
+                                    <el-link href="<?php echo beAdminUrl('System.AdminUserLogin.logout'); ?>" :underline="false">退出登录</el-link>
                                 </el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
@@ -165,8 +165,29 @@
 
         <be-west>
             <div id="app-west" :class="{'be-west': true, 'be-west-collapse': collapse}" v-cloak>
+                <?php
+                /*
                 <div class="logo">
                     <a href="<?php echo beAdminUrl(); ?>"></a>
+                </div>
+                 */
+                ?>
+
+                <div class="logo">
+                    <div class="be-row">
+                        <div class="be-col-auto">
+                            <a href="<?php echo beAdminUrl(); ?>">
+                                <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                                    <rect rx="5" height="40" width="40" y="0" x="0" fill="#ff6600"/>
+                                    <path d="M6 19 L11 19 M11 32 L6 32 L6 7 L11 7 C20 7 20 19 11 19 C20 20 20 33 11 32 M35 7 L24 7 L24 32 L36 32 M25 19 L34 19" stroke="#ffffff" stroke-width="2" fill="none" />
+                                </svg>
+                            </a>
+                        </div>
+                        <div class="be-col">
+                            <div class="logo-text-1"><span>B</span>eyond</div>
+                            <div class="logo-text-2"><span>E</span>xception</div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="menu">

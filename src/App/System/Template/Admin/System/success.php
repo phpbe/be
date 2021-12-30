@@ -33,7 +33,7 @@
                     $redirectMessage = str_replace($key, $val, $redirectMessage);
                 }
 
-                echo '<div class="success">' . $redirectMessage . '</div>';
+                echo '<div class="success-timer">' . $redirectMessage . '</div>';
             }
         }
         ?>

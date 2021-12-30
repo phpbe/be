@@ -50,7 +50,7 @@ class AdminUserLogin
         try {
             Be::getService('App.System.Admin.AdminUser')->logout();
 
-            $redirectUrl = beAdminUrl('System.AdminUser.login');
+            $redirectUrl = beAdminUrl('System.AdminUserLogin.login');
             $redirect = [
                 'url' => $redirectUrl,
                 'message' => '{timeout} 秒后跳转到 <a href="{url}">登录页</a>',

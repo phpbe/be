@@ -1,5 +1,5 @@
 <be-head>
-<link type="text/css" rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/Template/Admin/AdminUserLogin/css/login.css" />
+<link type="text/css" rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/Template/Admin/AdminUserLogin/css/login.css?v=20211230" />
 </be-head>
 
 <be-body>
@@ -8,7 +8,21 @@ $config = \Be\Be::getConfig('App.System.System');
 ?>
 <div id="app">
 
-    <div class="logo"></div>
+    <div class="logo">
+
+        <div class="be-row">
+            <div class="be-col-auto">
+                <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                    <rect rx="8" height="64" width="64" y="0" x="0" fill="#ff6600"/>
+                    <path d="M9 31 L15 31 M15 52 L9 52 L9 11 L15 11 C32 11 32 31 15 31 C32 32 32 52 15 52 M57 11 L39 11 L39 52 L57 52 M39 31 L55 31" stroke="#ffffff" stroke-width="4" fill="none" />
+                </svg>
+            </div>
+            <div class="be-col">
+                <div class="logo-text"><span>B</span>eyond <span>E</span>xception</div>
+            </div>
+        </div>
+
+    </div>
 
     <div class="login-box">
         <el-form size="small" layout="horizontal" ref="loginForm" :model="formData" label-width="80px">

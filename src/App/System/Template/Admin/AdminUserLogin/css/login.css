@@ -1,35 +1,43 @@
-html{background:#FFF;}
-body{text-align:center; background-color: #fff;}
-
-#app{margin:0 auto; width:350px;}
-
-.logo{background:url(../images/logo.gif) center center no-repeat; height:60px; margin:60px 0 30px 0;}
-.login-box{
-	text-align: left;
-	margin-top:50px;
-	padding: 30px 30px 10px 30px;
-	border-radius: 10px;
-	box-shadow: 0 0 15px #bbb;
+html {
+    background: #FFF;
 }
 
-.ant-input-suffix .anticon {
-	cursor: pointer;
-	color: #aaa;
-	transition: color 0.3s;
-}
-.ant-input-suffix .anticon:hover {
-	color: #999;
-}
-.ant-input-suffix .anticon:active {
-	color: #666;
+body {
+    text-align: center;
+    background-color: #fff;
 }
 
-.ant-input-suffix .anticon-close-circle{
-	font-size: 12px;
+#app {
+    margin: 0 auto;
+    width: 350px;
 }
 
-.ant-input-suffix .anticon-eye,
-.ant-input-suffix .anticon-eye-invisible {
-	font-size: 14px;
-	margin-left: 4px;
+.logo {
+    margin: 50px 0 0 0;
+}
+
+.logo svg {
+    width: 64px;
+    height: 64px;
+    margin: 0 20px;
+}
+
+.logo .logo-text {
+    text-align: left;
+    font-size: 28px;
+    line-height: 64px;
+    color: #999;
+    font-weight: lighter;
+}
+
+.logo .logo-text span {
+    color: #f60;
+}
+
+.login-box {
+    text-align: left;
+    margin-top: 40px;
+    padding: 30px 30px 10px 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px #bbb;
 }
