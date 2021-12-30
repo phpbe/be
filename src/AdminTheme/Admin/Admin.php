@@ -179,7 +179,7 @@
                             <a href="<?php echo beAdminUrl(); ?>">
                                 <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
                                     <rect rx="5" height="40" width="40" y="0" x="0" fill="#ff6600"/>
-                                    <path d="M6 19 L11 19 M11 32 L6 32 L6 7 L11 7 C20 7 20 19 11 19 C20 20 20 33 11 32 M35 7 L24 7 L24 32 L36 32 M25 19 L34 19" stroke="#ffffff" stroke-width="2" fill="none" />
+                                    <path d="M6 19 L11 19 M11 32 L6 32 L6 7 L11 7 C20 7 20 19 11 19 C20 20 20 32 11 32 M35 7 L24 7 L24 32 L36 32 M25 19 L34 19" stroke="#ffffff" stroke-width="2" fill="none" />
                                 </svg>
                             </a>
                         </div>

@@ -12,9 +12,9 @@ $config = \Be\Be::getConfig('App.System.System');
 
         <div class="be-row">
             <div class="be-col-auto">
-                <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-                    <rect rx="8" height="64" width="64" y="0" x="0" fill="#ff6600"/>
-                    <path d="M9 31 L15 31 M15 52 L9 52 L9 11 L15 11 C32 11 32 31 15 31 C32 32 32 52 15 52 M57 11 L39 11 L39 52 L57 52 M39 31 L55 31" stroke="#ffffff" stroke-width="4" fill="none" />
+                <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                    <rect rx="5" height="40" width="40" y="0" x="0" fill="#ff6600"/>
+                    <path d="M6 19 L11 19 M11 32 L6 32 L6 7 L11 7 C20 7 20 19 11 19 C20 20 20 32 11 32 M35 7 L24 7 L24 32 L36 32 M25 19 L34 19" stroke="#ffffff" stroke-width="2" fill="none" />
                 </svg>
             </div>
             <div class="be-col">
