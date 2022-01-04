@@ -274,7 +274,7 @@ class ThemeEditor
 
         $sectionType = $request->get('sectionType', '');
 
-        $service = Be::getService('App.System.Admin.Theme');
+        $service = Be::getService('App.System.Admin.' . $this->themeType);
         $service->enableSectionType($themeName, $pageName, $sectionType);
 
         $url = beAdminUrl('System.' . $this->themeType . '.setting', ['themeName' => $themeName, 'pageName' => $pageName]);

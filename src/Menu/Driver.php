@@ -5,7 +5,7 @@ namespace Be\Menu;
 /**
  * 菜单基类
  */
-abstract class Driver
+class Driver
 {
     protected $menus = [];
     protected $menuTree = null;
