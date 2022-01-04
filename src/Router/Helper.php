@@ -303,7 +303,7 @@ class Helper
                 }
             } elseif ($router->$actionName == 'static') {
                 // 静态路由有参数时，将参数以 GET 方式拼接到网址中
-                if ($params !== null) {
+                if ($params !== null && $params) {
                     return $rootUrl . $uri . '?' . http_build_query($params);
                 }
             }
@@ -314,7 +314,7 @@ class Helper
 
             // 未设置路由规则时，返回简单伪静态页格式
             $urlParams = '';
-            if ($params !== null) {
+            if ($params !== null && $params) {
                 foreach ($params as $key => $val) {
                     $urlParams .= '/' . $key . '-' . $val;
                 }

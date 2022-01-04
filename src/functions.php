@@ -22,17 +22,24 @@ function beUrl($route = null, array $params = null)
 
     $configSystem = \Be\Be::getConfig('App.System.System');
     if ($configSystem->urlRewrite === '1') {
-        $urlParams = '';
-        if ($params !== null) {
+        $url = $request->getRootUrl() . '/' . str_replace('.', '/', $route);
+        if ($params !== null && $params) {
+            $urlParams = '';
             foreach ($params as $key => $val) {
                 $urlParams .= '/' . $key . '-' . $val;
             }
+            $url .= $urlParams;
         }
-        return $request->getRootUrl() . '/' . str_replace('.', '/', $route) . $urlParams . $configSystem->urlSuffix;
+        $url .=  $configSystem->urlSuffix;
+        return $url;
     } elseif ($configSystem->urlRewrite === '2') {
         return \Be\Router\Helper::encode($route, $params);
     } else {
-        return $request->getRootUrl() . '/?route=' . $route . ($params !== null ? '&' . http_build_query($params) : '');
+        $url = $request->getRootUrl() . '/?route=' . $route;
+        if ($params !== null && $params) {
+            $url .=  '&' . http_build_query($params);
+        }
+        return $url;
     }
 }
 
@@ -62,15 +69,24 @@ function beAdminUrl($route = null, array $params = null)
     }
 
     if ($configSystem->urlRewrite) {
-        $urlParams = '';
-        if ($params !== null) {
+        $url = $request->getRootUrl() . '/' . $adminAlias . '/' . str_replace('.', '/', $route);
+        if ($params !== null && $params) {
+            $urlParams = '';
             foreach ($params as $key => $val) {
                 $urlParams .= '/' . $key . '-' . $val;
             }
+            $url .= $urlParams;
         }
-        return $request->getRootUrl() . '/' . $adminAlias . '/' . str_replace('.', '/', $route) . $urlParams . ($configSystem->urlRewrite === '1' ? $configSystem->urlSuffix : '');
+        if ($configSystem->urlRewrite === '1') {
+            $url .=  $configSystem->urlSuffix;
+        }
+        return $url;
     } else {
-        return $request->getRootUrl() . '/?' . $adminAlias . '=1&route=' . $route . ($params !== null ? '&' . http_build_query($params) : '');
+        $url = $request->getRootUrl() . '/?' . $adminAlias . '=1&route=' . $route;
+        if ($params !== null && $params) {
+            $url .= '&' . http_build_query($params);
+        }
+        return $url;
     }
 }
 
