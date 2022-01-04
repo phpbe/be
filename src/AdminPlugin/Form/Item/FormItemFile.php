@@ -203,24 +203,15 @@ class FormItemFile extends FormItem
             $newValue = $data[$this->name];
             $newValue = htmlspecialchars_decode($newValue);
 
+            $storage = Be::getStorage();
             if ($newValue != $this->value && $this->value != '') {
-                $lastPath = Be::getRuntime()->getUploadPath() . $this->path . $this->value;
-                if (file_exists($lastPath)) {
-                    @unlink($lastPath);
-                }
+                $oldPath = $this->path . $this->value;
+                $storage->removeFile($oldPath);
             }
 
-            $pathDstDir = Be::getRuntime()->getUploadPath() . $this->path;
-            if (!file_exists($pathDstDir)) {
-                mkdir($pathDstDir, 0755, true);
-            }
-
-            $pathSrc = Be::getRuntime()->getUploadPath() . '/tmp/' . $newValue;
-            $pathDst = $pathDstDir . $newValue;
-            if (file_exists($pathSrc)) {
-                @copy($pathSrc, $pathDst);
-                @unlink($pathSrc);
-            }
+            $newPath = $this->path . $newValue;
+            $file = Be::getRuntime()->getUploadPath() . '/tmp/' . $newValue;
+            $url = $storage->uploadFile($newPath, $file);
 
             $this->newValue = $newValue;
         }

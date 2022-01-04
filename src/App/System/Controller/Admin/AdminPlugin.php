@@ -51,7 +51,7 @@ class AdminPlugin
                 return;
             }
 
-            $newFileName = date('YmdHis') . '-' . \Be\Util\Random::simple(10) . '.' . $ext;
+            $newFileName = md5_file($file['tmp_name']) .'.' .$ext;
             $newFilePath = Be::getRuntime()->getUploadPath() . '/tmp/' . $newFileName;
 
             $dir = dirname($newFilePath);
@@ -117,7 +117,7 @@ class AdminPlugin
             $libImage = Be::getLib('Image');
             $libImage->open($file['tmp_name']);
             if ($libImage->isImage()) {
-                $newImageName = date('YmdHis') . '-' . \Be\Util\Random::simple(10) . '.' . $libImage->getType();
+                $newImageName = md5_file($file['tmp_name']) .'.' .$libImage->getType();
                 $newImagePath = Be::getRuntime()->getUploadPath() . '/tmp/' . $newImageName;
 
                 $dir = dirname($newImagePath);
@@ -213,7 +213,7 @@ class AdminPlugin
 
                     $newImageName = $filename . '.' . $libImage->getType();
                 } else {
-                    $newImageName = date('YmdHis') . '-' . \Be\Util\Random::simple(10) . '.' . $libImage->getType();
+                    $newImageName = md5_file($file['tmp_name']) .'.' .$libImage->getType();
                 }
                 $newImagePath = Be::getRuntime()->getUploadPath() . '/tmp/' . $newImageName;
 

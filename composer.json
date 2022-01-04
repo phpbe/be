@@ -23,6 +23,7 @@
     "ext-json": "*",
     "ext-pdo": "*",
     "be/scss": "*",
+    "aliyuncs/oss-sdk-php": "~2.4",
     "monolog/monolog": "~1.11",
     "elasticsearch/elasticsearch": "^v7.11"
   },
