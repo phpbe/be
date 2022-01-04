@@ -49,9 +49,6 @@ class MailQueue
             throw new ServiceException('收件人邮箱缺失！');
         }
 
-        $data->subject = $subject;
-        $data->body = $body;
-
         $data->cc_email = '';
         $data->cc_name = '';
         if ($cc !== null) {
@@ -87,6 +84,15 @@ class MailQueue
                 }
             }
         }
+
+        $data->subject = $subject;
+        $data->body = $body;
+        $data->sent = 0;
+        $data->sent_time = null;
+        $data->error_message = '';
+        $data->times = 0;
+        $data->create_time = date('Y-m-d H:i:s');
+        $data->update_time = date('Y-m-d H:i:s');
 
         $db = Be::getDb();
         $db->insert('system_mail_queue', $data);
