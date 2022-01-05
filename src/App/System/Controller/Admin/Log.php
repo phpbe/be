@@ -168,6 +168,14 @@ class Log extends Auth
                                 'type' => 'danger'
                             ]
                         ],
+                        [
+                            'label' => '刷新',
+                            'ui' => [
+                                'type' => 'primary',
+                                'icon' => 'el-icon-refresh',
+                                '@click' => 'submit'
+                            ]
+                        ],
                     ],
                 ],
 

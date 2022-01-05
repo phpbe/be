@@ -76,10 +76,12 @@ class ThemeEditor
                             'name' => 'label',
                             'label' => '中文名称',
                         ],
+                        /*
                         [
                             'name' => 'path',
                             'label' => '路径',
                         ],
+                        */
                         [
                             'name' => 'is_default',
                             'label' => '启用',
