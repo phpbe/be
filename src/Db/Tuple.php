@@ -176,13 +176,21 @@ abstract class Tuple
         if (is_array($this->_primaryKey)) {
             foreach ($this->_primaryKey as $primaryKey) {
                 if (strtolower($this->$primaryKey) == 'uuid()') {
-                    $this->$primaryKey = $db->getValue('SELECT UUID()');
+                    if (function_exists('uuid_create')) {
+                        $this->$primaryKey = uuid_create();
+                    } else {
+                        $this->$primaryKey = $db->getValue('SELECT UUID()');
+                    }
                 }
             }
         } else {
             $primaryKey = $this->_primaryKey;
             if (strtolower($this->$primaryKey) == 'uuid()') {
-                $this->$primaryKey = $db->getValue('SELECT UUID()');
+                if (function_exists('uuid_create')) {
+                    $this->$primaryKey = uuid_create();
+                } else {
+                    $this->$primaryKey = $db->getValue('SELECT UUID()');
+                }
             }
         }
 
@@ -272,7 +280,11 @@ abstract class Tuple
                     }
 
                     if (strtolower($this->$primaryKey) == 'uuid()') {
-                        $this->$primaryKey = $db->getValue('SELECT UUID()');
+                        if (function_exists('uuid_create')) {
+                            $this->$primaryKey = uuid_create();
+                        } else {
+                            $this->$primaryKey = $db->getValue('SELECT UUID()');
+                        }
                         $insert = true;
                         break;
                     }
@@ -281,7 +293,11 @@ abstract class Tuple
                 $primaryKey = $this->_primaryKey;
                 if ($this->$primaryKey) {
                     if (strtolower($this->$primaryKey) == 'uuid()') {
-                        $this->$primaryKey = $db->getValue('SELECT UUID()');
+                        if (function_exists('uuid_create')) {
+                            $this->$primaryKey = uuid_create();
+                        } else {
+                            $this->$primaryKey = $db->getValue('SELECT UUID()');
+                        }
                         $insert = true;
                     }
                 } else {
