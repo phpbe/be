@@ -67,7 +67,7 @@ class File implements Driver
      * 获取 多个指定的缓存 值
      *
      * @param array $keys 键名 数组
-     * @return array()
+     * @return array
      */
     public function getMany($keys)
     {
