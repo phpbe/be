@@ -967,6 +967,7 @@
                     this.loading = true;
                     var _this = this;
                     _this.$http.post("<?php echo $this->setting['form']['action']; ?>", {
+                        actualLayout: "<php echo $this->setting['actualLayout']; ?>",
                         formData: _this.formData,
                         orderBy: _this.orderBy,
                         orderByDir: _this.orderByDir,
@@ -1006,6 +1007,7 @@
                 reloadGridData: function () {
                     var _this = this;
                     _this.$http.post("<?php echo $this->setting['form']['action']; ?>", {
+                        actualLayout: "<php echo $this->setting['actualLayout']; ?>",
                         formData: _this.formData,
                         orderBy: _this.orderBy,
                         orderByDir: _this.orderByDir,

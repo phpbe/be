@@ -100,6 +100,7 @@ class Curd extends Driver
                     }
                 }
 
+                $actualLayout = $postData['actualLayout'];
                 $page = $postData['page'];
                 $pageSize = $postData['pageSize'];
                 $table->offset(($page - 1) * $pageSize)->limit($pageSize);
@@ -110,7 +111,7 @@ class Curd extends Driver
                 foreach ($rows as $row) {
                     $formattedRow = [];
 
-                    foreach ($this->setting['grid']['table']['items'] as $item) {
+                    foreach ($this->setting['grid'][$actualLayout]['items'] as $item) {
                         if (!isset($item['name'])) {
                             continue;
                         }
@@ -150,9 +151,9 @@ class Curd extends Driver
                             continue;
                         }
 
-                        if (isset($this->setting['grid']['table']['exclude']) &&
-                            is_array($this->setting['grid']['table']['exclude']) &&
-                            in_array($k, $this->setting['grid']['table']['exclude'])
+                        if (isset($this->setting['grid'][$actualLayout]['exclude']) &&
+                            is_array($this->setting['grid'][$actualLayout]['exclude']) &&
+                            in_array($k, $this->setting['grid'][$actualLayout]['exclude'])
                         ) {
                             continue;
                         }
