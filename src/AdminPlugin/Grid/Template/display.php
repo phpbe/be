@@ -158,7 +158,7 @@
             ?>
 
             .card-item {
-                height: 30px;
+                min-height: 30px;
                 line-height: 30px;
             }
 
