@@ -55,11 +55,11 @@ class ImagickImpl implements Driver
      */
     public function crop($x = 0, $y = 0, $width = null, $height = null)
     {
-        if ($width == null) $width = $this->image->getImageWidth() - $x;
-        if ($height == null) $height = $this->image->getImageHeight() - $y;
+        if ($width === null) $width = $this->image->getImageWidth() - $x;
+        if ($height === null) $height = $this->image->getImageHeight() - $y;
         if ($width <= 0 || $height <= 0) return false;
 
-        if ($this->type == 'gif') {
+        if ($this->type === 'gif') {
             $image = $this->image;
             $canvas = new \Imagick();
 
@@ -107,7 +107,7 @@ class ImagickImpl implements Driver
     {
         switch ($fit) {
             case 'force':
-                if ($this->type == 'gif') {
+                if ($this->type === 'gif') {
                     $image = $this->image;
                     $canvas = new \Imagick();
 
@@ -128,7 +128,7 @@ class ImagickImpl implements Driver
                 }
                 break;
             case 'scale':
-                if ($this->type == 'gif') {
+                if ($this->type === 'gif') {
                     $image = $this->image;
                     $canvas = new \Imagick();
 
@@ -170,7 +170,7 @@ class ImagickImpl implements Driver
                 $canvas = new \Imagick();
 
                 $color = 'rgba(' . $fillColor[0] . ',' . $fillColor[1] . ',' . $fillColor[2] . ',' . $fillColor[3] . ')';
-                if ($this->type == 'gif') {
+                if ($this->type === 'gif') {
                     $images = $image->coalesceImages();
                     foreach ($images as $frame) {
                         $frame->thumbnailImage($width, $height, true);
@@ -261,7 +261,7 @@ class ImagickImpl implements Driver
                 $image = $this->image;
                 $canvas = new \Imagick();
 
-                if ($this->type == 'gif') {
+                if ($this->type === 'gif') {
                     $images = $image->coalesceImages();
                     foreach ($images as $frame) {
                         $img = new \Imagick();
@@ -300,7 +300,7 @@ class ImagickImpl implements Driver
         $draw = new \ImagickDraw();
         $draw->composite($watermark->getImageCompose(), $x, $y, $watermark->getImageWidth(), $watermark->getimageheight(), $watermark);
 
-        if ($this->type == 'gif') {
+        if ($this->type === 'gif') {
             $image = $this->image;
             $canvas = new \Imagick();
 
@@ -350,7 +350,7 @@ class ImagickImpl implements Driver
 
         if (isset($style['underColor'])) $draw->setTextUnderColor($style['underColor']);
 
-        if ($this->type == 'gif') {
+        if ($this->type === 'gif') {
             foreach ($this->image as $frame) {
                 $frame->annotateImage($draw, $x, $y, $angle, $text);
             }
@@ -376,7 +376,7 @@ class ImagickImpl implements Driver
             mkdir($dir, 0777, true);
         }
 
-        if ($this->type == 'gif') {
+        if ($this->type === 'gif') {
             $this->image->writeImages($path, true);
         } else {
             $this->image->writeImage($path);
@@ -440,7 +440,7 @@ class ImagickImpl implements Driver
      */
     public function getType()
     {
-        if ($this->type == 'jpeg') return 'jpg';
+        if ($this->type === 'jpeg') return 'jpg';
         return $this->type;
     }
 
@@ -505,7 +505,7 @@ class ImagickImpl implements Driver
     // 添加噪点
     public function addNoise($type = null)
     {
-        $this->image->addNoiseImage($type == null ? \Imagick::NOISE_IMPULSE : $type);
+        $this->image->addNoiseImage($type === null ? \Imagick::NOISE_IMPULSE : $type);
     }
 
     // 调整色阶

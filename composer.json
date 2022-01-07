@@ -25,7 +25,8 @@
     "be/scss": "*",
     "aliyuncs/oss-sdk-php": "~2.4",
     "monolog/monolog": "~1.11",
-    "elasticsearch/elasticsearch": "^v7.11"
+    "elasticsearch/elasticsearch": "^v7.11",
+    "ext-gd": "*"
   },
   "autoload": {
     "psr-4": {

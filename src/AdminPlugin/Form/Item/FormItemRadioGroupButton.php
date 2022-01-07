@@ -56,7 +56,7 @@ class FormItemRadioGroupButton extends FormItem
 
         $html .= '<el-radio-group';
         foreach ($this->ui as $k => $v) {
-            if ($k == 'form-item' || $k == 'adio-button') {
+            if ($k === 'form-item' || $k === 'adio-button') {
                 continue;
             }
 

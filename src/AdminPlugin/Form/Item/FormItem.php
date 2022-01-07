@@ -33,12 +33,7 @@ abstract class FormItem
     public function __construct($params = [], $row = [])
     {
         if (isset($params['name'])) {
-            $name = $params['name'];
-            if ($name instanceof \Closure) {
-                $this->name = $name($row);
-            } else {
-                $this->name = $name;
-            }
+            $this->name = $params['name'];
         }
 
         if (isset($params['label'])) {
@@ -266,6 +261,7 @@ abstract class FormItem
      */
     public function submit($data)
     {
+        //print_r($data);
         if (isset($data[$this->name]) && $data[$this->name] !== $this->nullValue) {
             $newValue = $data[$this->name];
             switch ($this->valueType) {

@@ -164,7 +164,7 @@ class Http
     private function request()
     {
         $url = parse_url($this->url);
-        $ssl = ($url['scheme'] == 'https' || $url['scheme'] == 'ssl');
+        $ssl = ($url['scheme'] === 'https' || $url['scheme'] === 'ssl');
 
         $handle = curl_init();
 
@@ -186,12 +186,12 @@ class Http
             curl_setopt($handle, CURLOPT_USERPWD, $this->options['userpwd']);
         }
 
-        if ($this->options['method'] == 'POST' && count($this->data)) {
+        if ($this->options['method'] === 'POST' && count($this->data)) {
             curl_setopt($handle, CURLOPT_POST, true);
             curl_setopt($handle, CURLOPT_POSTFIELDS, $this->data);
         }
 
-        if ($this->options['httpVersion'] == '1.0')
+        if ($this->options['httpVersion'] === '1.0')
             curl_setopt($handle, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
         else
             curl_setopt($handle, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);

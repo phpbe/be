@@ -62,7 +62,7 @@ class Task extends Driver
         }
 
         $titleToolbarItems = [];
-        if (Be::getRuntime()->getMode() == 'Common') {
+        if (Be::getRuntime()->getMode() === 'Common') {
             $titleToolbarItems[] = [
                 'label' => '定时任务配置说明',
                 'driver' => ToolbarItemLink::class,
@@ -355,7 +355,7 @@ class Task extends Driver
                             'ui' => function ($row) {
                                 return [
                                     'form-item' => [
-                                        'v-if' => $row['schedule_lock'] == '0' ? 'true' : 'false'
+                                        'v-if' => $row['schedule_lock'] === '0' ? 'true' : 'false'
                                     ]
                                 ];
                             }
@@ -723,7 +723,7 @@ class Task extends Driver
         $response = Be::getResponse();
 
         $configTask = Be::getConfig('App.System.Task');
-        if ($configTask->password == '') {
+        if ($configTask->password === '') {
             $configTask->password = Random::complex(16);
             ConfigHelper::update('App.System.Task', $configTask);
             $response->set('configTaskPassword', 1);

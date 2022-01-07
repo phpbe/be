@@ -95,7 +95,7 @@ class AdminPermission
             if (!file_exists($controllerDir) && !is_dir($controllerDir)) continue;
             $controllers = scandir($controllerDir);
             foreach ($controllers as $controller) {
-                if ($controller == '.' || $controller == '..' || is_dir($controllerDir . '/' . $controller)) continue;
+                if ($controller === '.' || $controller === '..' || is_dir($controllerDir . '/' . $controller)) continue;
 
                 $controller = substr($controller, 0, -4);
                 $className = 'Be\\App\\' . $appName . '\\Controller\\Admin\\' . $controller;
@@ -109,8 +109,8 @@ class AdminPermission
                 $childLabel = null;
                 $childOrdering = null;
                 foreach ($parseClassComments as $key => $val) {
-                    if ($key == 'BePermissionGroup') {
-                        if (is_array($val[0]) && isset($val[0]['value']) && $val[0]['value'] != '*') {
+                    if ($key === 'BePermissionGroup') {
+                        if (is_array($val[0]) && isset($val[0]['value']) && $val[0]['value'] !== '*') {
                             $childKey = $appName . '.' . $controller;
                             $childLabel = $val[0]['value'];
                             if (isset($val[0]['ordering'])) {
@@ -141,15 +141,15 @@ class AdminPermission
                 $methods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
                 foreach ($methods as &$method) {
                     $methodName = $method->getName();
-                    if (substr($methodName, 0, 1) == '_') {
+                    if (substr($methodName, 0, 1) === '_') {
                         continue;
                     }
 
                     $methodComment = $method->getDocComment();
                     $methodComments = Annotation::parse($methodComment);
                     foreach ($methodComments as $key => $val) {
-                        if ($key == 'BePermission') {
-                            if (is_array($val[0]) && isset($val[0]['value']) && $val[0]['value'] != '*') {
+                        if ($key === 'BePermission') {
+                            if (is_array($val[0]) && isset($val[0]['value']) && $val[0]['value'] !== '*') {
                                 $subChildren[] = [
                                     'key' => $appName . '.' . $controller . '.' . $methodName,
                                     'label' => $val[0]['value'],

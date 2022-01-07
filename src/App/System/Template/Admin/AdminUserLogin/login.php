@@ -68,7 +68,7 @@ if ($return=='') {
                 this.$http.post("<?php echo beAdminUrl('System.AdminUserLogin.login'); ?>", _this.formData)
                     .then(function (response) {
                         _this.loginLoading = false;
-                        if (response.status == 200) {
+                        if (response.status === 200) {
                             if (response.data.success) {
                                 window.location.href = "<?php echo $return; ?>";
                             } else {

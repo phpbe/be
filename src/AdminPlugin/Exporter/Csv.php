@@ -23,7 +23,7 @@ class Csv extends Driver
             set_time_limit($this->timeLimit);
             ini_set('memory_limit', $this->memoryLimit);
 
-            if ($this->outputType == 'http') {
+            if ($this->outputType === 'http') {
                 header('Content-Type: application/csv');
                 header('Content-Transfer-Encoding: binary');
                 if ($this->outputFileNameOrPath === null) {
@@ -54,7 +54,7 @@ class Csv extends Driver
 
         foreach ($headers as &$header) {
 
-            if ($this->charset != 'UTF-8') {
+            if ($this->charset !== 'UTF-8') {
                 $header = iconv('UTF-8', $this->charset . '//IGNORE', $header);
             }
 
@@ -66,7 +66,7 @@ class Csv extends Driver
         unset($header);
 
         $line = implode(',', $headers) . "\r\n";
-        if ($this->outputType == 'http') {
+        if ($this->outputType === 'http') {
             echo $line;
         } else {
             fwrite($this->handler, $line);
@@ -109,7 +109,7 @@ class Csv extends Driver
                 }
 
             } else {
-                if ($this->charset != 'UTF-8') {
+                if ($this->charset !== 'UTF-8') {
                     $x = iconv('UTF-8', $this->charset . '//IGNORE', $x);
                 }
                 if (strpos($x, '"') !== false) {
@@ -121,11 +121,11 @@ class Csv extends Driver
         unset($x);
 
         $line = implode(',', $row) . "\r\n";
-        if ($this->outputType == 'http') {
+        if ($this->outputType === 'http') {
             echo $line;
 
             $this->index++;
-            if ($this->index % 5000 == 0) {
+            if ($this->index % 5000 === 0) {
                 ob_flush();
                 flush();
             }
@@ -143,7 +143,7 @@ class Csv extends Driver
      */
     public function end()
     {
-        if ($this->outputType == 'file' && is_resource($this->handler)) {
+        if ($this->outputType === 'file' && is_resource($this->handler)) {
             fclose($this->handler);
         }
         return $this;

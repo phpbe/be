@@ -42,7 +42,7 @@ class ThemeEditor
             $response->json();
         } else {
             Be::getAdminPlugin('Grid')->setting([
-                'title' => ($this->themeType == 'Theme' ? '前台' : '后台') . '主题管理',
+                'title' => ($this->themeType === 'Theme' ? '前台' : '后台') . '主题管理',
                 'pageSize' => 10,
                 'titleRightToolbar' => [
                     'items' => [
@@ -64,7 +64,8 @@ class ThemeEditor
                     'cols' => 2,
                     'image' => [
                         'name' => 'previewImageUrl',
-                        //'maxHeight' => '200',
+                        'maxWidth' => '300',
+                        'maxHeight' => '200',
                         'position' => 'left'
                     ],
                     'items' => [
@@ -89,7 +90,7 @@ class ThemeEditor
                             'target' => 'ajax',
                             'action' => 'toggleDefault',
                             'ui' => [
-                                ':disabled' => 'item.is_default == \'1\'',
+                                ':disabled' => 'item.is_default === \'1\'',
                                 'active-text' => '是',
                                 'inactive-text' => '否'
                             ]
@@ -138,7 +139,7 @@ class ThemeEditor
                             'action' => 'toggleDefault',
                             'width' => '90',
                             'ui' => [
-                                ':disabled' => 'scope.row.is_default == \'1\'',
+                                ':disabled' => 'scope.row.is_default === \'1\'',
                             ]
                         ],
                     ],
@@ -169,7 +170,7 @@ class ThemeEditor
         try {
             $serviceTheme = Be::getService('App.System.Admin.' . $this->themeType);
             $n = $serviceTheme->discover();
-            $response->success('发现 ' . $n . ' 个新' . ($this->themeType == 'Theme' ? '前台' : '后台') . '主题！');
+            $response->success('发现 ' . $n . ' 个新' . ($this->themeType === 'Theme' ? '前台' : '后台') . '主题！');
 
             Be::getRuntime()->reload();
         } catch (\Throwable $t) {
@@ -197,8 +198,8 @@ class ThemeEditor
             $serviceTheme = Be::getService('App.System.Admin.' . $this->themeType);
             $serviceTheme->toggleDefault($themeName);
 
-            beAdminOpLog('启用' . ($this->themeType == 'Theme' ? '前台' : '后台') . '主题：' . $themeName);
-            $response->success('启用' . ($this->themeType == 'Theme' ? '前台' : '后台') . '主题成功！');
+            beAdminOpLog('启用' . ($this->themeType === 'Theme' ? '前台' : '后台') . '主题：' . $themeName);
+            $response->success('启用' . ($this->themeType === 'Theme' ? '前台' : '后台') . '主题成功！');
 
             Be::getRuntime()->reload();
 
@@ -250,7 +251,7 @@ class ThemeEditor
         $response->set('page', $page);
         //print_r($page);
 
-        if ($pageName != 'Home') {
+        if ($pageName !== 'Home') {
             $pageHome = $service->getThemePage($themeName, 'Home');
             $response->set('pageHome', $pageHome);
         }

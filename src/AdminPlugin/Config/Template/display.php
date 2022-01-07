@@ -15,7 +15,7 @@
                 ?>
                 <el-tab-pane name="<?php echo $config['name']; ?>" label="<?php echo $config['label']; ?>">
                     <?php
-                    if ($config['name'] == $this->configName) {
+                    if ($config['name'] === $this->configName) {
                         if (count($this->configItemDrivers)) {
                             ?>
                             <div style="max-width: 800px;">
@@ -129,7 +129,7 @@
                         formData: _this.formData
                     }).then(function (response) {
                             _this.loading = false;
-                            if (response.status == 200) {
+                            if (response.status === 200) {
                                 if (response.data.success) {
                                     _this.$message.success(response.data.message);
                                 } else {
@@ -153,7 +153,7 @@
                         _this.$http.get("<?php echo beAdminUrl(null, ['task' => 'resetConfig', 'configName' => $this->configName]); ?>")
                             .then(function (response) {
                                 _this.loading = false;
-                                if (response.status == 200) {
+                                if (response.status === 200) {
                                     if (response.data.success) {
                                         _this.$message.success(response.data.message);
                                         window.location.reload();

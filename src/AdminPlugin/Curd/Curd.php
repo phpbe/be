@@ -298,7 +298,7 @@ class Curd extends Driver
                 $filename = $this->setting['grid']['title'];
             }
             $filename .= '（' . date('YmdHis') . '）';
-            $filename .= ($exportDriver == 'csv' ? '.csv' : '.xls');
+            $filename .= ($exportDriver === 'csv' ? '.csv' : '.xls');
 
             $exporter->setDriver($exportDriver)->setOutput('http', $filename);
 
@@ -437,7 +437,7 @@ class Curd extends Driver
 
                 $driverClass = null;
                 if (isset($item['driver'])) {
-                    if (substr($item['driver'], 0, 8) == 'FormItem') {
+                    if (substr($item['driver'], 0, 8) === 'FormItem') {
                         $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $item['driver'];
                     } else {
                         $driverClass = $item['driver'];
@@ -447,7 +447,7 @@ class Curd extends Driver
                 }
                 $driver = new $driverClass($item);
 
-                if ($driver->name == null) {
+                if ($driver->name === null) {
                     continue;
                 }
 
@@ -498,14 +498,14 @@ class Curd extends Driver
                             $sql = $db->quoteKey($driver->name) . ' LIKE ' . $db->quoteValue('%' . $driver->newValue);
                             break;
                         case 'RANGE':
-                            if (is_array($driver->newValue) && count($driver->newValue) == 2) {
+                            if (is_array($driver->newValue) && count($driver->newValue) === 2) {
                                 $sql = $db->quoteKey($driver->name) . ' >= ' . $db->quoteValue($driver->newValue[0]);
                                 $sql .= ' AND ';
                                 $sql .= $db->quoteKey($driver->name) . ' < ' . $db->quoteValue($driver->newValue[1]);
                             }
                             break;
                         case 'BETWEEN':
-                            if (is_array($driver->newValue) && count($driver->newValue) == 2) {
+                            if (is_array($driver->newValue) && count($driver->newValue) === 2) {
                                 $sql = $db->quoteKey($driver->name) . ' BETWEEN ' . $db->quoteValue($driver->newValue[0]);
                                 $sql .= ' AND ';
                                 $sql .= $db->quoteValue($driver->newValue[1]);
@@ -671,7 +671,7 @@ class Curd extends Driver
 
                         $driverClass = null;
                         if (isset($item['driver'])) {
-                            if (substr($item['driver'], 0, 8) == 'FormItem') {
+                            if (substr($item['driver'], 0, 8) === 'FormItem') {
                                 $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $item['driver'];
                             } else {
                                 $driverClass = $item['driver'];
@@ -681,7 +681,7 @@ class Curd extends Driver
                         }
                         $driver = new $driverClass($item);
 
-                        if ($driver->name == null) {
+                        if ($driver->name === null) {
                             continue;
                         }
 
@@ -736,7 +736,7 @@ class Curd extends Driver
 
             } catch (\Throwable $t) {
                 $db->rollback();
-                $this->trigger('error', $t);
+                $this->trigger('error', [$t]);
                 $response->error($t->getMessage());
                 Be::getLog()->error($t);
             }
@@ -817,7 +817,7 @@ class Curd extends Driver
 
                         $driverClass = null;
                         if (isset($item['driver'])) {
-                            if (substr($item['driver'], 0, 8) == 'FormItem') {
+                            if (substr($item['driver'], 0, 8) === 'FormItem') {
                                 $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $item['driver'];
                             } else {
                                 $driverClass = $item['driver'];
@@ -825,14 +825,20 @@ class Curd extends Driver
                         } else {
                             $driverClass = \Be\AdminPlugin\Form\Item\FormItemInput::class;
                         }
-                        $driver = new $driverClass($item, $formData);
 
-                        if ($driver->name == null) {
+                        if (!isset($item['name'])) {
                             continue;
                         }
 
+                        $name = $item['name'];
+
+                        if (isset($tuple->$name) && !isset($item['value'])) {
+                            $item['value'] = $tuple->$name;
+                        }
+
+                        $driver = new $driverClass($item);
+
                         $driver->submit($formData);
-                        $name = $driver->name;
 
                         // 必填字段
                         if ($driver->required) {
@@ -882,7 +888,7 @@ class Curd extends Driver
                 $response->success($title . '：编辑成功！');
             } catch (\Throwable $t) {
                 $db->rollback();
-                $this->trigger('error', $t);
+                $this->trigger('error', [$t]);
                 $response->error($t->getMessage());
                 Be::getLog()->error($t);
             }
@@ -981,7 +987,7 @@ class Curd extends Driver
         $fieldLabel = '';
         if (isset($this->setting['grid']['field']['items'])) {
             foreach ($this->setting['grid']['field']['items'] as $fieldItem) {
-                if ($fieldItem['name'] == $field) {
+                if ($fieldItem['name'] === $field) {
                     $fieldLabel = $fieldItem['label'];
                     break;
                 }
@@ -997,7 +1003,7 @@ class Curd extends Driver
             $db->startTransaction();
             try {
 
-                if (!is_array($postData['selectedRows']) || count($postData['selectedRows']) == 0) {
+                if (!is_array($postData['selectedRows']) || count($postData['selectedRows']) === 0) {
                     throw new AdminPluginException('你尚未选择要操作的数据！');
                 }
 
@@ -1184,7 +1190,7 @@ class Curd extends Driver
 
         if (isset($postData['selectedRows'])) {
 
-            if (!is_array($postData['selectedRows']) || count($postData['selectedRows']) == 0) {
+            if (!is_array($postData['selectedRows']) || count($postData['selectedRows']) === 0) {
                 $response->error('你尚未选择要操作的数据！');
                 return;
             }

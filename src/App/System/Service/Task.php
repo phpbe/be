@@ -26,7 +26,7 @@ class Task
         if (file_exists($dir) && is_dir($dir)) {
             $fileNames = scandir($dir);
             foreach ($fileNames as $fileName) {
-                if ($fileName != '.' && $fileName != '..' && is_file($dir . '/' . $fileName)) {
+                if ($fileName !== '.' && $fileName !== '..' && is_file($dir . '/' . $fileName)) {
                     $taskName = substr($fileName, 0, -4);
                     $className = '\\Be\\App\\' . $appName . '\\Task\\' . $taskName;
                     if (class_exists($className)) {
@@ -104,7 +104,7 @@ class Task
 
         $tuple->trigger = $triggerType;
 
-        if (Be::getRuntime()->getMode() == 'Swoole') {
+        if (Be::getRuntime()->getMode() === 'Swoole') {
             Be::getRuntime()->task($tuple->toObject());
         } else {
             $config = Be::getConfig('App.System.Task');
@@ -159,7 +159,7 @@ class Task
         $task = $tuple->toObject();
 
         /*
-        if ($trigger == 'SYSTEM') {
+        if ($trigger === 'SYSTEM') {
             if (TaskHelper::isOnTime($task->schedule, $timestamp)) {
                 return;
             }

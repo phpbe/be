@@ -91,7 +91,7 @@ class JsonRpc
             throw new ServiceException('Call RPC service (' . $call['service'] . '::' . $call['method'] . ') error: body data is not a valid JSON!');
         }
 
-        if (count($decodedResponse) != count($data)) {
+        if (count($decodedResponse) !== count($data)) {
             throw new ServiceException('Call RPC service (' . $call['service'] . '::' . $call['method'] . ') error: response data items does not match request!');
         }
 

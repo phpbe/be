@@ -57,23 +57,23 @@ class Common extends Driver
                 }
 
                 // 移除 ?[k=v]
-                if ($_SERVER['QUERY_STRING'] != '') {
+                if ($_SERVER['QUERY_STRING'] !== '') {
                     $uri = substr($uri, 0, strrpos($uri, '?'));
                 }
 
                 // 移除网址后缀 如：.html
-                if ($configSystem->urlRewrite == '1') {
+                if ($configSystem->urlRewrite === '1') {
                     $lenSefSuffix = strlen($configSystem->urlSuffix);
-                    if ($lenSefSuffix > 0 && substr($uri, -$lenSefSuffix, $lenSefSuffix) == $configSystem->urlSuffix) {
+                    if ($lenSefSuffix > 0 && substr($uri, -$lenSefSuffix, $lenSefSuffix) === $configSystem->urlSuffix) {
                         $uri = substr($uri, 0, strrpos($uri, $configSystem->urlSuffix));
                     }
                 }
 
                 // 移除结尾的 /
-                //if (substr($uri, -1, 1) == '/') $uri = substr($uri, 0, -1);
+                //if (substr($uri, -1, 1) === '/') $uri = substr($uri, 0, -1);
 
                 // 是否后台功能
-                if (substr($uri, 0, strlen($this->adminAlias) + 1) == '/' . $this->adminAlias) {
+                if (substr($uri, 0, strlen($this->adminAlias) + 1) === '/' . $this->adminAlias) {
                     $admin = true;
                     $uri = substr($uri, strlen($this->adminAlias) + 1);
                 }
@@ -136,7 +136,7 @@ class Common extends Driver
                     $route = $request->request('route', $configSystem->home);
                 }
                 $routes = explode('.', $route);
-                if (count($routes) == 3) {
+                if (count($routes) === 3) {
                     $app = $routes[0];
                     $controller = $routes[1];
                     $action = $routes[2];
@@ -170,7 +170,7 @@ class Common extends Driver
                  * @var \Be\Exception $t
                  */
                 $code = $t->getCode();
-                if ($code != 0) {
+                if ($code !== 0) {
                     $logId = Be::getLog()->emergency($t);
                     $response->set('logId', $logId);
                     $response->set('code', $t->getCode());

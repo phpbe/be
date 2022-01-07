@@ -99,7 +99,7 @@ if ($sectionData['enable']) {
     // 手机端
     echo '@media (max-width: 768px) {';
     echo '#group-of-icon-with-text-' . $sectionType . '-' . $sectionKey . ' .group-of-icon-with-text-item {';
-    $width = $cols == 1 ? '100%;' : ('calc((100% - ' . $sectionData['spacingMobile'] . 'px)/2)');
+    $width = $cols === 1 ? '100%;' : ('calc((100% - ' . $sectionData['spacingMobile'] . 'px)/2)');
     echo 'width: ' . $width . ';';
     if ($sectionData['spacingMobile']) {
         echo 'margin-bottom: ' . $sectionData['spacingMobile'] . 'px;';
@@ -117,7 +117,7 @@ if ($sectionData['enable']) {
     // 平析端
     echo '@media (min-width: 768px) {';
     echo '#group-of-icon-with-text-' . $sectionType . '-' . $sectionKey . ' .group-of-icon-with-text-item {';
-    $width = $cols == 1 ? '100%;' : ('calc((100% - ' . ($sectionData['spacingTablet'] * 1) . 'px)/2)');
+    $width = $cols === 1 ? '100%;' : ('calc((100% - ' . ($sectionData['spacingTablet'] * 1) . 'px)/2)');
     echo 'width: ' . $width . ';';
     if ($sectionData['spacingTablet']) {
         echo 'margin-bottom: ' . $sectionData['spacingTablet'] . 'px;';
@@ -128,7 +128,7 @@ if ($sectionData['enable']) {
     // 电脑端
     echo '@media (min-width: 992px) {';
     echo '#group-of-icon-with-text-' . $sectionType . '-' . $sectionKey . ' .group-of-icon-with-text-item {';
-    $width = $cols == 1 ? '100%;' : ('calc((100% - ' . ($sectionData['spacingDesktop'] * ($cols - 1)) . 'px)/' . $cols . ')');
+    $width = $cols === 1 ? '100%;' : ('calc((100% - ' . ($sectionData['spacingDesktop'] * ($cols - 1)) . 'px)/' . $cols . ')');
     echo 'width: ' . $width . ';';
     if ($sectionData['spacingDesktop']) {
         echo 'margin-bottom: ' . $sectionData['spacingDesktop'] . 'px;';

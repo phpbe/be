@@ -95,7 +95,7 @@ abstract class Connection
             /*
              * 当错误码为2006/2013，且没有事务时，重连数据库，
              */
-            if (($e->errorInfo[1] == 2006 || $e->errorInfo[1] == 2013) && $this->transactions == 0) {
+            if (($e->errorInfo[1] === 2006 || $e->errorInfo[1] === 2013) && $this->transactions === 0) {
                 $this->reconnect();
                 return $this->prepare($sql, $options);
             }
@@ -128,7 +128,7 @@ abstract class Connection
             /*
              * 当错误码为2006/2013，且没有事务时，重连数据库，
              */
-            if (($e->errorInfo[1] == 2006 || $e->errorInfo[1] == 2013) && $this->transactions == 0) {
+            if (($e->errorInfo[1] === 2006 || $e->errorInfo[1] === 2013) && $this->transactions === 0) {
                 $this->reconnect();
                 return $this->execute($sql, $bind, $prepareOptions);
             }
@@ -165,7 +165,7 @@ abstract class Connection
             /*
              * 当错误码为2006/2013，且没有事务时，重连数据库，
              */
-            if (($e->errorInfo[1] == 2006 || $e->errorInfo[1] == 2013) && $this->transactions == 0) {
+            if (($e->errorInfo[1] === 2006 || $e->errorInfo[1] === 2013) && $this->transactions === 0) {
                 $this->reconnect();
                 return $this->pdo->lastInsertId();
             }
@@ -192,14 +192,14 @@ abstract class Connection
     public function beginTransaction()
     {
         $this->transactions++;
-        if ($this->transactions == 1) {
+        if ($this->transactions === 1) {
             try {
                 $this->pdo->beginTransaction();
             } catch (\PDOException $e) {
                 /*
                  * 当错误码为2006/2013，且没有事务时，重连数据库，
                  */
-                if (($e->errorInfo[1] == 2006 || $e->errorInfo[1] == 2013) && $this->transactions == 1) {
+                if (($e->errorInfo[1] === 2006 || $e->errorInfo[1] === 2013) && $this->transactions === 1) {
                     $this->reconnect();
                     $this->pdo->beginTransaction();
                 } else {
@@ -217,7 +217,7 @@ abstract class Connection
     public function rollback()
     {
         $this->transactions--;
-        if ($this->transactions == 0) {
+        if ($this->transactions === 0) {
             $this->pdo->rollBack();
         }
     }
@@ -230,7 +230,7 @@ abstract class Connection
     public function commit()
     {
         $this->transactions--;
-        if ($this->transactions == 0) {
+        if ($this->transactions === 0) {
             $this->pdo->commit();
         }
     }
@@ -260,7 +260,7 @@ abstract class Connection
             /*
              * 当错误码为2006/2013，且没有事务时，重连数据库，
              */
-            if (($e->errorInfo[1] == 2006 || $e->errorInfo[1] == 2013) && $this->transactions == 0) {
+            if (($e->errorInfo[1] === 2006 || $e->errorInfo[1] === 2013) && $this->transactions === 0) {
                 $this->reconnect();
                 return $this->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION);
             }
@@ -307,7 +307,7 @@ abstract class Connection
             /*
              * 当错误码为2006/2013，且没有事务时，重连数据库，
              */
-            if (($e->errorInfo[1] == 2006 || $e->errorInfo[1] == 2013) && $this->transactions == 0) {
+            if (($e->errorInfo[1] === 2006 || $e->errorInfo[1] === 2013) && $this->transactions === 0) {
                 $this->reconnect();
                 return $this->pdo->quote((string)$value);
             }
@@ -333,7 +333,7 @@ abstract class Connection
                 /*
                  * 当错误码为2006/2013，且没有事务时，重连数据库，
                  */
-                if (($e->errorInfo[1] == 2006 || $e->errorInfo[1] == 2013) && $this->transactions == 0) {
+                if (($e->errorInfo[1] === 2006 || $e->errorInfo[1] === 2013) && $this->transactions === 0) {
                     $this->reconnect();
                     $quotedValues[] = $this->pdo->quote((string)$value);
                 } else {

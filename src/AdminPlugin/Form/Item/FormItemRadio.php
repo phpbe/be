@@ -57,7 +57,7 @@ class FormItemRadio extends FormItem
         foreach ($this->keyValues as $key => $val) {
             $html .= '<el-radio';
             foreach ($this->ui as $k => $v) {
-                if ($k == 'form-item') {
+                if ($k === 'form-item') {
                     continue;
                 }
 

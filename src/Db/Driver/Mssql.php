@@ -265,7 +265,7 @@ class Mssql extends Driver
         $count = count($primaryKeys);
         if ($count > 1) {
             $primaryKey = $primaryKeys;
-        } elseif ($count == 1) {
+        } elseif ($count === 1) {
             $primaryKey = $primaryKeys[0];
         }
 

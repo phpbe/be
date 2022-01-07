@@ -75,14 +75,14 @@ class GdImpl implements Driver
         }
 
         $newImage = imagecreatetruecolor($width, $height);
-        if ($this->type == 'image/gif') {
+        if ($this->type === 'image/gif') {
             $color = imagecolortransparent($this->image);
             imagepalettecopy($this->image, $newImage);
             imagefill($newImage, 0, 0, $color);
             imagecolortransparent($newImage, $color);
             imagetruecolortopalette($newImage, true, 255);
             imagecopyresized($newImage, $this->image, 0, 0, $x, $y, $width, $height, $width, $height);
-        } elseif ($this->type == 'image/png' || $this->type == 'image/x-png' || $this->type == 'image/webp') {
+        } elseif ($this->type === 'image/png' || $this->type === 'image/x-png' || $this->type === 'image/webp') {
             imagealphablending($newImage, false);
             imagesavealpha($newImage, true);
             $color = imagecolorallocatealpha($newImage, 255, 255, 255, 127);
@@ -210,7 +210,7 @@ class GdImpl implements Driver
 
         $newImage = imagecreatetruecolor($newWidth, $newHeight);
 
-        if ($this->type == 'image/gif') {
+        if ($this->type === 'image/gif') {
             imagepalettecopy($this->image, $newImage);
             if ($fillColor[3]) {
                 $color = imagecolorallocatealpha($newImage, $fillColor[0], $fillColor[1], $fillColor[2], $fillColor[3]);
@@ -222,7 +222,7 @@ class GdImpl implements Driver
             }
             imagetruecolortopalette($newImage, true, 255);
             imagecopyresized($newImage, $this->image, $destX, $destY, $srcX, $srcY, $destW, $destH, $srcW, $srcH);
-        } elseif ($this->type == 'image/png' || $this->type == 'image/x-png' || $this->type == 'image/webp') {
+        } elseif ($this->type === 'image/png' || $this->type === 'image/x-png' || $this->type === 'image/webp') {
             imagealphablending($newImage, false);
             imagesavealpha($newImage, true);
             $color = imagecolorallocatealpha($newImage, $fillColor[0], $fillColor[1], $fillColor[2], $fillColor[3]);
@@ -230,7 +230,7 @@ class GdImpl implements Driver
             imagecopyresampled($newImage, $this->image, $destX, $destY, $srcX, $srcY, $destW, $destH, $srcW, $srcH);
         } else {
             imagealphablending($newImage, false);
-            if ($fit == 'scaleFill') {
+            if ($fit === 'scaleFill') {
                 $color = imagecolorallocate($newImage, $fillColor[0], $fillColor[1], $fillColor[2]);
                 imagefill($newImage, 0, 0, $color);
             }
@@ -310,11 +310,11 @@ class GdImpl implements Driver
             mkdir($dir, 0777, true);
         }
 
-        if ($this->type == 'image/png' || $this->type == 'image/x-png') {
+        if ($this->type === 'image/png' || $this->type === 'image/x-png') {
             imagepng($this->image, $path);
-        } elseif ($this->type == 'image/gif') {
+        } elseif ($this->type === 'image/gif') {
             imagegif($this->image, $path);
-        } elseif ($this->type == 'image/webp') {
+        } elseif ($this->type === 'image/webp') {
             imagewebp($this->image, $path);
         } else {
             imagejpeg($this->image, $path, 80);
@@ -333,11 +333,11 @@ class GdImpl implements Driver
     {
         if (!$this->image) return false;
         if ($header) header('Content-type: ' . $this->type);
-        if ($this->type == 'image/png' || $this->type == 'image/x-png') {
+        if ($this->type === 'image/png' || $this->type === 'image/x-png') {
             imagepng($this->image);
-        } elseif ($this->type == 'image/gif') {
+        } elseif ($this->type === 'image/gif') {
             imagegif($this->image);
-        } elseif ($this->type == 'image/webp') {
+        } elseif ($this->type === 'image/webp') {
             imagewebp($this->image);
         } else {
             imagejpeg($this->image, null, 80);
@@ -397,11 +397,11 @@ class GdImpl implements Driver
     {
         if (!$this->type) return 'unknown';
 
-        if ($this->type == 'image/png' || $this->type == 'image/x-png') {
+        if ($this->type === 'image/png' || $this->type === 'image/x-png') {
             return 'png';
-        } elseif ($this->type == 'image/gif') {
+        } elseif ($this->type === 'image/gif') {
             return 'gif';
-        } elseif ($this->type == 'image/webp') {
+        } elseif ($this->type === 'image/webp') {
             return 'webp';
         }
         return 'jpg';
@@ -425,7 +425,7 @@ class GdImpl implements Driver
     {
         $image = null;
         // jpeg
-        if (function_exists('imagecreatefromjpeg') && (($type == 'image/jpg') || ($type == 'image/jpeg') || ($type == 'image/pjpeg'))) {
+        if (function_exists('imagecreatefromjpeg') && (($type === 'image/jpg') || ($type === 'image/jpeg') || ($type === 'image/pjpeg'))) {
             $image = @imagecreatefromjpeg($path);
             if ($image !== false) {
                 return $image;
@@ -433,7 +433,7 @@ class GdImpl implements Driver
         }
 
         // png
-        if (function_exists('imagecreatefrompng') && (($type == 'image/png') || ($type == 'image/x-png'))) {
+        if (function_exists('imagecreatefrompng') && (($type === 'image/png') || ($type === 'image/x-png'))) {
             $image = @imagecreatefrompng($path);
             if ($image !== false) {
                 return $image;
@@ -441,7 +441,7 @@ class GdImpl implements Driver
         }
 
         // gif
-        if (function_exists('imagecreatefromgif') && (($type == 'image/gif'))) {
+        if (function_exists('imagecreatefromgif') && (($type === 'image/gif'))) {
             $image = @imagecreatefromgif($path);
             if ($image !== false) {
                 return $image;
@@ -449,7 +449,7 @@ class GdImpl implements Driver
         }
 
         // webp
-        if (function_exists('imagecreatefromwebp') && (($type == 'image/webp'))) {
+        if (function_exists('imagecreatefromwebp') && (($type === 'image/webp'))) {
             $image = @imagecreatefromwebp($path);
             if ($image !== false) {
                 return $image;

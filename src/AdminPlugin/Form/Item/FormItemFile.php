@@ -116,7 +116,7 @@ class FormItemFile extends FormItem
         $html .= '<a v-if="formData.' . $this->name . '" :href="formItems.' . $this->name . '.url" target="_blank">{{formData.' . $this->name . '}}</a>';
         $html .= '<el-upload';
         foreach ($this->ui as $k => $v) {
-            if ($k == 'form-item') {
+            if ($k === 'form-item') {
                 continue;
             }
 
@@ -142,7 +142,7 @@ class FormItemFile extends FormItem
     public function getVueData()
     {
         $url = null;
-        if (strpos($this->value, '/') == false) {
+        if (strpos($this->value, '/') === false) {
             $url = Be::getRequest()->getUploadUrl() . $this->path . $this->value;
         } else {
             $url = $this->value;
@@ -201,17 +201,17 @@ class FormItemFile extends FormItem
     {
         if (isset($data[$this->name])) {
             $newValue = $data[$this->name];
-            $newValue = htmlspecialchars_decode($newValue);
+            if ($newValue !== $this->value) {
+                $storage = Be::getStorage();
+                if ($this->value !== null) {
+                    $oldPath = $this->path . $this->value;
+                    $storage->removeFile($oldPath);
+                }
 
-            $storage = Be::getStorage();
-            if ($newValue != $this->value && $this->value != '') {
-                $oldPath = $this->path . $this->value;
-                $storage->removeFile($oldPath);
+                $newPath = $this->path . $newValue;
+                $file = Be::getRuntime()->getUploadPath() . '/tmp/' . $newValue;
+                $url = $storage->uploadFile($newPath, $file);
             }
-
-            $newPath = $this->path . $newValue;
-            $file = Be::getRuntime()->getUploadPath() . '/tmp/' . $newValue;
-            $url = $storage->uploadFile($newPath, $file);
 
             $this->newValue = $newValue;
         }

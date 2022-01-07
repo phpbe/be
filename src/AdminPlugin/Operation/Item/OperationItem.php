@@ -140,7 +140,7 @@ abstract class OperationItem
             }
         }
 
-        if ($this->target == 'dialog') {
+        if ($this->target === 'dialog') {
             if (isset($params['dialog'])) {
                 $dialog = $params['dialog'];
                 if ($dialog instanceof \Closure) {
@@ -162,7 +162,7 @@ abstract class OperationItem
                 $this->dialog['height'] = '400px';
             }
 
-        } elseif ($this->target == 'drawer') {
+        } elseif ($this->target === 'drawer') {
             if (isset($params['drawer'])) {
                 $drawer = $params['drawer'];
                 if ($drawer instanceof \Closure) {
@@ -210,9 +210,9 @@ abstract class OperationItem
             ]
         ];
 
-        if ($this->target == 'dialog') {
+        if ($this->target === 'dialog') {
             $vueData['operationItems'][$this->name]['dialog'] = $this->dialog;
-        } elseif ($this->target == 'drawer') {
+        } elseif ($this->target === 'drawer') {
             $vueData['operationItems'][$this->name]['drawer'] = $this->drawer;
         }
 

@@ -41,7 +41,7 @@ class Grid extends Driver
             }
         }
 
-        if ($setting['layout'] == 'toggle') {
+        if ($setting['layout'] === 'toggle') {
             if (!isset($setting['defaultLayout'])) {
                 $setting['defaultLayout'] = 'card';
             }
@@ -51,7 +51,7 @@ class Grid extends Driver
             $setting['actualLayout'] = $setting['layout'];
         }
 
-        if ($setting['actualLayout'] == 'card') {
+        if ($setting['actualLayout'] === 'card') {
             if (!isset($setting['card']['ui']['row'])) {
                 $setting['card']['ui']['row'] = [
                     ':gutter' => 20,
@@ -81,7 +81,7 @@ class Grid extends Driver
                     $setting['card']['image']['position'] = 'left';
                 }
 
-                if ($setting['card']['image']['position'] == 'left')
+                if ($setting['card']['image']['position'] === 'left')
                 {
                     if (!isset($setting['card']['image']['space'])) {
                         $setting['card']['image']['space'] = '20';

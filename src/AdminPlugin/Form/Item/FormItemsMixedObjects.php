@@ -73,7 +73,7 @@ class FormItemsMixedObjects extends FormItems
 
         $html .= '<template slot="header">';
         foreach ($this->items as $item) {
-            $html .= '<span v-if="formItemsMixedObjectsItem.name == \'' . $item['name'] . '\'">' . $this->label . ' - {{formItemsMixedObjectsIndex+1}} - ';
+            $html .= '<span v-if="formItemsMixedObjectsItem.name === \'' . $item['name'] . '\'">' . $this->label . ' - {{formItemsMixedObjectsIndex+1}} - ';
             $html .= $item['label'];
             $html .= '</span>';
         }
@@ -81,7 +81,7 @@ class FormItemsMixedObjects extends FormItems
         $html .= '</template>';
 
         foreach ($this->items as $item) {
-            $html .= '<template v-if="formItemsMixedObjectsItem.name == \''.$item['name'].'\'">';
+            $html .= '<template v-if="formItemsMixedObjectsItem.name === \''.$item['name'].'\'">';
             foreach ($item['items'] as $itemX) {
                 if (isset($itemX['name'])) {
                     //$itemX['ui'][':prop'] = '\'formItemsMixedObjectsItem.\' + formItemsMixedObjectsIndex + \'.' . $itemX['name'] . '\'';
@@ -90,7 +90,7 @@ class FormItemsMixedObjects extends FormItems
 
                 $driverClass = null;
                 if (isset($itemX['driver'])) {
-                    if (substr($itemX['driver'], 0, 8) == 'FormItem') {
+                    if (substr($itemX['driver'], 0, 8) === 'FormItem') {
                         $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $itemX['driver'];
                     } else {
                         $driverClass = $itemX['driver'];
@@ -169,12 +169,12 @@ class FormItemsMixedObjects extends FormItems
             $newValue = [];
             foreach ($data[$this->name] as $d) {
                 foreach ($this->items as $item) {
-                    if ($d['name'] == $item['name']) {
+                    if ($d['name'] === $item['name']) {
                         $dataX = [];
                         foreach ($item['items'] as $itemX) {
                             $driverClass = null;
                             if (isset($itemX['driver'])) {
-                                if (substr($itemX['driver'], 0, 8) == 'FormItem') {
+                                if (substr($itemX['driver'], 0, 8) === 'FormItem') {
                                     $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $itemX['driver'];
                                 } else {
                                     $driverClass = $itemX['driver'];
@@ -238,7 +238,7 @@ class FormItemsMixedObjects extends FormItems
                 foreach ($item['items'] as $itemX) {
                     $driverClass = null;
                     if (isset($itemX['driver'])) {
-                        if (substr($itemX['driver'], 0, 8) == 'FormItem') {
+                        if (substr($itemX['driver'], 0, 8) === 'FormItem') {
                             $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $itemX['driver'];
                         } else {
                             $driverClass = $itemX['driver'];

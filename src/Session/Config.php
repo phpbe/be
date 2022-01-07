@@ -29,7 +29,7 @@ class Config
      * @BeConfigItem("REDIS库",
      *     driver="FormItemSelect",
      *     keyValues = "return \Be\Session\SessionHelper::getConfigRedisKeyValues();",
-     *     ui="return ['form-item' => ['v-show' => 'formData.driver == \'Redis\'']];")
+     *     ui="return ['form-item' => ['v-show' => 'formData.driver === \'Redis\'']];")
      */
     public $redis = 'master';
 

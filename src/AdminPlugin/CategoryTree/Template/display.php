@@ -87,7 +87,7 @@
                         formData: _this.formData
                     }).then(function (response) {
                             _this.loading = false;
-                            if (response.status == 200) {
+                            if (response.status === 200) {
                                 if (response.data.success) {
                                     _this.$message.success(response.data.message);
                                 } else {

@@ -14,7 +14,7 @@ class TaskHelper
      */
     public static function isScheduleValid($schedule) {
         $parts = explode(' ', trim($schedule));
-        if (count($parts) != 5) {
+        if (count($parts) !== 5) {
             return false;
         }
 
@@ -55,14 +55,14 @@ class TaskHelper
 
         foreach ($parts as $part) {
             if (is_numeric($part)) {
-                if ($part != intval($part)) {
+                if ($part !== intval($part)) {
                     return false;
                 }
 
                 continue;
             }
 
-            if ($part == '*') {
+            if ($part === '*') {
                 continue;
             }
 
@@ -76,7 +76,7 @@ class TaskHelper
                 // 0-29/3
                 if (strpos($rule, '/')) {
                     $fraction = explode('/', $rule);
-                    if (count($fraction) != 2) {
+                    if (count($fraction) !== 2) {
                         return false;
                     }
 
@@ -89,7 +89,7 @@ class TaskHelper
 
                     if (strpos($numerator, '-')) {
                         $scheduleRuleValues = explode('-', $numerator);
-                        if (count($scheduleRuleValues) != 2) {
+                        if (count($scheduleRuleValues) !== 2) {
                             return false;
                         }
 
@@ -98,14 +98,14 @@ class TaskHelper
                         }
 
                     } else {
-                        if ($numerator != '*') {
+                        if ($numerator !== '*') {
                             return false;
                         }
                     }
                 } elseif (strpos($rule, '-')) {
                     // 30-59
                     $ruleValues = explode('-', $rule);
-                    if (count($ruleValues) != 2) {
+                    if (count($ruleValues) !== 2) {
                         return false;
                     }
 
@@ -133,9 +133,9 @@ class TaskHelper
     public static function isOnTime($schedule, $timestamp = 0)
     {
         $schedule = explode(' ', $schedule);
-        if (count($schedule) != 5) return false;
+        if (count($schedule) !== 5) return false;
 
-        if ($timestamp == 0) $timestamp = time();
+        if ($timestamp === 0) $timestamp = time();
 
         return self::isScheduleMatch($schedule[0], date('i', $timestamp)) &&
             self::isScheduleMatch($schedule[1], date('G', $timestamp)) &&
@@ -157,7 +157,7 @@ class TaskHelper
         $timeValue = intval($timeValue);
 
         $match = false;
-        if ($scheduleRule == '*') {
+        if ($scheduleRule === '*') {
             $match = true;
         } else {
             $scheduleRules = explode(',', $scheduleRule);
@@ -165,7 +165,7 @@ class TaskHelper
                 // 0-29/3
                 if (strpos($scheduleRule, '/')) {
                     $fraction = explode('/', $scheduleRule);
-                    if (count($fraction) != 2) {
+                    if (count($fraction) !== 2) {
                         continue;
                     }
 
@@ -179,7 +179,7 @@ class TaskHelper
                     if (strpos($numerator, '-')) {
 
                         $scheduleRuleValues = explode('-', $numerator);
-                        if (count($scheduleRuleValues) != 2) {
+                        if (count($scheduleRuleValues) !== 2) {
                             continue;
                         }
 
@@ -188,15 +188,15 @@ class TaskHelper
                         }
 
                         if ($scheduleRuleValues[0] <= $timeValue && $timeValue <= $scheduleRuleValues[1]) {
-                            if (($timeValue - $scheduleRuleValues[0]) % $denominator == 0) {
+                            if (($timeValue - $scheduleRuleValues[0]) % $denominator === 0) {
                                 $match = true;
                                 break;
                             }
                         }
 
                     } else {
-                        if ($numerator == '*') {
-                            if ($timeValue % $denominator == 0) {
+                        if ($numerator === '*') {
+                            if ($timeValue % $denominator === 0) {
                                 $match = true;
                                 break;
                             }
@@ -206,7 +206,7 @@ class TaskHelper
                     // 30-59
                     if (strpos($scheduleRule, '-')) {
                         $scheduleRuleValues = explode('-', $scheduleRule);
-                        if (count($scheduleRuleValues) != 2) {
+                        if (count($scheduleRuleValues) !== 2) {
                             continue;
                         }
 
@@ -219,7 +219,7 @@ class TaskHelper
                             break;
                         }
                     } else {
-                        if ($scheduleRule == '*' || $scheduleRule == $timeValue) {
+                        if ($scheduleRule === '*' || $scheduleRule === $timeValue) {
                             $match = true;
                             break;
                         }

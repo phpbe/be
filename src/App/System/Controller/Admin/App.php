@@ -127,7 +127,7 @@ class App extends Auth
                 beAdminOpLog('安装新应用：' . $appName);
                 $response->success('应用安装成功！');
 
-                if (Be::getRuntime()->getMode() == 'Swoole') {
+                if (Be::getRuntime()->getMode() === 'Swoole') {
                     Be::getRuntime()->reload();
                 }
             } catch (\Throwable $t) {
@@ -180,7 +180,7 @@ class App extends Auth
             beAdminOpLog('卸载应用：' . $appName);
             $response->success('应用卸载成功！');
 
-            if (Be::getRuntime()->getMode() == 'Swoole') {
+            if (Be::getRuntime()->getMode() === 'Swoole') {
                 Be::getRuntime()->reload();
             }
         } catch (\Throwable $t) {

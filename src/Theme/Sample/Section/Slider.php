@@ -273,7 +273,7 @@
                             echo '<div class="slider-image-with-text-overlay-content-container">';
                             echo '<div class="slider-image-with-text-overlay-content" style="';
                             echo 'width: ' . $item['data']['contentWidth'] . 'px;';
-                            if ($item['data']['contentPosition'] == 'custom') {
+                            if ($item['data']['contentPosition'] === 'custom') {
                                 if ($item['data']['contentPositionLeft'] >= 0) {
                                     echo 'left: ' . $item['data']['contentPositionLeft'] . 'px;';
                                 }
@@ -289,12 +289,12 @@
                             } else {
                                 echo 'top: 50%;';
                                 echo 'transform: translateY(-50%);';
-                                if ($item['data']['contentPosition'] == 'left') {
+                                if ($item['data']['contentPosition'] === 'left') {
                                     echo 'left: 5%;';
-                                } elseif ($item['data']['contentPosition'] == 'center') {
+                                } elseif ($item['data']['contentPosition'] === 'center') {
                                     echo 'left: 50%;';
                                     echo 'transform: translateX(-50%);';
-                                } elseif ($item['data']['contentPosition'] == 'right') {
+                                } elseif ($item['data']['contentPosition'] === 'right') {
                                     echo 'right: 5%;';
                                 }
                             }

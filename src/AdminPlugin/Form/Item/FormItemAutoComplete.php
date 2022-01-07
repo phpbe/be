@@ -92,7 +92,7 @@ class FormItemAutoComplete extends FormItem
 
         $html .= '<el-autocomplete';
         foreach ($this->ui as $k => $v) {
-            if ($k == 'form-item') {
+            if ($k === 'form-item') {
                 continue;
             }
 
@@ -140,7 +140,7 @@ class FormItemAutoComplete extends FormItem
                         var suggestion;
                         for(var x in this.formItems.' . $this->name . '.suggestions) {
                             suggestion = this.formItems.' . $this->name . '.suggestions[x];
-                            if (suggestion.value.toLowerCase().indexOf(keywords.toLowerCase()) != -1) {
+                            if (suggestion.value.toLowerCase().indexOf(keywords.toLowerCase()) !== -1) {
                                 results.push(suggestion);
                             }
                         }
@@ -155,7 +155,7 @@ class FormItemAutoComplete extends FormItem
                 'formItemAutoComplete_' . $this->name . '_fetchSuggestions' => 'function(keywords, cb) {
                     var _this = this;
                     this.$http.post(\''.$this->remote.'\', {"keywords": keywords}).then(function (response) {
-                        if (response.status == 200) {
+                        if (response.status === 200) {
                             var responseData = response.data;
                             if (responseData.success) {
                                  if (responseData.data.suggestions) {

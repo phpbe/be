@@ -31,6 +31,13 @@ abstract class Tuple
     protected $_primaryKey = null;
 
     /**
+     * 原始数据
+     *
+     * @var null | object
+     */
+    protected $_init = null;
+
+    /**
      * 绑定一个数据源， GET, POST, 或者一个数组, 对象
      *
      * @param string | array | object $data 要绑定的数据对象
@@ -48,10 +55,19 @@ abstract class Tuple
 
         $properties = get_object_vars($this);
 
+        $tableProperty = Be::getTableProperty($this->_tableName, $this->_dbName);
+        $fields = $tableProperty->getFields();
         foreach ($properties as $key => $value) {
             if (isset($data[$key])) {
                 $val = $data[$key];
-                $this->$key = $val;
+                $field = $fields[$key];
+                if (in_array($field['type'], ['int', 'tinyint', 'smallint', 'mediumint', 'bigint'])) {
+                    $this->$key = (int) $val;
+                } elseif (in_array($field['type'], ['float', 'double'])) {
+                    $this->$key = (float) $val;
+                } else {
+                    $this->$key = $val;
+                }
             }
         }
 
@@ -117,13 +133,15 @@ abstract class Tuple
             }
         }
 
+        $this->_init = $tuple;
+
         return $this->bind($tuple);
     }
 
     /**
      * 按条件加载记录
      *
-     * @param string|int|array $field 要加载数据的键名，$val == null 时，为指定的主键值加载，
+     * @param string|int|array $field 要加载数据的键名，$val === null 时，为指定的主键值加载，
      * @param string $value 要加载的键的值
      * @return Tuple | mixed
      * @throws TupleException
@@ -161,6 +179,8 @@ abstract class Tuple
             throw new TupleException('Tuple:loadBy - no record found!');
         }
 
+        $this->_init = $tuple;
+
         return $this->bind($tuple);
     }
 
@@ -175,7 +195,7 @@ abstract class Tuple
 
         if (is_array($this->_primaryKey)) {
             foreach ($this->_primaryKey as $primaryKey) {
-                if (strtolower($this->$primaryKey) == 'uuid()') {
+                if (strtolower($this->$primaryKey) === 'uuid()') {
                     if (function_exists('uuid_create')) {
                         $this->$primaryKey = uuid_create();
                     } else {
@@ -185,7 +205,7 @@ abstract class Tuple
             }
         } else {
             $primaryKey = $this->_primaryKey;
-            if (strtolower($this->$primaryKey) == 'uuid()') {
+            if (strtolower($this->$primaryKey) === 'uuid()') {
                 if (function_exists('uuid_create')) {
                     $this->$primaryKey = uuid_create();
                 } else {
@@ -279,7 +299,7 @@ abstract class Tuple
                         break;
                     }
 
-                    if (strtolower($this->$primaryKey) == 'uuid()') {
+                    if (strtolower($this->$primaryKey) === 'uuid()') {
                         if (function_exists('uuid_create')) {
                             $this->$primaryKey = uuid_create();
                         } else {
@@ -292,7 +312,7 @@ abstract class Tuple
             } else {
                 $primaryKey = $this->_primaryKey;
                 if ($this->$primaryKey) {
-                    if (strtolower($this->$primaryKey) == 'uuid()') {
+                    if (strtolower($this->$primaryKey) === 'uuid()') {
                         if (function_exists('uuid_create')) {
                             $this->$primaryKey = uuid_create();
                         } else {

@@ -147,7 +147,7 @@
                                 _this.$http.post("<?php echo beAdminUrl('System.' . $this->themeType . '.saveSectionItem', ['themeName' => $this->themeName, 'pageName' => $this->pageName, 'sectionType' => $this->sectionType, 'sectionKey' => $this->sectionKey, 'itemKey' => $this->itemKey]); ?>", {
                                     formData: _this.formData,
                                 }).then(function (response) {
-                                    if (response.status == 200) {
+                                    if (response.status === 200) {
                                         if (response.data.success) {
                                             parent.reloadPreviewFrame();
                                         } else {

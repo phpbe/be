@@ -23,7 +23,7 @@ class IconWithText
     /**
      * @BeConfigItem("Bootstrap图标",
      *     driver="FormItemInput",
-     *     ui="return ['form-item' => ['v-show' => 'formData.icon == \'name\'']];"
+     *     ui="return ['form-item' => ['v-show' => 'formData.icon === \'name\'']];"
      * )
      */
     public $iconName = 'bi bi-x-diamond';
@@ -31,7 +31,7 @@ class IconWithText
     /**
      * @BeConfigItem("SVG图像数据",
      *     driver="FormItemInput",
-     *     ui="return ['form-item' => ['v-show' => 'formData.icon == \'svg\'']];"
+     *     ui="return ['form-item' => ['v-show' => 'formData.icon === \'svg\'']];"
      * )
      */
     public $iconSvg = '';
@@ -40,7 +40,7 @@ class IconWithText
      * @BeConfigItem("上传图像",
      *     driver="FormItemImage",
      *     path = "/Theme/Sample/Section/GroupOfIconWithText/IconWithText/iconImage/"),
-     *     ui="return ['form-item' => ['v-show' => 'formData.icon == \'image\'']];"
+     *     ui="return ['form-item' => ['v-show' => 'formData.icon === \'image\'']];"
      * )
      */
     public $iconImage = '';

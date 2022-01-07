@@ -22,7 +22,7 @@ class Index
         $response = Be::getResponse();
 
         $my = Be::getAdminUser();
-        if ($my->id == 0) {
+        if ($my->id === 0) {
             $response->redirect(beAdminUrl('System.AdminUserLogin.login'));
             return;
         }

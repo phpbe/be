@@ -39,7 +39,7 @@
 
                     $driverClass = null;
                     if (isset($item['driver'])) {
-                        if (substr($item['driver'], 0, 8) == 'FormItem') {
+                        if (substr($item['driver'], 0, 8) === 'FormItem') {
                             $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $item['driver'];
                         } else {
                             $driverClass = $item['driver'];
@@ -99,7 +99,7 @@
                 <?php
                 if (isset($this->setting['form']['actions']) && count($this->setting['form']['actions']) > 0) {
                     foreach ($this->setting['form']['actions'] as $key => $item) {
-                        if ($key == 'submit') {
+                        if ($key === 'submit') {
                             if ($item) {
                                 if ($item === true) {
                                     echo '<el-button type="primary" @click="submit" :disabled="loading" icon="el-icon-check">保存</el-button> ';
@@ -111,7 +111,7 @@
                             } else {
                                 continue;
                             }
-                        } elseif ($key == 'reset') {
+                        } elseif ($key === 'reset') {
                             if ($item) {
                                 if ($item === true) {
                                     echo '<el-button type="warning" @click="reset" :disabled="loading" icon="el-icon-refresh-left">重置</el-button> ';
@@ -123,7 +123,7 @@
                             } else {
                                 continue;
                             }
-                        } elseif ($key == 'cancel') {
+                        } elseif ($key === 'cancel') {
                             if ($item) {
                                 if ($item === true) {
                                     echo '<el-button @click="cancel" :disabled="loading" icon="el-icon-close">取消</el-button> ';
@@ -139,7 +139,7 @@
 
                         $driverClass = null;
                         if (isset($item['driver'])) {
-                            if (substr($item['driver'], 0, 10) == 'FormAction') {
+                            if (substr($item['driver'], 0, 10) === 'FormAction') {
                                 $driverClass = '\\Be\\AdminPlugin\\Form\\Action\\' . $item['driver'];
                             } else {
                                 $driverClass = $item['driver'];
@@ -260,7 +260,7 @@
                             }).then(function (response) {
                                 _this.loading = false;
                                 //console.log(response);
-                                if (response.status == 200) {
+                                if (response.status === 200) {
                                     var responseData = response.data;
                                     if (responseData.success) {
                                         var message;
@@ -271,7 +271,7 @@
                                         }
 
                                         alert(message);
-                                        if (self.frameElement != null && (self.frameElement.tagName == "IFRAME" || self.frameElement.tagName == "iframe")) {
+                                        if (self.frameElement != null && (self.frameElement.tagName.toLowerCase() === "iframe")) {
                                             parent.closeAndReload();
                                         } else {
                                             window.close();
@@ -300,10 +300,10 @@
                     return this.action(option, data);
                 },
                 action: function (option, data) {
-                    if (option.target == 'ajax') {
+                    if (option.target === 'ajax') {
                         var _this = this;
                         this.$http.post(option.url, data).then(function (response) {
-                            if (response.status == 200) {
+                            if (response.status === 200) {
                                 if (response.data.success) {
                                     _this.$message.success(response.data.message);
                                 } else {
@@ -372,7 +372,7 @@
                     this.$refs["formRef"].resetFields();
                 },
                 cancel: function () {
-                    if (self.frameElement != null && (self.frameElement.tagName == "IFRAME" || self.frameElement.tagName == "iframe")) {
+                    if (self.frameElement != null && (self.frameElement.tagName.toLowerCase() === "iframe")) {
                         parent.close();
                     } else {
                         window.close();

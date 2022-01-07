@@ -16,7 +16,7 @@ class System
     /**
      * @BeConfigItem("伪静态页后辍",
      *     driver="FormItemInput",
-     *     ui="return ['form-item' => ['v-show' => 'formData.urlRewrite == \'1\'']];")
+     *     ui="return ['form-item' => ['v-show' => 'formData.urlRewrite === \'1\'']];")
      */
     public $urlSuffix = '.html';
 

@@ -72,7 +72,7 @@ class ToolbarItemDropDown extends ToolbarItem
 
         $html .= '<span class="el-dropdown-link"';
         foreach ($this->ui as $k => $v) {
-            if ($k == 'dropdown' || $k == 'dropdown-menu' || $k == 'icon') {
+            if ($k === 'dropdown' || $k === 'dropdown-menu' || $k === 'icon') {
                 continue;
             }
 
@@ -132,9 +132,9 @@ class ToolbarItemDropDown extends ToolbarItem
                 'enable' => true,
             ];
 
-            if ($menu->target == 'dialog') {
+            if ($menu->target === 'dialog') {
                 $m['dialog'] = $menu->dialog;
-            } elseif ($menu->target == 'drawer') {
+            } elseif ($menu->target === 'drawer') {
                 $m['drawer'] = $menu->drawer;
             }
 

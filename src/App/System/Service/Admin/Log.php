@@ -20,7 +20,7 @@ class Log
         if (file_exists($dir) && is_dir($dir)) {
             $fileNames = scandir($dir);
             foreach ($fileNames as $fileName) {
-                if ($fileName != '.' && $fileName != '..' && is_dir($dir . '/' . $fileName)) {
+                if ($fileName !== '.' && $fileName !== '..' && is_dir($dir . '/' . $fileName)) {
                     $years[] = $fileName;
                 }
             }
@@ -41,7 +41,7 @@ class Log
         if (file_exists($dir) && is_dir($dir)) {
             $fileNames = scandir($dir);
             foreach ($fileNames as $fileName) {
-                if ($fileName != '.' && $fileName != '..' && is_dir($dir . '/' . $fileName)) {
+                if ($fileName !== '.' && $fileName !== '..' && is_dir($dir . '/' . $fileName)) {
                     $months[] = $fileName;
                 }
             }
@@ -63,7 +63,7 @@ class Log
         if (file_exists($dir) && is_dir($dir)) {
             $fileNames = scandir($dir);
             foreach ($fileNames as $fileName) {
-                if ($fileName != '.' && $fileName != '..' && is_dir($dir . '/' . $fileName)) {
+                if ($fileName !== '.' && $fileName !== '..' && is_dir($dir . '/' . $fileName)) {
                     $days[] = $fileName;
                 }
             }
@@ -179,11 +179,11 @@ class Log
     public function deleteLogs($range, $year, $month = 0, $day = 0)
     {
         $dir = null;
-        if ($range == 'year') {
+        if ($range === 'year') {
             $dir = Be::getRuntime()->getDataPath() . '/log/' . $year;
-        } elseif ($range == 'month') {
+        } elseif ($range === 'month') {
             $dir = Be::getRuntime()->getDataPath() . '/log/' . $year . '/' . $month;
-        } elseif ($range == 'day') {
+        } elseif ($range === 'day') {
             $dir = Be::getRuntime()->getDataPath() . '/log/' . $year . '/' . $month . '/' . $day;
         }
 

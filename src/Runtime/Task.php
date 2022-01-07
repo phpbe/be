@@ -39,7 +39,7 @@ class Task
             } catch (\Throwable $t) {
             }
 
-            if (count($tasks) == 0) return;
+            if (count($tasks) === 0) return;
 
             $t = time();
             foreach ($tasks as $task) {

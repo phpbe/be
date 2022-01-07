@@ -211,7 +211,7 @@ abstract class Driver
         $arrays = $statement->fetchAll(\PDO::FETCH_ASSOC);
         $statement->closeCursor();
 
-        if (count($arrays) == 0) return [];
+        if (count($arrays) === 0) return [];
 
         if ($key === null) {
             $key = key($arrays[0]);
@@ -290,7 +290,7 @@ abstract class Driver
         $objects = $statement->fetchAll(\PDO::FETCH_OBJ);
         $statement->closeCursor();
 
-        if (count($objects) == 0) return [];
+        if (count($objects) === 0) return [];
 
         if ($key === null) {
             $vars = get_object_vars($objects[0]);
@@ -346,7 +346,7 @@ abstract class Driver
      */
     public function insertMany($table, $objects)
     {
-        if (!is_array($objects) || count($objects) == 0) return [];
+        if (!is_array($objects) || count($objects) === 0) return [];
 
         $ids = [];
         reset($objects);
@@ -441,7 +441,7 @@ abstract class Driver
      */
     public function quickInsertMany($table, $objects)
     {
-        if (!is_array($objects) || count($objects) == 0) return 0;
+        if (!is_array($objects) || count($objects) === 0) return 0;
 
         reset($objects);
         $object = current($objects);
@@ -543,7 +543,7 @@ abstract class Driver
             } else {
 
                 // 主键不更新
-                if ($key == $primaryKey) {
+                if ($key === $primaryKey) {
                     $where[] = $this->connection->quoteKey($key) . '=?';
                     $whereValue[] = $value;
                     continue;
@@ -616,7 +616,7 @@ abstract class Driver
             } else {
 
                 // 主键不更新
-                if ($key == $primaryKey) {
+                if ($key === $primaryKey) {
                     $where[] = $this->connection->quoteKey($key) . '=' . $this->connection->quoteValue($value);
                     continue;
                 }
@@ -653,7 +653,7 @@ abstract class Driver
      */
     public function updateMany($table, $objects, $primaryKey = null)
     {
-        if (!is_array($objects) || count($objects) == 0) return 0;
+        if (!is_array($objects) || count($objects) === 0) return 0;
 
         if ($primaryKey === null) {
             $primaryKey = $this->getTablePrimaryKey($table);
@@ -690,7 +690,7 @@ abstract class Driver
                 }
             } else {
                 // 主键不更新
-                if ($key == $primaryKey) {
+                if ($key === $primaryKey) {
                     $where[] = $this->connection->quoteKey($key) . '=?';
                     continue;
                 }
@@ -737,7 +737,7 @@ abstract class Driver
                 } else {
 
                     // 主键不更新
-                    if ($key == $primaryKey) {
+                    if ($key === $primaryKey) {
                         $whereValue[] = $value;
                         continue;
                     }
@@ -746,12 +746,12 @@ abstract class Driver
                 $fieldValues[] = $value;
             }
 
-            if (count($whereValue) != count($where)) {
+            if (count($whereValue) !== count($where)) {
                 // 批量更新的数组未包含必须的主键名
                 throw new DbException('Db:updateMany - Update data missing primary key!');
             }
 
-            if (count($fieldValues) != count($fields)) {
+            if (count($fieldValues) !== count($fields)) {
                 // 批量更新的数组内部结构不一致
                 throw new DbException('Db:updateMany - Update data items have different structure!');
             }
@@ -776,7 +776,7 @@ abstract class Driver
      */
     public function quickUpdateMany($table, $objects, $primaryKey = null)
     {
-        if (!is_array($objects) || count($objects) == 0) return 0;
+        if (!is_array($objects) || count($objects) === 0) return 0;
 
         if ($primaryKey === null) {
             $primaryKey = $this->getTablePrimaryKey($table);
@@ -826,7 +826,7 @@ abstract class Driver
                     continue;
                 }
             } else {
-                if ($field == $primaryKey) {
+                if ($field === $primaryKey) {
                     continue;
                 }
             }
@@ -870,7 +870,7 @@ abstract class Driver
 
                 } else {
                     // 主键不更新
-                    if ($field == $primaryKey) {
+                    if ($field === $primaryKey) {
                         continue;
                     }
 

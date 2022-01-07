@@ -87,7 +87,7 @@ class Importer extends Driver
                     'value' => 'detect',
                     'ui' => [
                         'form-item' => [
-                            'v-if' => 'formData.type == \'csv\'',
+                            'v-if' => 'formData.type === \'csv\'',
                         ]
                     ]
                 ],
@@ -219,7 +219,7 @@ class Importer extends Driver
 
         $path = Be::getRuntime()->getUploadPath() . '/tmp/' . $file;
 
-        if ($type == 'csv') {
+        if ($type === 'csv') {
 
             $delimiter = ','; // 设置字段分界符（只允许一个字符）
             $enclosure = '"'; // 设置字段环绕符（只允许一个字符）
@@ -242,11 +242,11 @@ class Importer extends Driver
             $headers = fgetcsv($f, 0, $delimiter, $enclosure, $escape);
 
             $headerCount = count($headers);
-            if ($headerCount == 0) {
+            if ($headerCount === 0) {
                 throw new AdminPluginException('您上传的文件中无数据！');
             }
 
-            if ($charset == 'detect') {
+            if ($charset === 'detect') {
                 $charset = mb_detect_encoding(implode(',', $headers), array('GBK', 'GB2312', 'BIG5', 'UTF-8', 'UTF-16LE', 'UTF-16BE', 'ISO-8859-1'));
             } else {
                 $charset = strtoupper($charset);
@@ -256,7 +256,7 @@ class Importer extends Driver
             $colMapping = [];
             $col = 0;
             foreach ($headers as &$header) {
-                if ($charset != 'UTF-8') {
+                if ($charset !== 'UTF-8') {
                     $header = iconv($charset, 'UTF-8//IGNORE', $header);
                 }
 
@@ -291,13 +291,13 @@ class Importer extends Driver
                         continue;
                     }
 
-                    if (count($values) != $headerCount) {
+                    if (count($values) !== $headerCount) {
                         //$errors[] = '第 ' . $row . ' 行数据格式异常！';
                         continue;
                     }
 
                     foreach ($values as &$v) {
-                        if ($charset != 'UTF-8') {
+                        if ($charset !== 'UTF-8') {
                             $v = iconv($charset, 'UTF-8//IGNORE', $v);
                         }
 
@@ -378,13 +378,13 @@ class Importer extends Driver
                 throw new AdminPluginException('有' . count($errors) . '条数据有问题！');
             }
 
-        } elseif ($type == 'excel') {
+        } elseif ($type === 'excel') {
 
             $reader = null;
             $ext = strtolower(strrchr($file, '.'));
-            if ($ext == '.xlsx') {
+            if ($ext === '.xlsx') {
                 $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader('Xlsx');
-            } elseif ($ext == '.xls') {
+            } elseif ($ext === '.xls') {
                 $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader('Xls');
             }
 
@@ -519,16 +519,16 @@ class Importer extends Driver
         $file = $formData['file'] ?? 'file';
         $charset = $formData['charset'] ?? 'detect';
 
-        if ($charset == 'detect') {
+        if ($charset === 'detect') {
             $charset = 'gbk';
         }
         $charset = strtoupper($charset);
 
         $exporter = Be::getAdminPlugin('Exporter');
-        if ($type == 'csv' || $type == 'excel') {
+        if ($type === 'csv' || $type === 'excel') {
 
             $filename = isset($this->setting['title']) ? $this->setting['title'] : '导入模板';
-            $filename .= ($type == 'csv' ? '.csv' : '.xls');
+            $filename .= ($type === 'csv' ? '.csv' : '.xls');
 
             $exporter->setDriver($type)
                 ->setCharset($charset)

@@ -336,7 +336,7 @@ class Ip2Country
                 return implode('', unpack('A*', $buffer));
             }
 
-            if ($middleIndex == $startIndex) break;
+            if ($middleIndex === $startIndex) break;
 
             if ($ip1 > $ip) {
                 $endIndex = $middleIndex;

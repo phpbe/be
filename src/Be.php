@@ -441,7 +441,7 @@ abstract class Be
 
             $config = self::getConfig('App.System.Db');
             foreach ($config as $k => $v) {
-                if ($v['driver'] != 'mysql') continue;
+                if ($v['driver'] !== 'mysql') continue;
 
                 $size = isset($v['pool']) ? intval($v['pool']) : 0;
                 if ($size <= 0) {
@@ -873,7 +873,7 @@ abstract class Be
         }
 
         $runtime = self::getRuntime();
-        if ($runtime->getMode() == 'Swoole') {
+        if ($runtime->getMode() === 'Swoole') {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['template'][$theme][$template])) {
                 return self::$cache[$cid]['template'][$theme][$template];
@@ -891,7 +891,7 @@ abstract class Be
 
         $class = '\\Be\\Data\\Cache\\Template\\' . $theme . '\\' . $type . '\\' . $name . '\\' . implode('\\', $parts);
 
-        if ($runtime->getMode() == 'Swoole') {
+        if ($runtime->getMode() === 'Swoole') {
             $cid = \Swoole\Coroutine::getCid();
             self::$cache[$cid]['template'][$theme][$template] = new $class();
             return self::$cache[$cid]['template'][$theme][$template];
@@ -920,7 +920,7 @@ abstract class Be
         }
 
         $runtime = self::getRuntime();
-        if ($runtime->getMode() == 'Swoole') {
+        if ($runtime->getMode() === 'Swoole') {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['adminTemplate'][$theme][$template])) {
                 return self::$cache[$cid]['adminTemplate'][$theme][$template];
@@ -938,7 +938,7 @@ abstract class Be
 
         $class = '\\Be\\Data\\Cache\\AdminTemplate\\' . $theme . '\\' . $type . '\\' . $name . '\\' . implode('\\', $parts);
 
-        if ($runtime->getMode() == 'Swoole') {
+        if ($runtime->getMode() === 'Swoole') {
             $cid = \Swoole\Coroutine::getCid();
             self::$cache[$cid]['adminTemplate'][$theme][$template] = new $class();
             return self::$cache[$cid]['adminTemplate'][$theme][$template];

@@ -38,13 +38,13 @@ class Driver
                 }
             }
 
-            if (isset($config['auth']) && $config['auth'] != '') {
+            if (isset($config['auth']) && $config['auth'] !== '') {
                 if (!$redis->auth($config['auth'])) {
                     throw new RedisException('Redis（' . $config['host'] . ':' . $config['port'] . '）authentication fail!');
                 }
             }
 
-            if (isset($config['db']) && $config['db'] != 0) {
+            if (isset($config['db']) && $config['db'] !== 0) {
                 $redis->select($config['db']);
             }
 

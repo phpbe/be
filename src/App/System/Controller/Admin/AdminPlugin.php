@@ -17,7 +17,7 @@ class AdminPlugin
     public function __construct()
     {
         $my = Be::getAdminUser();
-        if ($my->id == 0) {
+        if ($my->id === 0) {
             throw new ControllerException('登录超时，请重新登录！');
         }
     }
@@ -28,7 +28,7 @@ class AdminPlugin
         $response = Be::getResponse();
 
         $file = $request->files('file');
-        if ($file['error'] == 0) {
+        if ($file['error'] === 0) {
             $configSystem = Be::getConfig('App.System.System');
             $maxSize = $configSystem->uploadMaxSize;
             $maxSizeInt = FileSize::string2Int($maxSize);
@@ -89,7 +89,7 @@ class AdminPlugin
         $response = Be::getResponse();
 
         $file = $request->files('file');
-        if ($file['error'] == 0) {
+        if ($file['error'] === 0) {
 
             $configSystem = Be::getConfig('App.System.System');
             $maxSize = $configSystem->uploadMaxSize;
@@ -170,7 +170,7 @@ class AdminPlugin
         $response = Be::getResponse();
 
         $file = $request->files('file');
-        if ($file['error'] == 0) {
+        if ($file['error'] === 0) {
 
             $configSystem = Be::getConfig('App.System.System');
             $maxSize = $configSystem->uploadMaxSize;
@@ -370,8 +370,8 @@ class AdminPlugin
                 $end = $start + $size;
 
                 /* 获取文件列表 */
-                //$path = $_SERVER['DOCUMENT_ROOT'] . (substr($path, 0, 1) == "/" ? "":"/") . $path;
-                $path = Be::getRuntime()->getRootPath() . (substr($path, 0, 1) == "/" ? "":"/") . $path;
+                //$path = $_SERVER['DOCUMENT_ROOT'] . (substr($path, 0, 1) === "/" ? "":"/") . $path;
+                $path = Be::getRuntime()->getRootPath() . (substr($path, 0, 1) === "/" ? "":"/") . $path;
                 $files = $this->getfiles($path, $allowFiles);
                 if (!count($files)) {
                     return json_encode(array(
@@ -473,10 +473,10 @@ class AdminPlugin
     {
         if (!is_dir($path)) return [];
         $rootPath = Be::getRuntime()->getRootPath();
-        if(substr($path, strlen($path) - 1) != '/') $path .= '/';
+        if(substr($path, strlen($path) - 1) !== '/') $path .= '/';
         $handle = opendir($path);
         while (false !== ($file = readdir($handle))) {
-            if ($file != '.' && $file != '..') {
+            if ($file !== '.' && $file !== '..') {
                 $path2 = $path . $file;
                 if (is_dir($path2)) {
                     $this->getfiles($path2, $allowFiles, $files);

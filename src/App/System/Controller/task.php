@@ -11,7 +11,7 @@ class Task
     {
         $response = Be::getResponse();
 
-        if (Be::getRuntime()->getMode() == 'Swoole') {
+        if (Be::getRuntime()->getMode() === 'Swoole') {
             $response->error('Swoole 模式下，不需要使用本功能。');
             return;
         }
@@ -24,14 +24,14 @@ class Task
         $request = Be::getRequest();
         $response = Be::getResponse();
 
-        if (Be::getRuntime()->getMode() == 'Swoole') {
+        if (Be::getRuntime()->getMode() === 'Swoole') {
             $response->error('Swoole 模式下，不需要使用本功能。');
             return;
         }
 
         $password = $request->get('password', '');
         $config = Be::getConfig('App.System.Task');
-        if ($config->password != $password) {
+        if ($config->password !== $password) {
             $response->error('密码错误, 任务调度中止！');
             return;
         }
@@ -45,14 +45,14 @@ class Task
         $request = Be::getRequest();
         $response = Be::getResponse();
 
-        if (Be::getRuntime()->getMode() == 'Swoole') {
+        if (Be::getRuntime()->getMode() === 'Swoole') {
             $response->error('Swoole 模式下，不需要使用本功能。');
             return;
         }
 
         $password = $request->get('password', '');
         $config = Be::getConfig('App.System.Task');
-        if ($config->password != $password) {
+        if ($config->password !== $password) {
             $response->error('密码（password）错误, 任务调度中止！');
             return;
         }

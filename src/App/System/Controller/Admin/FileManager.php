@@ -29,26 +29,26 @@ class FileManager extends Auth
 
 
         // session 缓存用户选择
-        if ($path == '') {
+        if ($path === '') {
             $sessionPath = $session->get('systemFileManagerPath');
-            if ($sessionPath != '') $path = $sessionPath;
+            if ($sessionPath !== '') $path = $sessionPath;
         } else {
-            if ($path == '/') $path = '';
+            if ($path === '/') $path = '';
             $session->set('systemFileManagerPath', $path);
         }
 
-        if ($view == '') {
+        if ($view === '') {
             $view = 'thumbnail';
             $sessionView = $session->get('systemFileManagerView');
-            if ($sessionView != '' && ($sessionView == 'thumbnail' || $sessionView == 'list')) $view = $sessionView;
+            if ($sessionView !== '' && ($sessionView === 'thumbnail' || $sessionView === 'list')) $view = $sessionView;
         } else {
-            if ($view != 'thumbnail' && $view != 'list') $view = 'thumbnail';
+            if ($view !== 'thumbnail' && $view !== 'list') $view = 'thumbnail';
             $session->set('systemFileManagerView', $view);
         }
 
-        if ($sort == '') {
+        if ($sort === '') {
             $sessionSort = $session->get('systemFileManagerSort');
-            if ($sessionSort == '') {
+            if ($sessionSort === '') {
                 $sort = 'name';
             } else {
                 $sort = $sessionSort;
@@ -58,18 +58,18 @@ class FileManager extends Auth
             $session->set('systemFileManagerSort', $sort);
         }
 
-        if ($filterImage == -1) {
+        if ($filterImage === -1) {
             $filterImage = 0;
             $sessionFilterImage = $session->get('systemFileManagerFilterImage', -1);
-            if ($sessionFilterImage != -1 && ($sessionFilterImage == 0 || $sessionFilterImage == 1)) $filterImage = $sessionFilterImage;
+            if ($sessionFilterImage !== -1 && ($sessionFilterImage === 0 || $sessionFilterImage === 1)) $filterImage = $sessionFilterImage;
         } else {
-            if ($filterImage != 0 && $filterImage != 1) $filterImage = 0;
+            if ($filterImage !== 0 && $filterImage !== 1) $filterImage = 0;
             $session->set('systemFileManagerFilterImage', $filterImage);
         }
 
-        if ($srcId == '') {
+        if ($srcId === '') {
             $srcId = $session->get('systemFileManagerSrcId', '');
-        } elseif ($srcId == 'img') {
+        } elseif ($srcId === 'img') {
             $srcId = '';
             $session->set('systemFileManagerSrcId', $srcId);
         } else {
@@ -180,7 +180,7 @@ class FileManager extends Auth
         ];
 
         $file = $_FILES['file'];
-        if ($file['error'] == 0) {
+        if ($file['error'] === 0) {
             $fileName = $file['name'];
 
             $type = strtolower(substr(strrchr($fileName, '.'), 1));
@@ -194,7 +194,7 @@ class FileManager extends Auth
 
             $serviceSystemFileManager = Be::getService('App.System.Admin.FileManager');
             $absPath = $serviceSystemFileManager->getAbsPath();
-            if ($absPath == false) {
+            if ($absPath === false) {
                 $response->error($serviceSystemFileManager->getError(), $redirect);
             }
 
@@ -215,12 +215,12 @@ class FileManager extends Auth
 
             if (move_uploaded_file($file['tmpName'], $dstPath)) {
                 $watermark = $request->post('watermark', 0, 'int');
-                if ($watermark == 1 && in_array($type, $configSystem->allowUploadImageTypes)) {
+                if ($watermark === 1 && in_array($type, $configSystem->allowUploadImageTypes)) {
                     $serviceSystem = Be::getService('App.System.Admin.Watermark');
                     $serviceSystem->watermark($dstPath);
                 }
 
-                if ($rename == false) {
+                if ($rename === false) {
                     $response->success('上传文件成功！', $redirect);
                 } else {
                     $response->success('有同名文件，新上传的文件已更名为：' . $rename . '！', $redirect);
@@ -306,7 +306,7 @@ class FileManager extends Auth
 
         $serviceSystemFileManager = Be::getService('App.System.Admin.FileManager');
         $absFilePath = $serviceSystemFileManager->getAbsFilePath($fileName);
-        if ($absFilePath == false) {
+        if ($absFilePath === false) {
             $response->error($serviceSystemFileManager->getError());
         } else {
             header('Pragma: private');

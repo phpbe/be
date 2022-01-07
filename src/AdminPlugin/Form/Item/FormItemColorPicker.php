@@ -59,7 +59,7 @@ class FormItemColorPicker extends FormItem
         $html .= '<div style="flex: 0 0 40px; height: 32px;">';
         $html .= '<el-color-picker';
         foreach ($this->ui as $k => $v) {
-            if ($k == 'form-item') {
+            if ($k === 'form-item') {
                 continue;
             }
 

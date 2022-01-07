@@ -88,7 +88,7 @@ if ($sectionData['enable']) {
     echo 'overflow: hidden;';
     echo '}';
 
-    if ($sectionData['width'] == 'fullWidth') {
+    if ($sectionData['width'] === 'fullWidth') {
         echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' .image-with-text-overlay-content-container {';
         echo 'position: absolute;';
         echo 'padding-left: 0.75rem;';
@@ -147,7 +147,7 @@ if ($sectionData['enable']) {
     echo '@media only screen and (min-width: 769px) {';
     echo '#image-with-text-overlay-' . $sectionType . '-' . $sectionKey . ' .image-with-text-overlay-content {';
     echo 'width: ' . $sectionData['contentWidth'] . 'px;';
-    if ($sectionData['contentPosition'] == 'custom') {
+    if ($sectionData['contentPosition'] === 'custom') {
         if ($sectionData['contentPositionLeft'] >= 0) {
             echo 'left: ' . $sectionData['contentPositionLeft'] . 'px;';
         }
@@ -163,12 +163,12 @@ if ($sectionData['enable']) {
     } else {
         echo 'top: 50%;';
         echo 'transform: translateY(-50%);';
-        if ($sectionData['contentPosition'] == 'left') {
+        if ($sectionData['contentPosition'] === 'left') {
             echo 'left: 5%;';
-        } elseif ($sectionData['contentPosition'] == 'center') {
+        } elseif ($sectionData['contentPosition'] === 'center') {
             echo 'left: 50%;';
             echo 'transform: translateX(-50%);';
-        } elseif ($sectionData['contentPosition'] == 'right') {
+        } elseif ($sectionData['contentPosition'] === 'right') {
             echo 'right: 5%;';
         }
     }
@@ -206,7 +206,7 @@ if ($sectionData['enable']) {
     echo '</style>';
 
     echo '<div id="image-with-text-overlay-' . $sectionType . '-' . $sectionKey . '">';
-    if ($sectionData['width'] == 'default') {
+    if ($sectionData['width'] === 'default') {
         echo '<div class="be-container">';
     }
     echo '<div class="image-with-text-overlay-container">';
@@ -238,7 +238,7 @@ if ($sectionData['enable']) {
     }
     echo '</div>';
 
-    if ($sectionData['width'] == 'fullWidth') {
+    if ($sectionData['width'] === 'fullWidth') {
         echo '<div class="image-with-text-overlay-content-container">';
     }
     echo '<div class="image-with-text-overlay-content">';
@@ -248,12 +248,12 @@ if ($sectionData['enable']) {
     echo '<a href="' . $sectionData['contentButtonLink'] . '" class="be-btn be-btn-large">' . $sectionData['contentButton'] . '</a>';
     echo '</div>';
     echo '</div>';
-    if ($sectionData['width'] == 'fullWidth') {
+    if ($sectionData['width'] === 'fullWidth') {
         echo '</div>';
     }
 
     echo '</div>';
-    if ($sectionData['width'] == 'default') {
+    if ($sectionData['width'] === 'default') {
         echo '</div>';
     }
     echo '</div>';

@@ -28,7 +28,7 @@ class Task
 
     public function __construct($task, $taskLog)
     {
-        if ($task->data != '') {
+        if ($task->data !== '') {
             $task->data = json_decode($task->data, true);
         }
 

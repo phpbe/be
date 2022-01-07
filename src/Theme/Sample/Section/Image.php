@@ -82,7 +82,7 @@ if ($sectionData['enable']) {
     echo '</style>';
 
     echo '<div id="image-' . $sectionType . '-' . $sectionKey . '">';
-    if ($sectionData['width'] == 'default') {
+    if ($sectionData['width'] === 'default') {
         echo '<div class="be-container">';
     }
 
@@ -125,7 +125,7 @@ if ($sectionData['enable']) {
     }
     echo '</div>';
 
-    if ($sectionData['width'] == 'default') {
+    if ($sectionData['width'] === 'default') {
         echo '</div>';
     }
     echo '</div>';

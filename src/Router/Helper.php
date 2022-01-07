@@ -54,7 +54,7 @@ class Helper
             $methodComment = $method->getDocComment();
             $methodComments = Annotation::parse($methodComment);
             foreach ($methodComments as $key => $val) {
-                if ($key == 'BeRoute') {
+                if ($key === 'BeRoute') {
                     if (is_array($val[0]) && isset($val[0]['value'])) {
                         $value = $val[0]['value'];
                         if (strpos($value, '<') !== false) { // 正则路由
@@ -144,7 +144,7 @@ class Helper
 
             $controllers = scandir($controllerDir);
             foreach ($controllers as $controller) {
-                if ($controller == '.' || $controller == '..' || is_dir($controllerDir . '/' . $controller)) continue;
+                if ($controller === '.' || $controller === '..' || is_dir($controllerDir . '/' . $controller)) continue;
 
                 $controllerNName = substr($controller, 0, -4);
                 $controllerClassName = '\\Be\\App\\' . $appName . '\\Controller\\' . $controllerNName;
@@ -157,7 +157,7 @@ class Helper
                     $methodComment = $method->getDocComment();
                     $methodComments = Annotation::parse($methodComment);
                     foreach ($methodComments as $key => $val) {
-                        if ($key == 'BeRoute') {
+                        if ($key === 'BeRoute') {
                             if (is_array($val[0]) && isset($val[0]['value'])) {
                                 $value = $val[0]['value'];
                                 if (strpos($value, '<') !== false) { // 正则路由
@@ -260,7 +260,7 @@ class Helper
             // 调用路由器生成网址
             $uri = $router->$actionName($params);
 
-            if ($router->$actionName == 'hashmap') {
+            if ($router->$actionName === 'hashmap') {
 
                 // 路由到网址的映射键名
                 $route2uriKey = 'be:route2uri:' . $route . ':' . md5(json_encode($params));
@@ -268,7 +268,7 @@ class Helper
                 $configRouter = Be::getConfig('App.System.Router');
                 if ($configRouter->cache) {
                     // 开启缓存时，并且生成的网址与缓存一致时，直接返回网址
-                    if (isset(self::$cache[$route2uriKey]) && self::$cache[$route2uriKey] == $uri) {
+                    if (isset(self::$cache[$route2uriKey]) && self::$cache[$route2uriKey] === $uri) {
                         return $rootUrl . $uri;
                     }
                 }
@@ -281,7 +281,7 @@ class Helper
                 $redisUri = $redis->get($route2uriKey);
                 if ($redisUri) {
                     // 路由到网址的映射与Redis中存储的不一致， 更新 REDIS 中的网址
-                    if ($uri != $redisUri) {
+                    if ($uri !== $redisUri) {
                         $redis->set($route2uriKey, $uri);
                         $redis->set($uri2routeKey, json_encode([$route, $params]));
 
@@ -301,7 +301,7 @@ class Helper
                     self::$cache[$route2uriKey] = $uri; // 路由到网址缓存
                     self::$cache[$uri2routeKey] = [$route, $params]; // 网址到路由缓存
                 }
-            } elseif ($router->$actionName == 'static') {
+            } elseif ($router->$actionName === 'static') {
                 // 静态路由有参数时，将参数以 GET 方式拼接到网址中
                 if ($params !== null && $params) {
                     return $rootUrl . $uri . '?' . http_build_query($params);

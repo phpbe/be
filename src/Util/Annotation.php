@@ -32,7 +32,7 @@ class Annotation
                     // 注解
                     if (preg_match("/^@[A-Za-z0-9_]+\s*$/", $line) || preg_match("/^@[A-Za-z0-9_]+\s*\(/", $line)) {
                         $currentAnnotation = $line;
-                        if (substr($line, -1, 1) == ')') {
+                        if (substr($line, -1, 1) === ')') {
                             $parsedAnnotation = self::parseAnnotation($currentAnnotation);
                             if ($parsedAnnotation) {
                                 $result[$parsedAnnotation['name']][] = $parsedAnnotation['keyValues'];
@@ -50,11 +50,11 @@ class Annotation
                         $value = '';
                     }
 
-                    if ($param == 'param' || $param == 'return') {
+                    if ($param === 'param' || $param === 'return') {
                         $pos = strpos($value, ' ');
                         $type = substr($value, 0, $pos);
                         $value = '(' . $type . ')' . substr($value, $pos + 1);
-                    } elseif ($param == 'class') {
+                    } elseif ($param === 'class') {
                         $r = preg_split("[|]", $value);
                         if (is_array($r)) {
                             $param = $r[0];
@@ -78,7 +78,7 @@ class Annotation
 
                     if ($currentAnnotation !== null) {
                         $currentAnnotation .= $line;
-                        if (substr($line, -1, 1) == ')') {
+                        if (substr($line, -1, 1) === ')') {
                             $parsedAnnotation = self::parseAnnotation($currentAnnotation);
                             if ($parsedAnnotation) {
                                 $result[$parsedAnnotation['name']][] = $parsedAnnotation['keyValues'];

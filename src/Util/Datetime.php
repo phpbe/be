@@ -36,10 +36,10 @@ class Datetime
 
         if ($seconds > 86400) {
             $days = intval($seconds / 86400);
-            if ($days == 1) {
-                if (date('a', $timestamp) == 'am') return '昨天上午';
+            if ($days === 1) {
+                if (date('a', $timestamp) === 'am') return '昨天上午';
                 else return '昨天下午';
-            } elseif ($days == 2) {
+            } elseif ($days === 2) {
                 return '前天';
             }
             return $days . '天前';
@@ -51,10 +51,10 @@ class Datetime
         elseif ($seconds > -86400) return intval(-$seconds / 3600) . '小时后';
         else {
             $days = intval(-$seconds / 86400);
-            if ($days == 1) {
-                if (date('a', $timestamp) == 'am') return '明天上午';
+            if ($days === 1) {
+                if (date('a', $timestamp) === 'am') return '明天上午';
                 else return '明天下午';
-            } elseif ($days == 2) {
+            } elseif ($days === 2) {
                 return '后天';
             }
             return $days . '天后';
@@ -104,7 +104,7 @@ class Datetime
                 if ($day > 31) $day = 31;
                 break;
             case 2:
-                $maxDay = (($year % 4 == 0 && $year % 100 != 0) || $year % 400 == 0) ? 29 : 28;
+                $maxDay = (($year % 4 === 0 && $year % 100 !== 0) || $year % 400 === 0) ? 29 : 28;
                 if ($day > $maxDay) $day = $maxDay;
                 break;
             case 3:

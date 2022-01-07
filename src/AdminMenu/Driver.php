@@ -74,7 +74,7 @@ class Driver
     {
         $menuId = null;
         foreach ($this->menus as $menu) {
-            if ($menu->url == $url) {
+            if ($menu->url === $url) {
                 $menuId = $menu->id;
                 break;
             }
@@ -118,7 +118,7 @@ class Driver
     {
         $subMenus = array();
         foreach ($this->menus as $menu) {
-            if ($menu->parentId == $menuId) {
+            if ($menu->parentId === $menuId) {
                 $menu->subMenu = $this->createMenuTree($menu->id);
                 $subMenus[] = $menu;
             }

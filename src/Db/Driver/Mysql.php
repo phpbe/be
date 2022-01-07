@@ -116,7 +116,7 @@ class Mysql extends Driver
      */
     public function replaceMany($table, $objects)
     {
-        if (!is_array($objects) || count($objects) == 0) return 0;
+        if (!is_array($objects) || count($objects) === 0) return 0;
 
         reset($objects);
         $object = current($objects);
@@ -208,7 +208,7 @@ class Mysql extends Driver
      */
     public function quickReplaceMany($table, $objects)
     {
-        if (!is_array($objects) || count($objects) == 0) return 0;
+        if (!is_array($objects) || count($objects) === 0) return 0;
 
         reset($objects);
         $object = current($objects);
@@ -386,7 +386,7 @@ class Mysql extends Driver
                 'scale' => $scale,
                 'comment' => $field->Comment,
                 'default' => $field->Default,
-                'nullAble' => $field->Null == 'YES' ? true : false,
+                'nullAble' => $field->Null === 'YES' ? true : false,
 
                 'unsigned' => $unsigned,
                 'collation' => $field->Collation,
@@ -412,7 +412,7 @@ class Mysql extends Driver
 
         $primaryKeys = [];
         foreach ($tableFields as $tableField) {
-            if ($tableField['key'] == 'PRI') {
+            if ($tableField['key'] === 'PRI') {
                 $primaryKeys[] = $tableField['name'];
             }
         }
@@ -420,7 +420,7 @@ class Mysql extends Driver
         $count = count($primaryKeys);
         if ($count > 1) {
             return $primaryKeys;
-        } elseif ($count == 1) {
+        } elseif ($count === 1) {
             return $primaryKeys[0];
         }
 

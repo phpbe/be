@@ -64,13 +64,13 @@ class XDB_R
 		}
 
 		$klen = strlen($key);
-		if ($klen == 0 || $klen > XDB_MAXKLEN)
+		if ($klen === 0 || $klen > XDB_MAXKLEN)
 			return false;
 
 		// get the data?
 		$rec = $this->_get_record($key);
 
-		if (!isset($rec['vlen']) || $rec['vlen'] == 0)
+		if (!isset($rec['vlen']) || $rec['vlen'] === 0)
 			return false;
 		
 		return $rec['value'];
@@ -111,7 +111,7 @@ class XDB_R
 
 		// check the fsize
 		$fstat = fstat($fd);
-		if ($fstat['size'] != $hdr['fsize'])
+		if ($fstat['size'] !== $hdr['fsize'])
 			return false;
 
 		// check float?
@@ -132,7 +132,7 @@ class XDB_R
 		fseek($this->fd, $poff, SEEK_SET);
 		$buf = fread($this->fd, 8);
 
-		if (strlen($buf) == 8) $tmp = unpack('Ioff/Ilen', $buf);
+		if (strlen($buf) === 8) $tmp = unpack('Ioff/Ilen', $buf);
 		else $tmp = array('off' => 0, 'len' => 0);
 		return $this->_tree_get_record($tmp['off'], $tmp['len'], $poff, $key);
 	}
@@ -140,7 +140,7 @@ class XDB_R
 	// get the record by tree
 	function _tree_get_record($off, $len, $poff = 0, $key = '')
 	{
-		if ($len == 0)
+		if ($len === 0)
 			return (array('poff' => $poff));
 		$this->_io_times++;
 		

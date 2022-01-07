@@ -323,7 +323,7 @@ class Report extends Driver
                 $filename = $this->setting['grid']['title'];
             }
             $filename .= '（' . date('YmdHis') . '）';
-            $filename .= ($exportDriver == 'csv' ? '.csv' : '.xls');
+            $filename .= ($exportDriver === 'csv' ? '.csv' : '.xls');
 
             $exporter->setDriver($exportDriver)->setOutput('http', $filename);
 
@@ -439,7 +439,7 @@ class Report extends Driver
             foreach ($this->setting['grid']['filter'] as $filter) {
                 if (is_array($filter)) {
                     $n = count($filter);
-                    if ($n == 2) {
+                    if ($n === 2) {
                         $wheres[] = $db->quoteKey($filter[0]) . ' = ' . $db->quoteValue($filter[1]);
                     } elseif ($n > 2) {
                         $wheres[] = $db->quoteKey($filter[0]) . ' ' . $db->quoteValue($filter[1]) . ' ' . $db->quoteValue($filter[2]);
@@ -477,7 +477,7 @@ class Report extends Driver
 
                 $driverClass = null;
                 if (isset($item['driver'])) {
-                    if (substr($item['driver'], 0, 8) == 'FormItem') {
+                    if (substr($item['driver'], 0, 8) === 'FormItem') {
                         $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $item['driver'];
                     } else {
                         $driverClass = $item['driver'];
@@ -538,14 +538,14 @@ class Report extends Driver
                             $sql .= $db->quoteKey($driver->name) . ' LIKE ' . $db->quoteValue('%' . $driver->newValue);
                             break;
                         case 'RANGE':
-                            if (is_array($driver->newValue) && count($driver->newValue) == 2) {
+                            if (is_array($driver->newValue) && count($driver->newValue) === 2) {
                                 $sql .= $db->quoteKey($driver->name) . ' >= ' . $db->quoteValue($driver->newValue[0]);
                                 $sql .= ' AND ';
                                 $sql .= $db->quoteKey($driver->name) . ' < ' . $db->quoteValue($driver->newValue[1]);
                             }
                             break;
                         case 'BETWEEN':
-                            if (is_array($driver->newValue) && count($driver->newValue) == 2) {
+                            if (is_array($driver->newValue) && count($driver->newValue) === 2) {
                                 $sql .= $db->quoteKey($driver->name) . ' BETWEEN ' . $db->quoteValue($driver->newValue[0]);
                                 $sql .= ' AND ';
                                 $sql .= $db->quoteValue($driver->newValue[1]);

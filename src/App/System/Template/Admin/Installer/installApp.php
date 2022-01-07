@@ -58,7 +58,7 @@
                     }).then(function (response) {
                         _this.loading = false;
                         console.log(response);
-                        if (response.status == 200) {
+                        if (response.status === 200) {
                             var responseData = response.data;
                             if (responseData.success) {
                                 window.location.href=responseData.redirectUrl;

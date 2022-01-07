@@ -124,7 +124,7 @@ class ImageWithTextOverlay
     /**
      * @BeConfigItem("内容区位置左侧边距（像素，小于0时不生效）",
      *     driver = "FormItemInputNumberInt",
-     *     ui="return ['form-item' => ['v-show' => 'formData.contentPosition == \'custom\'']];"
+     *     ui="return ['form-item' => ['v-show' => 'formData.contentPosition === \'custom\'']];"
      * )
      */
     public $contentPositionLeft = -1;
@@ -132,7 +132,7 @@ class ImageWithTextOverlay
     /**
      * @BeConfigItem("内容区位置右侧边距（像素，小于0时不生效）",
      *     driver = "FormItemInputNumberInt",
-     *     ui="return ['form-item' => ['v-show' => 'formData.contentPosition == \'custom\'']];"
+     *     ui="return ['form-item' => ['v-show' => 'formData.contentPosition === \'custom\'']];"
      * )
      */
     public $contentPositionRight = 30;
@@ -141,7 +141,7 @@ class ImageWithTextOverlay
     /**
      * @BeConfigItem("内容区位置顶部边距（像素，小于0时不生效）",
      *     driver = "FormItemInputNumberInt",
-     *     ui="return ['form-item' => ['v-show' => 'formData.contentPosition == \'custom\'']];"
+     *     ui="return ['form-item' => ['v-show' => 'formData.contentPosition === \'custom\'']];"
      * )
      */
     public $contentPositionTop = 30;
@@ -149,7 +149,7 @@ class ImageWithTextOverlay
     /**
      * @BeConfigItem("内容区位置底部边距（像素，小于0时不生效）",
      *     driver = "FormItemInputNumberInt",
-     *     ui="return ['form-item' => ['v-show' => 'formData.contentPosition == \'custom\'']];"
+     *     ui="return ['form-item' => ['v-show' => 'formData.contentPosition === \'custom\'']];"
      * )
      */
     public $contentPositionBottom = -1;

@@ -41,7 +41,7 @@ abstract class Driver
             throw new AdminPluginException('输出类型' . $outputType . '不支持！');
         }
 
-        if ($outputType == 'file' && !$outputFileNameOrPath) {
+        if ($outputType === 'file' && !$outputFileNameOrPath) {
             throw new AdminPluginException('输出类型为' . $outputType . '时必须设置输出路径！');
         }
 

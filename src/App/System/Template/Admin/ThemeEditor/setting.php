@@ -169,7 +169,7 @@
                 </div>
 
                 <div style="flex: 0 0 auto;">
-                    <?php if ($this->themeType == 'Theme') { ?>
+                    <?php if ($this->themeType === 'Theme') { ?>
                     <el-dropdown @command="toggleScreen">
                         <el-button size="medium" style="border: none">
                             <template v-if="screen === 'mobile'">
@@ -255,7 +255,7 @@
                                         </div>
 
                                         <div style="flex: 1">
-                                            <a href="javascript:void(0);" @click="editItem(section.url, '<?php echo $sectionType; ?>', sectionKey)" :class="activeUrl == section.url ? 'active' : ''">
+                                            <a href="javascript:void(0);" @click="editItem(section.url, '<?php echo $sectionType; ?>', sectionKey)" :class="activeUrl === section.url ? 'active' : ''">
                                                 <span class="icon" v-html="section.icon"></span>{{section.label}}
                                             </a>
                                         </div>
@@ -279,7 +279,7 @@
                                                     <li v-for="(existItem, existItemKey) in section.items.existItems" :key="existItemKey" data-sectiontype="<?php echo $sectionType; ?>" :data-sectionkey="sectionKey">
                                                         <div style="display: flex">
                                                             <div style="flex: 1">
-                                                                <a href="javascript:void(0);" @click="editItem(existItem.url, '<?php echo $sectionType; ?>', sectionKey)" :class="activeUrl == existItem.url ? 'active' : ''">
+                                                                <a href="javascript:void(0);" @click="editItem(existItem.url, '<?php echo $sectionType; ?>', sectionKey)" :class="activeUrl === existItem.url ? 'active' : ''">
                                                                     <span class="icon" v-html="existItem.icon"></span>{{existItem.label}}
                                                                 </a>
                                                             </div>
@@ -336,7 +336,7 @@
                         </li>
 
                         <?php
-                        if ($this->pageName != 'Home' && isset($this->page[$sectionType . 'Extended']) && $this->page[$sectionType . 'Extended']) {
+                        if ($this->pageName !== 'Home' && isset($this->page[$sectionType . 'Extended']) && $this->page[$sectionType . 'Extended']) {
                             ?>
                             <li style="padding-left: 28px;">
                                 <el-tooltip>
@@ -360,7 +360,7 @@
             <div style="position: absolute;left:0; right:0; bottom:0; height: 35px; line-height: 35px; background-color: #fff; ">
                 <ul class="west-links">
                     <li>
-                        <a href="javascript:void(0);" @click="editItem(theme.url, '', '')" :class="activeUrl == theme.url ? 'active' : ''" style=" padding-left: 20px;">
+                        <a href="javascript:void(0);" @click="editItem(theme.url, '', '')" :class="activeUrl === theme.url ? 'active' : ''" style=" padding-left: 20px;">
                             主题参数配置
                         </a>
                     </li>
@@ -428,11 +428,11 @@
                     var randomParam;
                     switch (this.screen) {
                         case "desktop":
-                            randomParam = (this.page.desktopPreviewUrl.indexOf('?') == -1 ? '?_=' : '&_=') + Math.random();
+                            randomParam = (this.page.desktopPreviewUrl.indexOf('?') === -1 ? '?_=' : '&_=') + Math.random();
                             this.previewUrl = this.page.desktopPreviewUrl + randomParam + this.previewUrlTag;
                             break;
                         case "mobile":
-                            randomParam = (this.page.mobilePreviewUrl.indexOf('?') == -1 ? '?_=' : '&_=') + Math.random();
+                            randomParam = (this.page.mobilePreviewUrl.indexOf('?') === -1 ? '?_=' : '&_=') + Math.random();
                             this.previewUrl = this.page.mobilePreviewUrl + randomParam + this.previewUrlTag;
                             break;
                     }
@@ -441,7 +441,7 @@
                     var page;
                     for(var x in this.theme.pages) {
                         page = this.theme.pages[x];
-                        if (page.name == pageName) {
+                        if (page.name === pageName) {
                             window.location.href = page.url;
                             break;
                         }
@@ -462,7 +462,7 @@
                         sectionName: commands[1]
                     }).then(function (response) {
                         loading.close();
-                        if (response.status == 200) {
+                        if (response.status === 200) {
                             if (response.data.success) {
                                 _this.page = response.data.page;
                             } else {
@@ -487,7 +487,7 @@
                             sectionKey: sectionKey
                         }).then(function (response) {
                             loading.close();
-                            if (response.status == 200) {
+                            if (response.status === 200) {
                                 if (response.data.success) {
                                     _this.page = response.data.page;
                                 } else {
@@ -513,7 +513,7 @@
                         newIndex: event.newIndex,
                     }).then(function (response) {
                         loading.close();
-                        if (response.status == 200) {
+                        if (response.status === 200) {
                             if (response.data.success) {
                                 _this.page = response.data.page;
                             } else {
@@ -529,7 +529,7 @@
                     this.activeUrl = url;
 
                     var previewUrlTag = "#be-section-" + sectionType + "-" + sectionKey;
-                    if (this.previewUrlTag != previewUrlTag) {
+                    if (this.previewUrlTag !== previewUrlTag) {
                         this.previewUrlTag = previewUrlTag;
                         this.reloadPreviewFrame();
                     }
@@ -540,7 +540,7 @@
                     var _this = this;
                     _this.$http.get(command).then(function (response) {
                         loading.close();
-                        if (response.status == 200) {
+                        if (response.status === 200) {
                             if (response.data.success) {
                                 _this.page = response.data.page;
                             } else {
@@ -568,7 +568,7 @@
                             itemKey: itemKey
                         }).then(function (response) {
                             loading.close();
-                            if (response.status == 200) {
+                            if (response.status === 200) {
                                 if (response.data.success) {
                                     _this.page = response.data.page;
                                 } else {
@@ -595,7 +595,7 @@
                         newIndex: event.newIndex,
                     }).then(function (response) {
                         loading.close();
-                        if (response.status == 200) {
+                        if (response.status === 200) {
                             if (response.data.success) {
                                 _this.page = response.data.page;
                             } else {

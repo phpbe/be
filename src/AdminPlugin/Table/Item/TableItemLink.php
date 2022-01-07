@@ -59,7 +59,7 @@ class TableItemLink extends TableItem
         $html .= '<template slot-scope="scope">';
         $html .= '<el-link';
         foreach ($this->ui as $k => $v) {
-            if ($k == 'table-column') {
+            if ($k === 'table-column') {
                 continue;
             }
 
@@ -95,9 +95,9 @@ class TableItemLink extends TableItem
             ]
         ];
 
-        if ($this->target == 'dialog') {
+        if ($this->target === 'dialog') {
             $vueData['tableItems'][$this->name]['dialog'] = $this->dialog;
-        } elseif ($this->target == 'drawer') {
+        } elseif ($this->target === 'drawer') {
             $vueData['tableItems'][$this->name]['drawer'] = $this->drawer;
         }
 

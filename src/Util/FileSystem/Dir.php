@@ -25,7 +25,7 @@ class Dir
         if (is_dir($path)) {
             $handle = opendir($path);
             while (($file = readdir($handle)) !== false) {
-                if ($file != '.' && $file != '..') {
+                if ($file !== '.' && $file !== '..') {
                     self::rm($path . '/' . $file);
                 }
             }
@@ -57,7 +57,7 @@ class Dir
 
         if ($srcDirSource) {
             while (false !== ($file = readdir($srcDirSource))) {
-                if ($file != '.' && $file != '..') {
+                if ($file !== '.' && $file !== '..') {
                     $srcPath = $srcDir . '/' . $file;
                     $dstPath = $dstDir . '/' . $file;
                     if (is_dir($srcPath)) {
@@ -99,7 +99,7 @@ class Dir
 
         if ($srcDirSource) {
             while (false !== ($file = readdir($srcDirSource))) {
-                if ($file != '.' && $file != '..') {
+                if ($file !== '.' && $file !== '..') {
                     $srcPath = $srcDir . '/' . $file;
                     $dstPath = $dstDir . '/' . $file;
 

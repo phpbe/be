@@ -30,7 +30,7 @@ $start = isset($_GET['start']) ? htmlspecialchars($_GET['start']) : 0;
 $end = $start + $size;
 
 /* 获取文件列表 */
-$path = $_SERVER['DOCUMENT_ROOT'] . (substr($path, 0, 1) == "/" ? "":"/") . $path;
+$path = $_SERVER['DOCUMENT_ROOT'] . (substr($path, 0, 1) === "/" ? "":"/") . $path;
 $files = getfiles($path, $allowFiles);
 if (!count($files)) {
     return json_encode(array(
@@ -71,10 +71,10 @@ return $result;
 function getfiles($path, $allowFiles, &$files = array())
 {
     if (!is_dir($path)) return null;
-    if(substr($path, strlen($path) - 1) != '/') $path .= '/';
+    if(substr($path, strlen($path) - 1) !== '/') $path .= '/';
     $handle = opendir($path);
     while (false !== ($file = readdir($handle))) {
-        if ($file != '.' && $file != '..') {
+        if ($file !== '.' && $file !== '..') {
             $path2 = $path . $file;
             if (is_dir($path2)) {
                 getfiles($path2, $allowFiles, $files);

@@ -116,9 +116,9 @@ class AdminUser
                 }
 
                 if ($tupleAdminUser->password === $this->encryptPassword($password, $tupleAdminUser->salt)) {
-                    if ($tupleAdminUser->is_delete == 1) {
+                    if ($tupleAdminUser->is_delete === 1) {
                         throw new ServiceException('用户账号（' . $username . '）不可用！');
-                    } elseif ($tupleAdminUser->is_enable == 0) {
+                    } elseif ($tupleAdminUser->is_enable === 0) {
                         throw new ServiceException('用户账号（' . $username . '）已被禁用！');
                     } else {
                         $tupleAdminUser->last_login_time = $tupleAdminUser->this_login_time;
@@ -196,14 +196,14 @@ class AdminUser
         $rememberMe = $request->cookie('be-adminUserRememberMe', null);
         if ($rememberMe) {
             $rememberMe = explode('|', $rememberMe);
-            if (count($rememberMe) != 2) return;
+            if (count($rememberMe) !== 2) return;
 
             $username = $rememberMe[0];
 
             $tupleAdminUser = Be::newTuple('system_admin_user');
             try {
                 $tupleAdminUser->loadBy('username', $username);
-                if ($tupleAdminUser->is_delete == 0 && $tupleAdminUser->is_enable == 1) {
+                if ($tupleAdminUser->is_delete === 0 && $tupleAdminUser->is_enable === 1) {
                     $password = base64_decode($rememberMe[1]);
                     $password = $this->rc4($password, $tupleAdminUser->salt);
                     $this->login($username, $password, $request->getIp());

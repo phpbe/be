@@ -49,7 +49,7 @@ if ($sectionData['enable']) {
     echo 'transition: all 0.7s ease;';
     echo '}';
 
-    if ($sectionData['hoverEffect'] != 'none') {
+    if ($sectionData['hoverEffect'] !== 'none') {
         switch ($sectionData['hoverEffect']) {
             case 'scale':
                 echo '#images-' . $sectionType . '-' . $sectionKey . ' a:hover img {';
@@ -116,7 +116,7 @@ if ($sectionData['enable']) {
     // 手机端
     echo '@media (max-width: 768px) {';
     echo '#images-' . $sectionType . '-' . $sectionKey . ' .images-item {';
-    $width = $cols == 1 ? '100%;' : ('calc((100% - ' . $sectionData['spacingMobile'] . 'px)/2)');
+    $width = $cols === 1 ? '100%;' : ('calc((100% - ' . $sectionData['spacingMobile'] . 'px)/2)');
     echo 'width: ' . $width . ';';
     if ($sectionData['spacingMobile']) {
         echo 'margin-bottom: ' . $sectionData['spacingMobile'] . 'px;';
@@ -134,7 +134,7 @@ if ($sectionData['enable']) {
     // 平析端
     echo '@media (min-width: 768px) {';
     echo '#images-' . $sectionType . '-' . $sectionKey . ' .images-item {';
-    $width = $cols == 1 ? '100%;' : ('calc((100% - ' . ($sectionData['spacingTablet'] * ($cols - 1)) . 'px)/' . $cols . ')');
+    $width = $cols === 1 ? '100%;' : ('calc((100% - ' . ($sectionData['spacingTablet'] * ($cols - 1)) . 'px)/' . $cols . ')');
     echo 'width: ' . $width . ';';
     if ($sectionData['spacingTablet']) {
         echo 'margin-bottom: ' . $sectionData['spacingTablet'] . 'px;';
@@ -145,7 +145,7 @@ if ($sectionData['enable']) {
     // 电脑端
     echo '@media (min-width: 992px) {';
     echo '#images-' . $sectionType . '-' . $sectionKey . ' .images-item {';
-    $width = $cols == 1 ? '100%;' : ('calc((100% - ' . ($sectionData['spacingDesktop'] * ($cols - 1)) . 'px)/' . $cols . ')');
+    $width = $cols === 1 ? '100%;' : ('calc((100% - ' . ($sectionData['spacingDesktop'] * ($cols - 1)) . 'px)/' . $cols . ')');
     echo 'width: ' . $width . ';';
     if ($sectionData['spacingDesktop']) {
         echo 'margin-bottom: ' . $sectionData['spacingDesktop'] . 'px;';

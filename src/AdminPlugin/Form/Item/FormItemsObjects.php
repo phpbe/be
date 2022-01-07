@@ -76,7 +76,7 @@ class FormItemsObjects extends FormItems
 
             $driverClass = null;
             if (isset($item['driver'])) {
-                if (substr($item['driver'], 0, 8) == 'FormItem') {
+                if (substr($item['driver'], 0, 8) === 'FormItem') {
                     $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $item['driver'];
                 } else {
                     $driverClass = $item['driver'];
@@ -147,7 +147,7 @@ class FormItemsObjects extends FormItems
                 foreach ($this->items as $item) {
                     $driverClass = null;
                     if (isset($item['driver'])) {
-                        if (substr($item['driver'], 0, 8) == 'FormItem') {
+                        if (substr($item['driver'], 0, 8) === 'FormItem') {
                             $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $item['driver'];
                         } else {
                             $driverClass = $item['driver'];
@@ -202,7 +202,7 @@ class FormItemsObjects extends FormItems
             foreach ($this->items as $item) {
                 $driverClass = null;
                 if (isset($item['driver'])) {
-                    if (substr($item['driver'], 0, 8) == 'FormItem') {
+                    if (substr($item['driver'], 0, 8) === 'FormItem') {
                         $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $item['driver'];
                     } else {
                         $driverClass = $item['driver'];

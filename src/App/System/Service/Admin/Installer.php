@@ -54,12 +54,12 @@ class Installer
         $vendorPath = Be::getRuntime()->getRootPath() . '/vendor';
         $dirs = scandir($vendorPath);
         foreach ($dirs as $dir) {
-            if ($dir != '..' && $dir != '.') {
+            if ($dir !== '..' && $dir !== '.') {
                 $subVendorPath = $vendorPath . '/' . $dir;
                 if (is_dir($subVendorPath)) {
                     $subDirs = scandir($subVendorPath);
                     foreach ($subDirs as $subDir) {
-                        if ($subDir != '..' && $subDir != '.') {
+                        if ($subDir !== '..' && $subDir !== '.') {
                             $propertyPath = $subVendorPath . '/' . $subDir . '/src/Property.php';
                             if (!file_exists($propertyPath)) {
                                 $propertyPath = $subVendorPath . '/' . $subDir . '/Property.php';
@@ -68,7 +68,7 @@ class Installer
                             if (file_exists($propertyPath)) {
                                 $content = file_get_contents($propertyPath);
                                 preg_match('/namespace\s+Be\\\\App\\\\(\w+)/i', $content, $matches);
-                                if (isset($matches[1]) && $matches[1] != 'System') {
+                                if (isset($matches[1]) && $matches[1] !== 'System') {
                                     $apps[] = $matches[1];
                                 }
                             }
@@ -122,7 +122,7 @@ class Installer
             $names = $configApp->names;
             $newNames = [];
             foreach ($names as $name) {
-                if ($name == $app) {
+                if ($name === $app) {
                     continue;
                 }
                 $newNames[] = $name;

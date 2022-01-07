@@ -33,7 +33,7 @@ class DbHelper
             }
 
             if (in_array($field['type'], [
-                'int', 'tinyint', 'smallint', 'mediumint', 'bigint', 'float', 'double', 'decimal'
+                'int', 'tinyint', 'smallint', 'mediumint', 'bigint', 'float', 'double'
             ])) {
                 $field['isNumber'] = 1;
             } else {

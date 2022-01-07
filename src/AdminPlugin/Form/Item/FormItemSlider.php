@@ -62,7 +62,7 @@ class FormItemSlider extends FormItem
 
         $html .= '<div style="padding: 0 10px;"><el-slider';
         foreach ($this->ui as $k => $v) {
-            if ($k == 'form-item') {
+            if ($k === 'form-item') {
                 continue;
             }
 

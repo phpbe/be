@@ -54,7 +54,7 @@ class TableItemAvatar extends TableItem
         $html .= '<template slot-scope="scope">';
         $html .= '<el-avatar';
         foreach ($this->ui as $k => $v) {
-            if ($k == 'table-column') {
+            if ($k === 'table-column') {
                 continue;
             }
 

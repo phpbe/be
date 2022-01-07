@@ -65,7 +65,7 @@ class Watermark
         $x = intval($x);
         $y = intval($y);
 
-        if ($configWatermark->type == 'text') {
+        if ($configWatermark->type === 'text') {
             $style = array();
             $style['fontSize'] = $configWatermark->textSize;
             $style['color'] = $configWatermark->textColor;

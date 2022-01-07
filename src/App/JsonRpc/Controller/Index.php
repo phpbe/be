@@ -32,7 +32,7 @@ class Index
         $request = Be::getRequest();
         $response = Be::getResponse();
 
-        if (Be::getRuntime()->getMode() == 'Swoole') {
+        if (Be::getRuntime()->getMode() === 'Swoole') {
             $inputDataStr = $request->getRequest()->getContent();
         } else {
             $inputDataStr = file_get_contents('php://input');
@@ -97,7 +97,7 @@ class Index
 
         $method = $inputArray['method'];
         $methods = explode('::', $method);
-        if (count($methods) != 2) {
+        if (count($methods) !== 2) {
             return $this->error($id, static::ERR_METHOD);
         }
 
@@ -170,7 +170,7 @@ class Index
     {
         $arr = (array)$obj;
         foreach ($arr as $k => $v) {
-            if (gettype($v) == 'object' || gettype($v) == 'array') {
+            if (gettype($v) === 'object' || gettype($v) === 'array') {
                 $arr[$k] = (array)$this->obj2Arr($v);
             }
         }

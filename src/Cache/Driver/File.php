@@ -95,7 +95,7 @@ class File implements Driver
 
         if (!is_bool($value) && !is_numeric($value)) $value = serialize($value);
 
-        if ($expire == 0) {
+        if ($expire === 0) {
             $expire = 9999999999;
         } else {
             $expire = time() + $expire;
@@ -231,7 +231,7 @@ class File implements Driver
     {
         $handle = opendir($this->path);
         while (($file = readdir($handle)) !== false) {
-            if ($file != '.' && $file != '..') {
+            if ($file !== '.' && $file !== '..') {
                 \Be\Util\FileSystem\Dir::rm($this->path . '/' . $file);
             }
         }

@@ -208,9 +208,9 @@ class Table
     {
         $fieldCount = count($wheres);
 
-        if ($fieldCount == 0) return $this;
+        if ($fieldCount === 0) return $this;
 
-        if ($fieldCount == 1) {
+        if ($fieldCount === 1) {
             return $this->where($wheres[0]);
         }
 
@@ -222,11 +222,11 @@ class Table
         foreach ($wheres as $w) {
             if (is_array($w)) {
                 $len = count($w);
-                if ($len == 1) {
+                if ($len === 1) {
                     $this->_where[] = $w[0];
-                } elseif ($len == 2) {
+                } elseif ($len === 2) {
                     $this->_where[] = [$w[0], '=', $w[1]];
-                } elseif ($len == 3) {
+                } elseif ($len === 3) {
                     $this->_where[] = [$w[0], $w[1], $w[2]];
                 }
             } else {
@@ -296,11 +296,11 @@ class Table
     public function orderBy($field, $dir = null)
     {
         $field = trim($field);
-        if ($dir == null) {
+        if ($dir === null) {
             $this->_orderBy = $field;
         } else {
             $dir = strtoupper(trim($dir));
-            if ($dir != 'ASC' && $dir != 'DESC') {
+            if ($dir !== 'ASC' && $dir !== 'DESC') {
                 $this->_orderBy = $field;
             } else {
                 $this->_orderBy = Be::getDb($this->_dbName)->quoteKey($field) . ' ' . $dir;
@@ -815,7 +815,7 @@ class Table
                             case 'BETWEEN':
                             case 'NOT BETWEEN':
                                 $sql .=  ' ' . $op;
-                                if (is_array($where[2]) && count($where[2]) == 2) {
+                                if (is_array($where[2]) && count($where[2]) === 2) {
                                     $sql .= ' ? AND ?';
                                     $values = array_merge($values, $where[2]);
                                 } else {
@@ -901,7 +901,7 @@ class Table
     {
         $db = Be::getDb($this->_dbName);
 
-        if ($this->_lastSql == null) return '';
+        if ($this->_lastSql === null) return '';
         $lastSql = $this->_lastSql[0];
         $values = $this->_lastSql[1];
         $n = count($values);

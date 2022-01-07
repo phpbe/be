@@ -32,7 +32,7 @@ class Config extends Driver
         if (file_exists($dir) && is_dir($dir)) {
             $fileNames = scandir($dir);
             foreach ($fileNames as $fileName) {
-                if ($fileName != '.' && $fileName != '..' && is_file($dir . '/' . $fileName)) {
+                if ($fileName !== '.' && $fileName !== '..' && is_file($dir . '/' . $fileName)) {
                     $configName = substr($fileName, 0, -4);
                     $className = '\\Be\\App\\' . $appName . '\\Config\\' . $configName;
                     if (class_exists($className)) {
@@ -97,7 +97,7 @@ class Config extends Driver
 
                     $driverClass = null;
                     if (isset($configItem['driver'])) {
-                        if (substr($configItem['driver'], 0, 8) == 'FormItem') {
+                        if (substr($configItem['driver'], 0, 8) === 'FormItem') {
                             $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $configItem['driver'];
                         } else {
                             $driverClass = $configItem['driver'];
@@ -181,7 +181,7 @@ class Config extends Driver
 
                     $driverClass = null;
                     if (isset($configItem['driver'])) {
-                        if (substr($configItem['driver'], 0, 8) == 'FormItem') {
+                        if (substr($configItem['driver'], 0, 8) === 'FormItem') {
                             $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $configItem['driver'];
                         } else {
                             $driverClass = $configItem['driver'];

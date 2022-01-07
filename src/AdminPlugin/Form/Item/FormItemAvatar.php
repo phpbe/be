@@ -13,7 +13,6 @@ use Be\Util\FileSystem\FileSize;
 class FormItemAvatar extends FormItem
 {
 
-    public $defaultValue = ''; // 当value为空时的默认值
     public $path = ''; // 保存路径
     public $maxSizeInt = 0; // 最大尺寸（整型字节数）
     public $maxSize = ''; // 最大尺寸（字符类型）
@@ -31,10 +30,6 @@ class FormItemAvatar extends FormItem
     public function __construct($params = [], $row = [])
     {
         parent::__construct($params, $row);
-
-        if (isset($params['defaultValue'])) {
-            $this->defaultValue = $params['defaultValue'];
-        }
 
         if (!isset($params['path'])) {
             throw new AdminPluginException('参数' . $this->label . ' (' . $this->name . ') 须指定保存路径（path）');
@@ -160,7 +155,7 @@ class FormItemAvatar extends FormItem
         $html .= '<el-upload';
         if (isset($this->ui)) {
             foreach ($this->ui as $k => $v) {
-                if ($k == 'form-item' || $k == 'avatar') {
+                if ($k === 'form-item' || $k === 'avatar') {
                     continue;
                 }
 
@@ -250,17 +245,17 @@ class FormItemAvatar extends FormItem
     {
         if (isset($data[$this->name])) {
             $newValue = $data[$this->name];
-            $newValue = htmlspecialchars_decode($newValue);
+            if ($newValue !== $this->value) {
+                $storage = Be::getStorage();
+                if ($this->value !== null) {
+                    $oldPath = $this->path . $this->value;
+                    $storage->removeFile($oldPath);
+                }
 
-            $storage = Be::getStorage();
-            if ($newValue != $this->value && $this->value != '') {
-                $oldPath = $this->path . $this->value;
-                $storage->removeFile($oldPath);
+                $newPath = $this->path . $newValue;
+                $file = Be::getRuntime()->getUploadPath() . '/tmp/' . $newValue;
+                $url = $storage->uploadFile($newPath, $file);
             }
-
-            $newPath = $this->path . $newValue;
-            $file = Be::getRuntime()->getUploadPath() . '/tmp/' . $newValue;
-            $url = $storage->uploadFile($newPath, $file);
 
             $this->newValue = $newValue;
         }

@@ -12,7 +12,7 @@ class FileManager
     public function getFiles($option = array())
     {
         $absPath = $this->getAbsPath($option['path']);
-        if ($absPath == false) $absPath = Be::getRuntime()->getUploadPath();
+        if ($absPath === false) $absPath = Be::getRuntime()->getUploadPath();
 
         $return = array();
 
@@ -21,7 +21,7 @@ class FileManager
         // 分析目录
         $files = scandir($absPath);
         foreach ($files as $x => $name) {
-            if ($name == "." || $name == "..") continue;
+            if ($name === "." || $name === "..") continue;
 
             $itemPath = $absPath . '/' . $name;
 
@@ -34,7 +34,7 @@ class FileManager
 
             // 是否只显示图像文件，插入图像时使用
             $filter = false;
-            if ($option['filterImage'] == 1 && $type != 'dir' && !in_array($type, $configSystem->allowUploadImageTypes)) $filter = true;
+            if ($option['filterImage'] === 1 && $type !== 'dir' && !in_array($type, $configSystem->allowUploadImageTypes)) $filter = true;
 
             if (!$filter) $return[$x] = array('name' => $name, 'date' => filemtime($itemPath), 'size' => $size, 'type' => $type);
         }
@@ -46,7 +46,7 @@ class FileManager
     public function createDir($dirName, $path = null)
     {
         $absPath = $this->getAbsPath($path);
-        if ($absPath == false) return false;
+        if ($absPath === false) return false;
 
         if (strpos($dirName, '/') !== false) {
             throw new ServiceException('文件夹名称不合法！');
@@ -65,7 +65,7 @@ class FileManager
     public function deleteDir($dirName, $path = null)
     {
         $absDirPath = $this->getAbsDirPath($dirName, $path);
-        if ($absDirPath == false) return false;
+        if ($absDirPath === false) return false;
 
         \Be\Util\FileSystem\Dir::rm($absDirPath);
 
@@ -75,7 +75,7 @@ class FileManager
     public function editDirName($oldDirName, $newDirName, $path = null)
     {
         $absPath = $this->getAbsPath($path);
-        if ($absPath == false) return false;
+        if ($absPath === false) return false;
 
         if (strpos($oldDirName, '/') !== false || strpos($newDirName, '/') !== false) {
             throw new ServiceException('文件夹名称不合法！');
@@ -102,7 +102,7 @@ class FileManager
     public function deleteFile($fileName, $path = null)
     {
         $absFilePath = $this->getAbsFilePath($fileName, $path);
-        if ($absFilePath == false) return false;
+        if ($absFilePath === false) return false;
 
         if (!unlink($absFilePath)) {
             throw new ServiceException('删除文件失败，请检查是否有权限！');
@@ -115,7 +115,7 @@ class FileManager
     public function editFileName($oldFileName, $newFileName, $path = null)
     {
         $absPath = $this->getAbsPath($path);
-        if ($absPath == false) return false;
+        if ($absPath === false) return false;
 
         if (strpos($oldFileName, '/') !== false || strpos($newFileName, '/') !== false) {
             throw new ServiceException('文件名称不合法！');
@@ -147,14 +147,14 @@ class FileManager
 
     public function getAbsPath($path = null)
     {
-        if ($path == null) $path = $session->get('systemFileManagerPath');
+        if ($path === null) $path = Be::getSession()->get('systemFileManagerPath');
 
         // 禁止用户查看其它目录
-        if (strpos($path, './') != false) {
+        if (strpos($path, './') !== false) {
             throw new ServiceException('路径不合法！');
         }
 
-        if (substr($path, -1, 1) == '/') {
+        if (substr($path, -1, 1) === '/') {
             throw new ServiceException('路径不合法！');
         }
 
@@ -171,7 +171,7 @@ class FileManager
     public function getAbsDirPath($dirName = '', $path = null)
     {
         $absPath = $this->getAbsPath($path);
-        if ($absPath == false) return false;
+        if ($absPath === false) return false;
 
         if (strpos($dirName, '/') !== false) {
             throw new ServiceException('文件夹名称不合法！');
@@ -189,7 +189,7 @@ class FileManager
     public function getAbsFilePath($fileName = '', $path = null)
     {
         $absPath = $this->getAbsPath($path);
-        if ($absPath == false) return false;
+        if ($absPath === false) return false;
 
         if (strpos($fileName, '/') !== false) {
             throw new ServiceException('文件名称不合法！');

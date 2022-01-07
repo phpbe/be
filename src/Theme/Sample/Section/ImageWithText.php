@@ -66,7 +66,7 @@ if ($sectionData['enable']) {
     echo '@media only screen and (min-width: 769px) {';
     echo '#image-with-text-' . $sectionType . '-' . $sectionKey . ' .image-with-text-container {';
     echo 'display: flex;';
-    if ($sectionData['imagePosition'] == 'right') { // 图像居右
+    if ($sectionData['imagePosition'] === 'right') { // 图像居右
         echo 'flex-direction: row-reverse !important;';
     }
     echo '}';
@@ -122,7 +122,7 @@ if ($sectionData['enable']) {
 
     echo '<div id="image-with-text-' . $sectionType . '-' . $sectionKey . '">';
 
-    if ($sectionData['width'] == 'default') {
+    if ($sectionData['width'] === 'default') {
         echo '<div class="be-container">';
     }
 
@@ -152,7 +152,7 @@ if ($sectionData['enable']) {
     echo '</div>';
     echo '</div>';
 
-    if ($sectionData['width'] == 'default') {
+    if ($sectionData['width'] === 'default') {
         echo '</div>';
     }
     echo '</div>';

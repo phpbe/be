@@ -47,7 +47,7 @@ class Date
                 if ($day > 31) $day = 31;
                 break;
             case 2:
-                $maxDay = (($year % 4 == 0 && $year % 100 != 0) || $year % 400 == 0) ? 29 : 28;
+                $maxDay = (($year % 4 === 0 && $year % 100 !== 0) || $year % 400 === 0) ? 29 : 28;
                 if ($day > $maxDay) $day = $maxDay;
                 break;
             case 3:

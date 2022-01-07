@@ -114,10 +114,10 @@ class Css
     {
         $c = array(0, 0, 0);
 
-        if (substr($hexColor, 0, 1) == '#') $hexColor = substr($hexColor, 1);
+        if (substr($hexColor, 0, 1) === '#') $hexColor = substr($hexColor, 1);
 
         $num = hexdec($hexColor);
-        $width = strlen($hexColor) == 3 ? 16 : 256;
+        $width = strlen($hexColor) === 3 ? 16 : 256;
 
         for ($i = 2; $i >= 0; $i--) {
             $t = $num % $width;
@@ -158,7 +158,7 @@ class Css
         $h = null;
 
         $l = ($min + $max) / 2;
-        if ($min == $max) {
+        if ($min === $max) {
             $s = $h = 0;
         } else {
             if ($l < 0.5)
@@ -166,9 +166,9 @@ class Css
             else
                 $s = ($max - $min) / (2.0 - $max - $min);
 
-            if ($r == $max) $h = ($g - $b) / ($max - $min);
-            elseif ($g == $max) $h = 2.0 + ($b - $r) / ($max - $min);
-            elseif ($b == $max) $h = 4.0 + ($r - $g) / ($max - $min);
+            if ($r === $max) $h = ($g - $b) / ($max - $min);
+            elseif ($g === $max) $h = 2.0 + ($b - $r) / ($max - $min);
+            elseif ($b === $max) $h = 4.0 + ($r - $g) / ($max - $min);
 
         }
 
@@ -193,7 +193,7 @@ class Css
         $S = $hslColor[1] / 100;
         $L = $hslColor[2] / 100;
 
-        if ($S == 0) {
+        if ($S === 0) {
             $r = $g = $b = $L;
         } else {
             $temp2 = $L < 0.5 ?

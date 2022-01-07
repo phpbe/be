@@ -37,14 +37,14 @@ class Excel extends Driver
             $filename = null;
             if ($this->outputFileNameOrPath !== null) {
                 $filename = $this->outputFileNameOrPath;
-                if (strrchr(strtolower($filename), '.') == 'xlsx') {
+                if (strrchr(strtolower($filename), '.') === 'xlsx') {
                     $this->xlsType = 'xlsx';
                 }
             } else {
                 $filename = date('YmdHis') . '.xls';
             }
 
-            if ($this->outputType == 'http') {
+            if ($this->outputType === 'http') {
                 header("Content-Type: application/vnd.ms-excel");
                 header('Content-Disposition: attachment; filename=' . $filename);
                 header('Pragma:no-cache');
@@ -150,7 +150,7 @@ class Excel extends Driver
 
         $writer = IOFactory::createWriter($this->handler, $this->xlsType);
 
-        if ($this->outputType == 'http') {
+        if ($this->outputType === 'http') {
             $writer->save('php://output');
         } else {
             $writer->save($this->outputFileNameOrPath);

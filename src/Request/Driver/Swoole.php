@@ -122,12 +122,12 @@ class Swoole extends Driver
 
     public function isGet()
     {
-        return 'GET' == $this->request->server['request_method'];
+        return 'GET' === $this->request->server['request_method'];
     }
 
     public function isPost()
     {
-        return 'POST' == $this->request->server['request_method'];
+        return 'POST' === $this->request->server['request_method'];
     }
 
     public function isAjax()

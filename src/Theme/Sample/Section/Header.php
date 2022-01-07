@@ -49,7 +49,7 @@
         <div class="be-container">
             <a class="navbar-brand" href="<?php echo beUrl(); ?>">
                 <?php
-                if ($sectionData['logoType'] == 'text') {
+                if ($sectionData['logoType'] === 'text') {
                     echo $sectionData['logoText'];
                 } else {
                     echo '<img src="';
@@ -105,7 +105,7 @@
                         echo '">';
 
                         echo '<a class="nav-link';
-                        if (isset($this->menuId) && $this->menuId == $tmpMenu->id) {
+                        if (isset($this->menuId) && $this->menuId === $tmpMenu->id) {
                             echo ' active';
                         }
                         if ($hasSubMenu) {

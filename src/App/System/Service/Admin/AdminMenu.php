@@ -34,7 +34,7 @@ class AdminMenu
                 $methods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
                 foreach ($methods as &$method) {
                     $methodName = $method->getName();
-                    if ($methodName == 'index') {
+                    if ($methodName === 'index') {
                         $app->url = 'beAdminUrl(\'' . $app->name . '.Index.index\')';
                         break;
                     }
@@ -43,7 +43,7 @@ class AdminMenu
 
             $controllers = scandir($controllerDir);
             foreach ($controllers as $controller) {
-                if ($controller == '.' || $controller == '..' || is_dir($controllerDir . '/' . $controller)) continue;
+                if ($controller === '.' || $controller === '..' || is_dir($controllerDir . '/' . $controller)) continue;
 
                 $controller = substr($controller, 0, -4);
                 $className = '\\Be\\App\\' . $appName . '\\Controller\\Admin\\' . $controller;
@@ -56,7 +56,7 @@ class AdminMenu
                 $classComment = $reflection->getDocComment();
                 $parseClassComments = Annotation::parse($classComment);
                 foreach ($parseClassComments as $key => $val) {
-                    if ($key == 'BeMenuGroup') {
+                    if ($key === 'BeMenuGroup') {
                         if (is_array($val[0])) {
                             if (!isset($val[0]['label']) && isset($val[0]['value'])) {
                                 $val[0]['label'] = $val[0]['value'];
@@ -77,7 +77,7 @@ class AdminMenu
                     $menuGroup = [];
                     $menu = [];
                     foreach ($methodComments as $key => $val) {
-                        if ($key == 'BeMenuGroup') {
+                        if ($key === 'BeMenuGroup') {
                             if (is_array($val[0])) {
                                 if (!isset($val[0]['label']) && isset($val[0]['value'])) {
                                     $val[0]['label'] = $val[0]['value'];
@@ -87,7 +87,7 @@ class AdminMenu
                                     $menuGroup = $val[0];
                                 }
                             }
-                        } elseif ($key == 'BeMenu') {
+                        } elseif ($key === 'BeMenu') {
                             if (is_array($val[0])) {
                                 if (!isset($val[0]['label']) && isset($val[0]['value'])) {
                                     $val[0]['label'] = $val[0]['value'];

@@ -51,7 +51,7 @@ class TableItemImage extends TableItem
         $html .= '<template slot-scope="scope">';
         $html .= '<el-image';
         foreach ($this->ui as $k => $v) {
-            if ($k == 'table-column') {
+            if ($k === 'table-column') {
                 continue;
             }
 

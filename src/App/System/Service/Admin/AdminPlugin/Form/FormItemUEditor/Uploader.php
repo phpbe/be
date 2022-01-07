@@ -59,9 +59,9 @@ class Uploader
         $this->fileField = $fileField;
         $this->config = $config;
         $this->type = $type;
-        if ($type == "remote") {
+        if ($type === "remote") {
             $this->saveRemote();
-        } else if($type == "base64") {
+        } else if($type === "base64") {
             $this->upBase64();
         } else {
             $this->upFile();
@@ -335,7 +335,7 @@ class Uploader
         //$rootPath = $_SERVER['DOCUMENT_ROOT'];
         $rootPath = Be::getRuntime()->getRootPath();
 
-        if (substr($fullname, 0, 1) != '/') {
+        if (substr($fullname, 0, 1) !== '/') {
             $fullname = '/' . $fullname;
         }
 

@@ -89,7 +89,7 @@ class Ip
             $ip2 = implode('', unpack('L', $buffer));
             if ($ip2 < 0) $ip2 += 4294967296;
             if ($ip2 < $ip) {
-                if ($middle_pos == $start_pos) return '未知位置';
+                if ($middle_pos === $start_pos) return '未知位置';
                 $start_pos = $middle_pos;
             }
         }
@@ -97,7 +97,7 @@ class Ip
         $addr1 = $addr2 = '';
 
         $flag = fread($this->db, 1);
-        if ($flag == chr(1)) {
+        if ($flag === chr(1)) {
             $buffer = fread($this->db, 3);
             if (strlen($buffer) < 3) return '系统错误';
             $ipSeek = implode('', unpack('L', $buffer . chr(0)));
@@ -105,11 +105,11 @@ class Ip
             $flag = fread($this->db, 1);
         }
 
-        if ($flag == chr(2)) {
+        if ($flag === chr(2)) {
             $buffer = fread($this->db, 3);
             if (strlen($buffer) < 3) return '系统错误';
             $flag = fread($this->db, 1);
-            if ($flag == chr(2)) {
+            if ($flag === chr(2)) {
                 $buffer2 = fread($this->db, 3);
                 if (strlen($buffer2) < 3) return '系统错误';
                 $seek = implode('', unpack('L', $buffer2 . chr(0)));
@@ -132,7 +132,7 @@ class Ip
                 $addr1 .= $char;
 
             $flag = fread($this->db, 1);
-            if ($flag == chr(2)) {
+            if ($flag === chr(2)) {
                 $buffer = fread($this->db, 3);
                 if (strlen($buffer) < 3) return '系统错误';
                 $seek = implode('', unpack('L', $buffer . chr(0)));
@@ -151,7 +151,7 @@ class Ip
         $addr = preg_replace('/CZ88.Net/is', '', $addr);
         $addr = preg_replace('/^s*/is', '', $addr);
         $addr = preg_replace('/s*$/is', '', $addr);
-        if (preg_match('/http/i', $addr) || $addr == '') $addr = '未知位置';
+        if (preg_match('/http/i', $addr) || $addr === '') $addr = '未知位置';
 
         return $addr;
     }

@@ -7,7 +7,7 @@
         }
 
         <?php
-        if ($this->setting['actualLayout'] == 'table') {
+        if ($this->setting['actualLayout'] === 'table') {
             ?>
             .el-table__row .el-divider__text,
             .el-table .el-link {
@@ -38,7 +38,7 @@
             }
 
             <?php
-        } elseif ($this->setting['actualLayout'] == 'card') {
+        } elseif ($this->setting['actualLayout'] === 'card') {
             ?>
             .el-card__body {
                 font-size: 14px;
@@ -47,7 +47,7 @@
 
             <?php
             if (isset($this->setting['card']['image'])) {
-                if ($this->setting['card']['image']['position'] == 'left') {
+                if ($this->setting['card']['image']['position'] === 'left') {
                     ?>
                     .card-lr {
                         display: flex;
@@ -96,7 +96,7 @@
                         ?>
                     }
                     <?php
-                } elseif ($this->setting['card']['image']['position'] == 'top') {
+                } elseif ($this->setting['card']['image']['position'] === 'top') {
                     ?>
                     .card-tb {
 
@@ -218,7 +218,7 @@
 
                     $driverClass = null;
                     if (isset($item['driver'])) {
-                        if (substr($item['driver'], 0, 11) == 'ToolbarItem') {
+                        if (substr($item['driver'], 0, 11) === 'ToolbarItem') {
                             $driverClass = '\\Be\\AdminPlugin\\Toolbar\\Item\\' . $item['driver'];
                         } else {
                             $driverClass = $item['driver'];
@@ -345,7 +345,7 @@
                         }
                     }
 
-                    if ($tabHtml && $tabPosition == 'beforeForm') {
+                    if ($tabHtml && $tabPosition === 'beforeForm') {
                         echo $tabHtml;
                     }
 
@@ -357,7 +357,7 @@
                                 foreach ($this->setting['form']['items'] as $item) {
                                     $driverClass = null;
                                     if (isset($item['driver'])) {
-                                        if (substr($item['driver'], 0, 8) == 'FormItem') {
+                                        if (substr($item['driver'], 0, 8) === 'FormItem') {
                                             $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $item['driver'];
                                         } else {
                                             $driverClass = $item['driver'];
@@ -408,7 +408,7 @@
                                 if (isset($this->setting['form']['actions']) && count($this->setting['form']['actions']) > 0) {
                                     $html = '';
                                     foreach ($this->setting['form']['actions'] as $key => $item) {
-                                        if ($key == 'submit') {
+                                        if ($key === 'submit') {
                                             if ($item) {
                                                 if ($item === true) {
                                                     $html .= '<el-button type="primary" icon="el-icon-search" @click="submit" :disabled="loading">查询</el-button> ';
@@ -424,7 +424,7 @@
 
                                         $driverClass = null;
                                         if (isset($item['driver'])) {
-                                            if (substr($item['driver'], 0, 10) == 'FormAction') {
+                                            if (substr($item['driver'], 0, 10) === 'FormAction') {
                                                 $driverClass = '\\Be\\AdminPlugin\\Form\\Action\\' . $item['driver'];
                                             } else {
                                                 $driverClass = $item['driver'];
@@ -465,20 +465,20 @@
                         <?php
                     }
 
-                    if ($tabHtml && $tabPosition == 'beforeToolbar') {
+                    if ($tabHtml && $tabPosition === 'beforeToolbar') {
                         echo $tabHtml;
                     }
 
                     $toggleLayoutHtml = '';
-                    if ($this->setting['layout'] == 'toggle') {
+                    if ($this->setting['layout'] === 'toggle') {
                         $toggleLayoutHtml = '<el-dropdown @command="toggleLayout" style="float: right;">';
                         $toggleLayoutHtml .= '<el-button size="medium" style="border: none">';
-                        $toggleLayoutHtml .= '<i class="' . ($this->setting['actualLayout'] == 'table' ? 'el-icon-s-grid' : 'el-icon-menu') . '" style="font-size: 1.5rem;"></i>';
+                        $toggleLayoutHtml .= '<i class="' . ($this->setting['actualLayout'] === 'table' ? 'el-icon-s-grid' : 'el-icon-menu') . '" style="font-size: 1.5rem;"></i>';
                         $toggleLayoutHtml .= '</el-button>';
 
                         $toggleLayoutHtml .= '<el-dropdown-menu slot="dropdown">';
-                        $toggleLayoutHtml .= '<el-dropdown-item command="table"' . ($this->setting['actualLayout'] == 'table' ? ' disabled' : '') . '><i class="el-icon-s-grid" style="font-size: 1.2rem;"></i> 表格布局</el-dropdown-item>';
-                        $toggleLayoutHtml .= '<el-dropdown-item command="card"' . ($this->setting['actualLayout'] == 'card' ? 'disabled' : '') . '><i class="el-icon-menu" style="font-size: 1.2rem;"></i> 卡片布局</el-dropdown-item>';
+                        $toggleLayoutHtml .= '<el-dropdown-item command="table"' . ($this->setting['actualLayout'] === 'table' ? ' disabled' : '') . '><i class="el-icon-s-grid" style="font-size: 1.2rem;"></i> 表格布局</el-dropdown-item>';
+                        $toggleLayoutHtml .= '<el-dropdown-item command="card"' . ($this->setting['actualLayout'] === 'card' ? 'disabled' : '') . '><i class="el-icon-menu" style="font-size: 1.2rem;"></i> 卡片布局</el-dropdown-item>';
                         $toggleLayoutHtml .= '</el-dropdown-menu>';
                         $toggleLayoutHtml .= '</el-dropdown>';
                     }
@@ -494,25 +494,25 @@
                             echo '</el-form-item>';
                         }
 
-                        if ($this->setting['layout'] == 'toggle') {
+                        if ($this->setting['layout'] === 'toggle') {
                             echo $toggleLayoutHtml;
                         }
 
                         echo '</div>';
                         echo '</el-col></el-row>';
                     } else {
-                        if ($this->setting['layout'] == 'toggle') {
+                        if ($this->setting['layout'] === 'toggle') {
                             echo '<div>';
                             echo $toggleLayoutHtml;
                             echo '</div><div style="clear: right"></div>';
                         }
                     }
 
-                    if ($tabHtml && ($tabPosition == 'beforeGrid')) {
+                    if ($tabHtml && ($tabPosition === 'beforeGrid')) {
                         echo $tabHtml;
                     }
 
-                    if ($this->setting['actualLayout'] == 'table') {
+                    if ($this->setting['actualLayout'] === 'table') {
                         ?>
                         <div class="be-p-relative">
                         <el-table<?php
@@ -560,7 +560,7 @@
                                     foreach ($this->setting['table']['operation']['items'] as $item) {
                                         $driverClass = null;
                                         if (isset($item['driver'])) {
-                                            if (substr($item['driver'], 0, 13) == 'OperationItem') {
+                                            if (substr($item['driver'], 0, 13) === 'OperationItem') {
                                                 $driverClass = '\\Be\\AdminPlugin\\Operation\\Item\\' . $item['driver'];
                                             } else {
                                                 $driverClass = $item['driver'];
@@ -587,7 +587,7 @@
                                 $opHtml .= $operationDriver->getHtmlAfter();
                                 $opPosition = $operationDriver->position;
 
-                                if ($opPosition == 'left') {
+                                if ($opPosition === 'left') {
                                     echo $opHtml;
                                 }
                             }
@@ -596,7 +596,7 @@
 
                                 $driverClass = null;
                                 if (isset($item['driver'])) {
-                                    if (substr($item['driver'], 0, 9) == 'TableItem') {
+                                    if (substr($item['driver'], 0, 9) === 'TableItem') {
                                         $driverClass = '\\Be\\AdminPlugin\\Table\\Item\\' . $item['driver'];
                                     } else {
                                         $driverClass = $item['driver'];
@@ -619,7 +619,7 @@
                                 }
                             }
 
-                            if (isset($this->setting['table']['operation']) && $opPosition == 'right') {
+                            if (isset($this->setting['table']['operation']) && $opPosition === 'right') {
                                 echo $opHtml;
                             }
                             ?>
@@ -628,7 +628,7 @@
 
                         if (isset($this->setting['table']['items'][0]) ) {
                             $tableItem0 = $this->setting['table']['items'][0];
-                            if (isset($tableItem0['driver']) && $tableItem0['driver'] == \Be\AdminPlugin\Table\Item\TableItemSelection::class) {
+                            if (isset($tableItem0['driver']) && $tableItem0['driver'] === \Be\AdminPlugin\Table\Item\TableItemSelection::class) {
                                 if (count($tableToolbarItems) > 0) {
                                     echo '<div class="table-action" v-if="selectedRows.length > 0" :style="{left: tableActionLeft, height: tableActionHeight}">';
                                     echo '<span class="be-px-100">已选中 {{selectedRows.length}} 项</span>';
@@ -642,7 +642,7 @@
 
                         echo '</div>';
 
-                    } elseif ($this->setting['actualLayout'] == 'card') {
+                    } elseif ($this->setting['actualLayout'] === 'card') {
                         ?>
                         <div v-loading='loading'>
                             <el-row<?php
@@ -670,7 +670,7 @@
                                     ?> v-for="(item, itemKey) in gridData" style="margin-bottom: 15px;">
                                     <el-card<?php
                                         foreach ($this->setting['card']['ui'] as $k => $v) {
-                                            if ($k == 'row' || $k == 'col') {
+                                            if ($k === 'row' || $k === 'col') {
                                                 continue;
                                             }
 
@@ -686,7 +686,7 @@
                                             echo $this->setting['card']['template'];
                                         } else {
                                             if (isset($this->setting['card']['image'])) {
-                                                if ($this->setting['card']['image']['position'] == 'left') {
+                                                if ($this->setting['card']['image']['position'] === 'left') {
                                                     echo '<div class="card-lr">';
                                                     echo '<div class="card-lr-image">';
                                                     echo '<a :href="item.'. $this->setting['card']['image']['name'] .'" target="_blank">';
@@ -695,7 +695,7 @@
                                                     echo '</div>';
                                                     echo '<div class="card-lr-space"></div>';
                                                     echo '<div class="card-lr-right">';
-                                                } elseif ($this->setting['card']['image']['position'] == 'top') {
+                                                } elseif ($this->setting['card']['image']['position'] === 'top') {
                                                     echo '<div class="card-tb-image">';
                                                     echo '<a :href="item.'. $this->setting['card']['image']['name'] .'" target="_blank">';
                                                     echo '<img :src="item.'. $this->setting['card']['image']['name'] .'">';
@@ -706,9 +706,9 @@
 
                                             $cssClass = null;
                                             if (isset($this->setting['card']['image'])) {
-                                                if ($this->setting['card']['image']['position'] == 'left') {
+                                                if ($this->setting['card']['image']['position'] === 'left') {
                                                     $cssClass = 'card-lr-right-items';
-                                                } elseif ($this->setting['card']['image']['position'] == 'top') {
+                                                } elseif ($this->setting['card']['image']['position'] === 'top') {
                                                     $cssClass = 'card-tb-items';
                                                 }
                                             } else {
@@ -719,7 +719,7 @@
                                                 foreach ($this->setting['card']['items'] as $item) {
                                                     $driverClass = null;
                                                     if (isset($item['driver'])) {
-                                                        if (substr($item['driver'], 0, 9) == 'CardItem') {
+                                                        if (substr($item['driver'], 0, 9) === 'CardItem') {
                                                             $driverClass = '\\Be\\AdminPlugin\\Card\\Item\\' . $item['driver'];
                                                         } else {
                                                             $driverClass = $item['driver'];
@@ -749,9 +749,9 @@
                                                 if (isset($this->setting['card']['operation']['items'])) {
                                                     $cssClass = null;
                                                     if (isset($this->setting['card']['image'])) {
-                                                        if ($this->setting['card']['image']['position'] == 'left') {
+                                                        if ($this->setting['card']['image']['position'] === 'left') {
                                                             $cssClass = 'card-lr-right-operations';
-                                                        } elseif ($this->setting['card']['image']['position'] == 'top') {
+                                                        } elseif ($this->setting['card']['image']['position'] === 'top') {
                                                             $cssClass = 'card-tb-operations';
                                                         }
                                                     } else {
@@ -764,7 +764,7 @@
                                                     foreach ($this->setting['card']['operation']['items'] as $item) {
                                                         $driverClass = null;
                                                         if (isset($item['driver'])) {
-                                                            if (substr($item['driver'], 0, 13) == 'OperationItem') {
+                                                            if (substr($item['driver'], 0, 13) === 'OperationItem') {
                                                                 $driverClass = '\\Be\\AdminPlugin\\Operation\\Item\\' . $item['driver'];
                                                             } else {
                                                                 $driverClass = $item['driver'];
@@ -793,7 +793,7 @@
                                             }
 
                                             if (isset($this->setting['card']['image'])) {
-                                                if ($this->setting['card']['image']['position'] == 'left') {
+                                                if ($this->setting['card']['image']['position'] === 'left') {
                                                     echo '</div>';
                                                     echo '</div>';
                                                 }
@@ -897,7 +897,7 @@
     $tableActionLeft = '50px';
     if (isset($this->setting['table']['items'][0]) ) {
         $tableItem0 = $this->setting['table']['items'][0];
-        if (isset($tableItem0['driver']) && $tableItem0['driver'] == \Be\AdminPlugin\Table\Item\TableItemSelection::class) {
+        if (isset($tableItem0['driver']) && $tableItem0['driver'] === \Be\AdminPlugin\Table\Item\TableItemSelection::class) {
             if (count($tableToolbarItems) > 0) {
                 if (isset($tableItem0['width'])) {
                     $tableActionLeft = $tableItem0['width'] . 'px';
@@ -909,7 +909,7 @@
 
     <script>
 
-        <?php if ($this->setting['actualLayout'] == 'card') { ?>
+        <?php if ($this->setting['actualLayout'] === 'card') { ?>
         Vue.component('card-operation', {
             template: '<slot :row="data"></slot>',
             props: {
@@ -927,7 +927,7 @@
 
         var pageSizeKey = "<?php echo $this->url; ?>:pageSize";
         var pageSize = localStorage.getItem(pageSizeKey);
-        if (pageSize == undefined || isNaN(pageSize)) {
+        if (pageSize === undefined || isNaN(pageSize)) {
             pageSize = <?php echo $this->pageSize; ?>;
         } else {
             pageSize = Number(pageSize);
@@ -976,7 +976,7 @@
                     }).then(function (response) {
                         _this.loading = false;
                         //console.log(response);
-                        if (response.status == 200) {
+                        if (response.status === 200) {
                             var responseData = response.data;
                             if (responseData.success) {
                                 _this.total = parseInt(responseData.data.total);
@@ -1014,7 +1014,7 @@
                         page: _this.page,
                         pageSize: _this.pageSize
                     }).then(function (response) {
-                        if (response.status == 200) {
+                        if (response.status === 200) {
                             var responseData = response.data;
                             if (responseData.success) {
                                 _this.total = parseInt(responseData.data.total);
@@ -1037,16 +1037,16 @@
                     this.loadGridData();
                 },
                 sort: function (option) {
-                    if (option.order == "ascending" || option.order == "descending") {
+                    if (option.order === "ascending" || option.order === "descending") {
                         this.orderBy = option.prop;
-                        this.orderByDir = option.order == "ascending" ? "ASC" : "DESC";
+                        this.orderByDir = option.order === "ascending" ? "ASC" : "DESC";
                     } else {
                         this.orderBy = "";
                         this.orderByDir = "";
                     }
                     this.loadGridData();
                 },
-                <?php if ($this->setting['layout'] == 'toggle') { ?>
+                <?php if ($this->setting['layout'] === 'toggle') { ?>
                 toggleLayout: function (command) {
                     var url = "<?php echo $this->setting['form']['action']; ?>";
                     if (url.indexOf("layout=") >=0 ) {
@@ -1105,10 +1105,10 @@
                     return this.action(option, data);
                 },
                 action: function (option, data) {
-                    if (option.target == 'ajax') {
+                    if (option.target === 'ajax') {
                         var _this = this;
                         this.$http.post(option.url, data).then(function (response) {
-                            if (response.status == 200) {
+                            if (response.status === 200) {
                                 if (response.data.success) {
                                     _this.$message({
                                         showClose: true,
@@ -1196,12 +1196,12 @@
                     <?php
                     if (count($tableToolbarItems) > 0) {
                         foreach ($tableToolbarItems as $item) {
-                            if (isset($item['params']['task']) && $item['params']['task'] == 'fieldEdit' && isset($item['params']['postData']['field']) && isset($item['params']['postData']['value'])) {
+                            if (isset($item['params']['task']) && $item['params']['task'] === 'fieldEdit' && isset($item['params']['postData']['field']) && isset($item['params']['postData']['value'])) {
                                 ?>
                                 if (this.selectedRows.length > 0) {
                                     toolbarEnable = true;
                                     for (var x in this.selectedRows) {
-                                        if (this.selectedRows[x].<?php echo $item['params']['postData']['field']; ?> == "<?php echo $item['params']['postData']['value']; ?>") {
+                                        if (this.selectedRows[x].<?php echo $item['params']['postData']['field']; ?> === "<?php echo $item['params']['postData']['value']; ?>") {
                                             toolbarEnable = false;
                                         }
                                     }
@@ -1216,7 +1216,7 @@
                     ?>
                 },
                 resize: function () {
-                    <?php if ($this->setting['actualLayout'] == 'table') { ?>
+                    <?php if ($this->setting['actualLayout'] === 'table') { ?>
                     let offset = this.total > 0 ? 55 : 15;
                     let rect = this.$refs.tableRef.$el.getBoundingClientRect();
                     //console.log(rect);
@@ -1260,7 +1260,7 @@
                 ?>
             },
             updated: function () {
-                <?php if ($this->setting['actualLayout'] == 'table') { ?>
+                <?php if ($this->setting['actualLayout'] === 'table') { ?>
                 let _this = this;
                 this.$nextTick(function () {
                     _this.$refs.tableRef.doLayout();
@@ -1306,7 +1306,7 @@
         });
 
         function reload() {
-            vueGrid.loadGridata();
+            vueGrid.reloadGridData();
         }
 
         function close() {
@@ -1325,17 +1325,17 @@
         function closeAndReload() {
             vueGrid.drawer.visible = false;
             vueGrid.dialog.visible = false;
-            vueGrid.loadGridata();
+            vueGrid.reloadGridData();
         }
 
         function closeDrawerAndReload() {
             vueGrid.drawer.visible = false;
-            vueGrid.loadGridata();
+            vueGrid.reloadGridData();
         }
 
         function closeDialogAndReload() {
             vueGrid.dialog.visible = false;
-            vueGrid.loadGridata();
+            vueGrid.reloadGridData();
         }
 
     </script>

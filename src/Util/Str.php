@@ -69,7 +69,7 @@ class Str
             '_a', '_b', '_c', '_d', '_e', '_f', '_g', '_h', '_i', '_j', '_k', '_l', '_m', '_n', '_o', '_p', '_q', '_r', '_s', '_t', '_u', '_v', '_w', '_x', '_y', '_z'
         ], $str);
 
-        if ($trimFirst && substr($str, 0, 1) == '_') $str = substr($str, 1);
+        if ($trimFirst && substr($str, 0, 1) === '_') $str = substr($str, 1);
 
         return $str;
     }
@@ -90,7 +90,7 @@ class Str
             '-a', '-b', '-c', '-d', '-e', '-f', '-g', '-h', '-i', '-j', '-k', '-l', '-m', '-n', '-o', '-p', '-q', '-r', '-s', '-t', '-u', '-v', '-w', '-x', '-y', '-z'
         ], $str);
 
-        if ($trimFirst && substr($str, 0, 1) == '-') $str = substr($str, 1);
+        if ($trimFirst && substr($str, 0, 1) === '-') $str = substr($str, 1);
 
         return $str;
     }
@@ -129,7 +129,7 @@ class Str
         while ($pos < $strLen) // 系统采用了utf-8编码， 逐字符判断
         {
             $char = ord($string[$pos]);
-            if ($char == 9 || $char == 10 || (32 <= $char && $char <= 126)) {
+            if ($char === 9 || $char === 10 || (32 <= $char && $char <= 126)) {
                 $lastLen = 1;
                 $pos++;
                 $len++;
@@ -149,7 +149,7 @@ class Str
                 $lastLen = 5;
                 $pos += 5;
                 $len += 2;
-            } elseif ($char == 252 || $char == 253) {
+            } elseif ($char === 252 || $char === 253) {
                 $lastLen = 6;
                 $pos += 6;
                 $len += 2;

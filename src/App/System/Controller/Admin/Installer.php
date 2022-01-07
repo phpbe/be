@@ -58,7 +58,7 @@ class Installer
             $value['isCacheDirWritable'] = is_writable($runtime->getCachePath()) ? 1 : 0;
             $value['isDataDirWritable'] = is_writable($runtime->getDataPath()) ? 1 : 0;
             $value['isUploadDirWritable'] = is_writable($runtime->getUploadPath()) ? 1 : 0;
-            $isAllPassed = array_sum($value) == count($value);
+            $isAllPassed = array_sum($value) === count($value);
 
             $response->set('steps', $this->steps);
             $response->set('step', 0);
@@ -261,7 +261,7 @@ class Installer
                                 }).then(function (response) {
                                     _this.testDbLoading = false;
                                     //console.log(response);
-                                    if (response.status == 200) {
+                                    if (response.status === 200) {
                                         var responseData = response.data;
                                         if (responseData.success) {
                                             var message;
@@ -300,7 +300,7 @@ class Installer
                                     }).then(function (response) {
                                         _this.loading = false;
                                         console.log(response);
-                                        if (response.status == 200) {
+                                        if (response.status === 200) {
                                             var responseData = response.data;
                                             if (responseData.success) {
                                                 window.location.href=responseData.redirectUrl;
@@ -484,7 +484,7 @@ class Installer
                                     }).then(function (response) {
                                         _this.loading = false;
                                         console.log(response);
-                                        if (response.status == 200) {
+                                        if (response.status === 200) {
                                             var responseData = response.data;
                                             if (responseData.success) {
                                                 window.location.href=responseData.redirectUrl;
@@ -528,7 +528,7 @@ class Installer
         $config->installable = false;
         ConfigHelper::update('App.System.System', $config);
 
-        if (Be::getRuntime()->getMode() == 'Swoole') {
+        if (Be::getRuntime()->getMode() === 'Swoole') {
             Be::getRuntime()->reload();
         }
     }

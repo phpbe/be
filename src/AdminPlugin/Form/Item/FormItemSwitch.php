@@ -66,7 +66,7 @@ class FormItemSwitch extends FormItem
 
         $html .= '<el-switch';
         foreach ($this->ui as $k => $v) {
-            if ($k == 'form-item') {
+            if ($k === 'form-item') {
                 continue;
             }
 

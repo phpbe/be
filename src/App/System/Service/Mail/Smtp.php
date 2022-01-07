@@ -14,7 +14,7 @@ class Smtp extends Driver
     public function __construct()
     {
         $config = Be::getConfig('App.System.Mail');
-        if ($config->driver != 'Smtp') {
+        if ($config->driver !== 'Smtp') {
             throw new ServiceException('实例化SMTP邮件发送器时报错：邮件配置参数非SMTP！');
         }
 
@@ -28,7 +28,7 @@ class Smtp extends Driver
         $this->driver->CharSet = 'utf-8';
         $this->driver->Encoding = 'base64';
 
-        if ($config->smtp == 1) {
+        if ($config->smtp === 1) {
             $this->driver->isSMTP();
             $this->driver->Host = $config->smtp['host']; // smtp 主机地址
             $this->driver->Port = $config->smtp['port']; // smtp 主机端口
@@ -37,7 +37,7 @@ class Smtp extends Driver
             $this->driver->Password = $config->smtp['password']; // smtp 用户密码
             $this->driver->Timeout = $config->smtp['timeout']; // smtp 超时时间 秒
 
-            if ($config->smtp['secure'] != '0') $this->driver->SMTPSecure = $config->smtp['secure']; // smtp 加密 'ssl' 或 'tls'
+            if ($config->smtp['secure'] !== '0') $this->driver->SMTPSecure = $config->smtp['secure']; // smtp 加密 'ssl' 或 'tls'
         }
     }
 

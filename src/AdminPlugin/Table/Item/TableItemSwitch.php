@@ -63,7 +63,7 @@ class TableItemSwitch extends TableItem
         $html .= '<template slot-scope="scope">';
         $html .= '<el-switch';
         foreach ($this->ui as $k => $v) {
-            if ($k == 'table-column') {
+            if ($k === 'table-column') {
                 continue;
             }
 

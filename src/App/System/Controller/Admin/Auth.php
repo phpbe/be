@@ -22,13 +22,13 @@ class Auth
         $actionName = $request->getActionName();
 
         $my = Be::getAdminUser();
-        if ($my->id == 0) {
+        if ($my->id === 0) {
             Be::getService('App.System.Admin.AdminUser')->rememberMe();
             $my = Be::getAdminUser();
         }
 
         // 校验权限
-        if ($my->id == 0) {
+        if ($my->id === 0) {
 
             $redirect = null;
             if ($request->isAjax()) {
@@ -54,7 +54,7 @@ class Auth
             // 已登录用户，IP锁定功能校验
             $configAdminUser = Be::getConfig('App.System.AdminUser');
             if ($configAdminUser->ipLock) {
-                if ($my->this_login_ip != $request->getIp()) {
+                if ($my->this_login_ip !== $request->getIp()) {
                     Be::getService('App.System.Admin.AdminUser')->logout();
 
                     $redirectUrl = beAdminUrl('System.AdminUserLogin.login');

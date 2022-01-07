@@ -258,7 +258,7 @@ class AdminRole extends Auth
                             'driver' => DetailItemTree::class,
                             'ui' => [
                                 'form-item' => [
-                                    'v-show' => 'formData.permission == \'-1\'',
+                                    'v-show' => 'formData.permission === \'-1\'',
                                 ]
                             ],
                             'value' => function ($row) {
@@ -316,7 +316,7 @@ class AdminRole extends Auth
                             'driver' => FormItemTree::class,
                             'ui' => [
                                 'form-item' => [
-                                    'v-show' => 'formData.permission == \'-1\'',
+                                    'v-show' => 'formData.permission === \'-1\'',
                                 ]
                             ],
                             'treeData' => function () {
@@ -337,12 +337,12 @@ class AdminRole extends Auth
                 ],
                 'events' => [
                     'before' => function (Tuple &$tuple) {
-                        if ($tuple->permission == '-1') {
+                        if ($tuple->permission === '-1') {
                             if (is_array($tuple->permission_keys)) {
                                 $permissionKeys = [];
                                 foreach ($tuple->permission_keys as $permission) {
                                     $arr = explode('.', $permission);
-                                    if (count($arr) == 3) {
+                                    if (count($arr) === 3) {
                                         $permissionKeys[] = $permission;
                                     }
                                 }
@@ -386,7 +386,7 @@ class AdminRole extends Auth
                             'driver' => FormItemTree::class,
                             'ui' => [
                                 'form-item' => [
-                                    'v-show' => 'formData.permission == \'-1\'',
+                                    'v-show' => 'formData.permission === \'-1\'',
                                 ]
                             ],
                             'value' => function ($row) {
@@ -409,12 +409,12 @@ class AdminRole extends Auth
                 ],
                 'events' => [
                     'before' => function (Tuple &$tuple) {
-                        if ($tuple->permission == '-1') {
+                        if ($tuple->permission === '-1') {
                             if (is_array($tuple->permission_keys)) {
                                 $permissionKeys = [];
                                 foreach ($tuple->permission_keys as $permission) {
                                     $arr = explode('.', $permission);
-                                    if (count($arr) == 3) {
+                                    if (count($arr) === 3) {
                                         $permissionKeys[] = $permission;
                                     }
                                 }
@@ -438,8 +438,8 @@ class AdminRole extends Auth
                         $request = Be::getRequest();
                         $postData = $request->json();
                         $field = $postData['postData']['field'];
-                        if ($field == 'is_enable') {
-                            if ($tuple->is_enable == 0) {
+                        if ($field === 'is_enable') {
+                            if ($tuple->is_enable === 0) {
                                 $n = Be::getTable('system_admin_user')
                                     ->where('admin_role_id', $tuple->id)
                                     ->where('is_delete', 0)
@@ -448,8 +448,8 @@ class AdminRole extends Auth
                                     throw new AdminPluginException('有' . $n . '个用户属于该角色（' . $tuple->name . '），不能禁用！');
                                 }
                             }
-                        } elseif ($field == 'is_delete') {
-                            if ($tuple->is_delete == 1) {
+                        } elseif ($field === 'is_delete') {
+                            if ($tuple->is_delete === 1) {
                                 $n = Be::getTable('system_admin_user')
                                     ->where('admin_role_id', $tuple->id)
                                     ->where('is_delete', 0)

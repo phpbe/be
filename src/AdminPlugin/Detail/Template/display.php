@@ -38,7 +38,7 @@
 
                     $driverClass = null;
                     if (isset($item['driver'])) {
-                        if (substr($item['driver'], 0, 10) == 'DetailItem') {
+                        if (substr($item['driver'], 0, 10) === 'DetailItem') {
                             $driverClass = '\\Be\\AdminPlugin\\Detail\\Item\\' . $item['driver'];
                         } else {
                             $driverClass = $item['driver'];
@@ -90,7 +90,7 @@
                 <?php
                 if (isset($this->setting['form']['actions']) && count($this->setting['form']['actions']) > 0) {
                     foreach ($this->setting['form']['actions'] as $key => $item) {
-                        if ($key == 'cancel') {
+                        if ($key === 'cancel') {
                             if ($item) {
                                 if ($item === true) {
                                     echo '<el-button type="primary" @click="cancel">关闭</el-button> ';
@@ -106,7 +106,7 @@
 
                         $driverClass = null;
                         if (isset($item['driver'])) {
-                            if (substr($item['driver'], 0, 10) == 'FormAction') {
+                            if (substr($item['driver'], 0, 10) === 'FormAction') {
                                 $driverClass = '\\Be\\AdminPlugin\\Form\\Action\\' . $item['driver'];
                             } else {
                                 $driverClass = $item['driver'];
@@ -172,7 +172,7 @@
             },
             methods: {
                 cancel: function () {
-                    if(self.frameElement != null && (self.frameElement.tagName == "IFRAME" || self.frameElement.tagName == "iframe")){
+                    if(self.frameElement !== null && (self.frameElement.tagName === "IFRAME" || self.frameElement.tagName === "iframe")){
                         parent.close();
                     } else {
                         window.close();
@@ -184,10 +184,10 @@
                     return this.action(option, data);
                 },
                 action: function (option, data) {
-                    if (option.target == 'ajax') {
+                    if (option.target === 'ajax') {
                         var _this = this;
                         this.$http.post(option.url, data).then(function (response) {
-                            if (response.status == 200) {
+                            if (response.status === 200) {
                                 if (response.data.success) {
                                     _this.$message.success(response.data.message);
                                 } else {

@@ -134,7 +134,7 @@
                     ?>
                     <div class="be-col-auto be-pr-30 north-links lh-60">
                         <img src="<?php
-                        if ($my->avatar == '') {
+                        if ($my->avatar === '') {
                             echo \Be\Be::getProperty('App.System')->getUrl().'/Template/Admin/AdminUser/images/avatar.png';
                         } else {
                             echo \Be\Be::getRequest()->getUploadUrl().'/System/AdminUser/Avatar/'.$my->avatar;
@@ -206,7 +206,7 @@
                         $appName = \Be\Be::getRequest()->getAppName();
                         foreach ($adminMenuTree as $menu) {
 
-                            if ($menu->id == $appName) {
+                            if ($menu->id === $appName) {
                                 // 有子菜单
                                 if ($menu->subMenu) {
                                     foreach ($menu->subMenu as $subMenu) {
@@ -278,7 +278,7 @@
             el: '#app-west',
             data : {
                 activeIndex: "west-menu-<?php echo $menuKey; ?>",
-                collapse: this.$cookies.isKey(sWestMenuCollapseKey) && this.$cookies.get(sWestMenuCollapseKey) == '1'
+                collapse: this.$cookies.isKey(sWestMenuCollapseKey) && this.$cookies.get(sWestMenuCollapseKey) === '1'
             },
             methods: {
                 toggleMenu: function (e) {

@@ -77,7 +77,7 @@ class FormItemDatePickerMonthRange extends FormItem
 
         $html .= '<el-date-picker';
         foreach ($this->ui as $k => $v) {
-            if ($k == 'form-item') {
+            if ($k === 'form-item') {
                 continue;
             }
 

@@ -71,8 +71,8 @@ class AdminRole
         $code .= 'class AdminRole' . $roleId . ' extends \\Be\\AdminUser\\AdminRole' . "\n";
         $code .= '{' . "\n";
         $code .= '  public $name = \'' . $tuple->name . '\';' . "\n";
-        $code .= '  public $permission = \'' . $tuple->permission . '\';' . "\n";
-        if ($tuple->permission == -1) {
+        $code .= '  public $permission = ' . $tuple->permission . ';' . "\n";
+        if ($tuple->permission === -1) {
             $code .= '  public $permissionKeys = [\'' . implode('\',\'', explode(',', $tuple->permission_keys)) . '\'];' . "\n";
         } else {
             $code .= '  public $permissionKeys = [];' . "\n";

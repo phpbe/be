@@ -128,7 +128,7 @@ class Cache
             $count = 0;
             $handle = opendir($path);
             while (($file = readdir($handle)) !== false) {
-                if ($file != '.' && $file != '..') {
+                if ($file !== '.' && $file !== '..') {
                     $count += $this->getFileCount($path . '/' . $file);
                 }
             }
@@ -147,7 +147,7 @@ class Cache
             $size = 0;
             $handle = opendir($path);
             while (($file = readdir($handle)) !== false) {
-                if ($file != '.' && $file != '..') {
+                if ($file !== '.' && $file !== '..') {
                     $size += $this->getFileSize($path . '/' . $file);
                 }
             }

@@ -29,7 +29,7 @@ abstract class ThemeEditor
                     'label' => $themProperty->getLabel(),
                     'path' => $themProperty->getPath(),
                     'previewImageUrl' => $themProperty->getPreviewImageUrl(),
-                    'is_default' => $name == $configTheme->default ? '1' : '0',
+                    'is_default' => $name === $configTheme->default ? '1' : '0',
                 ];
             }
 
@@ -63,12 +63,12 @@ abstract class ThemeEditor
         $vendorPath = $rootPath . '/vendor';
         $dirs = scandir($vendorPath);
         foreach ($dirs as $dir) {
-            if ($dir != '..' && $dir != '.') {
+            if ($dir !== '..' && $dir !== '.') {
                 $subVendorPath = $vendorPath . '/' . $dir;
                 if (is_dir($subVendorPath)) {
                     $subDirs = scandir($subVendorPath);
                     foreach ($subDirs as $subDir) {
-                        if ($subDir != '..' && $subDir != '.') {
+                        if ($subDir !== '..' && $subDir !== '.') {
 
                             // 应用中包含的 AdminTheme 或 Theme
                             $themePath = $subVendorPath . '/' . $subDir . '/'.$this->themeType;
@@ -130,7 +130,7 @@ abstract class ThemeEditor
         if (file_exists($themePath)) {
             $dirs = scandir($themePath);
             foreach ($dirs as $dir) {
-                if ($dir != '..' && $dir != '.') {
+                if ($dir !== '..' && $dir !== '.') {
                     $subVendorPath = $themePath . '/' . $dir;
                     if (is_dir($subVendorPath)) {
                         $propertyPath = $subVendorPath . '/Property.php';
@@ -198,7 +198,7 @@ abstract class ThemeEditor
     {
         $configTheme = Be::getConfig('App.System.'.$this->themeType);
 
-        if ($configTheme->default != $themeName) {
+        if ($configTheme->default !== $themeName) {
             $configTheme->default = $themeName;
             ConfigHelper::update('App.System.'.$this->themeType, $configTheme);
         }
@@ -230,7 +230,7 @@ abstract class ThemeEditor
     {
         $themeProperty = Be::getProperty($this->themeType . '.' . $themeName);
         if (!isset($themeProperty->pages[$pageName])) {
-            throw new ServiceException(($this->themeType == 'Theme' ? '主题' : '后台主题') . ' ' . $themeName . ' 属性 pages 配置项中' . $pageName . ' 缺失！');
+            throw new ServiceException(($this->themeType === 'Theme' ? '主题' : '后台主题') . ' ' . $themeName . ' 属性 pages 配置项中' . $pageName . ' 缺失！');
         }
         $themePageProperty = $themeProperty->pages[$pageName];
 
@@ -245,7 +245,7 @@ abstract class ThemeEditor
 
         $desktopPreviewUrl = null;
         $mobilePreviewUrl = null;
-        if ($this->themeType == 'Theme') {
+        if ($this->themeType === 'Theme') {
             $desktopPreviewUrl = beUrl($themePageProperty['url'][0], array_merge($params, ['_theme' => $themeName]));
             $mobilePreviewUrl = beUrl($themePageProperty['url'][0], array_merge($params, ['_theme' => $themeName, '_isMobile' => 1]));
         } else {
@@ -322,7 +322,7 @@ abstract class ThemeEditor
             $items = [];
             $itemDriverClasses = [];
             foreach ($configItems as $configItem) {
-                if ($configItem['name'] == 'items') {
+                if ($configItem['name'] === 'items') {
                     $items = $configItem;
 
                     if (isset($configItem['items'])) {
@@ -449,7 +449,7 @@ abstract class ThemeEditor
 
                 $driverClass = null;
                 if (isset($configItem['driver'])) {
-                    if (substr($configItem['driver'], 0, 8) == 'FormItem') {
+                    if (substr($configItem['driver'], 0, 8) === 'FormItem') {
                         $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $configItem['driver'];
                     } else {
                         $driverClass = $configItem['driver'];
@@ -487,7 +487,7 @@ abstract class ThemeEditor
             $configItemDrivers = [];
             foreach ($configAnnotation['configItems'] as $configItem) {
 
-                if ($configItem['name'] == 'items') {
+                if ($configItem['name'] === 'items') {
                     continue;
                 }
 
@@ -497,7 +497,7 @@ abstract class ThemeEditor
 
                 $driverClass = null;
                 if (isset($configItem['driver'])) {
-                    if (substr($configItem['driver'], 0, 8) == 'FormItem') {
+                    if (substr($configItem['driver'], 0, 8) === 'FormItem') {
                         $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $configItem['driver'];
                     } else {
                         $driverClass = $configItem['driver'];
@@ -534,12 +534,12 @@ abstract class ThemeEditor
 
         if ($configAnnotation['configItems']) {
             foreach ($configAnnotation['configItems'] as $configItem) {
-                if ($configItem['name'] == 'items') {
+                if ($configItem['name'] === 'items') {
 
                     if (isset($configItem['items'])) {
                         foreach ($configItem['items'] as $driverClass) {
                             $name = substr($driverClass, strrpos($driverClass, '\\') + 1);
-                            if ($name == $itemData['name']) {
+                            if ($name === $itemData['name']) {
                                 $configItemAnnotation = $this->getConfigAnnotation($driverClass, true);
 
                                 if ($configItemAnnotation['configItems']) {
@@ -552,7 +552,7 @@ abstract class ThemeEditor
 
                                         $driverClass = null;
                                         if (isset($configItemItem['driver'])) {
-                                            if (substr($configItemItem['driver'], 0, 8) == 'FormItem') {
+                                            if (substr($configItemItem['driver'], 0, 8) === 'FormItem') {
                                                 $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $configItemItem['driver'];
                                             } else {
                                                 $driverClass = $configItemItem['driver'];
@@ -665,7 +665,7 @@ abstract class ThemeEditor
      */
     public function enableSectionType($themeName, $pageName, $sectionType)
     {
-        if ($pageName == 'Home') {
+        if ($pageName === 'Home') {
             throw new ServiceException('首页不支持此功能！');
         }
 
@@ -692,7 +692,7 @@ abstract class ThemeEditor
      */
     public function disableSectionType($themeName, $pageName, $sectionType)
     {
-        if ($pageName == 'Home') {
+        if ($pageName === 'Home') {
             throw new ServiceException('首页不支持此功能！');
         }
 
@@ -926,7 +926,7 @@ abstract class ThemeEditor
         foreach ($properties as $property) {
             $itemName = $property->getName();
 
-            if ($itemName == 'items') {
+            if ($itemName === 'items') {
                 continue;
             }
 
@@ -957,7 +957,7 @@ abstract class ThemeEditor
 
                 $driverClass = null;
                 if (isset($configItem['driver'])) {
-                    if (substr($configItem['driver'], 0, 8) == 'FormItem') {
+                    if (substr($configItem['driver'], 0, 8) === 'FormItem') {
                         $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $configItem['driver'];
                     } else {
                         $driverClass = $configItem['driver'];

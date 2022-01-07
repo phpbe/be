@@ -66,7 +66,7 @@ class FormItemInputNumberFloat extends FormItem
 
         $html .= '<el-input-number ';
         foreach ($this->ui as $k => $v) {
-            if ($k == 'form-item') {
+            if ($k === 'form-item') {
                 continue;
             }
 

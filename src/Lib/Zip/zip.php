@@ -83,7 +83,7 @@ class Zip
         }
 
         for ($i = 0, $n = count($this->info); $i < $n; $i++) {
-            if (substr($this->info[$i]['name'], -1, 1) != '/' && substr($this->info[$i]['name'], -1, 1) != '\\') {
+            if (substr($this->info[$i]['name'], -1, 1) !== '/' && substr($this->info[$i]['name'], -1, 1) !== '\\') {
                 $buffer = $this->getFileData($i);
                 $extractToPath = $dir . '/' . str_replace('\\', '/', $this->info[$i]['name']);
                 $extractToDir = dirname($extractToPath);
@@ -103,13 +103,13 @@ class Zip
      */
     public function getFileData($key)
     {
-        if ($this->info[$key]['_method'] == 0x8) {
+        if ($this->info[$key]['_method'] === 0x8) {
             if (extension_loaded('zlib')) {
                 return @ gzinflate(substr($this->data, $this->info[$key]['_dataStart'], $this->info[$key]['csize']));
             }
-        } elseif ($this->info[$key]['_method'] == 0x0) {
+        } elseif ($this->info[$key]['_method'] === 0x0) {
             return substr($this->data, $this->info[$key]['_dataStart'], $this->info[$key]['csize']);
-        } elseif ($this->info[$key]['_method'] == 0x12) {
+        } elseif ($this->info[$key]['_method'] === 0x12) {
             if (extension_loaded('bz2')) {
                 return bzdecompress(substr($this->data, $this->info[$key]['_dataStart'], $this->info[$key]['csize']));
             }

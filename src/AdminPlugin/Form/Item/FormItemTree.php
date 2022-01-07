@@ -84,7 +84,7 @@ class FormItemTree extends FormItem
 
         $html .= '<el-tree';
         foreach ($this->ui as $k => $v) {
-            if ($k == 'form-item') {
+            if ($k === 'form-item') {
                 continue;
             }
 

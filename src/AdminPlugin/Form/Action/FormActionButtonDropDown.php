@@ -72,7 +72,7 @@ class FormActionButtonDropDown extends FormAction
 
         $html .= '<el-button';
         foreach ($this->ui as $k => $v) {
-            if ($k == 'dropdown' || $k == 'dropdown-menu') {
+            if ($k === 'dropdown' || $k === 'dropdown-menu') {
                 continue;
             }
             if ($v === null) {
@@ -125,9 +125,9 @@ class FormActionButtonDropDown extends FormAction
                 'postData' => $menu->postData,
             ];
 
-            if ($menu->target == 'dialog') {
+            if ($menu->target === 'dialog') {
                 $m['dialog'] = $menu->dialog;
-            } elseif ($menu->target == 'drawer') {
+            } elseif ($menu->target === 'drawer') {
                 $m['drawer'] = $menu->drawer;
             }
 

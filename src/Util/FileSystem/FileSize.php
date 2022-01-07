@@ -15,19 +15,19 @@ class FileSize
     {
         $fileSizeString = null;
         if ($fileSizeInt > 1099511627776) {
-            if ($fileSizeInt % 1099511627776 == 0) {
+            if ($fileSizeInt % 1099511627776 === 0) {
                 $fileSizeString = ($fileSizeInt >> 40) . ' TB';
             } else {
                 $fileSizeString = number_format($fileSizeInt / 1099511627776, 2, '.', '') . ' TB';
             }
         } elseif ($fileSizeInt > 1073741824) {
-            if ($fileSizeInt % 1073741824 == 0) {
+            if ($fileSizeInt % 1073741824 === 0) {
                 $fileSizeString = ($fileSizeInt >> 30) . ' GB';
             } else {
                 $fileSizeString = number_format($fileSizeInt / 1073741824, 2, '.', '') . ' GB';
             }
         } elseif ($fileSizeInt > 1048576) {
-            if ($fileSizeInt % 1048576 == 0) {
+            if ($fileSizeInt % 1048576 === 0) {
                 $fileSizeString = ($fileSizeInt >> 20) . ' MB';
             } else {
                 $fileSizeString = number_format($fileSizeInt / 1048576, 2, '.', '') . ' MB';

@@ -21,8 +21,8 @@ abstract class AdminRole
      */
     public function hasPermission($app, $controller, $action)
     {
-        if ($this->permission == 1) return true;
-        if ($this->permission == 0) return false;
+        if ($this->permission === 1) return true;
+        if ($this->permission === 0) return false;
         $adminPermission = \Be\Be::getAdminPermission();
         $perMissionKey = $adminPermission->getPermissionKey($app, $controller, $action);
         return in_array($perMissionKey, $this->permissionKeys);

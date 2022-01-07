@@ -110,17 +110,17 @@ class Common extends Driver
 
     public function isGet()
     {
-        return 'GET' == $_SERVER['REQUEST_METHOD'];
+        return 'GET' === $_SERVER['REQUEST_METHOD'];
     }
 
     public function isPost()
     {
-        return 'POST' == $_SERVER['REQUEST_METHOD'];
+        return 'POST' === $_SERVER['REQUEST_METHOD'];
     }
 
     public function isAjax()
     {
-        return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && 'XMLHTTPREQUEST' == strtoupper($_SERVER['HTTP_X_REQUESTED_WITH'])) ||
+        return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && 'XMLHTTPREQUEST' === strtoupper($_SERVER['HTTP_X_REQUESTED_WITH'])) ||
             (isset($_SERVER['HTTP_ACCEPT']) && strpos(strtolower($_SERVER['HTTP_ACCEPT']), 'application/json') !== false);
     }
 
@@ -165,7 +165,7 @@ class Common extends Driver
             if (isset($_SERVER['HTTP_SCHEME']) && ($_SERVER['HTTP_SCHEME'] === 'http' || $_SERVER['HTTP_SCHEME'] === 'https')) {
                 $url = $_SERVER['HTTP_SCHEME'] . '://';
             } else {
-                $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https://' : 'http://';
+                $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
             }
 
             $url .= isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ($_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT']));
@@ -214,7 +214,7 @@ class Common extends Driver
             if (isset($_SERVER['HTTP_SCHEME']) && ($_SERVER['HTTP_SCHEME'] === 'http' || $_SERVER['HTTP_SCHEME'] === 'https')) {
                 $rootUrl = $_SERVER['HTTP_SCHEME'] . '://';
             } else {
-                $rootUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https://' : 'http://';
+                $rootUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
             }
 
             $rootUrl .= isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ($_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT']));

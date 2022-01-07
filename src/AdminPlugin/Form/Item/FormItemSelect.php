@@ -68,7 +68,7 @@ class FormItemSelect extends FormItem
 
         $html .= '<el-select';
         foreach ($this->ui as $k => $v) {
-            if ($k == 'form-item') {
+            if ($k === 'form-item') {
                 continue;
             }
 

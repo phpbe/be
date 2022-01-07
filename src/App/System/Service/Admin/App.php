@@ -16,7 +16,7 @@ class App
      */
     public function getApps()
     {
-        if ($this->apps == null) {
+        if ($this->apps === null) {
             $configApp = Be::getConfig('App.System.App');
             $apps = [];
             foreach( $configApp->names as $appName) {
@@ -106,7 +106,7 @@ class App
         $names = $configApp->names;
         $newNames = [];
         foreach ($names as $name) {
-            if ($name == $appName) {
+            if ($name === $appName) {
                 continue;
             }
             $newNames[] = $name;

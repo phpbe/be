@@ -14,7 +14,7 @@ $view = $this->get('view');
 $sort = $this->get('sort');
 
 $filterImage = $this->get('filterImage');
-$filterName = ($filterImage == 1?'图片':'文件');
+$filterName = ($filterImage === 1?'图片':'文件');
 
 $srcId = $this->get('srcId');
 
@@ -82,12 +82,12 @@ $configWatermark = Be::getConfig('App.System.Watermark');
                 <div class="controls"><input type="file" name="file" /></div>
             </div>
             <div class="control-group">
-                <div class="controls"><label class="checkbox"><input type="checkbox" name="watermark" value="1"<?php echo $configWatermark->watermark == '0'?'':' checked="checked"'; ?> />图片添加水印</label></div>
+                <div class="controls"><label class="checkbox"><input type="checkbox" name="watermark" value="1"<?php echo $configWatermark->watermark === '0'?'':' checked="checked"'; ?> />图片添加水印</label></div>
             </div>
             <div class="control-group">
                 <div style="font-size:12px; color:#999; text-align:center;">
                     允许上传的<?php echo $filterName; ?>类型：
-                    <?php echo $filterImage == 1?implode('，',$configSystem->allowUploadImageTypes):implode('，',$configSystem->allowUploadFileTypes); ?>
+                    <?php echo $filterImage === 1?implode('，',$configSystem->allowUploadImageTypes):implode('，',$configSystem->allowUploadFileTypes); ?>
                 </div>
             </div>
         </div>
@@ -133,11 +133,11 @@ $configWatermark = Be::getConfig('App.System.Watermark');
                         </button>
                     </div>
                     <div class="span6 text-right">
-                        <button class="btn <?php if ($view == 'thumbnail') echo " btn-inverse"; ?>" onclick="javascript:setView('thumbnail');" title="缩略图">
-                            <i class="icon-th <?php if ($view == 'thumbnail') echo "icon-white"; ?>"></i>
+                        <button class="btn <?php if ($view === 'thumbnail') echo " btn-inverse"; ?>" onclick="javascript:setView('thumbnail');" title="缩略图">
+                            <i class="icon-th <?php if ($view === 'thumbnail') echo "icon-white"; ?>"></i>
                         </button>
-                        <button class="btn <?php if ($view == 'list') echo " btn-inverse"; ?>" onclick="javascript:setView('list');" title="详细">
-                            <i class="icon-align-justify <?php if ($view == 'list') echo "icon-white"; ?>"></i>
+                        <button class="btn <?php if ($view === 'list') echo " btn-inverse"; ?>" onclick="javascript:setView('list');" title="详细">
+                            <i class="icon-align-justify <?php if ($view === 'list') echo "icon-white"; ?>"></i>
                         </button>
                     </div>
                 </div>
@@ -155,7 +155,7 @@ $configWatermark = Be::getConfig('App.System.Watermark');
         if (count($paths)) {
             $tmpPath = '';
             foreach ($paths as $p) {
-                if ($p == '') continue;
+                if ($p === '') continue;
 
                 $tmpPath .= '/'.$p;
                 ?>
@@ -171,14 +171,14 @@ $configWatermark = Be::getConfig('App.System.Watermark');
 $configSystem = Be::getConfig('App.System.System');
 
 // 缩图图方式显示
-if ($view == 'thumbnail') {
+if ($view === 'thumbnail') {
 ?>
 <div class="view-thumbnail">
 <div class="files">
 <ul>
 <?php
 foreach ($files as $file) {
-    if ($file['type'] == 'dir') {
+    if ($file['type'] === 'dir') {
         ?>
         <li>
             <div class="file">
@@ -199,7 +199,7 @@ foreach ($files as $file) {
         ?>
         <li>
             <div class="file">
-                <a href="javascript:;" onclick="javascript:<?php echo $filterImage == 1?'selectImage':'selectFile'; ?>('<?php echo $file['name']; ?>', '<?php echo beAdminUrl().'/'.DATA.$path.'/'.$file['name']; ?>', '<?php echo $srcId ?>');">
+                <a href="javascript:;" onclick="javascript:<?php echo $filterImage === 1?'selectImage':'selectFile'; ?>('<?php echo $file['name']; ?>', '<?php echo beAdminUrl().'/'.DATA.$path.'/'.$file['name']; ?>', '<?php echo $srcId ?>');">
                     <?php
                     if (in_array($file['type'], $configSystem->allowUploadImageTypes)) {
                         ?>
@@ -236,7 +236,7 @@ foreach ($files as $file) {
 </div>
 <?php
 }
-elseif ($view == 'list') // 详细列表方式
+elseif ($view === 'list') // 详细列表方式
 {
 ?>
 <div class="view-list">
@@ -254,7 +254,7 @@ elseif ($view == 'list') // 详细列表方式
 <tbody>
 <?php
 foreach ($files as $file) {
-    if ($file['type'] == 'dir') {
+    if ($file['type'] === 'dir') {
         ?>
         <tr class="warning">
             <td>
@@ -286,7 +286,7 @@ foreach ($files as $file) {
         <tr>
             <td>
                 <div class="file-icon">
-                <a href="javascript:;" onclick="javascript:<?php echo $filterImage == 1?'selectImage':'selectFile'; ?>('<?php echo $file['name']; ?>', '<?php echo beAdminUrl().'/'.DATA.$path.'/'.$file['name']; ?>', '<?php echo $srcId ?>');">
+                <a href="javascript:;" onclick="javascript:<?php echo $filterImage === 1?'selectImage':'selectFile'; ?>('<?php echo $file['name']; ?>', '<?php echo beAdminUrl().'/'.DATA.$path.'/'.$file['name']; ?>', '<?php echo $srcId ?>');">
                     <?php
                     if (in_array($file['type'], $configSystem->allowUploadImageTypes)) {
                         ?>
@@ -307,7 +307,7 @@ foreach ($files as $file) {
                 </div>
             </td>
             <td>
-                <a href="javascript:;" onclick="javascript:<?php echo $filterImage == 1?'selectImage':'selectFile'; ?>('<?php echo $file['name']; ?>', '<?php echo beAdminUrl().'/'.DATA.$path.'/'.$file['name']; ?>', '<?php echo $srcId ?>');">
+                <a href="javascript:;" onclick="javascript:<?php echo $filterImage === 1?'selectImage':'selectFile'; ?>('<?php echo $file['name']; ?>', '<?php echo beAdminUrl().'/'.DATA.$path.'/'.$file['name']; ?>', '<?php echo $srcId ?>');">
                     <?php echo $file['name']; ?>
                 </a>
             </td>

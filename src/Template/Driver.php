@@ -26,7 +26,7 @@ class Driver
 
     public function getColor(int $index = 0)
     {
-        if ($index == 0) return $this->colors[0];
+        if ($index === 0) return $this->colors[0];
         if (array_key_exists($index, $this->colors)) return $this->colors[$index];
 
         $libCss = Be::getLib('Css');

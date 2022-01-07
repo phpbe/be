@@ -171,7 +171,7 @@ class Oracle extends Driver
      */
     public function insertMany($table, $objects)
     {
-        if (!is_array($objects) || count($objects) == 0) return [];
+        if (!is_array($objects) || count($objects) === 0) return [];
 
         $ids = [];
         reset($objects);
@@ -364,7 +364,7 @@ class Oracle extends Driver
      */
     public function quickInsertMany($table, $objects)
     {
-        if (!is_array($objects) || count($objects) == 0) return 0;
+        if (!is_array($objects) || count($objects) === 0) return 0;
 
         reset($objects);
         $object = current($objects);
@@ -505,7 +505,7 @@ class Oracle extends Driver
                     $isPrimaryKey = true;
                 }
             } else {
-                if ($key == $primaryKey) {
+                if ($key === $primaryKey) {
                     $isPrimaryKey = true;
                 }
             }
@@ -544,7 +544,7 @@ class Oracle extends Driver
                         }
                         break;
                     default:
-                        if ($value == '') {
+                        if ($value === '') {
                             $where[] = $this->connection->quoteKey($key) . ' IS NULL';
                         } else {
                             $where[] = $this->connection->quoteKey($key) . '=?';
@@ -598,7 +598,7 @@ class Oracle extends Driver
             }
         }
 
-        if ($where == null) {
+        if ($where === null) {
             throw new DbException('更新数据时未指定条件！');
         }
 
@@ -661,7 +661,7 @@ class Oracle extends Driver
                     $isPrimaryKey = true;
                 }
             } else {
-                if ($key == $primaryKey) {
+                if ($key === $primaryKey) {
                     $isPrimaryKey = true;
                 }
             }
@@ -697,7 +697,7 @@ class Oracle extends Driver
                         }
                         break;
                     default:
-                        if ($value == '') {
+                        if ($value === '') {
                             $where[] = $this->connection->quoteKey($key) . ' IS NULL';
                         } else {
                             $where[] = $this->connection->quoteKey($key) . '=' . $this->connection->quoteValue($value);
@@ -745,7 +745,7 @@ class Oracle extends Driver
 
         }
 
-        if ($where == null) {
+        if ($where === null) {
             throw new DbException('更新数据时未指定条件！');
         }
 
@@ -974,7 +974,7 @@ class Oracle extends Driver
                 'scale' => $field->DATA_SCALE,
                 'comment' => $field->COMMENTS,
                 'default' => $field->DATA_DEFAULT,
-                'nullAble' => $field->NULLABLE == 'Y' ? true : false,
+                'nullAble' => $field->NULLABLE === 'Y' ? true : false,
             ];
 
         }
@@ -1041,7 +1041,7 @@ class Oracle extends Driver
         $count = count($primaryKeys);
         if ($count > 1) {
             $primaryKey = $primaryKeys;
-        } elseif ($count == 1) {
+        } elseif ($count === 1) {
             $primaryKey = $primaryKeys[0];
         }
 

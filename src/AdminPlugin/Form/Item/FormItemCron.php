@@ -142,7 +142,7 @@ class FormItemCron extends FormItem
         $parsed = false;
         if ($this->value) {
             $parts = explode(' ', $this->value);
-            if (count($parts) == 5) {
+            if (count($parts) === 5) {
                 $parsed = true;
 
                 if (strpos($parts[0], ',') !== false) {
@@ -154,12 +154,12 @@ class FormItemCron extends FormItem
                         }
                     }
 
-                    if (count($arr) == 60) {
+                    if (count($arr) === 60) {
                         $minute = ['*'];
                     } else {
                         $minute = $arr;
                     }
-                } elseif ($parts[0] == '*' || is_numeric($parts[0])) {
+                } elseif ($parts[0] === '*' || is_numeric($parts[0])) {
                     $minute = [$parts[0]];
                 } else {
                     $parsed = false;
@@ -174,12 +174,12 @@ class FormItemCron extends FormItem
                         }
                     }
 
-                    if (count($arr) == 24) {
+                    if (count($arr) === 24) {
                         $hour = ['*'];
                     } else {
                         $hour = $arr;
                     }
-                } elseif ($parts[1] == '*' || is_numeric($parts[1])) {
+                } elseif ($parts[1] === '*' || is_numeric($parts[1])) {
                     $hour = [$parts[1]];
                 } else {
                     $parsed = false;
@@ -194,12 +194,12 @@ class FormItemCron extends FormItem
                         }
                     }
 
-                    if (count($arr) == 31) {
+                    if (count($arr) === 31) {
                         $day = ['*'];
                     } else {
                         $day = $arr;
                     }
-                } elseif ($parts[2] == '*' || is_numeric($parts[2])) {
+                } elseif ($parts[2] === '*' || is_numeric($parts[2])) {
                     $day = [$parts[2]];
                 } else {
                     $parsed = false;
@@ -214,12 +214,12 @@ class FormItemCron extends FormItem
                         }
                     }
 
-                    if (count($arr) == 12) {
+                    if (count($arr) === 12) {
                         $month = ['*'];
                     } else {
                         $month = $arr;
                     }
-                } elseif ($parts[3] == '*' || is_numeric($parts[3])) {
+                } elseif ($parts[3] === '*' || is_numeric($parts[3])) {
                     $month = [$parts[3]];
                 } else {
                     $parsed = false;
@@ -234,30 +234,30 @@ class FormItemCron extends FormItem
                         }
                     }
 
-                    if (count($arr) == 7) {
+                    if (count($arr) === 7) {
                         $week = ['*'];
                     } else {
                         $week = $arr;
                     }
-                } elseif ($parts[4] == '*' || is_numeric($parts[4])) {
+                } elseif ($parts[4] === '*' || is_numeric($parts[4])) {
                     $week = [$parts[4]];
                 } else {
                     $parsed = false;
                 }
 
-                if ($parts[3] != "*") {
+                if ($parts[3] !== "*") {
                     $per = "per_year";
                 } else {
-                    if ($parts[4] != "*") {
+                    if ($parts[4] !== "*") {
                         $per = "per_week";
                     } else {
-                        if ($parts[2] != "*") {
+                        if ($parts[2] !== "*") {
                             $per = "per_month";
                         } else {
-                            if ($parts[1] != "*") {
+                            if ($parts[1] !== "*") {
                                 $per = "per_day";
                             } else {
-                                if ($parts[0] != "*") {
+                                if ($parts[0] !== "*") {
                                     $per = "per_hour";
                                 } else {
                                     $per = "per_minute";
@@ -297,9 +297,9 @@ class FormItemCron extends FormItem
     {
         return [
             'formItemCron_changeType' => 'function(name) {
-                if (this.formItems[name].type == "none") {
+                if (this.formItems[name].type === "none") {
                     this.formData[name] = "";
-                } else if (this.formItems[name].type == "picker") {
+                } else if (this.formItems[name].type === "picker") {
                     this.formItems[name].month = ["*"];
                     this.formItems[name].week = ["*"];
                     this.formItems[name].day = ["*"];
@@ -307,16 +307,16 @@ class FormItemCron extends FormItem
                     this.formItems[name].minute = ["0"];
                     var per = "per_day";
                     var parts = this.formItems[name].custom.split(" ");
-                    if (parts.length == 5) {
+                    if (parts.length === 5) {
                         var arr, len, i, abort;
-                        if (parts[0].indexOf(",") != -1) {
+                        if (parts[0].indexOf(",") !== -1) {
                             arr = parts[0].split(",");
                             arr = this.formItemCron_arrayUnion(arr);
                             len = arr.length;
                             if (len > 1) {
                                 abort = false;
                                 for(i=0; i<len; i++) {
-                                    if (arr[i] == "*") {
+                                    if (arr[i] === "*") {
                                         this.formItems[name].minute = ["*"];
                                         abort = true;
                                         break;
@@ -324,26 +324,26 @@ class FormItemCron extends FormItem
                                 }
             
                                 if (!abort) {
-                                    if (len == 60) {
+                                    if (len === 60) {
                                         this.formItems[name].minute = ["*"];
                                     } else {
                                         this.formItems[name].minute = arr;
                                     }
                                 }
                             }
-                        } else if (parts[0] == "*" || !isNaN(parts[0])) {
+                        } else if (parts[0] === "*" || !isNaN(parts[0])) {
                             this.formItems[name].minute = [parts[0]];
                         }
 
                         
-                        if (parts[1].indexOf(",") != -1) {
+                        if (parts[1].indexOf(",") !== -1) {
                             arr = parts[1].split(",");
                             arr = this.formItemCron_arrayUnion(arr);
                             len = arr.length;
                             if (len > 1) {
                                 abort = false;
                                 for(i=0; i<len; i++) {
-                                    if (arr[i] == "*") {
+                                    if (arr[i] === "*") {
                                         this.formItems[name].hour = ["*"];
                                         abort = true;
                                         break;
@@ -351,25 +351,25 @@ class FormItemCron extends FormItem
                                 }
             
                                 if (!abort) {
-                                    if (len == 24) {
+                                    if (len === 24) {
                                         this.formItems[name].hour = ["*"];
                                     } else {
                                         this.formItems[name].hour = arr;
                                     }
                                 }
                             }
-                        } else if (parts[1] == "*" || !isNaN(parts[1])) {
+                        } else if (parts[1] === "*" || !isNaN(parts[1])) {
                             this.formItems[name].hour = [parts[1]];
                         }
                         
-                        if (parts[2].indexOf(",") != -1) {
+                        if (parts[2].indexOf(",") !== -1) {
                             arr = parts[2].split(",");
                             arr = this.formItemCron_arrayUnion(arr);
                             len = arr.length;
                             if (len > 1) {
                                 abort = false;
                                 for(i=0; i<len; i++) {
-                                    if (arr[i] == "*") {
+                                    if (arr[i] === "*") {
                                         this.formItems[name].day = ["*"];
                                         abort = true;
                                         break;
@@ -377,25 +377,25 @@ class FormItemCron extends FormItem
                                 }
             
                                 if (!abort) {
-                                    if (len == 32) {
+                                    if (len === 32) {
                                         this.formItems[name].day = ["*"];
                                     } else {
                                         this.formItems[name].day = arr;
                                     }
                                 }
                             }
-                        } else if (parts[2] == "*" || !isNaN(parts[2])) {
+                        } else if (parts[2] === "*" || !isNaN(parts[2])) {
                             this.formItems[name].day = [parts[2]];
                         }
                         
-                        if (parts[3].indexOf(",") != -1) {
+                        if (parts[3].indexOf(",") !== -1) {
                             arr = parts[3].split(",");
                             arr = this.formItemCron_arrayUnion(arr);
                             len = arr.length;
                             if (len > 1) {
                                 abort = false;
                                 for(i=0; i<len; i++) {
-                                    if (arr[i] == "*") {
+                                    if (arr[i] === "*") {
                                         this.formItems[name].month = ["*"];
                                         abort = true;
                                         break;
@@ -403,25 +403,25 @@ class FormItemCron extends FormItem
                                 }
             
                                 if (!abort) {
-                                    if (len == 12) {
+                                    if (len === 12) {
                                         this.formItems[name].month = ["*"];
                                     } else {
                                         this.formItems[name].month = arr;
                                     }
                                 }
                             }
-                        } else if (parts[3] == "*" || !isNaN(parts[3])) {
+                        } else if (parts[3] === "*" || !isNaN(parts[3])) {
                             this.formItems[name].month = [parts[3]];
                         }
                                                 
-                        if (parts[4].indexOf(",") != -1) {
+                        if (parts[4].indexOf(",") !== -1) {
                             arr = parts[4].split(",");
                             arr = this.formItemCron_arrayUnion(arr);
                             len = arr.length;
                             if (len > 1) {
                                 abort = false;
                                 for(i=0; i<len; i++) {
-                                    if (arr[i] == "*") {
+                                    if (arr[i] === "*") {
                                         this.formItems[name].month = ["*"];
                                         abort = true;
                                         break;
@@ -429,30 +429,30 @@ class FormItemCron extends FormItem
                                 }
             
                                 if (!abort) {
-                                    if (len == 7) {
+                                    if (len === 7) {
                                         this.formItems[name].week = ["*"];
                                     } else {
                                         this.formItems[name].week = arr;
                                     }
                                 }
                             }
-                        } else if (parts[4] == "*" || !isNaN(parts[4])) {
+                        } else if (parts[4] === "*" || !isNaN(parts[4])) {
                             this.formItems[name].week = [parts[4]];
                         }
                         
-                        if (parts[3] != "*") {
+                        if (parts[3] !== "*") {
                             per = "per_year";
                         } else {
-                            if (parts[4] != "*") {
+                            if (parts[4] !== "*") {
                                 per = "per_week";
                             } else {
-                                if (parts[2] != "*") {
+                                if (parts[2] !== "*") {
                                     per = "per_month";
                                 } else {
-                                    if (parts[1] != "*") {
+                                    if (parts[1] !== "*") {
                                         per = "per_day";
                                     } else {
-                                        if (parts[0] != "*") {
+                                        if (parts[0] !== "*") {
                                             per = "per_hour";
                                         } else {
                                             per = "per_minute";
@@ -471,117 +471,117 @@ class FormItemCron extends FormItem
                         + " " + this.formItemCron_sort(this.formItems[name].week).join(",");
     
                     this.formItems[name].custom = this.formData[name];
-                } else if (this.formItems[name].type == "custom") {
+                } else if (this.formItems[name].type === "custom") {
                     this.formData[name] = this.formItems[name].custom;
                 }
             }',
             'formItemCron_pickerChange' => 'function(name) {
-                if (this.formItems[name].per == "per_minute") {
+                if (this.formItems[name].per === "per_minute") {
                     this.formItems[name].month = ["*"];
                     this.formItems[name].week = ["*"];
                     this.formItems[name].day = ["*"];
                     this.formItems[name].hour = ["*"];
                     this.formItems[name].minute = ["*"];
-                } else if (this.formItems[name].per == "per_hour") {
+                } else if (this.formItems[name].per === "per_hour") {
                     this.formItems[name].month = ["*"];
                     this.formItems[name].week = ["*"];
                     this.formItems[name].day = ["*"];
                     this.formItems[name].hour = ["*"];
-                } else if (this.formItems[name].per == "per_day") {
+                } else if (this.formItems[name].per === "per_day") {
                     this.formItems[name].month = ["*"];
                     this.formItems[name].week = ["*"];
                     this.formItems[name].day = ["*"];
-                } else if (this.formItems[name].per == "per_month") {
+                } else if (this.formItems[name].per === "per_month") {
                     this.formItems[name].week = ["*"];
-                } else if (this.formItems[name].per == "per_week") {
+                } else if (this.formItems[name].per === "per_week") {
                     this.formItems[name].month = ["*"];
                     this.formItems[name].day = ["*"];
-                } else if (this.formItems[name].per == "per_year") {
+                } else if (this.formItems[name].per === "per_year") {
                     this.formItems[name].week = ["*"];
                 }
                 
                 len = this.formItems[name].minute.length;
                 if (len > 1) {
-                    if (this.formItems[name].minute[len-1] == "*") {
+                    if (this.formItems[name].minute[len-1] === "*") {
                         this.formItems[name].minute = ["*"];
                     } else {
-                        if (this.formItems[name].minute[0] == "*") {
+                        if (this.formItems[name].minute[0] === "*") {
                             this.formItems[name].minute.splice(0, 1);
                         }
                         
-                        if (this.formItems[name].minute.length == 60) {
+                        if (this.formItems[name].minute.length === 60) {
                             this.formItems[name].minute = ["*"];
                         }
                     }
-                } else if (len == 0) {
+                } else if (len === 0) {
                     this.formItems[name].minute = ["*"];
                 }
                 
                 len = this.formItems[name].hour.length;
                 if (len > 1) {
-                    if (this.formItems[name].hour[len-1] == "*") {
+                    if (this.formItems[name].hour[len-1] === "*") {
                         this.formItems[name].hour = ["*"];
                     } else {
-                        if (this.formItems[name].hour[0] == "*") {
+                        if (this.formItems[name].hour[0] === "*") {
                             this.formItems[name].hour.splice(0, 1);
                         }
                         
-                        if (this.formItems[name].hour.length == 24) {
+                        if (this.formItems[name].hour.length === 24) {
                             this.formItems[name].hour = ["*"];
                         }
                     }
-                } else if (len == 0) {
+                } else if (len === 0) {
                     this.formItems[name].hour = ["*"];
                 }
                 
                 len = this.formItems[name].day.length;
                 if (len > 1) {
-                    if (this.formItems[name].day[len-1] == "*") {
+                    if (this.formItems[name].day[len-1] === "*") {
                         this.formItems[name].day = ["*"];
                     } else {
-                        if (this.formItems[name].day[0] == "*") {
+                        if (this.formItems[name].day[0] === "*") {
                             this.formItems[name].day.splice(0, 1);
                         }
                         
-                        if (this.formItems[name].day.length == 31) {
+                        if (this.formItems[name].day.length === 31) {
                             this.formItems[name].day = ["*"];
                         }
                     }
-                } else if (len == 0) {
+                } else if (len === 0) {
                     this.formItems[name].day = ["*"];
                 }
 
                 var len = this.formItems[name].month.length;
                 if (len > 1) {
-                    if (this.formItems[name].month[len-1] == "*") {
+                    if (this.formItems[name].month[len-1] === "*") {
                         this.formItems[name].month = ["*"];
                     } else {
-                        if (this.formItems[name].month[0] == "*") {
+                        if (this.formItems[name].month[0] === "*") {
                             this.formItems[name].month.splice(0, 1);
                         }
                         
-                        if (this.formItems[name].month.length == 12) {
+                        if (this.formItems[name].month.length === 12) {
                             this.formItems[name].month = ["*"];
                         }
                     }
-                } else if (len == 0) {
+                } else if (len === 0) {
                     this.formItems[name].month = ["*"];
                 }
                 
                 len = this.formItems[name].week.length;
                 if (len > 1) {
-                    if (this.formItems[name].week[len-1] == "*") {
+                    if (this.formItems[name].week[len-1] === "*") {
                         this.formItems[name].week = ["*"];
                     } else {
-                        if (this.formItems[name].week[0] == "*") {
+                        if (this.formItems[name].week[0] === "*") {
                             this.formItems[name].week.splice(0, 1);
                         }
                         
-                        if (this.formItems[name].week.length == 7) {
+                        if (this.formItems[name].week.length === 7) {
                             this.formItems[name].week = ["*"];
                         }
                     }
-                } else if (len == 0) {
+                } else if (len === 0) {
                     this.formItems[name].week = ["*"];
                 }
                 
@@ -601,7 +601,7 @@ class FormItemCron extends FormItem
             'formItemCron_arrayUnion' => 'function(arr) {
                 for (var i=0; i<arr.length; i++) {
                     for (var j=i+1; j<arr.length; j++) {
-                        if (arr[i] == arr[j]) {
+                        if (arr[i] === arr[j]) {
                             arr.splice(j, 1);
                             j--;
                         }

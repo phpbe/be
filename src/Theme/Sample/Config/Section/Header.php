@@ -23,7 +23,7 @@ class Header
     /**
      * @BeConfigItem("Logo文字",
      *     driver="FormItemInput",
-     *     ui="return ['form-item' => ['v-show' => 'formData.logoType == \'text\'']];"
+     *     ui="return ['form-item' => ['v-show' => 'formData.logoType === \'text\'']];"
      * )
      */
     public $logoText = 'Beyond Exception';
@@ -33,7 +33,7 @@ class Header
      *     driver="FormItemImage",
      *     path = "/Theme/Sample/Section/Header/logo/",
      *     filename = "logo-{random}",
-     *     ui="return ['form-item' => ['v-show' => 'formData.logoType == \'image\'']];"
+     *     ui="return ['form-item' => ['v-show' => 'formData.logoType === \'image\'']];"
      * )
      */
     public $logoImage = '';
@@ -41,7 +41,7 @@ class Header
     /**
      * @BeConfigItem("Logo图像最大宽度",
      *     driver="FormItemInputNumberInt",
-     *     ui="return ['form-item' => ['v-show' => 'formData.logoType == \'image\'']];"
+     *     ui="return ['form-item' => ['v-show' => 'formData.logoType === \'image\'']];"
      * )
      */
     public $logoImageMaxWidth = '0';
@@ -49,7 +49,7 @@ class Header
     /**
      * @BeConfigItem("Logo图像最大高度",
      *     driver="FormItemInputNumberInt",
-     *     ui="return ['form-item' => ['v-show' => 'formData.logoType == \'image\'']];"
+     *     ui="return ['form-item' => ['v-show' => 'formData.logoType === \'image\'']];"
      * )
      */
     public $logoImageMaxHeight = '0';

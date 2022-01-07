@@ -122,13 +122,13 @@ class Cache extends Auth
                             }
                             
                             var total;
-                            if (column.property == "count") {
+                            if (column.property === "count") {
                                 total = 0;
                                 param.data.forEach(function(x){
                                     total += Number(x.count);
                                 })
                                 summaries[index] = total;
-                            } else if (column.property == "sizeStr") {
+                            } else if (column.property === "sizeStr") {
                                 total = 0;
                                 param.data.forEach(function(x){
                                     total += Number(x.size);

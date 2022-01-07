@@ -124,10 +124,10 @@ class Captcha
      */
     public function init()
     {
-        if ($this->width == 0) {
+        if ($this->width === 0) {
             $this->width = floor($this->fontSize * 1.3) * $this->textLength + 10;
         }
-        if ($this->height == 0) {
+        if ($this->height === 0) {
             $this->height = $this->fontSize * 2;
         }
 
@@ -156,7 +156,7 @@ class Captcha
      */
     public function point($n = 100, $color = null)
     {
-        if ($this->image == null) $this->init();
+        if ($this->image === null) $this->init();
 
         if (!$color) $color = $this->fontColor;
         $color = imagecolorallocate($this->image, $color[0], $color[1], $color[2]);
@@ -174,7 +174,7 @@ class Captcha
      */
     public function line($n = 5, $color = null)
     {
-        if ($this->image == null) $this->init();
+        if ($this->image === null) $this->init();
 
         if (!$color) $color = $this->fontColor;
         $color = imagecolorallocate($this->image, $color[0], $color[1], $color[2]);
@@ -188,7 +188,7 @@ class Captcha
      */
     public function distortion()
     {
-        if ($this->image == null) $this->init();
+        if ($this->image === null) $this->init();
 
         $image = imagecreatetruecolor($this->width, $this->height);
         imagefill($image, 0, 0, imagecolorallocate($this->image, $this->bgColor[0], $this->bgColor[1], $this->bgColor[2]));
@@ -210,7 +210,7 @@ class Captcha
      */
     public function border($n = 1, $color = null)
     {
-        if ($this->image == null) $this->init();
+        if ($this->image === null) $this->init();
 
         if (!$color) $color = $this->fontColor;
         $color = imagecolorallocate($this->image, $color[0], $color[1], $color[2]);
@@ -226,7 +226,7 @@ class Captcha
      */
     public function output($type = 'gif')
     {
-        if ($this->image == null) $this->init();
+        if ($this->image === null) $this->init();
 
         switch ($type) {
             case 'gif':

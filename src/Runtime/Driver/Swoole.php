@@ -131,7 +131,7 @@ class Swoole extends Driver
             \Be\Util\FileSystem\Dir::rm($dir);
         } else {
             $sessionConfig = Be::getConfig('App.System.Session');
-            if ($sessionConfig->driver == 'File') {
+            if ($sessionConfig->driver === 'File') {
                 $dir = Be::getRuntime()->getCachePath() . '/session';
                 \Be\Util\FileSystem\Dir::rm($dir);
             }
@@ -153,7 +153,7 @@ class Swoole extends Driver
                         $swooleResponse->header('Content-Type', self::MIME[$ext], false);
                         //缓存
                         $lastModified = gmdate('D, d M Y H:i:s', filemtime($rootPath . $uri)) . ' GMT';
-                        if (isset($swooleRequest->header['if-modified-since']) && $swooleRequest->header['if-modified-since'] == $lastModified) {
+                        if (isset($swooleRequest->header['if-modified-since']) && $swooleRequest->header['if-modified-since'] === $lastModified) {
                             $swooleResponse->status(304);
                             $swooleResponse->end();
                             return true;
@@ -172,7 +172,7 @@ class Swoole extends Driver
                         return true;
                     }
 
-                    if ($uri == '/favicon.ico') {
+                    if ($uri === '/favicon.ico') {
                         $swooleResponse->end();
                         return true;
                     }
@@ -215,18 +215,18 @@ class Swoole extends Driver
                 if ($configSystem->urlRewrite) {
 
                     // 移除网址后缀 如：.html
-                    if ($configSystem->urlRewrite == '1') {
+                    if ($configSystem->urlRewrite === '1') {
                         $lenSefSuffix = strlen($configSystem->urlSuffix);
-                        if ($lenSefSuffix > 0 && substr($uri, -$lenSefSuffix, $lenSefSuffix) == $configSystem->urlSuffix) {
+                        if ($lenSefSuffix > 0 && substr($uri, -$lenSefSuffix, $lenSefSuffix) === $configSystem->urlSuffix) {
                             $uri = substr($uri, 0, strrpos($uri, $configSystem->urlSuffix));
                         }
                     }
 
                     // 移除结尾的 /
-                    //if (substr($uri, -1, 1) == '/') $uri = substr($uri, 0, -1);
+                    //if (substr($uri, -1, 1) === '/') $uri = substr($uri, 0, -1);
 
                     // 是否后台功能
-                    if (substr($uri, 0, strlen($this->adminAlias) + 1) == '/' . $this->adminAlias) {
+                    if (substr($uri, 0, strlen($this->adminAlias) + 1) === '/' . $this->adminAlias) {
                         $admin = true;
                         $uri = substr($uri, strlen($this->adminAlias) + 1);
                     }
@@ -290,7 +290,7 @@ class Swoole extends Driver
                         $route = $request->request('route', $configSystem->home);
                     }
                     $routes = explode('.', $route);
-                    if (count($routes) == 3) {
+                    if (count($routes) === 3) {
                         $app = $routes[0];
                         $controller = $routes[1];
                         $action = $routes[2];
@@ -325,7 +325,7 @@ class Swoole extends Driver
                      * @var \Be\Exception $t
                      */
                     $code = $t->getCode();
-                    if ($code != 0) {
+                    if ($code !== 0) {
                         $logId = Be::getLog()->emergency($t);
                         $response->set('logId', $logId);
                         $response->set('code', $t->getCode());

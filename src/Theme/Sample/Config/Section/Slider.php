@@ -22,14 +22,14 @@ class Slider
     /**
      * @BeConfigItem("自动播放间隔（毫秒）",
      *     driver = "FormItemInputNumberInt",
-     *     ui="return ['form-item' => ['v-show' => 'formData.autoplay == 1']];")
+     *     ui="return ['form-item' => ['v-show' => 'formData.autoplay === 1']];")
      */
     public $delay = 3000;
 
     /**
      * @BeConfigItem("自动播放速度（毫秒）",
      *     driver = "FormItemInputNumberInt",
-     *     ui="return ['form-item' => ['v-show' => 'formData.autoplay == 1']];")
+     *     ui="return ['form-item' => ['v-show' => 'formData.autoplay === 1']];")
      */
     public $speed = 300;
 
@@ -54,7 +54,7 @@ class Slider
     /**
      * @BeConfigItem("前进后退按钮大小（像素）",
      *     driver = "FormItemInputNumberInt",
-     *     ui="return ['form-item' => ['v-show' => 'formData.navigation == 1']];")
+     *     ui="return ['form-item' => ['v-show' => 'formData.navigation === 1']];")
      */
     public $navigationSize = 30;
 
