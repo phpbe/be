@@ -1265,11 +1265,13 @@
                 this.$nextTick(function () {
                     _this.$refs.tableRef.doLayout();
 
-                    let tableActionLeft = this.$refs.tableRef.$el.getElementsByClassName('el-table-column--selection')[0].clientWidth;
-                    _this.tableActionLeft = tableActionLeft + "px";
+                    if (_this.selectedRows.length > 0) {
+                        let tableActionLeft = _this.$refs.tableRef.$el.getElementsByClassName('el-table-column--selection')[0].clientWidth;
+                        _this.tableActionLeft = tableActionLeft + "px";
 
-                    let tableActionHeight = this.$refs.tableRef.$el.getElementsByClassName('el-table__header')[0].clientHeight;
-                    _this.tableActionHeight = tableActionHeight + "px";
+                        let tableActionHeight = _this.$refs.tableRef.$el.getElementsByClassName('el-table__header')[0].clientHeight;
+                        _this.tableActionHeight = tableActionHeight + "px";
+                    }
                 });
                 <?php
                 }
