@@ -476,7 +476,7 @@ class AdminUser extends Auth
                         [
                             'name' => 'email',
                             'label' => '邮箱',
-                            'disabled' => true,
+                            'unique' => true,
                             'required' => true,
                         ],
                         [
@@ -514,7 +514,10 @@ class AdminUser extends Auth
                         } else {
                             unset($tuple->password);
                         }
-                        $tuple->update_time = date('Y-m-d H:i:s');
+
+                        if ($tuple->hasChange()) {
+                            $tuple->update_time = date('Y-m-d H:i:s');
+                        }
                     }
                 ]
             ],
@@ -549,7 +552,9 @@ class AdminUser extends Auth
                             }
                         }
 
-                        $tuple->update_time = date('Y-m-d H:i:s');
+                        if ($tuple->hasChange()) {
+                            $tuple->update_time = date('Y-m-d H:i:s');
+                        }
                     },
                 ],
             ],

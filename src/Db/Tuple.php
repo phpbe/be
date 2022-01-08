@@ -6,6 +6,8 @@ use Be\Be;
 
 /**
  * 数据库表行记录
+ *
+ * @var mixed
  */
 abstract class Tuple
 {
@@ -33,9 +35,17 @@ abstract class Tuple
     /**
      * 原始数据
      *
-     * @var null | object
+     * @var array
      */
-    protected $_init = null;
+    protected $_init = [];
+
+    /**
+     * 是否有改变
+     *
+     * @var bool
+     */
+    protected $_changed = false;
+
 
     /**
      * 绑定一个数据源， GET, POST, 或者一个数组, 对象
@@ -51,22 +61,23 @@ abstract class Tuple
             throw new TupleException('Tuple:bind - Bind data should be object or array!');
         }
 
-        if (is_object($data)) $data = get_object_vars($data);
-
-        $properties = get_object_vars($this);
+        if (is_object($data)) {
+            $data = get_object_vars($data);
+        }
 
         $tableProperty = Be::getTableProperty($this->_tableName, $this->_dbName);
         $fields = $tableProperty->getFields();
-        foreach ($properties as $key => $value) {
-            if (isset($data[$key])) {
-                $val = $data[$key];
-                $field = $fields[$key];
+        $properties = $this->toArray();
+        foreach ($properties as $fieldName => $value) {
+            $field = $fields[$fieldName];
+            if (isset($data[$fieldName])) {
+                $value = $data[$fieldName];
                 if (in_array($field['type'], ['int', 'tinyint', 'smallint', 'mediumint', 'bigint'])) {
-                    $this->$key = (int) $val;
+                    $this->$fieldName = (int)$value;
                 } elseif (in_array($field['type'], ['float', 'double'])) {
-                    $this->$key = (float) $val;
+                    $this->$fieldName = (float)$value;
                 } else {
-                    $this->$key = $val;
+                    $this->$fieldName = $value;
                 }
             }
         }
@@ -90,7 +101,7 @@ abstract class Tuple
 
         $db = Be::getDb($this->_dbName);
 
-        $tuple = null;
+        $data = null;
         if (is_array($primaryKeyValue)) {
             if (!is_array($this->_primaryKey)) {
                 // 表 $this->_tableName 非复合主键，不支持按复合主键载入数据
@@ -111,7 +122,7 @@ abstract class Tuple
             }
 
             $sql = 'SELECT * FROM ' . $db->quoteKey($this->_tableName) . ' WHERE ' . implode(' AND ', $keys);
-            $tuple = $db->getObject($sql, $values);
+            $data = $db->getArray($sql, $values);
 
         } else {
             if (is_array($this->_primaryKey)) {
@@ -120,10 +131,10 @@ abstract class Tuple
             }
 
             $sql = 'SELECT * FROM ' . $db->quoteKey($this->_tableName) . ' WHERE ' . $db->quoteKey($this->_primaryKey) . '=?';
-            $tuple = $db->getObject($sql, [$primaryKeyValue]);
+            $data = $db->getArray($sql, [$primaryKeyValue]);
         }
 
-        if (!$tuple) {
+        if (!$data) {
             if (is_array($primaryKeyValue)) {
                 // 主键编号（ implode(',', $this->_primaryKey)  ）为  implode(',', $primaryKeyValue)  的记录不存在
                 throw new TupleException('Tuple:load - The record of primary key (' . implode(',', $this->_primaryKey) . '), values ' . implode(',', $primaryKeyValue) . ' doesn\'t exists!');
@@ -133,9 +144,9 @@ abstract class Tuple
             }
         }
 
-        $this->_init = $tuple;
+        $this->_init = $data;
 
-        return $this->bind($tuple);
+        return $this->bind($data);
     }
 
     /**
@@ -150,7 +161,7 @@ abstract class Tuple
     {
         $db = Be::getDb($this->_dbName);
 
-        $tuple = null;
+        $data = null;
         if ($value === null) {
             if (is_array($field)) {
                 $keys = [];
@@ -160,10 +171,10 @@ abstract class Tuple
                     $values[] = $val;
                 }
                 $sql = 'SELECT * FROM ' . $db->quoteKey($this->_tableName) . ' WHERE ' . implode(' AND ', $keys);
-                $tuple = $db->getObject($sql, $values);
+                $data = $db->getArray($sql, $values);
             } else {
                 $sql = 'SELECT * FROM ' . $db->quoteKey($this->_tableName) . ' WHERE ' . $field;
-                $tuple = $db->getObject($sql);
+                $data = $db->getArray($sql);
             }
         } else {
             if (is_array($field)) {
@@ -171,17 +182,17 @@ abstract class Tuple
                 throw new TupleException('Tuple:loadBy - parameter error!');
             }
             $sql = 'SELECT * FROM ' . $db->quoteKey($this->_tableName) . ' WHERE ' . $db->quoteKey($field) . '=?';
-            $tuple = $db->getObject($sql, [$value]);
+            $data = $db->getArray($sql, [$value]);
         }
 
-        if (!$tuple) {
+        if (!$data) {
             // 未找到指定数据记录
             throw new TupleException('Tuple:loadBy - no record found!');
         }
 
-        $this->_init = $tuple;
+        $this->_init = $data;
 
-        return $this->bind($tuple);
+        return $this->bind($data);
     }
 
     /**
@@ -193,13 +204,14 @@ abstract class Tuple
     {
         $db = Be::getDb($this->_dbName);
 
+        // UUID主键如果用户未眶值，默认值为 'uuid()'，自动生成 UUID
         if (is_array($this->_primaryKey)) {
             foreach ($this->_primaryKey as $primaryKey) {
                 if (strtolower($this->$primaryKey) === 'uuid()') {
                     if (function_exists('uuid_create')) {
                         $this->$primaryKey = uuid_create();
                     } else {
-                        $this->$primaryKey = $db->getValue('SELECT UUID()');
+                        $this->$primaryKey = $db->uuid();
                     }
                 }
             }
@@ -209,7 +221,7 @@ abstract class Tuple
                 if (function_exists('uuid_create')) {
                     $this->$primaryKey = uuid_create();
                 } else {
-                    $this->$primaryKey = $db->getValue('SELECT UUID()');
+                    $this->$primaryKey = $db->uuid();
                 }
             }
         }
@@ -226,9 +238,9 @@ abstract class Tuple
         }
 
         if (is_array($this->_primaryKey)) {
-            $db->insert($this->_tableName, $this);
+            $db->insert($this->_tableName, $this->toArray());
             foreach ($this->_primaryKey as $primaryKey) {
-                $field = $tableProperty->getField($primaryKey);
+                $field = $fields[$primaryKey];
                 if (isset($field['autoIncrement']) && $field['autoIncrement']) {
                     $this->$primaryKey = $db->getLastInsertId();
                     break;
@@ -236,12 +248,16 @@ abstract class Tuple
             }
         } else {
             $primaryKey = $this->_primaryKey;
-            $db->insert($this->_tableName, $this);
-            $field = $tableProperty->getField($primaryKey);
+            $db->insert($this->_tableName, $this->toArray());
+            $field = $fields[$primaryKey];
             if (isset($field['autoIncrement']) && $field['autoIncrement']) {
                 $this->$primaryKey = $db->getLastInsertId();
             }
         }
+
+        // 更新 init 数据
+        $this->changed();
+
         return $this;
     }
 
@@ -259,7 +275,6 @@ abstract class Tuple
         }
 
         if (is_array($this->_primaryKey)) {
-            $update = true;
             foreach ($this->_primaryKey as $primaryKey) {
                 if (!$this->$primaryKey) {
                     // 表 $this->_tableName 主键 $primaryKey 未指定值, 不支持按主键更新
@@ -274,7 +289,25 @@ abstract class Tuple
             }
         }
 
-        Be::getDb($this->_dbName)->update($this->_tableName, $this, $this->_primaryKey);
+        if ($this->_changed) {
+            $changedFields = $this->getChanges();
+            if (count($changedFields) > 0) {
+                if (is_array($this->_primaryKey)) {
+                    foreach ($this->_primaryKey as $primaryKey) {
+                        $changedFields[$primaryKey] = $this->$primaryKey;
+                    }
+                } else {
+                    $primaryKey = $this->_primaryKey;
+                    $changedFields[$primaryKey] = $this->$primaryKey;
+                }
+
+                Be::getDb($this->_dbName)->update($this->_tableName, $changedFields, $this->_primaryKey);
+
+                // 更新 init 数据
+                $this->changed();
+            }
+        }
+
         return $this;
     }
 
@@ -303,7 +336,7 @@ abstract class Tuple
                         if (function_exists('uuid_create')) {
                             $this->$primaryKey = uuid_create();
                         } else {
-                            $this->$primaryKey = $db->getValue('SELECT UUID()');
+                            $this->$primaryKey = $db->uuid();
                         }
                         $insert = true;
                         break;
@@ -316,7 +349,7 @@ abstract class Tuple
                         if (function_exists('uuid_create')) {
                             $this->$primaryKey = uuid_create();
                         } else {
-                            $this->$primaryKey = $db->getValue('SELECT UUID()');
+                            $this->$primaryKey = $db->uuid();
                         }
                         $insert = true;
                     }
@@ -339,7 +372,7 @@ abstract class Tuple
                 }
             }
 
-            $db->insert($this->_tableName, $this);
+            $db->insert($this->_tableName, $this->toArray());
 
             if ($this->_primaryKey !== null) {
                 if (is_array($this->_primaryKey)) {
@@ -359,10 +392,142 @@ abstract class Tuple
                 }
             }
         } else {
-            $db->update($this->_tableName, $this, $this->_primaryKey);
+            if ($this->_changed) {
+                $changedFields = $this->getChanges();
+                if (count($changedFields) > 0) {
+                    if (is_array($this->_primaryKey)) {
+                        foreach ($this->_primaryKey as $primaryKey) {
+                            $changedFields[$primaryKey] = $this->$primaryKey;
+                        }
+                    } else {
+                        $primaryKey = $this->_primaryKey;
+                        $changedFields[$primaryKey] = $this->$primaryKey;
+                    }
+
+                    $db->update($this->_tableName, $changedFields, $this->_primaryKey);
+
+                    // 更新 init 数据
+                    $this->changed();
+                }
+            }
         }
 
         return $this;
+    }
+
+    /**
+     * 是否有改动
+     *
+     * @return bool
+     */
+    public function hasChange()
+    {
+        return $this->_changed;
+    }
+
+    /**
+     * 获取改动项
+     *
+     * @return array
+     */
+    public function getChanges()
+    {
+        $changedFields = [];
+        $tableProperty = Be::getTableProperty($this->_tableName, $this->_dbName);
+        $fields = $tableProperty->getFields();
+        $properties = $this->toArray();
+        foreach ($properties as $fieldName => $value) {
+            $field = $fields[$fieldName];
+            $initValue = $this->_init[$fieldName] ?? null;
+            if (in_array($field['type'], ['int', 'tinyint', 'smallint', 'mediumint', 'bigint'])) {
+                if ($initValue !== null) {
+                    $initValue = (int)$initValue;
+                }
+
+                if ($value !== null) {
+                    $value = (int)$value;
+                }
+            } elseif (in_array($field['type'], ['float', 'double'])) {
+                if ($initValue !== null) {
+                    $initValue = (float)$initValue;
+                }
+
+                if ($value !== null) {
+                    $value = (float)$value;
+                }
+            }
+
+            // 有更新
+            if ($initValue !== $value) {
+                $changedFields[$fieldName] = $value;
+            }
+        }
+
+        return $changedFields;
+    }
+
+    /**
+     * 获取改动项明细
+     *
+     * @return array
+     */
+    public function getChangeDetails()
+    {
+        $changedFields = [];
+        $tableProperty = Be::getTableProperty($this->_tableName, $this->_dbName);
+        $fields = $tableProperty->getFields();
+        $properties = $this->toArray();
+        foreach ($properties as $fieldName => $value) {
+            $field = $fields[$fieldName];
+            $initValue = $this->_init[$fieldName] ?? null;
+            if (in_array($field['type'], ['int', 'tinyint', 'smallint', 'mediumint', 'bigint'])) {
+                if ($initValue !== null) {
+                    $initValue = (int)$initValue;
+                }
+
+                if ($value !== null) {
+                    $value = (int)$value;
+                }
+            } elseif (in_array($field['type'], ['float', 'double'])) {
+                if ($initValue !== null) {
+                    $initValue = (float)$initValue;
+                }
+
+                if ($value !== null) {
+                    $value = (float)$value;
+                }
+            }
+
+            // 有更新
+            if ($initValue !== $value) {
+                $changedFields[$fieldName] = ['from' => $initValue, 'to' => $value];
+            }
+        }
+
+        return $changedFields;
+    }
+
+    /**
+     * 是否有改动
+     */
+    protected function changed()
+    {
+        $tableProperty = Be::getTableProperty($this->_tableName, $this->_dbName);
+        $fields = $tableProperty->getFields();
+        $properties = $this->toArray();
+        foreach ($properties as $fieldName => $value) {
+            $field = $fields[$fieldName];
+            if ($value !== null) {
+                if (in_array($field['type'], ['int', 'tinyint', 'smallint', 'mediumint', 'bigint'])) {
+                    $value = (int)$value;
+                } elseif (in_array($field['type'], ['float', 'double'])) {
+                    $value = (float)$value;
+                }
+            }
+            $this->_init[$fieldName] = $value;
+        }
+
+        $this->_changed = false;
     }
 
     /**
@@ -443,7 +608,6 @@ abstract class Tuple
             }
             $sql = 'UPDATE ' . $db->quoteKey($this->_tableName) . ' SET ' . $db->quoteKey($field) . '=' . $db->quoteKey($field) . '+' . $step . ' WHERE ' . implode(' AND ', $keys);
             $db->query($sql, [$values]);
-
         } else {
             $primaryKey = $this->_primaryKey;
             $primaryKeyValue = $this->$primaryKey;
@@ -478,7 +642,6 @@ abstract class Tuple
             }
             $sql = 'UPDATE ' . $db->quoteKey($this->_tableName) . ' SET ' . $db->quoteKey($field) . '=' . $db->quoteKey($field) . '-' . $step . ' WHERE ' . implode(' AND ', $keys);
             $db->query($sql, [$values]);
-
         } else {
             $primaryKey = $this->_primaryKey;
             $primaryKeyValue = $this->$primaryKey;
@@ -526,7 +689,7 @@ abstract class Tuple
     public function toArray()
     {
         $array = get_object_vars($this);
-        unset($array['_dbName'], $array['_tableName'], $array['_primaryKey']);
+        unset($array['_dbName'], $array['_tableName'], $array['_primaryKey'], $array['_init'], $array['_changed']);
 
         return $array;
     }
@@ -539,6 +702,75 @@ abstract class Tuple
     public function toObject()
     {
         return (object)$this->toArray();
+    }
+
+    /**
+     * 赋值
+     *
+     * @param string $fieldName
+     * @param $value
+     */
+    public function __set(string $fieldName, $value)
+    {
+        $tableProperty = Be::getTableProperty($this->_tableName, $this->_dbName);
+        $field = $tableProperty->getField($fieldName);
+
+        $initValue = $this->_init[$fieldName] ?? null;
+        if (in_array($field['type'], ['int', 'tinyint', 'smallint', 'mediumint', 'bigint'])) {
+            if ($initValue !== null) {
+                $initValue = (int)$initValue;
+            }
+
+            if ($value !== null) {
+                $value = (int)$value;
+            }
+        } elseif (in_array($field['type'], ['float', 'double'])) {
+            if ($initValue !== null) {
+                $initValue = (float)$initValue;
+            }
+
+            if ($value !== null) {
+                $value = (float)$value;
+            }
+        }
+
+        // 有更新
+        if ($initValue !== $value) {
+            $this->_changed = true;
+            $this->$fieldName = $value;
+        }
+    }
+
+    /**
+     * 取值
+     *
+     * @param string $fieldName
+     * @return mixed
+     */
+    public function __get(string $fieldName)
+    {
+        return $this->$fieldName;
+    }
+
+    /**
+     * 变量是否存在
+     *
+     * @param string $fieldName
+     * @return mixed
+     */
+    public function __isset(string $fieldName)
+    {
+        return isset($this->$fieldName);
+    }
+
+    /**
+     * unset 变量
+     *
+     * @param string $fieldName
+     */
+    public function __unset(string $fieldName)
+    {
+        unset($this->$fieldName);
     }
 
 }

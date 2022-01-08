@@ -2,6 +2,7 @@
 
 namespace Be\App\System\Controller\Admin;
 
+use Be\AdminPlugin\Detail\Item\DetailItemCode;
 use Be\AdminPlugin\Form\Item\FormItemDatePickerRange;
 use Be\AdminPlugin\Form\Item\FormItemSelect;
 use Be\AdminPlugin\Toolbar\Item\ToolbarItemDropDown;
@@ -200,6 +201,8 @@ class AdminOpLog extends Auth
                         [
                             'name' => 'details',
                             'label' => '明细',
+                            'driver' => DetailItemCode::class,
+                            'language' => 'json',
                         ],
                         [
                             'name' => 'ip',

@@ -962,6 +962,13 @@ abstract class Driver
     abstract function quickReplaceMany($table, $objects);
 
     /**
+     * 生成 UUID
+     *
+     * @return string
+     */
+    abstract function uuid();
+
+    /**
      * 获取 insert 插入后产生的 id
      *
      * @return int

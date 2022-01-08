@@ -116,12 +116,12 @@ class DbHelper
 
         foreach ($fields as $field) {
             if ($field['default'] === null) {
-                $code .= '    public $' . $field['name'] . ' = null;';
+                $code .= '    protected $' . $field['name'] . ' = null;';
             } else {
                 if ($field['isNumber']) {
-                    $code .= '    public $' . $field['name'] . ' = ' . $field['default'] . ';';
+                    $code .= '    protected $' . $field['name'] . ' = ' . $field['default'] . ';';
                 } else {
-                    $code .= '    public $' . $field['name'] . ' = \'' . $field['default'] . '\';';
+                    $code .= '    protected $' . $field['name'] . ' = \'' . $field['default'] . '\';';
                 }
             }
 

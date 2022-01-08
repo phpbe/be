@@ -808,6 +808,7 @@ class Curd extends Driver
                 }
 
                 if (isset($this->setting['edit']['form']['items']) && count($this->setting['edit']['form']['items']) > 0) {
+                    $row = $tuple->toArray();
                     foreach ($this->setting['edit']['form']['items'] as $item) {
 
                         // 禁止编辑字段
@@ -831,12 +832,11 @@ class Curd extends Driver
                         }
 
                         $name = $item['name'];
-
                         if (isset($tuple->$name) && !isset($item['value'])) {
                             $item['value'] = $tuple->$name;
                         }
 
-                        $driver = new $driverClass($item);
+                        $driver = new $driverClass($item, $row);
 
                         $driver->submit($formData);
 
@@ -868,7 +868,8 @@ class Curd extends Driver
                 }
 
                 $this->trigger('before', $tuple);
-                $tuple->save();
+                $tupleChangeDetails = $tuple->getChangeDetails();
+                $tuple->update();
                 $this->trigger('after', $tuple);
                 $strPrimaryKey = null;
                 $strPrimaryKeyValue = null;
@@ -881,7 +882,7 @@ class Curd extends Driver
                 }
 
                 if (!isset($this->setting['opLog']) || $this->setting['opLog']) {
-                    beAdminOpLog($title . '：编辑' . $strPrimaryKey . '为' . $strPrimaryKeyValue . '的记录！', $formData);
+                    beAdminOpLog($title . '：编辑' . $strPrimaryKey . '为' . $strPrimaryKeyValue . '的记录！', $tupleChangeDetails);
                 }
                 $db->commit();
                 $this->trigger('success', $tuple);
@@ -946,7 +947,6 @@ class Curd extends Driver
                     ->display();
 
             } catch (\Throwable $t) {
-                print_r($t);
                 $response->error($t->getMessage());
                 Be::getLog()->error($t);
             }

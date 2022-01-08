@@ -257,6 +257,15 @@ class Mysql extends Driver
     }
 
     /**
+     * 生成 UUID
+     *
+     * @return string
+     */
+    public function uuid() {
+        return $this->getValue('SELECT UUID()');
+    }
+
+    /**
      * 获取当前数据库所有表信息
      *
      * @return array

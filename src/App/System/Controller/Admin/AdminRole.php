@@ -409,7 +409,7 @@ class AdminRole extends Auth
                 ],
                 'events' => [
                     'before' => function (Tuple &$tuple) {
-                        if ($tuple->permission === '-1') {
+                        if ($tuple->permission === -1) {
                             if (is_array($tuple->permission_keys)) {
                                 $permissionKeys = [];
                                 foreach ($tuple->permission_keys as $permission) {
@@ -427,7 +427,9 @@ class AdminRole extends Auth
                             $tuple->permission_keys = '';
                         }
 
-                        $tuple->update_time = date('Y-m-d H:i:s');
+                        if ($tuple->hasChange()) {
+                            $tuple->update_time = date('Y-m-d H:i:s');
+                        }
                     }
                 ]
             ],
@@ -458,6 +460,10 @@ class AdminRole extends Auth
                                     throw new AdminPluginException('有' . $n . '个用户属于该角色（' . $tuple->name . '），不能删除！');
                                 }
                             }
+                        }
+
+                        if ($tuple->hasChange()) {
+                            $tuple->update_time = date('Y-m-d H:i:s');
                         }
                     },
                 ],
