@@ -93,17 +93,17 @@ class Log
         $max = intval(filesize($indexPath) / 20) - 1;
         if ($max < 0) return [];
 
-        $from = $offset;
-        $to = $offset + $limit - 1;
+        $from = $max - $offset;
+        $to = $from - $limit - 1;
 
-        if ($from > $max) $from = $max;
-        if ($to > $max) $to = $max;
+        if ($from < 0) $from = 0;
+        if ($to < 0) $to = 0;
 
         $fIndex = fopen($indexPath, 'rb');
         if (!$fIndex) return [];
 
         $logs = [];
-        for ($i = $from; $i <= $to; $i++) {
+        for ($i = $from; $i >= $to; $i--) {
             fseek($fIndex, $i * 20);
 
             $dataHashName = implode('', unpack('H*', fread($fIndex, 16)));

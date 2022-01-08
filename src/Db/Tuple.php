@@ -7,7 +7,6 @@ use Be\Be;
 /**
  * 数据库表行记录
  *
- * @var mixed
  */
 abstract class Tuple
 {

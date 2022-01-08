@@ -927,7 +927,7 @@
 
         var pageSizeKey = "<?php echo $this->url; ?>:pageSize";
         var pageSize = localStorage.getItem(pageSizeKey);
-        if (pageSize === undefined || isNaN(pageSize)) {
+        if (pageSize === null || isNaN(pageSize)) {
             pageSize = <?php echo $this->pageSize; ?>;
         } else {
             pageSize = Number(pageSize);

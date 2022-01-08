@@ -60,7 +60,7 @@ class Driver
      */
     public function getMenuTree()
     {
-        if (!is_array($this->menuTree)) {
+        if ($this->menuTree === null) {
             $this->menuTree = $this->createMenuTree();
         }
         return $this->menuTree;

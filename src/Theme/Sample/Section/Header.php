@@ -83,45 +83,47 @@
                     <?php
                     $menu = \Be\Be::getMenu();
                     $menuTree = $menu->getMenuTree();
-                    foreach ($menuTree as $tmpMenu) {
-                        $url = $tmpMenu->url;
-                        if (strpos($url, 'menuId') === false) {
-                            if (strpos($url, '?') === false) {
-                                $url .= '?menuId=' . $tmpMenu->id;
-                            } else {
-                                $url .= '&menuId=' . $tmpMenu->id;
+                    if (is_array($menuTree)) {
+                        foreach ($menuTree as $tmpMenu) {
+                            $url = $tmpMenu->url;
+                            if (strpos($url, 'menuId') === false) {
+                                if (strpos($url, '?') === false) {
+                                    $url .= '?menuId=' . $tmpMenu->id;
+                                } else {
+                                    $url .= '&menuId=' . $tmpMenu->id;
+                                }
                             }
-                        }
 
-                        $hasSubMenu = false;
-                        if (isset($tmpMenu->subMenu) && is_array($tmpMenu->subMenu) && count($tmpMenu->subMenu) > 0) {
-                            $hasSubMenu = true;
-                        }
-
-                        echo '<li class="nav-item';
-                        if ($hasSubMenu) {
-                            echo ' dropdown';
-                        }
-                        echo '">';
-
-                        echo '<a class="nav-link';
-                        if (isset($this->menuId) && $this->menuId === $tmpMenu->id) {
-                            echo ' active';
-                        }
-                        if ($hasSubMenu) {
-                            echo ' dropdown-toggle';
-                        }
-                        echo '" href="#">'.$tmpMenu->label.'</a>';
-
-                        if ($hasSubMenu) {
-                            echo '<ul class="dropdown-menu">';
-                            foreach ($tmpMenu->subMenu as $tmpSubMenu) {
-                                echo '<li><a class="dropdown-item" href="#">'. $tmpSubMenu->label .'</a></li>';
+                            $hasSubMenu = false;
+                            if (isset($tmpMenu->subMenu) && is_array($tmpMenu->subMenu) && count($tmpMenu->subMenu) > 0) {
+                                $hasSubMenu = true;
                             }
-                            echo '</ul>';
-                        }
 
-                        echo '</li>';
+                            echo '<li class="nav-item';
+                            if ($hasSubMenu) {
+                                echo ' dropdown';
+                            }
+                            echo '">';
+
+                            echo '<a class="nav-link';
+                            if (isset($this->menuId) && $this->menuId === $tmpMenu->id) {
+                                echo ' active';
+                            }
+                            if ($hasSubMenu) {
+                                echo ' dropdown-toggle';
+                            }
+                            echo '" href="#">'.$tmpMenu->label.'</a>';
+
+                            if ($hasSubMenu) {
+                                echo '<ul class="dropdown-menu">';
+                                foreach ($tmpMenu->subMenu as $tmpSubMenu) {
+                                    echo '<li><a class="dropdown-item" href="#">'. $tmpSubMenu->label .'</a></li>';
+                                }
+                                echo '</ul>';
+                            }
+
+                            echo '</li>';
+                        }
                     }
                     ?>
                 </ul>

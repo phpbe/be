@@ -8,7 +8,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 class Smtp extends Driver
 {
 
-    private $driver = null;
+    protected $driver = null;
 
     // 构造函数
     public function __construct()
