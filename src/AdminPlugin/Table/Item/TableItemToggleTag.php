@@ -36,6 +36,10 @@ class TableItemToggleTag extends TableItem
             if (isset($params['on']['label'])) {
                 $this->on['label'] = $params['on']['label'];
             }
+
+            if (isset($params['on']['icon'])) {
+                $this->on['icon'] = $params['on']['icon'];
+            }
         }
 
         if (isset($params['off'])) {
@@ -46,6 +50,10 @@ class TableItemToggleTag extends TableItem
             if (isset($params['off']['label'])) {
                 $this->off['label'] = $params['off']['label'];
             }
+
+            if (isset($params['off']['icon'])) {
+                $this->off['icon'] = $params['off']['icon'];
+            }
         }
 
         if (!isset($this->ui[':type'])) {
@@ -55,7 +63,7 @@ class TableItemToggleTag extends TableItem
         if (!isset($this->ui['size'])) {
             $this->ui['size'] = 'medium';
         }
-                
+
         if ($this->url) {
             if (!isset($this->ui['@click'])) {
                 $this->ui['@click'] = 'scope.row.' . $this->name . ' = (scope.row.' . $this->name . ' === \'1\' ? \'0\' : \'1\');tableItemClick(\'' . $this->name . '\', scope.row)';
@@ -99,7 +107,11 @@ class TableItemToggleTag extends TableItem
                 $html .= ' ' . $k . '="' . $v . '"';
             }
         }
-        $html .= '>{{scope.row.' . $this->name . ' === \'1\' ? \'' . $this->on['label'] . '\' : \'' . $this->off['label'] . '\'}}';
+        $html .= '>';
+        if (isset($this->on['icon']) && isset($this->off['icon'])) {
+            $html .= '<i :class="scope.row.' . $this->name . ' === \'1\' ? \''.$this->on['icon'].'\' : \''.$this->off['icon'].'\'"></i> ';
+        }
+        $html .= '{{scope.row.' . $this->name . ' === \'1\' ? \'' . $this->on['label'] . '\' : \'' . $this->off['label'] . '\'}}';
         $html .= '</el-tag>';
         $html .= '</template>';
         $html .= '</el-table-column>';
