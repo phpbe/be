@@ -6,17 +6,17 @@ namespace Be\AdminPlugin\Table\Item;
 /**
  * 字段 切换器
  */
-class TableItemToggle extends TableItem
+class TableItemToggleTag extends TableItem
 {
 
     public $on = [
         'type' => 'success',
-        'icon' => 'el-icon-success',
+        'label' => '是',
     ];
 
     public $off = [
         'type' => 'info',
-        'icon' => 'el-icon-error',
+        'label' => '否',
     ];
 
     /**
@@ -28,27 +28,23 @@ class TableItemToggle extends TableItem
     {
         parent::__construct($params);
 
-        if (isset($params['type']) && ($params['type'] === 'el-link' || $params['type'] === 'el-button')) {
-            $this->type = $params['type'];
-        }
-
         if (isset($params['on'])) {
-            if (isset($params['on']['icon'])) {
-                $this->on['icon'] = $params['on']['icon'];
-            }
-
             if (isset($params['on']['type'])) {
                 $this->on['type'] = $params['on']['type'];
+            }
+
+            if (isset($params['on']['label'])) {
+                $this->on['label'] = $params['on']['label'];
             }
         }
 
         if (isset($params['off'])) {
-            if (isset($params['off']['icon'])) {
-                $this->off['icon'] = $params['off']['icon'];
-            }
-
             if (isset($params['off']['type'])) {
                 $this->off['type'] = $params['off']['type'];
+            }
+
+            if (isset($params['off']['label'])) {
+                $this->off['label'] = $params['off']['label'];
             }
         }
 
@@ -56,33 +52,17 @@ class TableItemToggle extends TableItem
             $this->ui[':type'] = 'scope.row.' . $this->name . ' == \'1\' ? \'' . $this->on['type'] . '\' : \'' . $this->off['type'] . '\'';
         }
 
-        if (!isset($this->ui[':icon'])) {
-            $this->ui[':icon'] = 'scope.row.' . $this->name . ' == \'1\' ? \'' . $this->on['icon'] . '\' : \'' . $this->off['icon'] . '\'';
+        if (!isset($this->ui['size'])) {
+            $this->ui['size'] = 'small';
         }
-
-        if (!isset($this->ui['circle'])) {
-            $this->ui['circle'] = null;
-        }
-
-        if (!isset($this->ui[':underline'])) {
-            $this->ui[':underline'] = 'false';
-        }
-
+                
         if ($this->url) {
-            if (!isset($this->ui['style'])) {
-                $this->ui['style'] = 'font-size:24px;';
-            }
-
             if (!isset($this->ui['@click'])) {
                 $this->ui['@click'] = 'scope.row.' . $this->name . ' = (scope.row.' . $this->name . ' === \'1\' ? \'0\' : \'1\');tableItemClick(\'' . $this->name . '\', scope.row)';
             }
 
             if (!isset($this->postData['field'])) {
                 $this->postData['field'] = $this->name;
-            }
-        } else {
-            if (!isset($this->ui['style'])) {
-                $this->ui['style'] = 'cursor:auto;font-size:24px;';
             }
         }
     }
@@ -107,7 +87,7 @@ class TableItemToggle extends TableItem
         }
         $html .= '>';
         $html .= '<template slot-scope="scope">';
-        $html .= '<el-link';
+        $html .= '<el-tag';
         foreach ($this->ui as $k => $v) {
             if ($k === 'table-column') {
                 continue;
@@ -119,8 +99,8 @@ class TableItemToggle extends TableItem
                 $html .= ' ' . $k . '="' . $v . '"';
             }
         }
-        $html .= '>';
-        $html .= '</el-link>';
+        $html .= '>{{scope.row.' . $this->name . ' === \'1\' ? \'' . $this->on['label'] . '\' : \'' . $this->off['label'] . '\'}}';
+        $html .= '</el-tag>';
         $html .= '</template>';
         $html .= '</el-table-column>';
 
