@@ -53,7 +53,7 @@ class TableItemToggleTag extends TableItem
         }
 
         if (!isset($this->ui['size'])) {
-            $this->ui['size'] = 'small';
+            $this->ui['size'] = 'medium';
         }
                 
         if ($this->url) {
