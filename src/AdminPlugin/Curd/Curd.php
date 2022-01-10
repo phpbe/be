@@ -697,8 +697,12 @@ class Curd extends Driver
 
                         // 检查唯一性
                         if (isset($item['unique']) && $item['unique']) {
-                            $sql = 'SELECT COUNT(*) FROM ' . $db->quoteKey($this->setting['table']) . ' WHERE ' . $db->quoteKey($name) . '=' . $db->quoteValue($driver->newValue);
-                            if ($db->getValue($sql) > 0) {
+                            $tableUnique = Be::newTable($this->setting['table'], $this->setting['db']);
+                            $tableUnique->where($name, $driver->newValue);
+                            if (is_array($item['unique'])) {
+                                $tableUnique->wheres($item['unique']);
+                            }
+                            if ($tableUnique->count() > 0) {
                                 throw new AdminPluginException($driver->label . ' 已存在 ' . $driver->newValue . ' 的记录！');
                             }
                         }
@@ -849,16 +853,22 @@ class Curd extends Driver
 
                         // 检查唯一性
                         if (isset($item['unique']) && $item['unique']) {
-                            $sql = 'SELECT COUNT(*) FROM ' . $db->quoteKey($this->setting['table']) . ' WHERE ' . $db->quoteKey($name) . '=' . $db->quoteValue($driver->newValue);
+                            $tableUnique = Be::newTable($this->setting['table'], $this->setting['db']);
+                            $tableUnique->where($name, $driver->newValue);
+
                             if (is_array($primaryKey)) {
                                 foreach ($primaryKey as $pKey) {
-                                    $sql .= ' AND ' . $db->quoteKey($pKey) . '!=' . $db->quoteValue($formData[$pKey]);
+                                    $tableUnique->where($pKey, '!=', $formData[$pKey]);
                                 }
                             } else {
-                                $sql .= ' AND ' . $db->quoteKey($primaryKey) . '!=' . $db->quoteValue($formData[$primaryKey]);
+                                $tableUnique->where($primaryKey, '!=', $formData[$primaryKey]);
                             }
 
-                            if ($db->getValue($sql) > 0) {
+                            if (is_array($item['unique'])) {
+                                $tableUnique->wheres($item['unique']);
+                            }
+
+                            if ($tableUnique->count() > 0) {
                                 throw new AdminPluginException($driver->label . ' 已存在 ' . $driver->newValue . ' 的记录！');
                             }
                         }
