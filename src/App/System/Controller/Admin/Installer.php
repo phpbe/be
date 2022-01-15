@@ -411,7 +411,7 @@ class Installer
         $response = Be::getResponse();
 
         $tuple = Be::getTuple('system_admin_user');
-        $tuple->load(1);
+        $tuple->loadBy('username', 'admin');
 
         if ($request->isPost()) {
             $postData = $request->json();

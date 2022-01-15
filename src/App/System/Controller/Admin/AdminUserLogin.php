@@ -31,7 +31,7 @@ class AdminUserLogin
             }
         } else {
             $my = Be::getAdminUser();
-            if ($my->id > 0) {
+            if ($my->id !== '') {
                 $response->redirect(beAdminUrl('System.Index.index'));
                 return;
             }

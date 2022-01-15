@@ -6,10 +6,10 @@ use Be\Be;
 
 class AdminUser
 {
-    public $id = 0;
+    public $id = '';
     public $username = '';
     public $name = '';
-    public $admin_role_id = 0;
+    public $admin_role_id = '';
 
     /**
      * User constructor.
@@ -67,7 +67,7 @@ class AdminUser
      * @return bool
      */
     public function isGuest() {
-        return !$this->id;
+        return $this->id === '';
     }
 
 }

@@ -187,12 +187,6 @@ class AdminUser extends Auth
                             'width' => '50',
                         ],
                         [
-                            'name' => 'id',
-                            'label' => 'ID',
-                            'width' => '60',
-                            'sortable' => true,
-                        ],
-                        [
                             'name' => 'avatar',
                             'label' => '头像',
                             'driver' => TableItemAvatar::class,
@@ -525,33 +519,6 @@ class AdminUser extends Auth
             'fieldEdit' => [
                 'events' => [
                     'before' => function ($tuple) {
-                        $request = Be::getRequest();
-                        $postData = $request->json();
-                        $field = $postData['postData']['field'];
-                        if ($field === 'is_enable') {
-                            if ($tuple->is_enable === 0) {
-                                if ($tuple->id === 1) {
-                                    throw new AdminPluginException('默认用户不能禁用');
-                                }
-
-                                $my = Be::getAdminUser();
-                                if ($tuple->id === $my->id) {
-                                    throw new AdminPluginException('不能禁用自已的账号');
-                                }
-                            }
-                        } elseif ($field === 'is_delete') {
-                            if ($tuple->is_delete === 1) {
-                                if ($tuple->id === 1) {
-                                    throw new AdminPluginException('默认用户不能删除');
-                                }
-
-                                $my = Be::getAdminUser();
-                                if ($tuple->id === $my->id) {
-                                    throw new AdminPluginException('不能删除自已');
-                                }
-                            }
-                        }
-
                         if ($tuple->hasChange()) {
                             $tuple->update_time = date('Y-m-d H:i:s');
                         }

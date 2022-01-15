@@ -953,19 +953,19 @@ abstract class Be
      *
      * @return \Be\Menu\Driver
      */
-    public static function getMenu()
+    public static function getMenu($name)
     {
-        if (isset(self::$cache['Menu'])) return self::$cache['Menu'];
+        if (isset(self::$cache['Menu'][$name])) return self::$cache['Menu'][$name];
 
-        $path = self::getRuntime()->getCachePath() . '/Menu.php';
+        $path = self::getRuntime()->getCachePath() . '/Menu/' . $name . '.php';
         if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
             $service = Be::getService('App.System.Admin.Menu');
-            $service->update();
+            $service->update($name);
         }
 
-        $class = '\\Be\\Data\\Cache\\Menu';
-        self::$cache['Menu'] = new $class();
-        return self::$cache['Menu'];
+        $class = '\\Be\\Data\\Cache\\Menu\\' . $name;
+        self::$cache['Menu'][$name] = new $class();
+        return self::$cache['Menu'][$name];
     }
 
     /**
@@ -991,20 +991,21 @@ abstract class Be
     /**
      * 获取指定的一个角色信息
      *
-     * @param int $roleId 角色ID
+     * @param string $roleId 角色ID
      * @return \Be\AdminUser\AdminRole
      */
-    public static function getAdminRole(int $roleId)
+    public static function getAdminRole(string $roleId)
     {
         if (isset(self::$cache['adminRole'][$roleId])) return self::$cache['adminRole'][$roleId];
 
-        $path = self::getRuntime()->getCachePath() . '/AdminRole/AdminRole' . $roleId . '.php';
+        $suffix = str_replace('-', '', $roleId);
+        $path = self::getRuntime()->getCachePath() . '/AdminRole/AdminRole_' . $suffix . '.php';
         if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
             $service = Be::getService('App.System.Admin.AdminRole');
             $service->updateAdminRole($roleId);
         }
 
-        $class = '\\Be\\Data\\Cache\\AdminRole\\AdminRole' . $roleId;
+        $class = '\\Be\\Data\\Cache\\AdminRole\\AdminRole_' . $suffix;
         self::$cache['adminRole'][$roleId] = new $class();
         return self::$cache['adminRole'][$roleId];
     }

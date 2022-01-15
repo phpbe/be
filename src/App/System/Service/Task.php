@@ -57,7 +57,16 @@ class Task
                                 ];
                                 $db->update('system_task', $data, 'id');
                             } else {
+
+                                $taskId = null;
+                                if (function_exists('uuid_create')) {
+                                    $taskId = uuid_create();
+                                } else {
+                                    $taskId = $db->uuid();
+                                }
+
                                 $data = [
+                                    'id' => $taskId,
                                     'app' => $appName,
                                     'name' => $taskName,
                                     'label' => $task['value'] ?? '',
@@ -171,7 +180,7 @@ class Task
             $db = Be::newDb();
 
             // 有任务正在运行
-            $sql = 'SELECT * FROM system_task_log WHERE task_id = ' . $task->id . ' AND status = \'RUNNING\'';
+            $sql = 'SELECT * FROM system_task_log WHERE task_id = \'' . $task->id . '\' AND status = \'RUNNING\'';
             $taskLogs = $db->getObjects($sql);
 
             $running = count($taskLogs);
@@ -180,7 +189,7 @@ class Task
                     $t = time();
                     foreach ($taskLogs as $taskLog) {
                         if ($t - strtotime($taskLog->update_time) >= $task->timeout) {
-                            $sql = 'UPDATE system_task_log SET status = \'ERROR\', message=\'执行超时\' WHERE id = ' . $taskLog->id;
+                            $sql = 'UPDATE system_task_log SET status = \'ERROR\', message=\'执行超时\' WHERE id = \'' . $taskLog->id . '\'';
                             $db->query($sql);
                             $running--;
                         }
@@ -193,9 +202,16 @@ class Task
             }
 
             $taskLog = new \stdClass();
+            $taskLogId = null;
             $instance = null;
             try {
                 $now = date('Y-m-d H:i:s');
+
+                if (function_exists('uuid_create')) {
+                    $taskLog->id = uuid_create();
+                } else {
+                    $taskLog->id = $db->uuid();
+                }
 
                 $taskLog->task_id = $task->id;
                 $taskLog->data = $task->data;
@@ -205,8 +221,10 @@ class Task
                 //$taskLog->complete_time = null;
                 $taskLog->create_time = $now;
                 $taskLog->update_time = $now;
-                $taskLogId = $db->insert('system_task_log', $taskLog);
-                $taskLog->id = $taskLogId;
+
+                $db->insert('system_task_log', $taskLog);
+
+                $taskLogId = $taskLog->id;
 
                 /**
                  * @var \Be\Task\Task $instance
@@ -222,10 +240,10 @@ class Task
                 if ($instance !== null) {
                     $instance->error($t->getMessage());
                 } else {
-                    if ($taskLog->id > 0) {
+                    if ($taskLogId !== null) {
                         $now = date('Y-m-d H:i:s');
                         Be::newDb()->update('system_task_log', [
-                            'id' => $taskLog->id,
+                            'id' => $taskLogId,
                             'status' => 'ERROR',
                             'message' => $t->getMessage(),
                             'update_time' => $now

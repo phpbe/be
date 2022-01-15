@@ -17,7 +17,7 @@ class AdminPlugin
     public function __construct()
     {
         $my = Be::getAdminUser();
-        if ($my->id === 0) {
+        if ($my->id === '') {
             throw new ControllerException('登录超时，请重新登录！');
         }
     }

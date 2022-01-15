@@ -108,12 +108,6 @@ class AdminUserLoginLog extends Auth
 
                     'items' => [
                         [
-                            'name' => 'id',
-                            'label' => 'ID',
-                            'width' => '80',
-                            'sortable' => true,
-                        ],
-                        [
                             'name' => 'username',
                             'label' => '用户名',
                             'width' => '120',

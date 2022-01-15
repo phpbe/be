@@ -22,13 +22,13 @@ class Auth
         $actionName = $request->getActionName();
 
         $my = Be::getAdminUser();
-        if ($my->id === 0) {
+        if ($my->id === '') {
             Be::getService('App.System.Admin.AdminUser')->rememberMe();
             $my = Be::getAdminUser();
         }
 
         // 校验权限
-        if ($my->id === 0) {
+        if ($my->id === '') {
 
             $redirect = null;
             if ($request->isAjax()) {

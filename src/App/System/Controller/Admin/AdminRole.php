@@ -161,12 +161,6 @@ class AdminRole extends Auth
                             'width' => '50',
                         ],
                         [
-                            'name' => 'id',
-                            'label' => 'ID',
-                            'width' => '60',
-                            'sortable' => true,
-                        ],
-                        [
                             'name' => 'name',
                             'label' => '名称',
                             'align' => 'left',

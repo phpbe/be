@@ -186,22 +186,16 @@ class Task extends Driver
                             'width' => '50',
                         ],
                         [
-                            'name' => 'id',
-                            'label' => 'ID',
-                            'width' => '60',
-                            'sortable' => true,
-                        ],
-                        [
-                            'name' => 'name',
-                            'label' => '类名',
+                            'name' => 'label',
+                            'label' => '名称',
+                            'align' => 'left',
                             'driver' => TableItemLink::class,
                             'task' => 'detail',
                             'target' => 'drawer',
                         ],
                         [
-                            'name' => 'label',
-                            'label' => '名称',
-                            'align' => 'left',
+                            'name' => 'name',
+                            'label' => '类名',
                         ],
                         [
                             'name' => 'schedule',
@@ -280,12 +274,12 @@ class Task extends Driver
                             'label' => 'ID',
                         ],
                         [
-                            'name' => 'name',
-                            'label' => '类名',
-                        ],
-                        [
                             'name' => 'label',
                             'label' => '名称',
+                        ],
+                        [
+                            'name' => 'name',
+                            'label' => '类名',
                         ],
                         [
                             'name' => 'schedule',
@@ -339,13 +333,13 @@ class Task extends Driver
                 'form' => [
                     'items' => [
                         [
-                            'name' => 'name',
-                            'label' => '类名',
+                            'name' => 'label',
+                            'label' => '名称',
                             'readonly' => true,
                         ],
                         [
-                            'name' => 'label',
-                            'label' => '名称',
+                            'name' => 'name',
+                            'label' => '类名',
                             'readonly' => true,
                         ],
                         [
@@ -482,7 +476,7 @@ class Task extends Driver
 
             'grid' => [
                 'title' => '计划任务日志列表',
-                'orderBy' => 'id',
+                'orderBy' => 'create_time',
                 'orderByDir' => 'DESC',
                 'filter' => [
                     ['task_id', '=', $taskId],
@@ -524,12 +518,6 @@ class Task extends Driver
                         [
                             'driver' => TableItemSelection::class,
                             'width' => '50',
-                        ],
-                        [
-                            'name' => 'id',
-                            'label' => 'ID',
-                            'width' => '60',
-                            'sortable' => true,
                         ],
                         [
                             'name' => 'status',

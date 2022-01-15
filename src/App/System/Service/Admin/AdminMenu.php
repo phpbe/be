@@ -191,7 +191,7 @@ class AdminMenu
 
         foreach ($menus as $k => $v) {
             $app = $v['app'];
-            $code .= '    $this->addMenu(\'' . $app->key . '\', \'0\', \'' . $app->icon . '\',\'' . $app->label . '\', ' . $app->url . ' , \'\');' . "\n";
+            $code .= '    $this->addMenu(\'' . $app->key . '\', \'\', \'' . $app->icon . '\',\'' . $app->label . '\', ' . $app->url . ' , \'\');' . "\n";
             foreach ($v['groups'] as $key => $val) {
                 $group = $val['group'];
                 $menu = current($val['menus']);

@@ -7,32 +7,44 @@ use Be\Be;
 
 class Menu
 {
-
-    private $menus = null;
+    private $menus = [];
+    private $menuItems = [];
 
     /**
      * 获取后台菜单
      */
-    public function getMenus()
+    public function getMenu($name)
     {
-        if ($this->menus === null) {
-            $sql = 'SELECT * FROM system_menu WHERE is_enable = 1 AND is_delete = 0 ORDER BY ordering ASC';
-            $this->menus = Be::getDb()->getObjects($sql);
+        if (!isset($this->menus[$name])) {
+            $sql = 'SELECT * FROM system_menu WHERE `name`=?';
+            $this->menus[$name] = Be::getDb()->getObject($sql, [$name]);
         }
-        return $this->menus;
+        return $this->menus[$name];
+    }
+
+    /**
+     * 获取后台菜单
+     */
+    public function getMenuItems($menuName)
+    {
+        if (!isset($this->menuItems[$menuName])) {
+            $sql = 'SELECT * FROM system_menu_item WHERE menu_name=? ORDER BY ordering ASC';
+            $this->menuItems[$menuName] = Be::getDb()->getObjects($sql, [$menuName]);
+        }
+        return $this->menuItems[$menuName];
     }
 
     /**
      * 更新事台菜单
      */
-    public function update()
+    public function update($name)
     {
-        $menus = $this->getMenus();
+        $menus = $this->getMenuItems($name);
 
         $code = '<?php' . "\n";
-        $code .= 'namespace Be\\Data\\Cache;' . "\n";
+        $code .= 'namespace Be\\Data\\Cache\\Menu;' . "\n";
         $code .= "\n";
-        $code .= 'class Menu extends \\Be\\Menu\\Driver' . "\n";
+        $code .= 'class ' . $name . ' extends \\Be\\Menu\\Driver' . "\n";
         $code .= '{' . "\n";
         $code .= '  public function __construct()' . "\n";
         $code .= '  {' . "\n";
@@ -51,7 +63,7 @@ class Menu
         $code .= '  }' . "\n";
         $code .= '}' . "\n";
 
-        $path = Be::getRuntime()->getCachePath() . '/Menu.php';
+        $path = Be::getRuntime()->getCachePath() . '/Menu/' . $name . '.php';
         $dir = dirname($path);
         if (!is_dir($dir)) mkdir($dir, 0777, true);
 

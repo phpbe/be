@@ -54,10 +54,10 @@ class AdminRole
     /**
      * 更新指定角色到文件缓存中
      *
-     * @param $roleId
+     * @param string $roleId
      * @throws ServiceException
      */
-    public function updateAdminRole($roleId)
+    public function updateAdminRole(string $roleId)
     {
         $tuple = Be::newTuple('system_admin_role');
         $tuple->load($roleId);
@@ -65,10 +65,12 @@ class AdminRole
             throw new ServiceException('未找到指定编号（#' . $roleId . '）的角色！');
         }
 
+        $suffix = str_replace('-', '', $roleId);
+
         $code = '<?php' . "\n";
         $code .= 'namespace Be\\Data\\Cache\\AdminRole;' . "\n";
         $code .= "\n";
-        $code .= 'class AdminRole' . $roleId . ' extends \\Be\\AdminUser\\AdminRole' . "\n";
+        $code .= 'class AdminRole_' . $suffix . ' extends \\Be\\AdminUser\\AdminRole' . "\n";
         $code .= '{' . "\n";
         $code .= '  public $name = \'' . $tuple->name . '\';' . "\n";
         $code .= '  public $permission = ' . $tuple->permission . ';' . "\n";
@@ -79,7 +81,7 @@ class AdminRole
         }
         $code .= '}' . "\n";
 
-        $path = Be::getRuntime()->getCachePath() . '/AdminRole/AdminRole' . $roleId . '.php';
+        $path = Be::getRuntime()->getCachePath() . '/AdminRole/AdminRole_' . $suffix . '.php';
         $dir = dirname($path);
         if (!is_dir($dir)) mkdir($dir, 0777, true);
 

@@ -1,5 +1,5 @@
 CREATE TABLE `system_mail_queue` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
   `to_email` varchar(60) NOT NULL DEFAULT '' COMMENT '收件人邮箱',
   `to_name` varchar(60) NOT NULL DEFAULT '' COMMENT '收件人姓名',
   `cc_email` varchar(60) NOT NULL DEFAULT '' COMMENT '抄送人邮箱',
@@ -18,7 +18,7 @@ CREATE TABLE `system_mail_queue` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='发送邮件队列';
 
 CREATE TABLE IF NOT EXISTS `system_menu` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
   `parent_id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(120) NOT NULL DEFAULT '' COMMENT '名称',
   `route` varchar(240) NOT NULL DEFAULT '' COMMENT '路由',
@@ -33,8 +33,25 @@ CREATE TABLE IF NOT EXISTS `system_menu` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='菜单';
 
 
+CREATE TABLE IF NOT EXISTS `system_menu_item` (
+  `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
+  `parent_id` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(120) NOT NULL DEFAULT '' COMMENT '名称',
+  `route` varchar(240) NOT NULL DEFAULT '' COMMENT '路由',
+  `params` varchar(240) NOT NULL DEFAULT '' COMMENT '路由参数',
+  `url` varchar(240) NOT NULL DEFAULT '' COMMENT '指定网址',
+  `target` varchar(7) NOT NULL DEFAULT '' COMMENT '打开方式',
+  `is_home` tinyint NOT NULL DEFAULT '0' COMMENT '是否首页',
+  `is_enable` tinyint NOT NULL DEFAULT '1' COMMENT '是否可用',
+  `is_delete` tinyint NOT NULL DEFAULT '0' COMMENT '是否已删除',
+  `ordering` int NOT NULL DEFAULT '0' COMMENT '排序（越小越靠前）',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='菜单';
+
+
+
 CREATE TABLE `system_task` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
   `app` varchar(60) NOT NULL DEFAULT '' COMMENT '应用',
   `name` varchar(60) NOT NULL DEFAULT '' COMMENT '名称',
   `label` varchar(60) NOT NULL DEFAULT '' COMMENT '中文名称',
@@ -52,9 +69,9 @@ CREATE TABLE `system_task` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='计划任务';
 
 CREATE TABLE `system_task_log` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
-  `task_id` int(11) NOT NULL DEFAULT '0' COMMENT '任务ID',
-  `data` VARCHAR(200) NOT NULL DEFAULT '' COMMENT '任务数据（JSON格式）',
+  `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
+  `task_id` varchar(36) NOT NULL DEFAULT '' COMMENT '任务ID',
+  `data` varchar(200) NOT NULL DEFAULT '' COMMENT '任务数据（JSON格式）',
   `status` varchar(30) NOT NULL DEFAULT 'RUNNING' COMMENT '状态（RUNNING：运行中/COMPLETE：执行完成/ERROR：出错）	',
   `message` varchar(200) NOT NULL DEFAULT '' COMMENT '异常信息',
   `trigger` varchar(30) NOT NULL DEFAULT 'SYSTEM' COMMENT '触发方式：SYSTEM：系统调度/MANUAL：人工启动',
@@ -66,8 +83,8 @@ CREATE TABLE `system_task_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='抽取数据';
 
 CREATE TABLE `system_admin_op_log` (
-  `id` int NOT NULL AUTO_INCREMENT COMMENT '自增编号',
-  `admin_user_id` int NOT NULL DEFAULT '0' COMMENT '用户ID',
+  `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
+  `admin_user_id` varchar(36) NOT NULL DEFAULT '' COMMENT '用户ID',
   `app` VARCHAR(60) NOT NULL DEFAULT '' COMMENT '应用名',
   `controller` VARCHAR(60) NOT NULL DEFAULT '' COMMENT '控制器名',
   `action` VARCHAR(60) NOT NULL DEFAULT '' COMMENT '动作名',
@@ -80,7 +97,7 @@ CREATE TABLE `system_admin_op_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统后台操作日志';
 
 CREATE TABLE `system_admin_role` (
-  `id` int NOT NULL AUTO_INCREMENT COMMENT '自增编号',
+  `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
   `name` varchar(60) NOT NULL DEFAULT '' COMMENT '角色名',
   `remark` varchar(200) NOT NULL DEFAULT '' COMMENT '备注',
   `permission` tinyint NOT NULL DEFAULT '0' COMMENT '权限（0: 无权限/1: 所有权限/-1: 自定义权限）',
@@ -94,14 +111,14 @@ CREATE TABLE `system_admin_role` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户角色';
 
 INSERT INTO `system_admin_role` (`id`, `name`, `remark`, `permission`, `permission_keys`, `is_enable`, `is_delete`, `ordering`, `create_time`, `update_time`) VALUES
-(1, '超级管理员', '能执行所有操作', 1, '', 1, 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+((SELECT UUID()), '超级管理员', '能执行所有操作', 1, '', 1, 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 CREATE TABLE `system_admin_user` (
-  `id` int NOT NULL AUTO_INCREMENT COMMENT '自增编号',
+  `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
   `username` varchar(120) NOT NULL DEFAULT '' COMMENT '用户名',
   `password` char(40) NOT NULL DEFAULT '' COMMENT '密码',
   `salt` char(32) NOT NULL DEFAULT '' COMMENT '密码盐值',
-  `admin_role_id` INT NOT NULL DEFAULT '0' COMMENT '角色ID',
+  `admin_role_id` varchar(36) NOT NULL DEFAULT '' COMMENT '角色ID',
   `avatar` varchar(60) NOT NULL DEFAULT '' COMMENT '头像',
   `email` varchar(120) NOT NULL DEFAULT '' COMMENT '邮箱',
   `name` varchar(30) NOT NULL DEFAULT '' COMMENT '名称',
@@ -121,10 +138,10 @@ CREATE TABLE `system_admin_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户';
 
 INSERT INTO `system_admin_user` (`id`, `username`, `password`, `salt`, `admin_role_id`, `avatar`, `email`, `name`, `gender`, `phone`, `mobile`, `last_login_time`, `this_login_time`, `last_login_ip`, `this_login_ip`, `is_enable`, `is_delete`, `create_time`, `update_time`) VALUES
-(1, 'admin', 'a2ad3e6e3acf5b182324ed782f8a0556d43e59dd', 'ybFD7uzKMH8yvPHvuPNNT0vDv7uF2811', 1, '', 'be@phpbe.com', '管理员', 0, '', '', NULL, NULL, '', '', 1, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+((SELECT UUID()), 'admin', 'a2ad3e6e3acf5b182324ed782f8a0556d43e59dd', 'ybFD7uzKMH8yvPHvuPNNT0vDv7uF2811', (SELECT id FROM system_admin_role WHERE `name` = '超级管理员' LIMIT 1), '', 'be@phpbe.com', '管理员', 0, '', '', NULL, NULL, '', '', 1, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 CREATE TABLE `system_admin_user_login_log` (
-  `id` int NOT NULL AUTO_INCREMENT COMMENT '自增编号',
+  `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
   `username` varchar(120) NOT NULL DEFAULT '' COMMENT '用户名',
   `success` tinyint NOT NULL DEFAULT '0' COMMENT '是否登录成功（0-不成功/1-成功）',
   `description` varchar(240) NOT NULL DEFAULT '' COMMENT '描述',

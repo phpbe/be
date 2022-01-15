@@ -6,7 +6,7 @@ use Be\Be;
 
 class User
 {
-    public $id = 0;
+    public $id = '';
 
     /**
      * User constructor.
@@ -28,7 +28,7 @@ class User
      * @return bool
      */
     public function isGuest() {
-        return !$this->id;
+        return $this->id === '';
     }
 
 }

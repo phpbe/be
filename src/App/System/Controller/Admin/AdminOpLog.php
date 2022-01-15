@@ -107,12 +107,6 @@ class AdminOpLog extends Auth
                 'table' => [
                     'items' => [
                         [
-                            'name' => 'id',
-                            'label' => 'ID',
-                            'width' => '80',
-                            'sortable' => true,
-                        ],
-                        [
                             'name' => 'admin_user_id',
                             'label' => '用户',
                             'width' => '120',
@@ -203,6 +197,9 @@ class AdminOpLog extends Auth
                             'label' => '明细',
                             'driver' => DetailItemCode::class,
                             'language' => 'json',
+                            'value' => function ($row) {
+                                return json_encode(json_decode($row['details']),JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                            },
                         ],
                         [
                             'name' => 'ip',

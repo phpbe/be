@@ -65,7 +65,7 @@ class Task
         header("HTTP/1.1 200 OK");
         ob_implicit_flush();
 
-        $taskId = $request->get('taskId', 0);
+        $taskId = $request->get('taskId', '');
         if (!$taskId) {
             $response->error('参数（taskId）缺失, 任务中止！');
             return;

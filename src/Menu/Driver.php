@@ -38,10 +38,10 @@ class Driver
     /**
      * 获取一项菜单 或 整个菜单
      *
-     * @param int $menuId 菜单编号
+     * @param string $menuId 菜单编号
      * @return object | false | array
      */
-    public function getMenu($menuId = 0)
+    public function getMenu(string $menuId = '')
     {
         if ($menuId) {
             if (array_key_exists($menuId, $this->menus)) {
@@ -89,10 +89,10 @@ class Driver
     /**
      * 获取当前位置
      *
-     * @param int $menuId
+     * @param string $menuId
      * @return array
      */
-    public function getRoute($menuId = '0')
+    public function getRoute(string $menuId = '')
     {
         $route = array();
         if (array_key_exists($menuId, $this->menus)) {
@@ -103,7 +103,7 @@ class Driver
                     $route[] = $this->menus[$parentId];
                     $parentId = $this->menus[$parentId]->parentId;
                 } else {
-                    $parentId = '0';
+                    $parentId = '';
                 }
             }
         }
@@ -113,10 +113,10 @@ class Driver
 
     /**
      * 创建菜单树
-     * @param int $menuId
+     * @param string $menuId
      * @return array | false
      */
-    protected function createMenuTree($menuId = '0')
+    protected function createMenuTree(string $menuId = '')
     {
         $subMenus = array();
         foreach ($this->menus as $menu) {
