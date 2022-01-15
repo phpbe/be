@@ -17,38 +17,39 @@ CREATE TABLE `system_mail_queue` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='发送邮件队列';
 
-CREATE TABLE IF NOT EXISTS `system_menu` (
+CREATE TABLE `system_menu` (
   `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
-  `parent_id` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(60) NOT NULL COMMENT '菜单名',
+  `label` varchar(60) NOT NULL COMMENT '中文名称',
+  `is_system` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否系统菜单',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='菜单';
+
+INSERT INTO `system_menu` (`id`, `name`, `label`, `is_system`, `create_time`, `update_time`) VALUES
+((SELECT UUID()), 'North', '顶部菜单', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+((SELECT UUID()), 'South', '底部菜单', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+CREATE TABLE `system_menu_item` (
+  `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
+  `menu_name` varchar(36) NOT NULL COMMENT '菜单名称',
+  `parent_id` varchar(36) NOT NULL COMMENT '父ID',
   `name` varchar(120) NOT NULL DEFAULT '' COMMENT '名称',
   `route` varchar(240) NOT NULL DEFAULT '' COMMENT '路由',
   `params` varchar(240) NOT NULL DEFAULT '' COMMENT '路由参数',
   `url` varchar(240) NOT NULL DEFAULT '' COMMENT '指定网址',
+  `description` varchar(120) NOT NULL DEFAULT '' COMMENT '菜单描述',
   `target` varchar(7) NOT NULL DEFAULT '' COMMENT '打开方式',
-  `is_home` tinyint NOT NULL DEFAULT '0' COMMENT '是否首页',
-  `is_enable` tinyint NOT NULL DEFAULT '1' COMMENT '是否可用',
-  `is_delete` tinyint NOT NULL DEFAULT '0' COMMENT '是否已删除',
   `ordering` int NOT NULL DEFAULT '0' COMMENT '排序（越小越靠前）',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='菜单';
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `menu_name` (`menu_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='菜单项';
 
-
-CREATE TABLE IF NOT EXISTS `system_menu_item` (
-  `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
-  `parent_id` int(11) NOT NULL DEFAULT '0',
-  `name` varchar(120) NOT NULL DEFAULT '' COMMENT '名称',
-  `route` varchar(240) NOT NULL DEFAULT '' COMMENT '路由',
-  `params` varchar(240) NOT NULL DEFAULT '' COMMENT '路由参数',
-  `url` varchar(240) NOT NULL DEFAULT '' COMMENT '指定网址',
-  `target` varchar(7) NOT NULL DEFAULT '' COMMENT '打开方式',
-  `is_home` tinyint NOT NULL DEFAULT '0' COMMENT '是否首页',
-  `is_enable` tinyint NOT NULL DEFAULT '1' COMMENT '是否可用',
-  `is_delete` tinyint NOT NULL DEFAULT '0' COMMENT '是否已删除',
-  `ordering` int NOT NULL DEFAULT '0' COMMENT '排序（越小越靠前）',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='菜单';
-
-
+INSERT INTO `system_menu_item` (`id`, `menu_name`, `parent_id`, `name`, `route`, `params`, `url`, `description`, `target`, `ordering`, `create_time`, `update_time`) VALUES
+((SELECT UUID()), 'North', '', '首页', 'System.Index.index', '', '', '首页', '_self', 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 CREATE TABLE `system_task` (
   `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',

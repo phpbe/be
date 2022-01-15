@@ -81,7 +81,7 @@
 
                 <ul class="navbar-nav">
                     <?php
-                    $menu = \Be\Be::getMenu();
+                    $menu = \Be\Be::getMenu('North');
                     $menuTree = $menu->getMenuTree();
                     if (is_array($menuTree)) {
                         foreach ($menuTree as $tmpMenu) {
