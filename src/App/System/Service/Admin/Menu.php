@@ -8,10 +8,10 @@ use Be\Be;
 class Menu
 {
     private $menus = [];
-    private $menuItems = [];
+    private $items = [];
 
     /**
-     * 获取后台菜单
+     * 获取菜单
      */
     public function getMenu($name)
     {
@@ -23,15 +23,15 @@ class Menu
     }
 
     /**
-     * 获取后台菜单
+     * 获取菜单项
      */
-    public function getMenuItems($menuName)
+    public function getItems($menuName)
     {
-        if (!isset($this->menuItems[$menuName])) {
+        if (!isset($this->items[$menuName])) {
             $sql = 'SELECT * FROM system_menu_item WHERE menu_name=? ORDER BY ordering ASC';
-            $this->menuItems[$menuName] = Be::getDb()->getObjects($sql, [$menuName]);
+            $this->items[$menuName] = Be::getDb()->getObjects($sql, [$menuName]);
         }
-        return $this->menuItems[$menuName];
+        return $this->items[$menuName];
     }
 
     /**
@@ -39,7 +39,7 @@ class Menu
      */
     public function update($name)
     {
-        $menus = $this->getMenuItems($name);
+        $menus = $this->getItems($name);
 
         $code = '<?php' . "\n";
         $code .= 'namespace Be\\Data\\Cache\\Menu;' . "\n";
@@ -57,7 +57,7 @@ class Menu
                     $params = $parsedParams;
                 }
             }
-            $code .= '    $this->addMenu(\'' . $v->id . '\', \'' . $v->parent_id . '\', \'' . $v->name . '\', \'' . $v->route . '\', ' . var_export($params, true) . ', \'' . $v->url . '\', \'' . $v->target . '\');' . "\n";
+            $code .= '    $this->addItem(\'' . $v->id . '\', \'' . $v->parent_id . '\', \'' . $v->name . '\', \'' . $v->route . '\', ' . var_export($params, true) . ', \'' . $v->url . '\', \'' . $v->target . '\');' . "\n";
         }
 
         $code .= '  }' . "\n";

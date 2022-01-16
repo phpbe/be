@@ -7,50 +7,43 @@ namespace Be\Menu;
  */
 class Driver
 {
-    protected $menus = [];
-    protected $menuTree = null;
+
+    protected $items = [];
+    protected $tree = null;
 
     /**
      * 添加菜单项
      *
-     * @param int $menuId 菜单编号
-     * @param int $parentId 父级菜单编号， 等于0时为顶级菜单
+     * @param string $itemId 菜单项ID
+     * @param string $parentId 父级菜单项编号， 等于空时为顶级菜单
      * @param string $label 中文名称
      * @param string $route 路由
-     * @param string $params 路由参数
+     * @param array $params 路由参数
      * @param string $url 网址
      * @param string $target 打开方式
      */
-    public function addMenu($menuId, $parentId,  $label, $route, $params = [], $url = '', $target = '_self')
+    public function addItem(string $itemId, string $parentId, string $label, string $route, array $params = [], string $url = '', string $target = '_self')
     {
-        $menu = new \stdClass();
-        $menu->id = $menuId;
-        $menu->parentId = $parentId;
-        $menu->label = $label;
-        $menu->route = $route;
-        $menu->params = $params;
-        $menu->url = $url;
-        $menu->target = $target;
+        $item = new \stdClass();
+        $item->id = $itemId;
+        $item->parentId = $parentId;
+        $item->label = $label;
+        $item->route = $route;
+        $item->params = $params;
+        $item->url = $url;
+        $item->target = $target;
 
-        $this->menus[$menuId] = $menu;
+        $this->items[$itemId] = $item;
     }
 
     /**
-     * 获取一项菜单 或 整个菜单
+     * 获取菜单项列表
      *
-     * @param string $menuId 菜单编号
-     * @return object | false | array
+     * @return array
      */
-    public function getMenu(string $menuId = '')
+    public function getItems()
     {
-        if ($menuId) {
-            if (array_key_exists($menuId, $this->menus)) {
-                return $this->menus[$menuId];
-            } else {
-                return false;
-            }
-        }
-        return $this->menus;
+        return $this->items;
     }
 
     /**
@@ -58,12 +51,12 @@ class Driver
      *
      * @return array()
      */
-    public function getMenuTree()
+    public function getTree()
     {
-        if ($this->menuTree === null) {
-            $this->menuTree = $this->createMenuTree();
+        if ($this->tree === null) {
+            $this->tree = $this->createTree();
         }
-        return $this->menuTree;
+        return $this->tree;
     }
 
     /**
@@ -72,36 +65,36 @@ class Driver
      * @param string $url 网址
      * @return array
      */
-    public function getRouteByUrl($url)
+    public function getPathwayByUrl($url)
     {
-        $menuId = null;
-        foreach ($this->menus as $menu) {
-            if ($menu->url === $url) {
-                $menuId = $menu->id;
+        $itemId = null;
+        foreach ($this->items as $item) {
+            if ($item->url === $url) {
+                $itemId = $item->id;
                 break;
             }
         }
 
-        if ($menuId === null) return [];
-        return $this->getRoute($menuId);
+        if ($itemId === null) return [];
+        return $this->getPathway($itemId);
     }
 
     /**
      * 获取当前位置
      *
-     * @param string $menuId
+     * @param string $itemId
      * @return array
      */
-    public function getRoute(string $menuId = '')
+    public function getPathway(string $itemId = '')
     {
-        $route = array();
-        if (array_key_exists($menuId, $this->menus)) {
-            $route[] = $this->menus[$menuId];
-            $parentId = $this->menus[$menuId]->parentId;
+        $route = [];
+        if (isset($this->items[$itemId])) {
+            $route[] = $this->items[$itemId];
+            $parentId = $this->items[$itemId]->parentId;
             while ($parentId) {
-                if (array_key_exists($parentId, $this->menus)) {
-                    $route[] = $this->menus[$parentId];
-                    $parentId = $this->menus[$parentId]->parentId;
+                if (isset($this->items[$parentId])) {
+                    $route[] = $this->items[$parentId];
+                    $parentId = $this->items[$parentId]->parentId;
                 } else {
                     $parentId = '';
                 }
@@ -113,21 +106,20 @@ class Driver
 
     /**
      * 创建菜单树
-     * @param string $menuId
-     * @return array | false
+     * @param string $itemId
+     * @return array
      */
-    protected function createMenuTree(string $menuId = '')
+    protected function createTree(string $itemId = '')
     {
-        $subMenus = array();
-        foreach ($this->menus as $menu) {
-            if ($menu->parentId === $menuId) {
-                $menu->subMenu = $this->createMenuTree($menu->id);
-                $subMenus[] = $menu;
+        $subItems = [];
+        foreach ($this->items as $item) {
+            if ($item->parentId === $itemId) {
+                $item->subItems = $this->createTree($item->id);
+                $subItems[] = $item;
             }
         }
-        if (count($subMenus))
-            return $subMenus;
-        return false;
+
+        return $subItems;
     }
 
 

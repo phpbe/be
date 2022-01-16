@@ -2,10 +2,10 @@
 namespace Be\AdminMenu\Annotation;
 
 /**
- * 菜单
+ * 菜单项
  *
  */
-class BeAdminMenu extends Driver
+class BeMenu extends Driver
 {
 
     protected $icon = null;

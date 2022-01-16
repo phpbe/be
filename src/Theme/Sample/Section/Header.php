@@ -82,42 +82,66 @@
                 <ul class="navbar-nav">
                     <?php
                     $menu = \Be\Be::getMenu('North');
-                    $menuTree = $menu->getMenuTree();
+                    $menuTree = $menu->getTree();
                     if (is_array($menuTree)) {
-                        foreach ($menuTree as $tmpMenu) {
-                            $url = $tmpMenu->url;
-                            if (strpos($url, 'menuId') === false) {
-                                if (strpos($url, '?') === false) {
-                                    $url .= '?menuId=' . $tmpMenu->id;
-                                } else {
-                                    $url .= '&menuId=' . $tmpMenu->id;
-                                }
-                            }
+                        foreach ($menuTree as $item) {
 
-                            $hasSubMenu = false;
-                            if (isset($tmpMenu->subMenu) && is_array($tmpMenu->subMenu) && count($tmpMenu->subMenu) > 0) {
-                                $hasSubMenu = true;
+                            $hasSubItem = false;
+                            if (isset($item->subItems) && is_array($item->subItems) && count($item->subItems) > 0) {
+                                $hasSubItem = true;
                             }
 
                             echo '<li class="nav-item';
-                            if ($hasSubMenu) {
+                            if ($hasSubItem) {
                                 echo ' dropdown';
                             }
                             echo '">';
 
                             echo '<a class="nav-link';
-                            if (isset($this->menuId) && $this->menuId === $tmpMenu->id) {
-                                echo ' active';
-                            }
-                            if ($hasSubMenu) {
+                            if ($hasSubItem) {
                                 echo ' dropdown-toggle';
                             }
-                            echo '" href="#">'.$tmpMenu->label.'</a>';
 
-                            if ($hasSubMenu) {
+                            $url = 'javascript:void(0);';
+                            if ($item->route) {
+                                if ($item->params) {
+                                    $url = beUrl($item->route, $item->params);
+                                } else {
+                                    $url = beUrl($item->route);
+                                }
+                            } else {
+                                if ($item->url) {
+                                    $url = $item->url;
+                                }
+                            }
+
+                            echo '" href="'.$url.'"';
+                            if ($item->target === '_blank') {
+                                echo ' target="_blank"';
+                            }
+                            echo '>'.$item->label.'</a>';
+
+                            if ($hasSubItem) {
                                 echo '<ul class="dropdown-menu">';
-                                foreach ($tmpMenu->subMenu as $tmpSubMenu) {
-                                    echo '<li><a class="dropdown-item" href="#">'. $tmpSubMenu->label .'</a></li>';
+                                foreach ($item->subMenu as $subItem) {
+                                    $url = 'javascript:void(0);';
+                                    if ($subItem->route) {
+                                        if ($subItem->params) {
+                                            $url = beUrl($subItem->route, $subItem->params);
+                                        } else {
+                                            $url = beUrl($subItem->route);
+                                        }
+                                    } else {
+                                        if ($subItem->url) {
+                                            $url = $subItem->url;
+                                        }
+                                    }
+
+                                    echo '<li><a class="dropdown-item" href="'.$url.'"';
+                                    if ($subItem->target === '_blank') {
+                                        echo ' target="_blank"';
+                                    }
+                                    echo '>'. $subItem->label .'</a></li>';
                                 }
                                 echo '</ul>';
                             }

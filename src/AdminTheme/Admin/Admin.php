@@ -65,48 +65,58 @@
                     <div class="be-col be-pl-200">
                         <?php
                         $adminMenu = \Be\Be::getAdminMenu();
-                        $adminMenuTree = $adminMenu->getMenuTree()
+                        $adminMenuTree = $adminMenu->getTree()
                         ?>
                         <el-menu
                                 mode="horizontal"
                                 :default-active="defaultActive">
                             <?php
-                            foreach ($adminMenuTree as $menu) {
+                            foreach ($adminMenuTree as $item) {
+
+                                $hasSubItem = false;
+                                if (isset($item->subItems) && is_array($item->subItems) && count($item->subItems) > 0) {
+                                    $hasSubItem = true;
+                                }
 
                                 // 有子菜单
-                                if ($menu->subMenu) {
-                                    echo '<el-submenu index="north-menu-'.$menu->id.'" popper-class="be-north-popup-menu">';
+                                if ($hasSubItem) {
+                                    echo '<el-submenu index="north-menu-'.$item->id.'" popper-class="be-north-popup-menu">';
 
                                     echo '<template slot="title">';
-                                    if ($menu->url) {
-                                        echo '<el-link href="'.$menu->url.'" icon="'.$menu->icon.'" :underline="false" style="display:inline !important;">';
-                                        echo $menu->label;
+                                    if ($item->url) {
+                                        echo '<el-link href="'.$item->url.'" icon="'.$item->icon.'" :underline="false" style="display:inline !important;">';
+                                        echo $item->label;
                                         echo '</el-link>';
                                     } else {
-                                        echo '<i class="'.$menu->icon.'"></i>';
-                                        echo '<span>'.$menu->label.'</span>';
+                                        echo '<i class="'.$item->icon.'"></i>';
+                                        echo '<span>'.$item->label.'</span>';
                                     }
                                     echo '</template>';
 
-                                    foreach ($menu->subMenu as $subMenu) {
-                                        echo '<el-submenu index="north-menu-'.$subMenu->id.'" popper-class="be-north-popup-menu">';
+                                    foreach ($item->subItems as $subItem) {
+                                        echo '<el-submenu index="north-menu-'.$subItem->id.'" popper-class="be-north-popup-menu">';
 
                                         echo '<template slot="title">';
-                                        if ($subMenu->url) {
-                                            echo '<el-link href="'.$subMenu->url.'" icon="'.$subMenu->icon.'" :underline="false">';
-                                            echo $subMenu->label;
+                                        if ($subItem->url) {
+                                            echo '<el-link href="'.$subItem->url.'" icon="'.$subItem->icon.'" :underline="false">';
+                                            echo $subItem->label;
                                             echo '</el-link>';
                                         } else {
-                                            echo '<i class="'.$subMenu->icon.'"></i>';
-                                            echo '<span>'.$subMenu->label.'</span>';
+                                            echo '<i class="'.$subItem->icon.'"></i>';
+                                            echo '<span>'.$subItem->label.'</span>';
                                         }
                                         echo '</template>';
 
-                                        if ($subMenu->subMenu) {
-                                            foreach ($subMenu->subMenu as $subSubMenu) {
-                                                echo '<el-menu-item index="north-menu-'.$subSubMenu->id.'">';
-                                                echo '<el-link href="'.$subSubMenu->url.'" icon="'.$subSubMenu->icon.'" :underline="false">';
-                                                echo $subSubMenu->label;
+                                        $hasSubSubItem = false;
+                                        if (isset($subItem->subItems) && is_array($subItem->subItems) && count($subItem->subItems) > 0) {
+                                            $hasSubSubItem = true;
+                                        }
+
+                                        if ($hasSubSubItem) {
+                                            foreach ($subItem->subItems as $subSubItem) {
+                                                echo '<el-menu-item index="north-menu-'.$subSubItem->id.'">';
+                                                echo '<el-link href="'.$subSubItem->url.'" icon="'.$subSubItem->icon.'" :underline="false">';
+                                                echo $subSubItem->label;
                                                 echo '</el-link>';
                                                 echo '</el-menu-item>';
                                             }
@@ -193,7 +203,7 @@
                 <div class="menu">
                     <?php
                     $adminMenu = \Be\Be::getAdminMenu();
-                    $adminMenuTree = $adminMenu->getMenuTree()
+                    $adminMenuTree = $adminMenu->getTree()
                     ?>
                     <el-menu
                             background-color="#30354d"
@@ -204,25 +214,36 @@
                             :collapse-transition="false">
                         <?php
                         $appName = \Be\Be::getRequest()->getAppName();
-                        foreach ($adminMenuTree as $menu) {
+                        foreach ($adminMenuTree as $item) {
 
-                            if ($menu->id === $appName) {
+                            if ($item->id === $appName) {
+
+                                $hasSubItem = false;
+                                if (isset($item->subItems) && is_array($item->subItems) && count($item->subItems) > 0) {
+                                    $hasSubItem = true;
+                                }
+
                                 // 有子菜单
-                                if ($menu->subMenu) {
-                                    foreach ($menu->subMenu as $subMenu) {
-                                        echo '<el-submenu index="west-menu-'.$subMenu->id.'" popper-class="be-west-popup-menu">';
+                                if ($hasSubItem) {
+                                    foreach ($item->subItems as $subItem) {
+                                        echo '<el-submenu index="west-menu-'.$subItem->id.'" popper-class="be-west-popup-menu">';
 
                                         echo '<template slot="title">';
-                                        echo '<i class="'.$subMenu->icon.'"></i>';
-                                        echo '<span>'.$subMenu->label.'</span>';
+                                        echo '<i class="'.$subItem->icon.'"></i>';
+                                        echo '<span>'.$subItem->label.'</span>';
                                         echo '</template>';
 
-                                        if ($subMenu->subMenu) {
-                                            foreach ($subMenu->subMenu as $subSubMenu) {
-                                                echo '<el-menu-item index="west-menu-'.$subSubMenu->id.'">';
+                                        $hasSubSubItem = false;
+                                        if (isset($subItem->subItems) && is_array($subItem->subItems) && count($subItem->subItems) > 0) {
+                                            $hasSubSubItem = true;
+                                        }
+
+                                        if ($hasSubSubItem) {
+                                            foreach ($subItem->subItems as $subSubItem) {
+                                                echo '<el-menu-item index="west-menu-'.$subSubItem->id.'">';
                                                 echo '<template slot="title">';
-                                                echo '<el-link href="'.$subSubMenu->url.'" icon="'.$subSubMenu->icon.'" :underline="false">';
-                                                echo $subSubMenu->label;
+                                                echo '<el-link href="'.$subSubItem->url.'" icon="'.$subSubItem->icon.'" :underline="false">';
+                                                echo $subSubItem->label;
                                                 echo '</el-link>';
                                                 echo '</template>';
                                                 echo '</el-menu-item>';

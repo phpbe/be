@@ -75,7 +75,7 @@ class AdminMenu
                     $methodComment = $method->getDocComment();
                     $methodComments = Annotation::parse($methodComment);
                     $menuGroup = [];
-                    $menu = [];
+                    $item = [];
                     foreach ($methodComments as $key => $val) {
                         if ($key === 'BeMenuGroup') {
                             if (is_array($val[0])) {
@@ -94,7 +94,7 @@ class AdminMenu
                                 }
 
                                 if (isset($val[0]['label'])) {
-                                    $menu = $val[0];
+                                    $item = $val[0];
                                 }
                             }
                         }
@@ -104,37 +104,37 @@ class AdminMenu
                         $menuGroup = $classMenuGroup;
                     }
 
-                    if (!$menuGroup || !$menu) {
+                    if (!$menuGroup || !$item) {
                         continue;
                     }
 
                     $app->key = $appName;
                     $menuGroup['key'] = $appName . '.' . $controller;
 
-                    $menu['key'] = $appName . '.' . $controller . '.' . $methodName;
-                    $menu['url'] = 'beAdminUrl(\'' . $appName . '.' . $controller . '.' . $methodName . '\')';
-                    if (!isset($menu['ordering'])) {
-                        $menu['ordering'] = 1000000;
+                    $item['key'] = $appName . '.' . $controller . '.' . $methodName;
+                    $item['url'] = 'beAdminUrl(\'' . $appName . '.' . $controller . '.' . $methodName . '\')';
+                    if (!isset($item['ordering'])) {
+                        $item['ordering'] = 1000000;
                     }
 
                     if (!isset($menus[$appName])) {
                         $menus[$appName] = [
                             'app' => $app,
                             'groups' => [],
-                            'ordering' => $menu['ordering'],
+                            'ordering' => $item['ordering'],
                         ];
                     }
 
                     if (!isset($menus[$appName]['groups'][$menuGroup['label']])) {
                         $menus[$appName]['groups'][$menuGroup['label']] = [
                             'group' => $menuGroup,
-                            'menus' => [
-                                $menu
+                            'items' => [
+                                $item
                             ],
                         ];
                     } else {
                         $menus[$appName]['groups'][$menuGroup['label']]['group'] = array_merge($menus[$appName]['groups'][$menuGroup['label']]['group'], $menuGroup);
-                        $menus[$appName]['groups'][$menuGroup['label']]['menus'][] = $menu;
+                        $menus[$appName]['groups'][$menuGroup['label']]['items'][] = $item;
                     }
 
                     if (isset($menuGroup['ordering'])) {
@@ -157,8 +157,8 @@ class AdminMenu
         // 排序
         foreach ($menus as $k => &$v) {
             foreach ($v['groups'] as $key => &$val) {
-                $orderings = array_column($val['menus'],'ordering');
-                array_multisort($val['menus'],SORT_ASC, SORT_NUMERIC,$orderings);
+                $orderings = array_column($val['items'],'ordering');
+                array_multisort($val['items'],SORT_ASC, SORT_NUMERIC,$orderings);
             }
             unset($val);
 
@@ -179,7 +179,7 @@ class AdminMenu
      */
     public function update()
     {
-        $menus = $this->getMenus();
+        $items = $this->getMenus();
 
         $code = '<?php' . "\n";
         $code .= 'namespace Be\\Data\\Cache;' . "\n";
@@ -189,15 +189,15 @@ class AdminMenu
         $code .= '  public function __construct()' . "\n";
         $code .= '  {' . "\n";
 
-        foreach ($menus as $k => $v) {
+        foreach ($items as $k => $v) {
             $app = $v['app'];
-            $code .= '    $this->addMenu(\'' . $app->key . '\', \'\', \'' . $app->icon . '\',\'' . $app->label . '\', ' . $app->url . ' , \'\');' . "\n";
+            $code .= '    $this->addItem(\'' . $app->key . '\', \'\', \'' . $app->icon . '\',\'' . $app->label . '\', ' . $app->url . ' , \'\');' . "\n";
             foreach ($v['groups'] as $key => $val) {
                 $group = $val['group'];
-                $menu = current($val['menus']);
-                $code .= '    $this->addMenu(\'' . $group['key'] . '\',\'' . $app->key . '\',\'' . (isset($group['icon']) ? $group['icon'] : 'el-icon-folder') . '\',\'' . $group['label'] . '\', ' . $menu['url'] . ', \'\');' . "\n";
-                foreach ($val['menus'] as $menu) {
-                    $code .= '    $this->addMenu(\'' . $menu['key'] . '\', \'' . $group['key'] . '\', \'' . (isset($menu['icon']) ? $menu['icon'] : 'el-icon-arrow-right') . '\', \'' . $menu['label'] . '\', ' . $menu['url'] . ', \'' . (isset($menu['target']) ? $menu['target'] : '') . '\');' . "\n";
+                $firstItem = current($val['items']);
+                $code .= '    $this->addItem(\'' . $group['key'] . '\',\'' . $app->key . '\',\'' . (isset($group['icon']) ? $group['icon'] : 'el-icon-folder') . '\',\'' . $group['label'] . '\', ' . $firstItem['url'] . ', \'\');' . "\n";
+                foreach ($val['items'] as $item) {
+                    $code .= '    $this->addItem(\'' . $item['key'] . '\', \'' . $group['key'] . '\', \'' . (isset($item['icon']) ? $item['icon'] : 'el-icon-arrow-right') . '\', \'' . $item['label'] . '\', ' . $item['url'] . ', \'' . (isset($item['target']) ? $item['target'] : '') . '\');' . "\n";
                 }
             }
         }
