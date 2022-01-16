@@ -60,51 +60,6 @@ class Driver
     }
 
     /**
-     * 获取当前位置
-     *
-     * @param string $url 网址
-     * @return array
-     */
-    public function getPathwayByUrl($url)
-    {
-        $itemId = null;
-        foreach ($this->items as $item) {
-            if ($item->url === $url) {
-                $itemId = $item->id;
-                break;
-            }
-        }
-
-        if ($itemId === null) return [];
-        return $this->getPathway($itemId);
-    }
-
-    /**
-     * 获取当前位置
-     *
-     * @param string $itemId
-     * @return array
-     */
-    public function getPathway(string $itemId = '')
-    {
-        $route = [];
-        if (isset($this->items[$itemId])) {
-            $route[] = $this->items[$itemId];
-            $parentId = $this->items[$itemId]->parentId;
-            while ($parentId) {
-                if (isset($this->items[$parentId])) {
-                    $route[] = $this->items[$parentId];
-                    $parentId = $this->items[$parentId]->parentId;
-                } else {
-                    $parentId = '';
-                }
-            }
-        }
-        $route = array_reverse($route, true);
-        return $route;
-    }
-
-    /**
      * 创建菜单树
      * @param string $itemId
      * @return array
