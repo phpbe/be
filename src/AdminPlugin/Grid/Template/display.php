@@ -283,11 +283,11 @@
                     echo '</div>';
 
                     if (count($titleRightToolbarItems) > 0) {
+                        echo '<div class="be-col-auto">';
                         foreach ($titleRightToolbarItems as $item) {
-                            echo '<div class="be-col-auto">';
                             echo $item['html'];
-                            echo '</div>';
                         }
+                        echo '</div>';
                     }
                     ?>
                 </div>
