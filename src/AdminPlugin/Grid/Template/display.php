@@ -274,20 +274,22 @@
                     </div>
 
                     <?php
-                    echo '<div class="be-col be-px-200">';
                     if (count($titleToolbarItems) > 0) {
                         foreach ($titleToolbarItems as $item) {
+                            echo '<div class="be-col-auto be-pl-100">';
                             echo $item['html'];
+                            echo '</div>';
                         }
                     }
-                    echo '</div>';
+
+                    echo '<div class="be-col"></div>';
 
                     if (count($titleRightToolbarItems) > 0) {
-                        echo '<div class="be-col-auto">';
                         foreach ($titleRightToolbarItems as $item) {
+                            echo '<div class="be-col-auto be-pl-100">';
                             echo $item['html'];
+                            echo '</div>';
                         }
-                        echo '</div>';
                     }
                     ?>
                 </div>
