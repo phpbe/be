@@ -617,10 +617,23 @@ class Curd extends Driver
             $setting = $this->setting['detail'];
             $setting['form']['items'] = $fields;
 
+
+            if (isset($this->setting['detail']['events']['before'])) {
+                $this->on('before', $this->setting['delete']['events']['before']);
+            }
+
+            if (isset($this->setting['detail']['events']['after'])) {
+                $this->on('after', $this->setting['delete']['events']['after']);
+            }
+
+            $this->trigger('before', $tuple, $postData);
+
             Be::getAdminPlugin('Detail')
                 ->setting($setting)
                 ->setValue($row)
                 ->display();
+
+            $this->trigger('after', $tuple, $postData);
 
         } catch (\Throwable $t) {
             $response->error($t->getMessage());
