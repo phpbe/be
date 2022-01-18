@@ -86,6 +86,10 @@ class FormItemSelect extends FormItem
 
         $html .= '</el-select>';
 
+        if ($this->description) {
+            $html .= '<div class="be-c-999">' . $this->description . '</div>';
+        }
+
         $html .= '</el-form-item>';
         return $html;
     }

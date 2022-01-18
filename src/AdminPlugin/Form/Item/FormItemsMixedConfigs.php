@@ -230,6 +230,10 @@ class FormItemsMixedConfigs extends FormItems
             $html .= '</el-dropdown>';
         }
 
+        if ($this->description) {
+            $html .= '<div class="be-c-999">' . $this->description . '</div>';
+        }
+
         $html .= '</el-form-item>';
         return $html;
     }

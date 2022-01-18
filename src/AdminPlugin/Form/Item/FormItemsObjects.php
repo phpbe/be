@@ -128,6 +128,10 @@ class FormItemsObjects extends FormItems
             $html .= '<el-button type="primary" icon="el-icon-plus" @click="FormItemsObjects_' . $this->name . '_add">新增</el-button>';
         }
 
+        if ($this->description) {
+            $html .= '<div class="be-c-999">' . $this->description . '</div>';
+        }
+
         $html .= '</el-form-item>';
         return $html;
     }

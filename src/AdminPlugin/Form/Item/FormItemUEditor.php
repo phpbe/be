@@ -128,6 +128,11 @@ class FormItemUEditor extends FormItem
 
         $html .= '<textarea ref="refFormItemUEditor_' . $this->name . '" v-model="formData.' . $this->name . '"></textarea>';
         //<script id="editor" type="text/plain" style="width:1024px;height:500px;"></script>
+
+        if ($this->description) {
+            $html .= '<div class="be-c-999">' . $this->description . '</div>';
+        }
+
         $html .= '</el-form-item>';
         return $html;
     }

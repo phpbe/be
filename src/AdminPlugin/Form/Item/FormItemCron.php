@@ -119,6 +119,10 @@ class FormItemCron extends FormItem
         $html .= '<el-input v-model="formItems.' . $this->name . '.custom" @change="formItemCron_customChange(\'' . $this->name . '\')"></el-input>';
         $html .= '</div>';
 
+        if ($this->description) {
+            $html .= '<div class="be-c-999">' . $this->description . '</div>';
+        }
+
         $html .= '</el-form-item>';
         return $html;
     }

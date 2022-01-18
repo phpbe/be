@@ -170,6 +170,11 @@ class FormItemAvatar extends FormItem
         $html .= '<el-button size="medium" type="primary"><i class="el-icon-upload2"></i> 选择头像文件</el-button>';
         $html .= '<div class="el-upload__tip" slot="tip">' . $this->description . '</div>';
         $html .= '</el-upload>';
+
+        if ($this->description) {
+            $html .= '<div class="be-c-999">' . $this->description . '</div>';
+        }
+
         $html .= '</el-form-item>';
         return $html;
     }
