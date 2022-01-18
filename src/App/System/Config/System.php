@@ -48,11 +48,11 @@ class System
     /**
      * @BeConfigItem("是否开启开发者模式", driver="FormItemSwitch")
      */
-    public $developer = true;
+    public $developer = 1;
 
     /**
      * @BeConfigItem("是否开启可安装及重装", driver="FormItemSwitch")
      */
-    public $installable = true;
+    public $installable = 1;
 
 }

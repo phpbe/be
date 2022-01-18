@@ -64,6 +64,6 @@ class Server
     /**
      * @BeConfigItem("启动时清空Cache", driver="FormItemSwitch")
      */
-    public $clearCacheOnStart = true;
+    public $clearCacheOnStart = 1;
 
 }
