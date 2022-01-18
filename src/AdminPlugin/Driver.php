@@ -37,7 +37,7 @@ abstract class Driver
     /**
      * 触发事件
      * @param string $event 事件名
-     * @param array ...$args 事件参数
+     * @param mixed ...$args 事件参数
      * @return self
      */
     public function trigger($event, ...$args) {

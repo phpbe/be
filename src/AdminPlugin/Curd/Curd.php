@@ -711,9 +711,9 @@ class Curd extends Driver
                     }
                 }
 
-                $this->trigger('before', $tuple);
+                $this->trigger('before', $tuple, $postData);
                 $tuple->save();
-                $this->trigger('after', $tuple);
+                $this->trigger('after', $tuple, $postData);
 
                 $primaryKey = $tuple->getPrimaryKey();
 
@@ -735,12 +735,12 @@ class Curd extends Driver
                     beAdminOpLog($title . '：新建' . $strPrimaryKey . '为' . $strPrimaryKeyValue . '的记录！', $formData);
                 }
                 $db->commit();
-                $this->trigger('success', $tuple);
+                $this->trigger('success', $tuple, $postData);
                 $response->success($title . '：新建成功！');
 
             } catch (\Throwable $t) {
                 $db->rollback();
-                $this->trigger('error', [$t]);
+                $this->trigger('error', $t, $postData);
                 $response->error($t->getMessage());
                 Be::getLog()->error($t);
             }
@@ -877,10 +877,10 @@ class Curd extends Driver
                     }
                 }
 
-                $this->trigger('before', $tuple);
+                $this->trigger('before', $tuple, $postData);
                 $tupleChangeDetails = $tuple->getChangeDetails();
                 $tuple->update();
-                $this->trigger('after', $tuple);
+                $this->trigger('after', $tuple, $postData);
                 $strPrimaryKey = null;
                 $strPrimaryKeyValue = null;
                 if (is_array($primaryKey)) {
@@ -895,11 +895,11 @@ class Curd extends Driver
                     beAdminOpLog($title . '：编辑' . $strPrimaryKey . '为' . $strPrimaryKeyValue . '的记录！', $tupleChangeDetails);
                 }
                 $db->commit();
-                $this->trigger('success', $tuple);
+                $this->trigger('success', $tuple, $postData);
                 $response->success($title . '：编辑成功！');
             } catch (\Throwable $t) {
                 $db->rollback();
-                $this->trigger('error', [$t]);
+                $this->trigger('error', $t, $postData);
                 $response->error($t->getMessage());
                 Be::getLog()->error($t);
             }
@@ -1055,9 +1055,9 @@ class Curd extends Driver
 
                     $tuple->load($primaryKeyValue);
                     $tuple->$field = $value;
-                    $this->trigger('before', $tuple);
+                    $this->trigger('before', $tuple, $postData);
                     $tuple->save();
-                    $this->trigger('after', $tuple);
+                    $this->trigger('after', $tuple, $postData);
 
                     if ($strPrimaryKey === null) {
                         if (is_array($primaryKey)) {
@@ -1083,12 +1083,12 @@ class Curd extends Driver
                 }
                 $db->commit();
 
-                $this->trigger('success', null);
+                $this->trigger('success', $postData);
                 $response->success($title . '，执行成功！');
 
             } catch (\Throwable $t) {
                 $db->rollback();
-                $this->trigger('fail', $t);
+                $this->trigger('error', $t, $postData);
                 $response->error($t->getMessage());
                 Be::getLog()->error($t);
             }
@@ -1131,9 +1131,9 @@ class Curd extends Driver
                 }
                 $tuple->load($primaryKeyValue);
                 $tuple->$field = $value;
-                $this->trigger('before', $tuple);
+                $this->trigger('before', $tuple, $postData);
                 $tuple->save();
-                $this->trigger('after', $tuple);
+                $this->trigger('after', $tuple, $postData);
 
                 $strPrimaryKey = null;
                 $strPrimaryKeyValue = null;
@@ -1149,11 +1149,11 @@ class Curd extends Driver
                     beAdminOpLog($title . '（#' . $strPrimaryKey . '：' . $strPrimaryKeyValue . '）');
                 }
                 $db->commit();
-                $this->trigger('success', $tuple);
+                $this->trigger('success', $tuple, $postData);
                 $response->success($title . '，执行成功！');
             } catch (\Throwable $t) {
                 $db->rollback();
-                $this->trigger('error', $t);
+                $this->trigger('error', $t, $postData);
                 $response->error($t->getMessage());
                 Be::getLog()->error($t);
             }
@@ -1234,9 +1234,9 @@ class Curd extends Driver
                     }
 
                     $tuple->load($primaryKeyValue);
-                    $this->trigger('before', $tuple);
+                    $this->trigger('before', $tuple, $postData);
                     $tuple->delete();
-                    $this->trigger('after', $tuple);
+                    $this->trigger('after', $tuple, $postData);
 
                     if ($strPrimaryKey === null) {
                         if (is_array($primaryKey)) {
@@ -1261,11 +1261,11 @@ class Curd extends Driver
                     beAdminOpLog($title . '（#' . $strPrimaryKey . '：' . $strPrimaryKeyValue . '）');
                 }
                 $db->commit();
-                $this->trigger('success', null);
+                $this->trigger('success', $postData);
                 $response->success($title . '，执行成功！');
             } catch (\Throwable $t) {
                 $db->rollback();
-                $this->trigger('error', $t);
+                $this->trigger('error', $t, $postData);
                 $response->error($t->getMessage());
                 Be::getLog()->error($t);
             }
@@ -1294,9 +1294,9 @@ class Curd extends Driver
                     $primaryKeyValue = $postData['row'][$primaryKey];
                 }
                 $tuple->load($primaryKeyValue);
-                $this->trigger('before', $tuple);
+                $this->trigger('before', $tuple, $postData);
                 $tuple->delete();
-                $this->trigger('after', $tuple);
+                $this->trigger('after', $tuple, $postData);
 
                 $strPrimaryKey = null;
                 $strPrimaryKeyValue = null;
@@ -1312,11 +1312,11 @@ class Curd extends Driver
                     beAdminOpLog($title . '（#' . $strPrimaryKey . '：' . $strPrimaryKeyValue . '）');
                 }
                 $db->commit();
-                $this->trigger('success', $tuple);
+                $this->trigger('success', $tuple, $postData);
                 $response->success($title . '，执行成功！');
             } catch (\Throwable $t) {
                 $db->rollback();
-                $this->trigger('error', $t);
+                $this->trigger('error', $t, $postData);
                 $response->error($t->getMessage());
                 Be::getLog()->error($t);
             }
