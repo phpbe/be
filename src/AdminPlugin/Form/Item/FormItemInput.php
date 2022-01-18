@@ -73,7 +73,7 @@ class FormItemInput extends FormItem
         $html .= '</el-input>';
 
         if ($this->description) {
-            $html .= '<div class="be-c-999">' . $this->description . '</div>';
+            $html .= '<div class="be-c-999 be-mt-20 be-lh-150">' . $this->description . '</div>';
         }
 
         $html .= '</el-form-item>';

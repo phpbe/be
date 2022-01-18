@@ -130,7 +130,7 @@ class FormItemUEditor extends FormItem
         //<script id="editor" type="text/plain" style="width:1024px;height:500px;"></script>
 
         if ($this->description) {
-            $html .= '<div class="be-c-999">' . $this->description . '</div>';
+            $html .= '<div class="be-c-999 be-mt-20 be-lh-150">' . $this->description . '</div>';
         }
 
         $html .= '</el-form-item>';
