@@ -21,9 +21,9 @@ class FormItemSwitch extends FormItem
         parent::__construct($params, $row);
 
         if (!$this->value) {
-            $this->value = '0';
+            $this->value = 0;
         } else {
-            $this->value = (string)$this->value;
+            $this->value = 1;
         }
 
         if ($this->disabled) {
@@ -33,16 +33,16 @@ class FormItemSwitch extends FormItem
         }
 
         if (!isset($this->ui['active-value'])) {
-            $this->ui['active-value'] = 1;
+            $this->ui[':active-value'] = 1;
         }
 
         if (!isset($this->ui['inactive-value'])) {
-            $this->ui['inactive-value'] = 0;
+            $this->ui[':inactive-value'] = 0;
         }
 
         if ($this->name !== null) {
-            if (!isset($this->ui['v-model'])) {
-                $this->ui['v-model'] = 'formData.' . $this->name;
+            if (!isset($this->ui['v-model.number'])) {
+                $this->ui['v-model.number'] = 'formData.' . $this->name;
             }
         }
     }
