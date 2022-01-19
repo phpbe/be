@@ -19,10 +19,6 @@ class FormActionButton extends FormAction
     {
         parent::__construct($params);
 
-        if (!isset($this->ui['size'])) {
-            $this->ui['size'] = isset($params['size']) ? $params['size'] : 'mini';
-        }
-
         if (!isset($this->ui['type']) && isset($params['type'])) {
             $this->ui['type'] = $params['type'];
         }

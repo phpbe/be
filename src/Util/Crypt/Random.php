@@ -1,5 +1,5 @@
 <?php
-namespace Be\Util;
+namespace Be\Util\Crypt;
 
 class Random
 {

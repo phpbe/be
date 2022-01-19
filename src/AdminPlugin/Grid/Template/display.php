@@ -1007,6 +1007,7 @@
                     });
                 },
                 reloadGridData: function () {
+                    this.loading = true;
                     var _this = this;
                     _this.$http.post("<?php echo $this->setting['form']['action']; ?>", {
                         actualLayout: "<?php echo $this->setting['actualLayout']; ?>",
@@ -1016,6 +1017,7 @@
                         page: _this.page,
                         pageSize: _this.pageSize
                     }).then(function (response) {
+                        _this.loading = false;
                         if (response.status === 200) {
                             var responseData = response.data;
                             if (responseData.success) {
@@ -1026,6 +1028,9 @@
                             _this.resize();
                             _this.updateToolbars();
                         }
+                    }).catch(function (error) {
+                        _this.loading = false;
+                        _this.$message.error(error);
                     });
                 },
                 changePageSize: function (pageSize) {
@@ -1108,8 +1113,10 @@
                 },
                 action: function (option, data) {
                     if (option.target === 'ajax') {
+                        this.loading = true;
                         var _this = this;
                         this.$http.post(option.url, data).then(function (response) {
+                            _this.loading = false;
                             if (response.status === 200) {
                                 if (response.data.success) {
                                     _this.$message({
@@ -1129,6 +1136,7 @@
                                 _this.loadGridData();
                             }
                         }).catch(function (error) {
+                            _this.loading = false;
                             _this.$message({
                                 showClose: true,
                                 message: error,
@@ -1147,6 +1155,11 @@
                             case "blank":
                             case "_blank":
                                 eForm.target = "_blank";
+                                break;
+                            case "window":
+                                let windowName = "window-" + Math.floor(Math.random() * 100000000);
+                                window.open("about:blank", windowName);
+                                eForm.target = windowName;
                                 break;
                             case "dialog":
                                 eForm.target = "frame-dialog";

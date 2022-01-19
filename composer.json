@@ -28,7 +28,8 @@
     "ext-curl": "*",
     "ext-json": "*",
     "ext-pdo": "*",
-    "ext-gd": "*"
+    "ext-gd": "*",
+    "ext-openssl": "*"
   },
   "autoload": {
     "psr-4": {

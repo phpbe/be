@@ -9,7 +9,7 @@ use Be\AdminPlugin\Form\Item\FormItemAutoComplete;
 use Be\AdminPlugin\Form\Item\FormItemCustom;
 use Be\AdminPlugin\Form\Item\FormItemInputNumberInt;
 use Be\Be;
-use Be\Util\Random;
+use Be\Util\Crypt\Random;
 
 
 /**

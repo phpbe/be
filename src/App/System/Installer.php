@@ -3,7 +3,7 @@ namespace Be\App\System;
 
 use Be\Runtime\RuntimeException;
 use Be\Be;
-use Be\Util\Random;
+use Be\Util\Crypt\Random;
 
 /**
  * 应用安装器

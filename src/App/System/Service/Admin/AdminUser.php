@@ -3,7 +3,8 @@
 namespace Be\App\System\Service\Admin;
 
 use Be\Db\Tuple;
-use Be\Util\Random;
+use Be\Util\Crypt\Aes;
+use Be\Util\Crypt\Random;
 use Be\App\ServiceException;
 use Be\Be;
 
@@ -135,7 +136,7 @@ class AdminUser
 
             $this->makeLogin($tupleAdminUser);
 
-            $adminRememberMe = $username . '|' . base64_encode($this->rc4($password, $tupleAdminUser->salt));
+            $adminRememberMe = $username . '|' . Aes::encrypt($password, $tupleAdminUser->salt);
             $response->cookie('be-adminUserRememberMe', $adminRememberMe, time() + 30 * 86400, '/', '', false, true);
 
             $tupleAdminUserLoginLog->success = 1;
@@ -204,8 +205,8 @@ class AdminUser
             try {
                 $tupleAdminUser->loadBy('username', $username);
                 if ($tupleAdminUser->is_delete === 0 && $tupleAdminUser->is_enable === 1) {
-                    $password = base64_decode($rememberMe[1]);
-                    $password = $this->rc4($password, $tupleAdminUser->salt);
+                    $password = $rememberMe[1];
+                    $password = Aes::decrypt($password, $tupleAdminUser->salt);
                     $this->login($username, $password, $request->getIp());
                 }
             } catch (\Exception $e) {
@@ -234,43 +235,6 @@ class AdminUser
     public function encryptPassword($password, $salt)
     {
         return sha1(sha1($password) . $salt);
-    }
-
-
-    public function rc4($txt, $pwd)
-    {
-        $result = '';
-        $kL = strlen($pwd);
-        $tL = strlen($txt);
-        $level = 256;
-        $key = [];
-        $box = [];
-
-        for ($i = 0; $i < $level; ++$i) {
-            $key[$i] = ord($pwd[$i % $kL]);
-            $box[$i] = $i;
-        }
-
-        for ($j = $i = 0; $i < $level; ++$i) {
-            $j = ($j + $box[$i] + $key[$i]) % $level;
-            $tmp = $box[$i];
-            $box[$i] = $box[$j];
-            $box[$j] = $tmp;
-        }
-
-        for ($a = $j = $i = 0; $i < $tL; ++$i) {
-            $a = ($a + 1) % $level;
-            $j = ($j + $box[$a]) % $level;
-
-            $tmp = $box[$a];
-            $box[$a] = $box[$j];
-            $box[$j] = $tmp;
-
-            $k = $box[($box[$a] + $box[$j]) % $level];
-            $result .= chr(ord($txt[$i]) ^ $k);
-        }
-
-        return $result;
     }
 
 

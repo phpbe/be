@@ -271,12 +271,20 @@
                                         }
 
                                         alert(message);
-                                        if (self.frameElement != null && (self.frameElement.tagName.toLowerCase() === "iframe")) {
-                                            parent.closeAndReload();
-                                        } else {
-                                            window.close();
-                                        }
 
+                                        if (responseData.callback) {
+
+                                        } else {
+                                            if (responseData.redirectUrl) {
+                                                window.location.href=responseData.redirectUrl;
+                                            } else {
+                                                if (self.frameElement != null && (self.frameElement.tagName.toLowerCase() === "iframe")) {
+                                                    parent.closeAndReload();
+                                                } else {
+                                                    window.close();
+                                                }
+                                            }
+                                        }
                                     } else {
                                         if (responseData.message) {
                                             _this.$message.error(responseData.message);
