@@ -207,7 +207,7 @@ class AdminPlugin
                     }
 
                     if (strpos($filename, '{random}') !== false) {
-                        $random = \Be\Util\Random::simple(10);
+                        $random = \Be\Util\Crypt\Random::simple(10);
                         $filename = str_replace('{random}', $random, $filename);
                     }
 

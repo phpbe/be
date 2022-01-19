@@ -20,8 +20,7 @@ use Be\AdminPlugin\Table\Item\TableItemCustom;
 use Be\AdminPlugin\Table\Item\TableItemLink;
 use Be\AdminPlugin\Table\Item\TableItemSelection;
 use Be\AdminPlugin\Table\Item\TableItemSwitch;
-use Be\Task\Annotation\BeTask;
-use Be\Util\Random;
+use Be\Util\Crypt\Random;
 
 /**
  * 计划任务
