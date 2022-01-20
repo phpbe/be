@@ -360,7 +360,7 @@ class AdminUser extends Auth
             ],
 
             'create' => [
-                'title' => '新建用户',
+                'title' => '新建管理员',
                 'form' => [
                     'items' => [
                         [
@@ -435,7 +435,7 @@ class AdminUser extends Auth
             ],
 
             'edit' => [
-                'title' => '编辑用户',
+                'title' => '编辑管理员',
                 'form' => [
                     'items' => [
                         [

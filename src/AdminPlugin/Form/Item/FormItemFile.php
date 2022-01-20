@@ -131,10 +131,6 @@ class FormItemFile extends FormItem
         $html .= '<div class="el-upload__tip" slot="tip">' . $this->description . '</div>';
         $html .= '</el-upload>';
 
-        if ($this->description) {
-            $html .= '<div class="be-c-999 be-mt-20 be-lh-150">' . $this->description . '</div>';
-        }
-
         $html .= '</el-form-item>';
         return $html;
     }
