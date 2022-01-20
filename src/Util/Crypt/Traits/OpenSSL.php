@@ -35,6 +35,11 @@ trait OpenSSL
         $iv = null;
         $raw = null;
         if ($ivLen > 0) {
+            if (strlen($str) <= $ivLen) {
+                // throw new UtilException('Crypt ' . self::$name . ': cipher text is invalid!');
+                return '';
+            }
+
             $iv = substr($str, 0, $ivLen);
             $raw = substr($str, $ivLen);
         } else {
