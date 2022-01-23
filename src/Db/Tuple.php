@@ -651,6 +651,36 @@ abstract class Tuple
     }
 
     /**
+     * 初始化
+     *
+     * @return Tuple
+     */
+    public function init()
+    {
+        $tableProperty = Be::getTableProperty($this->_tableName, $this->_dbName);
+        $fields = $tableProperty->getFields();
+        foreach ($fields as $field) {
+            $fieldName = $field['name'];
+            if ($field['default'] === null) {
+                $this->$fieldName = null;
+            } else {
+                if (in_array($field['type'], ['int', 'tinyint', 'smallint', 'mediumint', 'bigint'])) {
+                    $this->$fieldName = (int)$field['default'];
+                } elseif (in_array($field['type'], ['float', 'double'])) {
+                    $this->$fieldName = (float)$field['default'];
+                } else {
+                    $this->$fieldName = $field['default'];
+                }
+            }
+        }
+
+        $this->_init = [];
+        $this->_changed = false;
+
+        return $this;
+    }
+
+    /**
      * 获取数据库名
      *
      * @return string
