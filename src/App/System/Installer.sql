@@ -1,3 +1,73 @@
+
+CREATE TABLE `system_admin_op_log` (
+  `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
+  `admin_user_id` varchar(36) NOT NULL DEFAULT '' COMMENT '用户ID',
+  `app` VARCHAR(60) NOT NULL DEFAULT '' COMMENT '应用名',
+  `controller` VARCHAR(60) NOT NULL DEFAULT '' COMMENT '控制器名',
+  `action` VARCHAR(60) NOT NULL DEFAULT '' COMMENT '动作名',
+  `content` VARCHAR(240) NOT NULL DEFAULT '' COMMENT '内容',
+  `details` text NOT NULL COMMENT '明细',
+  `ip` varchar(15) NOT NULL DEFAULT '' COMMENT 'IP',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `admin_user_id` (`admin_user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统后台操作日志';
+
+CREATE TABLE `system_admin_role` (
+  `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
+  `name` varchar(60) NOT NULL DEFAULT '' COMMENT '角色名',
+  `remark` varchar(200) NOT NULL DEFAULT '' COMMENT '备注',
+  `permission` tinyint NOT NULL DEFAULT '0' COMMENT '权限（0: 无权限/1: 所有权限/-1: 自定义权限）',
+  `permission_keys` text NOT NULL COMMENT '自定义权限',
+  `is_enable` tinyint NOT NULL DEFAULT '1' COMMENT '是否可用',
+  `is_delete` tinyint NOT NULL DEFAULT '0' COMMENT '是否已删除',
+  `ordering` int NOT NULL DEFAULT '0' COMMENT '排序（越小越靠前）',
+  `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户角色';
+
+INSERT INTO `system_admin_role` (`id`, `name`, `remark`, `permission`, `permission_keys`, `is_enable`, `is_delete`, `ordering`, `create_time`, `update_time`) VALUES
+((SELECT UUID()), '超级管理员', '能执行所有操作', 1, '', 1, 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+CREATE TABLE `system_admin_user` (
+  `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
+  `username` varchar(120) NOT NULL DEFAULT '' COMMENT '用户名',
+  `password` char(40) NOT NULL DEFAULT '' COMMENT '密码',
+  `salt` char(32) NOT NULL DEFAULT '' COMMENT '密码盐值',
+  `admin_role_id` varchar(36) NOT NULL DEFAULT '' COMMENT '角色ID',
+  `avatar` varchar(60) NOT NULL DEFAULT '' COMMENT '头像',
+  `email` varchar(120) NOT NULL DEFAULT '' COMMENT '邮箱',
+  `name` varchar(30) NOT NULL DEFAULT '' COMMENT '名称',
+  `gender` tinyint NOT NULL DEFAULT '-1' COMMENT '性别（0：女/1：男/-1：保密）',
+  `phone` varchar(20) NOT NULL DEFAULT '' COMMENT '电话',
+  `mobile` varchar(20) NOT NULL DEFAULT '' COMMENT '手机',
+  `last_login_time` timestamp NULL COMMENT '上次登陆时间',
+  `this_login_time` timestamp NULL COMMENT '本次登陆时间',
+  `last_login_ip` VARCHAR(15) NOT NULL DEFAULT '' COMMENT '上次登录的IP',
+  `this_login_ip` VARCHAR(15) NOT NULL DEFAULT '' COMMENT '本次登录的IP',
+  `is_enable` tinyint NOT NULL DEFAULT '1' COMMENT '是否可用',
+  `is_delete` tinyint NOT NULL DEFAULT '0' COMMENT '是否已删除',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户';
+
+INSERT INTO `system_admin_user` (`id`, `username`, `password`, `salt`, `admin_role_id`, `avatar`, `email`, `name`, `gender`, `phone`, `mobile`, `last_login_time`, `this_login_time`, `last_login_ip`, `this_login_ip`, `is_enable`, `is_delete`, `create_time`, `update_time`) VALUES
+((SELECT UUID()), 'admin', 'a2ad3e6e3acf5b182324ed782f8a0556d43e59dd', 'ybFD7uzKMH8yvPHvuPNNT0vDv7uF2811', (SELECT id FROM system_admin_role WHERE `name` = '超级管理员' LIMIT 1), '', 'be@phpbe.com', '管理员', 0, '', '', NULL, NULL, '', '', 1, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+CREATE TABLE `system_admin_user_login_log` (
+  `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
+  `username` varchar(120) NOT NULL DEFAULT '' COMMENT '用户名',
+  `success` tinyint NOT NULL DEFAULT '0' COMMENT '是否登录成功（0-不成功/1-成功）',
+  `description` varchar(240) NOT NULL DEFAULT '' COMMENT '描述',
+  `ip` varchar(15) NOT NULL DEFAULT '' COMMENT 'IP',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户登录日志';
+
+
 CREATE TABLE `system_mail_queue` (
   `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
   `to_email` varchar(60) NOT NULL DEFAULT '' COMMENT '收件人邮箱',
@@ -83,71 +153,4 @@ CREATE TABLE `system_task_log` (
   KEY `task_id` (`task_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='抽取数据';
 
-CREATE TABLE `system_admin_op_log` (
-  `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
-  `admin_user_id` varchar(36) NOT NULL DEFAULT '' COMMENT '用户ID',
-  `app` VARCHAR(60) NOT NULL DEFAULT '' COMMENT '应用名',
-  `controller` VARCHAR(60) NOT NULL DEFAULT '' COMMENT '控制器名',
-  `action` VARCHAR(60) NOT NULL DEFAULT '' COMMENT '动作名',
-  `content` VARCHAR(240) NOT NULL DEFAULT '' COMMENT '内容',
-  `details` text NOT NULL COMMENT '明细',
-  `ip` varchar(15) NOT NULL DEFAULT '' COMMENT 'IP',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  PRIMARY KEY (`id`),
-  KEY `admin_user_id` (`admin_user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统后台操作日志';
-
-CREATE TABLE `system_admin_role` (
-  `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
-  `name` varchar(60) NOT NULL DEFAULT '' COMMENT '角色名',
-  `remark` varchar(200) NOT NULL DEFAULT '' COMMENT '备注',
-  `permission` tinyint NOT NULL DEFAULT '0' COMMENT '权限（0: 无权限/1: 所有权限/-1: 自定义权限）',
-  `permission_keys` text NOT NULL COMMENT '自定义权限',
-  `is_enable` tinyint NOT NULL DEFAULT '1' COMMENT '是否可用',
-  `is_delete` tinyint NOT NULL DEFAULT '0' COMMENT '是否已删除',
-  `ordering` int NOT NULL DEFAULT '0' COMMENT '排序（越小越靠前）',
-  `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户角色';
-
-INSERT INTO `system_admin_role` (`id`, `name`, `remark`, `permission`, `permission_keys`, `is_enable`, `is_delete`, `ordering`, `create_time`, `update_time`) VALUES
-((SELECT UUID()), '超级管理员', '能执行所有操作', 1, '', 1, 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
-CREATE TABLE `system_admin_user` (
-  `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
-  `username` varchar(120) NOT NULL DEFAULT '' COMMENT '用户名',
-  `password` char(40) NOT NULL DEFAULT '' COMMENT '密码',
-  `salt` char(32) NOT NULL DEFAULT '' COMMENT '密码盐值',
-  `admin_role_id` varchar(36) NOT NULL DEFAULT '' COMMENT '角色ID',
-  `avatar` varchar(60) NOT NULL DEFAULT '' COMMENT '头像',
-  `email` varchar(120) NOT NULL DEFAULT '' COMMENT '邮箱',
-  `name` varchar(30) NOT NULL DEFAULT '' COMMENT '名称',
-  `gender` tinyint NOT NULL DEFAULT '-1' COMMENT '性别（0：女/1：男/-1：保密）',
-  `phone` varchar(20) NOT NULL DEFAULT '' COMMENT '电话',
-  `mobile` varchar(20) NOT NULL DEFAULT '' COMMENT '手机',
-  `last_login_time` timestamp NULL COMMENT '上次登陆时间',
-  `this_login_time` timestamp NULL COMMENT '本次登陆时间',
-  `last_login_ip` VARCHAR(15) NOT NULL DEFAULT '' COMMENT '上次登录的IP',
-  `this_login_ip` VARCHAR(15) NOT NULL DEFAULT '' COMMENT '本次登录的IP',
-  `is_enable` tinyint NOT NULL DEFAULT '1' COMMENT '是否可用',
-  `is_delete` tinyint NOT NULL DEFAULT '0' COMMENT '是否已删除',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` timestamp on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户';
-
-INSERT INTO `system_admin_user` (`id`, `username`, `password`, `salt`, `admin_role_id`, `avatar`, `email`, `name`, `gender`, `phone`, `mobile`, `last_login_time`, `this_login_time`, `last_login_ip`, `this_login_ip`, `is_enable`, `is_delete`, `create_time`, `update_time`) VALUES
-((SELECT UUID()), 'admin', 'a2ad3e6e3acf5b182324ed782f8a0556d43e59dd', 'ybFD7uzKMH8yvPHvuPNNT0vDv7uF2811', (SELECT id FROM system_admin_role WHERE `name` = '超级管理员' LIMIT 1), '', 'be@phpbe.com', '管理员', 0, '', '', NULL, NULL, '', '', 1, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
-CREATE TABLE `system_admin_user_login_log` (
-  `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
-  `username` varchar(120) NOT NULL DEFAULT '' COMMENT '用户名',
-  `success` tinyint NOT NULL DEFAULT '0' COMMENT '是否登录成功（0-不成功/1-成功）',
-  `description` varchar(240) NOT NULL DEFAULT '' COMMENT '描述',
-  `ip` varchar(15) NOT NULL DEFAULT '' COMMENT 'IP',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户登录日志';
 
