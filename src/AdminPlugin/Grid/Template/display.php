@@ -1133,6 +1133,15 @@
                                         });
                                     }
                                 }
+
+                                if (response.data.callback) {
+                                    setTimeout(function () {
+                                        try {
+                                            eval(response.data.callback);
+                                        } catch (e) {}
+                                    }, 3000);
+                                }
+
                                 _this.loadGridData();
                             }
                         }).catch(function (error) {
