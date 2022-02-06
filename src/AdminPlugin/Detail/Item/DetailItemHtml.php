@@ -25,7 +25,7 @@ class DetailItemHtml extends DetailItem
             }
         }
         $html .= '>';
-        $html .= '<div v-html="'.$this->value.'"></div>';
+        $html .= '<div v-html="detailItems.' . $this->name . '.value"></div>';
         $html .= '</el-form-item>';
         return $html;
     }

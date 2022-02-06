@@ -30,14 +30,14 @@ class DetailItemTree extends DetailItem
             $this->treeData = $treeData;
         }
 
-        if (!isset($this->ui['tree']['node-key'])) {
-            $this->ui['tree']['node-key'] = 'key';
+        if (!isset($this->ui['node-key'])) {
+            $this->ui['node-key'] = 'key';
         }
 
-        $this->ui['tree'][':data'] = 'detailItems.' . $this->name . '.treeData';
-        $this->ui['tree'][':default-checked-keys'] = 'detailItems.' . $this->name . '.value';
-        $this->ui['tree']['show-checkbox'] = null;
-        $this->ui['tree']['default-expand-all'] = null;
+        $this->ui[':data'] = 'detailItems.' . $this->name . '.treeData';
+        $this->ui[':default-checked-keys'] = 'detailItems.' . $this->name . '.value';
+        $this->ui['show-checkbox'] = null;
+        $this->ui['default-expand-all'] = null;
     }
 
 
@@ -61,18 +61,25 @@ class DetailItemTree extends DetailItem
     public function getHtml()
     {
         $html = '<el-form-item';
-        foreach ($this->ui['form-item'] as $k => $v) {
-            if ($v === null) {
-                $html .= ' ' . $k;
-            } else {
-                $html .= ' ' . $k . '="' . $v . '"';
+
+        if (isset($this->ui['form-item'])) {
+            foreach ($this->ui['form-item'] as $k => $v) {
+                if ($v === null) {
+                    $html .= ' ' . $k;
+                } else {
+                    $html .= ' ' . $k . '="' . $v . '"';
+                }
             }
         }
         $html .= '>';
 
         $html .= '<el-tree';
-        if (isset($this->ui['tree'])) {
-            foreach ($this->ui['tree'] as $k => $v) {
+        if (isset($this->ui)) {
+            foreach ($this->ui as $k => $v) {
+                if ($k === 'form-item') {
+                    continue;
+                }
+
                 if ($v === null) {
                     $html .= ' ' . $k;
                 } else {

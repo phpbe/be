@@ -19,8 +19,8 @@ class DetailItemProgress extends DetailItem
     {
         parent::__construct($params, $row);
 
-        if (!isset($this->ui['progress'][':percentage'])) {
-            $this->ui['progress'][':percentage'] = $this->value;
+        if (!isset($this->ui[':percentage'])) {
+            $this->ui[':percentage'] = 'detailItems.' . $this->name . '.value';
         }
     }
 
@@ -32,17 +32,25 @@ class DetailItemProgress extends DetailItem
     public function getHtml()
     {
         $html = '<el-form-item';
-        foreach ($this->ui['form-item'] as $k => $v) {
-            if ($v === null) {
-                $html .= ' '.$k;
-            } else {
-                $html .= ' '.$k.'="' . $v . '"';
+
+        if (isset($this->ui['form-item'])) {
+            foreach ($this->ui['form-item'] as $k => $v) {
+                if ($v === null) {
+                    $html .= ' ' . $k;
+                } else {
+                    $html .= ' ' . $k . '="' . $v . '"';
+                }
             }
         }
+
         $html .= '>';
         $html .= '<el-progress';
-        if (isset($this->ui['progress'])) {
-            foreach ($this->ui['progress'] as $k => $v) {
+        if (isset($this->ui)) {
+            foreach ($this->ui as $k => $v) {
+                if ($k === 'form-item') {
+                    continue;
+                }
+
                 if ($v === null) {
                     $html .= ' ' . $k;
                 } else {

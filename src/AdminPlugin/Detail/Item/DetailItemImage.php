@@ -18,9 +18,9 @@ class DetailItemImage extends DetailItem
     public function __construct($params = [], $row = [])
     {
         parent::__construct($params, $row);
-
-        if (!isset($this->ui['image'][':src'])) {
-            $this->ui['image'][':src'] = $this->value;
+        
+        if (!isset($this->ui[':src'])) {
+            $this->ui[':src'] = 'detailItems.' . $this->name . '.value';
         }
     }
 
@@ -32,17 +32,25 @@ class DetailItemImage extends DetailItem
     public function getHtml()
     {
         $html = '<el-form-item';
-        foreach ($this->ui['form-item'] as $k => $v) {
-            if ($v === null) {
-                $html .= ' '.$k;
-            } else {
-                $html .= ' '.$k.'="' . $v . '"';
+
+        if (isset($this->ui['form-item'])) {
+            foreach ($this->ui['form-item'] as $k => $v) {
+                if ($v === null) {
+                    $html .= ' ' . $k;
+                } else {
+                    $html .= ' ' . $k . '="' . $v . '"';
+                }
             }
         }
+
         $html .= '>';
         $html .= '<el-image';
-        if (isset($this->ui['image'])) {
-            foreach ($this->ui['image'] as $k => $v) {
+        if (isset($this->ui)) {
+            foreach ($this->ui as $k => $v) {
+                if ($k === 'form-item') {
+                    continue;
+                }
+
                 if ($v === null) {
                     $html .= ' ' . $k;
                 } else {

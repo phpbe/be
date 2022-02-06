@@ -19,12 +19,12 @@ class DetailItemAvatar extends DetailItem
     {
         parent::__construct($params, $row);
 
-        if (!isset($this->ui['avatar']['shape'])) {
-            $this->ui['avatar']['shape'] = 'square';
+        if (!isset($this->ui['shape'])) {
+            $this->ui['shape'] = 'square';
         }
 
-        if (!isset($this->ui['avatar']['src'])) {
-            $this->ui['avatar']['src'] = $this->value;
+        if (!isset($this->ui[':src'])) {
+            $this->ui[':src'] = 'detailItems.' . $this->name . '.value';
         }
     }
 
@@ -36,17 +36,25 @@ class DetailItemAvatar extends DetailItem
     public function getHtml()
     {
         $html = '<el-form-item';
-        foreach ($this->ui['form-item'] as $k => $v) {
-            if ($v === null) {
-                $html .= ' '.$k;
-            } else {
-                $html .= ' '.$k.'="' . $v . '"';
+
+        if (isset($this->ui['form-item'])) {
+            foreach ($this->ui['form-item'] as $k => $v) {
+                if ($v === null) {
+                    $html .= ' '.$k;
+                } else {
+                    $html .= ' '.$k.'="' . $v . '"';
+                }
             }
         }
+
         $html .= '>';
         $html .= '<el-avatar';
-        if (isset($this->ui['avatar'])) {
-            foreach ($this->ui['avatar'] as $k => $v) {
+        if (isset($this->ui)) {
+            foreach ($this->ui as $k => $v) {
+                if ($k === 'form-item') {
+                    continue;
+                }
+
                 if ($v === null) {
                     $html .= ' ' . $k;
                 } else {

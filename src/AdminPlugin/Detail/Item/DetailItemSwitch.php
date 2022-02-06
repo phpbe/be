@@ -19,16 +19,16 @@ class DetailItemSwitch extends DetailItem
     {
         parent::__construct($params, $row);
 
-        if (!isset($this->ui['switch']['active-value'])) {
-            $this->ui['switch']['active-value'] = '1';
+        if (!isset($this->ui[':active-value'])) {
+            $this->ui[':active-value'] = '1';
         }
 
-        if (!isset($this->ui['switch']['inactive-value'])) {
-            $this->ui['switch']['inactive-value'] = '0';
+        if (!isset($this->ui[':inactive-value'])) {
+            $this->ui[':inactive-value'] = '0';
         }
 
-        if (!isset($this->ui['switch']['value'])) {
-            $this->ui['switch']['value'] = $this->value;
+        if (!isset($this->ui[':value'])) {
+            $this->ui[':value'] = 'detailItems.' . $this->name . '.value';
         }
     }
 
@@ -40,17 +40,25 @@ class DetailItemSwitch extends DetailItem
     public function getHtml()
     {
         $html = '<el-form-item';
-        foreach ($this->ui['form-item'] as $k => $v) {
-            if ($v === null) {
-                $html .= ' '.$k;
-            } else {
-                $html .= ' '.$k.'="' . $v . '"';
+
+        if (isset($this->ui['form-item'])) {
+            foreach ($this->ui['form-item'] as $k => $v) {
+                if ($v === null) {
+                    $html .= ' ' . $k;
+                } else {
+                    $html .= ' ' . $k . '="' . $v . '"';
+                }
             }
         }
+
         $html .= '>';
         $html .= '<el-switch';
-        if (isset($this->ui['switch'])) {
-            foreach ($this->ui['switch'] as $k => $v) {
+        if (isset($this->ui)) {
+            foreach ($this->ui as $k => $v) {
+                if ($k === 'form-item') {
+                    continue;
+                }
+
                 if ($v === null) {
                     $html .= ' ' . $k;
                 } else {

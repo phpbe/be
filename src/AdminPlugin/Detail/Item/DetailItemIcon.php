@@ -19,8 +19,8 @@ class DetailItemIcon extends DetailItem
     {
         parent::__construct($params, $row);
 
-        if (!isset($this->ui['icon']['class'])) {
-            $this->ui['icon']['class'] = $this->value;
+        if (!isset($this->ui[':class'])) {
+            $this->ui[':class'] = 'detailItems.' . $this->name . '.value';
         }
     }
 
@@ -32,17 +32,25 @@ class DetailItemIcon extends DetailItem
     public function getHtml()
     {
         $html = '<el-form-item';
-        foreach ($this->ui['form-item'] as $k => $v) {
-            if ($v === null) {
-                $html .= ' '.$k;
-            } else {
-                $html .= ' '.$k.'="' . $v . '"';
+
+        if (isset($this->ui['form-item'])) {
+            foreach ($this->ui['form-item'] as $k => $v) {
+                if ($v === null) {
+                    $html .= ' ' . $k;
+                } else {
+                    $html .= ' ' . $k . '="' . $v . '"';
+                }
             }
         }
+
         $html .= '>';
         $html .= '<el-icon';
-        if (isset($this->ui['icon'])) {
-            foreach ($this->ui['icon'] as $k => $v) {
+        if (isset($this->ui)) {
+            foreach ($this->ui as $k => $v) {
+                if ($k === 'form-item') {
+                    continue;
+                }
+
                 if ($v === null) {
                     $html .= ' ' . $k;
                 } else {
