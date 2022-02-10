@@ -3,6 +3,7 @@
 namespace Be\App\System\Controller\Admin;
 
 use Be\AdminPlugin\Form\Item\FormItemInputTextArea;
+use Be\AdminPlugin\Form\Item\FormItemTinymce;
 use Be\Be;
 
 /**
@@ -62,13 +63,11 @@ class Mail extends Auth
                         [
                             'name' => 'body',
                             'label' => '内容',
-                            'driver' => FormItemInputTextArea::class,
+                            'driver' => FormItemTinymce::class,
+                            //'layout' => 'basic',
                             'value' => '这是一封测试邮件。',
                         ],
                     ],
-                    'ui' => [
-                        'style' => 'max-width: 800px;'
-                    ]
                 ],
                 'theme' => 'Admin',
             ])->execute();
