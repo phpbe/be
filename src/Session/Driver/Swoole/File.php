@@ -38,8 +38,8 @@ class File extends Driver
         if ($this->data !== null) {
             $dir =  Be::getRuntime()->getCachePath() . '/session';
             if (!is_dir($dir)) {
-                mkdir($dir, 0755, true);
-                chmod($dir, 0755);
+                mkdir($dir, 0777, true);
+                chmod($dir, 0777);
             }
 
             $path = $dir . '/' . $this->id;

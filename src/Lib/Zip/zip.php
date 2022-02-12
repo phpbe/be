@@ -73,7 +73,10 @@ class Zip
      */
     public function extractTo($dir)
     {
-        if (!file_exists($dir)) mkdir($dir, 0777, true);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+            chmod($dir, 0777);
+        }
 
         if (!$this->data) $this->loadData();
         if (!$this->info) $this->loadInfo();
@@ -88,8 +91,13 @@ class Zip
                 $extractToPath = $dir . '/' . str_replace('\\', '/', $this->info[$i]['name']);
                 $extractToDir = dirname($extractToPath);
 
-                if (!file_exists($extractToDir)) mkdir($extractToDir, 0777, true);
+                if (!is_dir($extractToDir)) {
+                    mkdir($extractToDir, 0777, true);
+                    chmod($extractToDir, 0777);
+                }
+
                 file_put_contents($extractToPath, $buffer);
+                chmod($extractToPath, 0777);
             }
         }
         return true;

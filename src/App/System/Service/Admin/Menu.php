@@ -65,10 +65,13 @@ class Menu
 
         $path = Be::getRuntime()->getCachePath() . '/Menu/' . $name . '.php';
         $dir = dirname($path);
-        if (!is_dir($dir)) mkdir($dir, 0777, true);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+            chmod($dir, 0777);
+        }
 
         file_put_contents($path, $code, LOCK_EX);
-        @chmod($path, 0755);
+        chmod($path, 0777);
     }
 
 }

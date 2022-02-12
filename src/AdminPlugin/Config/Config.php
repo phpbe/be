@@ -240,9 +240,11 @@ class Config extends Driver
 
             $path = Be::getRuntime()->getDataPath() . '/App/' . $appName . '/Config/' . $configName . '.php';
             $dir = dirname($path);
-            if (!is_dir($dir)) mkdir($dir, 0755, true);
+            if (!is_dir($dir)) {
+                mkdir($dir, 0777, true);
+                chmod($path, 0777);
+            }
             file_put_contents($path, $code, LOCK_EX);
-            @chmod($path, 0755);
 
             // 更新 config 实例
             foreach ($newValues as $k => $v) {

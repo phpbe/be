@@ -53,6 +53,7 @@ class Dir
 
         if (!is_dir($dstDir)) {
             mkdir($dstDir, 0777, true);
+            chmod($dstDir, 0777);
         }
 
         if ($srcDirSource) {
@@ -95,6 +96,7 @@ class Dir
 
         if (!is_dir($dstDir)) {
             mkdir($dstDir, 0777, true);
+            chmod($dstDir, 0777);
         }
 
         if ($srcDirSource) {

@@ -27,8 +27,8 @@ class FileHandler extends AbstractProcessingHandler
 
         $dir = Be::getRuntime()->getDataPath() . '/log/' .  $year . '/' . $month . '/' . $day . '/';
         if (!is_dir($dir)) {
-            mkdir($dir, 0755, true);
-            @chmod($dir, 0755);
+            mkdir($dir, 0777, true);
+            chmod($dir, 0777);
         }
 
         $logFileName = $record['extra']['hash'];
@@ -38,6 +38,7 @@ class FileHandler extends AbstractProcessingHandler
         if (!file_exists($logFilePath)) {
             $record['extra']['record_time'] = $t;
             file_put_contents($logFilePath, json_encode($record));
+            chmod($logFilePath, 0777);
         }
 
         $indexFilePath = $dir . 'index';

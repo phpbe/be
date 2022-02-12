@@ -372,8 +372,9 @@ class ImagickImpl implements Driver
         $this->image->stripImage();
 
         $dir = dirname($path);
-        if (!file_exists($dir)) {
+        if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
+            chmod($dir, 0777);
         }
 
         if ($this->type === 'gif') {

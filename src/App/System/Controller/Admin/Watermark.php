@@ -24,11 +24,12 @@ class Watermark extends Auth
 
         if (!file_exists($src)) $response->end($src . ' 不存在');
         $dir = dirname($dst);
-        if (!file_exists($dir)) {
-            mkdir($dir, 0755, true);
-        } else {
-            if (file_exists($dst)) @unlink($dst);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+            chmod($dir, 0777);
         }
+
+        if (file_exists($dst)) @unlink($dst);
 
         copy($src, $dst);
 

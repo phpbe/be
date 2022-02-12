@@ -99,10 +99,13 @@ class Helper
 
         $path = Be::getRuntime()->getCachePath() . '/Router/' . $app . '/' . $router . '.php';
         $dir = dirname($path);
-        if (!is_dir($dir)) mkdir($dir, 0777, true);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+            chmod($dir, 0777);
+        }
 
         file_put_contents($path, $code, LOCK_EX);
-        @chmod($path, 0755);
+        chmod($path, 0777);
     }
 
     /**
@@ -231,10 +234,13 @@ class Helper
 
         $path = Be::getRuntime()->getCachePath() . '/Router/Mapping.php';
         $dir = dirname($path);
-        if (!is_dir($dir)) mkdir($dir, 0777, true);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+            chmod($dir, 0777);
+        }
 
         file_put_contents($path, $code, LOCK_EX);
-        @chmod($path, 0755);
+        chmod($path, 0777);
     }
 
 

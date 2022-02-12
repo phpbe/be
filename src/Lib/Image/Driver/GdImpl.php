@@ -306,8 +306,9 @@ class GdImpl implements Driver
         if (!$this->image) return false;
 
         $dir = dirname($path);
-        if (!file_exists($dir)) {
+        if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
+            chmod($dir, 0777);
         }
 
         if ($this->type === 'image/png' || $this->type === 'image/x-png') {

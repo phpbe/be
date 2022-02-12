@@ -24,9 +24,9 @@ class Log
     {
         $path = Be::getRuntime()->getDataPath() . '/JsonRpc/access_log/' . date('Y/m/d');
         $dir = dirname($path);
-        if (!file_exists($dir)) {
-            mkdir($dir, 0755, true);
-            chmod($dir, 0755);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+            chmod($dir, 0777);
         }
 
         $data = date('Y-m-d H:i:s') . ':' . "\n";
@@ -46,9 +46,9 @@ class Log
     {
         $path = Be::getRuntime()->getDataPath() . '/JsonRpc/error_log/' . date('Y/m/d');
         $dir = dirname($path);
-        if (!file_exists($dir)) {
-            mkdir($dir, 0755, true);
-            chmod($dir, 0755);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+            chmod($dir, 0777);
         }
 
         $data = date('Y-m-d H:i:s') . ':' . "\n";

@@ -58,6 +58,7 @@ class FileManager
         }
 
         mkdir($dirPath, 0777, true);
+        chmod($dirPath, 0777);
 
         return true;
     }

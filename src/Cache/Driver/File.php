@@ -90,7 +90,10 @@ class File implements Driver
     {
         $hash = sha1($key);
         $dir = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2);
-        if (!is_dir($dir)) mkdir($dir, 0777, 1);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+            chmod($dir, 0777);
+        }
         $path = $dir . '/' . $hash . '.php';
 
         if (!is_bool($value) && !is_numeric($value)) $value = serialize($value);
@@ -102,7 +105,9 @@ class File implements Driver
             if ($expire > 9999999999) $expire = 9999999999;
         }
         $data = "<?php\n//" . $expire . $value;
-        return file_put_contents($path, $data);
+        if (!file_put_contents($path, $data)) return false;
+        chmod($path, 0777);
+        return true;
     }
 
     /**
@@ -159,13 +164,17 @@ class File implements Driver
     {
         $hash = sha1($key);
         $dir = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2);
-        if (!is_dir($dir)) mkdir($dir, 0777, 1);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+            chmod($dir, 0777);
+        }
         $path = $dir . '/' . $hash . '.php';
 
         if (!is_file($path)) {
             $value = $step;
             $data = "<?php\n//9999999999" . $value;
             if (!file_put_contents($path, $data)) return false;
+            chmod($path, 0777);
             return $value;
         }
 
@@ -179,6 +188,7 @@ class File implements Driver
             $value = intval($content) + $step;
             $data = "<?php\n//" . $expire . $value;
             if (!file_put_contents($path, $data)) return false;
+            chmod($path, 0777);
             return $value;
         } else {
             return false;
@@ -196,13 +206,17 @@ class File implements Driver
     {
         $hash = sha1($key);
         $dir = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2);
-        if (!is_dir($dir)) mkdir($dir, 0777, 1);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+            chmod($dir, 0777);
+        }
         $path = $dir . '/' . $hash . '.php';
 
         if (!is_file($path)) {
             $value = -$step;
             $data = "<?php\n//9999999999" . $value;
             if (!file_put_contents($path, $data)) return false;
+            chmod($path, 0777);
             return $value;
         }
 
@@ -216,6 +230,7 @@ class File implements Driver
             $value = intval($content) - $step;
             $data = "<?php\n//" . $expire . $value;
             if (!file_put_contents($path, $data)) return false;
+            chmod($path, 0777);
             return $value;
         } else {
             return false;

@@ -45,6 +45,7 @@ class TemplateHelper
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
+            chmod($dir, 0777);
         }
 
         $contentTheme = file_get_contents($fileTheme);
@@ -255,7 +256,7 @@ class TemplateHelper
         $codePhp .= "\n";
 
         file_put_contents($path, $codePhp, LOCK_EX);
-        @chmod($path, 0755);
+        chmod($path, 0777);
     }
 
 
