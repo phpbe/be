@@ -36,6 +36,10 @@ class FormItemTinymce extends FormItem
             'tinymce.min.js',
         ];
 
+
+        $fileCallback = base64_encode('parent.window.befile.selectedFiles = files;');
+        $imageCallback = base64_encode('parent.window.beimage.selectedFiles = files;');
+
         $this->option = [
             'selector' => '#formItemTinymce_' . $this->name,
             'language' => 'zh_CN',
@@ -44,7 +48,8 @@ class FormItemTinymce extends FormItem
             'height' => '500',
             'forced_root_block' => false,
             'toolbar_mode' => 'sliding',
-            'images_upload_url' => beAdminUrl('System.AdminPlugin.formItemTinymce')
+            'be_file_manager_url' => beAdminUrl('System.FileManager.pop', ['callback' => $fileCallback]),
+            'be_file_manager_url_filter_image' => beAdminUrl('System.FileManager.pop', ['filterImage' => 1, 'callback' => $imageCallback]),
         ];
 
         $layout = 'simple';
@@ -63,16 +68,16 @@ class FormItemTinymce extends FormItem
                 break;
             case 'simple':
                 $this->option = array_merge($this->option, [
-                    'plugins' => 'advlist autosave code fullscreen image imagetools link lists media table',
-                    'toolbar' => 'formatselect bold italic strikethrough underline forecolor backcolor align removeformat | bullist numlist outdent indent | link image media table | code fullscreen',
+                    'plugins' => 'advlist autosave code fullscreen befile beimage link lists media table',
+                    'toolbar' => 'formatselect bold italic strikethrough underline forecolor backcolor align removeformat | bullist numlist outdent indent | link befile beimage media table | code fullscreen',
                     'menubar' => false,
                     'statusbar' => false,
                 ]);
                 break;
             case 'full':
                 $this->option = array_merge($this->option, [
-                    'plugins' => 'advlist anchor autolink autosave charmap charmap code codesample directionality emoticons fullscreen help hr image imagetools importcss insertdatetime link lists media nonbreaking noneditable pagebreak paste preview print quickbars save searchreplace table template textpattern toc visualblocks visualchars wordcount',
-                    'toolbar' => 'undo redo | fontselect fontsizeselect formatselect bold italic underline strikethrough forecolor backcolor alignleft aligncenter alignright alignjustify removeformat | bullist numlist outdent indent | link image media table codesample anchor pagebreak charmap emoticons template | code preview fullscreen',
+                    'plugins' => 'advlist anchor autolink autosave befile beimage charmap charmap code codesample directionality emoticons fullscreen help hr image importcss insertdatetime link lists media nonbreaking noneditable pagebreak paste preview print quickbars save searchreplace table template textpattern toc visualblocks visualchars wordcount',
+                    'toolbar' => 'undo redo | fontselect fontsizeselect formatselect bold italic underline strikethrough forecolor backcolor alignleft aligncenter alignright alignjustify removeformat | bullist numlist outdent indent | link befile beimage media table codesample anchor pagebreak charmap emoticons template | code preview fullscreen',
                     'menubar' => 'file edit view insert format tools table help',
                     'fontsize_formats' => '9px 10px 11px 12px 13px 14px 15px 16px 18px 20px 24px 28px 32px 36px 40px 48px 60px 72px',
                 ]);
