@@ -750,15 +750,18 @@
                 // 缩略图祋图下选择文件
                 selectFile: function (file) {
                     file.selected = !file.selected;
-
-                    let selectedFiles = [];
-                    for (let file of this.files) {
-                        if (file.selected) {
-                            selectedFiles.push(file);
-                        }
+                    if (this.formData.view === 'list') {
+                        this.$refs.filesTableRef.toggleRowSelection(file, file.selected);
                     }
 
+                    let selectedFiles = [];
+                    for (let f of this.files) {
+                        if (f.selected) {
+                            selectedFiles.push(f);
+                        }
+                    }
                     this.selectedFiles = selectedFiles;
+
                     this.callback(selectedFiles);
                 },
 

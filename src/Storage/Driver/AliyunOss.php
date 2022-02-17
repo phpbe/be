@@ -5,6 +5,7 @@ namespace Be\Storage\Driver;
 use Be\Be;
 use Be\Storage\StorageException;
 use Be\Storage\Driver;
+use Be\Util\FileSystem\FileSize;
 use OSS\OssClient;
 use OSS\Core\OssException;
 
@@ -39,44 +40,84 @@ class AliyunOss extends Driver
             throw new StorageException('Illegal folder path!');
         }
 
-        $listObjects = null;
-        $config = Be::getConfig('App.System.StorageAliyunOss');
+        $ossDirPath = substr($dirPath, 1);
         try {
+            $configSystem = Be::getConfig('App.System.System');
+            $rootUrl = $this->getRootUrl();
+            $files = [];
+
+            $config = Be::getConfig('App.System.StorageAliyunOss');
             $endpoint = $config->internal ? $config->endpointInternal : $config->endpoint;
             $ossClient = new OssClient($config->accessKeyId, $config->accessKeySecret, $endpoint);
             $ossClient->setConnectTimeout(30);
 
             // 填写对文件分组的字符，例如/。
             $delimiter = '/';
-
-            $options = array(
+            $ossOption = [
                 'delimiter' => $delimiter,
-                'prefix' => $dirPath,  // 前缀，即路径
+                'prefix' => $ossDirPath,  // 前缀，即路径
                 'max-keys' => 1000, // 超过 1000 个分页
                 'marker' => $option['nextPage'] ?? '', // 分页
-            );
+            ];
 
-            $listObjects = $ossClient->listObjects($config->bucket, $options);
+            $listObjects = $ossClient->listObjects($config->bucket, $ossOption);
+
+            $prefixList = $listObjects->getPrefixList(); // 目录列表。当匹配prefix的目录下无子目录或者设置delimiter为空时，目录列表不显示。
+            if (!empty($prefixList)) {
+                foreach ($prefixList as $prefixInfo) {
+                    $name = $prefixInfo->getPrefix();
+                    $name = substr($name, strlen($ossDirPath));
+                    if ($name === '') continue;
+
+                    $name = substr($name, 0, -1);
+                    $files[] = [
+                        'name' => $name,
+                        'type' => 'dir',
+                        'size' => 0,
+                        'sizeString' => '0 B',
+                        'url' => $rootUrl . '/' . $name,
+                        'createTime' => '',
+                        'updateTime' => '',
+                    ];
+                }
+            }
+
+            $objectList = $listObjects->getObjectList(); // 文件列表。
+            if (!empty($objectList)) {
+                foreach ($objectList as $objectInfo) {
+                    $name = $objectInfo->getKey();
+                    $name = substr($name, strlen($ossDirPath));
+                    if ($name === '') continue;
+
+                    $type = strtolower(substr(strrchr($name, '.'), 1));
+
+                    // 只显示图像类型时，过滤
+                    if (isset($option['filterImage']) && $option['filterImage'] === 1) {
+                        if (!in_array($type, $configSystem->allowUploadImageTypes)) {
+                            continue;
+                        }
+                    }
+
+                    $size = $objectInfo->getSize();
+                    $sizeString = FileSize::int2String($size);
+
+                    $files[] = [
+                        'name' => $name,
+                        'type' => $type,
+                        'size' => $size,
+                        'sizeString' => $sizeString,
+                        'url' => $rootUrl . $dirPath . $name,
+                        'createTime' => date('Y-m-d H:i:s'),
+                        'updateTime' => date('Y-m-d H:i:s', strtotime($objectInfo->getLastModified())),
+                    ];
+                }
+            }
+
+            return $files;
+
         } catch (OssException $e) {
             throw new StorageException('Aliyun OSS error：' . $e->getMessage());
         }
-
-        $objectList = $listObjects->getObjectList(); // 文件列表。
-        $prefixList = $listObjects->getPrefixList(); // 目录列表。当匹配prefix的目录下无子目录或者设置delimiter为空时，目录列表不显示。
-        if (!empty($objectList)) {
-            print("objectList:\n");
-            foreach ($objectList as $objectInfo) {
-                print($objectInfo->getKey() . "\n");
-            }
-        }
-        if (!empty($prefixList)) {
-            print("prefixList: \n");
-            foreach ($prefixList as $prefixInfo) {
-                print($prefixInfo->getPrefix() . "\n");
-            }
-        }
-
-        return [];
     }
 
     /**
@@ -94,16 +135,18 @@ class AliyunOss extends Driver
             throw new StorageException('Illegal file path：' . $path . '!');
         }
 
+        $ossPath = substr($path, 1);
+
         $config = Be::getConfig('App.System.StorageAliyunOss');
         try {
             $endpoint = $config->internal ? $config->endpointInternal : $config->endpoint;
             $ossClient = new OssClient($config->accessKeyId, $config->accessKeySecret, $endpoint);
             $ossClient->setConnectTimeout(30);
-            $exist = $ossClient->doesObjectExist($config->bucket, $path);
+            $exist = $ossClient->doesObjectExist($config->bucket, $ossPath);
             if ($exist) {
                 throw new StorageException('File ' . $path . ' already exists!');
             }
-            $ossClient->uploadFile($config->bucket, $path, $tmpFile);
+            $ossClient->uploadFile($config->bucket, $ossPath, $tmpFile);
         } catch (OssException $e) {
             throw new StorageException('Aliyun OSS error：' . $e->getMessage());
         }
@@ -137,26 +180,29 @@ class AliyunOss extends Driver
             throw new StorageException('Forbidden destination file type：' . $type . '!');
         }
 
+        $ossOldPath = substr($oldPath, 1);
+        $ossNewPath = substr($newPath, 1);
+
         $config = Be::getConfig('App.System.StorageAliyunOss');
         try {
             $endpoint = $config->internal ? $config->endpointInternal : $config->endpoint;
             $ossClient = new OssClient($config->accessKeyId, $config->accessKeySecret, $endpoint);
             $ossClient->setConnectTimeout(30);
-            $exist = $ossClient->doesObjectExist($config->bucket, $oldPath);
+            $exist = $ossClient->doesObjectExist($config->bucket, $ossOldPath);
             if (!$exist) {
                 throw new StorageException('Original file ' . $oldPath . ' does not exist!');
             }
 
-            $exist = $ossClient->doesObjectExist($config->bucket, $newPath);
+            $exist = $ossClient->doesObjectExist($config->bucket, $ossNewPath);
             if ($exist) {
                 throw new StorageException('Destination file ' . $newPath . ' already exists!');
             }
 
             // 拷备文件
-            $ossClient->copyObject($config->bucket, $oldPath, $config->bucket, $newPath);
+            $ossClient->copyObject($config->bucket, $ossOldPath, $config->bucket, $ossNewPath);
 
             // 删除旧文件
-            $ossClient->deleteObject($config->bucket, $oldPath);
+            $ossClient->deleteObject($config->bucket, $ossOldPath);
         } catch (OssException $e) {
             throw new StorageException('Aliyun OSS error：' . $e->getMessage());
         }
@@ -179,17 +225,19 @@ class AliyunOss extends Driver
             throw new StorageException('Illegal file path：' . $path . '!');
         }
 
+        $ossPath = substr($path, 1);
+
         $config = Be::getConfig('App.System.StorageAliyunOss');
         try {
             $endpoint = $config->internal ? $config->endpointInternal : $config->endpoint;
             $ossClient = new OssClient($config->accessKeyId, $config->accessKeySecret, $endpoint);
             $ossClient->setConnectTimeout(30);
-            $exist = $ossClient->doesObjectExist($config->bucket, $path);
+            $exist = $ossClient->doesObjectExist($config->bucket, $ossPath);
             if (!$exist) {
                 throw new StorageException('File ' . $path . ' does not exist!');
             }
 
-            $ossClient->deleteObject($config->bucket, $path);
+            $ossClient->deleteObject($config->bucket, $ossPath);
         } catch (OssException $e) {
             throw new StorageException('Aliyun OSS error：' . $e->getMessage());
         }
@@ -211,12 +259,14 @@ class AliyunOss extends Driver
             throw new StorageException('Illegal file path：' . $path . '!');
         }
 
+        $ossPath = substr($path, 1);
+
         $config = Be::getConfig('App.System.StorageAliyunOss');
         try {
             $endpoint = $config->internal ? $config->endpointInternal : $config->endpoint;
             $ossClient = new OssClient($config->accessKeyId, $config->accessKeySecret, $endpoint);
             $ossClient->setConnectTimeout(30);
-            return $ossClient->doesObjectExist($config->bucket, $path);
+            return $ossClient->doesObjectExist($config->bucket, $ossPath);
         } catch (OssException $e) {
             throw new StorageException('Aliyun OSS error：' . $e->getMessage());
         }
@@ -235,17 +285,19 @@ class AliyunOss extends Driver
             throw new StorageException('Illegal folder path!');
         }
 
+        $ossDirPath = substr($dirPath, 1);
+
         $config = Be::getConfig('App.System.StorageAliyunOss');
         try {
             $endpoint = $config->internal ? $config->endpointInternal : $config->endpoint;
             $ossClient = new OssClient($config->accessKeyId, $config->accessKeySecret, $endpoint);
             $ossClient->setConnectTimeout(30);
-            $exist = $ossClient->doesObjectExist($config->bucket, $dirPath);
+            $exist = $ossClient->doesObjectExist($config->bucket, $ossDirPath);
             if ($exist) {
                 throw new StorageException('Folder ' . $dirPath . ' already exists!');
             }
 
-            $ossClient->putObject($config->bucket, $dirPath, '');
+            $ossClient->putObject($config->bucket, $ossDirPath, '');
         } catch (OssException $e) {
             throw new StorageException('Aliyun OSS error：' . $e->getMessage());
         }
@@ -265,17 +317,19 @@ class AliyunOss extends Driver
             throw new StorageException('Illegal folder path!');
         }
 
+        $ossDirPath = substr($dirPath, 1);
+
         $config = Be::getConfig('App.System.StorageAliyunOss');
         try {
             $endpoint = $config->internal ? $config->endpointInternal : $config->endpoint;
             $ossClient = new OssClient($config->accessKeyId, $config->accessKeySecret, $endpoint);
             $ossClient->setConnectTimeout(30);
-            $exist = $ossClient->doesObjectExist($config->bucket, $dirPath);
+            $exist = $ossClient->doesObjectExist($config->bucket, $ossDirPath);
             if (!$exist) {
                 throw new StorageException('Folder ' . $dirPath . ' does not exist!');
             }
 
-            $ossClient->deleteObject($config->bucket, $dirPath);
+            $ossClient->deleteObject($config->bucket, $ossDirPath);
         } catch (OssException $e) {
             throw new StorageException('Aliyun OSS error：' . $e->getMessage());
         }
@@ -302,26 +356,29 @@ class AliyunOss extends Driver
             throw new StorageException('Illegal destination folder path!');
         }
 
+        $ossOldDirPath = substr($oldDirPath, 1);
+        $ossNewDirPath = substr($newDirPath, 1);
+
         $config = Be::getConfig('App.System.StorageAliyunOss');
         try {
             $endpoint = $config->internal ? $config->endpointInternal : $config->endpoint;
             $ossClient = new OssClient($config->accessKeyId, $config->accessKeySecret, $endpoint);
             $ossClient->setConnectTimeout(30);
-            $exist = $ossClient->doesObjectExist($config->bucket, $oldDirPath);
+            $exist = $ossClient->doesObjectExist($config->bucket, $ossOldDirPath);
             if (!$exist) {
                 throw new StorageException('Original folder ' . $oldDirPath . ' does not exist!');
             }
 
-            $exist = $ossClient->doesObjectExist($config->bucket, $newDirPath);
+            $exist = $ossClient->doesObjectExist($config->bucket, $ossNewDirPath);
             if ($exist) {
                 throw new StorageException('Destination folder ' . $newDirPath . ' already exists!');
             }
 
             // 拷备文件
-            $ossClient->copyObject($config->bucket, $oldDirPath, $config->bucket, $newDirPath);
+            $ossClient->copyObject($config->bucket, $ossOldDirPath, $config->bucket, $ossNewDirPath);
 
             // 删除旧文件
-            $ossClient->deleteObject($config->bucket, $oldDirPath);
+            $ossClient->deleteObject($config->bucket, $ossOldDirPath);
 
         } catch (OssException $e) {
             throw new StorageException('Aliyun OSS error：' . $e->getMessage());
@@ -344,12 +401,14 @@ class AliyunOss extends Driver
             throw new StorageException('Illegal folder path：' . $dirPath . '!');
         }
 
+        $ossDirPath = substr($dirPath, 1);
+
         $config = Be::getConfig('App.System.StorageAliyunOss');
         try {
             $endpoint = $config->internal ? $config->endpointInternal : $config->endpoint;
             $ossClient = new OssClient($config->accessKeyId, $config->accessKeySecret, $endpoint);
             $ossClient->setConnectTimeout(30);
-            return $ossClient->doesObjectExist($config->bucket, $dirPath);
+            return $ossClient->doesObjectExist($config->bucket, $ossDirPath);
         } catch (OssException $e) {
             throw new StorageException('Aliyun OSS error：' . $e->getMessage());
         }
