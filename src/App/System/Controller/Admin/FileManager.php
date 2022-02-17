@@ -1,321 +1,512 @@
 <?php
+
 namespace Be\App\System\Controller\Admin;
 
+use Be\App\ControllerException;
 use Be\Be;
+use Be\Util\FileSystem\FileSize;
+use Be\Util\Net\FileUpload;
 
-// 文件管理器
+/**
+ * 文件管理器
+ *
+ * @BeMenuGroup("管理")
+ * @BePermissionGroup("管理")
+ */
 class FileManager extends Auth
 {
 
-    public function browser()
+    /**
+     * @BeMenu("存储", icon = "el-icon-folder", ordering="2.6")
+     * @BePermission("存储", ordering="2.6")
+     */
+    public function index()
     {
         $request = Be::getRequest();
         $response = Be::getResponse();
         $session = Be::getSession();
 
-        // 要查看的路径
-        $path = $request->post('path', '');
+        $sessionKeyPath = 'be-fileManager-path';
+        $sessionKeyView = 'be-fileManager-view';
 
-        // 显示方式 thumbnail 缩略图 list 详细列表
-        $view = $request->post('view', '');
+        if ($request->isAjax()) {
 
-        // 排序
-        $sort = $request->post('sort', '');
+            $postData = $request->json();
+            $formData = $postData['formData'] ?? [];
 
-        // 只显示图像
-        $filterImage = $request->get('filterImage', -1, 'int');
-
-        $srcId = $request->get('srcId', '');
-
-
-        // session 缓存用户选择
-        if ($path === '') {
-            $sessionPath = $session->get('systemFileManagerPath');
-            if ($sessionPath !== '') $path = $sessionPath;
-        } else {
-            if ($path === '/') $path = '';
-            $session->set('systemFileManagerPath', $path);
-        }
-
-        if ($view === '') {
-            $view = 'thumbnail';
-            $sessionView = $session->get('systemFileManagerView');
-            if ($sessionView !== '' && ($sessionView === 'thumbnail' || $sessionView === 'list')) $view = $sessionView;
-        } else {
-            if ($view !== 'thumbnail' && $view !== 'list') $view = 'thumbnail';
-            $session->set('systemFileManagerView', $view);
-        }
-
-        if ($sort === '') {
-            $sessionSort = $session->get('systemFileManagerSort');
-            if ($sessionSort === '') {
-                $sort = 'name';
-            } else {
-                $sort = $sessionSort;
+            // 要查看的路径
+            $path = $formData['path'] ?? '';
+            if ($path === '') {
+                $path = '/';
             }
+            $session->set($sessionKeyPath, $path);
+            $response->set('path', $path);
 
+            // 显示方式 thumbnail 缩略图 list 详细列表
+            $view = $formData['view'] ?? '';
+            if ($view !== 'thumbnail' && $view !== 'list') {
+                $view = 'thumbnail';
+            }
+            $session->set($sessionKeyView, $view);
+            $response->set('view', $view);
+
+            // 获取文件列表
+            $option = [];
+            $storage = Be::getStorage();
+            $files = $storage->getFiles($path, $option);
+            $response->set('files', $files);
+
+            $response->set('success', true);
+            $response->json();
         } else {
-            $session->set('systemFileManagerSort', $sort);
+            // 要查看的路径
+            $path = $session->get($sessionKeyPath, '');
+            if ($path === '') {
+                $path = '/';
+            }
+            $response->set('path', $path);
+
+            // 显示方式 thumbnail 缩略图 list 详细列表
+            $view = $session->get($sessionKeyView, '');
+            if ($view !== 'thumbnail' && $view !== 'list') {
+                $view = 'thumbnail';
+            }
+            $response->set('view', $view);
+
+            $response->set('title', '存储');
+            $response->display();
         }
-
-        if ($filterImage === -1) {
-            $filterImage = 0;
-            $sessionFilterImage = $session->get('systemFileManagerFilterImage', -1);
-            if ($sessionFilterImage !== -1 && ($sessionFilterImage === 0 || $sessionFilterImage === 1)) $filterImage = $sessionFilterImage;
-        } else {
-            if ($filterImage !== 0 && $filterImage !== 1) $filterImage = 0;
-            $session->set('systemFileManagerFilterImage', $filterImage);
-        }
-
-        if ($srcId === '') {
-            $srcId = $session->get('systemFileManagerSrcId', '');
-        } elseif ($srcId === 'img') {
-            $srcId = '';
-            $session->set('systemFileManagerSrcId', $srcId);
-        } else {
-            $session->set('systemFileManagerSrcId', $srcId);
-        }
-
-        $option = array();
-        $option['path'] = $path;
-        $option['view'] = $view;
-        $option['sort'] = $sort;
-        $option['filterImage'] = $filterImage;
-
-        $serviceSystemFileManager = Be::getService('App.System.Admin.FileManager');
-        $files = $serviceSystemFileManager->getFiles($option);
-
-        $response->set('path', $path);
-        $response->set('view', $view);
-        $response->set('sort', $sort);
-        $response->set('filterImage', $filterImage);
-        $response->set('srcId', $srcId);
-
-        $response->set('files', $files);
-        $response->display();
     }
 
+    /**
+     * @BePermission("查看", ordering="2.61")
+     */
+    public function pop()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+        $session = Be::getSession();
+
+        // 是否启用过滤，只显示图像
+        $filterImage = $request->get('filterImage', -1, 'int');
+        if ($filterImage !== 0 && $filterImage !== 1) {
+            $filterImage = 0;
+        }
+        $response->set('filterImage', $filterImage);
+
+        // JS 回调代码，base64编码
+        $callback = $request->get('callback', '');
+        if ($callback) {
+            $callback = base64_decode($callback);
+        }
+        $response->set('callback', $callback);
+
+        $sessionKeyPath = 'be-fileManager-' . $filterImage . '-path';
+        $sessionKeyView = 'be-fileManager-' . $filterImage . '-view';
+
+        if ($request->isAjax()) {
+
+            $postData = $request->json();
+            $formData = $postData['formData'] ?? [];
+
+            // 要查看的路径
+            $path = $formData['path'] ?? '';
+            if ($path === '') {
+                $path = '/';
+            }
+            $session->set($sessionKeyPath, $path);
+            $response->set('path', $path);
+
+            // 显示方式 thumbnail 缩略图 list 详细列表
+            $view = $formData['view'] ?? '';
+            if ($view !== 'thumbnail' && $view !== 'list') {
+                $view = 'thumbnail';
+            }
+            $session->set($sessionKeyView, $view);
+            $response->set('view', $view);
+
+            if (isset($postData['toggleView']) && $postData['toggleView']) {
+                $response->set('success', true);
+                $response->json();
+                return;
+            }
+
+            // 获取文件列表
+            $option = [];
+            $option['filterImage'] = $filterImage;
+            $storage = Be::getStorage();
+            $files = $storage->getFiles($path, $option);
+            $response->set('files', $files);
+
+            $response->set('success', true);
+            $response->json();
+        } else {
+            // 要查看的路径
+            $path = $session->get($sessionKeyPath, '');
+            if ($path === '') {
+                $path = '/';
+            }
+            $response->set('path', $path);
+
+            // 显示方式 thumbnail 缩略图 list 详细列表
+            $view = $session->get($sessionKeyView, '');
+            if ($view !== 'thumbnail' && $view !== 'list') {
+                $view = 'thumbnail';
+            }
+            $response->set('view', $view);
+
+            $response->display();
+        }
+    }
+
+    /**
+     * @BePermission("创建文件夹", ordering="2.62")
+     */
     public function createDir()
     {
         $request = Be::getRequest();
         $response = Be::getResponse();
 
-        $dirName = $request->post('dirName', '');
+        $postData = $request->json();
+        $formData = $postData['formData'] ?? [];
 
-        $redirectUrl = beAdminUrl('System.FileManager.browser');
-        $redirect = [
-            'url' => $redirectUrl,
-            'message' => '{timeout} 秒后跳转到 {link}',
-            'timeout' => 3,
-        ];
+        try {
+            if (!isset($formData['path'])) {
+                throw new ControllerException('参数（path）缺失！');
+            }
+            $path = $formData['path'];
 
-        $serviceSystemFileManager = Be::getService('App.System.Admin.FileManager');
-        if ($serviceSystemFileManager->createDir($dirName)) {
-            $response->success('创建文件夹(' . $dirName . ')成功！', $redirect);
-        } else {
-            $response->error($serviceSystemFileManager->getError(), $redirect);
+            if (!isset($formData['dirName'])) {
+                throw new ControllerException('参数（dirName）缺失！');
+            }
+            $dirName = $formData['dirName'];
+
+            $storage = Be::getStorage();
+            $fullPath = $path . $dirName . '/';
+            if ($storage->isDirExist($fullPath)) {
+                throw new ControllerException('文件夹（' . $fullPath . '）已存在！');
+            }
+            $storage->createDir($fullPath);
+
+            $response->set('success', true);
+            $response->set('message', '创建文件夹成功！');
+            $response->json();
+        } catch (\Throwable $t) {
+            $response->set('success', false);
+            $response->set('message', '创建文件夹失败：' . $t->getMessage());
+            $response->json();
         }
     }
 
-    // 删除文件夹
+    /**
+     * 修改文件夹名称
+     *
+     * @BePermission("修改文件夹名称", ordering="2.63")
+     */
+    public function renameDir()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $postData = $request->json();
+        $formData = $postData['formData'] ?? [];
+
+        try {
+            if (!isset($formData['path'])) {
+                throw new ControllerException('参数（path）缺失！');
+            }
+            $path = $formData['path'];
+
+            if (!isset($formData['oldDirName'])) {
+                throw new ControllerException('参数（oldDirName）缺失！');
+            }
+            $oldDirName = $formData['oldDirName'];
+
+            if (!isset($formData['newDirName'])) {
+                throw new ControllerException('参数（newDirName）缺失！');
+            }
+            $newDirName = $formData['newDirName'];
+
+            $storage = Be::getStorage();
+            $oldFullPath = $path . $oldDirName . '/';
+            $newFullPath = $path . $newDirName . '/';
+
+            if ($storage->isDirExist($newFullPath)) {
+                throw new ControllerException('文件夹（' . $newFullPath . '）已存在！');
+            }
+
+            $storage->renameDir($oldFullPath, $newFullPath);
+
+            $response->set('success', true);
+            $response->set('message', '修改文件夹名称成功！');
+            $response->json();
+        } catch (\Throwable $t) {
+            $response->set('success', false);
+            $response->set('message', '修改文件夹名称失败：' . $t->getMessage());
+            $response->json();
+        }
+    }
+
+    /**
+     * 删除文件夹
+     *
+     * @BePermission("删除文件夹", ordering="2.64")
+     */
     public function deleteDir()
     {
         $request = Be::getRequest();
         $response = Be::getResponse();
 
-        $dirName = $request->get('dirName', '');
+        $postData = $request->json();
+        $formData = $postData['formData'] ?? [];
 
-        $redirectUrl = beAdminUrl('System.FileManager.browser');
-        $redirect = [
-            'url' => $redirectUrl,
-            'message' => '{timeout} 秒后跳转到 {link}',
-            'timeout' => 3,
-        ];
+        try {
+            if (!isset($formData['path'])) {
+                throw new ControllerException('参数（path）缺失！');
+            }
+            $path = $formData['path'];
 
-        $serviceSystemFileManager = Be::getService('App.System.Admin.FileManager');
-        if ($serviceSystemFileManager->deleteDir($dirName)) {
-            $response->success('删除文件夹(' . $dirName . ')成功！', $redirect);
-        } else {
-            $response->error($serviceSystemFileManager->getError(), $redirect);
+            if (!isset($formData['dirName'])) {
+                throw new ControllerException('参数（dirName）缺失！');
+            }
+            $dirName = $formData['dirName'];
+
+            $storage = Be::getStorage();
+            $fullPath = $path . $dirName . '/';
+
+            $storage->deleteDir($fullPath);
+
+            $response->set('success', true);
+            $response->set('message', '删除文件夹成功！');
+            $response->json();
+        } catch (\Throwable $t) {
+            $response->set('success', false);
+            $response->set('message', '删除文件夹失败：' . $t->getMessage());
+            $response->json();
         }
     }
 
-    // 修改文件夹名称
-    public function editDirName()
+    /**
+     * 上传图像
+     *
+     * @BePermission("上传图像", ordering="2.65")
+     */
+    public function uploadImage()
     {
         $request = Be::getRequest();
         $response = Be::getResponse();
 
-        $oldDirName = $request->post('oldDirName', '');
-        $newDirName = $request->post('newDirName', '');
+        try {
+            $path = $request->post('path');
+            if (!$path) {
+                throw new ControllerException('参数（path）缺失！');
+            }
 
-        $redirectUrl = beAdminUrl('System.FileManager.browser');
-        $redirect = [
-            'url' => $redirectUrl,
-            'message' => '{timeout} 秒后跳转到 {link}',
-            'timeout' => 3,
-        ];
+            $file = $request->files('file');
+            if ($file['error'] !== 0) {
+                throw new ControllerException(FileUpload::errorDescription($file['error']));
+            }
 
-        $serviceSystemFileManager = Be::getService('App.System.Admin.FileManager');
-        if ($serviceSystemFileManager->editDirName($oldDirName, $newDirName)) {
-            $response->success('重命名文件夹成功！', $redirect);
-        } else {
-            $response->error($serviceSystemFileManager->getError(), $redirect);
+            $configSystem = Be::getConfig('App.System.System');
+            $maxSize = $configSystem->uploadMaxSize;
+            $maxSizeInt = FileSize::string2Int($maxSize);
+            if ($file['size'] > $maxSizeInt) {
+                throw new ControllerException('您上传的图旬尺寸已超过最大限制：' . $maxSize . '！');
+            }
+
+            $ext = '';
+            $rPos = strrpos($file['name'], '.');
+            if ($rPos !== false) {
+                $ext = substr($file['name'], $rPos + 1);
+            }
+            if (!in_array($ext, $configSystem->allowUploadImageTypes)) {
+                throw new ControllerException('禁止上传的图像类型：' . $ext . '！');
+            }
+
+            $storage = Be::getStorage();
+            $fullPath = $path . $file['name'];
+
+            if ($storage->isFileExist($fullPath)) {
+                throw new ControllerException('图像（' . $fullPath . '）已存在！');
+            }
+
+            $url = $storage->uploadFile($fullPath, $file['tmp_name']);
+
+            $response->set('success', true);
+            $response->set('message', '上传成功！');
+            $response->set('url', $url);
+            $response->json();
+        } catch (\Throwable $t) {
+            $response->set('success', false);
+            $response->set('message', '上传图像失败：' . $t->getMessage());
+            $response->json();
         }
     }
 
-
+    /**
+     * 上传文件
+     *
+     * @BePermission("上传文件", ordering="2.66")
+     */
     public function uploadFile()
     {
         $request = Be::getRequest();
         $response = Be::getResponse();
 
-        $configSystem = Be::getConfig('App.System.System');
-
-        $redirectUrl = beAdminUrl('System.FileManager.browser');
-        $redirect = [
-            'url' => $redirectUrl,
-            'message' => '{timeout} 秒后跳转到 {link}',
-            'timeout' => 3,
-        ];
-
-        $file = $_FILES['file'];
-        if ($file['error'] === 0) {
-            $fileName = $file['name'];
-
-            $type = strtolower(substr(strrchr($fileName, '.'), 1));
-            if (!in_array($type, $configSystem->allowUploadFileTypes)) {
-                $response->error('不允许上传(' . $type . ')格式的文件！', $redirect);
+        try {
+            $path = $request->post('path');
+            if (!$path) {
+                throw new ControllerException('参数（path）缺失！');
             }
 
-            if (strpos($fileName, '/') !== false) {
-                $response->error('文件名称不合法！', $redirect);
+            $file = $request->files('file');
+            if ($file['error'] !== 0) {
+                throw new ControllerException(FileUpload::errorDescription($file['error']));
             }
 
-            $serviceSystemFileManager = Be::getService('App.System.Admin.FileManager');
-            $absPath = $serviceSystemFileManager->getAbsPath();
-            if ($absPath === false) {
-                $response->error($serviceSystemFileManager->getError(), $redirect);
+            $configSystem = Be::getConfig('App.System.System');
+            $maxSize = $configSystem->uploadMaxSize;
+            $maxSizeInt = FileSize::string2Int($maxSize);
+            if ($file['size'] > $maxSizeInt) {
+                throw new ControllerException('您上传的文件尺寸已超过最大限制：' . $maxSize . '！');
             }
 
-            $dstPath = $absPath . '/' . $fileName;
-
-            $rename = false;
-            if (file_exists($dstPath)) {
-                $i = 1;
-                $name = substr($fileName, 0, strrpos($fileName, '.'));
-                while (file_exists($absPath . '/' . $name . '_' . $i . '.' . $type)) {
-                    $i++;
-                }
-
-                $dstPath = $absPath . '/' . $name . '_' . $i . '.' . $type;
-
-                $rename = $name . '_' . $i . '.' . $type;
+            $ext = '';
+            $rPos = strrpos($file['name'], '.');
+            if ($rPos !== false) {
+                $ext = substr($file['name'], $rPos + 1);
+            }
+            if (!in_array($ext, $configSystem->allowUploadFileTypes)) {
+                throw new ControllerException('禁止上传的文件类型：' . $ext . '！');
             }
 
-            if (move_uploaded_file($file['tmpName'], $dstPath)) {
-                $watermark = $request->post('watermark', 0, 'int');
-                if ($watermark === 1 && in_array($type, $configSystem->allowUploadImageTypes)) {
-                    $serviceSystem = Be::getService('App.System.Admin.Watermark');
-                    $serviceSystem->watermark($dstPath);
-                }
+            $storage = Be::getStorage();
+            $fullPath = $path . $file['name'];
 
-                if ($rename === false) {
-                    $response->success('上传文件成功！', $redirect);
-                } else {
-                    $response->success('有同名文件，新上传的文件已更名为：' . $rename . '！', $redirect);
-                }
-            } else {
-                $response->error('上传失败！', $redirect);
-            }
-        } else {
-
-            $uploadErrors = array(
-                '1' => '您上传的文件过大！',
-                '2' => '您上传的文件过大！',
-                '3' => '文件只有部分被上传！',
-                '4' => '没有文件被上传！',
-                '5' => '上传的文件大小为 0！'
-            );
-
-            $error = '';
-            if (array_key_exists($file['error'], $uploadErrors)) {
-                $error = $uploadErrors[$file['error']];
-            } else {
-                $error = '错误代码：' . $file['error'];
+            if ($storage->isFileExist($fullPath)) {
+                throw new ControllerException('文件（' . $fullPath . '）已存在！');
             }
 
-            $response->error('上传失败' . '(' . $error . ')', $redirect);
+            $url = $storage->uploadFile($fullPath, $file['tmp_name']);
+
+            $response->set('success', true);
+            $response->set('message', '上传文件成功！');
+            $response->set('url', $url);
+            $response->json();
+        } catch (\Throwable $t) {
+            $response->set('success', false);
+            $response->set('message', '上传文件失败：' . $t->getMessage());
+            $response->json();
         }
     }
 
-    // 删除文件
+    /**
+     * 修改文件名称
+     *
+     * @BePermission("修改文件名称", ordering="2.67")
+     */
+    public function renameFile()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $postData = $request->json();
+        $formData = $postData['formData'] ?? [];
+
+        try {
+
+            $filterImage = $request->get('filterImage', -1, 'int');
+
+            if (!isset($formData['path'])) {
+                throw new ControllerException('参数（path）缺失！');
+            }
+            $path = $formData['path'];
+
+            if (!isset($formData['oldFileName'])) {
+                throw new ControllerException('参数（oldFileName）缺失！');
+            }
+            $oldFileName = $formData['oldFileName'];
+
+            if (!isset($formData['newFileName'])) {
+                throw new ControllerException('参数（newFileName）缺失！');
+            }
+            $newFileName = $formData['newFileName'];
+
+            $ext = '';
+            $rPos = strrpos($newFileName, '.');
+            if ($rPos !== false) {
+                $ext = substr($newFileName, $rPos + 1);
+            }
+
+            $configSystem = Be::getConfig('App.System.System');
+            if ($filterImage) {
+                if (!in_array($ext, $configSystem->allowUploadImageTypes)) {
+                    throw new ControllerException('禁止使用的图像类型：' . $ext . '！');
+                }
+            } else {
+                if (!in_array($ext, $configSystem->allowUploadFileTypes)) {
+                    throw new ControllerException('禁止使用的文件类型：' . $ext . '！');
+                }
+            }
+
+            $storage = Be::getStorage();
+            $oldFullPath = $path . $oldFileName;
+            $newFullPath = $path . $newFileName;
+
+            if ($storage->isFileExist($newFullPath)) {
+                throw new ControllerException('文件（' . $newFullPath . '）已存在！');
+            }
+
+            $storage->renameFile($oldFullPath, $newFullPath);
+
+            $response->set('success', true);
+            $response->set('message', '修改文件名称成功！');
+            $response->json();
+        } catch (\Throwable $t) {
+            $response->set('success', false);
+            $response->set('message', '修改文件名称失败：' . $t->getMessage());
+            $response->json();
+        }
+    }
+
+    /**
+     * 删除文件
+     *
+     * @BePermission("删除文件", ordering="2.68")
+     */
     public function deleteFile()
     {
         $request = Be::getRequest();
         $response = Be::getResponse();
 
-        $fileName = $request->get('fileName', '');
+        $postData = $request->json();
+        $formData = $postData['formData'] ?? [];
 
-        $redirectUrl = beAdminUrl('System.FileManager.browser');
-        $redirect = [
-            'url' => $redirectUrl,
-            'message' => '{timeout} 秒后跳转到 {link}',
-            'timeout' => 3,
-        ];
+        try {
+            if (!isset($formData['path'])) {
+                throw new ControllerException('参数（path）缺失！');
+            }
+            $path = $formData['path'];
 
-        $serviceSystemFileManager = Be::getService('App.System.Admin.FileManager');
-        if ($serviceSystemFileManager->deleteFile($fileName)) {
-            $response->success('删除文件(' . $fileName . ')成功！', $redirect);
-        } else {
-            $response->error($serviceSystemFileManager->getError(), $redirect);
+            if (!isset($formData['fileName'])) {
+                throw new ControllerException('参数（fileName）缺失！');
+            }
+            $fileName = $formData['fileName'];
+
+            $storage = Be::getStorage();
+            $fullPath = $path . $fileName;
+
+            $storage->deleteFile($fullPath);
+
+            $response->set('success', true);
+            $response->set('message', '删除文件成功！');
+            $response->json();
+        } catch (\Throwable $t) {
+            $response->set('success', false);
+            $response->set('message', '删除文件失败：' . $t->getMessage());
+            $response->json();
         }
     }
 
-    // 修改文件名称
-    public function editFileName()
-    {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
-
-        $oldFileName = $request->post('oldFileName', '');
-        $newFileName = $request->post('newFileName', '');
-
-        $redirectUrl = beAdminUrl('System.FileManager.browser');
-        $redirect = [
-            'url' => $redirectUrl,
-            'message' => '{timeout} 秒后跳转到 {link}',
-            'timeout' => 3,
-        ];
-
-        $serviceSystemFileManager = Be::getService('App.System.Admin.FileManager');
-        if ($serviceSystemFileManager->editFileName($oldFileName, $newFileName)) {
-            $response->success('重命名文件成功！', $redirect);
-        } else {
-            $response->error($serviceSystemFileManager->getError(), $redirect);
-        }
-
-    }
-
-    public function downloadFile()
-    {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
-
-        $fileName = $request->get('fileName', '');
-
-        $serviceSystemFileManager = Be::getService('App.System.Admin.FileManager');
-        $absFilePath = $serviceSystemFileManager->getAbsFilePath($fileName);
-        if ($absFilePath === false) {
-            $response->error($serviceSystemFileManager->getError());
-        } else {
-            header('Pragma: private');
-            header('Cache-control: private, must-revalidate');
-            header("Content-Type: application/octet-stream");
-            header("Content-Length: " . (string)(filesize($absFilePath)));
-            header('Content-Disposition: attachment; filename="' . ($fileName) . '"');
-            readfile($absFilePath);
-        }
-    }
 
 }

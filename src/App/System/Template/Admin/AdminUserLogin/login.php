@@ -6,7 +6,7 @@
 <?php
 $config = \Be\Be::getConfig('App.System.System');
 ?>
-<div id="app">
+<div id="app" v-cloak>
 
     <div class="logo">
 
