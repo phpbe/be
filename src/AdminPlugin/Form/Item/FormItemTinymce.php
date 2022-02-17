@@ -48,8 +48,8 @@ class FormItemTinymce extends FormItem
             'height' => '500',
             'forced_root_block' => false,
             'toolbar_mode' => 'sliding',
-            'be_file_manager_url' => beAdminUrl('System.FileManager.pop', ['callback' => $fileCallback]),
-            'be_file_manager_url_filter_image' => beAdminUrl('System.FileManager.pop', ['filterImage' => 1, 'callback' => $imageCallback]),
+            'be_storage_url' => beAdminUrl('System.Storage.pop', ['callback' => $fileCallback]),
+            'be_storage_url_filter_image' => beAdminUrl('System.Storage.pop', ['filterImage' => 1, 'callback' => $imageCallback]),
         ];
 
         $layout = 'simple';

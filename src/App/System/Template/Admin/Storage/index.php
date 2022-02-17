@@ -1,49 +1,49 @@
 <be-head>
     <style type="text/css">
-        .file-manager {
+        .storage {
 
         }
 
-        .file-manager-toolbar {
+        .storage-toolbar {
             padding: 5px 10px;
             border-bottom: 1px solid #f1f1f1;
             z-index: 999;
         }
 
-        .file-manager-breadcrumb {
+        .storage-breadcrumb {
             padding: 10px;
             border-bottom: 1px solid #f6f6f6;
         }
 
-        .file-manager-files {
+        .storage-files {
 
         }
 
 
-        .file-manager-view-thumbnail {
+        .storage-view-thumbnail {
             padding: 10px;
         }
 
-        .file-manager-view-thumbnail ul {
+        .storage-view-thumbnail ul {
             padding: 0;
             margin: 0;
         }
 
-        .file-manager-view-thumbnail li {
+        .storage-view-thumbnail li {
             display: inline-block;
             width: 120px;
             height: 150px;
         }
 
-        .file-manager-view-thumbnail li:hover {
+        .storage-view-thumbnail li:hover {
             background-color: #fafafa;
         }
 
-        .file-manager-view-thumbnail .file {
+        .storage-view-thumbnail .file {
             padding: 5px;
         }
 
-        .file-manager-view-thumbnail .file-icon {
+        .storage-view-thumbnail .file-icon {
             width: 110px;
             height: 90px;
             line-height: 90px;
@@ -51,14 +51,14 @@
             text-align: center;
         }
 
-        .file-manager-view-thumbnail .file-icon img {
+        .storage-view-thumbnail .file-icon img {
             height: auto;
             max-width: 80px;
             max-height: 80px;
             vertical-align: middle;
         }
 
-        .file-manager-view-thumbnail .file-name {
+        .storage-view-thumbnail .file-name {
             height: 50px;
             line-height: 25px;
             overflow: hidden;
@@ -70,50 +70,50 @@
         }
 
 
-        .file-manager-view-list {
+        .storage-view-list {
         }
 
-        .file-manager-view-list .file-icon {
+        .storage-view-list .file-icon {
         }
 
-        .file-manager-view-list .file-icon img {
+        .storage-view-list .file-icon img {
             height: auto;
             max-width: 24px;
             max-height: 24px;
             vertical-align: middle;
         }
 
-        .file-manager-view-list .file-size {
+        .storage-view-list .file-size {
             color: #999;
         }
 
-        .file-manager-view-list .file-update-time {
+        .storage-view-list .file-update-time {
             color: #999;
         }
 
-        .file-manager-view-list .file-operation i {
+        .storage-view-list .file-operation i {
             font-size: 18px;
         }
 
-        .file-manager-upload-image{
+        .storage-upload-image{
             max-height: 400px;
             overflow-y: auto;
         }
 
-        .file-manager-upload-file .el-upload {
+        .storage-upload-file .el-upload {
             width: 100%;
         }
 
-        .file-manager-upload-file .el-upload-dragger {
+        .storage-upload-file .el-upload-dragger {
             width: 100%;
             height: 120px;
         }
 
-        .file-manager-upload-file .el-upload-dragger .el-icon-upload {
+        .storage-upload-file .el-upload-dragger .el-icon-upload {
             margin-top: 10px;
         }
 
-        .file-manager-upload-file .el-upload-list {
+        .storage-upload-file .el-upload-list {
             max-height: 200px;
             overflow-y: auto;
         }
@@ -124,15 +124,14 @@
 <be-center-body>
     <?php
     $configSystem = \Be\Be::getConfig('App.System.System');
-    $configWatermark = \Be\Be::getConfig('App.System.Watermark');
     $templateUrl = \Be\Be::getProperty('App.System')->getUrl();
     ?>
 
     <div id="app" v-cloak>
 
-        <div class="file-manager">
+        <div class="storage">
 
-            <div class="file-manager-toolbar">
+            <div class="storage-toolbar">
                 <div class="be-row">
                     <div class="be-col-auto">
                         <el-button type="default" size="medium" icon="el-icon-folder-add" @click="createDir">新建文件夹</el-button>
@@ -151,23 +150,23 @@
                 </div>
             </div>
 
-            <div class="file-manager-breadcrumb">
+            <div class="storage-breadcrumb">
                 <el-breadcrumb separator="/">
                     <el-breadcrumb-item><a href="javascript:void(0);" @click="setPath('/')"><i class="el-icon-s-home"></i></a></el-breadcrumb-item>
                     <el-breadcrumb-item v-for="item in breadcrumb"><a href="javascript:void(0);" @click="setPath(item[0])">{{item[1]}}</a></el-breadcrumb-item>
                 </el-breadcrumb>
             </div>
 
-            <div class="file-manager-files" v-loading="loading">
+            <div class="storage-files" v-loading="loading">
                 <template v-if="formData.view==='thumbnail'">
-                    <div class="file-manager-view-thumbnail">
+                    <div class="storage-view-thumbnail">
                         <ul>
                             <template v-for="file in files">
                                 <li>
                                     <div v-if="file.type === 'dir'" class="file">
                                         <div class="file-icon">
                                             <el-link :title="file.name" @click="setPath(formData.path + file.name + '/')" :underline="false">
-                                                <el-image src="<?php echo $templateUrl; ?>/Template/Admin/FileManager/images/types/folder.png"></el-image>
+                                                <el-image src="<?php echo $templateUrl; ?>/Template/Admin/Storage/images/types/folder.png"></el-image>
                                             </el-link>
                                         </div>
                                         <div class="file-name">
@@ -177,8 +176,8 @@
                                     <div v-else class="file">
                                         <div class="file-icon">
                                             <el-image v-if="imageTypes.indexOf(file.type) !== -1" :src="file.url"></el-image>
-                                            <el-image v-else-if="fileTypes.indexOf(file.type) !== -1" :src="'<?php echo $templateUrl; ?>/Template/Admin/FileManager/images/types/' + file.type + '.png'"></el-image>
-                                            <el-image v-else src="<?php echo $templateUrl; ?>/Template/Admin/FileManager/images/types/unknown.png"></el-image>
+                                            <el-image v-else-if="fileTypes.indexOf(file.type) !== -1" :src="'<?php echo $templateUrl; ?>/Template/Admin/Storage/images/types/' + file.type + '.png'"></el-image>
+                                            <el-image v-else src="<?php echo $templateUrl; ?>/Template/Admin/Storage/images/types/unknown.png"></el-image>
                                         </div>
                                         <div class="file-name">
                                             {{file.name}}
@@ -191,7 +190,7 @@
                 </template>
 
                 <template v-else-if="formData.view==='list'">
-                    <div class="file-manager-view-list">
+                    <div class="storage-view-list">
 
                         <el-table ref="filesTableRef" :data="files" size="medium">
 
@@ -203,13 +202,13 @@
                                 <template slot-scope="scope">
                                     <div v-if="scope.row.type === 'dir'" class="file-icon">
                                         <el-link @click="setPath(formData.path + scope.row.name + '/')" :underline="false">
-                                            <el-image src="<?php echo $templateUrl; ?>/Template/Admin/FileManager/images/types/folder_s.png"></el-image>
+                                            <el-image src="<?php echo $templateUrl; ?>/Template/Admin/Storage/images/types/folder_s.png"></el-image>
                                         </el-link>
                                     </div>
                                     <div v-else class="file-icon">
                                         <el-image v-if="imageTypes.indexOf(scope.row.type) !== -1" :src="scope.row.url"></el-image>
-                                        <el-image v-else-if="fileTypes.indexOf(scope.row.type) !== -1" :src="'<?php echo $templateUrl; ?>/Template/Admin/FileManager/images/types/' + scope.row.type + '_s.png'"></el-image>
-                                        <el-image v-else src="<?php echo $templateUrl; ?>/Template/Admin/FileManager/images/types/unknown_s.png"></el-image>
+                                        <el-image v-else-if="fileTypes.indexOf(scope.row.type) !== -1" :src="'<?php echo $templateUrl; ?>/Template/Admin/Storage/images/types/' + scope.row.type + '_s.png'"></el-image>
+                                        <el-image v-else src="<?php echo $templateUrl; ?>/Template/Admin/Storage/images/types/unknown_s.png"></el-image>
                                     </div>
                                 </template>
                             </el-table-column>
@@ -300,12 +299,12 @@
 
 
         <el-dialog v-loading="uploadFileLoading" :visible.sync="uploadFileVisible" title="上传文件" :center="true" :close-on-click-modal="false" :close-on-press-escape="false">
-            <div class="file-manager-upload-file">
+            <div class="storage-upload-file">
                 <el-upload
                         ref="uploadFileRef"
                         v-loading="uploadFileUploading"
                         element-loading-text="上传中..."
-                        action="<?php echo beAdminUrl('System.FileManager.uploadFile'); ?>"
+                        action="<?php echo beAdminUrl('System.Storage.uploadFile'); ?>"
                         :file-list="uploadFiles"
                         :limit="100"
                         :on-exceed="uploadFileExceed"
@@ -407,7 +406,7 @@
                 loadData: function () {
                     this.loading = true;
                     var _this = this;
-                    this.$http.post("<?php echo beAdminUrl('System.FileManager.index'); ?>", {
+                    this.$http.post("<?php echo beAdminUrl('System.Storage.index'); ?>", {
                         formData: _this.formData
                     }).then(function (response) {
                         _this.loading = false;
@@ -439,7 +438,7 @@
                 setView: function (view) {
                     this.formData.view = view;
 
-                    this.$http.post("<?php echo beAdminUrl('System.FileManager.index'); ?>", {
+                    this.$http.post("<?php echo beAdminUrl('System.Storage.index'); ?>", {
                         toggleView: 1,
                         formData: this.formData
                     });
@@ -466,7 +465,7 @@
                 createDirSave: function () {
                     this.createDirLoading = true;
                     var _this = this;
-                    this.$http.post("<?php echo beAdminUrl('System.FileManager.createDir'); ?>", {
+                    this.$http.post("<?php echo beAdminUrl('System.Storage.createDir'); ?>", {
                         formData: _this.createDirFormData
                     }).then(function (response) {
                         _this.createDirLoading = false;
@@ -496,7 +495,7 @@
                 renameDirSave: function () {
                     this.renameDirLoading = true;
                     var _this = this;
-                    this.$http.post("<?php echo beAdminUrl('System.FileManager.renameDir'); ?>", {
+                    this.$http.post("<?php echo beAdminUrl('System.Storage.renameDir'); ?>", {
                         formData: _this.renameDirFormData
                     }).then(function (response) {
                         _this.renameDirLoading = false;
@@ -527,7 +526,7 @@
                         type: 'warning'
                     }).then(function() {
                         _this.loading = true;
-                        _this.$http.post("<?php echo beAdminUrl('System.FileManager.deleteDir'); ?>", {
+                        _this.$http.post("<?php echo beAdminUrl('System.Storage.deleteDir'); ?>", {
                             formData: {
                                 path: _this.formData.path,
                                 dirName: file.name,
@@ -595,7 +594,7 @@
                 renameFileSave: function () {
                     this.renameFileLoading = true;
                     var _this = this;
-                    this.$http.post("<?php echo beAdminUrl('System.FileManager.renameFile'); ?>", {
+                    this.$http.post("<?php echo beAdminUrl('System.Storage.renameFile'); ?>", {
                         formData: _this.renameFileFormData
                     }).then(function (response) {
                         _this.renameFileLoading = false;
@@ -625,7 +624,7 @@
                         type: 'warning'
                     }).then(function() {
                         _this.loading = true;
-                        _this.$http.post("<?php echo beAdminUrl('System.FileManager.deleteFile'); ?>", {
+                        _this.$http.post("<?php echo beAdminUrl('System.Storage.deleteFile'); ?>", {
                             formData: {
                                 path: _this.formData.path,
                                 fileName: file.name,

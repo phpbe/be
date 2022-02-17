@@ -8,12 +8,12 @@ use Be\Util\FileSystem\FileSize;
 use Be\Util\Net\FileUpload;
 
 /**
- * 文件管理器
+ * 存储管理器
  *
  * @BeMenuGroup("管理")
  * @BePermissionGroup("管理")
  */
-class FileManager extends Auth
+class Storage extends Auth
 {
 
     /**
@@ -26,8 +26,8 @@ class FileManager extends Auth
         $response = Be::getResponse();
         $session = Be::getSession();
 
-        $sessionKeyPath = 'be-fileManager-path';
-        $sessionKeyView = 'be-fileManager-view';
+        $sessionKeyPath = 'be-storage-path';
+        $sessionKeyView = 'be-storage-view';
 
         if ($request->isAjax()) {
 
@@ -101,8 +101,8 @@ class FileManager extends Auth
         }
         $response->set('callback', $callback);
 
-        $sessionKeyPath = 'be-fileManager-' . $filterImage . '-path';
-        $sessionKeyView = 'be-fileManager-' . $filterImage . '-view';
+        $sessionKeyPath = 'be-storage-' . $filterImage . '-path';
+        $sessionKeyView = 'be-storage-' . $filterImage . '-view';
 
         if ($request->isAjax()) {
 
