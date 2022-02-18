@@ -100,6 +100,8 @@
             display: -webkit-box;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 2;
+            word-wrap: break-word;
+            word-break: break-word;
         }
 
 
@@ -169,7 +171,7 @@
                 <div class="be-row">
                     <div class="be-col-auto">
                         <el-button type="default" size="medium" icon="el-icon-folder-add" @click="createDir">新建文件夹</el-button>
-                        <el-button type="default" size="medium" icon="el-icon-upload2" @click="uploadFile()">上传<?php echo $filterName; ?></el-button>
+                        <el-button type="default" size="medium" icon="el-icon-upload2" v-if="files.length < 900" @click="uploadFile()">上传<?php echo $filterName; ?></el-button>
                     </div>
                     <div class="be-col"></div>
                     <div class="be-col-auto">

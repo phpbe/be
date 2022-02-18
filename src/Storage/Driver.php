@@ -18,6 +18,16 @@ abstract class Driver
     abstract function getRootUrl(): string;
 
     /**
+     * 获取文件网址
+     *
+     * @param string $path 文件存储路径
+     * @return string 文件网址
+     */
+    public function getFileUrl(string $path): string {
+        return $this->getRootUrl() . $path;
+    }
+
+    /**
      * 获取指定路径下的文件列表
      *
      * @param string $dirPath 文件夹路径 以 '/' 开头，以 '/' 结尾
@@ -49,7 +59,7 @@ abstract class Driver
      *
      * @param string $path 文件存储路径
      */
-    abstract function deleteFile(string $path);
+    abstract function deleteFile(string $path): bool;
 
     /**
      * 文件是否存在
