@@ -50,6 +50,12 @@ class Storage extends Auth
             $session->set($sessionKeyView, $view);
             $response->set('view', $view);
 
+            if (isset($postData['toggleView']) && $postData['toggleView']) {
+                $response->set('success', true);
+                $response->json();
+                return;
+            }
+
             // 获取文件列表
             $option = [];
             $storage = Be::getStorage();
