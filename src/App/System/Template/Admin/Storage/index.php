@@ -218,13 +218,11 @@
 
                             <el-table-column label="文件名">
                                 <template slot-scope="scope">
-                                    <div class="file-name">
-                                        <div v-if="scope.row.type === 'dir'" class="file-icon">
-                                            <el-link @click="setPath(formData.path + scope.row.name + '/')" :underline="false">{{scope.row.name}}</el-link>
-                                        </div>
-                                        <div v-else class="file-icon">
-                                            {{scope.row.name}}
-                                        </div>
+                                    <div v-if="scope.row.type === 'dir'" class="file-name">
+                                        <el-link @click="setPath(formData.path + scope.row.name + '/')" :underline="false">{{scope.row.name}}</el-link>
+                                    </div>
+                                    <div v-else class="file-name">
+                                        {{scope.row.name}}
                                     </div>
                                 </template>
                             </el-table-column>
