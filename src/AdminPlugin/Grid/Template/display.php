@@ -1140,13 +1140,7 @@
                                             eval(response.data.callback);
                                         } catch (e) {}
                                     }, 1000);
-                                }DetailItemAvatar.php
-                                DetailItemHtml.php
-                                DetailItemImage.php
-                                DetailItemIcon.php
-                                DetailItemProgress.php
-                                DetailItemSwitch.php
-                                DetailItemTree.php
+                                }
 
                                 _this.loadGridData();
                             }
