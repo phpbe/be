@@ -26,7 +26,7 @@ class Table
     /**
      * 主键
      *
-     * @var null | string | array
+     * @var string|array|null
      */
     protected $_primaryKey = null;
 
@@ -49,7 +49,7 @@ class Table
      * @param string $alias 别名
      * @return Table
      */
-    public function alias($alias)
+    public function alias($alias): Table
     {
         $this->_alias = $alias;
         return $this;
@@ -63,7 +63,7 @@ class Table
      * @param string $on 连接条件
      * @return Table
      */
-    public function leftJoin($table, $on)
+    public function leftJoin(string $table, string $on): Table
     {
         return $this->_join('LEFT JOIN', $table, $on);
     }
@@ -75,7 +75,7 @@ class Table
      * @param string $on 连接条件
      * @return Table
      */
-    public function rightJoin($table, $on)
+    public function rightJoin(string $table, string $on): Table
     {
         return $this->_join('RIGHT JOIN', $table, $on);
     }
@@ -87,7 +87,7 @@ class Table
      * @param string $on 连接条件
      * @return Table
      */
-    public function innerJoin($table, $on)
+    public function innerJoin(string $table, string $on): Table
     {
         return $this->_join('INNER JOIN', $table, $on);
     }
@@ -99,7 +99,7 @@ class Table
      * @param string $on 连接条件
      * @return Table
      */
-    public function join($table, $on)
+    public function join(string $table, string $on): Table
     {
         return $this->_join('INNER JOIN', $table, $on);
     }
@@ -111,7 +111,7 @@ class Table
      * @param string $on 连接条件
      * @return Table
      */
-    public function fullJoin($table, $on)
+    public function fullJoin(string $table, string $on): Table
     {
         return $this->_join('FULL JOIN', $table, $on);
     }
@@ -123,12 +123,12 @@ class Table
      * @param string $on 连接条件
      * @return Table
      */
-    public function crossJoin($table, $on)
+    public function crossJoin(string $table, string $on): Table
     {
         return $this->_join('CROSS JOIN', $table, $on);
     }
 
-    protected function _join($type, $table, $on)
+    protected function _join(string $type, string $table, string $on): Table
     {
         $alias = null;
         if (strpos($table, ' ') !== false) {
@@ -150,9 +150,9 @@ class Table
     /**
      * 设置单个查询条件
      *
-     * @param string | array $field 字段名或需要直接拼接进SQL的字符
-     * @param string $op 操作类型：=/<>/!=/>/</>=/<=/between/not between/in/not in/like/not like
-     * @param string $value 值，
+     * @param string|array $field 字段名或需要直接拼接进SQL的字符
+     * @param string|null $op 操作类型：=/<>/!=/>/</>=/<=/between/not between/in/not in/like/not like
+     * @param string|null $value 值，
      * @return Table
      * @example
      * <pre>
@@ -168,7 +168,7 @@ class Table
      * $table->where(['username','=', 'Tom']);
      * </pre>
      */
-    public function where($field, $op = null, $value = null)
+    public function where($field, string $op = null, string $value = null): Table
     {
         if (is_array($field)) {
             $this->where(...$field);
@@ -204,7 +204,7 @@ class Table
      *]); // 最终SQL: WHERE (username='Tom' OR age>18)
      * </pre>
      */
-    public function wheres($wheres)
+    public function wheres(array $wheres): Table
     {
         $fieldCount = count($wheres);
 
@@ -244,7 +244,7 @@ class Table
      * @param string $field 分组条件
      * @return Table
      */
-    public function groupBy($field)
+    public function groupBy(string $field): Table
     {
         $this->_groupBy = $field;
         return $this;
@@ -256,7 +256,7 @@ class Table
      * @param string $having
      * @return Table
      */
-    public function having($having)
+    public function having(string $having): Table
     {
         $this->_having = $having;
         return $this;
@@ -268,9 +268,9 @@ class Table
      * @param int $offset 偏移量
      * @return Table
      */
-    public function offset($offset = 0)
+    public function offset(int $offset = 0): Table
     {
-        $this->_offset = intval($offset);
+        $this->_offset = (int)$offset;
         return $this;
     }
 
@@ -280,9 +280,9 @@ class Table
      * @param int $limit 要返回的记录条数
      * @return Table
      */
-    public function limit($limit = 20)
+    public function limit(int $limit = 20): Table
     {
-        $this->_limit = intval($limit);
+        $this->_limit = (int)$limit;
         return $this;
     }
 
@@ -290,10 +290,10 @@ class Table
      * 排序
      *
      * @param string $field 要排序的字段
-     * @param string $dir 排序方向：ASC | DESC
+     * @param string|null $dir 排序方向：ASC | DESC
      * @return Table
      */
-    public function orderBy($field, $dir = null)
+    public function orderBy(string $field, string $dir = null): Table
     {
         $field = trim($field);
         if ($dir === null) {
@@ -313,9 +313,9 @@ class Table
      * 查询单个字段第一条记录
      *
      * @param string $field 查询的字段
-     * @return string|int
+     * @return string
      */
-    public function getValue($field)
+    public function getValue(string $field): string
     {
         return $this->query('getValue', $field);
     }
@@ -326,7 +326,7 @@ class Table
      * @param string $field 查询的字段
      * @return array 数组
      */
-    public function getValues($field)
+    public function getValues(string $field): array
     {
         return $this->query('getValues', $field);
     }
@@ -335,9 +335,9 @@ class Table
      * 查询单个字段的所有记录, 跌代器方式
      *
      * @param string $field 查询的字段
-     * @return array
+     * @return \Generator
      */
-    public function getYieldValues($field)
+    public function getYieldValues(string $field): \Generator
     {
         return $this->query('getYieldValues', $field);
     }
@@ -349,7 +349,7 @@ class Table
      * @param string $valueField 值字段
      * @return array 数组
      */
-    public function getKeyValues($keyField, $valueField)
+    public function getKeyValues(string $keyField, string $valueField): array
     {
         return $this->query('getKeyValues', $keyField . ',' . $valueField);
     }
@@ -360,7 +360,7 @@ class Table
      * @param string $fields 查询用到的字段列表
      * @return array 数组
      */
-    public function getArray($fields = null)
+    public function getArray(string $fields = null): array
     {
         return $this->query('getArray', $fields);
     }
@@ -368,10 +368,10 @@ class Table
     /**
      * 查询多条记录
      *
-     * @param string $fields 查询用到的字段列表
+     * @param string|null $fields 查询用到的字段列表
      * @return array 二维数组
      */
-    public function getArrays($fields = null)
+    public function getArrays(string $fields = null): array
     {
         return $this->query('getArrays', $fields);
     }
@@ -379,10 +379,10 @@ class Table
     /**
      * 查询多条记录, 跌代器方式
      *
-     * @param string $fields 查询用到的字段列表
-     * @return array
+     * @param string|null $fields 查询用到的字段列表
+     * @return \Generator
      */
-    public function getYieldArrays($fields = null)
+    public function getYieldArrays(string $fields = null): \Generator
     {
         return $this->query('getYieldArrays', $fields);
     }
@@ -390,10 +390,11 @@ class Table
     /**
      * 查询多条记录
      *
+     * @param string $keyField 键字段
      * @param string $fields 查询用到的字段列表
      * @return array 二维数组
      */
-    public function getKeyArrays($keyField, $fields = null)
+    public function getKeyArrays(string $keyField, string $fields = null): array
     {
         return $this->query('getKeyArrays', $fields, $keyField);
     }
@@ -404,7 +405,7 @@ class Table
      * @param string $fields 查询用到的字段列表
      * @return object 对象
      */
-    public function getObject($fields = null)
+    public function getObject(string $fields = null)
     {
         return $this->query('getObject', $fields);
     }
@@ -415,7 +416,7 @@ class Table
      * @param string $fields 查询用到的字段列表
      * @return array
      */
-    public function getObjects($fields = null)
+    public function getObjects(string $fields = null): array
     {
         return $this->query('getObjects', $fields);
     }
@@ -423,10 +424,10 @@ class Table
     /**
      * 查询多条记录, 跌代器方式
      *
-     * @param string $fields 查询用到的字段列表
-     * @return array
+     * @param string|null $fields 查询用到的字段列表
+     * @return \Generator
      */
-    public function getYieldObjects($fields = null)
+    public function getYieldObjects(string $fields = null): \Generator
     {
         return $this->query('getYieldObjects', $fields);
     }
@@ -434,10 +435,11 @@ class Table
     /**
      * 查询多条记发
      *
-     * @param string $fields 查询用到的字段列表
+     * @param string $keyField 键字段
+     * @param string|null $fields 查询用到的字段列表
      * @return array 对象列表
      */
-    public function getKeyObjects($keyField, $fields = null)
+    public function getKeyObjects(string $keyField, string $fields = null): array
     {
         return $this->query('getKeyObjects', $fields, $keyField);
     }
@@ -449,7 +451,7 @@ class Table
      * @param string $fields 查询用到的字段列表
      * @return mixed
      */
-    private function query($fn, $fields = null, $keyField = null)
+    private function query(string $fn, string $fields = null, string $keyField = null)
     {
         $db = Be::getDb($this->_dbName);
 
@@ -491,18 +493,18 @@ class Table
      * @param string $field 字段
      * @return int
      */
-    public function count($field = '*')
+    public function count(string $field = '*'): int
     {
-        return $this->query('getValue', 'COUNT(' . $field . ')');
+        return (int)$this->query('getValue', 'COUNT(' . $field . ')');
     }
 
     /**
      * 求和
      *
      * @param string $field 字段名
-     * @return number
+     * @return string
      */
-    public function sum($field)
+    public function sum(string $field): string
     {
         return $this->query('getValue', 'SUM(' . $field . ')');
     }
@@ -511,9 +513,9 @@ class Table
      * 取最小值
      *
      * @param string $field 字段名
-     * @return number
+     * @return string
      */
-    public function min($field)
+    public function min(string $field): string
     {
         return $this->query('getValue', 'MIN(' . $field . ')');
     }
@@ -522,9 +524,9 @@ class Table
      * 取最大值
      *
      * @param string $field 字段名
-     * @return number
+     * @return string
      */
-    public function max($field)
+    public function max(string $field): string
     {
         return $this->query('getValue', 'MAX(' . $field . ')');
     }
@@ -533,9 +535,9 @@ class Table
      * 取平均值
      *
      * @param string $field 字段名
-     * @return number
+     * @return string
      */
-    public function avg($field)
+    public function avg(string $field): string
     {
         return $this->query('getValue', 'AVG(' . $field . ')');
     }
@@ -547,7 +549,7 @@ class Table
      * @param int $step 自增量
      * @return Table
      */
-    public function increment($field, $step = 1)
+    public function increment(string $field, int $step = 1): Table
     {
         $db = Be::getDb($this->_dbName);
 
@@ -596,7 +598,7 @@ class Table
      * @param int $step 自减量
      * @return Table
      */
-    public function decrement($field, $step = 1)
+    public function decrement(string $field, int $step = 1): Table
     {
         $db = Be::getDb($this->_dbName);
 
@@ -644,7 +646,7 @@ class Table
      * @param array $keyValues 要更新的数据键值对
      * @return Table
      */
-    public function update($keyValues = [])
+    public function update(array $keyValues = []): Table
     {
         $db = Be::getDb($this->_dbName);
 
@@ -691,10 +693,10 @@ class Table
 
     /**
      * 删除数据
-     * @param string $tableName 表名，有连表时需指定
+     * @param string|null $tableName 表名，有连表时需指定
      * @return Table
      */
-    public function delete($tableName = null)
+    public function delete(string $tableName = null): Table
     {
         $db = Be::getDb($this->_dbName);
 
@@ -731,7 +733,7 @@ class Table
      * 清空表
      * @return Table
      */
-    public function truncate()
+    public function truncate(): Table
     {
         $db = Be::getDb($this->_dbName);
 
@@ -747,7 +749,7 @@ class Table
      * 删除表
      * @return Table
      */
-    public function drop()
+    public function drop(): Table
     {
         $db = Be::getDb($this->_dbName);
 
@@ -764,7 +766,7 @@ class Table
      *
      * @return Table
      */
-    public function init()
+    public function init(): Table
     {
         $this->_join = [];
         $this->_where = [];
@@ -783,7 +785,7 @@ class Table
      * @return array
      * @throws TableException
      */
-    public function prepareSql()
+    public function prepareSql(): array
     {
         $db = Be::getDb($this->_dbName);
 
@@ -801,7 +803,7 @@ class Table
                     } else {
                         $sql .= ' ' . $db->quoteKey($where[0]);
                         $op = strtoupper($where[1]);
-                        $sql .=  ' ' . $op;
+                        $sql .= ' ' . $op;
                         switch ($op) {
                             case 'IN':
                             case 'NOT IN':
@@ -814,7 +816,7 @@ class Table
                                 break;
                             case 'BETWEEN':
                             case 'NOT BETWEEN':
-                                $sql .=  ' ' . $op;
+                                $sql .= ' ' . $op;
                                 if (is_array($where[2]) && count($where[2]) === 2) {
                                     $sql .= ' ? AND ?';
                                     $values = array_merge($values, $where[2]);
@@ -857,7 +859,7 @@ class Table
      *
      * @return string
      */
-    public function getDbName()
+    public function getDbName(): string
     {
         return $this->_dbName;
     }
@@ -867,7 +869,7 @@ class Table
      *
      * @return string
      */
-    public function getTableName()
+    public function getTableName(): string
     {
         return $this->_tableName;
     }
@@ -875,7 +877,7 @@ class Table
     /**
      * 获取主键名
      *
-     * @return string
+     * @return string|array|null
      */
     public function getPrimaryKey()
     {
@@ -887,7 +889,7 @@ class Table
      *
      * @return array
      */
-    public function getFields()
+    public function getFields(): array
     {
         return $this->_fields;
     }
@@ -897,7 +899,7 @@ class Table
      *
      * @return string
      */
-    public function getLastSql()
+    public function getLastSql(): string
     {
         $db = Be::getDb($this->_dbName);
 
