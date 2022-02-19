@@ -152,7 +152,7 @@ class Table
      *
      * @param string|array $field 字段名或需要直接拼接进SQL的字符
      * @param string|null $op 操作类型：=/<>/!=/>/</>=/<=/between/not between/in/not in/like/not like
-     * @param string|null $value 值，
+     * @param string|array|null $value 值，
      * @return Table
      * @example
      * <pre>
@@ -168,7 +168,7 @@ class Table
      * $table->where(['username','=', 'Tom']);
      * </pre>
      */
-    public function where($field, string $op = null, string $value = null): Table
+    public function where($field, string $op = null, $value = null): Table
     {
         if (is_array($field)) {
             $this->where(...$field);
