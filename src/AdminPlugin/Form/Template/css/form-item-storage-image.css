@@ -10,10 +10,12 @@
     line-height: 96px;
     position: relative;
     text-align: center;
+    background-color: #f5f7fa;
 }
 
 .form-item-storage-image-selector {
     cursor: pointer;
+    background-color: #fff;
 }
 
 .form-item-storage-image-selector:hover {
