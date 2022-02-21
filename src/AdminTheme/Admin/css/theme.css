@@ -273,3 +273,5 @@ body {
     min-height: 60px;
     height: auto !important;
 }
+
+.be-dialog .el-dialog__body {padding: 0 5px;}

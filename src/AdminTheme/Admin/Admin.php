@@ -50,7 +50,8 @@
     ?>
 
     <link rel="stylesheet" href="<?php echo $beUrl; ?>/vendor/be/scss/src/be.css" />
-    <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/theme.css?v=202112300123" />
+
+    <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/theme.css?v=20220220" />
     <be-head>
     </be-head>
 </head>
@@ -169,7 +170,21 @@
 
                 </div>
             </div>
+            <script>
+                <?php
+                $menuKey = \Be\Be::getRequest()->getRoute();
+                ?>
+                var vueNorth = new Vue({
+                    el: '#be-north',
+                    data: {
+                        defaultActive: "north-menu-<?php echo $menuKey; ?>",
+                        aboutModel: false
+                    },
+                    methods: {
 
+                    }
+                });
+            </script>
         </be-north>
 
 
@@ -263,6 +278,34 @@
                     <i :class="collapse ?'el-icon-s-unfold': 'el-icon-s-fold'"></i>
                 </div>
             </div>
+            <script>
+                <?php
+                $menuKey = \Be\Be::getRequest()->getRoute();
+                ?>
+                var sWestMenuCollapseKey = '_westMenuCollapse';
+                var vueWestMenu = new Vue({
+                    el: '#app-west',
+                    data : {
+                        activeIndex: "west-menu-<?php echo $menuKey; ?>",
+                        collapse: this.$cookies.isKey(sWestMenuCollapseKey) && this.$cookies.get(sWestMenuCollapseKey) === '1'
+                    },
+                    methods: {
+                        toggleMenu: function (e) {
+                            this.collapse = !this.collapse;
+                            console.log(this.collapse);
+                            document.getElementById("be-north").style.left = this.collapse ? "64px" : "200px";
+                            document.getElementById("be-middle").style.left = this.collapse ? "64px" : "200px";
+                            this.$cookies.set(sWestMenuCollapseKey, this.collapse ? '1' : '0', 86400 * 180);
+                        }
+                    },
+                    created: function () {
+                        if (this.collapse) {
+                            document.getElementById("be-north").style.left = "64px";
+                            document.getElementById("be-middle").style.left = "64px";
+                        }
+                    }
+                });
+            </script>
         </be-west>
 
 
@@ -277,50 +320,34 @@
             </div>
         </be-middle>
     </div>
-
-    <script>
-        <?php
-        $menuKey = \Be\Be::getRequest()->getRoute();
-        ?>
-        var vueNorth = new Vue({
-            el: '#be-north',
-            data: {
-                defaultActive: "north-menu-<?php echo $menuKey; ?>",
-                aboutModel: false
-            },
-            methods: {
-
-            }
-        });
-
-
-        var sWestMenuCollapseKey = '_westMenuCollapse';
-        var vueWestMenu = new Vue({
-            el: '#app-west',
-            data : {
-                activeIndex: "west-menu-<?php echo $menuKey; ?>",
-                collapse: this.$cookies.isKey(sWestMenuCollapseKey) && this.$cookies.get(sWestMenuCollapseKey) === '1'
-            },
-            methods: {
-                toggleMenu: function (e) {
-                    this.collapse = !this.collapse;
-                    console.log(this.collapse);
-                    document.getElementById("be-north").style.left = this.collapse ? "64px" : "200px";
-                    document.getElementById("be-middle").style.left = this.collapse ? "64px" : "200px";
-                    this.$cookies.set(sWestMenuCollapseKey, this.collapse ? '1' : '0', 86400 * 180);
-                }
-            },
-            created: function () {
-                if (this.collapse) {
-                    document.getElementById("be-north").style.left = "64px";
-                    document.getElementById("be-middle").style.left = "64px";
-                }
-            }
-        });
-
-    </script>
-
     </be-body>
+
+
+    <div id="app-be" v-cloak>
+        <el-dialog
+                class="be-dialog"
+                :title="dialog.title"
+                :visible.sync="dialog.visible"
+                :width="dialog.width"
+                :close-on-click-modal="false"
+                :destroy-on-close="true">
+            <iframe id="frame-be-dialog" name="frame-be-dialog" src="about:blank" :style="{width:'100%',height:dialog.height,border:0}"></iframe>
+        </el-dialog>
+
+        <el-drawer
+                class="be-drawer"
+                :visible.sync="drawer.visible"
+                :size="drawer.width"
+                :title="drawer.title"
+                :wrapper-closable="false"
+                :destroy-on-close="true">
+            <div style="padding:0 10px;height: 100%;">
+                <iframe id="frame-be-drawer" name="frame-be-drawer" src="about:blank" style="width:100%;height:100%;border:0;"></iframe>
+            </div>
+        </el-drawer>
+    </div>
+    <script src="<?php echo $themeUrl; ?>/js/theme.js"></script>
+
 </body>
 </html>
 </be-html>

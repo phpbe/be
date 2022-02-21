@@ -203,7 +203,7 @@ if ($sectionData['enable']) {
                             case 'image':
                                 echo '<img src="';
                                 if (strpos($item['data']['iconImage'], '/') === false) {
-                                    echo \Be\Be::getRequest()->getUploadUrl() . '/Theme/Sample/Section/GroupOfIconWithText/IconWithText/iconImage/' . $item['data']['iconImage'];
+                                    echo \Be\Be::getStorage()->getRootUrl() . '/Theme/Sample/Section/GroupOfIconWithText/IconWithText/iconImage/' . $item['data']['iconImage'];
                                 } else {
                                     echo $item['data']['iconImage'];
                                 }

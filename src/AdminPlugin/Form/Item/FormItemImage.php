@@ -163,7 +163,7 @@ class FormItemImage extends FormItem
     {
         $url = null;
         if (strpos($this->value, '/') === false) {
-            $url = Be::getRequest()->getUploadUrl() . $this->path . $this->value;
+            $url = Be::getStorage()->getRootUrl() . $this->path . $this->value;
         } else {
             $url = $this->value;
         }
@@ -228,12 +228,14 @@ class FormItemImage extends FormItem
                 $storage = Be::getStorage();
                 if ($this->value !== null) {
                     $oldPath = $this->path . $this->value;
-                    $storage->removeFile($oldPath);
+                    $storage->deleteFile($oldPath);
                 }
 
                 $newPath = $this->path . $newValue;
-                $file = Be::getRuntime()->getUploadPath() . '/tmp/' . $newValue;
-                $url = $storage->uploadFile($newPath, $file);
+                if (!$storage->isFileExist($newPath)) {
+                    $file = Be::getRuntime()->getUploadPath() . '/tmp/' . $newValue;
+                    $url = $storage->uploadFile($newPath, $file);
+                }
             }
 
             $this->newValue = $newValue;

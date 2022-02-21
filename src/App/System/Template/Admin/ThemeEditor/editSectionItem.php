@@ -31,7 +31,9 @@
 <be-body>
     <?php
     $js = [];
+    $jsCode = '';
     $css = [];
+    $cssCode = '';
     $formData = [];
     $vueData = [];
     $vueMethods = [];
@@ -63,9 +65,19 @@
                     $js = array_merge($js, $jsX);
                 }
 
+                $jsCodeX = $driver->getJsCode();
+                if ($jsCodeX) {
+                    $jsCode .= $jsCodeX . "\n";
+                }
+
                 $cssX = $driver->getCss();
                 if ($cssX) {
                     $css = array_merge($css, $cssX);
+                }
+
+                $cssCodeX = $driver->getCssCode();
+                if ($cssCodeX) {
+                    $cssCode .= $cssCodeX . "\n";
                 }
 
                 $vueDataX = $driver->getVueData();
@@ -110,10 +122,18 @@
             echo '<link rel="stylesheet" href="'.$x.'">';
         }
     }
+
+    if ($jsCode) {
+        echo '<script>' . $jsCode . '</script>';
+    }
+
+    if ($cssCode) {
+        echo '<style>' . $cssCode . '</style>';
+    }
     ?>
 
     <script>
-        new Vue({
+        var vueForm = new Vue({
             el: '#app',
             data: {
                 formData: <?php echo json_encode($formData); ?>,
@@ -137,8 +157,8 @@
                         }
 
                         this.changing = 1;
-                        var _this = this;
-                        var timer = setInterval(function () {
+                        let _this = this;
+                        let timer = setInterval(function () {
                             _this.changing++;
                             if (_this.changing > 5) {
                                 _this.changing = 0;

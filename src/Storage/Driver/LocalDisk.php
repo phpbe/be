@@ -125,7 +125,7 @@ class LocalDisk extends Driver
             chmod($dir, 0777);
         }
 
-        if (file_exists($newFilePath)) {
+        if (!file_exists($newFilePath)) {
             throw new StorageException('File ' . $path . ' already exists!');
         }
 
@@ -203,10 +203,9 @@ class LocalDisk extends Driver
         }
 
         $filePath = Be::getRuntime()->getUploadPath() . $path;
-        if (!file_exists($filePath)) {
-            throw new StorageException('File ' . $path . ' does not exist!');
+        if (file_exists($filePath)) {
+            unlink($filePath);
         }
-        unlink($filePath);
         return true;
     }
 
@@ -268,11 +267,9 @@ class LocalDisk extends Driver
 
         $uploadPath = Be::getRuntime()->getUploadPath();
         $path = $uploadPath . $dirPath;
-        if (!is_dir($path)) {
-            throw new StorageException('Folder ' . $dirPath . ' does not exist!');
+        if (is_dir($path)) {
+            \Be\Util\FileSystem\Dir::rm($path);
         }
-
-        \Be\Util\FileSystem\Dir::rm($path);
 
         return true;
     }

@@ -1,0 +1,56 @@
+
+.form-item-storage-image, .form-item-storage-image-selector {
+    display: inline-block;
+    width: 96px;
+    height: 96px;
+    margin: 0 8px 8px 0;
+    border: 1px dashed #c0ccda;
+    border-radius: 6px;
+    overflow: hidden;
+    line-height: 96px;
+    position: relative;
+    text-align: center;
+}
+
+.form-item-storage-image-selector {
+    cursor: pointer;
+}
+
+.form-item-storage-image-selector:hover {
+    border-color: #409eff;
+}
+
+.form-item-storage-image-selector i {
+    font-size: 28px;
+    color: #8c939d;
+}
+
+.form-item-storage-image img {
+    max-width: 100%;
+    vertical-align: middle;
+}
+
+.form-item-storage-image .form-item-storage-image-actions {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 32px;
+    line-height: 32px;
+    background-color: rgba(0, 0, 0, 0.5);
+    text-align: center;
+    cursor: default;
+    transition: all 0.3s ease;
+    opacity: 0;
+}
+
+.form-item-storage-image:hover .form-item-storage-image-actions {
+    opacity: 1;
+}
+
+.form-item-storage-image .form-item-storage-image-action {
+    color: #ddd;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+}

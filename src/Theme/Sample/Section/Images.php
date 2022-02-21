@@ -185,7 +185,7 @@ if ($sectionData['enable']) {
                             }
                             echo '<img src="';
                             if (strpos($item['data']['image'], '/') === false) {
-                                echo \Be\Be::getRequest()->getUploadUrl() . '/Theme/Sample/Section/Images/Image/image/' . $item['data']['image'];
+                                echo \Be\Be::getStorage()->getRootUrl() . '/Theme/Sample/Section/Images/Image/image/' . $item['data']['image'];
                             } else {
                                 echo $item['data']['image'];
                             }

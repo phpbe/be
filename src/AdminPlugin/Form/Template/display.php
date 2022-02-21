@@ -1,7 +1,9 @@
 <be-center-body>
     <?php
     $js = [];
+    $jsCode = '';
     $css = [];
+    $cssCode = '';
     $formData = [];
     $vueData = [];
     $vueMethods = [];
@@ -66,11 +68,21 @@
                         $js = array_merge($js, $jsX);
                     }
 
+                    $jsCodeX = $driver->getJsCode();
+                    if ($jsCodeX) {
+                        $jsCode .= $jsCodeX . "\n";
+                    }
+
                     $cssX = $driver->getCss();
                     if ($cssX) {
                         $css = array_merge($css, $cssX);
                     }
 
+                    $cssCodeX = $driver->getCssCode();
+                    if ($cssCodeX) {
+                        $cssCode .= $cssCodeX . "\n";
+                    }
+                    
                     $vueDataX = $driver->getVueData();
                     if ($vueDataX) {
                         $vueData = \Be\Util\Arr::merge($vueData, $vueDataX);
@@ -231,6 +243,14 @@
         foreach ($css as $x) {
             echo '<link rel="stylesheet" type="text/css" href="' . $x . '" />';
         }
+    }
+    
+    if ($jsCode) {
+        echo '<script>' . $jsCode . '</script>';
+    }
+
+    if ($cssCode) {
+        echo '<style>' . $cssCode . '</style>';
     }
     ?>
 

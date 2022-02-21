@@ -133,7 +133,7 @@ if ($sectionData['enable']) {
     } else {
         echo '<img src="';
         if (strpos($sectionData['image'], '/') === false) {
-            echo \Be\Be::getRequest()->getUploadUrl() . '/Theme/Sample/Section/ImageWithText/image/' . $sectionData['image'];
+            echo \Be\Be::getStorage()->getRootUrl() . '/Theme/Sample/Section/ImageWithText/image/' . $sectionData['image'];
         } else {
             echo $sectionData['image'];
         }

@@ -54,7 +54,7 @@
                 } else {
                     echo '<img src="';
                     if (strpos($sectionData['logoImage'], '/') === false) {
-                        echo \Be\Be::getRequest()->getUploadUrl() . '/Theme/Sample/Section/Header/logo/' . $sectionData['logoImage'];
+                        echo \Be\Be::getStorage()->getRootUrl() . '/Theme/Sample/Section/Header/logo/' . $sectionData['logoImage'];
                     } else {
                         echo $sectionData['logoImage'];
                     }
@@ -63,10 +63,10 @@
                     if ($sectionData['logoImageMaxWidth'] || $sectionData['logoImageMaxHeight']) {
                         echo ' style="';
                         if ($sectionData['logoImageMaxWidth']) {
-                            echo 'max-width:' . $sectionData['logoImageMaxWidth'] . ';';
+                            echo 'max-width:' . $sectionData['logoImageMaxWidth'] . 'px;';
                         }
                         if ($sectionData['logoImageMaxHeight']) {
-                            echo 'max-height:' . $sectionData['logoImageMaxHeight'] . ';';
+                            echo 'max-height:' . $sectionData['logoImageMaxHeight'] . 'px;';
                         }
                         echo '"';
                     }

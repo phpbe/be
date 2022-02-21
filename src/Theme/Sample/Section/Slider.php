@@ -207,7 +207,7 @@
                                 }
                                 echo '<img src="';
                                 if (strpos($item['data']['image'], '/') === false) {
-                                    echo \Be\Be::getRequest()->getUploadUrl() . '/Theme/Sample/Section/Slider/image/' . $item['data']['image'];
+                                    echo \Be\Be::getStorage()->getRootUrl() . '/Theme/Sample/Section/Slider/image/' . $item['data']['image'];
                                 } else {
                                     echo $item['data']['image'];
                                 }
@@ -227,7 +227,7 @@
                                 }
                                 echo '<img src="';
                                 if (strpos($item['data']['imageMobile'], '/') === false) {
-                                    echo \Be\Be::getRequest()->getUploadUrl() . '/Theme/Sample/Section/Slider/imageMobile/' . $item['data']['imageMobile'];
+                                    echo \Be\Be::getStorage()->getRootUrl() . '/Theme/Sample/Section/Slider/imageMobile/' . $item['data']['imageMobile'];
                                 } else {
                                     echo $item['data']['imageMobile'];
                                 }
@@ -249,7 +249,7 @@
                             } else {
                                 echo '<img src="';
                                 if (strpos($item['data']['image'], '/') === false) {
-                                    echo \Be\Be::getRequest()->getUploadUrl() . '/Theme/Sample/Section/Slider/ImageWithTextOverlay/image/' . $item['data']['image'];
+                                    echo \Be\Be::getStorage()->getRootUrl() . '/Theme/Sample/Section/Slider/ImageWithTextOverlay/image/' . $item['data']['image'];
                                 } else {
                                     echo $item['data']['image'];
                                 }
@@ -262,7 +262,7 @@
                             } else {
                                 echo '<img src="';
                                 if (strpos($item['data']['imageMobile'], '/') === false) {
-                                    echo \Be\Be::getRequest()->getUploadUrl() . '/Theme/Sample/Section/Slider/ImageWithTextOverlay/imageMobile/' . $item['data']['imageMobile'];
+                                    echo \Be\Be::getStorage()->getRootUrl() . '/Theme/Sample/Section/Slider/ImageWithTextOverlay/imageMobile/' . $item['data']['imageMobile'];
                                 } else {
                                     echo $item['data']['imageMobile'];
                                 }

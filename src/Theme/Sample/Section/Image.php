@@ -95,7 +95,7 @@ if ($sectionData['enable']) {
         }
         echo '<img src="';
         if (strpos($sectionData['image'], '/') === false) {
-            echo \Be\Be::getRequest()->getUploadUrl() . '/Theme/Sample/Section/Image/image/' . $sectionData['image'];
+            echo \Be\Be::getStorage()->getRootUrl() . '/Theme/Sample/Section/Image/image/' . $sectionData['image'];
         } else {
             echo $sectionData['image'];
         }
@@ -114,7 +114,7 @@ if ($sectionData['enable']) {
         }
         echo '<img src="';
         if (strpos($sectionData['imageMobile'], '/') === false) {
-            echo \Be\Be::getRequest()->getUploadUrl() . '/Theme/Sample/Section/Image/imageMobile/' . $sectionData['imageMobile'];
+            echo \Be\Be::getStorage()->getRootUrl() . '/Theme/Sample/Section/Image/imageMobile/' . $sectionData['imageMobile'];
         } else {
             echo $sectionData['imageMobile'];
         }

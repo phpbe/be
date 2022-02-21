@@ -233,11 +233,9 @@ class AliyunOss extends Driver
             $ossClient = new OssClient($config->accessKeyId, $config->accessKeySecret, $endpoint);
             $ossClient->setConnectTimeout(30);
             $exist = $ossClient->doesObjectExist($config->bucket, $ossPath);
-            if (!$exist) {
-                throw new StorageException('File ' . $path . ' does not exist!');
+            if ($exist) {
+                $ossClient->deleteObject($config->bucket, $ossPath);
             }
-
-            $ossClient->deleteObject($config->bucket, $ossPath);
         } catch (OssException $e) {
             throw new StorageException('Aliyun OSS error：' . $e->getMessage());
         }
@@ -325,11 +323,9 @@ class AliyunOss extends Driver
             $ossClient = new OssClient($config->accessKeyId, $config->accessKeySecret, $endpoint);
             $ossClient->setConnectTimeout(30);
             $exist = $ossClient->doesObjectExist($config->bucket, $ossDirPath);
-            if (!$exist) {
-                throw new StorageException('Folder ' . $dirPath . ' does not exist!');
+            if ($exist) {
+                $ossClient->deleteObject($config->bucket, $ossDirPath);
             }
-
-            $ossClient->deleteObject($config->bucket, $ossDirPath);
         } catch (OssException $e) {
             throw new StorageException('Aliyun OSS error：' . $e->getMessage());
         }
