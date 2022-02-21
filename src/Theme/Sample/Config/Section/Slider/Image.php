@@ -14,15 +14,15 @@ class Image
 
     /**
      * @BeConfigItem("图像",
-     *     driver="FormItemImage",
-     *     path = "/Theme/Sample/Section/Slider/image/")
+     *     driver="FormItemStorageImage"
+     * )
      */
     public $image = '';
 
     /**
      * @BeConfigItem("手机版图像",
-     *     driver="FormItemImage",
-     *     path = "/Theme/Sample/Section/Slider/imageMobile/")
+     *     driver="FormItemStorageImage"
+     * )
      */
     public $imageMobile = '';
 

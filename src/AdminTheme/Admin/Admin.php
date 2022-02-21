@@ -322,7 +322,6 @@
     </div>
     </be-body>
 
-
     <div id="app-be" v-cloak>
         <el-dialog
                 class="be-dialog"
@@ -331,7 +330,7 @@
                 :width="dialog.width"
                 :close-on-click-modal="false"
                 :destroy-on-close="true">
-            <iframe id="frame-be-dialog" name="frame-be-dialog" src="about:blank" :style="{width:'100%',height:dialog.height,border:0}"></iframe>
+            <iframe id="frame-be-dialog" name="frame-be-dialog" :src="dialog.url" :style="{width:'100%',height:dialog.height,border:0}"></iframe>
         </el-dialog>
 
         <el-drawer
@@ -342,11 +341,11 @@
                 :wrapper-closable="false"
                 :destroy-on-close="true">
             <div style="padding:0 10px;height: 100%;">
-                <iframe id="frame-be-drawer" name="frame-be-drawer" src="about:blank" style="width:100%;height:100%;border:0;"></iframe>
+                <iframe id="frame-be-drawer" name="frame-be-drawer" :src="drawer.url" style="width:100%;height:100%;border:0;"></iframe>
             </div>
         </el-drawer>
     </div>
-    <script src="<?php echo $themeUrl; ?>/js/theme.js"></script>
+    <script src="<?php echo $themeUrl; ?>/js/theme.js?v=20200221"></script>
 
 </body>
 </html>

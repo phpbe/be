@@ -115,8 +115,6 @@ class FormItemStorageImage extends FormItem
             'formItemStorageImage_' . $this->name . '_select' => 'function () {
                 if (window.frameElement && window.frameElement.tagName == "IFRAME") {
                     parent.be.setActiveIframe(window);
-                    console.log(window);
-                    console.log(parent.be);
                     parent.be.openDialog("选择一个图像", "' . $iframeUrl . '");
                 } else {
                     be.openDialog("选择一个图像", "' . $url . '");

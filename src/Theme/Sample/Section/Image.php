@@ -93,13 +93,7 @@ if ($sectionData['enable']) {
         if ($sectionData['link']) {
             echo '<a href="' . $sectionData['link'] . '">';
         }
-        echo '<img src="';
-        if (strpos($sectionData['image'], '/') === false) {
-            echo \Be\Be::getStorage()->getRootUrl() . '/Theme/Sample/Section/Image/image/' . $sectionData['image'];
-        } else {
-            echo $sectionData['image'];
-        }
-        echo '">';
+        echo '<img src="' . $sectionData['image'] . '">';
         if ($sectionData['link']) {
             echo '</a>';
         }
@@ -112,13 +106,7 @@ if ($sectionData['enable']) {
         if ($sectionData['link']) {
             echo '<a href="' . $sectionData['link'] . '">';
         }
-        echo '<img src="';
-        if (strpos($sectionData['imageMobile'], '/') === false) {
-            echo \Be\Be::getStorage()->getRootUrl() . '/Theme/Sample/Section/Image/imageMobile/' . $sectionData['imageMobile'];
-        } else {
-            echo $sectionData['imageMobile'];
-        }
-        echo '">';
+        echo '<img src="' . $sectionData['imageMobile'] . '">';
         if ($sectionData['link']) {
             echo '</a>';
         }

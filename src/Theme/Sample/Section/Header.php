@@ -52,13 +52,7 @@
                 if ($sectionData['logoType'] === 'text') {
                     echo $sectionData['logoText'];
                 } else {
-                    echo '<img src="';
-                    if (strpos($sectionData['logoImage'], '/') === false) {
-                        echo \Be\Be::getStorage()->getRootUrl() . '/Theme/Sample/Section/Header/logo/' . $sectionData['logoImage'];
-                    } else {
-                        echo $sectionData['logoImage'];
-                    }
-                    echo '"';
+                    echo '<img src="' . $sectionData['logoImage'] . '"';
 
                     if ($sectionData['logoImageMaxWidth'] || $sectionData['logoImageMaxHeight']) {
                         echo ' style="';

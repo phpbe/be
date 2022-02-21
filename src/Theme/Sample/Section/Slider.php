@@ -205,13 +205,7 @@
                                 if ($item['data']['link']) {
                                     echo '<a href="'.$item['data']['link'].'">';
                                 }
-                                echo '<img src="';
-                                if (strpos($item['data']['image'], '/') === false) {
-                                    echo \Be\Be::getStorage()->getRootUrl() . '/Theme/Sample/Section/Slider/image/' . $item['data']['image'];
-                                } else {
-                                    echo $item['data']['image'];
-                                }
-                                echo '" />';
+                                echo '<img src="' . $item['data']['image'] . '" />';
                                 if ($item['data']['link']) {
                                     echo '</a>';
                                 }
@@ -225,13 +219,7 @@
                                 if ($item['data']['link']) {
                                     echo '<a href="'.$item['data']['link'].'">';
                                 }
-                                echo '<img src="';
-                                if (strpos($item['data']['imageMobile'], '/') === false) {
-                                    echo \Be\Be::getStorage()->getRootUrl() . '/Theme/Sample/Section/Slider/imageMobile/' . $item['data']['imageMobile'];
-                                } else {
-                                    echo $item['data']['imageMobile'];
-                                }
-                                echo '" />';
+                                echo '<img src="' . $item['data']['imageMobile'] . '" />';
                                 if ($item['data']['link']) {
                                     echo '</a>';
                                 }
@@ -247,26 +235,14 @@
                             if (!$item['data']['image']) {
                                 echo '<div class="no-image">1200X400px+</div>';
                             } else {
-                                echo '<img src="';
-                                if (strpos($item['data']['image'], '/') === false) {
-                                    echo \Be\Be::getStorage()->getRootUrl() . '/Theme/Sample/Section/Slider/ImageWithTextOverlay/image/' . $item['data']['image'];
-                                } else {
-                                    echo $item['data']['image'];
-                                }
-                                echo '">';
+                                echo '<img src="' . $item['data']['image'] . '">';
                             }
                             echo '</div>';
                             echo '<div class="slider-image-with-text-overlay-image-mobile">';
                             if (!$item['data']['imageMobile']) {
                                 echo '<div class="no-image">720X400px+</div>';
                             } else {
-                                echo '<img src="';
-                                if (strpos($item['data']['imageMobile'], '/') === false) {
-                                    echo \Be\Be::getStorage()->getRootUrl() . '/Theme/Sample/Section/Slider/ImageWithTextOverlay/imageMobile/' . $item['data']['imageMobile'];
-                                } else {
-                                    echo $item['data']['imageMobile'];
-                                }
-                                echo '">';
+                                echo '<img src="' . $item['data']['imageMobile'] . '">';
                             }
                             echo '</div>';
 

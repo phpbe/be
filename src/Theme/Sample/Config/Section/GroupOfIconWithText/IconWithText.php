@@ -38,8 +38,7 @@ class IconWithText
 
     /**
      * @BeConfigItem("上传图像",
-     *     driver="FormItemImage",
-     *     path = "/Theme/Sample/Section/GroupOfIconWithText/IconWithText/iconImage/"),
+     *     driver="FormItemStorageImage",
      *     ui="return ['form-item' => ['v-show' => 'formData.icon === \'image\'']];"
      * )
      */

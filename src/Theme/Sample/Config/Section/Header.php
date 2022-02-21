@@ -30,9 +30,7 @@ class Header
 
     /**
      * @BeConfigItem("Logo图像",
-     *     driver="FormItemImage",
-     *     path = "/Theme/Sample/Section/Header/logo/",
-     *     filename = "logo-{random}",
+     *     driver="FormItemStorageImage",
      *     ui="return ['form-item' => ['v-show' => 'formData.logoType === \'image\'']];"
      * )
      */

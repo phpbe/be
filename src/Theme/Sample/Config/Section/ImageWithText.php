@@ -31,15 +31,15 @@ class ImageWithText
 
     /**
      * @BeConfigItem("图像",
-     *     driver="FormItemImage",
-     *     path = "/Theme/Sample/Section/ImageWithText/image/")
+     *     driver="FormItemStorageImage"
+     * )
      */
     public $image = '';
 
     /**
      * @BeConfigItem("手机版图像",
-     *     driver="FormItemImage",
-     *     path = "/Theme/Sample/Section/ImageWithText/imageMobile/")
+     *     driver="FormItemStorageImage"
+     * )
      */
     public $imageMobile = '';
 

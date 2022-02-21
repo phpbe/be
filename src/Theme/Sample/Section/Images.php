@@ -183,13 +183,7 @@ if ($sectionData['enable']) {
                             if ($item['data']['link']) {
                                 echo '<a href="' . $item['data']['link'] . '">';
                             }
-                            echo '<img src="';
-                            if (strpos($item['data']['image'], '/') === false) {
-                                echo \Be\Be::getStorage()->getRootUrl() . '/Theme/Sample/Section/Images/Image/image/' . $item['data']['image'];
-                            } else {
-                                echo $item['data']['image'];
-                            }
-                            echo '" />';
+                            echo '<img src="' . $item['data']['image'] . '" />';
 
                             if ($item['data']['link']) {
                                 echo '</a>';

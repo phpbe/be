@@ -10,16 +10,16 @@ window.be = {
         return this.activeIframe;
     },
 
-    openDialog: function (url, options) {
-        vueBe.openDialog(url, options);
+    openDialog: function (title, url, options = {}) {
+        vueBe.openDialog(title, url, options);
     },
 
     closeDialog: function () {
         vueBe.closeDialog();
     },
 
-    openDrawer: function (url, options) {
-        vueBe.openDrawer(url, options);
+    openDrawer: function (title, url, options = {}) {
+        vueBe.openDrawer(title, url, options);
     },
 
     closeDrawer: function () {
@@ -31,8 +31,8 @@ window.be = {
 let vueBe = new Vue({
     el: '#app-be',
     data: {
-        dialog: {visible: false, title: "", width: "", height: ""},
-        drawer: {visible: false, title: "", width: ""}
+        dialog: {visible: false, title: "", url: "about:blank", width: "", height: ""},
+        drawer: {visible: false, title: "", url: "about:blank", width: ""}
     },
     methods: {
         openDialog: function (title, url, option = {}) {
@@ -58,22 +58,14 @@ let vueBe = new Vue({
                 this.dialog.height = height + "px";
             }
 
-            var eForm = document.createElement("form");
-            eForm.action = url;
-            eForm.target = "frame-be-dialog";
-            document.body.appendChild(eForm);
-
-            setTimeout(function () {
-                eForm.submit();
-            }, 50);
-
-            setTimeout(function () {
-                document.body.removeChild(eForm);
-            }, 3000);
+            url += url.indexOf("?") === -1 ? "?" : "&"
+            url += "_=" + Math.random();
+            this.dialog.url = url;
         },
 
         closeDialog: function () {
             this.dialog.visible = false;
+            this.dialog.url = "about:blank";
         },
 
         openDrawer: function (title, url, option) {
@@ -87,22 +79,14 @@ let vueBe = new Vue({
                 this.drawer.width = "40%";
             }
 
-            var eForm = document.createElement("form");
-            eForm.action = url;
-            eForm.target = "frame-be-drawer";
-            document.body.appendChild(eForm);
-
-            setTimeout(function () {
-                eForm.submit();
-            }, 50);
-
-            setTimeout(function () {
-                document.body.removeChild(eForm);
-            }, 3000);
+            url += url.indexOf("?") === -1 ? "?" : "&"
+            url += "_=" + Math.random();
+            this.drawer.url = url;
         },
 
         closeDrawer: function () {
             this.drawer.visible = false;
+            this.drawer.url = "about:blank";
         },
 
     }

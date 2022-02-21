@@ -14,8 +14,8 @@ class Image
 
     /**
      * @BeConfigItem("图像",
-     *     driver="FormItemImage",
-     *     path = "/Theme/Sample/Section/Images/Image/image/")
+     *     driver="FormItemStorageImage"
+     * )
      */
     public $image = '';
 

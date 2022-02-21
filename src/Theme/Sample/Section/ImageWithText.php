@@ -131,13 +131,7 @@ if ($sectionData['enable']) {
     if (!$sectionData['image']) {
         echo '<div class="no-image">600X300px+</div>';
     } else {
-        echo '<img src="';
-        if (strpos($sectionData['image'], '/') === false) {
-            echo \Be\Be::getStorage()->getRootUrl() . '/Theme/Sample/Section/ImageWithText/image/' . $sectionData['image'];
-        } else {
-            echo $sectionData['image'];
-        }
-        echo '">';
+        echo '<img src="' . $sectionData['image'] . '">';
     }
     echo '</div>';
 

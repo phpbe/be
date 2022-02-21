@@ -31,15 +31,15 @@ class ImageWithTextOverlay
 
     /**
      * @BeConfigItem("图像",
-     *     driver="FormItemImage",
-     *     path = "/Theme/Sample/Section/ImageWithTextOverlay/image/")
+     *     driver="FormItemStorageImage"
+     * )
      */
     public $image = '';
 
     /**
      * @BeConfigItem("手机版图像",
-     *     driver="FormItemImage",
-     *     path = "/Theme/Sample/Section/ImageWithTextOverlay/imageMobile/")
+     *     driver="FormItemStorageImage"
+     * )
      */
     public $imageMobile = '';
 

@@ -57,8 +57,9 @@ class Common extends Driver
                 }
 
                 // 移除 ?[k=v]
-                if ($_SERVER['QUERY_STRING'] !== '') {
-                    $uri = substr($uri, 0, strrpos($uri, '?'));
+                $pos = strpos($uri, '?');
+                if ($pos !== false) {
+                    $uri = substr($uri, 0, $pos);
                 }
 
                 // 移除网址后缀 如：.html

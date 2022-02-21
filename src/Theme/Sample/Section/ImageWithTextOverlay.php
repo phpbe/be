@@ -215,26 +215,14 @@ if ($sectionData['enable']) {
     if (!$sectionData['image']) {
         echo '<div class="no-image">1200X400px+</div>';
     } else {
-        echo '<img src="';
-        if (strpos($sectionData['image'], '/') === false) {
-            echo \Be\Be::getStorage()->getRootUrl() . '/Theme/Sample/Section/ImageWithTextOverlay/image/' . $sectionData['image'];
-        } else {
-            echo $sectionData['image'];
-        }
-        echo '">';
+        echo '<img src="' . $sectionData['image'] . '">';
     }
     echo '</div>';
     echo '<div class="image-with-text-overlay-image-mobile">';
     if (!$sectionData['imageMobile']) {
         echo '<div class="no-image">720X400px+</div>';
     } else {
-        echo '<img src="';
-        if (strpos($sectionData['imageMobile'], '/') === false) {
-            echo \Be\Be::getStorage()->getRootUrl() . '/Theme/Sample/Section/ImageWithTextOverlay/imageMobile/' . $sectionData['imageMobile'];
-        } else {
-            echo $sectionData['imageMobile'];
-        }
-        echo '">';
+        echo '<img src="' . $sectionData['imageMobile'] . '">';
     }
     echo '</div>';
 
