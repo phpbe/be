@@ -47,16 +47,46 @@ class Installer
         $request = Be::getRequest();
         $response = Be::getResponse();
 
+        $runtime = Be::getRuntime();
+
         if ($request->isPost()) {
+
+            $dataPath = $runtime->getDataPath();
+            $uploadPath = $runtime->getUploadPath();
+
+            if (!is_dir($dataPath)) {
+                mkdir($dataPath, 0777, true);
+                chmod($dataPath, 0777);
+            }
+
+            if (!is_dir($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+                chmod($uploadPath, 0777);
+            }
+
             $response->redirect(beAdminUrl('System.Installer.configDb'));
         } else {
-            $runtime = Be::getRuntime();
             $value = [];
             $value['isPhpVersionGtMatch'] = version_compare(PHP_VERSION, '7.1.0') >= 0 ? 1 : 0;
             $value['isPdoMysqlInstalled'] = extension_loaded('pdo_mysql') ? 1 : 0;
             $value['isRedisInstalled'] = extension_loaded('redis') ? 1 : 0;
-            $value['isDataDirWritable'] = is_writable($runtime->getDataPath()) ? 1 : 0;
-            $value['isUploadDirWritable'] = is_writable($runtime->getUploadPath()) ? 1 : 0;
+
+            $rootPath = $runtime->getRootPath();
+            $dataPath = $runtime->getDataPath();
+            $uploadPath = $runtime->getUploadPath();
+
+            if (is_dir($dataPath)) {
+                $value['isDataDirWritable'] = is_writable($dataPath) ? 1 : 0;
+            } else {
+                $value['isDataDirWritable'] = is_writable($rootPath) ? 1 : 0;
+            }
+
+            if (is_dir($uploadPath)) {
+                $value['isUploadDirWritable'] = is_writable($uploadPath) ? 1 : 0;
+            } else {
+                $value['isUploadDirWritable'] = is_writable($rootPath) ? 1 : 0;
+            }
+
             $isAllPassed = array_sum($value) === count($value);
 
             $response->set('steps', $this->steps);
