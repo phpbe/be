@@ -55,7 +55,6 @@ class Installer
             $value['isPhpVersionGtMatch'] = version_compare(PHP_VERSION, '7.1.0') >= 0 ? 1 : 0;
             $value['isPdoMysqlInstalled'] = extension_loaded('pdo_mysql') ? 1 : 0;
             $value['isRedisInstalled'] = extension_loaded('redis') ? 1 : 0;
-            $value['isCacheDirWritable'] = is_writable($runtime->getCachePath()) ? 1 : 0;
             $value['isDataDirWritable'] = is_writable($runtime->getDataPath()) ? 1 : 0;
             $value['isUploadDirWritable'] = is_writable($runtime->getUploadPath()) ? 1 : 0;
             $isAllPassed = array_sum($value) === count($value);
@@ -73,6 +72,7 @@ class Installer
                         ],
                         'items' => [
                             [
+                                'name' => 'php',
                                 'label' => 'PHP版本（7.1+）',
                                 'driver' => DetailItemIcon::class,
                                 'value' => $value['isPhpVersionGtMatch'] ? 'el-icon-check' : 'el-icon-close',
@@ -81,6 +81,7 @@ class Installer
                                 ]
                             ],
                             [
+                                'name' => 'mysql',
                                 'label' => 'PDO Mysql 扩展',
                                 'driver' => DetailItemIcon::class,
                                 'value' => $value['isPdoMysqlInstalled'] ? 'el-icon-check' : 'el-icon-close',
@@ -89,6 +90,7 @@ class Installer
                                 ]
                             ],
                             [
+                                'name' => 'redis',
                                 'label' => 'Redis 扩展',
                                 'driver' => DetailItemIcon::class,
                                 'value' => $value['isRedisInstalled'] ? 'el-icon-check' : 'el-icon-close',
@@ -97,14 +99,7 @@ class Installer
                                 ]
                             ],
                             [
-                                'label' => 'cache 目录可写',
-                                'driver' => DetailItemIcon::class,
-                                'value' => $value['isCacheDirWritable'] ? 'el-icon-check' : 'el-icon-close',
-                                'ui' => [
-                                    'style' => 'color:' . ($value['isCacheDirWritable'] ? '#67C23A' : '#F56C6C')
-                                ]
-                            ],
-                            [
+                                'name' => 'data',
                                 'label' => 'data 目录可写',
                                 'driver' => DetailItemIcon::class,
                                 'value' => $value['isDataDirWritable'] ? 'el-icon-check' : 'el-icon-close',
@@ -113,6 +108,7 @@ class Installer
                                 ]
                             ],
                             [
+                                'name' => 'upload',
                                 'label' => 'upload 目录可写',
                                 'driver' => DetailItemIcon::class,
                                 'value' => $value['isUploadDirWritable'] ? 'el-icon-check' : 'el-icon-close',
