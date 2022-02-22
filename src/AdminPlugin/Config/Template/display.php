@@ -1,3 +1,12 @@
+<be-head>
+    <style type="text/css">
+        .el-form-item .el-form-item {
+            margin-bottom: 10px;
+        }
+    </style>
+</be-head>
+
+
 <be-center-body>
     <?php
     $js = [];

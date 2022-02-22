@@ -184,6 +184,16 @@ abstract class FormItems
         return false;
     }
 
+    /**
+     * 获取需要引入的 JS 代码
+     *
+     * @return false | string
+     */
+    public function getJsCode()
+    {
+        return false;
+    }
+
     protected $css = [];
     /**
      * 获取需要引入的 CSS 文件
@@ -196,6 +206,16 @@ abstract class FormItems
             return $this->css;
         }
 
+        return false;
+    }
+
+    /**
+     * 获取需要引入的 CSS 文件
+     *
+     * @return false | string
+     */
+    public function getCssCode()
+    {
         return false;
     }
 
