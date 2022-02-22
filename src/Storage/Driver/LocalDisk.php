@@ -125,7 +125,7 @@ class LocalDisk extends Driver
             chmod($dir, 0777);
         }
 
-        if (!file_exists($newFilePath)) {
+        if (file_exists($newFilePath)) {
             throw new StorageException('File ' . $path . ' already exists!');
         }
 

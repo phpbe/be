@@ -113,7 +113,7 @@ class Installer
                                 'driver' => DetailItemIcon::class,
                                 'value' => $value['isUploadDirWritable'] ? 'el-icon-check' : 'el-icon-close',
                                 'ui' => [
-                                    'style' => 'color:' . ($value['isDataDirWritable'] ? '#67C23A' : '#F56C6C')
+                                    'style' => 'color:' . ($value['isUploadDirWritable'] ? '#67C23A' : '#F56C6C')
                                 ]
                             ],
                         ],
