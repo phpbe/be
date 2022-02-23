@@ -30,7 +30,13 @@ class Index
         $response->set('title', '后台首页');
 
         $tupleAdminUser = Be::newTuple('system_admin_user');
-        $tupleAdminUser->load($my->id);
+        try {
+            $tupleAdminUser->load($my->id);
+        } catch (\Throwable $t) {
+            $response->redirect(beAdminUrl('System.AdminUserLogin.logout'));
+            return;
+        }
+        
         unset($tupleAdminUser->password, $tupleAdminUser->salt, $tupleAdminUser->remember_me_token);
         $response->set('adminUser', $tupleAdminUser);
 
