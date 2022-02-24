@@ -27,75 +27,73 @@ class MailQueue
      */
     public function send($to, $subject = '', $body = '', $cc = null, $bcc = null)
     {
-        $data = new \stdClass();
+        $tuple = Be::newTuple('system_mail_queue');
 
-        $data->to_email = '';
-        $data->to_name = '';
+        $tuple->to_email = '';
+        $tuple->to_name = '';
         if (is_string($to)) {
-            $data->to_email = $to;
+            $tuple->to_email = $to;
         } else {
             if (is_array($to)) {
                 if (isset($to['email'])) {
-                    $data->to_email = $to['email'];
+                    $tuple->to_email = $to['email'];
                 }
 
                 if (isset($to['name'])) {
-                    $data->to_name = $to['name'];
+                    $tuple->to_name = $to['name'];
                 }
             }
         }
 
-        if (!$data->to_email) {
+        if (!$tuple->to_email) {
             throw new ServiceException('收件人邮箱缺失！');
         }
 
-        $data->cc_email = '';
-        $data->cc_name = '';
+        $tuple->cc_email = '';
+        $tuple->cc_name = '';
         if ($cc !== null) {
             if (is_string($cc)) {
-                $data->cc_email = $cc;
+                $tuple->cc_email = $cc;
             } else {
                 if (is_array($cc)) {
                     if (isset($cc['email'])) {
-                        $data->cc_email = $cc['email'];
+                        $tuple->cc_email = $cc['email'];
 
                         if (isset($cc['name'])) {
-                            $data->cc_name = $cc['name'];
+                            $tuple->cc_name = $cc['name'];
                         }
                     }
                 }
             }
         }
 
-        $data->bcc_email = '';
-        $data->bcc_name = '';
+        $tuple->bcc_email = '';
+        $tuple->bcc_name = '';
         if ($bcc !== null) {
             if (is_string($bcc)) {
-                $data->bcc_email = $bcc;
+                $tuple->bcc_email = $bcc;
             } else {
                 if (is_array($bcc)) {
                     if (isset($bcc['email'])) {
-                        $data->bcc_email = $bcc['email'];
+                        $tuple->bcc_email = $bcc['email'];
 
                         if (isset($bcc['name'])) {
-                            $data->bcc_name = $bcc['name'];
+                            $tuple->bcc_name = $bcc['name'];
                         }
                     }
                 }
             }
         }
 
-        $data->subject = $subject;
-        $data->body = $body;
-        $data->sent = 0;
-        $data->sent_time = null;
-        $data->error_message = '';
-        $data->times = 0;
-        $data->create_time = date('Y-m-d H:i:s');
-        $data->update_time = date('Y-m-d H:i:s');
-
-        $db = Be::getDb();
-        $db->insert('system_mail_queue', $data);
+        $tuple->subject = $subject;
+        $tuple->body = $body;
+        $tuple->sent = 0;
+        $tuple->sent_time = null;
+        $tuple->error_message = '';
+        $tuple->times = 0;
+        $tuple->create_time = date('Y-m-d H:i:s');
+        $tuple->update_time = date('Y-m-d H:i:s');
+        $tuple->insert();
     }
 
 }
