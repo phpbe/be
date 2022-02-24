@@ -360,7 +360,7 @@
                             :data="uploadFileFormData"
                             multiple>
                         <i slot="default" class="el-icon-plus"></i>
-                        <div class="el-upload__tip" slot="tip">可上传 <?php echo implode('/', $configSystem->allowUploadImageTypes); ?> 文件，不超过<?php echo $configSystem->uploadMaxSize; ?>，单次最多可传100个<?php echo $filterName; ?></div>
+                        <div class="el-upload__tip" slot="tip">可上传 <?php echo implode('/', $configSystem->allowUploadImageTypes); ?> 文件，不超过<?php echo $configSystem->uploadMaxSize; ?>，单次最多可上传100个<?php echo $filterName; ?></div>
                     </el-upload>
                 </div>
                 <?php
@@ -381,7 +381,7 @@
                             multiple>
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                        <div class="el-upload__tip" slot="tip">可上传 <?php echo implode('/', $configSystem->allowUploadFileTypes); ?> 文件，不超过<?php echo $configSystem->uploadMaxSize; ?>，单次最多可传100个<?php echo $filterName; ?></div>
+                        <div class="el-upload__tip" slot="tip">可上传 <?php echo implode('/', $configSystem->allowUploadFileTypes); ?> 文件，不超过<?php echo $configSystem->uploadMaxSize; ?>，单次最多可上传100个<?php echo $filterName; ?></div>
                     </el-upload>
                 </div>
                 <?php
