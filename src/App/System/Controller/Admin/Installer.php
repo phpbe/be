@@ -180,7 +180,7 @@ class Installer
 
                 $configDb = Be::getConfig('App.System.Db');
 
-                $configDbDefault = new \Be\Db\Config();
+                $configDbDefault = new \Be\App\System\Config\Db();
                 foreach ($configDbDefault->master as $k => $v) {
                     if (isset($formData[$k])) {
                         $configDb->master[$k] = $formData[$k];
