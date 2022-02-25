@@ -3,7 +3,7 @@
 namespace Be\App\System\Service\Admin;
 
 use Be\Be;
-use Be\Util\FileSystem\FileSize;
+use Be\Util\File\FileSize;
 
 class Cache
 {
@@ -118,7 +118,7 @@ class Cache
             return $success;
         }
 
-        return \Be\Util\FileSystem\Dir::rm(Be::getRuntime()->getCachePath() . '/' . $name);
+        return \Be\Util\File\Dir::rm(Be::getRuntime()->getCachePath() . '/' . $name);
     }
 
 

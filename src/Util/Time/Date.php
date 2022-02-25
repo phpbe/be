@@ -1,5 +1,6 @@
 <?php
-namespace Be\Util;
+
+namespace Be\Util\Time;
 
 class Date
 {
@@ -10,7 +11,7 @@ class Date
      * @param string $date 日期 例：2000-01-31
      * @return string 日期 例：2000-02-29
      */
-    public static function getNextMonth($date)
+    public static function getNextMonth(string $date): string
     {
         return self::getNextNMonth($date, 1);
     }
@@ -22,7 +23,7 @@ class Date
      * @param int $n 月数
      * @return string 日期 例：2000-03-31
      */
-    public static function getNextNMonth($date, $n = 1)
+    public static function getNextNMonth(string $date, int $n = 1): string
     {
         $t = strtotime($date);
         $year = date('Y', $t);
@@ -44,41 +45,23 @@ class Date
 
         switch ($month) {
             case 1:
+            case 3:
+            case 5:
+            case 7:
+            case 8:
+            case 10:
+            case 12:
                 if ($day > 31) $day = 31;
                 break;
             case 2:
                 $maxDay = (($year % 4 === 0 && $year % 100 !== 0) || $year % 400 === 0) ? 29 : 28;
                 if ($day > $maxDay) $day = $maxDay;
                 break;
-            case 3:
-                if ($day > 31) $day = 31;
-                break;
             case 4:
-                if ($day > 30) $day = 30;
-                break;
-            case 5:
-                if ($day > 31) $day = 31;
-                break;
             case 6:
-                if ($day > 30) $day = 30;
-                break;
-            case 7:
-                if ($day > 31) $day = 31;
-                break;
-            case 8:
-                if ($day > 31) $day = 31;
-                break;
             case 9:
-                if ($day > 30) $day = 30;
-                break;
-            case 10:
-                if ($day > 31) $day = 31;
-                break;
             case 11:
                 if ($day > 30) $day = 30;
-                break;
-            case 12:
-                if ($day > 31) $day = 31;
                 break;
         }
 
@@ -92,7 +75,7 @@ class Date
      * @param string $date 日期 例：2000-03-31
      * @return string 日期 例：2000-02-29
      */
-    public static function getLastMonth($date)
+    public static function getLastMonth(string $date): string
     {
         return self::getNextNMonth($date, -1);
     }
@@ -104,7 +87,7 @@ class Date
      * @param int $n 月数
      * @return string 日期 例：2000-01-31
      */
-    public static function getLastNMonth($date, $n = 1)
+    public static function getLastNMonth(string $date, int $n = 1): string
     {
         return self::getNextNMonth($date, -$n);
     }
@@ -115,7 +98,7 @@ class Date
      * @param string $format
      * @return false|string
      */
-    public static function now($format = 'Y-m-d')
+    public static function now(string $format = 'Y-m-d'): string
     {
         return date($format, time());
     }

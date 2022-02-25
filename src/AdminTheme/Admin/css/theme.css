@@ -257,14 +257,24 @@ body {
 
 .be-center .be-center-title {
     font-size: 1.25rem;
-    height: 4rem;
-    line-height: 4rem;
+    height: 3.5rem;
+    line-height: 3.5rem;
 }
 
 .be-center .be-center-body {
     padding: 1rem 1rem .5rem 1rem;
     background-color: #fff;
 }
+
+.be-center .be-center-box {
+    padding: 1.5rem;
+    background-color: #fff;
+}
+
+.be-center .be-center-box-title {
+    font-size: 1.1rem;
+}
+
 
 .CodeMirror{
     font-size : 13px;

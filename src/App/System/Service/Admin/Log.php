@@ -187,6 +187,6 @@ class Log
             $dir = Be::getRuntime()->getDataPath() . '/log/' . $year . '/' . $month . '/' . $day;
         }
 
-        \Be\Util\FileSystem\Dir::rm($dir);
+        \Be\Util\File\Dir::rm($dir);
     }
 }

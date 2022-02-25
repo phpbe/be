@@ -1,4 +1,5 @@
 <?php
+
 namespace Be\Util\Crypt;
 
 class Random
@@ -10,7 +11,8 @@ class Random
      * @param int $n 长度
      * @return string
      */
-    public static function numbers($n = 8) {
+    public static function numbers(int $n = 8): string
+    {
         return self::create($n, '0123456789');
     }
 
@@ -20,7 +22,8 @@ class Random
      * @param int $n 长度
      * @return string
      */
-    public static function uppercaseLetters($n = 8) {
+    public static function uppercaseLetters(int $n = 8): string
+    {
         return self::create($n, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ');
     }
 
@@ -30,7 +33,8 @@ class Random
      * @param int $n 长度
      * @return string
      */
-    public static function lowercaseLetters($n = 8) {
+    public static function lowercaseLetters(int $n = 8): string
+    {
         return self::create($n, 'abcdefghijklmnopqrstuvwxyz');
     }
 
@@ -40,7 +44,8 @@ class Random
      * @param int $n 长度
      * @return string
      */
-    public static function letters($n = 8) {
+    public static function letters(int $n = 8): string
+    {
         return self::create($n, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz');
     }
 
@@ -50,7 +55,8 @@ class Random
      * @param int $n 长度
      * @return string
      */
-    public static function simple($n = 8) {
+    public static function simple(int $n = 8): string
+    {
         return self::create($n, 'abcdefghijklmnopqrstuvwxyz0123456789');
     }
 
@@ -60,7 +66,8 @@ class Random
      * @param int $n 长度
      * @return string
      */
-    public static function complex($n = 8) {
+    public static function complex(int $n = 8): string
+    {
         return self::create($n, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
     }
 
@@ -70,7 +77,8 @@ class Random
      * @param int $n 长度
      * @return string
      */
-    public static function secure($n = 8) {
+    public static function secure(int $n = 8): string
+    {
         return self::create($n, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=');
     }
 
@@ -81,10 +89,11 @@ class Random
      * @param string $seed 种子
      * @return string
      */
-    public static function create($n, $seed) {
+    public static function create(int $n, string $seed): string
+    {
         $return = '';
         $len = strlen($seed) - 1;
-        for ($i = 0; $i < $n; $i++){
+        for ($i = 0; $i < $n; $i++) {
             $return .= $seed[rand(0, $len)];
         }
         return $return;

@@ -1,5 +1,6 @@
 <?php
-namespace Be\Util;
+
+namespace Be\Util\Time;
 
 class Datetime
 {
@@ -11,7 +12,7 @@ class Datetime
      * @param string $defaultFormat 默认时间格式
      * @return string
      */
-    public static function formatTime($time, $maxDays = 30, $defaultFormat = 'Y-m-d')
+    public static function formatTime(string $time, int $maxDays = 30, string $defaultFormat = 'Y-m-d'): string
     {
         return self::formatTimestamp(strtotime($time), $maxDays, $defaultFormat);
     }
@@ -24,7 +25,7 @@ class Datetime
      * @param string $defaultFormat 默认时间格式
      * @return string
      */
-    public static function formatTimestamp($timestamp, $maxDays = 30, $defaultFormat = 'Y-m-d')
+    public static function formatTimestamp(int $timestamp, int $maxDays = 30, string $defaultFormat = 'Y-m-d'): string
     {
         $t = time();
 
@@ -67,7 +68,7 @@ class Datetime
      * @param string $datetime 时间 例：2000-01-31 12:00:00
      * @return string 时间 例：2000-02-29 12:00:00
      */
-    public static function getNextMonth($datetime)
+    public static function getNextMonth(string $datetime): string
     {
         return self::getNextNMonth($datetime, 1);
     }
@@ -79,7 +80,7 @@ class Datetime
      * @param int $n 月数
      * @return string 时间 例：2000-02-29 12:00:00
      */
-    public static function getNextNMonth($datetime, $n = 1)
+    public static function getNextNMonth(string $datetime, int $n = 1): string
     {
         $t = strtotime($datetime);
         $year = date('Y', $t);
@@ -101,41 +102,23 @@ class Datetime
 
         switch ($month) {
             case 1:
+            case 3:
+            case 5:
+            case 7:
+            case 8:
+            case 10:
+            case 12:
                 if ($day > 31) $day = 31;
                 break;
             case 2:
                 $maxDay = (($year % 4 === 0 && $year % 100 !== 0) || $year % 400 === 0) ? 29 : 28;
                 if ($day > $maxDay) $day = $maxDay;
                 break;
-            case 3:
-                if ($day > 31) $day = 31;
-                break;
             case 4:
-                if ($day > 30) $day = 30;
-                break;
-            case 5:
-                if ($day > 31) $day = 31;
-                break;
             case 6:
-                if ($day > 30) $day = 30;
-                break;
-            case 7:
-                if ($day > 31) $day = 31;
-                break;
-            case 8:
-                if ($day > 31) $day = 31;
-                break;
             case 9:
-                if ($day > 30) $day = 30;
-                break;
-            case 10:
-                if ($day > 31) $day = 31;
-                break;
             case 11:
                 if ($day > 30) $day = 30;
-                break;
-            case 12:
-                if ($day > 31) $day = 31;
                 break;
         }
 
@@ -149,7 +132,7 @@ class Datetime
      * @param string $datetime 时间 例：2000-03-31 12:00:00
      * @return string 时间 例：2000-02-29 12:00:00
      */
-    public static function getLastMonth($datetime)
+    public static function getLastMonth(string $datetime): string
     {
         return self::getNextNMonth($datetime, -1);
     }
@@ -161,7 +144,7 @@ class Datetime
      * @param int $n 月数
      * @return string 时间 例：2000-02-29 12:00:00
      */
-    public static function getLastNMonth($datetime, $n = 1)
+    public static function getLastNMonth(string $datetime, int $n = 1): string
     {
         return self::getNextNMonth($datetime, -$n);
     }
@@ -172,7 +155,7 @@ class Datetime
      * @param string $format
      * @return false|string
      */
-    public static function now($format = 'Y-m-d H:i:s')
+    public static function now(string $format = 'Y-m-d H:i:s'): string
     {
         return date($format, time());
     }

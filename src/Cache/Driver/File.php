@@ -247,7 +247,7 @@ class File implements Driver
         $handle = opendir($this->path);
         while (($file = readdir($handle)) !== false) {
             if ($file !== '.' && $file !== '..') {
-                \Be\Util\FileSystem\Dir::rm($this->path . '/' . $file);
+                \Be\Util\File\Dir::rm($this->path . '/' . $file);
             }
         }
         closedir($handle);

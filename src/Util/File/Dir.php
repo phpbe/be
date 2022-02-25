@@ -1,5 +1,6 @@
 <?php
-namespace Be\Util\FileSystem;
+
+namespace Be\Util\File;
 
 /**
  * 文件夹操作类
@@ -16,7 +17,7 @@ class Dir
      * @param string $path 文件路径
      * @return bool
      */
-    public static function rm($path)
+    public static function rm(string $path): bool
     {
         if (!file_exists($path)) {
             return true;
@@ -47,7 +48,7 @@ class Dir
      * @param bool $overWrite 是否覆盖
      * @return bool
      */
-    public static function copy($srcDir, $dstDir, $overWrite = false)
+    public static function copy(string $srcDir, string $dstDir, bool $overWrite = false): bool
     {
         $srcDirSource = opendir($srcDir);
 
@@ -90,7 +91,7 @@ class Dir
      * @param bool $overWrite 是否覆盖
      * @return bool
      */
-    public static function move($srcDir, $dstDir, $overWrite = false)
+    public static function move(string $srcDir, string $dstDir, bool $overWrite = false): bool
     {
         $srcDirSource = opendir($srcDir);
 

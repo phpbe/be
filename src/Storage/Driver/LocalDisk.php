@@ -5,7 +5,7 @@ namespace Be\Storage\Driver;
 use Be\Be;
 use Be\Storage\StorageException;
 use Be\Storage\Driver;
-use Be\Util\FileSystem\FileSize;
+use Be\Util\File\FileSize;
 
 /**
  * 本地磁盘
@@ -268,7 +268,7 @@ class LocalDisk extends Driver
         $uploadPath = Be::getRuntime()->getUploadPath();
         $path = $uploadPath . $dirPath;
         if (is_dir($path)) {
-            \Be\Util\FileSystem\Dir::rm($path);
+            \Be\Util\File\Dir::rm($path);
         }
 
         return true;

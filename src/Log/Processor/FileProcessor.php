@@ -3,7 +3,7 @@
 namespace Be\Log\Processor;
 
 use Be\Be;
-use Be\Util\FileSystem\FileSize;
+use Be\Util\File\FileSize;
 use Monolog\Logger;
 
 class FileProcessor

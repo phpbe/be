@@ -5,7 +5,7 @@ namespace Be\Storage\Driver;
 use Be\Be;
 use Be\Storage\StorageException;
 use Be\Storage\Driver;
-use Be\Util\FileSystem\FileSize;
+use Be\Util\File\FileSize;
 use OSS\OssClient;
 use OSS\Core\OssException;
 

@@ -11,7 +11,7 @@ class Validator
      * @param string $mobile 手机号码
      * @return bool
      */
-    public static function isMobile($mobile)
+    public static function isMobile(string $mobile): bool
     {
         return preg_match('/^1[3-9]\d{9}$/', $mobile);
     }
@@ -22,7 +22,7 @@ class Validator
      * @param string $email 邮箱
      * @return bool
      */
-    public static function isEmail($email)
+    public static function isEmail(string $email): bool
     {
         return filter_var($email, FILTER_VALIDATE_EMAIL);
     }
@@ -93,7 +93,7 @@ class Validator
      * @param array $check 检查项
      * @return bool
      */
-    public static function isPasswordSecure(string $password, array $check = null)
+    public static function isPasswordSecure(string $password, array $check = null): bool
     {
         try {
             self::checkPasswordSecure($password, $check);
@@ -108,9 +108,9 @@ class Validator
      * 获取密码安全分值
      *
      * @param string $password 密码
-     * @return bool
+     * @return int
      */
-    public static function getPasswordSecureScore(string $password)
+    public static function getPasswordSecureScore(string $password): int
     {
         $score = 0;
         if (!preg_match('/[A-Z]/', $password)) {
@@ -133,7 +133,7 @@ class Validator
         if ($len >= 8) {
             $score++;
         } elseif ($len > 0) {
-            $score = (int) ($score * pow(0.8, 8 - $len));
+            $score = (int)($score * pow(0.8, 8 - $len));
         }
 
         return $score;
@@ -145,7 +145,7 @@ class Validator
      * @param string $ip
      * @return bool
      */
-    public static function isIp($ip)
+    public static function isIp(string $ip): bool
     {
         return filter_var($ip, FILTER_VALIDATE_IP);
     }
@@ -156,7 +156,7 @@ class Validator
      * @param string $mac
      * @return bool
      */
-    public static function isMac($mac)
+    public static function isMac(string $mac): bool
     {
         return filter_var($mac, FILTER_VALIDATE_MAC);
     }
@@ -167,7 +167,7 @@ class Validator
      * @param string $domain
      * @return bool
      */
-    public static function isDomain($domain)
+    public static function isDomain(string $domain): bool
     {
         return filter_var($domain, FILTER_VALIDATE_DOMAIN);
     }
@@ -178,7 +178,7 @@ class Validator
      * @param string $url
      * @return bool
      */
-    public static function isUrl($url)
+    public static function isUrl(string $url): bool
     {
         return filter_var($url, FILTER_VALIDATE_URL);
     }
@@ -190,7 +190,7 @@ class Validator
      * @param string $idCard
      * @return bool
      */
-    public static function isIdCard($idCard)
+    public static function isIdCard(string $idCard): bool
     {
         if (strlen($idCard) > 18) return false;
         return preg_match("/^\d{6}((1[89])|(2\d))\d{2}((0\d)|(1[0-2]))((3[01])|([0-2]\d))\d{3}(\d|X)$/i", $idCard);
@@ -202,7 +202,7 @@ class Validator
      * @param string $postcode
      * @return bool
      */
-    public static function isPostcode($postcode)
+    public static function isPostcode(string $postcode): bool
     {
         return preg_match('/\d{6}/', $postcode);
     }
@@ -213,7 +213,7 @@ class Validator
      * @param string $str
      * @return bool
      */
-    public static function isChinese($str)
+    public static function isChinese(string $str): bool
     {
         return preg_match('/^[\x{4e00}-\x{9fa5}]+$/u', $str);
     }

@@ -12,7 +12,7 @@ class Sha
      * @param string $str 要加密的字符
      * @return string
      */
-    public static function sha256(string $str)
+    public static function sha256(string $str): string
     {
         return hash('sha256', $str);
     }
@@ -23,11 +23,10 @@ class Sha
      * @param string $str 要加密的字符
      * @return string
      */
-    public static function sha512(string $str)
+    public static function sha512(string $str): string
     {
         return hash('sha512', $str);
     }
-
 
 
 }

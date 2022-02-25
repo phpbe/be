@@ -209,14 +209,27 @@ class FormItemTinymce extends FormItem
             $mountedCode .=  $key . ':' . json_encode($val) . ',';
         }
 
+        $onChangeCallback = '';
+        if (isset($this->ui['@change'])) {
+            $onChangeCallback = '_this.';
+            $onChangeCallback .= $this->ui['@change'];
+            if (strpos($onChangeCallback, '(') === false) {
+                $onChangeCallback .= '()';
+            }
+            $onChangeCallback .= ';';
+        }
+
         // 内容更新时回写到 formData
         $mountedCode .=  'init_instance_callback: function(editor) {
             _this.formItems.' . $this->name . '.instance = editor;
             editor.setContent(_this.formData.' . $this->name . ');
             editor.on(\'input change undo redo\', function() {
-                _this.formData.' . $this->name . ' = this.getContent();
+                let content = this.getContent();
+                _this.formData.' . $this->name . ' = content;
+                '.$onChangeCallback.'
             });
         }';
+
         $mountedCode .= '});';
 
         return [

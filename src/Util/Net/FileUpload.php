@@ -11,7 +11,7 @@ class FileUpload
      * @param int $errorCode 错误码
      * @return string
      */
-    public static function errorDescription($errorCode)
+    public static function errorDescription(int $errorCode): string
     {
         switch ($errorCode) {
             case 1:

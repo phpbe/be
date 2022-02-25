@@ -12,7 +12,7 @@ trait OpenSSL
      * @param string $pwd 密码
      * @return string
      */
-    public static function encrypt(string $str, string $pwd)
+    public static function encrypt(string $str, string $pwd): string
     {
         $ivLen = openssl_cipher_iv_length(self::$cipherMethod);
         $iv = $ivLen > 0 ? openssl_random_pseudo_bytes($ivLen) : '';
@@ -27,7 +27,7 @@ trait OpenSSL
      * @param string $pwd 密码
      * @return string
      */
-    public static function decrypt(string $str, string $pwd)
+    public static function decrypt(string $str, string $pwd): string
     {
         $str = base64_decode($str);
         $ivLen = openssl_cipher_iv_length(self::$cipherMethod);

@@ -1,6 +1,8 @@
 <?php
 
-namespace Be\Util\FileSystem;
+namespace Be\Util\File;
+
+use Be\Util\UtilException;
 
 class FileSize
 {
@@ -11,7 +13,7 @@ class FileSize
      * @param int $fileSizeInt 文件大小整型
      * @return string
      */
-    public static function int2String($fileSizeInt)
+    public static function int2String(int $fileSizeInt): string
     {
         $fileSizeString = null;
         if ($fileSizeInt > 1099511627776) {
@@ -45,9 +47,9 @@ class FileSize
      *
      * @param string $fileSizeString 文件大小字符
      * @return int
-     * @throws \Exception
+     * @throws UtilException
      */
-    public static function string2Int($fileSizeString)
+    public static function string2Int(string $fileSizeString): int
     {
         $fileSizeInt = 0;
         $fileSizeString = strtoupper(trim($fileSizeString));
@@ -68,7 +70,7 @@ class FileSize
 
             if (!in_array($unit, ['B', 'K', 'M', 'G', 'T', 'P', 'KB', 'MB', 'GB', 'TB', 'PB'])) {
                 // 不支持的文件尺寸单位
-                throw new \Exception('Not support file size unit: ' . $unit . '!');
+                throw new UtilException('Not support file size unit: ' . $unit . '!');
             }
 
             switch ($unit) {

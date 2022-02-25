@@ -5,7 +5,7 @@ namespace Be\AdminPlugin\Form\Item;
 
 use Be\Be;
 use Be\AdminPlugin\AdminPluginException;
-use Be\Util\FileSystem\FileSize;
+use Be\Util\File\FileSize;
 
 /**
  * 表单项 头像

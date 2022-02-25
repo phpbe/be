@@ -3,7 +3,7 @@
 namespace Be\App\System\Service\Admin;
 
 use Be\Be;
-use Be\Util\Str;
+use Be\Util\Str\CaseConverter;
 
 class Db
 {
@@ -19,7 +19,7 @@ class Db
     public function getTables($app, $dbName = 'master')
     {
         $tables = [];
-        $prefix = Str::camel2Underline($app) . '_';
+        $prefix = CaseConverter::camel2Underline($app) . '_';
         $db = Be::getDb($dbName);
         $tableNames = $db->getValues('SHOW TABLES LIKE \'' . $prefix . '%\'');
         if ($tableNames) {

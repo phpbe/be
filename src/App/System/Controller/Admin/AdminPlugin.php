@@ -4,7 +4,7 @@ namespace Be\App\System\Controller\Admin;
 
 use Be\App\ControllerException;
 use Be\Be;
-use Be\Util\FileSystem\FileSize;
+use Be\Util\File\FileSize;
 use Be\Util\Net\FileUpload;
 
 /**

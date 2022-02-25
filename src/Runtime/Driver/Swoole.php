@@ -128,12 +128,12 @@ class Swoole extends Driver
 
         if ($configServer->clearCacheOnStart) {
             $dir = Be::getRuntime()->getCachePath();
-            \Be\Util\FileSystem\Dir::rm($dir);
+            \Be\Util\File\Dir::rm($dir);
         } else {
             $sessionConfig = Be::getConfig('App.System.Session');
             if ($sessionConfig->driver === 'File') {
                 $dir = Be::getRuntime()->getCachePath() . '/session';
-                \Be\Util\FileSystem\Dir::rm($dir);
+                \Be\Util\File\Dir::rm($dir);
             }
         }
 
