@@ -38,7 +38,7 @@ class Pinyin
             } else {
                 foreach (self::$dict as $key => $val) {
                     if (strpos($val, $cnChar) !== false) {
-                        $pinyinStr .= $separator . ($short ? substr($key, 0, 1) : $key);
+                        $pinyinStr .= $separator . ($short ? substr($key, 0, 1) : $key) . $separator;
                         break;
                     }
                 }
