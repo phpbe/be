@@ -19,12 +19,14 @@ class Pinyin
      */
     public static function convert(string $cnStr, string $separator = '-', bool $short = false, string $spaceReplace = null): string
     {
-        if ($spaceReplace !== null) {
-            $cnStr = str_replace(' ', $spaceReplace, $cnStr);
-            if ($spaceReplace !== '') {
-                while (strpos($cnStr, $spaceReplace . $spaceReplace) !== false) {
-                    $cnStr = str_replace($spaceReplace . $spaceReplace, $spaceReplace, $cnStr);
-                }
+        if ($spaceReplace === null) {
+            $spaceReplace = $separator;
+        }
+
+        $cnStr = str_replace(' ', $spaceReplace, $cnStr);
+        if ($spaceReplace !== '') {
+            while (strpos($cnStr, $spaceReplace . $spaceReplace) !== false) {
+                $cnStr = str_replace($spaceReplace . $spaceReplace, $spaceReplace, $cnStr);
             }
         }
 
