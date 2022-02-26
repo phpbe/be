@@ -27,7 +27,7 @@ class AdminMenu
             $controllerDir = Be::getRuntime()->getRootPath() . $appProperty->getPath(). '/Controller/Admin';
             if (!file_exists($controllerDir) && !is_dir($controllerDir)) continue;
 
-            $app->url = '\'\'';
+            $app->route = '';
             $className = '\\Be\\App\\' . $appName . '\\Controller\\Admin\\Index';
             if (class_exists($className)) {
                 $reflection = new \ReflectionClass($className);
@@ -35,7 +35,7 @@ class AdminMenu
                 foreach ($methods as &$method) {
                     $methodName = $method->getName();
                     if ($methodName === 'index') {
-                        $app->url = 'beAdminUrl(\'' . $app->name . '.Index.index\')';
+                        $app->route = $app->name . '.Index.index';
                         break;
                     }
                 }
@@ -112,7 +112,7 @@ class AdminMenu
                     $menuGroup['key'] = $appName . '.' . $controller;
 
                     $item['key'] = $appName . '.' . $controller . '.' . $methodName;
-                    $item['url'] = 'beAdminUrl(\'' . $appName . '.' . $controller . '.' . $methodName . '\')';
+                    $item['route'] = $appName . '.' . $controller . '.' . $methodName;
                     if (!isset($item['ordering'])) {
                         $item['ordering'] = 1000000;
                     }
@@ -191,13 +191,13 @@ class AdminMenu
 
         foreach ($items as $k => $v) {
             $app = $v['app'];
-            $code .= '    $this->addItem(\'' . $app->key . '\', \'\', \'' . $app->icon . '\',\'' . $app->label . '\', ' . $app->url . ' , \'\');' . "\n";
+            $code .= '    $this->addItem(\'' . $app->key . '\', \'\', \'' . $app->icon . '\',\'' . $app->label . '\', \'' . $app->route . '\', [], \'\', \'\');' . "\n";
             foreach ($v['groups'] as $key => $val) {
                 $group = $val['group'];
                 $firstItem = current($val['items']);
-                $code .= '    $this->addItem(\'' . $group['key'] . '\',\'' . $app->key . '\',\'' . (isset($group['icon']) ? $group['icon'] : 'el-icon-folder') . '\',\'' . $group['label'] . '\', ' . $firstItem['url'] . ', \'\');' . "\n";
+                $code .= '    $this->addItem(\'' . $group['key'] . '\',\'' . $app->key . '\',\'' . (isset($group['icon']) ? $group['icon'] : 'el-icon-folder') . '\',\'' . $group['label'] . '\', \'' . $firstItem['route'] . '\', [], \'\', \'\');' . "\n";
                 foreach ($val['items'] as $item) {
-                    $code .= '    $this->addItem(\'' . $item['key'] . '\', \'' . $group['key'] . '\', \'' . (isset($item['icon']) ? $item['icon'] : 'el-icon-arrow-right') . '\', \'' . $item['label'] . '\', ' . $item['url'] . ', \'' . (isset($item['target']) ? $item['target'] : '') . '\');' . "\n";
+                    $code .= '    $this->addItem(\'' . $item['key'] . '\', \'' . $group['key'] . '\', \'' . (isset($item['icon']) ? $item['icon'] : 'el-icon-arrow-right') . '\', \'' . $item['label'] . '\', \'' . $item['route'] . '\', [], \'\', \'' . (isset($item['target']) ? $item['target'] : '') . '\');' . "\n";
                 }
             }
         }

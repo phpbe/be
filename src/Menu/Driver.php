@@ -22,7 +22,7 @@ class Driver
      * @param string $url 网址
      * @param string $target 打开方式
      */
-    public function addItem(string $itemId, string $parentId, string $label, string $route, array $params = [], string $url = '', string $target = '_self')
+    public function addItem(string $itemId, string $parentId, string $label, string $route = '', array $params = [], string $url = '', string $target = '_self')
     {
         $item = new \stdClass();
         $item->id = $itemId;
@@ -30,7 +30,11 @@ class Driver
         $item->label = $label;
         $item->route = $route;
         $item->params = $params;
-        $item->url = $url;
+        if ($route) {
+            $item->url = beUrl($route, $params);
+        } else {
+            $item->url = $url;
+        }
         $item->target = $target;
 
         $this->items[$itemId] = $item;

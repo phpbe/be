@@ -66,7 +66,8 @@
                     <div class="be-col be-pl-200">
                         <?php
                         $adminMenu = \Be\Be::getAdminMenu();
-                        $adminMenuTree = $adminMenu->getTree()
+                        $adminMenuTree = $adminMenu->getTree();
+                        $adminMenuActiveMenuKey = $adminMenu->getActiveMenuKey();
                         ?>
                         <el-menu
                                 mode="horizontal"
@@ -171,13 +172,10 @@
                 </div>
             </div>
             <script>
-                <?php
-                $menuKey = \Be\Be::getRequest()->getRoute();
-                ?>
                 var vueNorth = new Vue({
                     el: '#be-north',
                     data: {
-                        defaultActive: "north-menu-<?php echo $menuKey; ?>",
+                        defaultActive: "north-menu-<?php echo $adminMenuActiveMenuKey; ?>",
                         aboutModel: false
                     },
                     methods: {
@@ -218,7 +216,8 @@
                 <div class="menu">
                     <?php
                     $adminMenu = \Be\Be::getAdminMenu();
-                    $adminMenuTree = $adminMenu->getTree()
+                    $adminMenuTree = $adminMenu->getTree();
+                    $adminMenuActiveMenuKey = $adminMenu->getActiveMenuKey();
                     ?>
                     <el-menu
                             background-color="#30354d"
@@ -279,14 +278,11 @@
                 </div>
             </div>
             <script>
-                <?php
-                $menuKey = \Be\Be::getRequest()->getRoute();
-                ?>
                 var sWestMenuCollapseKey = '_westMenuCollapse';
                 var vueWestMenu = new Vue({
                     el: '#app-west',
                     data : {
-                        activeIndex: "west-menu-<?php echo $menuKey; ?>",
+                        activeIndex: "west-menu-<?php echo $adminMenuActiveMenuKey; ?>",
                         collapse: this.$cookies.isKey(sWestMenuCollapseKey) && this.$cookies.get(sWestMenuCollapseKey) === '1'
                     },
                     methods: {
