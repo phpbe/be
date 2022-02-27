@@ -19,7 +19,7 @@ class Watermark extends Auth
         $response = Be::getResponse();
 
         $src = Be::getRuntime()->getRootPath() . Be::getProperty('App.System')->getPath() . '/Template/Admin/Watermark/images/material.jpg';
-        $dst = Be::getRuntime()->getUploadPath() . '/System/Admin/Watermark/rendering.jpg';
+        $dst = Be::getRuntime()->getUploadPath() . '/tmp/watermark-rendering.jpg';
 
         if (!file_exists($src)) $response->end($src . ' 不存在');
         $dir = dirname($dst);
