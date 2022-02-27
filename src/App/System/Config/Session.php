@@ -31,7 +31,7 @@ class Session
     /**
      * @BeConfigItem("REDIS库",
      *     driver="FormItemSelect",
-     *     keyValues = "return \Be\Session\SessionHelper::getConfigRedisKeyValues();",
+     *     keyValues = "return \Be\Redis\RedisHelper::getConfigKeyValues();",
      *     ui="return ['form-item' => ['v-show' => 'formData.driver === \'Redis\'']];")
      */
     public $redis = 'master';

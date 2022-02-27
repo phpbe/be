@@ -46,6 +46,13 @@ class Driver
     }
 
     /**
+     * 设置肖前菜单的键名
+     */
+    public function setActiveMenuKey(string $activeMenuKey) {
+        $this->activeMenuKey = $activeMenuKey;
+    }
+
+    /**
      * 获取肖前菜单的键名
      *
      * @return string
