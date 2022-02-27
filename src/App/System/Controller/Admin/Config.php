@@ -5,19 +5,19 @@ namespace Be\App\System\Controller\Admin;
 use Be\Be;
 
 /**
- * @BeMenuGroup("系统配置", icon="el-icon-setting", ordering="3")
- * @BePermissionGroup("系统配置", icon="el-icon-setting", ordering="3")
+ * @BeMenuGroup("控制台")
+ * @BePermissionGroup("控制台")
  */
 class Config extends Auth
 {
 
     /**
-     * @BeMenu("系统配置", icon="el-icon-setting", ordering="3.1")
-     * @BePermission("系统配置", ordering="3.1")
+     * @BeMenu("参数", icon="el-icon-setting", ordering="2.7")
+     * @BePermission("参数", ordering="2.7")
      */
     public function dashboard()
     {
-        Be::getAdminPlugin('Config')->setting(['appName' => 'System', 'title' => '系统配置'])->execute();
+        Be::getAdminPlugin('Config')->setting(['appName' => 'System', 'title' => '参数'])->execute();
     }
 
 

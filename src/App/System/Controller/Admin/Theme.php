@@ -7,8 +7,8 @@ use Be\Be;
 use Be\Db\Tuple;
 
 /**
- * @BeMenuGroup("管理")
- * @BePermissionGroup("管理")
+ * @BeMenuGroup("控制台")
+ * @BePermissionGroup("控制台")
  */
 class Theme extends Auth
 {

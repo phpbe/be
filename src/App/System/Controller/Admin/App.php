@@ -5,8 +5,8 @@ use Be\AdminPlugin\Table\Item\TableItemIcon;
 use Be\Be;
 
 /**
- * @BeMenuGroup("管理", icon="el-icon-monitor", ordering="2")
- * @BePermissionGroup("管理", ordering="2")
+ * @BeMenuGroup("控制台", icon="el-icon-monitor", ordering="2")
+ * @BePermissionGroup("控制台", ordering="2")
  */
 class App extends Auth
 {

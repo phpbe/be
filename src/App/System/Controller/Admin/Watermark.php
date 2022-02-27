@@ -5,15 +5,14 @@ namespace Be\App\System\Controller\Admin;
 use Be\Be;
 
 /**
- * @BeMenuGroup("系统配置")
- * @BePermissionGroup("系统配置")
+ * @BeMenuGroup("管理")
+ * @BePermissionGroup("管理")
  */
 class Watermark extends Auth
 {
 
     /**
-     * @BeMenu("水印测试", icon = "el-icon-fa fa-image", ordering="3.3")
-     * @BePermission("水印测试", ordering="3.3")
+     * @BePermission("水印测试", ordering="2.72")
      */
     public function test()
     {

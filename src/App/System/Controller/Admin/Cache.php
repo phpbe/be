@@ -8,8 +8,8 @@ use Be\Be;
 
 
 /**
- * @BeMenuGroup("管理")
- * @BePermissionGroup("管理")
+ * @BeMenuGroup("控制台")
+ * @BePermissionGroup("控制台")
  */
 class Cache extends Auth
 {

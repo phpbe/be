@@ -10,8 +10,8 @@ use Be\Util\Net\FileUpload;
 /**
  * 存储管理器
  *
- * @BeMenuGroup("管理")
- * @BePermissionGroup("管理")
+ * @BeMenuGroup("控制台")
+ * @BePermissionGroup("控制台")
  */
 class Storage extends Auth
 {

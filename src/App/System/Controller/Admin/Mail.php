@@ -7,15 +7,14 @@ use Be\AdminPlugin\Form\Item\FormItemTinymce;
 use Be\Be;
 
 /**
- * @BeMenuGroup("系统配置")
- * @BePermissionGroup("系统配置")
+ * @BeMenuGroup("管理")
+ * @BePermissionGroup("管理")
  */
 class Mail extends Auth
 {
 
     /**
-     * @BeMenu("发送邮件测试", icon="el-icon-fa fa-envelope-o", ordering="3.2")
-     * @BePermission("发送邮件测试", ordering="3.2")
+     * @BePermission("发送邮件测试", ordering="2.71")
      */
     public function test()
     {

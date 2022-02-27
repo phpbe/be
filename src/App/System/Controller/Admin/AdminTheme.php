@@ -2,8 +2,8 @@
 namespace Be\App\System\Controller\Admin;
 
 /**
- * @BeMenuGroup("管理")
- * @BePermissionGroup("管理")
+ * @BeMenuGroup("控制台")
+ * @BePermissionGroup("控制台")
  */
 class AdminTheme extends Auth
 {
