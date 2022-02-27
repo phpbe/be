@@ -285,3 +285,9 @@ body {
 }
 
 .be-dialog .el-dialog__body {padding: 0 5px;}
+
+.el-drawer__header {
+    padding: 10px 20px;
+    margin-bottom: 0;
+}
+

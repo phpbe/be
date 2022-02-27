@@ -50,7 +50,7 @@
         ?>
 
         <link rel="stylesheet" href="<?php echo $beUrl; ?>/vendor/be/scss/src/be.css" />
-        <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/theme.css" />
+        <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/theme.css?v=20110227" />
 
         <be-head>
         </be-head>
