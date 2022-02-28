@@ -221,7 +221,6 @@ class Menu extends Auth
             $response->set('menu', $menu);
             $response->set('flatTree', $flatTree);
 
-            //$response->display(null, 'System');
             $response->display('App.System.Admin.Menu.items');
         }
     }
@@ -229,7 +228,20 @@ class Menu extends Auth
     /**
      * 菜单项 - 设置网址
      *
-     * @BeRoute("/admin/menu-set-url")
+     * @BePermission("菜单项", ordering="2.41")
+     */
+    public function paramPicker()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $response->display('App.System.Admin.Menu.paramPicker', 'Blank');
+    }
+
+    /**
+     * 菜单项 - 设置网址
+     *
+     * @BePermission("菜单项", ordering="2.41")
      */
     public function setUrl()
     {
@@ -238,5 +250,7 @@ class Menu extends Auth
 
         $response->display('App.System.Admin.Menu.setUrl', 'Blank');
     }
+
+
 
 }

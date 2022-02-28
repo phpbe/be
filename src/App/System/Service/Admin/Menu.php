@@ -4,6 +4,8 @@ namespace Be\App\System\Service\Admin;
 
 use Be\App\ServiceException;
 use Be\Be;
+use Be\Menu\Annotation\BeMenu;
+use Be\Util\Annotation;
 
 class Menu
 {
@@ -331,6 +333,127 @@ class Menu
             // Swoole 模式下，需重新加载服务器
             $runtime->reload();
         }
+    }
+
+    private $menuPickers = null;
+
+    /**
+     * 获取菜单选择器列表
+     *
+     * @return void
+     */
+    public function getMenuPickers(): array
+    {
+        if ($this->menuPickers !== null) return $this->menuPickers;
+
+        $menuPickers = [];
+
+        $apps = Be::getService('App.System.Admin.App')->getApps();
+        foreach ($apps as $app) {
+
+            $appMenuPickers = [];
+            $appProperty = Be::getProperty('App.' . $app->name);
+            $controllerDir = Be::getRuntime()->getRootPath() . $appProperty->getPath() . '/Controller';
+            $controllerNames = scandir($controllerDir);
+            foreach ($controllerNames as $controllerName) {
+                if ($controllerName === '.' || $controllerName === '..' || is_dir($controllerName . '/' . $controllerName)) continue;
+
+                $controllerName = substr($controllerName, 0, -4);
+                $className = '\\Be\\App\\' . $app->name . '\\Controller\\' . $controllerName;
+                if (!class_exists($className)) continue;
+
+                $reflection = new \ReflectionClass($className);
+                $methods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
+                foreach ($methods as $method) {
+                    $methodName = $method->getName();
+                    $methodComment = $method->getDocComment();
+                    $methodComments = Annotation::parse($methodComment);
+                    $item = [];
+                    foreach ($methodComments as $key => $val) {
+                        if ($key === 'BeMenu') {
+                            if (is_array($val[0])) {
+                                if (!isset($val[0]['label']) && isset($val[0]['value'])) {
+                                    $val[0]['label'] = $val[0]['value'];
+                                }
+
+                                if (isset($val[0]['label'])) {
+                                    $item = $val[0];
+                                }
+                            }
+                        }
+                    }
+
+                    if (!$item) {
+                        continue;
+                    }
+
+                    $appMenuPickers[] = [
+                        'label' => $item['label'],
+                        'route' => $app->name . '.' . $controllerName . '.' . $methodName,
+                        'hasParamPicker' => isset($item['paramPicker']) ? 1 : 0,
+                        'ordering' => $item['ordering'] ?? 0,
+                    ];
+                }
+            }
+
+            if (count($appMenuPickers) > 0) {
+                $orderings = array_column($appMenuPickers, 'ordering');
+                array_multisort($appMenuPickers, SORT_ASC, SORT_NUMERIC, $orderings);
+
+                $menuPickers[$app->name] = [
+                    'app' => $app,
+                    'menuPickers' => $appMenuPickers
+                ];
+            }
+        }
+
+        $this->menuPickers = $menuPickers;
+        return $menuPickers;
+    }
+
+    /**
+     * 获取菜单选择器
+     *
+     * @return BeMenu|bool
+     */
+    public function getMenuPicker($appName, $controllerName, $actionName): BeMenu
+    {
+        $className = '\\Be\\App\\' . $appName . '\\Controller\\' . $controllerName;
+        if (!class_exists($className)) {
+            throw new ServiceException('控制器类（' . $appName . '.' . $className . '）不存在！');
+        }
+
+        $reflection = new \ReflectionClass($className);
+
+        $method = null;
+        try {
+            $method = $reflection->getMethod($actionName);
+        } catch (\Throwable $t) {
+            throw new ServiceException('控制器类（' . $appName . '.' . $className . '）的方法（' . $actionName . '）不存在！');
+        }
+
+        $methodComment = $method->getDocComment();
+        $methodComments = Annotation::parse($methodComment);
+        $item = [];
+        foreach ($methodComments as $key => $val) {
+            if ($key === 'BeMenu') {
+                if (is_array($val[0])) {
+                    if (!isset($val[0]['label']) && isset($val[0]['value'])) {
+                        $val[0]['label'] = $val[0]['value'];
+                    }
+
+                    if (isset($val[0]['label'])) {
+                        $item = $val[0];
+                    }
+                }
+            }
+        }
+
+        if (!$item) {
+            return false;
+        }
+
+        return new BeMenu($item);
     }
 
 }

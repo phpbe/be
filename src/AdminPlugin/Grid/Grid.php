@@ -9,7 +9,7 @@ use Be\AdminPlugin\Driver;
  * 列表器
  *
  * Class Grid
- * @package Be\AdminPlugin\Lists
+ * @package Be\AdminPlugin\Grid
  */
 class Grid extends Driver
 {

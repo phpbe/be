@@ -8,7 +8,8 @@ namespace Be\Menu\Annotation;
 class BeMenu extends Driver
 {
 
-    protected $icon = null;
-    protected $target = null;
+
+    protected $paramPicker = null;
+
 
 }
