@@ -2,7 +2,7 @@
 namespace Be\App\System;
 
 /**
- * 应用安装器
+ * 应用卸载器
  */
 class UnInstaller extends \Be\App\UnInstaller
 {
