@@ -27,9 +27,19 @@ abstract class Driver
      *
      * @return string
      */
-    public function getMode()
+    public function getMode(): string
     {
         return $this->mode;
+    }
+
+    /**
+     * 当前是否Swoole模式
+     *
+     * @return bool
+     */
+    public function isSwooleMode(): bool
+    {
+        return $this->mode === 'Swoole';
     }
 
     /**

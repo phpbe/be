@@ -11,7 +11,7 @@ class Task
     {
         $response = Be::getResponse();
 
-        if (Be::getRuntime()->getMode() === 'Swoole') {
+        if (Be::getRuntime()->isSwooleMode()) {
             $response->error('Swoole 模式下，不需要使用本功能。');
             return;
         }
@@ -24,7 +24,7 @@ class Task
         $request = Be::getRequest();
         $response = Be::getResponse();
 
-        if (Be::getRuntime()->getMode() === 'Swoole') {
+        if (Be::getRuntime()->isSwooleMode()) {
             $response->error('Swoole 模式下，不需要使用本功能。');
             return;
         }
@@ -45,7 +45,7 @@ class Task
         $request = Be::getRequest();
         $response = Be::getResponse();
 
-        if (Be::getRuntime()->getMode() === 'Swoole') {
+        if (Be::getRuntime()->isSwooleMode()) {
             $response->error('Swoole 模式下，不需要使用本功能。');
             return;
         }

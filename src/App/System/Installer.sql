@@ -119,7 +119,7 @@ CREATE TABLE `system_menu_item` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='菜单项';
 
 INSERT INTO `system_menu_item` (`id`, `menu_name`, `parent_id`, `name`, `route`, `params`, `url`, `description`, `target`, `ordering`, `create_time`, `update_time`) VALUES
-((SELECT UUID()), 'North', '', '首页', 'System.Index.index', '', '', '首页', '_self', 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+((SELECT UUID()), 'North', '', '首页', 'System.Home.index', '', '', '首页', '_self', 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 CREATE TABLE `system_task` (
   `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',

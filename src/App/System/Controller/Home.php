@@ -4,7 +4,7 @@ namespace Be\App\System\Controller;
 
 use Be\Be;
 
-class Index
+class Home
 {
 
     public function index()

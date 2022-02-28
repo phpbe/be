@@ -554,7 +554,7 @@ class Installer
         $config->installable = false;
         ConfigHelper::update('App.System.System', $config);
 
-        if (Be::getRuntime()->getMode() === 'Swoole') {
+        if (Be::getRuntime()->isSwooleMode()) {
             Be::getRuntime()->reload();
         }
     }

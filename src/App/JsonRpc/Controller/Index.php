@@ -32,7 +32,7 @@ class Index
         $request = Be::getRequest();
         $response = Be::getResponse();
 
-        if (Be::getRuntime()->getMode() === 'Swoole') {
+        if (Be::getRuntime()->isSwooleMode()) {
             $inputDataStr = $request->getRequest()->getContent();
         } else {
             $inputDataStr = file_get_contents('php://input');

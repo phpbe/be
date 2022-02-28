@@ -22,7 +22,7 @@ abstract class Be
      */
     public static function getCid(): int
     {
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             return \Swoole\Coroutine::getCid();
         }
 
@@ -55,7 +55,7 @@ abstract class Be
      */
     public static function setRequest(\Be\Request\Driver $request)
     {
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             self::$cache[$cid]['request'] = $request;
         } else {
@@ -70,7 +70,7 @@ abstract class Be
      */
     public static function getRequest()
     {
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['request'])) {
                 return self::$cache[$cid]['request'];
@@ -91,7 +91,7 @@ abstract class Be
      */
     public static function setResponse(\Be\Response\Driver $response)
     {
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             self::$cache[$cid]['response'] = $response;
         } else {
@@ -106,7 +106,7 @@ abstract class Be
      */
     public static function getResponse()
     {
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['response'])) {
                 return self::$cache[$cid]['response'];
@@ -166,7 +166,7 @@ abstract class Be
      */
     public static function getLog()
     {
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (!isset(self::$cache[$cid]['log'])) {
                 self::$cache[$cid]['log'] = new \Be\Log\Driver();
@@ -208,7 +208,7 @@ abstract class Be
     public static function getSession()
     {
         $config = self::getConfig('App.System.Session');
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['session'])) {
                 return self::$cache[$cid]['session'];
@@ -243,7 +243,7 @@ abstract class Be
     public static function getCache()
     {
         $config = self::getConfig('App.System.Cache');
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['cache'])) {
                 return self::$cache[$cid]['cache'];
@@ -277,7 +277,7 @@ abstract class Be
     public static function getStorage()
     {
         $config = self::getConfig('App.System.Storage');
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['storage'])) {
                 return self::$cache[$cid]['storage'];
@@ -351,7 +351,7 @@ abstract class Be
      */
     public static function getRedis(string $name = 'master')
     {
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['redis'][$name])) return self::$cache[$cid]['redis'][$name];
 
@@ -404,7 +404,7 @@ abstract class Be
      */
     public static function getEs()
     {
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (!isset(self::$cache[$cid]['es'])) {
                 self::$cache[$cid]['es'] = self::newEs();
@@ -478,7 +478,7 @@ abstract class Be
      */
     public static function getDb(string $name = 'master')
     {
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['db'][$name])) return self::$cache[$cid]['db'][$name];
 
@@ -555,7 +555,7 @@ abstract class Be
      */
     public static function getTuple(string $name, string $db = 'master')
     {
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (!isset(self::$cache[$cid]['tuple'][$db][$name])) {
                 self::$cache[$cid]['tuple'][$db][$name] = self::newTuple($name, $db);
@@ -597,7 +597,7 @@ abstract class Be
      */
     public static function getTable(string $name, string $db = 'master')
     {
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (!isset(self::$cache[$cid]['table'][$db][$name])) {
                 self::$cache[$cid]['table'][$db][$name] = self::newTable($name, $db);
@@ -660,7 +660,7 @@ abstract class Be
      */
     public static function getMongoDb(string $name)
     {
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (!isset(self::$cache[$cid]['mongoDb'][$name])) {
                 self::$cache[$cid]['mongoDb'][$name] = self::newMongoDb($name);
@@ -698,7 +698,7 @@ abstract class Be
      */
     public static function getService(string $name)
     {
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (!isset(self::$cache[$cid]['service'][$name])) {
                 self::$cache[$cid]['service'][$name] = self::newService($name);
@@ -740,7 +740,7 @@ abstract class Be
      */
     public static function getLib(string $name)
     {
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (!isset(self::$cache[$cid]['lib'][$name])) {
                 self::$cache[$cid]['lib'][$name] = self::newLib($name);
@@ -783,7 +783,7 @@ abstract class Be
      */
     public static function getPlugin(string $name)
     {
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (!isset(self::$cache[$cid]['plugin'][$name])) {
                 self::$cache[$cid]['plugin'][$name] = self::newPlugin($name);
@@ -823,7 +823,7 @@ abstract class Be
      */
     public static function getAdminPlugin(string $name)
     {
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (!isset(self::$cache[$cid]['adminPlugin'][$name])) {
                 self::$cache[$cid]['adminPlugin'][$name] = self::newAdminPlugin($name);
@@ -873,7 +873,7 @@ abstract class Be
         }
 
         $runtime = self::getRuntime();
-        if ($runtime->getMode() === 'Swoole') {
+        if ($runtime->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['template'][$theme][$template])) {
                 return self::$cache[$cid]['template'][$theme][$template];
@@ -891,7 +891,7 @@ abstract class Be
 
         $class = '\\Be\\Data\\Cache\\Template\\' . $theme . '\\' . $type . '\\' . $name . '\\' . implode('\\', $parts);
 
-        if ($runtime->getMode() === 'Swoole') {
+        if ($runtime->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             self::$cache[$cid]['template'][$theme][$template] = new $class();
             return self::$cache[$cid]['template'][$theme][$template];
@@ -920,7 +920,7 @@ abstract class Be
         }
 
         $runtime = self::getRuntime();
-        if ($runtime->getMode() === 'Swoole') {
+        if ($runtime->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['adminTemplate'][$theme][$template])) {
                 return self::$cache[$cid]['adminTemplate'][$theme][$template];
@@ -938,7 +938,7 @@ abstract class Be
 
         $class = '\\Be\\Data\\Cache\\AdminTemplate\\' . $theme . '\\' . $type . '\\' . $name . '\\' . implode('\\', $parts);
 
-        if ($runtime->getMode() === 'Swoole') {
+        if ($runtime->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             self::$cache[$cid]['adminTemplate'][$theme][$template] = new $class();
             return self::$cache[$cid]['adminTemplate'][$theme][$template];
@@ -1039,7 +1039,7 @@ abstract class Be
     public static function setAdminUser($adminUser = null)
     {
         Be::getSession()->set('be-adminUser', $adminUser);
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['adminUser'])) {
                 if ($adminUser === null) {
@@ -1066,7 +1066,7 @@ abstract class Be
      */
     public static function getAdminUser()
     {
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['adminUser'])) {
                 return self::$cache[$cid]['adminUser'];
@@ -1094,7 +1094,7 @@ abstract class Be
     public static function setUser($user = null)
     {
         Be::getSession()->set('be-user', $user);
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['user'])) {
                 if ($user === null) {
@@ -1121,7 +1121,7 @@ abstract class Be
      */
     public static function getUser()
     {
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['user'])) {
                 return self::$cache[$cid]['user'];
@@ -1149,7 +1149,7 @@ abstract class Be
      */
     public static function setContext(string $name, $value)
     {
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             self::$cache[$cid]['context'][$name] = $value;
         } else {
@@ -1165,7 +1165,7 @@ abstract class Be
      */
     public static function getContext(string $name)
     {
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['context'][$name])) {
                 return self::$cache[$cid]['context'][$name];
@@ -1187,7 +1187,7 @@ abstract class Be
      */
     public static function hasContext(string $name): bool
     {
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             return isset(self::$cache[$cid]['context'][$name]);
         } else {
@@ -1200,7 +1200,7 @@ abstract class Be
      */
     public static function gc()
     {
-        if (self::getRuntime()->getMode() === 'Swoole') {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
 
             // 关闭 SESSION

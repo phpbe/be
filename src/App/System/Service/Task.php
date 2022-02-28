@@ -113,7 +113,7 @@ class Task
 
         $tuple->trigger = $triggerType;
 
-        if (Be::getRuntime()->getMode() === 'Swoole') {
+        if (Be::getRuntime()->isSwooleMode()) {
             Be::getRuntime()->task($tuple->toObject());
         } else {
             $config = Be::getConfig('App.System.Task');

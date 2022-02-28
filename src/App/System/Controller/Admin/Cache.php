@@ -15,8 +15,8 @@ class Cache extends Auth
 {
 
     /**
-     * @BeMenu("缓存", icon = "el-icon-fa fa-database", ordering="2.5")
-     * @BePermission("缓存列表", ordering="2.5")
+     * @BeMenu("缓存", icon = "el-icon-fa fa-database", ordering="2.6")
+     * @BePermission("缓存列表", ordering="2.6")
      */
     public function index()
     {
@@ -160,7 +160,7 @@ class Cache extends Auth
     }
 
     /**
-     * @BePermission("删除缓存", ordering="2.51")
+     * @BePermission("删除缓存", ordering="2.61")
      */
     public function delete()
     {

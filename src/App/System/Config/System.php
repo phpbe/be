@@ -43,7 +43,7 @@ class System
     /**
      * @BeConfigItem("默认首页", driver="FormItemInput")
      */
-    public $home = 'System.Index.index';
+    public $home = 'System.Home.index';
 
     /**
      * @BeConfigItem("是否开启开发者模式", driver="FormItemSwitch")

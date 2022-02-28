@@ -17,8 +17,8 @@ class Storage extends Auth
 {
 
     /**
-     * @BeMenu("存储", icon = "el-icon-folder", ordering="2.6")
-     * @BePermission("存储", ordering="2.6")
+     * @BeMenu("存储", icon = "el-icon-folder", ordering="2.7")
+     * @BePermission("存储", ordering="2.7")
      */
     public function index()
     {
@@ -85,7 +85,7 @@ class Storage extends Auth
     }
 
     /**
-     * @BePermission("查看", ordering="2.61")
+     * @BePermission("查看", ordering="2.71")
      */
     public function pop()
     {
@@ -166,7 +166,7 @@ class Storage extends Auth
     }
 
     /**
-     * @BePermission("创建文件夹", ordering="2.62")
+     * @BePermission("创建文件夹", ordering="2.72")
      */
     public function createDir()
     {
@@ -207,7 +207,7 @@ class Storage extends Auth
     /**
      * 修改文件夹名称
      *
-     * @BePermission("修改文件夹名称", ordering="2.63")
+     * @BePermission("修改文件夹名称", ordering="2.73")
      */
     public function renameDir()
     {
@@ -256,7 +256,7 @@ class Storage extends Auth
     /**
      * 删除文件夹
      *
-     * @BePermission("删除文件夹", ordering="2.64")
+     * @BePermission("删除文件夹", ordering="2.74")
      */
     public function deleteDir()
     {
@@ -295,7 +295,7 @@ class Storage extends Auth
     /**
      * 上传图像
      *
-     * @BePermission("上传图像", ordering="2.65")
+     * @BePermission("上传图像", ordering="2.75")
      */
     public function uploadImage()
     {
@@ -352,7 +352,7 @@ class Storage extends Auth
     /**
      * 上传文件
      *
-     * @BePermission("上传文件", ordering="2.66")
+     * @BePermission("上传文件", ordering="2.76")
      */
     public function uploadFile()
     {
@@ -409,7 +409,7 @@ class Storage extends Auth
     /**
      * 修改文件名称
      *
-     * @BePermission("修改文件名称", ordering="2.67")
+     * @BePermission("修改文件名称", ordering="2.77")
      */
     public function renameFile()
     {
@@ -478,7 +478,7 @@ class Storage extends Auth
     /**
      * 删除文件
      *
-     * @BePermission("删除文件", ordering="2.68")
+     * @BePermission("删除文件", ordering="2.78")
      */
     public function deleteFile()
     {
