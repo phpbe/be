@@ -45,6 +45,84 @@ class Driver
     }
 
     /**
+     * 设置肖前菜单的键名
+     */
+    public function setActiveMenuKey(string $activeMenuKey)
+    {
+        $contextKey = 'AdminMenu:activeMenuKey';
+        Be::setContext($contextKey, $activeMenuKey);
+    }
+
+    /**
+     * 获取肖前菜单的键名
+     *
+     * @return string
+     */
+    public function getActiveMenuKey(): string
+    {
+        $contextKey = 'AdminMenu:activeMenuKey';
+        if (Be::hasContext($contextKey)) {
+            return Be::getContext($contextKey);
+        }
+
+        $request = Be::getRequest();
+
+        $menuKey1Matched = false;
+        $menuKey2Matched = false;
+        $menuKey3Matched = false;
+        $menuKey1Flag = $request->getAppName() . '.';
+        $menuKey2Flag = $request->getAppName() . '.' . $request->getControllerName() . '.';
+        $menuKey3Flag = $request->getAppName() . '.' . $request->getControllerName() . '.' . $request->getActionName();
+        $menuKey1 = null;
+        $menuKey2 = null;
+        $menuKey3 = null;
+
+        foreach ($this->items as $item) {
+            if (!$menuKey1Matched) {
+                if (strpos($item->route, $menuKey1Flag) === 0) {
+                    $menuKey1Matched = true;
+                    $menuKey1 = $item->route;
+                }
+            }
+            if (!$menuKey1Matched) continue;
+
+            if (!$menuKey2Matched) {
+                if (strpos($item->route, $menuKey2Flag) === 0) {
+                    $menuKey2Matched = true;
+                    $menuKey2 = $item->route;
+                }
+            }
+            if (!$menuKey2Matched) continue;
+
+            if (!$menuKey3Matched) {
+                if (strpos($item->route, $menuKey3Flag) === 0) {
+                    $menuKey3Matched = true;
+                    $menuKey3 = $item->route;
+                    break;
+                }
+            }
+        }
+
+        if ($menuKey3Matched) {
+            Be::setContext($contextKey, $menuKey3);
+            return $menuKey3;
+        }
+
+        if ($menuKey2Matched) {
+            Be::setContext($contextKey, $menuKey2);
+            return $menuKey2;
+        }
+
+        if ($menuKey1Matched) {
+            Be::setContext($contextKey, $menuKey1);
+            return $menuKey1;
+        }
+
+        Be::setContext($contextKey, $menuKey3Flag);
+        return $menuKey3Flag;
+    }
+
+    /**
      * 获取菜单项列表
      *
      * @return array

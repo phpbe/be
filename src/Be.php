@@ -1180,6 +1180,22 @@ abstract class Be
     }
 
     /**
+     * 上下文是否存在
+     *
+     * @param string $name
+     * @return bool
+     */
+    public static function hasContext(string $name): bool
+    {
+        if (self::getRuntime()->getMode() === 'Swoole') {
+            $cid = \Swoole\Coroutine::getCid();
+            return isset(self::$cache[$cid]['context'][$name]);
+        } else {
+            return isset(self::$cache['context'][$name]);
+        }
+    }
+
+    /**
      * 回收资源
      */
     public static function gc()

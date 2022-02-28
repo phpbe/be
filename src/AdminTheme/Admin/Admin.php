@@ -67,7 +67,7 @@
                         <?php
                         $adminMenu = \Be\Be::getAdminMenu();
                         $adminMenuTree = $adminMenu->getTree();
-                        $adminMenuActiveMenuKey = \Be\Be::getService('App.System.Admin.AdminMenu')->getActiveMenuKey();
+                        $adminMenuActiveMenuKey = $adminMenu->getActiveMenuKey();
                         ?>
                         <el-menu
                                 mode="horizontal"
@@ -217,7 +217,7 @@
                     <?php
                     $adminMenu = \Be\Be::getAdminMenu();
                     $adminMenuTree = $adminMenu->getTree();
-                    $adminMenuActiveMenuKey = \Be\Be::getService('App.System.Admin.AdminMenu')->getActiveMenuKey();
+                    $adminMenuActiveMenuKey = $adminMenu->getActiveMenuKey();
                     ?>
                     <el-menu
                             background-color="#30354d"
