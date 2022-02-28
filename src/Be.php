@@ -958,7 +958,7 @@ abstract class Be
         if (isset(self::$cache['Menu'][$name])) return self::$cache['Menu'][$name];
 
         $path = self::getRuntime()->getCachePath() . '/Menu/' . $name . '.php';
-        if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
+        if (!file_exists($path)) {
             $service = Be::getService('App.System.Admin.Menu');
             $service->update($name);
         }
