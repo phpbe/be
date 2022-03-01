@@ -358,7 +358,7 @@
                         route: "",
                         params: {},
                         url: "",
-                        description: "未选择链接",
+                        description: "无",
                         target: "_self",
                         level: 1
                     });
@@ -372,7 +372,7 @@
                         route: "",
                         params: {},
                         url: "",
-                        description: "未选择链接",
+                        description: "无",
                         target: "_self",
                         level: menuItem.level + 1
                     });
@@ -388,7 +388,7 @@
                     menuItem.route = "";
                     menuItem.params = {};
                     menuItem.url = "";
-                    menuItem.description = "未选择链接";
+                    menuItem.description = "无";
 
                     switch (val) {
                         case "None":
@@ -428,7 +428,7 @@
                     url += "pickerRoute=" +menuPicker.route;
                     this.drawer.url = url;
                     this.drawer.title = app.label + "：" + menuPicker.label;
-                    this.drawer.width = "800px";
+                    this.drawer.width = "80%";
                     this.drawer.visible = true;
                 },
                 setMenuLinkUrl:function () {

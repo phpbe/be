@@ -37,16 +37,14 @@
         $vueHooks = [];
         ?>
         <div id="app" v-cloak>
-            <div class="be-center-title"><?php echo $this->title; ?></div>
-
             <div class="be-center-body">
                 <el-form<?php
                 $formUi = [
                     ':inline' => 'true',
                     'size' => 'medium',
                 ];
-                if (isset($this->setting['form']['ui'])) {
-                    $formUi = array_merge($formUi, $this->setting['form']['ui']);
+                if (isset($this->setting['grid']['form']['ui'])) {
+                    $formUi = array_merge($formUi, $this->setting['grid']['form']['ui']);
                 }
 
                 foreach ($formUi as $k => $v) {
@@ -58,15 +56,15 @@
                 }
                 ?>>
                     <?php
-                    if (isset($this->setting['headnote'])) {
-                        echo $this->setting['headnote'];
+                    if (isset($this->setting['grid']['headnote'])) {
+                        echo $this->setting['grid']['headnote'];
                     }
 
-                    if (isset($this->setting['form']['items']) && count($this->setting['form']['items']) > 0) {
+                    if (isset($this->setting['grid']['form']['items']) && count($this->setting['grid']['form']['items']) > 0) {
                         ?>
                         <div id="form-items" ref="formItemsRef">
                             <?php
-                            foreach ($this->setting['form']['items'] as $item) {
+                            foreach ($this->setting['grid']['form']['items'] as $item) {
                                 $driverClass = null;
                                 if (isset($item['driver'])) {
                                     if (substr($item['driver'], 0, 8) === 'FormItem') {
@@ -117,9 +115,9 @@
                                 }
                             }
 
-                            if (isset($this->setting['form']['actions']) && count($this->setting['form']['actions']) > 0) {
+                            if (isset($this->setting['grid']['form']['actions']) && count($this->setting['grid']['form']['actions']) > 0) {
                                 $html = '';
-                                foreach ($this->setting['form']['actions'] as $key => $item) {
+                                foreach ($this->setting['grid']['form']['actions'] as $key => $item) {
                                     if ($key === 'submit') {
                                         if ($item) {
                                             if ($item === true) {
@@ -178,9 +176,10 @@
                         ':height' => 'tableHeight',
                         ':default-sort' => '{prop:orderBy,order:orderByDir}',
                         '@sort-change' => 'sort',
+                        '@row-click' => 'selectRow',
                     ];
-                    if (isset($this->setting['table']['ui'])) {
-                        $tableUi = array_merge($tableUi, $this->setting['table']['ui']);
+                    if (isset($this->setting['grid']['table']['ui'])) {
+                        $tableUi = array_merge($tableUi, $this->setting['grid']['table']['ui']);
                     }
 
                     foreach ($tableUi as $k => $v) {
@@ -193,8 +192,8 @@
                     ?>>
                         <template slot="empty">
                             <?php
-                            if (isset($this->setting['table']['empty']) && is_string($this->setting['table']['empty'])) {
-                                echo $this->setting['table']['empty'];
+                            if (isset($this->setting['grid']['table']['empty']) && is_string($this->setting['grid']['table']['empty'])) {
+                                echo $this->setting['grid']['table']['empty'];
                             } else {
                                 echo '<el-empty description="暂无数据"></el-empty>';
                             }
@@ -207,12 +206,12 @@
                                 label=""
                                 width="60">
                             <template scope="scope">
-                                <el-radio :label="scope.row.<?php echo $this->setting['name']; ?>" v-model="paramValue" @change.native="selectParam(scope.row)">&nbsp</el-radio>
+                                <el-radio :label="scope.row.<?php echo $this->setting['name']; ?>" v-model="selectedValue" @change.native="selectRow(scope.row)">&nbsp</el-radio>
                             </template>
                         </el-table-column>
 
                         <?php
-                        foreach ($this->setting['table']['items'] as $item) {
+                        foreach ($this->setting['grid']['table']['items'] as $item) {
 
                             $driverClass = null;
                             if (isset($item['driver'])) {
@@ -242,8 +241,8 @@
                     </el-table>
                     <?php
 
-                    if (isset($this->setting['footnote'])) {
-                        echo $this->setting['footnote'];
+                    if (isset($this->setting['grid']['footnote'])) {
+                        echo $this->setting['grid']['footnote'];
                     }
                     ?>
 
@@ -261,7 +260,7 @@
                             </el-pagination>
                         </div>
                         <div class="be-col-auto">
-                            <el-button type="primary" icon="el-icon-check" @click="selectParamConfirm" :disabled="paramValue === ''">确定</el-button>
+                            <el-button type="primary" icon="el-icon-check" @click="selectRowConfirm" :disabled="selectedValue === ''">确定</el-button>
                         </div>
                     </div>
 
@@ -273,24 +272,24 @@
 
 
     <?php
-    if (isset($this->setting['js'])) {
-        $js = array_merge($js, $this->setting['js']);
+    if (isset($this->setting['grid']['js'])) {
+        $js = array_merge($js, $this->setting['grid']['js']);
     }
 
-    if (isset($this->setting['css'])) {
-        $css = array_merge($css, $this->setting['css']);
+    if (isset($this->setting['grid']['css'])) {
+        $css = array_merge($css, $this->setting['grid']['css']);
     }
 
-    if (isset($this->setting['vueData'])) {
-        $vueData = \Be\Util\Arr::merge($vueData, $this->setting['vueData']);
+    if (isset($this->setting['grid']['vueData'])) {
+        $vueData = \Be\Util\Arr::merge($vueData, $this->setting['grid']['vueData']);
     }
 
-    if (isset($this->setting['vueMethods'])) {
-        $vueMethods = \Be\Util\Arr::merge($vueMethods, $this->setting['vueMethods']);
+    if (isset($this->setting['grid']['vueMethods'])) {
+        $vueMethods = \Be\Util\Arr::merge($vueMethods, $this->setting['grid']['vueMethods']);
     }
 
-    if (isset($this->setting['vueHooks'])) {
-        foreach ($this->setting['vueHooks'] as $k => $v) {
+    if (isset($this->setting['grid']['vueHooks'])) {
+        foreach ($this->setting['grid']['vueHooks'] as $k => $v) {
             if (isset($vueHooks[$k])) {
                 $vueHooks[$k] .= "\r\n" . $v;
             } else {
@@ -315,7 +314,7 @@
     ?>
 
     <script>
-        var pageSizeKey = "<?php echo $this->url; ?>:pageSize";
+        var pageSizeKey = "<?php echo 'url:' . md5($this->url); ?>:pageSize";
         var pageSize = localStorage.getItem(pageSizeKey);
         if (pageSize === null || isNaN(pageSize)) {
             pageSize = <?php echo $this->pageSize; ?>;
@@ -337,7 +336,8 @@
                 loading: false,
                 tableHeight: 500,
 
-                paramValue: "",
+                selectedRow: null,
+                selectedValue: "",
 
                 t: false<?php
                 if ($vueData) {
@@ -352,30 +352,34 @@
                     this.page = 1;
                     this.loadGridData();
                 },
-                selectParam(row) {
-                    this.paramValue = row.<?php echo $this->setting['name']; ?>;
+                selectRow(row) {
+                    this.selectedRow = row;
+                    this.selectedValue = row.<?php echo $this->setting['name']; ?>;
                 },
 
-                selectParamConfirm(row) {
+                selectRowConfirm() {
                     let description = "<?php echo $this->setting['value']; ?>";
-                    for (let x in row) {
-                        description = description.replace("{" + x + "}", row[x]);
+                    for (let x in this.selectedRow) {
+                        description = description.replace("{" + x + "}", this.selectedRow[x]);
+                    }
+                    if (description.length > 15) {
+                        description = description.substr(0, 15) +  "...";
                     }
 
                     parent.setMenuLink({
                         route: "<?php echo $this->route; ?>",
                         params: {
-                            <?php echo $this->setting['name']; ?>: this.paramValue
-                        },
-                        url: "",
-                        description: "<?php echo $this->app->label; ?>" + description
-                    });
+                    <?php echo $this->setting['name']; ?>: this.selectedValue
+                },
+                    url: "",
+                        description: "<?php echo $this->app->label; ?>：" + description
+                });
                 },
 
                 loadGridData: function () {
                     this.loading = true;
                     var _this = this;
-                    _this.$http.post("<?php echo $this->setting['form']['action']; ?>", {
+                    _this.$http.post("<?php echo $this->setting['grid']['form']['action']; ?>", {
                         formData: _this.formData,
                         orderBy: _this.orderBy,
                         orderByDir: _this.orderByDir,
@@ -405,7 +409,6 @@
                                 }
                             }
                             _this.resize();
-                            _this.updateToolbars();
                         }
                     }).catch(function (error) {
                         _this.loading = false;

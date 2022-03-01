@@ -26,9 +26,9 @@ class MenuPicker extends Curd
      */
     public function setting($setting = [])
     {
-        $this->app = $this->setting['app'];
-        $this->route = $this->setting['route'];
-        $annotation = $this->setting['annotation'];
+        $this->app = $setting['app'];
+        $this->route = $setting['route'];
+        $annotation = $setting['annotation'];
         parent::setting($annotation->picker);
         return $this;
     }
@@ -44,35 +44,35 @@ class MenuPicker extends Curd
         if ($request->isAjax()) {
             parent::Grid();
         } else {
-            $response->set('title', $setting['title'] ?? '');
+
+            $response->set('title', $this->setting['grid']['title'] ?? '');
             $response->set('app', $this->app);
             $response->set('route', $this->route);
             $response->set('url', $request->getUrl());
 
-            $setting = $this->setting['grid'];
-            if (!isset($setting['form']['action'])) {
-                $setting['form']['action'] = Be::getRequest()->getUrl();
+            if (!isset($this->setting['grid']['form']['action'])) {
+                $this->setting['grid']['form']['action'] = Be::getRequest()->getUrl();
             }
 
-            if (!isset($setting['form']['actions'])) {
-                $setting['form']['actions'] = [
+            if (!isset($this->setting['grid']['form']['actions'])) {
+                $this->setting['grid']['form']['actions'] = [
                     'submit' => true,
                 ];
             }
-            $response->set('setting', $setting);
+            $response->set('setting', $this->setting);
 
             $pageSize = null;
-            if (isset($setting['pageSize']) &&
-                is_numeric($setting['pageSize']) &&
-                $setting['pageSize'] > 0
+            if (isset($this->setting['grid']['pageSize']) &&
+                is_numeric($this->setting['grid']['pageSize']) &&
+                $this->setting['grid']['pageSize'] > 0
             ) {
-                $pageSize = $setting['pageSize'];
+                $pageSize = $this->setting['grid']['pageSize'];
             } else {
                 $pageSize = Be::getConfig('App.System.Admin')->pageSize;;
             }
             $response->set('pageSize', $pageSize);
 
-            $theme = $setting['theme'] ?? 'Blank';
+            $theme = $this->setting['grid']['theme'] ?? 'Blank';
             $response->display('AdminPlugin.MenuPicker.display', $theme);
         }
 

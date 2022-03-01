@@ -100,7 +100,7 @@ class Curd extends Driver
                     }
                 }
 
-                $actualLayout = $postData['actualLayout'];
+                $actualLayout = $postData['actualLayout'] ?? 'table';
                 $page = $postData['page'];
                 $pageSize = $postData['pageSize'];
                 $table->offset(($page - 1) * $pageSize)->limit($pageSize);
