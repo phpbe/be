@@ -3,17 +3,24 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
     <title><?php echo $this->title; ?></title>
-    <base href="<?php echo beUrl(); ?>/">
-    <script>var beUrl = "<?php echo beUrl(); ?>"; </script>
+    <meta name="keywords" content="<?php echo isset($this->meta_keywords) ? $this->meta_keywords : ''; ?>">
+    <meta name="description" content="<?php echo isset($this->meta_description) ? $this->meta_description : ''; ?>">
+    <meta name="applicable-device" content="pc,mobile">
+    <?php
+    $beUrl = beUrl();
+    $themeUrl = \Be\Be::getProperty('Theme.Sample')->getUrl();
+    ?>
+    <base href="<?php echo $beUrl; ?>/" >
+    <script>var beUrl = "<?php echo $beUrl; ?>"; </script>
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="<?php echo $beUrl; ?>/vendor/be/scss/src/be.css" />
 
     <?php
     $configTheme = \Be\Be::getConfig('Theme.Sample.Theme');

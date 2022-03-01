@@ -10,7 +10,7 @@ class Router
     /**
      * @BeConfigItem("Hashmap路由 - REDIS库",
      *     driver="FormItemSelect",
-     *     keyValues = "return \Be\Session\SessionHelper::getConfigRedisKeyValues();",
+     *     keyValues = "return \Be\Redis\RedisHelper::getConfigKeyValues();",
      *     description="当有使用 Hashmap路由 时才需要此配置藉由")
      */
     public $redis = 'master';
