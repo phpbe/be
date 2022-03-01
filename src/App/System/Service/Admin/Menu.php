@@ -290,8 +290,10 @@ class Menu
 
     /**
      * 更新事台菜单
+     *
+     * @param string $menuName 菜单名称
      */
-    public function update($menuName)
+    public function update(string $menuName)
     {
         $menus = $this->getItems($menuName);
 
@@ -400,7 +402,7 @@ class Menu
                 $orderings = array_column($appMenuPickers, 'ordering');
                 array_multisort($appMenuPickers, SORT_ASC, SORT_NUMERIC, $orderings);
 
-                $menuPickers[$app->name] = [
+                $menuPickers[] = [
                     'app' => $app,
                     'menuPickers' => $appMenuPickers
                 ];
@@ -414,10 +416,22 @@ class Menu
     /**
      * 获取菜单选择器
      *
-     * @return BeMenu|bool
+     * @param string $route 路由
+     * @return array|bool
      */
-    public function getMenuPicker($appName, $controllerName, $actionName): BeMenu
+    public function getMenuPicker(string $route): array
     {
+        $routes = explode('.', $route);
+        if (count($routes) !== 3) {
+            throw new ServiceException('route参数错误！');
+        }
+
+        $appName = $routes[0];
+        $controllerName = $routes[1];
+        $actionName = $routes[2];
+
+        $appProperty = Be::getProperty('App.' . $appName);
+
         $className = '\\Be\\App\\' . $appName . '\\Controller\\' . $controllerName;
         if (!class_exists($className)) {
             throw new ServiceException('控制器类（' . $appName . '.' . $className . '）不存在！');
@@ -453,7 +467,11 @@ class Menu
             return false;
         }
 
-        return new BeMenu($item);
+        return [
+            'route' => $route,
+            'app' => $appProperty,
+            'annotation' => new BeMenu($item),
+        ];
     }
 
 }

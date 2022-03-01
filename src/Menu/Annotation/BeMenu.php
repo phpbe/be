@@ -9,7 +9,7 @@ class BeMenu extends Driver
 {
 
 
-    protected $paramPicker = null;
+    protected $picker = null;
 
 
 }

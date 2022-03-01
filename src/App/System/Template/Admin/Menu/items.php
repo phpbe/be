@@ -203,11 +203,29 @@
                                                     style="width:100%;"
                                                     v-model="menuItem.description"
                                                     size="medium"
-                                                    @change="((val)=>{setMenuLink(val, menuItemIndex)})"
+                                                    @change="(val)=>{setMenuLink(val, menuItemIndex);}"
                                             >
-                                                <el-option value="None" label="无"></el-option>
-                                                <el-option value="Home" label="首页"></el-option>
-                                                <el-option value="Url" label="指定网址"></el-option>
+                                                <el-option-group key="common" label="通用">
+                                                    <el-option style="padding-left: 2rem;" value="None" label="无"></el-option>
+                                                    <el-option style="padding-left: 2rem;" value="Url" label="指定网址"></el-option>
+                                                </el-option-group>
+                                                <?php
+                                                foreach ($this->menuPickers as $menuPicker)
+                                                {
+                                                    ?>
+                                                    <el-option-group key="<?php echo $menuPicker['app']->name; ?>" label="<?php echo $menuPicker['app']->label; ?>">
+                                                        <?php
+                                                        foreach ($menuPicker['menuPickers'] as $picker)
+                                                        {
+                                                            ?>
+                                                            <el-option style="padding-left: 2rem;" value="<?php echo $picker['route']; ?>" label="<?php echo $picker['label']; ?>"></el-option>
+                                                            <?php
+                                                        }
+                                                        ?>
+                                                    </el-option-group>
+                                                    <?php
+                                                }
+                                                ?>
                                             </el-select>
                                         </div>
                                     </div>
@@ -276,6 +294,9 @@
                 formData: {
                     menuItems: <?php echo json_encode($this->flatTree); ?>,
                 },
+
+                menuPickers: <?php echo json_encode($this->menuPickers); ?>,
+
                 dragTimer : null,
                 dragIndexFrom : null,
                 dragIndexTo : null,
@@ -363,103 +384,61 @@
                 },
                 setMenuLink:function (val, menuItemIndex) {
                     let menuItem = this.formData.menuItems[menuItemIndex];
+
+                    menuItem.route = "";
+                    menuItem.params = {};
+                    menuItem.url = "";
+                    menuItem.description = "未选择链接";
+
                     switch (val) {
                         case "None":
-                            menuItem.route = "";
-                            menuItem.params = {};
-                            menuItem.url = "";
-                            menuItem.description = "未选择链接";
-                            break;
-                        case "Home":
-                            menuItem.route = "System.Home.index";
-                            menuItem.params = {};
-                            menuItem.url = "";
-                            menuItem.description = "首页";
-                            break;
-                        case "ProductCategory":
-                            menuItem.route = "";
-                            menuItem.params = {};
-                            menuItem.url = "";
-                            menuItem.description = "未选择链接";
-
-                            this.setMenuLinkIndex = menuItemIndex;
-                            this.setMenuLinkChooseCategory();
-                            /*
-                            menuItem.route = "ShopFai.Product.category";
-                            menuItem.params = {};
-                            menuItem.url = "";
-                            menuItem.description = "商品分类：";
-                             */
-                            break;
-                        case "ProductDetail":
-                            menuItem.route = "";
-                            menuItem.params = {};
-                            menuItem.url = "";
-                            menuItem.description = "未选择链接";
-
-                            this.setMenuLinkIndex = menuItemIndex;
-                            this.setMenuLinkChooseProduct();
-                            /*
-                            menuItem.route = "ShopFai.Product.detail";
-                            menuItem.params = {};
-                            menuItem.url = "";
-                            menuItem.description = "商品详情页：";
-                             */
-                            break;
-                        case "ProductGuessYouLike":
-                            menuItem.route = "ShopFai.Product.guessYouLike";
-                            menuItem.params = {};
-                            menuItem.url = "";
-                            menuItem.description = "猜你喜欢商品列表";
-                            break;
-                        case "ProductNewProducts":
-                            menuItem.route = "ShopFai.Product.newProducts";
-                            menuItem.params = {};
-                            menuItem.url = "";
-                            menuItem.description = "新品列表";
-                            break;
-                        case "ProductTopSales":
-                            menuItem.route = "ShopFai.Product.topSales";
-                            menuItem.params = {};
-                            menuItem.url = "";
-                            menuItem.description = "热销商品列表";
                             break;
                         case "Url":
-                            menuItem.route = "";
-                            menuItem.params = {};
-                            menuItem.url = "";
-                            menuItem.description = "未选择链接";
-
                             this.setMenuLinkIndex = menuItemIndex;
                             this.setMenuLinkUrl();
-                            /*
-                            menuItem.route = "";
-                            menuItem.params = {};
-                            menuItem.url = "";
-                            menuItem.description = "指定网址：";
-                            */
                             break;
+                        default:
+                            let app;
+                            let menuPicker;
+                            l1:for (let x of this.menuPickers) {
+                                for (let xx of x.menuPickers) {
+                                    if (xx.route === val) {
+                                        app = x.app;
+                                        menuPicker = xx;
+                                        break l1;
+                                    }
+                                }
+                            }
+
+                            if (menuPicker.hasParamPicker === 1) {
+                                this.setMenuLinkIndex = menuItemIndex;
+                                this.setMenuLinkParamPicker(app, menuPicker);
+                            } else {
+                                menuItem.route = menuPicker.route;
+                                menuItem.params = {};
+                                menuItem.url = "";
+                                menuItem.description = app.label + "：" + menuPicker.label;
+                            }
                     }
                     //this.formData.menuItems[menuItemIndex] = menuItem;
                 },
-                setMenuLinkChooseProduct:function () {
-                    this.drawer.url = "<?php echo beAdminUrl('System.Menu.chooseProduct'); ?>";
-                    this.drawer.title = "选择商品";
-                    this.drawer.width = "80%";
-                    this.drawer.visible = true;
-                },
-                setMenuLinkChooseCategory:function () {
-                    this.drawer.url = "<?php echo beAdminUrl('System.Menu.chooseCategory'); ?>";
-                    this.drawer.title = "选择分类";
-                    this.drawer.width = "600";
+                setMenuLinkParamPicker:function (app, menuPicker) {
+                    let url = "<?php echo beAdminUrl('System.Menu.picker'); ?>";
+                    url += url.indexOf("?") === -1 ? "?" : "&";
+                    url += "pickerRoute=" +menuPicker.route;
+                    this.drawer.url = url;
+                    this.drawer.title = app.label + "：" + menuPicker.label;
+                    this.drawer.width = "800px";
                     this.drawer.visible = true;
                 },
                 setMenuLinkUrl:function () {
                     this.drawer.url = "<?php echo beAdminUrl('System.Menu.setUrl'); ?>";
                     this.drawer.title = "指定网址";
-                    this.drawer.width = "400";
+                    this.drawer.width = "600px";
                     this.drawer.visible = true;
                 },
+
+
                 setMenuLinkSubmit: function (menuItemSubmit) {
                     let menuItem = this.formData.menuItems[this.setMenuLinkIndex];
                     menuItem.route = menuItemSubmit.route;
@@ -470,7 +449,6 @@
                     this.setMenuLinkIndex = null;
                     this.drawer.visible = false;
                 },
-
 
                 dragStart(e) {
                     //console.log("dragStart", e);

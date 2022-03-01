@@ -216,10 +216,13 @@ class Menu extends Auth
             }
         } else {
             $flatTree = $service->getFlatTree($menu->name);
+            $response->set('flatTree', $flatTree);
+
+            $menuPickers = $service->getMenuPickers();
+            $response->set('menuPickers', $menuPickers);
 
             $response->set('title', $menu->label . ' - 菜单项管理');
             $response->set('menu', $menu);
-            $response->set('flatTree', $flatTree);
 
             $response->display('App.System.Admin.Menu.items');
         }
@@ -230,12 +233,21 @@ class Menu extends Auth
      *
      * @BePermission("菜单项", ordering="2.41")
      */
-    public function paramPicker()
+    public function picker()
     {
         $request = Be::getRequest();
         $response = Be::getResponse();
 
-        $response->display('App.System.Admin.Menu.paramPicker', 'Blank');
+        try {
+            $pickerRoute = $request->get('pickerRoute');
+            $service = Be::getService('App.System.Admin.Menu');
+            $menuPicker = $service->getMenuPicker($pickerRoute);
+            Be::getAdminPlugin('MenuPicker')
+                ->setting($menuPicker)
+                ->execute();
+        } catch (\Throwable $t) {
+            $response->error($t->getMessage());
+        }
     }
 
     /**
