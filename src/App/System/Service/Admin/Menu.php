@@ -392,7 +392,7 @@ class Menu
                     $appMenuPickers[] = [
                         'label' => $item['label'],
                         'route' => $app->name . '.' . $controllerName . '.' . $methodName,
-                        'hasParamPicker' => isset($item['paramPicker']) ? 1 : 0,
+                        'hasMenuPicker' => isset($item['picker']) ? 1 : 0,
                         'ordering' => $item['ordering'] ?? 0,
                     ];
                 }

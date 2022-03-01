@@ -410,9 +410,9 @@
                                 }
                             }
 
-                            if (menuPicker.hasParamPicker === 1) {
+                            if (menuPicker.hasMenuPicker === 1) {
                                 this.setMenuLinkIndex = menuItemIndex;
-                                this.setMenuLinkParamPicker(app, menuPicker);
+                                this.setMenuLinkPicker(app, menuPicker);
                             } else {
                                 menuItem.route = menuPicker.route;
                                 menuItem.params = {};
@@ -422,7 +422,7 @@
                     }
                     //this.formData.menuItems[menuItemIndex] = menuItem;
                 },
-                setMenuLinkParamPicker:function (app, menuPicker) {
+                setMenuLinkPicker:function (app, menuPicker) {
                     let url = "<?php echo beAdminUrl('System.Menu.picker'); ?>";
                     url += url.indexOf("?") === -1 ? "?" : "&";
                     url += "pickerRoute=" +menuPicker.route;
@@ -437,7 +437,6 @@
                     this.drawer.width = "600px";
                     this.drawer.visible = true;
                 },
-
 
                 setMenuLinkSubmit: function (menuItemSubmit) {
                     let menuItem = this.formData.menuItems[this.setMenuLinkIndex];
