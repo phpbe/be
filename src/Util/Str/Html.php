@@ -14,7 +14,7 @@ class Html
      * @param string $html HTML 代码
      * @return string
      */
-    private function clean(string $html): string
+    public static function clean(string $html): string
     {
         $html = trim($html);
         $html = strip_tags($html);
