@@ -23,7 +23,7 @@ class Driver
 
             $config = Be::getConfig('App.System.Redis');
             if (!isset($config->$name)) {
-                throw new RedisException('Redis config item (' . $name . ') doesn\'t exist!');
+                throw new RedisException('Redis config item (' . $name . ') does not exist!');
             }
             $config = $config->$name;
 

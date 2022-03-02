@@ -105,7 +105,11 @@
                                 }
                             } else {
                                 if ($item->url) {
-                                    $url = $item->url;
+                                    if ($item->url === '/') {
+                                        $url = beUrl();
+                                    } else {
+                                        $url = $item->url;
+                                    }
                                 }
                             }
 
@@ -127,7 +131,11 @@
                                         }
                                     } else {
                                         if ($subItem->url) {
-                                            $url = $subItem->url;
+                                            if ($subItem->url === '/') {
+                                                $url = beUrl();
+                                            } else {
+                                                $url = $subItem->url;
+                                            }
                                         }
                                     }
 

@@ -25,7 +25,7 @@ class TemplateHelper
         $runtime = Be::getRuntime();
         $fileTheme = $runtime->getRootPath() . $themeProperty->getPath() . '/' . $theme . '.php';
         if (!file_exists($fileTheme)) {
-            throw new RuntimeException($themeNamespace . ' ' . $theme . ' doesn\'t exist!');
+            throw new RuntimeException($themeNamespace . ' ' . $theme . ' does not exist!');
         }
 
         $parts = explode('.', $template);
@@ -37,7 +37,7 @@ class TemplateHelper
             $property = Be::getProperty($type . '.' . $name);
             $fileTemplate = $runtime->getRootPath() . $property->getPath() . '/Template/' . implode('/', $parts) . '.php';
             if (!file_exists($fileTemplate)) {
-                throw new RuntimeException($templateNamespace . ' ' . $template . ' doesn\'t exist!');
+                throw new RuntimeException($templateNamespace . ' ' . $template . ' does not exist!');
             }
         }
 
@@ -72,7 +72,7 @@ class TemplateHelper
                     $fileInclude = $runtime->getRootPath() . $tmpProperty->getPath() . '/' . $templateNamespace . '/' . implode('/', $includes) . '.php';
                     if (!file_exists($fileInclude)) {
                         // 模板中包含的文件 $m 不存在
-                        throw new RuntimeException($templateNamespace . ' include file ' . $m . ' doesn\'t exist!');
+                        throw new RuntimeException($templateNamespace . ' include file ' . $m . ' does not exist!');
                     }
 
                     $contentInclude = file_get_contents($fileInclude);

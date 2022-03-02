@@ -307,7 +307,7 @@ class Swoole extends Driver
                 $class = 'Be\\App\\' . $app . '\\Controller\\' . ($admin ? 'Admin\\' : '') . $controller;
                 if (!class_exists($class)) {
                     $response->set('code', 404);
-                    $response->error('Controller ' . $app . '/' . $controller . ' doesn\'t exist!');
+                    $response->error('Controller ' . $app . '/' . $controller . ' does not exist!');
                 } else {
                     $instance = new $class();
                     if (method_exists($instance, $action)) {

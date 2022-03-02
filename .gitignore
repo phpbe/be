@@ -1,7 +1,7 @@
-index.php
-server.php
-.htaccess
-composer.lock
+/index.php
+/server.php
+/.htaccess
+/composer.lock
 .DS_store
 Thumbs.db
 

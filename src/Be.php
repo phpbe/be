@@ -193,7 +193,7 @@ abstract class Be
 
         $parts = explode('.', $name);
         $class = '\\Be\\' . implode('\\', $parts) . '\\Property';
-        if (!class_exists($class)) throw new RuntimeException('Property ' . $name . ' doesn\'t exist!');
+        if (!class_exists($class)) throw new RuntimeException('Property ' . $name . ' does not exist!');
         $instance = new $class();
 
         self::$cache['property'][$name] = $instance;
@@ -216,7 +216,7 @@ abstract class Be
 
             $driver = '\\Be\\Session\\Driver\\Swoole\\' . $config->driver;
             if (!class_exists($driver)) {
-                throw new RuntimeException('Session driver' . $config->driver . ' doesn\'t exist!');
+                throw new RuntimeException('Session driver' . $config->driver . ' does not exist!');
             }
             self::$cache[$cid]['session'] = new $driver($config);
             return self::$cache[$cid]['session'];
@@ -227,7 +227,7 @@ abstract class Be
 
             $driver = '\\Be\\Session\\Driver\\Common\\' . $config->driver;
             if (!class_exists($driver)) {
-                throw new RuntimeException('Session driver' . $config->driver . ' doesn\'t exist!');
+                throw new RuntimeException('Session driver' . $config->driver . ' does not exist!');
             }
 
             self::$cache['session'] = new $driver($config);
@@ -251,7 +251,7 @@ abstract class Be
 
             $driver = '\\Be\\Cache\\Driver\\' . $config->driver;
             if (!class_exists($driver)) {
-                throw new RuntimeException('Cache driver' . $config->driver . ' doesn\'t exist!');
+                throw new RuntimeException('Cache driver' . $config->driver . ' does not exist!');
             }
             self::$cache[$cid]['cache'] = new $driver($config);
             return self::$cache[$cid]['cache'];
@@ -262,7 +262,7 @@ abstract class Be
 
             $driver = '\\Be\\Cache\\Driver\\' . $config->driver;
             if (!class_exists($driver)) {
-                throw new RuntimeException('Cache driver' . $config->driver . ' doesn\'t exist!');
+                throw new RuntimeException('Cache driver' . $config->driver . ' does not exist!');
             }
             self::$cache['cache'] = new $driver($config);
             return self::$cache['cache'];
@@ -285,7 +285,7 @@ abstract class Be
 
             $driver = '\\Be\\Storage\\Driver\\' . $config->driver;
             if (!class_exists($driver)) {
-                throw new RuntimeException('Storage driver' . $config->driver . ' doesn\'t exist!');
+                throw new RuntimeException('Storage driver' . $config->driver . ' does not exist!');
             }
             self::$cache[$cid]['storage'] = new $driver($config);
             return self::$cache[$cid]['storage'];
@@ -296,7 +296,7 @@ abstract class Be
 
             $driver = '\\Be\\Storage\\Driver\\' . $config->driver;
             if (!class_exists($driver)) {
-                throw new RuntimeException('Storage driver' . $config->driver . ' doesn\'t exist!');
+                throw new RuntimeException('Storage driver' . $config->driver . ' does not exist!');
             }
             self::$cache['storage'] = new $driver($config);
             return self::$cache['storage'];
@@ -357,7 +357,7 @@ abstract class Be
 
             $config = Be::getConfig('App.System.Redis');
             if (!isset($config->$name)) {
-                throw new RuntimeException('Redis config item (' . $name . ') doesn\'t exist!');
+                throw new RuntimeException('Redis config item (' . $name . ') does not exist!');
             }
 
             $driver = null;
@@ -390,7 +390,7 @@ abstract class Be
     {
         $config = Be::getConfig('App.System.Redis');
         if (!isset($config->$name)) {
-            throw new RuntimeException('Redis config item (' . $name . ') doesn\'t exist!');
+            throw new RuntimeException('Redis config item (' . $name . ') does not exist!');
         }
 
         return new \Be\Redis\Driver($name);
@@ -484,7 +484,7 @@ abstract class Be
 
             $config = self::getConfig('App.System.Db');
             if (!isset($config->$name)) {
-                throw new RuntimeException('Db config item (' . $name . ') doesn\'t exist!');
+                throw new RuntimeException('Db config item (' . $name . ') does not exist!');
             }
             $configData = $config->$name;
 
@@ -527,7 +527,7 @@ abstract class Be
     {
         $config = Be::getConfig('App.System.Db');
         if (!isset($config->$name)) {
-            throw new RuntimeException('Db config item (' . $name . ') doesn\'t exist!');
+            throw new RuntimeException('Db config item (' . $name . ') does not exist!');
         }
         $configData = $config->$name;
 
@@ -685,7 +685,7 @@ abstract class Be
     {
         $config = Be::getConfig('App.System.MongoDb');
         if (!isset($config->$name)) {
-            throw new RuntimeException('MongoDb config item (' . $name . ') doesn\'t exist!');
+            throw new RuntimeException('MongoDb config item (' . $name . ') does not exist!');
         }
         return new \Be\MongoDb\Driver($config->$name);
     }
@@ -725,7 +725,7 @@ abstract class Be
         $catalog = array_shift($parts);
         $class = '\\Be\\' . $type . '\\' . $catalog . '\\Service\\' . implode('\\', $parts);
         if (!class_exists($class)) {
-            throw new RuntimeException('Service (' . $name . ') doesn\'t exist!');
+            throw new RuntimeException('Service (' . $name . ') does not exist!');
         }
 
         return new $class();
@@ -769,7 +769,7 @@ abstract class Be
         } else {
             $class = $name;
         }
-        if (!class_exists($class)) throw new RuntimeException('Lib ' . $class . ' doesn\'t exist!');
+        if (!class_exists($class)) throw new RuntimeException('Lib ' . $class . ' does not exist!');
 
         return new $class();
     }
@@ -808,7 +808,7 @@ abstract class Be
     {
         $class = '\\Be\\Plugin\\' . $name . '\\' . $name;
         if (!class_exists($class)) {
-            throw new RuntimeException('Plugin ' . $name . ' doesn\'t exist!');
+            throw new RuntimeException('Plugin ' . $name . ' does not exist!');
         }
 
         return new $class();
@@ -848,7 +848,7 @@ abstract class Be
     {
         $class = '\\Be\\AdminPlugin\\' . $name . '\\' . $name;
         if (!class_exists($class)) {
-            throw new RuntimeException('AdminPlugin ' . $name . ' doesn\'t exist!');
+            throw new RuntimeException('AdminPlugin ' . $name . ' does not exist!');
         }
 
         return new $class();

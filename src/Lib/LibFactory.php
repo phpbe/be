@@ -44,7 +44,7 @@ abstract class LibFactory
         } else {
             $class = $name;
         }
-        if (!class_exists($class)) throw new RuntimeException('Lib ' . $class . ' doesn\'t exist!');
+        if (!class_exists($class)) throw new RuntimeException('Lib ' . $class . ' does not exist!');
 
         return new $class();
     }
