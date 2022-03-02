@@ -304,13 +304,18 @@ class Swoole extends Driver
 
                 $request->setRoute($app, $controller, $action);
 
-                $controllerPath = $app . ($admin ? '.Admin.' : '.') . $controller;
-                $instance = Be::getController($controllerPath);
-                if (method_exists($instance, $action)) {
-                    $instance->$action();
-                } else {
+                $class = 'Be\\App\\' . $app . '\\Controller\\' . ($admin ? 'Admin\\' : '') . $controller;
+                if (!class_exists($class)) {
                     $response->set('code', 404);
-                    $response->error('Undefined action ' . $action . ' of controller ' . $controllerPath . '!');
+                    $response->error('Controller ' . $app . '/' . $controller . ' doesn\'t exist!');
+                } else {
+                    $instance = new $class();
+                    if (method_exists($instance, $action)) {
+                        $instance->$action();
+                    } else {
+                        $response->set('code', 404);
+                        $response->error('Undefined action ' . $action . ' of class ' . $class . '!');
+                    }
                 }
 
             } catch (\Throwable $t) {
