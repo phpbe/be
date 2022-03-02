@@ -206,8 +206,8 @@
                                                     @change="(val)=>{setMenuLink(val, menuItemIndex);}"
                                             >
                                                 <el-option-group key="common" label="通用">
-                                                    <el-option style="padding-left: 2rem;" value="None" label="无"></el-option>
-                                                    <el-option style="padding-left: 2rem;" value="Url" label="指定网址"></el-option>
+                                                    <el-option style="padding-left: 2.5rem;" value="None" label="无"></el-option>
+                                                    <el-option style="padding-left: 2.5rem;" value="Url" label="指定网址"></el-option>
                                                 </el-option-group>
                                                 <?php
                                                 foreach ($this->menuPickers as $menuPicker)
@@ -218,7 +218,7 @@
                                                         foreach ($menuPicker['menuPickers'] as $picker)
                                                         {
                                                             ?>
-                                                            <el-option style="padding-left: 2rem;" value="<?php echo $picker['route']; ?>" label="<?php echo $picker['label']; ?>"></el-option>
+                                                            <el-option style="padding-left: 2.5rem;" value="<?php echo $picker['route']; ?>" label="<?php echo $picker['label']; ?>"></el-option>
                                                             <?php
                                                         }
                                                         ?>
