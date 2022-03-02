@@ -2,7 +2,7 @@
 namespace Be\App\System\Config;
 
 /**
- * @BeConfig("Swoole 服务器")
+ * @BeConfig("Swoole 服务器", enable="return \Be\Be::getRuntime()->isSwooleMode();")
  */
 class Server
 {

@@ -42,6 +42,11 @@ class Config extends Driver
                         if (isset($parseClassComments['BeConfig'][0])) {
                             $annotation = new BeConfig($parseClassComments['BeConfig'][0]);
                             $config = $annotation->toArray();
+
+                            if (isset($config['enable']) && !$config['enable']) {
+                                continue;
+                            }
+
                             if (isset($config['value'])) {
                                 $config['label'] = $config['value'];
                                 unset($config['value']);

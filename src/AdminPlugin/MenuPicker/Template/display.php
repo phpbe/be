@@ -175,6 +175,7 @@
                         'size' => 'medium',
                         ':height' => 'tableHeight',
                         ':default-sort' => '{prop:orderBy,order:orderByDir}',
+                        'highlight-current-row' => 'true',
                         '@sort-change' => 'sort',
                         '@row-click' => 'selectRow',
                     ];

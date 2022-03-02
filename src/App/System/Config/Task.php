@@ -2,7 +2,7 @@
 namespace Be\App\System\Config;
 
 /**
- * @BeConfig("计划任务")
+ * @BeConfig("计划任务", enable="return !\Be\Be::getRuntime()->isSwooleMode();")
  */
 class Task
 {

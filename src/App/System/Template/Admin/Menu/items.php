@@ -207,6 +207,7 @@
                                             >
                                                 <el-option-group key="common" label="通用">
                                                     <el-option style="padding-left: 2.5rem;" value="None" label="无"></el-option>
+                                                    <el-option style="padding-left: 2.5rem;" value="Home" label="默认首页"></el-option>
                                                     <el-option style="padding-left: 2.5rem;" value="Url" label="指定网址"></el-option>
                                                 </el-option-group>
                                                 <?php
@@ -289,6 +290,8 @@
             if ($item['route'] === '') {
                 if ($item['url'] === '') {
                     $item['selectedValue'] = 'None';
+                } elseif ($item['url'] === '/') {
+                    $item['selectedValue'] = 'Home';
                 } else {
                     $item['selectedValue'] = 'Url';
                 }
@@ -414,7 +417,14 @@
                             menuItem.params = {};
                             menuItem.url = "";
                             menuItem.description = "无";
-                            menuItem.selectedValue = menuItem.description;
+                            menuItem.selectedValue = 'None';
+                            break;
+                        case "Home":
+                            menuItem.route = "";
+                            menuItem.params = {};
+                            menuItem.url = "/";
+                            menuItem.description = "默认首页";
+                            menuItem.selectedValue = 'Home';
                             break;
                         case "Url":
                             menuItem.selectedValue = menuItem.description;
