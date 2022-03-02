@@ -337,8 +337,6 @@ class Menu
         }
     }
 
-    private $menuPickers = null;
-
     /**
      * 获取菜单选择器列表
      *
@@ -346,7 +344,10 @@ class Menu
      */
     public function getMenuPickers(): array
     {
-        if ($this->menuPickers !== null) return $this->menuPickers;
+        $key = 'App:System:menuPickers';
+        if (Be::hasGlobal($key)) {
+            return Be::getGlobal($key);
+        }
 
         $menuPickers = [];
 
@@ -409,7 +410,7 @@ class Menu
             }
         }
 
-        $this->menuPickers = $menuPickers;
+        Be::setGlobal($key, $menuPickers);
         return $menuPickers;
     }
 

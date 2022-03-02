@@ -1142,6 +1142,57 @@ abstract class Be
     }
 
     /**
+     * 设置全局数据
+     *
+     * @param string $name
+     * @param $value
+     */
+    public static function setGlobal(string $name, $value)
+    {
+        if (self::getRuntime()->isSwooleMode()) {
+            self::$cache['global'][$name] = $value;
+        } else {
+            self::$cache['global'][$name] = $value;
+        }
+    }
+
+    /**
+     * 获取全局数据
+     *
+     * @param string $name
+     * @return mixed|null
+     */
+    public static function getGlobal(string $name)
+    {
+        if (self::getRuntime()->isSwooleMode()) {
+            if (isset(self::$cache['global'][$name])) {
+                return self::$cache['global'][$name];
+            }
+            return null;
+        } else {
+            if (isset(self::$cache['global'][$name])) {
+                return self::$cache['global'][$name];
+            }
+            return null;
+        }
+    }
+
+    /**
+     * 全局数据是否存在
+     *
+     * @param string $name
+     * @return bool
+     */
+    public static function hasGlobal(string $name): bool
+    {
+        if (self::getRuntime()->isSwooleMode()) {
+            return isset(self::$cache['global'][$name]);
+        } else {
+            return isset(self::$cache['global'][$name]);
+        }
+    }
+
+    /**
      * 设置上下文
      *
      * @param string $name
