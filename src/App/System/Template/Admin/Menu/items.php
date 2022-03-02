@@ -201,7 +201,7 @@
                                         <div class="menu-item-col-link">
                                             <el-select
                                                     style="width:100%;"
-                                                    v-model="menuItem.description"
+                                                    v-model="menuItem.selectedValue"
                                                     size="medium"
                                                     @change="(val)=>{setMenuLink(val, menuItemIndex);}"
                                             >
@@ -280,6 +280,29 @@
         </el-drawer>
 
     </div>
+
+    <?php
+    foreach ($this->flatTree as &$item) {
+        if (strpos($item['description'], '指定网址：') === 0) {
+            $item['selectedValue'] = $item['description'];
+        } else {
+            if ($item['route'] === '') {
+                if ($item['url'] === '') {
+                    $item['selectedValue'] = 'None';
+                } else {
+                    $item['selectedValue'] = 'Url';
+                }
+            } else {
+                if ($item['params']) {
+                    $item['selectedValue'] = $item['description'];
+                } else {
+                    $item['selectedValue'] = $item['route'];
+                }
+            }
+        }
+    }
+    unset($item);
+    ?>
 
     <script>
         Vue.component('vuedraggable', window.vuedraggable);
@@ -385,15 +408,17 @@
                 setMenuLink:function (val, menuItemIndex) {
                     let menuItem = this.formData.menuItems[menuItemIndex];
 
-                    menuItem.route = "";
-                    menuItem.params = {};
-                    menuItem.url = "";
-                    menuItem.description = "无";
-
                     switch (val) {
                         case "None":
+                            menuItem.route = "";
+                            menuItem.params = {};
+                            menuItem.url = "";
+                            menuItem.description = "无";
+                            menuItem.selectedValue = menuItem.description;
                             break;
                         case "Url":
+                            menuItem.selectedValue = menuItem.description;
+
                             this.setMenuLinkIndex = menuItemIndex;
                             this.setMenuLinkUrl();
                             break;
@@ -411,6 +436,8 @@
                             }
 
                             if (menuPicker.hasMenuPicker === 1) {
+                                menuItem.selectedValue = menuItem.description;
+
                                 this.setMenuLinkIndex = menuItemIndex;
                                 this.setMenuLinkPicker(app, menuPicker);
                             } else {
@@ -418,6 +445,8 @@
                                 menuItem.params = {};
                                 menuItem.url = "";
                                 menuItem.description = app.label + "：" + menuPicker.label;
+
+                                menuItem.selectedValue = menuItem.description;
                             }
                     }
                     //this.formData.menuItems[menuItemIndex] = menuItem;
@@ -444,6 +473,7 @@
                     menuItem.params = menuItemSubmit.params;
                     menuItem.url = menuItemSubmit.url;
                     menuItem.description = menuItemSubmit.description;
+                    menuItem.selectedValue = menuItem.description;
 
                     this.setMenuLinkIndex = null;
                     this.drawer.visible = false;
