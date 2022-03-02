@@ -45,7 +45,7 @@
 
     <div id="footer-<?php echo $sectionType . '-' . $sectionKey; ?>">
         <div class="be-container">
-            <div class="text-center">
+            <div class="be-ta-center">
                 <?php
                 if (isset($sectionData['copyright'])) {
                     echo $sectionData['copyright'];

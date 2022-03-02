@@ -9,7 +9,7 @@ class Property extends \Be\Theme\Property
     public $label = '示例主题';
     public $pages = [
         'Home' => [
-            'url' => ['System.Index.index'],
+            'url' => ['System.Home.index'],
             'sections' => [
                 'north' => ['Header'],
                 'middle' => ['Slider', 'GroupOfIconWithText', 'Images', 'ImageWithTextOverlay', 'ImageWithText', 'Image'],

@@ -17,7 +17,7 @@ class Theme
      * @BeConfigItem("页面字体大小",
      *     driver="FormItemInputNumberInt")
      */
-    public $pageFontSize = 12;
+    public $pageFontSize = 14;
 
     /**
      * @BeConfigItem("页面背景颜色",

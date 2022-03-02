@@ -22,6 +22,8 @@
 
     <link rel="stylesheet" href="<?php echo $beUrl; ?>/vendor/be/scss/src/be.css" />
 
+    <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/theme.css" />
+
     <?php
     $configTheme = \Be\Be::getConfig('Theme.Sample.Theme');
     ?>
@@ -33,101 +35,36 @@
         }
 
         a {
-            color: <?php echo $configTheme->linkColor ?>;
-            text-decoration: none;
+            color: <?php echo $configTheme->linkColor; ?>;
         }
 
         a:hover {
-            color: <?php echo $configTheme->linkHoverColor ?>;
-            text-decoration: underline;
+            color: <?php echo $configTheme->linkHoverColor; ?>;
         }
 
-        .be-container {
-            width: 100%;
-            padding-left: 0.75rem;
-            padding-right: 0.75rem;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        @media (max-width: 768px) {
-            .be-container {
-
-            }
-        }
-
-        @media (min-width: 768px) {
-            .be-container {
-                max-width: 720px;
-            }
-        }
-
-        @media (min-width: 992px) {
-            .be-container {
-                max-width: 960px;
-            }
-        }
-
-        @media (min-width: 1200px) {
-            .be-container {
-                max-width: 1140px;
-            }
-        }
-
-        @media (min-width: 1400px) {
-            .be-container {
-                max-width: 1320px;
-            }
+        .link-hover:before {
+            background-color: <?php echo $configTheme->linkHoverColor; ?>;
         }
 
         .be-btn {
-            color: <?php echo $configTheme->btnColor ?>;
-            background-color: <?php echo $configTheme->btnBackgroundColor ?>;
-            border: 1px solid <?php echo $configTheme->btnBorderColor ?>;
-            font-size: 1rem;
-            display: inline-block;
-            text-align: center;
-            vertical-align: middle;
-            cursor: pointer;
-            outline: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 100%;
-            transition: all .3s ease;
-            border-radius: 2rem;
-            padding: 0.2rem 1.5rem;
-            min-width: 5rem;
-            text-decoration: none;
+            color: <?php echo $configTheme->btnColor; ?>;
+            background-color: <?php echo $configTheme->btnBackgroundColor; ?>;
+            border: 1px solid <?php echo $configTheme->btnBorderColor; ?>;
         }
 
-        .be-btn:hover {
-            color: <?php echo $configTheme->btnHoverColor ?>;
-            background-color: <?php echo $configTheme->btnHoverBackgroundColor ?>;
-            border-color: <?php echo $configTheme->btnHoverBorderColor ?>;
-            text-decoration: none;
+        .be-btn:hover,
+        .be-btn:focus {
+            color: <?php echo $configTheme->btnHoverColor; ?>;
+            background-color: <?php echo $configTheme->btnHoverBackgroundColor; ?>;
+            border-color: <?php echo $configTheme->btnHoverBorderColor; ?>;
         }
 
-        .be-btn-mini {
-            font-size: 0.6rem !important;
-            padding: 0.05rem 1rem !important;
-            border-radius: 1rem !important;
-            min-width: 3rem;
+        .be-btn-outline:hover,
+        .be-btn-outline:focus {
+            color: #fff !important;
+            background-color: <?php echo $configTheme->btnBackgroundColor; ?> !important;
+            border-color: <?php echo $configTheme->btnBorderColor; ?> !important;
         }
-
-        .be-btn-small {
-            font-size: 0.8rem !important;
-            padding: 0.1rem 1.2rem !important;
-            border-radius: 1.5rem !important;
-            min-width: 4rem;
-        }
-
-        .be-btn-large {
-            font-size: 1.2rem !important;
-            padding: 0.3rem 2rem !important;
-            border-radius: 2.5rem !important;
-            min-width: 6rem;
-        }
-
     </style>
 
     <be-head>
