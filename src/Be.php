@@ -2,6 +2,8 @@
 
 namespace Be;
 
+use Be\App\PrivateController;
+use Be\App\PrivateService;
 use Be\Runtime\RuntimeException;
 
 /**
@@ -691,6 +693,58 @@ abstract class Be
     }
 
     /**
+     * 获取指定的一个控制器
+     *
+     * @param string $name 控制器名
+     * @return mixed
+     */
+    public static function getController(string $name)
+    {
+        if (self::getRuntime()->isSwooleMode()) {
+            if (isset(self::$cache['controller'][$name])) {
+                return self::$cache['controller'][$name];
+            }
+
+            $cid = \Swoole\Coroutine::getCid();
+            if (isset(self::$cache[$cid]['controller'][$name])) {
+                return self::$cache[$cid]['controller'][$name];
+            }
+
+            $service = self::newController($name);
+            if ($service instanceof PrivateController) {
+                self::$cache[$cid]['controller'][$name] = $service;
+            } else {
+                self::$cache['controller'][$name] = $service;
+            }
+
+            return $service;
+        } else {
+            if (!isset(self::$cache['controller'][$name])) {
+                self::$cache['controller'][$name] = self::newController($name);
+            }
+            return self::$cache['controller'][$name];
+        }
+    }
+
+    /**
+     * 新创建一个控制器
+     *
+     * @param string $name 控制器名
+     * @return mixed
+     */
+    public static function newController(string $name)
+    {
+        $parts = explode('.', $name);
+        $app = array_shift($parts);
+        $class = '\\Be\\App\\' . $app . '\\Controller\\' . implode('\\', $parts);
+        if (!class_exists($class)) {
+            throw new RuntimeException('Controller (' . $name . ') does not exist!', 404);
+        }
+
+        return new $class();
+    }
+
+    /**
      * 获取指定的一个服务
      *
      * @param string $name 服务名
@@ -699,11 +753,23 @@ abstract class Be
     public static function getService(string $name)
     {
         if (self::getRuntime()->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            if (!isset(self::$cache[$cid]['service'][$name])) {
-                self::$cache[$cid]['service'][$name] = self::newService($name);
+            if (isset(self::$cache['service'][$name])) {
+                return self::$cache['service'][$name];
             }
-            return self::$cache[$cid]['service'][$name];
+
+            $cid = \Swoole\Coroutine::getCid();
+            if (isset(self::$cache[$cid]['service'][$name])) {
+                return self::$cache[$cid]['service'][$name];
+            }
+
+            $service = self::newService($name);
+            if ($service instanceof PrivateService) {
+                self::$cache[$cid]['service'][$name] = $service;
+            } else {
+                self::$cache['service'][$name] = $service;
+            }
+
+            return $service;
         } else {
             if (!isset(self::$cache['service'][$name])) {
                 self::$cache['service'][$name] = self::newService($name);
@@ -725,7 +791,7 @@ abstract class Be
         $catalog = array_shift($parts);
         $class = '\\Be\\' . $type . '\\' . $catalog . '\\Service\\' . implode('\\', $parts);
         if (!class_exists($class)) {
-            throw new RuntimeException('Service (' . $name . ') doesn\'t exist!');
+            throw new RuntimeException('Service (' . $name . ') does not exist!');
         }
 
         return new $class();

@@ -151,18 +151,13 @@ class Common extends Driver
 
             $request->setRoute($app, $controller, $action);
 
-            $class = 'Be\\App\\' . $app . '\\Controller\\' . ($admin ? 'Admin\\' : '') . $controller;
-            if (!class_exists($class)) {
-                $response->set('code', 404);
-                $response->error('Controller ' . $app . '/' . $controller . ' doesn\'t exist!');
+            $controllerPath = $app . ($admin ? '.Admin.' : '.') . $controller;
+            $instance = Be::getController($controllerPath);
+            if (method_exists($instance, $action)) {
+                $instance->$action();
             } else {
-                $instance = new $class();
-                if (method_exists($instance, $action)) {
-                    $instance->$action();
-                } else {
-                    $response->set('code', 404);
-                    $response->error('Undefined action ' . $action . ' of class ' . $class . '!');
-                }
+                $response->set('code', 404);
+                $response->error('Undefined action ' . $action . ' of controller ' . $controllerPath . '!');
             }
 
         } catch (\Throwable $t) {
