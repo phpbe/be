@@ -1,6 +1,6 @@
 <be-html>
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -21,6 +21,9 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
 
     <link rel="stylesheet" href="<?php echo $beUrl; ?>/vendor/be/scss/src/be.css" />
+
+    <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/drawer.css" />
+    <script src="<?php echo $themeUrl; ?>/js/drawer-menu.js"></script>
 
     <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/theme.css" />
 
@@ -115,6 +118,97 @@
             ?>
         </be-south>
     </be-body>
+
+    <div id="overlay"></div>
+
+
+    <div id="drawer-menu" class="drawer">
+        <div class="drawer-fixed-header">
+            <div class="drawer-header">
+                <div class="drawer-title">导航</div>
+                <button type="button" class="drawer-close" onclick="DrawerMenu.hide();"></button>
+            </div>
+        </div>
+        <ul class="drawer-menu-lv1">
+            <?php
+            $menu = \Be\Be::getMenu('North');
+            $menuTree = $menu->getTree();
+            foreach ($menuTree as $item) {
+                $hasSubItem = false;
+                if (isset($item->subItems) && is_array($item->subItems) && count($item->subItems) > 0) {
+                    $hasSubItem = true;
+                }
+
+                if ($hasSubItem) {
+                    echo '<li class="drawer-menu-lv1-item-with-dropdown">';
+                } else {
+                    echo '<li class="drawer-menu-lv1-item">';
+                }
+
+                $url = 'javascript:void(0);';
+                if ($item->route) {
+                    if ($item->params) {
+                        $url = beUrl($item->route, $item->params);
+                    } else {
+                        $url = beUrl($item->route);
+                    }
+                } else {
+                    if ($item->url) {
+                        if ($item->url === '/') {
+                            $url = beUrl();
+                        } else {
+                            $url = $item->url;
+                        }
+                    }
+                }
+                echo '<a href="'.$url.'"';
+                if ($item->target === '_blank') {
+                    echo ' target="_blank"';
+                }
+                echo '>' . $item->label . '</a>';
+
+                if ($hasSubItem) {
+                    echo '<div class="drawer-menu-lv1-dropdown">';
+                    echo '<div class="drawer-menu-lv1-dropdown-title">';
+                    echo $item->label;
+                    echo '</div>';
+                    echo '<ul class="drawer-menu-lv2">';
+                    foreach ($item->subItems as $subItem) {
+                        $url = 'javascript:void(0);';
+                        if ($subItem->route) {
+                            if ($subItem->params) {
+                                $url = beUrl($subItem->route, $subItem->params);
+                            } else {
+                                $url = beUrl($subItem->route);
+                            }
+                        } else {
+                            if ($subItem->url) {
+                                if ($subItem->url === '/') {
+                                    $url = beUrl();
+                                } else {
+                                    $url = $subItem->url;
+                                }
+                            }
+                        }
+
+                        echo '<li class="drawer-menu-lv2-item"><a href="'.$url.'"';
+                        if ($subItem->target === '_blank') {
+                            echo ' target="_blank"';
+                        }
+                        echo '>' . $subItem->label . '</a></li>';
+                    }
+                    echo '</ul>';
+                    echo '</div>';
+                }
+
+                echo '</li>';
+            }
+            ?>
+        </ul>
+    </div>
+
+
+
 </body>
 </html>
 </be-html>

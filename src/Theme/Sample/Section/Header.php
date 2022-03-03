@@ -21,7 +21,7 @@ if ($sectionData['enable']) {
         }
 
         #header-<?php echo $sectionType . '-' . $sectionKey; ?> .header-icon-menu {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='%23fff' d='M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z'/%3e%3c/svg%3e");
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='<?php echo urlencode($configTheme->pageColor) ?>' d='M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z'/%3e%3c/svg%3e");
         }
 
         /* 手机端 */
@@ -46,7 +46,7 @@ if ($sectionData['enable']) {
                 flex-wrap: wrap;
                 justify-content: space-between;
                 align-items: center;
-                height: 5rem;
+                padding: 0.5rem 0;
             }
 
             #header-<?php echo $sectionType . '-' . $sectionKey; ?> .header-mobile-left-toolbars {
@@ -108,6 +108,10 @@ if ($sectionData['enable']) {
                 <?php
             }
             ?>
+
+            #header-<?php echo $sectionType . '-' . $sectionKey; ?> .header-mobile-right-toolbars {
+                flex: 0 1 auto;
+            }
         }
 
         /* 电脑端 */
@@ -127,13 +131,11 @@ if ($sectionData['enable']) {
                 flex-wrap: wrap;
                 justify-content: space-between;
                 align-items: center;
-                padding: 1.5rem 0;
+                padding: 0.5rem 0;
             }
 
             #header-<?php echo $sectionType . '-' . $sectionKey; ?> .header-desktop-logo {
                 flex: 0 1 auto;
-                max-width: 120px;
-                max-height: 40px;
             }
 
             <?php
@@ -251,6 +253,9 @@ if ($sectionData['enable']) {
                             }
                             ?>
                         </a>
+                    </div>
+
+                    <div class="header-mobile-right-toolbars">
                     </div>
 
                 </div>
