@@ -308,9 +308,9 @@ class Menu
         foreach ($menus as $k => $v) {
             $params = [];
             if ($v->params) {
-                parse_str($v->params, $parsedParams);
-                if ($parsedParams) {
-                    $params = $parsedParams;
+                $decodedParams = json_decode($v->params, true);
+                if ($decodedParams) {
+                    $params = $decodedParams;
                 }
             }
             $code .= '    $this->addItem(\'' . $v->id . '\', \'' . $v->parent_id . '\', \'' . $v->name . '\', \'' . $v->route . '\', ' . var_export($params, true) . ', \'' . $v->url . '\', \'' . $v->target . '\');' . "\n";

@@ -416,8 +416,8 @@ class Curd extends Driver
         }
 
         if (isset($this->setting['grid']['tab'])) {
-            if (isset($item['buildSql']) && $item['buildSql'] instanceof \Closure) {
-                $buildSql = $item['buildSql'];
+            if (isset($this->setting['grid']['tab']['buildSql']) && $this->setting['grid']['tab']['buildSql'] instanceof \Closure) {
+                $buildSql = $this->setting['grid']['tab']['buildSql'];
                 $sql = $buildSql($this->setting['db'], $formData);
                 if ($sql) {
                     $table->where($sql);
