@@ -66,7 +66,7 @@ class TableItemToggleIcon extends TableItem
 
         if ($this->url) {
             if (!isset($this->ui[':style'])) {
-                $this->ui[':style'] = '{\'font-size\':\'24px\',\'color\':scope.row.' . $this->name . ' === \'1\' ? false : \'#bbb\'}';
+                $this->ui[':style'] = '\'font-size:24px;\' + (scope.row.' . $this->name . ' === \'1\' ? \'\' : \'color:#bbb;\')';
             }
 
             if (!isset($this->ui['@click'])) {
@@ -78,7 +78,7 @@ class TableItemToggleIcon extends TableItem
             }
         } else {
             if (!isset($this->ui[':style'])) {
-                $this->ui[':style'] = '{\'cursor\':\'auto\',\'font-size\':\'24px\',\'color\':scope.row.' . $this->name . ' === \'1\' ? false : \'#bbb\'}';
+                $this->ui[':style'] = '\'cursor:auto;font-size:24px;\' + (scope.row.' . $this->name . ' === \'1\' ? \'\' : \'color:#bbb;\')';
             }
         }
     }

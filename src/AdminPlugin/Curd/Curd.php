@@ -431,7 +431,11 @@ class Curd extends Driver
                         $buildSql = $this->setting['grid']['tab']['buildSql'];
                         $sql = $buildSql($this->setting['db'], [$driver->name => $key]);
                         if ($sql) {
-                            $table->where($sql);
+                            if (isset($sql[0]) && is_array($sql[0])) {
+                                $table->wheres($sql);
+                            } else {
+                                $table->where($sql);
+                            }
                         }
                     } else {
                         $sql = $db->quoteKey($driver->name) . ' = ' . $db->quoteValue($key);
@@ -467,7 +471,11 @@ class Curd extends Driver
                 $buildSql = $this->setting['grid']['tab']['buildSql'];
                 $sql = $buildSql($this->setting['db'], $formData);
                 if ($sql) {
-                    $table->where($sql);
+                    if (isset($sql[0]) && is_array($sql[0])) {
+                        $table->wheres($sql);
+                    } else {
+                        $table->where($sql);
+                    }
                 }
             } else {
                 $driver = new \Be\AdminPlugin\Tab\Driver($this->setting['grid']['tab']);
@@ -508,7 +516,11 @@ class Curd extends Driver
                     $buildSql = $item['buildSql'];
                     $sql = $buildSql($this->setting['db'], $formData);
                     if ($sql) {
-                        $table->where($sql);
+                        if (isset($sql[0]) && is_array($sql[0])) {
+                            $table->wheres($sql);
+                        } else {
+                            $table->where($sql);
+                        }
                     }
                 } else {
 
