@@ -49,11 +49,11 @@ class TableItemToggleIcon extends TableItem
         }
 
         if (!isset($this->ui[':type'])) {
-            $this->ui[':type'] = 'scope.row.' . $this->name . ' == \'1\' ? \'' . $this->on['type'] . '\' : \'' . $this->off['type'] . '\'';
+            $this->ui[':type'] = 'scope.row.' . $this->name . ' === \'1\' ? \'' . $this->on['type'] . '\' : \'' . $this->off['type'] . '\'';
         }
 
         if (!isset($this->ui[':icon'])) {
-            $this->ui[':icon'] = 'scope.row.' . $this->name . ' == \'1\' ? \'' . $this->on['icon'] . '\' : \'' . $this->off['icon'] . '\'';
+            $this->ui[':icon'] = 'scope.row.' . $this->name . ' === \'1\' ? \'' . $this->on['icon'] . '\' : \'' . $this->off['icon'] . '\'';
         }
 
         if (!isset($this->ui['circle'])) {
@@ -65,8 +65,8 @@ class TableItemToggleIcon extends TableItem
         }
 
         if ($this->url) {
-            if (!isset($this->ui['style'])) {
-                $this->ui['style'] = 'font-size:24px;';
+            if (!isset($this->ui[':style'])) {
+                $this->ui[':style'] = '{\'font-size\':\'24px\',\'color\':scope.row.' . $this->name . ' === \'1\' ? false : \'#bbb\'}';
             }
 
             if (!isset($this->ui['@click'])) {
@@ -77,8 +77,8 @@ class TableItemToggleIcon extends TableItem
                 $this->postData['field'] = $this->name;
             }
         } else {
-            if (!isset($this->ui['style'])) {
-                $this->ui['style'] = 'cursor:auto;font-size:24px;';
+            if (!isset($this->ui[':style'])) {
+                $this->ui[':style'] = '{\'cursor\':\'auto\',\'font-size\':\'24px\',\'color\':scope.row.' . $this->name . ' === \'1\' ? false : \'#bbb\'}';
             }
         }
     }

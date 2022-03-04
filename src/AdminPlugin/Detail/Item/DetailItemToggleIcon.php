@@ -36,7 +36,7 @@ class DetailItemToggleIcon extends DetailItem
         }
 
         if (!isset($this->ui['style'])) {
-            $this->ui['style'] = 'cursor:auto;font-size:24px;';
+            $this->ui['style'] = 'cursor:auto;font-size:24px;' . ( $this->value ? '' : 'color:#bbb');
         }
     }
 
