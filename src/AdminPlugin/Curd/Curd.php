@@ -77,7 +77,7 @@ class Curd extends Driver
                 $postData = $request->json();
                 $formData = $postData['formData'];
                 $table = $this->getTable($formData);
-
+                
                 $total = $table->count();
 
                 $orderBy = isset($postData['orderBy']) ? $postData['orderBy'] : '';
@@ -163,11 +163,17 @@ class Curd extends Driver
                     $formattedRows[] = $formattedRow;
                 }
 
-                $response->set('success', true);
-                $response->set('data', [
+                $responseData = [
                     'total' => $total,
                     'gridData' => $formattedRows,
-                ]);
+                ];
+
+                if (isset($this->setting['grid']['tab']['counter']) && $this->setting['grid']['tab']['counter']) {
+                    $responseData['tabCounters'] = $this->getTabCounters();
+                }
+
+                $response->set('success', true);
+                $response->set('data', $responseData);
                 $response->json();
             } catch (\Throwable $t) {
                 $response->set('success', false);
@@ -396,6 +402,44 @@ class Curd extends Driver
             $response->error($t->getMessage());
             Be::getLog()->error($t);
         }
+    }
+
+    /**
+     * 获取Tab项计数
+     *
+     * @return array
+     */
+    private function getTabCounters(): array
+    {
+        $counters = [];
+        if (isset($this->setting['grid']['tab'])) {
+            $db = Be::getDb($this->setting['db']);
+            $driver = new \Be\AdminPlugin\Tab\Driver($this->setting['grid']['tab']);
+            foreach ($driver->keyValues as $key => $val) {
+                $key = (string)$key;
+
+                $table = Be::newTable($this->setting['table'], $this->setting['db']);
+
+                if (isset($this->setting['grid']['filter']) && count($this->setting['grid']['filter']) > 0) {
+                    foreach ($this->setting['grid']['filter'] as $filter) {
+                        $table->where($filter);
+                    }
+                }
+
+                if (isset($this->setting['grid']['tab']['buildSql']) && $this->setting['grid']['tab']['buildSql'] instanceof \Closure) {
+                    $buildSql = $this->setting['grid']['tab']['buildSql'];
+                    $sql = $buildSql($this->setting['db'], [$driver->name => $key]);
+                    if ($sql) {
+                        $table->where($sql);
+                    }
+                } else {
+                    $sql = $db->quoteKey($driver->name) . ' = ' . $db->quoteValue($key);
+                    $table->where($sql);
+                }
+                $counters[$key] = $table->count();
+            }
+        }
+        return $counters;
     }
 
     /**

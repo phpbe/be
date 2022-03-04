@@ -984,6 +984,11 @@
                                 _this.total = parseInt(responseData.data.total);
                                 _this.gridData = responseData.data.gridData;
                                 _this.pages = Math.floor(_this.total / _this.pageSize);
+                                <?php
+                                if (isset($this->setting['tab']['counter']) && $this->setting['tab']['counter']) {
+                                    echo '_this.formItems.' . $this->setting['tab']['name'].'.counters = responseData.data.tabCounters;';
+                                }
+                                ?>
                             } else {
                                 _this.total = 0;
                                 _this.gridData = [];
@@ -1024,6 +1029,11 @@
                                 _this.total = parseInt(responseData.data.total);
                                 _this.gridData = responseData.data.gridData;
                                 _this.pages = Math.floor(_this.total / _this.pageSize);
+                                <?php
+                                if (isset($this->setting['tab']['counter']) && $this->setting['tab']['counter']) {
+                                    echo '_this.formItems.' . $this->setting['tab']['name'].'.counters = responseData.data.tabCounters;';
+                                }
+                                ?>
                             }
                             _this.resize();
                             _this.updateToolbars();

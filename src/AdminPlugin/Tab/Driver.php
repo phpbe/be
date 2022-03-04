@@ -19,6 +19,8 @@ class Driver
 
     protected $newValue = ''; // 新值，提交后生成
 
+    protected $counter = false; // 是否显示计数
+
     /**
      * 构造函数
      *
@@ -108,6 +110,10 @@ class Driver
             $this->ui['@tab-click'] = 'tabClick';
         }
 
+        if (isset($params['counter']) && $params['counter']) {
+            $this->counter = true;
+        }
+
         $this->ui['v-model'] = 'formData.' . $this->name;
 
     }
@@ -130,7 +136,14 @@ class Driver
         $html .= '>';
 
         foreach ($this->keyValues as $key => $val) {
-            $html .= '<el-tab-pane label="' . $val . '" name="' . $key . '"></el-tab-pane>';
+            $html .= '<el-tab-pane label="' . $val . '" name="' . $key . '">';
+            if ($this->counter) {
+                $html .= '<span slot="label">';
+                $html .= '<span>' . $val . '</span>';
+                $html .= '<span> ({{formItems.'.$this->name.'.counters[\''.$key.'\']}})</span>';
+                $html .= '</span>';
+            }
+            $html .= '</el-tab-pane>';
         }
 
         $html .= '</el-tabs>';
@@ -144,7 +157,21 @@ class Driver
      */
     public function getVueData()
     {
-        return false;
+        if ($this->counter) {
+            $counters = [];
+            foreach ($this->keyValues as $key => $val) {
+                $counters[$key] = 0;
+            }
+            return [
+                'formItems' => [
+                    $this->name => [
+                        'counters' => $counters
+                    ],
+                ]
+            ];
+        } else {
+            return false;
+        }
     }
 
     /**
