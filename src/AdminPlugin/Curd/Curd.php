@@ -77,7 +77,7 @@ class Curd extends Driver
                 $postData = $request->json();
                 $formData = $postData['formData'];
                 $table = $this->getTable($formData);
-                
+
                 $total = $table->count();
 
                 $orderBy = isset($postData['orderBy']) ? $postData['orderBy'] : '';
@@ -426,16 +426,19 @@ class Curd extends Driver
                     }
                 }
 
-                if (isset($this->setting['grid']['tab']['buildSql']) && $this->setting['grid']['tab']['buildSql'] instanceof \Closure) {
-                    $buildSql = $this->setting['grid']['tab']['buildSql'];
-                    $sql = $buildSql($this->setting['db'], [$driver->name => $key]);
-                    if ($sql) {
+                if ($key !== $driver->nullValue) {
+                    if (isset($this->setting['grid']['tab']['buildSql']) && $this->setting['grid']['tab']['buildSql'] instanceof \Closure) {
+                        $buildSql = $this->setting['grid']['tab']['buildSql'];
+                        $sql = $buildSql($this->setting['db'], [$driver->name => $key]);
+                        if ($sql) {
+                            $table->where($sql);
+                        }
+                    } else {
+                        $sql = $db->quoteKey($driver->name) . ' = ' . $db->quoteValue($key);
                         $table->where($sql);
                     }
-                } else {
-                    $sql = $db->quoteKey($driver->name) . ' = ' . $db->quoteValue($key);
-                    $table->where($sql);
                 }
+
                 $counters[$key] = $table->count();
             }
         }
