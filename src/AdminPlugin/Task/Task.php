@@ -543,19 +543,19 @@ class Task extends Driver
                         [
                             'name' => 'complete_time',
                             'label' => '完成时间',
-                            'width' => '150',
+                            'width' => '180',
                             'sortable' => true,
                         ],
                         [
                             'name' => 'create_time',
                             'label' => '创建时间',
-                            'width' => '150',
+                            'width' => '180',
                             'sortable' => true,
                         ],
                         [
                             'name' => 'update_time',
                             'label' => '更新时间',
-                            'width' => '150',
+                            'width' => '180',
                             'sortable' => true,
                         ],
                     ],
