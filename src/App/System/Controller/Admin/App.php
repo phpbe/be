@@ -66,6 +66,9 @@ class App extends Auth
                                 'label' => '图标',
                                 'driver' => TableItemIcon::class,
                                 'width' => '90',
+                                'ui' => [
+                                    'style' => 'font-size: 24px;',
+                                ],
                             ],
                             [
                                 'name' => 'name',
