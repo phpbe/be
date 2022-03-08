@@ -20,6 +20,7 @@
     "php": "~7.1",
     "be/scss": "*",
     "aliyuncs/oss-sdk-php": "~2.4",
+    "qcloud/cos-sdk-v5": "2.*",
     "monolog/monolog": "~1.11",
     "elasticsearch/elasticsearch": "^v7.11",
     "phpmailer/phpmailer": "~6.0",

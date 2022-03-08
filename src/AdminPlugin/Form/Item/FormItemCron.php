@@ -120,7 +120,7 @@ class FormItemCron extends FormItem
         $html .= '</div>';
 
         if ($this->description) {
-            $html .= '<div class="be-c-999 be-mt-20 be-lh-150">' . $this->description . '</div>';
+            $html .= '<div class="be-c-bbb be-mt-50 be-lh-150">' . $this->description . '</div>';
         }
 
         $html .= '</el-form-item>';

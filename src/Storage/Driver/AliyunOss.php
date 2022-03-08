@@ -49,7 +49,6 @@ class AliyunOss extends Driver
             $config = Be::getConfig('App.System.StorageAliyunOss');
             $endpoint = $config->internal ? $config->endpointInternal : $config->endpoint;
             $ossClient = new OssClient($config->accessKeyId, $config->accessKeySecret, $endpoint);
-            $ossClient->setConnectTimeout(30);
 
             // 填写对文件分组的字符，例如/。
             $delimiter = '/';
@@ -141,7 +140,6 @@ class AliyunOss extends Driver
         try {
             $endpoint = $config->internal ? $config->endpointInternal : $config->endpoint;
             $ossClient = new OssClient($config->accessKeyId, $config->accessKeySecret, $endpoint);
-            $ossClient->setConnectTimeout(30);
             $exist = $ossClient->doesObjectExist($config->bucket, $ossPath);
             if ($exist) {
                 throw new StorageException('File ' . $path . ' already exists!');
@@ -187,7 +185,6 @@ class AliyunOss extends Driver
         try {
             $endpoint = $config->internal ? $config->endpointInternal : $config->endpoint;
             $ossClient = new OssClient($config->accessKeyId, $config->accessKeySecret, $endpoint);
-            $ossClient->setConnectTimeout(30);
             $exist = $ossClient->doesObjectExist($config->bucket, $ossOldPath);
             if (!$exist) {
                 throw new StorageException('Original file ' . $oldPath . ' does not exist!');
@@ -231,7 +228,6 @@ class AliyunOss extends Driver
         try {
             $endpoint = $config->internal ? $config->endpointInternal : $config->endpoint;
             $ossClient = new OssClient($config->accessKeyId, $config->accessKeySecret, $endpoint);
-            $ossClient->setConnectTimeout(30);
             $exist = $ossClient->doesObjectExist($config->bucket, $ossPath);
             if ($exist) {
                 $ossClient->deleteObject($config->bucket, $ossPath);
@@ -263,7 +259,6 @@ class AliyunOss extends Driver
         try {
             $endpoint = $config->internal ? $config->endpointInternal : $config->endpoint;
             $ossClient = new OssClient($config->accessKeyId, $config->accessKeySecret, $endpoint);
-            $ossClient->setConnectTimeout(30);
             return $ossClient->doesObjectExist($config->bucket, $ossPath);
         } catch (OssException $e) {
             throw new StorageException('Aliyun OSS error：' . $e->getMessage());
@@ -289,7 +284,6 @@ class AliyunOss extends Driver
         try {
             $endpoint = $config->internal ? $config->endpointInternal : $config->endpoint;
             $ossClient = new OssClient($config->accessKeyId, $config->accessKeySecret, $endpoint);
-            $ossClient->setConnectTimeout(30);
             $exist = $ossClient->doesObjectExist($config->bucket, $ossDirPath);
             if ($exist) {
                 throw new StorageException('Folder ' . $dirPath . ' already exists!');
@@ -321,10 +315,32 @@ class AliyunOss extends Driver
         try {
             $endpoint = $config->internal ? $config->endpointInternal : $config->endpoint;
             $ossClient = new OssClient($config->accessKeyId, $config->accessKeySecret, $endpoint);
-            $ossClient->setConnectTimeout(30);
             $exist = $ossClient->doesObjectExist($config->bucket, $ossDirPath);
+
             if ($exist) {
-                $ossClient->deleteObject($config->bucket, $ossDirPath);
+                $ossDirPath = substr($ossDirPath, 0, -1);
+                $nextMarker = '';
+                while (true) {
+                    $ossOption = [
+                        'delimiter' => '',
+                        'prefix' => $ossDirPath,
+                        'max-keys' => 1000,
+                        'marker' => $nextMarker,
+                    ];
+
+                    $listObjects = $ossClient->listObjects($config->bucket, $ossOption);
+                    $objectList = $listObjects->getObjectList();
+                    if (!empty($objectList)) {
+                        foreach ($objectList as $objectInfo) {
+                            $ossClient->deleteObject($config->bucket, $objectInfo->getKey());
+                        }
+                    }
+
+                    $nextMarker = $listObjects->getNextMarker();
+                    if ($listObjects->getIsTruncated() !== "true") {
+                        break;
+                    }
+                }
             }
         } catch (OssException $e) {
             throw new StorageException('Aliyun OSS error：' . $e->getMessage());
@@ -359,7 +375,6 @@ class AliyunOss extends Driver
         try {
             $endpoint = $config->internal ? $config->endpointInternal : $config->endpoint;
             $ossClient = new OssClient($config->accessKeyId, $config->accessKeySecret, $endpoint);
-            $ossClient->setConnectTimeout(30);
             $exist = $ossClient->doesObjectExist($config->bucket, $ossOldDirPath);
             if (!$exist) {
                 throw new StorageException('Original folder ' . $oldDirPath . ' does not exist!');
@@ -370,11 +385,60 @@ class AliyunOss extends Driver
                 throw new StorageException('Destination folder ' . $newDirPath . ' already exists!');
             }
 
-            // 拷备文件
-            $ossClient->copyObject($config->bucket, $ossOldDirPath, $config->bucket, $ossNewDirPath);
+            // 创建新的文件夹
+            $ossClient->putObject($config->bucket, $ossNewDirPath, '');
 
-            // 删除旧文件
-            $ossClient->deleteObject($config->bucket, $ossOldDirPath);
+            $ossDirPath = substr($ossOldDirPath, 0, -1);
+
+            // 循环拷贝旧文件
+            $nextMarker = '';
+            while (true) {
+                $ossOption = [
+                    'delimiter' => '',
+                    'prefix' => $ossDirPath,
+                    'max-keys' => 1000,
+                    'marker' => $nextMarker,
+                ];
+
+                $listObjects = $ossClient->listObjects($config->bucket, $ossOption);
+                $objectList = $listObjects->getObjectList();
+                if (!empty($objectList)) {
+                    foreach ($objectList as $objectInfo) {
+                        $ossOldPath = $objectInfo->getKey();
+                        $ossNewPath = $ossNewDirPath . substr($ossOldPath, strlen($ossOldDirPath));
+                        $ossClient->copyObject($config->bucket, $ossOldPath, $config->bucket, $ossNewPath); // 拷备文件
+                    }
+                }
+
+                $nextMarker = $listObjects->getNextMarker();
+                if ($listObjects->getIsTruncated() !== "true") {
+                    break;
+                }
+            }
+
+            // 循环删除旧文件
+            $nextMarker = '';
+            while (true) {
+                $ossOption = [
+                    'delimiter' => '',
+                    'prefix' => $ossDirPath,
+                    'max-keys' => 1000,
+                    'marker' => $nextMarker,
+                ];
+
+                $listObjects = $ossClient->listObjects($config->bucket, $ossOption);
+                $objectList = $listObjects->getObjectList();
+                if (!empty($objectList)) {
+                    foreach ($objectList as $objectInfo) {
+                        $ossClient->deleteObject($config->bucket, $objectInfo->getKey());
+                    }
+                }
+
+                $nextMarker = $listObjects->getNextMarker();
+                if ($listObjects->getIsTruncated() !== "true") {
+                    break;
+                }
+            }
 
         } catch (OssException $e) {
             throw new StorageException('Aliyun OSS error：' . $e->getMessage());
@@ -403,7 +467,6 @@ class AliyunOss extends Driver
         try {
             $endpoint = $config->internal ? $config->endpointInternal : $config->endpoint;
             $ossClient = new OssClient($config->accessKeyId, $config->accessKeySecret, $endpoint);
-            $ossClient->setConnectTimeout(30);
             return $ossClient->doesObjectExist($config->bucket, $ossDirPath);
         } catch (OssException $e) {
             throw new StorageException('Aliyun OSS error：' . $e->getMessage());

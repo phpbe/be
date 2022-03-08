@@ -10,7 +10,7 @@ class Storage
     /**
      * @BeConfigItem("驱动",
      *     driver="FormItemSelect",
-     *     keyValues = "return ['LocalDisk' => '本地磁盘', 'AliyunOss' => '阿里云OSS'];")
+     *     keyValues = "return ['LocalDisk' => '本地磁盘', 'AliyunOss' => '阿里云OSS', 'TencentCos' => '腾讯云COS'];")
      */
     public $driver = 'LocalDisk';
 
