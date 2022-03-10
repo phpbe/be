@@ -120,17 +120,32 @@ class Swoole extends Driver
         return $this->request->files[$name];
     }
 
-    public function isGet()
+    /**
+     * 是否GET请求
+     *
+     * @return bool
+     */
+    public function isGet(): bool
     {
         return 'GET' === $this->request->server['request_method'];
     }
 
-    public function isPost()
+    /**
+     * 是否POST请求
+     *
+     * @return bool
+     */
+    public function isPost(): bool
     {
         return 'POST' === $this->request->server['request_method'];
     }
 
-    public function isAjax()
+    /**
+     * 是否AJAX请求
+     *
+     * @return bool
+     */
+    public function isAjax(): bool
     {
         return isset($this->request->header['accept']) && strpos(strtolower($this->request->header['accept']), 'application/json') !== false;
     }
@@ -140,10 +155,10 @@ class Swoole extends Driver
      *
      * @return bool
      */
-    public function isMobile()
+    public function isMobile(): bool
     {
         if (isset($this->request->get['_isMobile'])) {
-            return $this->request->get['_isMobile'] ? true: false;
+            return $this->request->get['_isMobile'] ? true : false;
         }
 
         if (empty($this->request->header['user-agent'])) {
@@ -161,33 +176,72 @@ class Swoole extends Driver
         }
     }
 
-    public function getMethod()
+    /**
+     * 获取当前请求的方法类型
+     *
+     * @return string 方法类型 GET / POST / ...
+     */
+    public function getMethod(): string
     {
         return $this->request->server['request_method'];
     }
 
     /**
-     * 获取当前请求的完整网址
+     * 获取当前请求的通讯协议
+     *
+     * @return string 通讯协议
      */
-    public function getUrl()
+    public function getScheme(): string
     {
-        if ($this->url === null) {
-            $url = null;
-            if (isset($this->request->header['scheme']) && ($this->request->header['scheme'] === 'http' || $this->request->header['scheme'] === 'https')) {
-                $url = $this->request->header['scheme'] . '://';
-            } else {
-                $url = 'http://';
-            }
-            $url .= $this->request->header['host'];
-            $url .= $this->request->server['request_uri'];
-            if ($this->request->server['query_string']) {
-                $url .= '?' . $this->request->server['query_string'];
-            }
+        if (isset($this->request->header['scheme']) && ($this->request->header['scheme'] === 'http' || $this->request->header['scheme'] === 'https')) {
+            return $this->request->header['scheme'];
+        } else {
+            return 'http';
+        }
+    }
 
-            $this->url = $url;
+    /**
+     * 获取当前请求的域名，即服务器名 server name
+     *
+     * @return string 域名
+     */
+    public function getDomain(): string
+    {
+        $domain = $this->request->header['host'];
+        $pos = strpos($domain, ':');
+        if ($pos !== false) {
+            $domain = substr($domain, 0, $pos);
+        }
+        return $domain;
+    }
+
+    /**
+     * 获取当前请求的主机名，包含端品号
+     *
+     * @return string 主机名
+     */
+    public function getHost(): string
+    {
+        return $this->request->header['host'];
+    }
+
+    /**
+     * 获取当前请求的主机，包含端品号
+     *
+     * @return int 端口号
+     */
+    public function getPort(): int
+    {
+        $host = $this->request->header['host'];
+        $port = null;
+        $pos = strpos($host, ':');
+        if ($pos !== false) {
+            $port = (int)substr($host, $pos + 1);
+        } else {
+            $port = 80;
         }
 
-        return $this->url;
+        return $port;
     }
 
     /**
@@ -195,7 +249,7 @@ class Swoole extends Driver
      *
      * @return string
      */
-    public function getIp(bool $detectProxy = true)
+    public function getIp(bool $detectProxy = true): string
     {
         if ($detectProxy) {
             if (isset($this->request->header['x-forwarded-for'])) {
@@ -220,8 +274,36 @@ class Swoole extends Driver
 
     /**
      * 获取当前请求的完整网址
+     *
+     * @return string 网址
      */
-    public function getRootUrl()
+    public function getUrl(): string
+    {
+        if ($this->url === null) {
+            $url = null;
+            if (isset($this->request->header['scheme']) && ($this->request->header['scheme'] === 'http' || $this->request->header['scheme'] === 'https')) {
+                $url = $this->request->header['scheme'] . '://';
+            } else {
+                $url = 'http://';
+            }
+            $url .= $this->request->header['host'];
+            $url .= $this->request->server['request_uri'];
+            if ($this->request->server['query_string']) {
+                $url .= '?' . $this->request->server['query_string'];
+            }
+
+            $this->url = $url;
+        }
+
+        return $this->url;
+    }
+
+    /**
+     * 获取当前请求的根网址
+     *
+     * @return string 请求的根网址
+     */
+    public function getRootUrl(): string
     {
         if ($this->rootUrl === null) {
             $rootUrl = null;
@@ -240,8 +322,10 @@ class Swoole extends Driver
 
     /**
      * 获取来源网址
+     *
+     * @return string 来源网址
      */
-    public function getReferer()
+    public function getReferer(): string
     {
         return $this->request->header['referer'] ?? '';
     }

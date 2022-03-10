@@ -193,58 +193,114 @@ abstract class Driver
         }
     }
 
-    abstract function isGet();
+    /**
+     * 是否GET请求
+     *
+     * @return bool
+     */
+    abstract function isGet(): bool;
 
-    abstract function isPost();
+    /**
+     * 是否POST请求
+     *
+     * @return bool
+     */
+    abstract function isPost(): bool;
 
-    abstract function isAjax();
+    /**
+     * 是否AJAX请求
+     *
+     * @return bool
+     */
+    abstract function isAjax(): bool;
 
     /**
      * 是否通过手机访问
      *
      * @return bool
      */
-    abstract function isMobile();
-
-    abstract function getMethod();
-
+    abstract function isMobile(): bool;
 
     /**
-     * 获取当前请求的完整网址
+     * 获取当前请求的方法类型
+     *
+     * @return string 方法类型 GET / POST / ...
      */
-    abstract function getUrl();
+    abstract function getMethod(): string;
+
+    /**
+     * 获取当前请求的通讯协议
+     *
+     * @return string 通讯协议
+     */
+    abstract function getScheme(): string;
+
+    /**
+     * 获取当前请求的域名，即服务器名 server name
+     *
+     * @return string 域名
+     */
+    abstract function getDomain(): string;
+
+    /**
+     * 获取当前请求的主机名，包含端品号
+     *
+     * @return string 主机名
+     */
+    abstract function getHost(): string;
+
+    /**
+     * 获取当前请求的主机，包含端品号
+     *
+     * @return int 端口号
+     */
+    abstract function getPort(): int;
+
 
     /**
      * 获取请求者的 IP 地址
      *
      * @return string
      */
-    abstract function getIp(bool $detectProxy = true);
+    abstract function getIp(bool $detectProxy = true): string;
 
     /**
      * 获取当前请求的完整网址
+     *
+     * @return string 网址
      */
-    abstract function getRootUrl();
+    abstract function getUrl(): string;
+
+    /**
+     * 获取当前请求的根网址
+     *
+     * @return string 请求的根网址
+     */
+    abstract function getRootUrl(): string;
 
     /**
      * 获取upload上传目录的网址
+     *
+     * @return string 上传目录的网址
      */
-    public function getUploadUrl()
+    public function getUploadUrl(): string
     {
         return $this->getRootUrl() . '/' . Be::getRuntime()->getUploadDir();
     }
 
     /**
      * 获取来源网址
+     *
+     * @return string 来源网址
      */
-    abstract function getReferer();
+    abstract function getReferer(): string;
 
     /**
      * 获取当前执行的是否后台功能
      *
      * @return bool
      */
-    public function isAdmin()
+    public function isAdmin(): bool
     {
         return $this->admin;
     }
@@ -254,7 +310,7 @@ abstract class Driver
      *
      * @return null | string
      */
-    public function getAppName()
+    public function getAppName(): string
     {
         return $this->appName;
     }
@@ -264,7 +320,7 @@ abstract class Driver
      *
      * @return null | string
      */
-    public function getControllerName()
+    public function getControllerName(): string
     {
         return $this->controllerName;
     }
@@ -274,7 +330,7 @@ abstract class Driver
      *
      * @return null | string
      */
-    public function getActionName()
+    public function getActionName(): string
     {
         return $this->actionName;
     }
@@ -284,7 +340,7 @@ abstract class Driver
      *
      * @return null | string
      */
-    public function getRoute()
+    public function getRoute(): string
     {
         return $this->route;
     }

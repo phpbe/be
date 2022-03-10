@@ -108,17 +108,32 @@ class Common extends Driver
         return $_FILES[$name];
     }
 
-    public function isGet()
+    /**
+     * 是否GET请求
+     *
+     * @return bool
+     */
+    public function isGet(): bool
     {
         return 'GET' === $_SERVER['REQUEST_METHOD'];
     }
 
-    public function isPost()
+    /**
+     * 是否POST请求
+     *
+     * @return bool
+     */
+    public function isPost(): bool
     {
         return 'POST' === $_SERVER['REQUEST_METHOD'];
     }
 
-    public function isAjax()
+    /**
+     * 是否AJAX请求
+     *
+     * @return bool
+     */
+    public function isAjax(): bool
     {
         return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && 'XMLHTTPREQUEST' === strtoupper($_SERVER['HTTP_X_REQUESTED_WITH'])) ||
             (isset($_SERVER['HTTP_ACCEPT']) && strpos(strtolower($_SERVER['HTTP_ACCEPT']), 'application/json') !== false);
@@ -129,7 +144,7 @@ class Common extends Driver
      *
      * @return bool
      */
-    public function isMobile()
+    public function isMobile(): bool
     {
         if (isset($_GET['_isMobile'])) {
             return $_GET['_isMobile'] ? true : false;
@@ -150,30 +165,58 @@ class Common extends Driver
         }
     }
 
-    public function getMethod()
+    /**
+     * 获取当前请求的方法类型
+     *
+     * @return string 方法类型 GET / POST / ...
+     */
+    public function getMethod(): string
     {
         return $_SERVER['REQUEST_METHOD'];
     }
 
     /**
-     * 获取当前请求的完整网址
+     * 获取当前请求的通讯协议
+     *
+     * @return string 通讯协议
      */
-    public function getUrl()
+    public function getScheme(): string
     {
-        if ($this->url === null) {
-            $url = null;
-            if (isset($_SERVER['HTTP_SCHEME']) && ($_SERVER['HTTP_SCHEME'] === 'http' || $_SERVER['HTTP_SCHEME'] === 'https')) {
-                $url = $_SERVER['HTTP_SCHEME'] . '://';
-            } else {
-                $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
-            }
-
-            $url .= isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ($_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT']));
-            $url .= $_SERVER['REQUEST_URI'];
-            $this->url = $url;
+        if (isset($_SERVER['HTTP_SCHEME']) && ($_SERVER['HTTP_SCHEME'] === 'http' || $_SERVER['HTTP_SCHEME'] === 'https')) {
+            return $_SERVER['HTTP_SCHEME'];
+        } else {
+            return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
         }
+    }
 
-        return $this->url;
+    /**
+     * 获取当前请求的域名，即服务器名 server name
+     *
+     * @return string 域名
+     */
+    public function getDomain(): string
+    {
+        return $_SERVER['SERVER_NAME'];
+    }
+
+    /**
+     * 获取当前请求的主机名，包含端品号
+     *
+     * @return string 主机名
+     */
+    public function getHost(): string
+    {
+        return isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ($_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT']));
+    }
+
+    /**
+     * 获取当前请求的主机，包含端品号
+     *
+     * @return int 端口号
+     */
+    public function getPort(): int
+    {
+        return $_SERVER['SERVER_PORT'] ?? 80;
     }
 
     /**
@@ -181,7 +224,7 @@ class Common extends Driver
      *
      * @return string
      */
-    public function getIp(bool $detectProxy = true)
+    public function getIp(bool $detectProxy = true): string
     {
         if ($detectProxy) {
             if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
@@ -206,8 +249,33 @@ class Common extends Driver
 
     /**
      * 获取当前请求的完整网址
+     *
+     * @return string 网址
      */
-    public function getRootUrl()
+    public function getUrl(): string
+    {
+        if ($this->url === null) {
+            $url = null;
+            if (isset($_SERVER['HTTP_SCHEME']) && ($_SERVER['HTTP_SCHEME'] === 'http' || $_SERVER['HTTP_SCHEME'] === 'https')) {
+                $url = $_SERVER['HTTP_SCHEME'] . '://';
+            } else {
+                $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
+            }
+
+            $url .= isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ($_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT']));
+            $url .= $_SERVER['REQUEST_URI'];
+            $this->url = $url;
+        }
+
+        return $this->url;
+    }
+
+    /**
+     * 获取当前请求的根网址
+     *
+     * @return string 请求的根网址
+     */
+    public function getRootUrl(): string
     {
         if ($this->rootUrl === null) {
             $rootUrl = null;
@@ -236,8 +304,10 @@ class Common extends Driver
 
     /**
      * 获取来源网址
+     *
+     * @return string 来源网址
      */
-    public function getReferer()
+    public function getReferer(): string
     {
         return $_SERVER['HTTP_REFERER'] ?? '';
     }
