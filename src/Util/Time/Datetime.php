@@ -7,14 +7,14 @@ class Datetime
     /**
      * 格式化时间
      *
-     * @param string $time 字符型时间， 例如：2000-01-01
+     * @param string $datetime 字符型时间， 例如：2000-01-01 12:00:00
      * @param int $maxDays 多少天前或后以默认时间格式输出
      * @param string $defaultFormat 默认时间格式
      * @return string
      */
-    public static function formatTime(string $time, int $maxDays = 30, string $defaultFormat = 'Y-m-d'): string
+    public static function formatTime(string $datetime, int $maxDays = 30, string $defaultFormat = 'Y-m-d'): string
     {
-        return self::formatTimestamp(strtotime($time), $maxDays, $defaultFormat);
+        return self::formatTimestamp(strtotime($datetime), $maxDays, $defaultFormat);
     }
 
     /**
@@ -60,6 +60,52 @@ class Datetime
             }
             return $days . '天后';
         }
+    }
+
+    /**
+     * 获取后一个天的时间
+     *
+     * @param string $datetime 日期 例：2022-02-28 12:00:00
+     * @return string 日期 例：2000-03-01 12:00:00
+     */
+    public static function getNextDay(string $datetime): string
+    {
+        return date('Y-m-d H:i:s', strtotime($datetime) + 86400);
+    }
+
+    /**
+     * 获取后N天的时间
+     *
+     * @param string $datetime 日期 例：2022-02-28 12:00:00
+     * @param int $n 天数
+     * @return string 日期 例：2000-03-02 12:00:00
+     */
+    public static function getNextNDay(string $datetime, int $n = 1): string
+    {
+        return date('Y-m-d H:i:s', strtotime($datetime) + 86400 * $n);
+    }
+
+    /**
+     * 获取前一个天的时间
+     *
+     * @param string $datetime 日期 例：2022-03-01 12:00:00
+     * @return string 日期 例：2000-02-28 12:00:00
+     */
+    public static function getLastDay(string $datetime): string
+    {
+        return date('Y-m-d H:i:s', strtotime($datetime) - 86400);
+    }
+
+    /**
+     * 获取前N天的时间
+     *
+     * @param string $datetime 日期 例：2022-03-01 12:00:00
+     * @param int $n 天数
+     * @return string 日期 例：2000-02-28 12:00:00
+     */
+    public static function getLastNDay(string $datetime, int $n = 1): string
+    {
+        return date('Y-m-d H:i:s', strtotime($datetime) - 86400 * $n);
     }
 
     /**

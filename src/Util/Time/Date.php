@@ -6,6 +6,53 @@ class Date
 {
 
     /**
+     * 获取后一个天的日期
+     *
+     * @param string $date 日期 例：2022-02-28
+     * @return string 日期 例：2000-03-01
+     */
+    public static function getNextDay(string $date): string
+    {
+        return date('Y-m-d', strtotime($date) + 86400);
+    }
+
+    /**
+     * 获取后N天的日期
+     *
+     * @param string $date 日期 例：2022-02-28
+     * @param int $n 天数
+     * @return string 日期 例：2000-03-02
+     */
+    public static function getNextNDay(string $date, int $n = 1): string
+    {
+        return date('Y-m-d', strtotime($date) + 86400 * $n);
+    }
+
+
+    /**
+     * 获取前一个天的日期
+     *
+     * @param string $date 日期 例：2022-03-01
+     * @return string 日期 例：2000-02-28
+     */
+    public static function getLastDay(string $date): string
+    {
+        return date('Y-m-d', strtotime($date) - 86400);
+    }
+
+    /**
+     * 获取前N天的日期
+     *
+     * @param string $date 日期 例：2022-03-01
+     * @param int $n 天数
+     * @return string 日期 例：2000-02-28
+     */
+    public static function getLastNDay(string $date, int $n = 1): string
+    {
+        return date('Y-m-d', strtotime($date) - 86400 * $n);
+    }
+
+    /**
      * 获取后一个月的日期
      *
      * @param string $date 日期 例：2000-01-31
