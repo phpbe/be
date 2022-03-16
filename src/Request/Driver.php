@@ -76,6 +76,13 @@ abstract class Driver
     abstract function json(string $name = null, $default = null, $format = null);
 
     /**
+     * 获取请求的原始数据
+     *
+     * @return string
+     */
+    abstract function getInput(): string;
+
+    /**
      * 获取 cookie 数据
      * @param string $name 参数量
      * @param mixed $default 默认值

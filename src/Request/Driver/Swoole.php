@@ -105,6 +105,16 @@ class Swoole extends Driver
     }
 
     /**
+     * 获取请求的原始数据
+     *
+     * @return string
+     */
+    public function getInput(): string
+    {
+        return $this->request->getContent();
+    }
+
+    /**
      * 获取 cookie 数据
      * @param string $name 参数量
      * @param mixed $default 默认值
