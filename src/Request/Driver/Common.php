@@ -10,8 +10,49 @@ use Be\Request\Driver;
  */
 class Common extends Driver
 {
+
     /**
-     * 获取 $_GET 数据
+     * 获取 header 数据
+     * @param string $name 参数量
+     * @param mixed $default 默认值
+     * @param string|\Closure $format 格式化
+     * @return array|mixed|string
+     */
+    public function header(string $name = null, $default = null, $format = 'string')
+    {
+        if ($name === null) {
+            $headers = [];
+            foreach ($_SERVER as $key => $val) {
+                if (substr($key, 0, 5) === 'HTTP_') {
+                    $key = substr($key, 5);
+                    $key = strtolower($key);
+                    $key = str_replace('_', '-', $key);
+                    $headers[$key] = $val;
+                }
+            }
+            return $this->_request($headers, $name, $default, $format);
+        } else {
+            $name = str_replace('-', '_', $name);
+            $name = strtoupper($name);
+            $name = 'HTTP_' . $name;
+            return $this->_request($_SERVER, $name, $default, $format);
+        }
+    }
+
+    /**
+     * 获取 server 数据
+     * @param string $name 参数量
+     * @param mixed $default 默认值
+     * @param string|\Closure $format 格式化
+     * @return array|mixed|string
+     */
+    public function server(string $name = null, $default = null, $format = 'string')
+    {
+        return $this->_request($_SERVER, $name, $default, $format);
+    }
+
+    /**
+     * 获取 get 数据
      * @param string $name 参数量
      * @param mixed $default 默认值
      * @param string|\Closure $format 格式化
@@ -23,7 +64,7 @@ class Common extends Driver
     }
 
     /**
-     * 获取 $_POST 数据
+     * 获取 post 数据
      * @param string $name 参数量
      * @param mixed $default 默认值
      * @param string|\Closure $format 格式化
@@ -35,7 +76,7 @@ class Common extends Driver
     }
 
     /**
-     * 获取 $_REQUEST 数据
+     * 获取 request 数据
      * @param string $name 参数量
      * @param mixed $default 默认值
      * @param string|\Closure $format 格式化
@@ -69,19 +110,7 @@ class Common extends Driver
     }
 
     /**
-     * 获取 $_SERVER 数据
-     * @param string $name 参数量
-     * @param mixed $default 默认值
-     * @param string|\Closure $format 格式化
-     * @return array|mixed|string
-     */
-    public function server(string $name = null, $default = null, $format = 'string')
-    {
-        return $this->_request($_SERVER, $name, $default, $format);
-    }
-
-    /**
-     * 获取 $_COOKIE 数据
+     * 获取 cookie 数据
      * @param string $name 参数量
      * @param mixed $default 默认值
      * @param string|\Closure $format 格式化

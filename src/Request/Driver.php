@@ -22,7 +22,25 @@ abstract class Driver
     protected $rootUrl = null;
 
     /**
-     * 获取 $_GET 数据
+     * 获取 header 数据
+     * @param string $name 参数量
+     * @param mixed $default 默认值
+     * @param string|\Closure $format 格式化
+     * @return array|mixed|string
+     */
+    abstract function header(string $name = null, $default = null, $format = 'string');
+
+    /**
+     * 获取 server 数据
+     * @param string $name 参数量
+     * @param mixed $default 默认值
+     * @param string|\Closure $format 格式化
+     * @return array|mixed|string
+     */
+    abstract function server(string $name = null, $default = null, $format = 'string');
+
+    /**
+     * 获取 get 数据
      * @param string $name 参数量
      * @param mixed $default 默认值
      * @param string|\Closure $format 格式化
@@ -31,7 +49,7 @@ abstract class Driver
     abstract function get(string $name = null, $default = null, $format = 'string');
 
     /**
-     * 获取 $_POST 数据
+     * 获取 post 数据
      * @param string $name 参数量
      * @param mixed $default 默认值
      * @param string|\Closure $format 格式化
@@ -40,7 +58,7 @@ abstract class Driver
     abstract function post(string $name = null, $default = null, $format = 'string');
 
     /**
-     * 获取 $_REQUEST 数据
+     * 获取 request 数据
      * @param string $name 参数量
      * @param mixed $default 默认值
      * @param string|\Closure $format 格式化
@@ -58,16 +76,7 @@ abstract class Driver
     abstract function json(string $name = null, $default = null, $format = null);
 
     /**
-     * 获取 $_SERVER 数据
-     * @param string $name 参数量
-     * @param mixed $default 默认值
-     * @param string|\Closure $format 格式化
-     * @return array|mixed|string
-     */
-    abstract function server(string $name = null, $default = null, $format = 'string');
-
-    /**
-     * 获取 $_COOKIE 数据
+     * 获取 cookie 数据
      * @param string $name 参数量
      * @param mixed $default 默认值
      * @param string|\Closure $format 格式化
