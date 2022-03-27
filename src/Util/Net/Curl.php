@@ -75,6 +75,11 @@ class Curl
      */
     static public function put(string $url, $data, array $headers = null, array $options = null)
     {
+        if (is_array($data)) {
+            // 数据为数组时，走 x-www-form-urlencoded，如果需要 form-data，需调用 Curl::request 方法
+            $data = http_build_query($data);
+        }
+
         return self::request('PUT', $url, $data, $headers, $options);
     }
 
@@ -90,6 +95,11 @@ class Curl
      */
     static public function delete(string $url, $data = null, array $headers = null, array $options = null)
     {
+        if (is_array($data)) {
+            // 数据为数组时，走 x-www-form-urlencoded，如果需要 form-data，需调用 Curl::request 方法
+            $data = http_build_query($data);
+        }
+
         return self::request('DELETE', $url, $data, $headers, $options);
     }
 
@@ -105,7 +115,26 @@ class Curl
      */
     static public function patch(string $url, $data = null, array $headers = null, array $options = null)
     {
+        if (is_array($data)) {
+            // 数据为数组时，走 x-www-form-urlencoded，如果需要 form-data，需调用 Curl::request 方法
+            $data = http_build_query($data);
+        }
+
         return self::request('PATCH', $url, $data, $headers, $options);
+    }
+
+    /**
+     * HEAD请求
+     *
+     * @param string $url
+     * @param array|null $headers
+     * @param array|null $options
+     * @return bool|string
+     * @throws UtilException
+     */
+    static public function head(string $url, array $headers = null, array $options = null)
+    {
+        return self::request('HEAD', $url, null, $headers, $options);
     }
 
     /**
@@ -128,7 +157,7 @@ class Curl
             CURLOPT_CONNECTTIMEOUT => 15, // 连接超时
             CURLOPT_TIMEOUT => 30, // 总超时
             CURLOPT_RETURNTRANSFER => true, // 不直接输出
-            CURLOPT_HEADER => false, // 不返回头信息
+            CURLOPT_HEADER => $method === 'HEAD', // 是否返回头信息，HEAD 请求时返回头信息，其它请求不返回
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         ];
 
@@ -153,7 +182,7 @@ class Curl
                 break;
             case 'POST':
                 if ($data === null) {
-                    throw new UtilException('POST请求数据垲失！');
+                    throw new UtilException('POST请求数据缺失！');
                 }
                 $options[CURLOPT_POST] = 1;
                 $options[CURLOPT_POSTFIELDS] = $data;
@@ -162,10 +191,13 @@ class Curl
             case 'DELETE':
             case 'PATCH':
                 if ($data === null) {
-                    throw new UtilException($method . '请求数据垲失！');
+                    throw new UtilException($method . '请求数据缺失！');
                 }
                 $options[CURLOPT_CUSTOMREQUEST] = $method;
                 $options[CURLOPT_POSTFIELDS] = $data;
+                break;
+            case 'HEAD':
+                $options[CURLOPT_CUSTOMREQUEST] = $method;
                 break;
         }
 
