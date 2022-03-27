@@ -819,7 +819,7 @@
                                 @size-change="changePageSize"
                                 @current-change="gotoPage"
                                 :current-page="page"
-                                :page-sizes="[10, 15, 20, 25, 30, 50, 100, 200, 500]"
+                                :page-sizes="[10, 12, 15, 20, 25, 30, 50, 100, 200, 500]"
                                 :page-size="pageSize"
                                 layout="total, sizes, prev, pager, next, jumper"
                                 :total="total">
