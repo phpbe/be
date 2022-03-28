@@ -90,9 +90,12 @@ class Task
 
             $taskLog = new \stdClass();
             $instance = null;
+
+            $taskLogInserted = false;
             try {
                 $now = date('Y-m-d H:i:s');
-
+                $taskLogId = $db->uuid();
+                $taskLog->id = $taskLogId;
                 $taskLog->task_id = $task->id;
                 $taskLog->data = $task->data;
                 $taskLog->status = 'RUNNING';
@@ -101,8 +104,8 @@ class Task
                 //$taskLog->complete_time = null;
                 $taskLog->create_time = $now;
                 $taskLog->update_time = $now;
-                $taskLogId = $db->insert('system_task_log', $taskLog);
-                $taskLog->id = $taskLogId;
+                $db->insert('system_task_log', $taskLog);
+                $taskLogInserted = true;
 
                 /**
                  * @var \Be\Task\Task $instance
@@ -118,7 +121,7 @@ class Task
                 if ($instance !== null) {
                     $instance->error($t->getMessage());
                 } else {
-                    if (isset($taskLog->id) && strlen($taskLog->id) === 36) {
+                    if ($taskLogInserted) {
                         $now = date('Y-m-d H:i:s');
                         Be::newDb()->update('system_task_log', [
                             'id' => $taskLog->id,
