@@ -199,7 +199,7 @@ class Task extends Driver
                         [
                             'name' => 'schedule',
                             'label' => '执行计划',
-                            'width' => '90',
+                            'width' => '120',
                         ],
                         [
                             'name' => 'schedule_lock',
