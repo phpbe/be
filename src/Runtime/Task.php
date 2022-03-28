@@ -67,7 +67,7 @@ class Task
             $db = Be::newDb();
 
             // 有任务正在运行
-            $sql = 'SELECT * FROM system_task_log WHERE task_id = ' . $task->id . ' AND status = \'RUNNING\'';
+            $sql = 'SELECT * FROM system_task_log WHERE task_id = \'' . $task->id . '\' AND status = \'RUNNING\'';
             $taskLogs = $db->getObjects($sql);
 
             $running = count($taskLogs);
@@ -76,7 +76,7 @@ class Task
                     $t = time();
                     foreach ($taskLogs as $taskLog) {
                         if ($t - strtotime($taskLog->update_time) >= $task->timeout) {
-                            $sql = 'UPDATE system_task_log SET status = \'ERROR\', message=\'执行超时\' WHERE id = ' . $taskLog->id;
+                            $sql = 'UPDATE system_task_log SET status = \'ERROR\', message=\'执行超时\' WHERE id = \'' . $taskLog->id . '\'';
                             $db->query($sql);
                             $running--;
                         }
@@ -118,7 +118,7 @@ class Task
                 if ($instance !== null) {
                     $instance->error($t->getMessage());
                 } else {
-                    if ($taskLog->id > 0) {
+                    if (isset($taskLog->id) && strlen($taskLog->id) === 36) {
                         $now = date('Y-m-d H:i:s');
                         Be::newDb()->update('system_task_log', [
                             'id' => $taskLog->id,
