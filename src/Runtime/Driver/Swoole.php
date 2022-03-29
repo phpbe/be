@@ -242,7 +242,7 @@ class Swoole extends Driver
 
                             if (isset($decodedRoute[1])) {
                                 foreach ($decodedRoute[1] as $key => $val) {
-                                    $_GET[$key] = $_REQUEST[$key] = $val;
+                                    $swooleRequest->get[$key] = $val;
                                 }
                             }
 
@@ -273,7 +273,7 @@ class Swoole extends Driver
                                     $key = substr($uris[$i], 0, $pos);
                                     $val = substr($uris[$i], $pos + 1);
 
-                                    $swooleRequest->get[$key] = $swooleRequest->request[$key] = $val;
+                                    $swooleRequest->get[$key] = $val;
                                 }
                             }
                         }

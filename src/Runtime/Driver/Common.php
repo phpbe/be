@@ -90,7 +90,7 @@ class Common extends Driver
 
                         if (isset($decodedRoute[1])) {
                             foreach ($decodedRoute[1] as $key => $val) {
-                                $_GET[$key] = $_REQUEST[$key] = $val;
+                                $_GET[$key] = $val;
                             }
                         }
 
@@ -120,7 +120,7 @@ class Common extends Driver
                                 $key = substr($uris[$i], 0, $pos);
                                 $val = substr($uris[$i], $pos + 1);
 
-                                $_GET[$key] = $_REQUEST[$key] = $val;
+                                $_GET[$key] = $val;
                             }
                         }
                     }
