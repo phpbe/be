@@ -30,7 +30,7 @@ class Common extends Driver
             // 默认时区
             date_default_timezone_set($configSystem->timezone);
 
-            $admin = $request->request($this->adminAlias, false);
+            $admin = $request->get($this->adminAlias, false);
             $app = null;
             $controller = null;
             $action = null;
@@ -132,9 +132,9 @@ class Common extends Driver
             // 默认访问控制台页面
             if (!$app) {
                 if ($admin) {
-                    $route = $request->request('route', Be::getConfig('App.System.Admin')->home);
+                    $route = $request->get('route', Be::getConfig('App.System.Admin')->home);
                 } else {
-                    $route = $request->request('route', $configSystem->home);
+                    $route = $request->get('route', $configSystem->home);
                 }
                 $routes = explode('.', $route);
                 if (count($routes) === 3) {

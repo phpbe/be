@@ -206,7 +206,7 @@ class Swoole extends Driver
                 // 检查网站配置， 是否暂停服务
                 $configSystem = Be::getConfig('App.System.System');
 
-                $admin = $request->request($this->adminAlias, false);
+                $admin = $request->get($this->adminAlias, false);
                 $app = null;
                 $controller = null;
                 $action = null;
@@ -285,9 +285,9 @@ class Swoole extends Driver
                 // 默认访问控制台页面
                 if (!$app) {
                     if ($admin) {
-                        $route = $request->request('route', Be::getConfig('App.System.Admin')->home);
+                        $route = $request->get('route', Be::getConfig('App.System.Admin')->home);
                     } else {
-                        $route = $request->request('route', $configSystem->home);
+                        $route = $request->get('route', $configSystem->home);
                     }
                     $routes = explode('.', $route);
                     if (count($routes) === 3) {

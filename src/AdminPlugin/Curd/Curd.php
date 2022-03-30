@@ -56,7 +56,7 @@ class Curd extends Driver
     public function execute($task = null)
     {
         if ($task === null) {
-            $task = Be::getRequest()->request('task', 'Grid');
+            $task = Be::getRequest()->get('task', 'Grid');
         }
 
         if (method_exists($this, $task)) {

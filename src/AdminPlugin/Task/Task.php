@@ -43,7 +43,7 @@ class Task extends Driver
         $request = Be::getRequest();
 
         if ($task === null) {
-            $task = $request->request('task', 'Grid');
+            $task = $request->get('task', 'Grid');
         }
 
         if (method_exists($this, $task)) {

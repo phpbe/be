@@ -79,7 +79,7 @@ abstract class Driver
     public function execute($task = null)
     {
         if ($task === null) {
-            $task = Be::getRequest()->request('task', 'display');
+            $task = Be::getRequest()->get('task', 'display');
         }
 
         if (method_exists($this, $task)) {
