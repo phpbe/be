@@ -259,14 +259,14 @@ abstract class Driver
     abstract function getDomain(): string;
 
     /**
-     * 获取当前请求的主机名，包含端品号
+     * 获取当前请求的主机名，包含端口号
      *
      * @return string 主机名
      */
     abstract function getHost(): string;
 
     /**
-     * 获取当前请求的主机，包含端品号
+     * 获取当前请求的主机，包含端口号
      *
      * @return int 端口号
      */

@@ -233,20 +233,35 @@ class Swoole extends Driver
 
                     $routeParsed = false;
                     if (!$admin && $configSystem->urlRewrite === '2') {
-                        $decodedRoute = \Be\Router\Helper::decode($uri);
-                        if ($decodedRoute) {
-                            $routes = explode('.', $decodedRoute[0]);
-                            $app = $routes[0] ?? '';
-                            $controller = $routes[1] ?? '';
-                            $action = $routes[2] ?? '';
-
-                            if (isset($decodedRoute[1])) {
-                                foreach ($decodedRoute[1] as $key => $val) {
-                                    $swooleRequest->get[$key] = $val;
+                        if ($uri === '/') {
+                            $route = $request->get('route', '');
+                            if ($route) {
+                                $routes = explode('.', $route);
+                                if (count($routes) === 3) {
+                                    $app = $routes[0];
+                                    $controller = $routes[1];
+                                    $action = $routes[2];
+                                    $routeParsed = true;
                                 }
                             }
+                        }
 
-                            $routeParsed = true;
+                        if (!$routeParsed) {
+                            $decodedRoute = \Be\Router\Helper::decode($uri);
+                            if ($decodedRoute) {
+                                $routes = explode('.', $decodedRoute[0]);
+                                $app = $routes[0] ?? '';
+                                $controller = $routes[1] ?? '';
+                                $action = $routes[2] ?? '';
+
+                                if (isset($decodedRoute[1])) {
+                                    foreach ($decodedRoute[1] as $key => $val) {
+                                        $swooleRequest->get[$key] = $val;
+                                    }
+                                }
+
+                                $routeParsed = true;
+                            }
                         }
                     }
 
