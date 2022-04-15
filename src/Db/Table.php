@@ -811,7 +811,7 @@ class Table
                                     $sql .= ' (' . implode(',', array_fill(0, count($where[2]), '?')) . ')';
                                     $values = array_merge($values, $where[2]);
                                 } else {
-                                    throw new TableException('IN 查询条件异常！');
+                                    throw new TableException('Table query(in/not in) condition exception!');
                                 }
                                 break;
                             case 'BETWEEN':
@@ -821,7 +821,7 @@ class Table
                                     $sql .= ' ? AND ?';
                                     $values = array_merge($values, $where[2]);
                                 } else {
-                                    throw new TableException('BETWEEN 查询条件异常！');
+                                    throw new TableException('Table query(between/not between) condition exception!');
                                 }
                                 break;
                             default:
