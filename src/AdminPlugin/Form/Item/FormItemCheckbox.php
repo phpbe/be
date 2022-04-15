@@ -3,12 +3,10 @@
 namespace Be\AdminPlugin\Form\Item;
 
 /**
- * 表单项 开关
+ * 表单项 单选框
  */
-class FormItemSwitch extends FormItem
+class FormItemCheckbox extends FormItem
 {
-
-    public $valueType = 'int';
 
     /**
      * 构造函数
@@ -32,12 +30,12 @@ class FormItemSwitch extends FormItem
             }
         }
 
-        if (!isset($this->ui[':active-value'])) {
-            $this->ui[':active-value'] = 1;
+        if (!isset($this->ui[':true-label'])) {
+            $this->ui[':true-label'] = 1;
         }
 
-        if (!isset($this->ui[':inactive-value'])) {
-            $this->ui[':inactive-value'] = 0;
+        if (!isset($this->ui[':false-label'])) {
+            $this->ui[':false-label'] = 0;
         }
 
         if ($this->name !== null) {
@@ -48,7 +46,7 @@ class FormItemSwitch extends FormItem
     }
 
     /**
-     * 获取html内容ß
+     * 获取html内容
      *
      * @return string
      */
@@ -57,14 +55,14 @@ class FormItemSwitch extends FormItem
         $html = '<el-form-item';
         foreach ($this->ui['form-item'] as $k => $v) {
             if ($v === null) {
-                $html .= ' ' . $k;
+                $html .= ' '.$k;
             } else {
-                $html .= ' ' . $k . '="' . $v . '"';
+                $html .= ' '.$k.'="' . $v . '"';
             }
         }
         $html .= '>';
 
-        $html .= '<el-switch';
+        $html .= '<el-checkbox';
         foreach ($this->ui as $k => $v) {
             if ($k === 'form-item') {
                 continue;
@@ -76,8 +74,10 @@ class FormItemSwitch extends FormItem
                 $html .= ' ' . $k . '="' . $v . '"';
             }
         }
+
+        $html .= ' label="'. $this->label .'"';
         $html .= '>';
-        $html .= '</el-switch>';
+        $html .= '</el-checkbox>';
 
         if ($this->description) {
             $html .= '<div class="be-c-bbb be-mt-50 be-lh-150">' . $this->description . '</div>';
@@ -87,5 +87,5 @@ class FormItemSwitch extends FormItem
         return $html;
     }
 
-
 }
+
