@@ -1094,11 +1094,6 @@ class Curd extends Driver
                 }
                 $value = $postData['postData']['value'];
 
-                $title = '修改字段 ' . $fieldLabel . '（' . $field . '）的值为' . $value;
-                if (isset($this->setting['fieldEdit']['title'])) {
-                    $title = $this->setting['fieldEdit']['title'] . '（' . $title . '）';
-                }
-
                 $strPrimaryKey = null;
                 $primaryKeyValues = [];
 
@@ -1151,12 +1146,17 @@ class Curd extends Driver
                 $strPrimaryKeyValue = implode(',', $primaryKeyValues);
 
                 if (!isset($this->setting['opLog']) || $this->setting['opLog']) {
-                    beAdminOpLog($title . '（#' . $strPrimaryKey . '：' . $strPrimaryKeyValue . '）');
+                    $opLog = '修改字段 ' . $fieldLabel . '（' . $field . '）的值为' . $value;
+                    if (isset($this->setting['fieldEdit']['title'])) {
+                        $opLog = $this->setting['fieldEdit']['title'] . '（' . $title . '）';
+                    }
+
+                    beAdminOpLog($opLog . '（#' . $strPrimaryKey . '：' . $strPrimaryKeyValue . '）');
                 }
                 $db->commit();
 
                 $this->trigger('success', $postData);
-                $response->success($title . '，执行成功！');
+                $response->success('执行成功！');
 
             } catch (\Throwable $t) {
                 $db->rollback();
@@ -1175,11 +1175,6 @@ class Curd extends Driver
                 }
 
                 $value = isset($postData['postData']['value']) ? $postData['postData']['value'] : $postData['row'][$field];
-
-                $title = '修改字段 ' . $fieldLabel . '（' . $field . '）的值为' . $value;
-                if (isset($this->setting['fieldEdit']['title'])) {
-                    $title = $this->setting['fieldEdit']['title'] . '（' . $title . '）';
-                }
 
                 $tuple = Be::newTuple($this->setting['table'], $this->setting['db']);
                 $primaryKey = $tuple->getPrimaryKey();
@@ -1218,11 +1213,16 @@ class Curd extends Driver
                 }
 
                 if (!isset($this->setting['opLog']) || $this->setting['opLog']) {
-                    beAdminOpLog($title . '（#' . $strPrimaryKey . '：' . $strPrimaryKeyValue . '）');
+                    $opLog = '修改字段 ' . $fieldLabel . '（' . $field . '）的值为' . $value;
+                    if (isset($this->setting['fieldEdit']['title'])) {
+                        $opLog = $this->setting['fieldEdit']['title'] . '（' . $title . '）';
+                    }
+
+                    beAdminOpLog($opLog . '（#' . $strPrimaryKey . '：' . $strPrimaryKeyValue . '）');
                 }
                 $db->commit();
                 $this->trigger('success', $tuple, $postData);
-                $response->success($title . '，执行成功！');
+                $response->success('执行成功！');
             } catch (\Throwable $t) {
                 $db->rollback();
                 $this->trigger('error', $t, $postData);
