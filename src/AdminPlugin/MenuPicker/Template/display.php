@@ -370,11 +370,11 @@
                     parent.setMenuLink({
                         route: "<?php echo $this->route; ?>",
                         params: {
-                    <?php echo $this->setting['name']; ?>: this.selectedValue
-                },
-                    url: "",
+                            <?php echo $this->setting['name']; ?>: this.selectedValue
+                        },
+                        url: "",
                         description: "<?php echo $this->app->label; ?>：" + description
-                });
+                    });
                 },
 
                 loadGridData: function () {

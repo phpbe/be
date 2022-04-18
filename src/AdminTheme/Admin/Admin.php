@@ -336,7 +336,7 @@
                 :title="drawer.title"
                 :wrapper-closable="false"
                 :destroy-on-close="true">
-            <div style="padding:0 10px;height: 100%;">
+            <div style="padding:0 10px;height: 100%;overflow:hidden;">
                 <iframe id="frame-be-drawer" name="frame-be-drawer" :src="drawer.url" style="width:100%;height:100%;border:0;"></iframe>
             </div>
         </el-drawer>

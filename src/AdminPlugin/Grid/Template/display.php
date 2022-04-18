@@ -843,7 +843,7 @@
                         :title="drawer.title"
                         :wrapper-closable="false"
                         :destroy-on-close="true">
-                    <div style="padding:0 20px;height: 100%;">
+                    <div style="padding:0 20px;height: 100%;overflow:hidden;">
                         <iframe id="frame-drawer" name="frame-drawer" src="about:blank"
                                 style="width:100%;height:100%;border:0;"></iframe>
                     </div>
