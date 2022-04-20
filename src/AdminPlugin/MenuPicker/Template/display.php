@@ -437,7 +437,7 @@
                     this.loadGridData();
                 },
                 resize: function () {
-                    let offset = this.total > 0 ? 55 : 15;
+                    let offset = this.total > 0 ? 60 : 15;
                     let rect = this.$refs.tableRef.$el.getBoundingClientRect();
                     this.tableHeight = Math.max(document.documentElement.clientHeight - rect.top - offset, 100);
                 }

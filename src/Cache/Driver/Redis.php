@@ -3,13 +3,13 @@
 namespace Be\Cache\Driver;
 
 use Be\Be;
-use Be\Cache\Config;
 use Be\Cache\Driver;
+use Be\Cache\Proxy;
 
 /**
  * 缓存驱动
  */
-class Redis implements Driver
+class Redis extends Driver
 {
 
     /**
@@ -20,7 +20,7 @@ class Redis implements Driver
     /**
      * 构造函数
      *
-     * @param Config $config 配置参数
+     * @param object $config 配置参数
      */
     public function __construct($config)
     {
@@ -85,7 +85,7 @@ class Redis implements Driver
      * @param int $expire 有效时间（秒）
      * @return bool
      */
-    public function set($key, $value, $expire = 0)
+    public function set($key, $value, $expire = 0): bool
     {
         if (!is_bool($value) && !is_numeric($value)) {
             $value = serialize($value);
@@ -105,7 +105,7 @@ class Redis implements Driver
      * @param int $expire 有效时间（秒）
      * @return bool
      */
-    public function setMany($values, $expire = 0)
+    public function setMany($values, $expire = 0): bool
     {
         $formattedValues = array();
         foreach ($values as $key => $value) {
@@ -122,7 +122,8 @@ class Redis implements Driver
             foreach ($formattedValues as $key => $val) {
                 $this->redis->expire($key, $expire);
             }
-            return $this->redis->exec();
+            $this->redis->exec();
+            return true;
         } else {
             return $this->redis->mset($formattedValues);
         }
@@ -134,7 +135,7 @@ class Redis implements Driver
      * @param string $key 缓存键名
      * @return bool
      */
-    public function has($key)
+    public function has($key): bool
     {
         return $this->redis->exists('be:cache:' . $key) ? true : false;
     }
@@ -145,7 +146,7 @@ class Redis implements Driver
      * @param string $key 缓存键名
      * @return bool
      */
-    public function delete($key)
+    public function delete($key): bool
     {
         return $this->redis->del('be:cache:' . $key);
     }
@@ -179,38 +180,10 @@ class Redis implements Driver
      *
      * @return bool
      */
-    public function flush()
+    public function flush(): bool
     {
         return true;
     }
 
-    /**
-     * 缓存代理
-     *
-     * @param string $name 键名
-     * @param callable $callable 匿名函数，无参数
-     * @param int $expire 超时时间
-     * @return mixed
-     */
-    public function proxy($name, $callable, $expire = 0)
-    {
-        $key = 'be:cache:proxy:' . $name;
-        if ($this->redis->exists($key)) {
-            $value = $this->redis->get($key);
-            if (is_bool($value) || is_numeric($value)) return $value;
-            return unserialize($value);
-        }
-
-        $value = $callable();
-        if (!is_bool($value) && !is_numeric($value)) $value = serialize($value);
-
-        if ($expire > 0) {
-            $this->redis->setex($key, $expire, $value);
-        } else {
-            $this->redis->set($key, $value);
-        }
-
-        return $value;
-    }
 
 }

@@ -8,7 +8,7 @@ use Be\Cache\Driver;
 /**
  * 缓存驱动
  */
-class File implements Driver
+class File extends Driver
 {
 
     private $path = null;
@@ -16,9 +16,9 @@ class File implements Driver
     /**
      * 构造函数
      *
-     * @param array $config 配置参数
+     * @param object $config 配置参数
      */
-    public function __construct($config = [])
+    public function __construct($config)
     {
         $this->path = Be::getRuntime()->getCachePath() . '/cache';
     }
@@ -86,7 +86,7 @@ class File implements Driver
      * @param int $expire 有效时间（秒）
      * @return bool
      */
-    public function set($key, $value, $expire = 0)
+    public function set($key, $value, $expire = 0): bool
     {
         $hash = sha1($key);
         $dir = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2);
@@ -117,7 +117,7 @@ class File implements Driver
      * @param int $expire 有效时间（秒）
      * @return bool
      */
-    public function setMany($values, $expire = 0)
+    public function setMany($values, $expire = 0): bool
     {
         foreach ($values as $key => $value) {
             $this->set($key, $value, $expire);
@@ -131,7 +131,7 @@ class File implements Driver
      * @param string $key 缓存键名
      * @return bool
      */
-    public function has($key)
+    public function has($key): bool
     {
         $hash = sha1($key);
         $path = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2) . '/' . $hash . '.php';
@@ -145,7 +145,7 @@ class File implements Driver
      * @param string $key 缓存键名
      * @return bool
      */
-    public function delete($key)
+    public function delete($key): bool
     {
         $hash = sha1($key);
         $path = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2) . '/' . $hash . '.php';
@@ -242,7 +242,7 @@ class File implements Driver
      *
      * @return bool
      */
-    public function flush()
+    public function flush(): bool
     {
         $handle = opendir($this->path);
         while (($file = readdir($handle)) !== false) {
@@ -254,26 +254,5 @@ class File implements Driver
         return true;
     }
 
-    /**
-     * 缓存代理
-     *
-     * @param string $name 键名
-     * @param callable $callable 匿名函数，无参数
-     * @param int $expire 超时时间
-     * @return mixed
-     */
-    public function proxy($name, $callable, $expire = 0)
-    {
-        $name = 'proxy:' . $name;
-
-        if ($this->has($name)) {
-            return $this->get($name);
-        }
-
-        $value = $callable();
-        $this->set($name, $value, $expire);
-
-        return $value;
-    }
 
 }
