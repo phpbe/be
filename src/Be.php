@@ -156,7 +156,7 @@ abstract class Be
             return $instance;
         }
 
-        throw new RuntimeException('Config ' . $name . ' doesn\t exist!');
+        throw new RuntimeException('Config ' . $name . ' does not exist!');
     }
 
     /**
