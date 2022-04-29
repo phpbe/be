@@ -32,6 +32,13 @@ abstract class Tuple
     protected $_primaryKey = null;
 
     /**
+     * 是否已加载数据
+     *
+     * @var bool
+     */
+    protected $_loaded = false;
+
+    /**
      * 原始数据
      *
      * @var array
@@ -144,6 +151,7 @@ abstract class Tuple
         }
 
         $this->_init = $data;
+        $this->_loaded = true;
 
         return $this->bind($data);
     }
@@ -190,6 +198,7 @@ abstract class Tuple
         }
 
         $this->_init = $data;
+        $this->_loaded = true;
 
         return $this->bind($data);
     }
@@ -412,6 +421,16 @@ abstract class Tuple
         }
 
         return $this;
+    }
+
+    /**
+     * 是否已加载
+     *
+     * @return bool
+     */
+    public function isLoaded()
+    {
+        return $this->_loaded;
     }
 
     /**
