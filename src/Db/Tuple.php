@@ -60,7 +60,7 @@ abstract class Tuple
      * @return Tuple | mixed
      * @throws TupleException
      */
-    public function bind($data)
+    public function bind($data): Tuple
     {
         if (!is_object($data) && !is_array($data)) {
             // 数据格式须为对象或数组
@@ -98,7 +98,7 @@ abstract class Tuple
      * @return Tuple | mixed
      * @throws TupleException
      */
-    public function load($primaryKeyValue)
+    public function load($primaryKeyValue): Tuple
     {
         if ($this->_primaryKey === null) {
             // 表 $this->_tableName 无主键，不支持按主键载入数据
@@ -164,7 +164,7 @@ abstract class Tuple
      * @return Tuple | mixed
      * @throws TupleException
      */
-    public function loadBy($field, $value = null)
+    public function loadBy($field, $value = null): Tuple
     {
         $db = Be::getDb($this->_dbName);
 
@@ -208,7 +208,7 @@ abstract class Tuple
      *
      * @return Tuple | mixed
      */
-    public function insert()
+    public function insert(): Tuple
     {
         $db = Be::getDb($this->_dbName);
 
@@ -275,7 +275,7 @@ abstract class Tuple
      * @return Tuple | mixed
      * @throws TupleException
      */
-    public function update()
+    public function update(): Tuple
     {
         if ($this->_primaryKey === null) {
             // 表 $this->_tableName 无主键, 不支持按主键更新
@@ -325,7 +325,7 @@ abstract class Tuple
      *
      * @return Tuple | mixed
      */
-    public function save()
+    public function save(): Tuple
     {
         $db = Be::getDb($this->_dbName);
 
@@ -428,7 +428,7 @@ abstract class Tuple
      *
      * @return bool
      */
-    public function isLoaded()
+    public function isLoaded(): bool
     {
         return $this->_loaded;
     }
@@ -438,7 +438,7 @@ abstract class Tuple
      *
      * @return bool
      */
-    public function hasChange()
+    public function hasChange(): bool
     {
         return $this->_changed;
     }
@@ -448,7 +448,7 @@ abstract class Tuple
      *
      * @return array
      */
-    public function getChanges()
+    public function getChanges(): array
     {
         $changedFields = [];
         $tableProperty = Be::getTableProperty($this->_tableName, $this->_dbName);
@@ -489,7 +489,7 @@ abstract class Tuple
      *
      * @return array
      */
-    public function getChangeDetails()
+    public function getChangeDetails(): array
     {
         $changedFields = [];
         $tableProperty = Be::getTableProperty($this->_tableName, $this->_dbName);
@@ -555,7 +555,7 @@ abstract class Tuple
      * @return Tuple | mixed
      * @throws TupleException
      */
-    public function delete($primaryKeyValue = null)
+    public function delete($primaryKeyValue = null): Tuple
     {
         if ($this->_primaryKey === null) {
             // 表 $this->_tableName 无主键, 不支持按主键删除
@@ -609,7 +609,7 @@ abstract class Tuple
      * @return Tuple | mixed
      * @throws TupleException
      */
-    public function increment($field, $step = 1)
+    public function increment($field, $step = 1): Tuple
     {
         if ($this->_primaryKey === null) {
             // 表 $this->_tableName 无主键, 不支持字段自增
@@ -643,7 +643,7 @@ abstract class Tuple
      * @return Tuple | mixed
      * @throws TupleException
      */
-    public function decrement($field, $step = 1)
+    public function decrement($field, $step = 1): Tuple
     {
         if ($this->_primaryKey === null) {
             // 表 $this->_tableName 无主键, 不支持字段自减
@@ -674,7 +674,7 @@ abstract class Tuple
      *
      * @return Tuple
      */
-    public function init()
+    public function init(): Tuple
     {
         $tableProperty = Be::getTableProperty($this->_tableName, $this->_dbName);
         $fields = $tableProperty->getFields();
@@ -704,7 +704,7 @@ abstract class Tuple
      *
      * @return string
      */
-    public function getDbName()
+    public function getDbName(): string
     {
         return $this->_dbName;
     }
@@ -714,7 +714,7 @@ abstract class Tuple
      *
      * @return string
      */
-    public function getTableName()
+    public function getTableName(): string
     {
         return $this->_tableName;
     }
@@ -734,10 +734,10 @@ abstract class Tuple
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         $array = get_object_vars($this);
-        unset($array['_dbName'], $array['_tableName'], $array['_primaryKey'], $array['_init'], $array['_changed']);
+        unset($array['_dbName'], $array['_tableName'], $array['_primaryKey'], $array['_loaded'], $array['_init'], $array['_changed']);
 
         return $array;
     }
