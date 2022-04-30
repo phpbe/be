@@ -3,7 +3,7 @@
 namespace Be\Lib\Ip;
 
 use Be\Lib\LibException;
-use Be\Request\RequestFactory;
+use Be\Request;
 
 /**
  * 转换到地理位置（QQwry纯真地址库）
@@ -158,7 +158,7 @@ class Ip
 
     public function toString()
     {
-        $ip = RequestFactory::getInstance()->getIp();
+        $ip = Request::getIp();
         return $this->convert($ip);
     }
 

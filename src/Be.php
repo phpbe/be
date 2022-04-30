@@ -145,18 +145,34 @@ abstract class Be
         $parts = explode('.', $name);
         $type = array_shift($parts);
         $catalog = array_shift($parts);
+
+        $instance1 = null;
+        $instance2 = null;
         $class = '\\Be\\Data\\' . $type . '\\' . $catalog . '\\Config\\' . implode('\\', $parts);
         if (class_exists($class)) {
-            return new $class();
+            $instance1 =  new $class();
         }
 
         $class = '\\Be\\' . $type . '\\' . $catalog . '\\Config\\' . implode('\\', $parts);
         if (class_exists($class)) {
-            $instance = new $class();
-            return $instance;
+            $instance2 = new $class();
         }
 
-        throw new RuntimeException('Config ' . $name . ' does not exist!');
+        if ($instance1 === null) {
+            return $instance2;
+        } else {
+            if ($instance2 === null) {
+                throw new RuntimeException('Config ' . $name . ' does not exist!');
+            } else {
+                $vars = get_object_vars($instance2);
+                foreach ($vars as $key => $val) {
+                    if (!isset($instance1->$key)) {
+                        $instance1->$key = $val;
+                    }
+                }
+                return $instance1;
+            }
+        }
     }
 
     /**
