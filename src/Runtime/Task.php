@@ -44,6 +44,7 @@ class Task
             $t = time();
             foreach ($tasks as $task) {
                 if (TaskHelper::isOnTime($task->schedule, $t)) {
+                    $task->trigger = 'SYSTEM';
                     $swooleHttpServer->task($task);
                 }
             }
