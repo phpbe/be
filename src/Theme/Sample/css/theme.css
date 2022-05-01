@@ -49,3 +49,18 @@ li {
     width: 100%;
     visibility: visible;
 }
+
+
+/* --------------------------------- validator --------------------------------- */
+form .be-input.error,
+form .be-select.error,
+form .be-textarea.error {
+    border-color: #f30;
+    box-shadow: 0 0 0 1px #f30;
+}
+
+form label.error {
+    color: #f30;
+    margin-top: 5px;
+    display: inline-block;
+}

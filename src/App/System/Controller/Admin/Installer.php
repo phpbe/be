@@ -436,7 +436,7 @@ class Installer
         $request = Be::getRequest();
         $response = Be::getResponse();
 
-        $tuple = Be::getTuple('system_admin_user');
+        $tuple = Be::newTuple('system_admin_user');
         $tuple->loadBy('username', 'admin');
 
         if ($request->isPost()) {

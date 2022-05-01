@@ -105,19 +105,20 @@ class Task
         $app = $parts[0];
         $name = $parts[1];
 
-        $tuple = Be::getTuple('system_task');
-        $tuple->loadBy([
+        $tupleTask = Be::newTuple('system_task');
+        $tupleTask->loadBy([
             'app' => $app,
             'name' => $name,
         ]);
 
-        $tuple->trigger = $triggerType;
+        $task = $tupleTask->toObject();
+        $task->trigger = $triggerType;
 
         if (Be::getRuntime()->isSwooleMode()) {
-            Be::getRuntime()->task($tuple->toObject());
+            Be::getRuntime()->task($task);
         } else {
             $config = Be::getConfig('App.System.Task');
-            $url = beUrl('System.Task.run', ['password' => $config->password, 'taskId' => $tuple->id, 'trigger' => $triggerType]);
+            $url = beUrl('System.Task.run', ['password' => $config->password, 'taskId' => $task->id, 'trigger' => $triggerType]);
             $curl = curl_init();
             curl_setopt($curl, CURLOPT_URL, $url);
             curl_setopt($curl, CURLOPT_HEADER, 1);
@@ -163,7 +164,7 @@ class Task
      */
     public function run($taskId, $timestamp, $trigger)
     {
-        $tuple = Be::getTuple('system_task');
+        $tuple = Be::newTuple('system_task');
         $tuple->load($taskId);
         $task = $tuple->toObject();
 

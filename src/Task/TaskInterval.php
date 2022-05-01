@@ -26,6 +26,10 @@ class TaskInterval extends Task
     {
         parent::__construct($task, $taskLog);
 
+        if (!is_array($this->task->data)) {
+            $this->task->data = [];
+        }
+
         if (isset($this->task->data['breakpoint'])) {
             $this->breakpoint = $this->task->data['breakpoint'];
         } else {
@@ -37,6 +41,12 @@ class TaskInterval extends Task
     public function execute()
     {
 
+    }
+
+    public function complete()
+    {
+        $this->task->data['breakpoint'] = $this->breakpoint;
+        parent::complete();
     }
 
 }
