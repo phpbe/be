@@ -47,19 +47,17 @@
 
             <div class="be-tab-nav">
                 <a class="be-tab-nav-active" data-be-target="#be-tab-pane-trace">错误跟踪信息</a>
-                <a data-be-target="#be-tab-pane-server">$_SERVER</a>
-                <a data-be-target="#be-tab-pane-get">$_GET</a>
-                <a data-be-target="#be-tab-pane-post">$_POST</a>
-                <a data-be-target="#be-tab-pane-request">$_REQUEST</a>
-                <a data-be-target="#be-tab-pane-cookie">$_COOKIE</a>
+                <a data-be-target="#be-tab-pane-get">GET</a>
+                <a data-be-target="#be-tab-pane-post">POST</a>
+                <a data-be-target="#be-tab-pane-request">REQUEST</a>
+                <a data-be-target="#be-tab-pane-cookie">COOKIE</a>
+                <a data-be-target="#be-tab-pane-header">头信息</a>
+                <a data-be-target="#be-tab-pane-server">SERVER</a>
             </div>
 
             <div class="be-tab-content">
                 <div class="be-tab-pane" id="be-tab-pane-trace">
                     <pre class="prettyprint linenums"><?php print_r($this->e->getTrace()); ?></pre>
-                </div>
-                <div class="be-tab-pane" id="be-tab-pane-server">
-                    <pre class="prettyprint linenums"><?php print_r($request->server()) ?></pre>
                 </div>
                 <div class="be-tab-pane" id="be-tab-pane-get">
                     <pre class="prettyprint linenums"><?php print_r($request->get()) ?></pre>
@@ -72,6 +70,12 @@
                 </div>
                 <div class="be-tab-pane" id="be-tab-pane-cookie">
                     <pre class="prettyprint linenums"><?php print_r($request->cookie()) ?></pre>
+                </div>
+                <div class="be-tab-pane" id="be-tab-pane-header">
+                    <pre class="prettyprint linenums"><?php print_r($request->header()) ?></pre>
+                </div>
+                <div class="be-tab-pane" id="be-tab-pane-server">
+                    <pre class="prettyprint linenums"><?php print_r($request->server()) ?></pre>
                 </div>
             </div>
         </div>

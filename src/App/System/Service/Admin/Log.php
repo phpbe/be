@@ -107,7 +107,7 @@ class Log
             fseek($fIndex, $i * 20);
 
             $dataHashName = implode('', unpack('H*', fread($fIndex, 16)));
-            $createTime = intval(implode('', unpack('L', fread($fIndex, 4))));
+            $updateTime = intval(implode('', unpack('L', fread($fIndex, 4))));
 
             $path = $dataDir . $dataHashName;
             if (file_exists($path)) {
@@ -118,13 +118,13 @@ class Log
                 $log['year'] = $year;
                 $log['month'] = $month;
                 $log['day'] = $day;
-                $log['hash'] = $data['extra']['hash'];
-                $log['file'] = $data['context']['file'];
-                $log['line'] = $data['context']['line'];
-                $log['code'] = $data['context']['code'];
-                $log['message'] = $data['message'];
-                $log['create_time'] = date('Y-m-d H:i:s', $createTime);
-                $log['record_time'] = date('Y-m-d H:i:s', $data['extra']['record_time']);
+                $log['id'] = $data['id'] ?? '';
+                $log['file'] = $data['file'] ?? '';
+                $log['line'] = $data['line'] ?? '';
+                $log['code'] = $data['code'] ?? '';
+                $log['message'] = $data['message'] ?? '';
+                $log['create_time'] = $data['create_time'] ?? '';
+                $log['update_time'] = date('Y-m-d H:i:s', $updateTime);
                 $logs[] = $log;
             }
         }

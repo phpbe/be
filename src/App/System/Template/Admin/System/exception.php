@@ -35,20 +35,23 @@
                 <el-tab-pane label="错误跟踪信息" name="tab-trace">
                     <pre class="prettyprint linenums"><?php print_r($this->e->getTrace()); ?></pre>
                 </el-tab-pane>
-                <el-tab-pane label="$_SERVER" name="tab-server">
-                    <pre class="prettyprint linenums"><?php print_r($request->server()) ?></pre>
-                </el-tab-pane>
-                <el-tab-pane label="$_GET" name="tab-get">
+                <el-tab-pane label="GET" name="tab-get">
                     <pre class="prettyprint linenums"><?php print_r($request->get()) ?></pre>
                 </el-tab-pane>
-                <el-tab-pane label="$_POST" name="tab-post">
+                <el-tab-pane label="POST" name="tab-post">
                     <pre class="prettyprint linenums"><?php print_r($request->post()) ?></pre>
                 </el-tab-pane>
-                <el-tab-pane label="$_REQUEST" name="tab-request">
+                <el-tab-pane label="REQUEST" name="tab-request">
                     <pre class="prettyprint linenums"><?php print_r($request->request()) ?></pre>
                 </el-tab-pane>
-                <el-tab-pane label="$_COOKIE" name="tab-cookie">
+                <el-tab-pane label="COOKIE" name="tab-cookie">
                     <pre class="prettyprint linenums"><?php print_r($request->cookie()) ?></pre>
+                </el-tab-pane>
+                <el-tab-pane label="头信息" name="tab-server">
+                    <pre class="prettyprint linenums"><?php print_r($request->header()) ?></pre>
+                </el-tab-pane>
+                <el-tab-pane label="SERVER" name="tab-server">
+                    <pre class="prettyprint linenums"><?php print_r($request->server()) ?></pre>
                 </el-tab-pane>
             </el-tabs>
             <?php

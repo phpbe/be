@@ -4,9 +4,7 @@ namespace Be\Log;
 
 use Be\Be;
 use Be\Runtime\RuntimeException;
-use Monolog\Logger;
-use Be\Log\Handler\FileHandler;
-use Be\Log\Processor\FileProcessor;
+use Be\Util\File\FileSize;
 
 /**
  * 日志类
@@ -20,64 +18,28 @@ use Be\Log\Processor\FileProcessor;
  * @method static bool alert(\Throwable $t)
  * @method static bool emergency(\Throwable $t)
  */
-class Driver
+abstract class Driver
 {
 
-    private $logger = null;
-
-
     /**
+     * 获取级别编码
      *
-     * @return Logger
+     * @param $level
+     * @return int
      */
-    private function getLogger()
+    protected function getLevelCode($level): int
     {
-        if ($this->logger === null) {
-
-            $configSystemLog = Be::getConfig('App.System.Log');
-
-            $level = Logger::DEBUG;
-            if (isset($configSystemLog->level)) {
-                switch ($configSystemLog->level) {
-                    case 'debug':
-                        $level = Logger::DEBUG;
-                        break;
-                    case 'info':
-                        $level = Logger::INFO;
-                        break;
-                    case 'notice':
-                        $level = Logger::NOTICE;
-                        break;
-                    case 'warning':
-                        $level = Logger::WARNING;
-                        break;
-                    case 'error':
-                        $level = Logger::ERROR;
-                        break;
-                    case 'critical':
-                        $level = Logger::CRITICAL;
-                        break;
-                    case 'alert':
-                        $level = Logger::ALERT;
-                        break;
-                    case 'emergency':
-                        $level = Logger::EMERGENCY;
-                        break;
-                }
-            }
-
-            $logger = new Logger('Be');
-
-            $handler = new FileHandler($level);
-            $logger->pushHandler($handler);
-
-            $processor = new FileProcessor($level, $configSystemLog);
-            $logger->pushProcessor($processor);
-
-            $this->logger = $logger;
+        switch ($level) {
+            case 'debug': return 100;
+            case 'info': return 200;
+            case 'notice': return 300;
+            case 'warning': return 400;
+            case 'error': return 500;
+            case 'critical': return 600;
+            case 'alert': return 700;
+            case 'emergency': return 800;
         }
-
-        return $this->logger;
+        return 0;
     }
 
     /**
@@ -89,35 +51,13 @@ class Driver
      */
     public function __call($name, $arguments)
     {
-        $level = null;
-        switch ($name) {
-            case 'debug':
-                $level = Logger::DEBUG;
-                break;
-            case 'info':
-                $level = Logger::INFO;
-                break;
-            case 'notice':
-                $level = Logger::NOTICE;
-                break;
-            case 'warning':
-                $level = Logger::WARNING;
-                break;
-            case 'error':
-                $level = Logger::ERROR;
-                break;
-            case 'critical':
-                $level = Logger::CRITICAL;
-                break;
-            case 'alert':
-                $level = Logger::ALERT;
-                break;
-            case 'emergency':
-                $level = Logger::EMERGENCY;
-                break;
-            default:
-                // 不支持的系统日志方法
-                throw new RuntimeException('not support method ' . $name . '!');
+        $configSystemLog = Be::getConfig('App.System.Log');
+
+        $configLevelCode = $this->getLevelCode($configSystemLog->level);
+        $levelCode = $this->getLevelCode($name);
+
+        if ($levelCode < $configLevelCode) {
+            return '';
         }
 
         /**
@@ -125,16 +65,92 @@ class Driver
          */
         $t = $arguments[0];
 
-        $message = $t->getMessage();
-        $context = [
-            'file' => $t->getFile(),
-            'line' => $t->getLine(),
-            'code' => $t->getCode(),
-            'trace' => $t->getTrace(),
+        $content = [
+            'level' => strtoupper($name),
+            'create_time' => date('Y-m-d H:i:s'),
         ];
 
-        return $this->getLogger()->addRecord($level, $message, $context);
+        if ($t instanceof \Throwable) {
+            $content['message'] = $t->getMessage();
+            $content['file'] = $t->getFile();
+            $content['line'] = $t->getLine();
+            $content['code'] = $t->getCode();
+            $content['trace'] = $t->getTrace();
+        } else {
+            if (is_object($t)) {
+                $content = get_object_vars($t);
+            }
+
+            if (is_array($t)) {
+                $content = $t;
+            }
+
+            if (!isset($content['message'])) {
+                $content['message'] = is_string($t) ? $t : '';
+            }
+
+            if (!isset($content['file'])) {
+                $content['file'] = '';
+            }
+
+            if (!isset($content['line'])) {
+                $content['line'] = '';
+            }
+        }
+
+        if (!isset($content['id'])) {
+            $content['id'] = md5(json_encode([
+                'file' => $content['file'],
+                'line' => $content['line'],
+                'message' => $content['message']
+            ]));
+        }
+
+        $request = Be::getRequest();
+
+        if (isset($configSystemLog->get) && $configSystemLog->get) {
+            $content['get'] = $request->get();
+        }
+
+        if (isset($configSystemLog->post) && $configSystemLog->post) {
+            $content['post'] = $request->post();
+        }
+
+        if (isset($configSystemLog->request) && $configSystemLog->request) {
+            $content['request'] = $request->request();
+        }
+
+        if (isset($configSystemLog->cookie) && $configSystemLog->cookie) {
+            $content['cookie'] = $request->cookie();
+        }
+
+        if (isset($configSystemLog->session) && $configSystemLog->session) {
+            $session = Be::getSession();
+            $content['session'] = $session->get();
+        }
+
+        if (isset($configSystemLog->header) && $configSystemLog->header) {
+            $content['header'] = $request->header();
+        }
+
+        if (isset($configSystemLog->server) && $configSystemLog->server) {
+            $content['server'] = $request->server();
+        }
+
+        if (isset($configSystemLog->memery) && $configSystemLog->memery) {
+            $bytes = memory_get_usage();
+            $content['memory_usage'] = FileSize::int2String($bytes);
+
+            $bytes = memory_get_peak_usage();
+            $content['memory_peak_usage'] = FileSize::int2String($bytes);
+        }
+
+        $this->write($content);
+
+        return $content['id'];
     }
+
+    abstract protected function write(array $content);
 
 
 }

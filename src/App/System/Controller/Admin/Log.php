@@ -3,6 +3,7 @@
 namespace Be\App\System\Controller\Admin;
 
 use Be\AdminPlugin\Form\Item\FormItemRadioGroupButton;
+use Be\AdminPlugin\Table\Item\TableItemLink;
 use Be\Be;
 
 /**
@@ -182,9 +183,20 @@ class Log extends Auth
                 'table' => [
                     'items' => [
                         [
+                            'name' => 'id',
+                            'label' => '编号',
+                            'width' => '300',
+                            'driver' => TableItemLink::class,
+                            'url' => beAdminUrl('System.Log.detail'),
+                            'target' => 'drawer',
+                            'drawer' => [
+                                'width' => '75%',
+                            ],
+                        ],
+                        [
                             'name' => 'file',
                             'label' => '文件',
-                            'align' => 'left'
+                            'align' => 'left',
                         ],
                         [
                             'name' => 'line',
@@ -198,36 +210,19 @@ class Log extends Auth
                         ],
                         [
                             'name' => 'message',
-                            'label' => '错误信息',
+                            'label' => '日志信息',
                             'align' => 'left',
                         ],
                         [
                             'name' => 'create_time',
-                            'label' => '产生时间',
-                            'width' => '180',
-                        ],
-                        [
-                            'name' => 'record_time',
                             'label' => '首次产生时间',
                             'width' => '180',
                         ],
-                    ],
-                    'operation' => [
-                        'label' => '操作',
-                        'width' => '120',
-                        'items' => [
-                            [
-                                'label' => '查看明细',
-                                'url' => beAdminUrl('System.Log.detail'),
-                                'target' => 'drawer',
-                                'drawer' => [
-                                    'width' => '75%',
-                                ],
-                                'ui' => [
-                                    'icon' => 'el-icon-search',
-                                ]
-                            ],
-                        ]
+                        [
+                            'name' => 'update_time',
+                            'label' => '产生时间',
+                            'width' => '180',
+                        ],
                     ],
                 ],
 
@@ -254,7 +249,7 @@ class Log extends Auth
         $data = json_decode($data, true);
         try {
             $servicebeAdminOpLog = Be::getService('App.System.Admin.Log');
-            $log = $servicebeAdminOpLog->getlog($data['row']['year'], $data['row']['month'], $data['row']['day'], $data['row']['hash']);
+            $log = $servicebeAdminOpLog->getlog($data['row']['year'], $data['row']['month'], $data['row']['day'], $data['row']['id']);
             $response->set('title', '系统日志明细');
             $response->set('log', $log);
             $response->display(null, 'Blank');

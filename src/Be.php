@@ -185,12 +185,12 @@ abstract class Be
         if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (!isset(self::$cache[$cid]['log'])) {
-                self::$cache[$cid]['log'] = new \Be\Log\Driver();
+                self::$cache[$cid]['log'] = new \Be\Log\Driver\File();
             }
             return self::$cache[$cid]['log'];
         } else {
             if (!isset(self::$cache['log'])) {
-                self::$cache['log'] = new \Be\Log\Driver();
+                self::$cache['log'] = new \Be\Log\Driver\File();
             }
             return self::$cache['log'];
         }

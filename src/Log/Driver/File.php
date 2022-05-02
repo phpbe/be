@@ -1,23 +1,22 @@
 <?php
 
-namespace Be\Log\Handler;
+namespace Be\Log\Driver;
 
 use Be\Be;
-use Monolog\Logger;
-use Monolog\Handler\AbstractProcessingHandler;
+use Be\Log\Driver;
 
-class FileHandler extends AbstractProcessingHandler
+/**
+ * 日志驱动
+ */
+class File extends Driver
 {
 
-
-    public function __construct($level = Logger::DEBUG, $bubble = true)
-    {
-        parent::__construct($level, $bubble);
-    }
-
-
-    // 日志存储实现
-    protected function write(array $record)
+    /**
+     * 日志存储实现
+     *
+     * @param array $content 日志内容
+     */
+    protected function write(array $content)
     {
         $t = time();
 
@@ -31,13 +30,12 @@ class FileHandler extends AbstractProcessingHandler
             chmod($dir, 0777);
         }
 
-        $logFileName = $record['extra']['hash'];
+        $logFileName = $content['id'];
 
         $logFilePath = $dir . $logFileName;
 
         if (!file_exists($logFilePath)) {
-            $record['extra']['record_time'] = $t;
-            file_put_contents($logFilePath, json_encode($record));
+            file_put_contents($logFilePath, json_encode($content));
             chmod($logFilePath, 0777);
         }
 
@@ -48,8 +46,6 @@ class FileHandler extends AbstractProcessingHandler
             fwrite($f, pack('L', $t));
             fclose($f);
         }
-
-        return true;
     }
 
 }

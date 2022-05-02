@@ -133,7 +133,7 @@ class Task
                     }
                 }
 
-                //Be::getLog()->emergency($t);
+                Be::getLog()->error($t);
             }
         }
     }
