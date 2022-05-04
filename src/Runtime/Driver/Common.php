@@ -188,13 +188,13 @@ class Common extends Driver
                  */
                 $code = $t->getCode();
                 if ($code !== 0) {
-                    $logId = Be::getLog()->emergency($t);
+                    $logId = Be::getLog()->critical($t);
                     $response->set('logId', $logId);
                     $response->set('code', $t->getCode());
                 }
                 $response->error($t->getMessage(), $t->getRedirect());
             } else {
-                $logId = Be::getLog()->emergency($t);
+                $logId = Be::getLog()->critical($t);
                 $response->set('logId', $logId);
                 $response->exception($t);
             }

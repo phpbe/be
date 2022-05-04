@@ -119,6 +119,9 @@ class Task
                 //返回任务执行的结果
                 //$server->finish("{$data} -> OK");
             } catch (\Throwable $t) {
+
+                Be::getLog()->critical($t);
+
                 if ($instance !== null) {
                     $instance->error($t->getMessage());
                 } else {
@@ -133,7 +136,6 @@ class Task
                     }
                 }
 
-                Be::getLog()->error($t);
             }
         }
     }
