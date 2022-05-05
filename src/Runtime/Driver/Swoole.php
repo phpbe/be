@@ -4,6 +4,7 @@ namespace Be\Runtime\Driver;
 
 use Be\Be;
 use Be\Runtime\Driver;
+use Be\Util\File\Mime;
 
 /**
  *  运行时
@@ -19,59 +20,8 @@ class Swoole extends Driver
      */
     private $swooleHttpServer = null;
 
-    const MIME = [
-        'html' => 'text/html',
-        'htm' => 'text/html',
-        'xhtml' => 'application/xhtml+xml',
-        'xml' => 'text/xml',
-        'txt' => 'text/plain',
-        'log' => 'text/plain',
-
-        'js' => 'application/javascript',
-        'json' => 'application/json',
-        'css' => 'text/css',
-
-        'jpg' => 'image/jpeg',
-        'jpeg' => 'image/jpeg',
-        'gif' => 'image/gif',
-        'png' => 'image/png',
-        'bmp' => 'image/bmp',
-        'ico' => 'image/icon',
-        'svg' => 'image/svg+xml',
-
-        'mp3' => 'audio/mpeg',
-        'wav' => 'audio/wav',
-
-        'mp4' => 'video/avi',
-        'avi' => 'video/avi',
-        '3gp' => 'application/octet-stream',
-        'flv' => 'application/octet-stream',
-        'swf' => 'application/x-shockwave-flash',
-
-        'zip' => 'application/zip',
-        'rar' => 'application/octet-stream',
-
-        'ttf' => 'application/octet-stream',
-        'otf' => 'application/octet-stream',
-        'eot' => 'application/octet-stream',
-        'fon' => 'application/octet-stream',
-        'woff' => 'application/octet-stream',
-        'woff2' => 'application/octet-stream',
-
-        'doc' => 'application/msword',
-        'xls' => 'application/vnd.ms-excel',
-        'xlsx' => 'application/vnd.ms-excel',
-        'ppt' => 'application/vnd.ms-powerpoint',
-        'mdb' => 'application/msaccess',
-        'chm' => 'application/octet-stream',
-
-        'pdf' => 'application/pdf',
-    ];
-
-
     public function execute()
     {
-
         if ($this->swooleHttpServer !== null) {
             return;
         }
@@ -147,10 +97,10 @@ class Swoole extends Driver
             $ext = strrchr($uri, '.');
             if ($ext) {
                 $ext = strtolower(substr($ext, 1));
-                if (isset(self::MIME[$ext])) {
+                if (isset(\Be\Util\File\Mime::MAPPING[$ext])) {
                     $rootPath = Be::getRuntime()->getRootPath();
                     if (file_exists($rootPath . $uri)) {
-                        $swooleResponse->header('Content-Type', self::MIME[$ext], false);
+                        $swooleResponse->header('Content-Type', \Be\Util\File\Mime::MAPPING[$ext], false);
                         //缓存
                         $lastModified = gmdate('D, d M Y H:i:s', filemtime($rootPath . $uri)) . ' GMT';
                         if (isset($swooleRequest->header['if-modified-since']) && $swooleRequest->header['if-modified-since'] === $lastModified) {
