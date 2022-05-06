@@ -1003,10 +1003,11 @@ class Mime
     /**
      * 检测指定文件的MIME
      *
-     * @param $filename
+     * @param string $filename 文件名
+     * @param string $defaultMime 默认MIME
      * @return string
      */
-    public static function detectMime($filename): string
+    public static function detectMime(string $filename, string $defaultMime = 'application/octet-stream'): string
     {
         $mime = false;
 
@@ -1031,12 +1032,13 @@ class Mime
             if ($ext && strlen($ext) > 1) {
                 $ext = substr($ext, 1);
                 $ext = strtolower($ext);
-                return self::extToMime($ext);
+                $ext = trim($ext);
+                return self::extToMime($ext, $defaultMime);
             }
         }
 
         if (!$mime) {
-            $mime = 'application/octet-stream';
+            return $defaultMime;
         }
 
         $pos = strpos($mime, ';');
@@ -1055,11 +1057,14 @@ class Mime
      * 注意，是从文件内容获取MIME, 再跟据MIME获取扩展名，不是直接从名字中获取的
      *
      * @param string $filename 文件名
+     * @param string $defaultExt 默认扩展名
      * @return string
      */
-    public static function detectExt(string $filename): string
+    public static function detectExt(string $filename, string $defaultExt = ''): string
     {
         $mime = false;
+
+        $filename = trim($filename);
 
         if (function_exists('mime_content_type')) {
             $mime = mime_content_type($filename);
@@ -1077,12 +1082,15 @@ class Mime
             }
         }
 
-        $defaultExt = strrchr($filename, '.');
-        if ($defaultExt && strlen($defaultExt) > 1) {
-            $defaultExt = substr($defaultExt, 1);
-            $defaultExt = strtolower($defaultExt);
-        } else {
-            $defaultExt = '';
+        if (!$defaultExt) {
+            $defaultExt = strrchr($filename, '.');
+            if ($defaultExt && strlen($defaultExt) > 1) {
+                $defaultExt = substr($defaultExt, 1);
+                $defaultExt = strtolower($defaultExt);
+                $defaultExt = trim($defaultExt);
+            } else {
+                $defaultExt = '';
+            }
         }
 
         if (!$mime) {
@@ -1103,24 +1111,25 @@ class Mime
      * 扩展名转MIME
      *
      * @param string $ext 扩展名
+     * @param string $defaultMime 默认MIME
      * @return string
      */
-    public static function extToMime(string $ext): string
+    public static function extToMime(string $ext, string $defaultMime = 'application/octet-stream'): string
     {
         if (isset(self::MAPPING[$ext])) {
             return self::MAPPING[$ext];
         }
 
-        return 'application/octet-stream';
+        return $defaultMime;
     }
 
     /**
      * MIME转扩展名
      * @param string $mime MIME
-     * @param string $default 默认值
+     * @param string $defaultExt 默认扩展名
      * @return string
      */
-    public static function mimeToExt(string $mime, string $default = ''): string
+    public static function mimeToExt(string $mime, string $defaultExt = ''): string
     {
         $ext = false;
         foreach (self::MAPPING as $key => $val) {
@@ -1129,12 +1138,12 @@ class Mime
                     $ext = $key;
                 }
 
-                if ($default === '') {
+                if ($defaultExt === '') {
                     if ($ext) {
                         return $ext;
                     }
                 } else {
-                    if ($ext === $default) {
+                    if ($ext === $defaultExt) {
                         return $ext;
                     }
                 }
@@ -1145,7 +1154,7 @@ class Mime
             return $ext;
         }
 
-        return $default;
+        return $defaultExt;
     }
 
 
