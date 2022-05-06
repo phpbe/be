@@ -363,9 +363,9 @@ class Mime
         'jlt' => 'application/vnd.hp-jlyt',
         'jnlp' => 'application/x-java-jnlp-file',
         'joda' => 'application/vnd.joost.joda-archive',
-        'jpe' => 'image/jpeg',
-        'jpeg' => 'image/jpeg',
         'jpg' => 'image/jpeg',
+        'jpeg' => 'image/jpeg',
+        'jpe' => 'image/jpeg',
         'jpgm' => 'video/jpm',
         'jpgv' => 'video/jpeg',
         'jpm' => 'video/jpm',
@@ -949,15 +949,15 @@ class Mime
         'xhtml' => 'application/xhtml+xml',
         'xhvml' => 'application/xv+xml',
         'xif' => 'image/vnd.xiff',
+        'xls' => 'application/vnd.ms-excel',
+        'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         'xla' => 'application/vnd.ms-excel',
         'xlam' => 'application/vnd.ms-excel.addin.macroenabled.12',
         'xlc' => 'application/vnd.ms-excel',
         'xlf' => 'application/x-xliff+xml',
         'xlm' => 'application/vnd.ms-excel',
-        'xls' => 'application/vnd.ms-excel',
         'xlsb' => 'application/vnd.ms-excel.sheet.binary.macroenabled.12',
         'xlsm' => 'application/vnd.ms-excel.sheet.macroenabled.12',
-        'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         'xlt' => 'application/vnd.ms-excel',
         'xltm' => 'application/vnd.ms-excel.template.macroenabled.12',
         'xltx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
@@ -1143,8 +1143,8 @@ class Mime
                         return $ext;
                     }
                 } else {
-                    if ($ext === $defaultExt) {
-                        return $ext;
+                    if ($key === $defaultExt) {
+                        return $key;
                     }
                 }
             }

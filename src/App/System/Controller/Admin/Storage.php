@@ -3,8 +3,10 @@
 namespace Be\App\System\Controller\Admin;
 
 use Be\App\ControllerException;
+use Be\App\ServiceException;
 use Be\Be;
 use Be\Util\File\FileSize;
+use Be\Util\File\Mime;
 use Be\Util\Net\FileUpload;
 
 /**
@@ -316,21 +318,35 @@ class Storage extends Auth
             $configSystem = Be::getConfig('App.System.System');
             $maxSize = $configSystem->uploadMaxSize;
             $maxSizeInt = FileSize::string2Int($maxSize);
-            if ($file['size'] > $maxSizeInt) {
-                throw new ControllerException('您上传的图旬尺寸已超过最大限制：' . $maxSize . '！');
+            $size = filesize($file['tmp_name']);
+            if ($size > $maxSizeInt) {
+                throw new ControllerException('您上传的文件尺寸已超过最大限制：' . $maxSize . '！');
             }
 
-            $ext = '';
-            $rPos = strrpos($file['name'], '.');
-            if ($rPos !== false) {
-                $ext = substr($file['name'], $rPos + 1);
+            $fulName = trim($file['name']);
+            $defaultExt = strrchr($fulName, '.');
+            if ($defaultExt && strlen($defaultExt) > 1) {
+                $defaultExt = substr($defaultExt, 1);
+                $defaultExt = strtolower($defaultExt);
+                $defaultExt = trim($defaultExt);
+            } else {
+                $defaultExt = '';
             }
-            if (!in_array($ext, $configSystem->allowUploadImageTypes)) {
-                throw new ControllerException('禁止上传的图像类型：' . $ext . '！');
+
+            $name = $fulName;
+            $rPos = strrpos($fulName, '.');
+            if ($rPos !== false) {
+                $name = substr($fulName, 0, $rPos);
+            }
+
+            $fileExt = Mime::detectExt($file['tmp_name'], $defaultExt);
+
+            if (!in_array($fileExt, $configSystem->allowUploadImageTypes)) {
+                throw new ControllerException('禁止上传的图像类型：' . $fileExt . '！');
             }
 
             $storage = Be::getStorage();
-            $fullPath = $path . $file['name'];
+            $fullPath = $path . $name . '.' . $fileExt;
 
             if ($storage->isFileExist($fullPath)) {
                 throw new ControllerException('图像（' . $fullPath . '）已存在！');
@@ -373,21 +389,35 @@ class Storage extends Auth
             $configSystem = Be::getConfig('App.System.System');
             $maxSize = $configSystem->uploadMaxSize;
             $maxSizeInt = FileSize::string2Int($maxSize);
-            if ($file['size'] > $maxSizeInt) {
+            $size = filesize($file['tmp_name']);
+            if ($size > $maxSizeInt) {
                 throw new ControllerException('您上传的文件尺寸已超过最大限制：' . $maxSize . '！');
             }
 
-            $ext = '';
-            $rPos = strrpos($file['name'], '.');
-            if ($rPos !== false) {
-                $ext = substr($file['name'], $rPos + 1);
+            $fulName = trim($file['name']);
+            $defaultExt = strrchr($fulName, '.');
+            if ($defaultExt && strlen($defaultExt) > 1) {
+                $defaultExt = substr($defaultExt, 1);
+                $defaultExt = strtolower($defaultExt);
+                $defaultExt = trim($defaultExt);
+            } else {
+                $defaultExt = '';
             }
-            if (!in_array($ext, $configSystem->allowUploadFileTypes)) {
-                throw new ControllerException('禁止上传的文件类型：' . $ext . '！');
+
+            $name = $fulName;
+            $rPos = strrpos($fulName, '.');
+            if ($rPos !== false) {
+                $name = substr($fulName, 0, $rPos);
+            }
+
+            $fileExt = Mime::detectExt($file['tmp_name'], $defaultExt);
+
+            if (!in_array($fileExt, $configSystem->allowUploadFileTypes)) {
+                throw new ControllerException('禁止上传的文件类型：' . $fileExt . '！');
             }
 
             $storage = Be::getStorage();
-            $fullPath = $path . $file['name'];
+            $fullPath = $path . $name . '.' . $fileExt;
 
             if ($storage->isFileExist($fullPath)) {
                 throw new ControllerException('文件（' . $fullPath . '）已存在！');
