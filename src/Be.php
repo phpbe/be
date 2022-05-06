@@ -150,7 +150,7 @@ abstract class Be
         $instance2 = null;
         $class = '\\Be\\Data\\' . $type . '\\' . $catalog . '\\Config\\' . implode('\\', $parts);
         if (class_exists($class)) {
-            $instance1 =  new $class();
+            $instance1 = new $class();
         }
 
         $class = '\\Be\\' . $type . '\\' . $catalog . '\\Config\\' . implode('\\', $parts);
@@ -180,20 +180,30 @@ abstract class Be
      *
      * @return \Be\Log\Driver
      */
-    public static function getLog()
+    public static function getLog(): \Be\Log\Driver
     {
         if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (!isset(self::$cache[$cid]['log'])) {
-                self::$cache[$cid]['log'] = new \Be\Log\Driver\File();
+                self::$cache[$cid]['log'] = self::newLog();
             }
             return self::$cache[$cid]['log'];
         } else {
             if (!isset(self::$cache['log'])) {
-                self::$cache['log'] = new \Be\Log\Driver\File();
+                self::$cache['log'] = self::newLog();
             }
             return self::$cache['log'];
         }
+    }
+
+    /**
+     * 创建 日志记录器
+     *
+     * @return \Be\Log\Driver
+     */
+    public static function newLog(): \Be\Log\Driver
+    {
+        return new \Be\Log\Driver\File();
     }
 
     /**
@@ -221,7 +231,7 @@ abstract class Be
      *
      * @return \Be\Session\Driver
      */
-    public static function getSession()
+    public static function getSession(): \Be\Session\Driver
     {
         $config = self::getConfig('App.System.Session');
         if (self::getRuntime()->isSwooleMode()) {
@@ -256,33 +266,35 @@ abstract class Be
      *
      * @return \Be\Cache\Driver
      */
-    public static function getCache()
+    public static function getCache(): \Be\Cache\Driver
     {
-        $config = self::getConfig('App.System.Cache');
         if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['cache'])) {
-                return self::$cache[$cid]['cache'];
+            if (!isset(self::$cache[$cid]['cache'])) {
+                self::$cache[$cid]['cache'] = self::newCache();
             }
-
-            $driver = '\\Be\\Cache\\Driver\\' . $config->driver;
-            if (!class_exists($driver)) {
-                throw new RuntimeException('Cache driver' . $config->driver . ' does not exist!');
-            }
-            self::$cache[$cid]['cache'] = new $driver($config);
             return self::$cache[$cid]['cache'];
         } else {
-            if (isset(self::$cache['cache'])) {
-                return self::$cache['cache'];
+            if (!isset(self::$cache['cache'])) {
+                self::$cache['cache'] = self::newCache();
             }
-
-            $driver = '\\Be\\Cache\\Driver\\' . $config->driver;
-            if (!class_exists($driver)) {
-                throw new RuntimeException('Cache driver' . $config->driver . ' does not exist!');
-            }
-            self::$cache['cache'] = new $driver($config);
             return self::$cache['cache'];
         }
+    }
+
+    /**
+     * 创建 Cache
+     *
+     * @return \Be\Cache\Driver
+     */
+    public static function newCache(): \Be\Cache\Driver
+    {
+        $config = self::getConfig('App.System.Cache');
+        $driver = '\\Be\\Cache\\Driver\\' . $config->driver;
+        if (!class_exists($driver)) {
+            throw new RuntimeException('Cache driver' . $config->driver . ' does not exist!');
+        }
+        return new $driver($config);
     }
 
     /**
@@ -290,33 +302,35 @@ abstract class Be
      *
      * @return \Be\Storage\Driver
      */
-    public static function getStorage()
+    public static function getStorage(): \Be\Storage\Driver
     {
-        $config = self::getConfig('App.System.Storage');
         if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['storage'])) {
-                return self::$cache[$cid]['storage'];
+            if (!isset(self::$cache[$cid]['storage'])) {
+                self::$cache[$cid]['storage'] = self::newStorage();
             }
-
-            $driver = '\\Be\\Storage\\Driver\\' . $config->driver;
-            if (!class_exists($driver)) {
-                throw new RuntimeException('Storage driver' . $config->driver . ' does not exist!');
-            }
-            self::$cache[$cid]['storage'] = new $driver($config);
             return self::$cache[$cid]['storage'];
         } else {
-            if (isset(self::$cache['storage'])) {
-                return self::$cache['storage'];
+            if (!isset(self::$cache['storage'])) {
+                self::$cache['storage'] = self::newStorage();
             }
-
-            $driver = '\\Be\\Storage\\Driver\\' . $config->driver;
-            if (!class_exists($driver)) {
-                throw new RuntimeException('Storage driver' . $config->driver . ' does not exist!');
-            }
-            self::$cache['storage'] = new $driver($config);
             return self::$cache['storage'];
         }
+    }
+
+    /**
+     * 创建 Storage
+     *
+     * @return \Be\Storage\Driver
+     */
+    public static function newStorage(): \Be\Storage\Driver
+    {
+        $config = self::getConfig('App.System.Storage');
+        $driver = '\\Be\\Storage\\Driver\\' . $config->driver;
+        if (!class_exists($driver)) {
+            throw new RuntimeException('Storage driver' . $config->driver . ' does not exist!');
+        }
+        return new $driver($config);
     }
 
     /**
@@ -571,29 +585,6 @@ abstract class Be
      */
     public static function getTuple(string $name, string $db = 'master')
     {
-        if (self::getRuntime()->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            if (!isset(self::$cache[$cid]['tuple'][$db][$name])) {
-                self::$cache[$cid]['tuple'][$db][$name] = self::newTuple($name, $db);
-            }
-            return self::$cache[$cid]['tuple'][$db][$name];
-        } else {
-            if (!isset(self::$cache['tuple'][$db][$name])) {
-                self::$cache['tuple'][$db][$name] = self::newTuple($name, $db);
-            }
-            return self::$cache['tuple'][$db][$name];
-        }
-    }
-
-    /**
-     * 新创建一个数据库行记灵对象
-     *
-     * @param string $name 数据库行记灵对象名
-     * @param string $db 库名
-     * @return \Be\Db\Tuple | mixed
-     */
-    public static function newTuple(string $name, string $db = 'master')
-    {
         $path = self::getRuntime()->getCachePath() . '/Tuple/' . $db . '/' . $name . '.php';
         if (Be::getConfig('App.System.System')->developer || !file_exists($path)) {
             \Be\Db\DbHelper::updateTuple($name, $db);
@@ -612,29 +603,6 @@ abstract class Be
      * @return \Be\Db\Table
      */
     public static function getTable(string $name, string $db = 'master')
-    {
-        if (self::getRuntime()->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            if (!isset(self::$cache[$cid]['table'][$db][$name])) {
-                self::$cache[$cid]['table'][$db][$name] = self::newTable($name, $db);
-            }
-            return self::$cache[$cid]['table'][$db][$name];
-        } else {
-            if (!isset(self::$cache['table'][$db][$name])) {
-                self::$cache['table'][$db][$name] = self::newTable($name, $db);
-            }
-            return self::$cache['table'][$db][$name];
-        }
-    }
-
-    /**
-     * 新创建一个数据库表对象
-     *
-     * @param string $name 表名
-     * @param string $db 库名
-     * @return \Be\Db\Table
-     */
-    public static function newTable(string $name, string $db = 'master')
     {
         $path = self::getRuntime()->getCachePath() . '/Table/' . $db . '/' . $name . '.php';
         if (Be::getConfig('App.System.System')->developer || !file_exists($path)) {
