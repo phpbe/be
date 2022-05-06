@@ -418,7 +418,7 @@ class Curd extends Driver
             foreach ($driver->keyValues as $key => $val) {
                 $key = (string)$key;
 
-                $table = Be::newTable($this->setting['table'], $this->setting['db']);
+                $table = Be::getTable($this->setting['table'], $this->setting['db']);
 
                 if (isset($this->setting['grid']['filter']) && count($this->setting['grid']['filter']) > 0) {
                     foreach ($this->setting['grid']['filter'] as $filter) {
@@ -458,7 +458,7 @@ class Curd extends Driver
     private function getTable($formData)
     {
         $db = Be::getDb($this->setting['db']);
-        $table = Be::newTable($this->setting['table'], $this->setting['db']);
+        $table = Be::getTable($this->setting['table'], $this->setting['db']);
 
         if (isset($this->setting['grid']['filter']) && count($this->setting['grid']['filter']) > 0) {
             foreach ($this->setting['grid']['filter'] as $filter) {
@@ -606,7 +606,7 @@ class Curd extends Driver
         $postData = $request->post('data', '', '');
         $postData = json_decode($postData, true);
 
-        $tuple = Be::newTuple($this->setting['table'], $this->setting['db']);
+        $tuple = Be::getTuple($this->setting['table'], $this->setting['db']);
 
         try {
 
@@ -720,7 +720,7 @@ class Curd extends Driver
                 $postData = $request->json();
                 $formData = $postData['formData'];
 
-                $tuple = Be::newTuple($this->setting['table'], $this->setting['db']);
+                $tuple = Be::getTuple($this->setting['table'], $this->setting['db']);
 
                 if (isset($this->setting['create']['events']['before'])) {
                     $this->on('before', $this->setting['create']['events']['before']);
@@ -769,7 +769,7 @@ class Curd extends Driver
 
                         // 检查唯一性
                         if (isset($item['unique']) && $item['unique']) {
-                            $tableUnique = Be::newTable($this->setting['table'], $this->setting['db']);
+                            $tableUnique = Be::getTable($this->setting['table'], $this->setting['db']);
                             $tableUnique->where($name, $driver->newValue);
                             if (is_array($item['unique'])) {
                                 $tableUnique->wheres($item['unique']);
@@ -836,7 +836,7 @@ class Curd extends Driver
 
         $title = isset($this->setting['edit']['title']) ? $this->setting['edit']['title'] : '编辑';
 
-        $tuple = Be::newTuple($this->setting['table'], $this->setting['db']);
+        $tuple = Be::getTuple($this->setting['table'], $this->setting['db']);
 
         if ($request->isAjax()) {
 
@@ -925,7 +925,7 @@ class Curd extends Driver
 
                         // 检查唯一性
                         if (isset($item['unique']) && $item['unique']) {
-                            $tableUnique = Be::newTable($this->setting['table'], $this->setting['db']);
+                            $tableUnique = Be::getTable($this->setting['table'], $this->setting['db']);
                             $tableUnique->where($name, $driver->newValue);
 
                             if (is_array($primaryKey)) {
@@ -1099,7 +1099,7 @@ class Curd extends Driver
 
                 $i = 0;
                 foreach ($postData['selectedRows'] as $row) {
-                    $tuple = Be::newTuple($this->setting['table'], $this->setting['db']);
+                    $tuple = Be::getTuple($this->setting['table'], $this->setting['db']);
                     $primaryKey = $tuple->getPrimaryKey();
 
                     $primaryKeyValue = null;
@@ -1176,7 +1176,7 @@ class Curd extends Driver
 
                 $value = isset($postData['postData']['value']) ? $postData['postData']['value'] : $postData['row'][$field];
 
-                $tuple = Be::newTuple($this->setting['table'], $this->setting['db']);
+                $tuple = Be::getTuple($this->setting['table'], $this->setting['db']);
                 $primaryKey = $tuple->getPrimaryKey();
 
                 $primaryKeyValue = null;
@@ -1284,7 +1284,7 @@ class Curd extends Driver
 
                 $i = 0;
                 foreach ($postData['selectedRows'] as $row) {
-                    $tuple = Be::newTuple($this->setting['table'], $this->setting['db']);
+                    $tuple = Be::getTuple($this->setting['table'], $this->setting['db']);
                     $primaryKey = $tuple->getPrimaryKey();
 
                     $primaryKeyValue = null;
@@ -1345,7 +1345,7 @@ class Curd extends Driver
         } elseif (isset($postData['row'])) {
             $db->startTransaction();
             try {
-                $tuple = Be::newTuple($this->setting['table'], $this->setting['db']);
+                $tuple = Be::getTuple($this->setting['table'], $this->setting['db']);
                 $primaryKey = $tuple->getPrimaryKey();
 
                 $primaryKeyValue = null;

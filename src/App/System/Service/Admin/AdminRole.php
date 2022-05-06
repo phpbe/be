@@ -17,7 +17,7 @@ class AdminRole
      */
     public function getAdminRole($roleId)
     {
-        return Be::newTuple('system_admin_role')->load($roleId);
+        return Be::getTuple('system_admin_role')->load($roleId);
     }
 
     /**
@@ -27,7 +27,7 @@ class AdminRole
      */
     public function getAdminRoles()
     {
-        return Be::newTable('system_admin_role')->orderBy('ordering', 'ASC')->getObjects();
+        return Be::getTable('system_admin_role')->orderBy('ordering', 'ASC')->getObjects();
     }
 
     /**
@@ -37,7 +37,7 @@ class AdminRole
      */
     public function getAdminRoleKeyValues()
     {
-        return Be::newTable('system_admin_role')->orderBy('ordering', 'ASC')->getKeyValues('id', 'name');
+        return Be::getTable('system_admin_role')->orderBy('ordering', 'ASC')->getKeyValues('id', 'name');
     }
 
     /**
@@ -59,7 +59,7 @@ class AdminRole
      */
     public function updateAdminRole(string $roleId)
     {
-        $tuple = Be::newTuple('system_admin_role');
+        $tuple = Be::getTuple('system_admin_role');
         $tuple->load($roleId);
         if (!$tuple->id) {
             throw new ServiceException('未找到指定编号（#' . $roleId . '）的角色！');

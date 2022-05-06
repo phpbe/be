@@ -196,12 +196,12 @@ class Menu
             }
 
             if (count($keepIds) > 0) {
-                Be::newTable('system_menu_item')
+                Be::getTable('system_menu_item')
                     ->where('menu_name', $menu->name)
                     ->where('id', 'NOT IN', $keepIds)
                     ->delete();
             } else {
-                Be::newTable('system_menu_item')
+                Be::getTable('system_menu_item')
                     ->where('menu_name', $menu->name)
                     ->delete();
             }
@@ -216,7 +216,7 @@ class Menu
                     $isNew = true;
                 }
 
-                $tupleMenuItem = Be::newTuple('system_menu_item');
+                $tupleMenuItem = Be::getTuple('system_menu_item');
 
                 if (!$isNew) {
                     try {

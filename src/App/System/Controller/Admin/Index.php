@@ -29,7 +29,7 @@ class Index
 
         $response->set('title', '后台首页');
 
-        $tupleAdminUser = Be::newTuple('system_admin_user');
+        $tupleAdminUser = Be::getTuple('system_admin_user');
         try {
             $tupleAdminUser->load($my->id);
         } catch (\Throwable $t) {

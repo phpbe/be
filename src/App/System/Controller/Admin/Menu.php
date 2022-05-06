@@ -127,7 +127,7 @@ class Menu extends Auth
                 ],
                 'events' => [
                     'before' => function (Tuple &$tuple) {
-                        if (Be::newTable('system_menu')
+                        if (Be::getTable('system_menu')
                                 ->where('name', $tuple->name)
                                 ->count() > 0) {
                             throw new ControllerException('菜单调用类名' . $tuple->name . '已存在！');

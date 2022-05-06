@@ -105,7 +105,7 @@ class Task
         $app = $parts[0];
         $name = $parts[1];
 
-        $tupleTask = Be::newTuple('system_task');
+        $tupleTask = Be::getTuple('system_task');
         $tupleTask->loadBy([
             'app' => $app,
             'name' => $name,
@@ -164,7 +164,7 @@ class Task
      */
     public function run($taskId, $timestamp, $trigger)
     {
-        $tuple = Be::newTuple('system_task');
+        $tuple = Be::getTuple('system_task');
         $tuple->load($taskId);
         $task = $tuple->toObject();
 

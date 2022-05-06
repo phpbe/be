@@ -15,7 +15,7 @@ class AdminOpLog
     {
         $request = Be::getRequest();
         $my = Be::getAdminUser();
-        $tupleAdminLog = Be::newTuple('system_admin_op_log');
+        $tupleAdminLog = Be::getTuple('system_admin_op_log');
         $tupleAdminLog->admin_user_id = $my->id;
         $tupleAdminLog->app = $request->getAppName();
         $tupleAdminLog->controller = $request->getControllerName();

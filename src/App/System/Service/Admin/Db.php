@@ -24,7 +24,7 @@ class Db
         $tableNames = $db->getValues('SHOW TABLES LIKE \'' . $prefix . '%\'');
         if ($tableNames) {
             foreach ($tableNames as $tableName) {
-                $tables[] = Be::newTable($tableName, $dbName);
+                $tables[] = Be::getTable($tableName, $dbName);
             }
         }
         return $tables;

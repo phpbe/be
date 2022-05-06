@@ -159,7 +159,7 @@ class AdminUserLoginLog extends Auth
         $db = Be::getDb();
         $db->startTransaction();
         try {
-            Be::newTable('system_admin_user_login_log')
+            Be::getTable('system_admin_user_login_log')
                 ->where('create_time', '<', date('Y-m-d H:i:s', time() - 90 * 86400))
                 ->delete();
             beAdminOpLog('删除三个月前用户登录日志！');

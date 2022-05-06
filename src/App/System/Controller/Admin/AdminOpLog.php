@@ -228,7 +228,7 @@ class AdminOpLog extends Auth
         $db = Be::getDb();
         $db->startTransaction();
         try {
-            Be::newTable('system_admin_op_log')
+            Be::getTable('system_admin_op_log')
                 ->where('create_time', '<', date('Y-m-d H:i:s', time() - 90 * 86400))
                 ->delete();
             beAdminOpLog('删除三个月前操作日志！');

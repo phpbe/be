@@ -422,7 +422,7 @@ class Task extends Driver
         try {
             $request = Be::getRequest();
             $postData = $request->json();
-            $tupleTask = Be::newTuple('system_task');
+            $tupleTask = Be::getTuple('system_task');
             $tupleTask->load($postData['row']['id']);
             Be::getService('App.System.Task')->trigger($tupleTask->app . '.' . $tupleTask->name, 'MANUAL');
             beAdminOpLog('手工启动任务：' . $tupleTask->label . '（' . $tupleTask->app . '.' . $tupleTask->name . '）');
@@ -673,7 +673,7 @@ class Task extends Driver
         $response = Be::getResponse();
         try {
             $postData = $request->json();
-            $tuple = Be::newTuple('system_task_log');
+            $tuple = Be::getTuple('system_task_log');
             $tuple->load($postData['row']['id']);
             $taskId = $tuple->task_id;
             $taskLogId = $tuple->id;
@@ -694,7 +694,7 @@ class Task extends Driver
         $response = Be::getResponse();
         try {
             $lastMonth = Datetime::getLastMonth(date('Y-m-d H:i:s'));
-            Be::newTable('system_task_log')
+            Be::getTable('system_task_log')
                 ->where('create_time', '<', $lastMonth)
                 ->delete();
             beAdminOpLog('删除了一个月前计划任务日志。');

@@ -49,7 +49,7 @@ class AdminUser
         }
         $session->set($timesKey, $times);
 
-        $tupleAdminUserLoginLog = Be::newTuple('system_admin_user_login_log');
+        $tupleAdminUserLoginLog = Be::getTuple('system_admin_user_login_log');
         $tupleAdminUserLoginLog->username = $username;
         $tupleAdminUserLoginLog->ip = $ip;
         $tupleAdminUserLoginLog->create_time = date('Y-m-d H:i:s');
@@ -57,7 +57,7 @@ class AdminUser
         $db = Be::getDb();
         $db->beginTransaction();
         try {
-            $tupleAdminUser = Be::newTuple('system_admin_user');
+            $tupleAdminUser = Be::getTuple('system_admin_user');
 
             $configAdminUser = Be::getConfig('App.System.AdminUser');
             if ($configAdminUser->ldap) {
@@ -172,7 +172,7 @@ class AdminUser
         } elseif (is_object($adminUserId)) {
             $adminUser = $adminUserId;
         } elseif (is_numeric($adminUserId)) {
-            $tupleAdminUser = Be::newTuple('system_admin_user');
+            $tupleAdminUser = Be::getTuple('system_admin_user');
             $tupleAdminUser->load($adminUserId);
             $adminUser = $tupleAdminUser->toObject();
         } else {
@@ -201,7 +201,7 @@ class AdminUser
 
             $username = $rememberMe[0];
 
-            $tupleAdminUser = Be::newTuple('system_admin_user');
+            $tupleAdminUser = Be::getTuple('system_admin_user');
             try {
                 $tupleAdminUser->loadBy('username', $username);
                 if ($tupleAdminUser->is_delete === 0 && $tupleAdminUser->is_enable === 1) {

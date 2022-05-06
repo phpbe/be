@@ -27,7 +27,7 @@ class MailQueue
      */
     public function send($to, $subject = '', $body = '', $cc = null, $bcc = null)
     {
-        $tuple = Be::newTuple('system_mail_queue');
+        $tuple = Be::getTuple('system_mail_queue');
 
         $tuple->to_email = '';
         $tuple->to_name = '';
