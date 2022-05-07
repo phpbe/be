@@ -216,21 +216,13 @@ abstract class Tuple
         if (is_array($this->_primaryKey)) {
             foreach ($this->_primaryKey as $primaryKey) {
                 if (strtolower($this->$primaryKey) === 'uuid()') {
-                    if (function_exists('uuid_create')) {
-                        $this->$primaryKey = uuid_create();
-                    } else {
-                        $this->$primaryKey = $db->uuid();
-                    }
+                    $this->$primaryKey = $db->quickUuid();
                 }
             }
         } else {
             $primaryKey = $this->_primaryKey;
             if (strtolower($this->$primaryKey) === 'uuid()') {
-                if (function_exists('uuid_create')) {
-                    $this->$primaryKey = uuid_create();
-                } else {
-                    $this->$primaryKey = $db->uuid();
-                }
+                $this->$primaryKey = $db->quickUuid();
             }
         }
 
@@ -341,11 +333,7 @@ abstract class Tuple
                     }
 
                     if (strtolower($this->$primaryKey) === 'uuid()') {
-                        if (function_exists('uuid_create')) {
-                            $this->$primaryKey = uuid_create();
-                        } else {
-                            $this->$primaryKey = $db->uuid();
-                        }
+                        $this->$primaryKey = $db->quickUuid();
                         $insert = true;
                         break;
                     }
@@ -354,11 +342,7 @@ abstract class Tuple
                 $primaryKey = $this->_primaryKey;
                 if ($this->$primaryKey) {
                     if (strtolower($this->$primaryKey) === 'uuid()') {
-                        if (function_exists('uuid_create')) {
-                            $this->$primaryKey = uuid_create();
-                        } else {
-                            $this->$primaryKey = $db->uuid();
-                        }
+                        $this->$primaryKey = $db->quickUuid();
                         $insert = true;
                     }
                 } else {

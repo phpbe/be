@@ -2,6 +2,7 @@
 
 namespace Be\Db;
 
+
 /**
  * 数据库类
  */
@@ -887,7 +888,7 @@ abstract class Driver
                 foreach ($primaryKey as $pKey) {
                     $in[] = $this->connection->quoteValue($vars[$pKey]);
                 }
-                $primaryKeyIn[] = '('.implode(',', $in).')';
+                $primaryKeyIn[] = '(' . implode(',', $in) . ')';
             } else {
                 $primaryKeyIn[] = $this->connection->quoteValue($vars[$primaryKey]);
             }
@@ -912,7 +913,7 @@ abstract class Driver
             $sql .= $this->connection->quoteKey($primaryKey) . ' IN ';
         }
 
-        $sql .= '('.implode(',', $primaryKeyIn).')';
+        $sql .= '(' . implode(',', $primaryKeyIn) . ')';
 
         $statement = $this->execute($sql);
         $effectLines = $statement->rowCount();
@@ -967,6 +968,22 @@ abstract class Driver
      * @return string
      */
     abstract function uuid();
+
+    /**
+     * 快速生成 UUID
+     *
+     * 优先使用php生成，php不支持时再再调用数据库的方法生成
+     *
+     * @return string
+     */
+    public function quickUuid(): string
+    {
+        if (function_exists('uuid_create')) {
+            return uuid_create();
+        } else {
+            return $this->uuid();
+        }
+    }
 
     /**
      * 获取 insert 插入后产生的 id
@@ -1072,7 +1089,7 @@ abstract class Driver
 
     /**
      * 事务提交
-     * 
+     *
      * @throws DbException
      */
     public function commit()
@@ -1110,7 +1127,7 @@ abstract class Driver
      */
     public function quoteKey($field)
     {
-       return $this->connection->quoteKey($field);
+        return $this->connection->quoteKey($field);
     }
 
     /**
