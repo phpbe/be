@@ -26,6 +26,14 @@ class Task
      */
     protected $schedule = null;
 
+    /**
+     * 是否可并行执行
+     *
+     * @var bool
+     */
+    protected $parallel = false;
+
+
     public function __construct($task, $taskLog)
     {
         if ($task->data !== '') {
@@ -62,9 +70,14 @@ class Task
         Be::newDb()->update('system_task_log', $this->taskLog, 'id');
     }
 
-    public function getSchedule()
+    public function getSchedule(): string
     {
         return $this->schedule;
+    }
+
+    public function isParallel(): bool
+    {
+        return $this->parallel;
     }
 
     public function complete()

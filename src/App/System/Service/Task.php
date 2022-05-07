@@ -38,6 +38,7 @@ class Task
                             $task = $annotation->toArray();
 
                             $schedule = $task['schedule'] ?? '';
+                            $parallel = $task['parallel'] ?? false;
                             $scheduleLock = 0;
                             $defaultProperties = $reflection->getDefaultProperties();
                             if (isset($defaultProperties['schedule']) && $defaultProperties['schedule']) {
@@ -45,11 +46,16 @@ class Task
                                 $scheduleLock = 1;
                             }
 
+                            if (isset($defaultProperties['parallel'])) {
+                                $parallel = (bool) $defaultProperties['parallel'];
+                            }
+
                             if (isset($dbTasks[$taskName])) {
                                 $data = [
                                     'id' => $dbTasks[$taskName]->id,
                                     'name' => $taskName,
                                     'label' => $task['value'] ?? '',
+                                    'parallel' => $parallel,
                                     'schedule' => $schedule,
                                     'schedule_lock' => $scheduleLock,
                                     'is_delete' => 0,
@@ -70,6 +76,7 @@ class Task
                                     'app' => $appName,
                                     'name' => $taskName,
                                     'label' => $task['value'] ?? '',
+                                    'parallel' => $parallel,
                                     'schedule' => $schedule,
                                     'schedule_lock' => $scheduleLock,
                                     'is_enable' => 0,
@@ -94,12 +101,13 @@ class Task
      * 触发启动指定的计划任务
      *
      * @param string $taskRoute
+     * @param array $taskData 数据
      * @param $triggerType
      *              SYSTEM: 系统定时任务按时启动
      *              MANUAL: 用户手工触发
      *              RELATED：程序功能关联触发。
      */
-    public function trigger($taskRoute, $triggerType = 'RELATED')
+    public function trigger($taskRoute, array $taskData = [], $triggerType = 'RELATED')
     {
         $parts = explode('.', $taskRoute);
         $app = $parts[0];
@@ -238,6 +246,9 @@ class Task
                 //返回任务执行的结果
                 //$server->finish("{$data} -> OK");
             } catch (\Throwable $t) {
+
+                Be::getLog()->critical($t);
+
                 if ($instance !== null) {
                     $instance->error($t->getMessage());
                 } else {
@@ -252,7 +263,6 @@ class Task
                     }
                 }
 
-                //Be::getLog()->emergency($t);
             }
         }
     }

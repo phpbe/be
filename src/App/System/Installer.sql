@@ -126,6 +126,7 @@ CREATE TABLE `system_task` (
   `app` varchar(60) NOT NULL DEFAULT '' COMMENT '应用',
   `name` varchar(60) NOT NULL DEFAULT '' COMMENT '名称',
   `label` varchar(60) NOT NULL DEFAULT '' COMMENT '中文名称',
+  `parallel` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否可并行执行',
   `schedule` varchar(30) NOT NULL DEFAULT '* * * * *' COMMENT '执行计划',
   `schedule_lock` TINYINT NOT NULL DEFAULT '0' COMMENT '是否锁定执行计划',
   `timeout` int(11) NOT NULL DEFAULT '0' COMMENT '超时时间',
