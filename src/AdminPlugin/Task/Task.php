@@ -348,7 +348,7 @@ class Task extends Driver
                             'ui' => function ($row) {
                                 return [
                                     'form-item' => [
-                                        'v-if' => $row['schedule_lock'] === '0' ? 'true' : 'false'
+                                        'v-if' => $row['schedule_lock'] === 0 ? 'true' : 'false'
                                     ]
                                 ];
                             }
