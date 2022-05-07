@@ -65,12 +65,7 @@ class Task
                                 $db->update('system_task', $data, 'id');
                             } else {
 
-                                $taskId = null;
-                                if (function_exists('uuid_create')) {
-                                    $taskId = uuid_create();
-                                } else {
-                                    $taskId = $db->uuid();
-                                }
+                                $taskId = $db->quickUuid();
 
                                 $data = [
                                     'id' => $taskId,
@@ -253,12 +248,7 @@ class Task
             $instance = null;
             try {
                 $now = date('Y-m-d H:i:s');
-
-                if (function_exists('uuid_create')) {
-                    $taskLog->id = uuid_create();
-                } else {
-                    $taskLog->id = $db->uuid();
-                }
+                $taskLog->id = $db->quickUuid();
                 $taskLog->task_id = $task->id;
                 $taskLog->data = $task->data;
                 $taskLog->status = 'RUNNING';
@@ -305,12 +295,7 @@ class Task
             $now = date('Y-m-d H:i:s');
 
             $taskLog = new \stdClass();
-            if (function_exists('uuid_create')) {
-                $taskLog->id = uuid_create();
-            } else {
-                $taskLog->id = $db->uuid();
-            }
-
+            $taskLog->id = $db->quickUuid();
             $taskLog->task_id = $task->id;
             $taskLog->data = $task->data;
             $taskLog->status = 'ERROR';
