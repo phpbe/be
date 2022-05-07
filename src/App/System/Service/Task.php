@@ -2,6 +2,7 @@
 
 namespace Be\App\System\Service;
 
+use Be\App\ServiceException;
 use Be\Be;
 use Be\Task\Annotation\BeTask;
 use Be\Task\TaskHelper;
@@ -47,7 +48,7 @@ class Task
                             }
 
                             if (isset($defaultProperties['parallel'])) {
-                                $parallel = (bool) $defaultProperties['parallel'];
+                                $parallel = (bool)$defaultProperties['parallel'];
                             }
 
                             if (isset($dbTasks[$taskName])) {
@@ -102,27 +103,38 @@ class Task
      *
      * @param string $taskRoute
      * @param array $taskData 数据
-     * @param $triggerType
+     * @param string $triggerType
      *              SYSTEM: 系统定时任务按时启动
      *              MANUAL: 用户手工触发
      *              RELATED：程序功能关联触发。
      */
-    public function trigger($taskRoute, array $taskData = [], $triggerType = 'RELATED')
+    public function trigger(string $taskRoute, array $taskData = null, string $triggerType = 'RELATED')
     {
         $parts = explode('.', $taskRoute);
+        if (count($parts) !== 2) {
+            return;
+        }
+
         $app = $parts[0];
         $name = $parts[1];
 
         $tupleTask = Be::getTuple('system_task');
-        $tupleTask->loadBy([
-            'app' => $app,
-            'name' => $name,
-        ]);
+        try {
+            $tupleTask->loadBy([
+                'app' => $app,
+                'name' => $name,
+            ]);
+        } catch (\Throwable $t) {
+            throw new ServiceException('Task does not register!');
+        }
 
         $task = $tupleTask->toObject();
-        $task->trigger = $triggerType;
 
         if (Be::getRuntime()->isSwooleMode()) {
+            $task->trigger = $triggerType;
+            if ($taskData !== null && count($taskData) > 0) {
+                $task->data = $taskData;
+            }
             Be::getRuntime()->task($task);
         } else {
             $config = Be::getConfig('App.System.Task');
@@ -132,6 +144,10 @@ class Task
             curl_setopt($curl, CURLOPT_HEADER, 1);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($curl, CURLOPT_TIMEOUT, 1);
+            if ($taskData !== null && count($taskData) > 0) {
+                $options[CURLOPT_POST] = 1;
+                $options[CURLOPT_POSTFIELDS] = http_build_query($taskData);
+            }
             curl_exec($curl);
             curl_close($curl);
         }
@@ -143,7 +159,7 @@ class Task
      *
      * 调度
      */
-    public function dispatch()
+    public function schedule()
     {
         $db = Be::getDb();
 
@@ -170,10 +186,15 @@ class Task
      * 普通PHP模式  执行计划任务
      *
      */
-    public function run($taskId, $timestamp, $trigger)
+    public function onTask($taskId, $timestamp, $trigger, $taskData = null)
     {
         $tuple = Be::getTuple('system_task');
-        $tuple->load($taskId);
+        try {
+            $tuple->load($taskId);
+        } catch (\Throwable $t) {
+            return;
+        }
+
         $task = $tuple->toObject();
 
         /*
@@ -184,30 +205,47 @@ class Task
         }
         */
 
+        $task->parallel = (int)$task->parallel;
+
+        if ($taskData !== null) {
+            $task->data = $taskData;
+        }
+
+        $this->run($task, $trigger);
+    }
+
+    /**
+     * 执行计划任务
+     */
+    public function run($task, $trigger)
+    {
+        $db = Be::newDb();
+
         $class = '\\Be\\App\\' . $task->app . '\\Task\\' . $task->name;
         if (class_exists($class)) {
-            $db = Be::newDb();
+            // 计划任务不允许并行
+            if ($task->parallel === 0) {
+                // 有任务正在运行
+                $sql = 'SELECT * FROM system_task_log WHERE task_id = \'' . $task->id . '\' AND status = \'RUNNING\'';
+                $taskLogs = $db->getObjects($sql);
 
-            // 有任务正在运行
-            $sql = 'SELECT * FROM system_task_log WHERE task_id = \'' . $task->id . '\' AND status = \'RUNNING\'';
-            $taskLogs = $db->getObjects($sql);
-
-            $running = count($taskLogs);
-            if ($running > 0) {
-                if ($task->timeout > 0) {
-                    $t = time();
-                    foreach ($taskLogs as $taskLog) {
-                        if ($t - strtotime($taskLog->update_time) >= $task->timeout) {
-                            $sql = 'UPDATE system_task_log SET status = \'ERROR\', message=\'执行超时\' WHERE id = \'' . $taskLog->id . '\'';
-                            $db->query($sql);
-                            $running--;
+                $running = count($taskLogs);
+                if ($running > 0) {
+                    if ($task->timeout > 0) {
+                        $t = time();
+                        foreach ($taskLogs as $taskLog) {
+                            if ($t - strtotime($taskLog->update_time) >= $task->timeout) {
+                                $sql = 'UPDATE system_task_log SET status = \'ERROR\', message=\'执行超时\' WHERE id = \'' . $taskLog->id . '\'';
+                                $db->query($sql);
+                                $running--;
+                            }
                         }
                     }
                 }
-            }
 
-            if ($running > 0) {
-                return;
+                if ($running > 0) {
+                    return;
+                }
             }
 
             $taskLog = new \stdClass();
@@ -221,7 +259,6 @@ class Task
                 } else {
                     $taskLog->id = $db->uuid();
                 }
-
                 $taskLog->task_id = $task->id;
                 $taskLog->data = $task->data;
                 $taskLog->status = 'RUNNING';
@@ -246,7 +283,6 @@ class Task
                 //返回任务执行的结果
                 //$server->finish("{$data} -> OK");
             } catch (\Throwable $t) {
-
                 Be::getLog()->critical($t);
 
                 if ($instance !== null) {
@@ -262,9 +298,32 @@ class Task
                         ]);
                     }
                 }
-
             }
+
+        } else {
+
+            $now = date('Y-m-d H:i:s');
+
+            $taskLog = new \stdClass();
+            if (function_exists('uuid_create')) {
+                $taskLog->id = uuid_create();
+            } else {
+                $taskLog->id = $db->uuid();
+            }
+
+            $taskLog->task_id = $task->id;
+            $taskLog->data = $task->data;
+            $taskLog->status = 'ERROR';
+            $taskLog->message = '计划任务类（' . $class . '）不存在！';
+            $taskLog->trigger = $trigger;
+            //$taskLog->complete_time = null;
+            $taskLog->create_time = $now;
+            $taskLog->update_time = $now;
+
+            $db->insert('system_task_log', $taskLog);
         }
     }
+
+
 
 }

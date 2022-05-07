@@ -7,6 +7,9 @@ use Be\Be;
 class Task
 {
 
+    /**
+     * @BeRoute("/system/task")
+     */
     public function index()
     {
         $response = Be::getResponse();
@@ -19,7 +22,12 @@ class Task
         Be::getResponse()->success('任务程序运行正常。');
     }
 
-    public function dispatch()
+    /**
+     * 定时任务
+     *
+     * @BeRoute("/system/task/schedule")
+     */
+    public function schedule()
     {
         $request = Be::getRequest();
         $response = Be::getResponse();
@@ -36,10 +44,12 @@ class Task
             return;
         }
 
-        Be::getService('App.System.Task')->dispatch();
+        Be::getService('App.System.Task')->schedule();
     }
 
-
+    /**
+     * @BeRoute("/system/task/run")
+     */
     public function run()
     {
         $request = Be::getRequest();
@@ -84,7 +94,15 @@ class Task
             return;
         }
 
-        Be::getService('App.System.Task')->run($taskId, $timestamp, $trigger);
+        $taskData = null;
+        if ($request->isPost()) {
+            $postData = $request->post();
+            if (is_array($postData) && count($postData) > 0) {
+                $taskData = $postData;
+            }
+        }
+
+        Be::getService('App.System.Task')->onTask($taskId, $timestamp, $trigger, $taskData);
     }
 
 

@@ -29,7 +29,7 @@
         <hr>
         <p>
             <code># 每分钟访问一次任务调度中心</code><br>
-            <code>* * * * * curl <?php echo beUrl('System.Task.dispatch', ['password' => $this->configTask->password ]); ?></code>
+            <code>* * * * * curl <?php echo beUrl('System.Task.schedule', ['password' => $this->configTask->password ]); ?></code>
         </p>
 
         <h3>Windows 计划任务 配置</h3>
@@ -37,7 +37,7 @@
         <p>
             请查阅相关资料，配置 windows 计划任务每分钟访问任务调度中心网址：<br>
             <code>
-                <?php echo beUrl('System.Task.dispatch', ['password' => $this->configTask->password ]); ?>
+                <?php echo beUrl('System.Task.schedule', ['password' => $this->configTask->password ]); ?>
             </code>
         </p>
 

@@ -63,81 +63,9 @@ class Task
         $trigger = $task->trigger;
         unset($task->trigger);
 
-        $class = '\\Be\\App\\' . $task->app . '\\Task\\' . $task->name;
-        if (class_exists($class)) {
-            $db = Be::newDb();
+        $task->parallel = (int)$task->parallel;
 
-            // 有任务正在运行
-            $sql = 'SELECT * FROM system_task_log WHERE task_id = \'' . $task->id . '\' AND status = \'RUNNING\'';
-            $taskLogs = $db->getObjects($sql);
-
-            $running = count($taskLogs);
-            if ($running > 0) {
-                if ($task->timeout > 0) {
-                    $t = time();
-                    foreach ($taskLogs as $taskLog) {
-                        if ($t - strtotime($taskLog->update_time) >= $task->timeout) {
-                            $sql = 'UPDATE system_task_log SET status = \'ERROR\', message=\'执行超时\' WHERE id = \'' . $taskLog->id . '\'';
-                            $db->query($sql);
-                            $running--;
-                        }
-                    }
-                }
-            }
-
-            if ($running > 0) {
-                return;
-            }
-
-            $taskLog = new \stdClass();
-            $instance = null;
-
-            $taskLogInserted = false;
-            try {
-                $now = date('Y-m-d H:i:s');
-                $taskLogId = $db->uuid();
-                $taskLog->id = $taskLogId;
-                $taskLog->task_id = $task->id;
-                $taskLog->data = $task->data;
-                $taskLog->status = 'RUNNING';
-                $taskLog->message = '';
-                $taskLog->trigger = $trigger;
-                //$taskLog->complete_time = null;
-                $taskLog->create_time = $now;
-                $taskLog->update_time = $now;
-                $db->insert('system_task_log', $taskLog);
-                $taskLogInserted = true;
-
-                /**
-                 * @var \Be\Task\Task $instance
-                 */
-                $instance = new $class($task, $taskLog);
-                $instance->execute();
-
-                $instance->complete();
-
-                //返回任务执行的结果
-                //$server->finish("{$data} -> OK");
-            } catch (\Throwable $t) {
-
-                Be::getLog()->critical($t);
-
-                if ($instance !== null) {
-                    $instance->error($t->getMessage());
-                } else {
-                    if ($taskLogInserted) {
-                        $now = date('Y-m-d H:i:s');
-                        Be::newDb()->update('system_task_log', [
-                            'id' => $taskLog->id,
-                            'status' => 'ERROR',
-                            'message' => $t->getMessage(),
-                            'update_time' => $now
-                        ]);
-                    }
-                }
-
-            }
-        }
+        Be::newService('App.System.Task')->run($task, $trigger);
     }
 
 
