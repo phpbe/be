@@ -12,7 +12,8 @@ class TaskHelper
      * @param $schedule
      * @return bool
      */
-    public static function isScheduleValid($schedule) {
+    public static function isScheduleValid($schedule)
+    {
         $parts = explode(' ', trim($schedule));
         if (count($parts) !== 5) {
             return false;
@@ -20,42 +21,47 @@ class TaskHelper
 
         // 分
         if (is_numeric($parts[0])) {
-            if ($parts[0] > 59 || $parts[0] < 0) {
+            $value = (int)$parts[0];
+            if ($value > 59 || $value < 0) {
                 return false;
             }
         }
 
         // 时
         if (is_numeric($parts[1])) {
-            if ($parts[1] > 23 || $parts[1] < 0) {
+            $value = (int)$parts[1];
+            if ($value > 23 || $value < 0) {
                 return false;
             }
         }
 
         // 日
         if (is_numeric($parts[2])) {
-            if ($parts[2] > 31 || $parts[2] < 1) {
+            $value = (int)$parts[2];
+            if ($value > 31 || $value < 1) {
                 return false;
             }
         }
 
         // 月
         if (is_numeric($parts[3])) {
-            if ($parts[3] > 12 || $parts[3] < 1) {
+            $value = (int)$parts[3];
+            if ($value > 12 || $value < 1) {
                 return false;
             }
         }
 
         // 周
         if (is_numeric($parts[4])) {
-            if ($parts[4] > 6 || $parts[4] < 0) {
+            $value = (int)$parts[4];
+            if ($value > 6 || $value < 0) {
                 return false;
             }
         }
 
         foreach ($parts as $part) {
             if (is_numeric($part)) {
-                if ($part !== intval($part)) {
+                if ($part !== (string)(int)$part) {
                     return false;
                 }
 
@@ -176,6 +182,8 @@ class TaskHelper
                         continue;
                     }
 
+                    $denominator = (int)$denominator;
+
                     if (strpos($numerator, '-')) {
 
                         $scheduleRuleValues = explode('-', $numerator);
@@ -187,8 +195,11 @@ class TaskHelper
                             continue;
                         }
 
-                        if ($scheduleRuleValues[0] <= $timeValue && $timeValue <= $scheduleRuleValues[1]) {
-                            if (($timeValue - $scheduleRuleValues[0]) % $denominator === 0) {
+                        $scheduleRule0 = (int)$scheduleRuleValues[0];
+                        $scheduleRule1 = (int)$scheduleRuleValues[1];
+
+                        if ($scheduleRule0 <= $timeValue && $timeValue <= $scheduleRule1) {
+                            if (($timeValue - $scheduleRule0) % $denominator === 0) {
                                 $match = true;
                                 break;
                             }
@@ -214,14 +225,23 @@ class TaskHelper
                             continue;
                         }
 
-                        if ($scheduleRuleValues[0] <= $timeValue && $timeValue <= $scheduleRuleValues[1]) {
+                        $scheduleRule0 = (int)$scheduleRuleValues[0];
+                        $scheduleRule1 = (int)$scheduleRuleValues[1];
+
+                        if ($scheduleRule0 <= $timeValue && $timeValue <= $scheduleRule1) {
                             $match = true;
                             break;
                         }
                     } else {
-                        if ($scheduleRule === '*' || $scheduleRule === $timeValue) {
+                        if ($scheduleRule === '*') {
                             $match = true;
                             break;
+                        } else {
+                            $scheduleRule = (int)$scheduleRule;
+                            if ($scheduleRule === $timeValue) {
+                                $match = true;
+                                break;
+                            }
                         }
                     }
                 }
