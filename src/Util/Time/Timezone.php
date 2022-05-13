@@ -151,6 +151,22 @@ class Timezone
     }
 
     /**
+     * 获取时区名称
+     *
+     * @param string $timezone 时区
+     * @return string
+     */
+    public static function getTimezoneName(string $timezone): string
+    {
+        $keyValues = self::getKeyValues();
+        if (isset($keyValues[$timezone])) {
+            return $keyValues[$timezone];
+        }
+
+        return $timezone;
+    }
+
+    /**
      * 将指定的时间，转换时区
      *
      * @param string $toFormat
