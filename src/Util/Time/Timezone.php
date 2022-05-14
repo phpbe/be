@@ -175,9 +175,9 @@ class Timezone
      * @param string $fromTimezone
      * @return string
      */
-    public static function convert(string $toFormat, string $toTimezone, string $fromDatetime = 'now', string $fromTimezone = null): string
+    public static function convert(string $toFormat, string $toTimezone, string $fromDatetime = 'now', string $fromTimezone = ''): string
     {
-        $toDatetime = new \DateTime($fromDatetime, $fromTimezone);
+        $toDatetime = new \DateTime($fromDatetime, new \DateTimeZone($fromTimezone));
         $toDatetime->setTimezone(new \DateTimeZone($toTimezone));
         return $toDatetime->format($toFormat);
     }

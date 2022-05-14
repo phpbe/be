@@ -502,9 +502,9 @@ class Table
      * 求和
      *
      * @param string $field 字段名
-     * @return string
+     * @return string|null
      */
-    public function sum(string $field): string
+    public function sum(string $field)
     {
         return $this->query('getValue', 'SUM(' . $field . ')');
     }
@@ -513,9 +513,9 @@ class Table
      * 取最小值
      *
      * @param string $field 字段名
-     * @return string
+     * @return string|null
      */
-    public function min(string $field): string
+    public function min(string $field)
     {
         return $this->query('getValue', 'MIN(' . $field . ')');
     }
@@ -524,9 +524,9 @@ class Table
      * 取最大值
      *
      * @param string $field 字段名
-     * @return string
+     * @return string|null
      */
-    public function max(string $field): string
+    public function max(string $field)
     {
         return $this->query('getValue', 'MAX(' . $field . ')');
     }
@@ -535,9 +535,9 @@ class Table
      * 取平均值
      *
      * @param string $field 字段名
-     * @return string
+     * @return string|null
      */
-    public function avg(string $field): string
+    public function avg(string $field)
     {
         return $this->query('getValue', 'AVG(' . $field . ')');
     }
