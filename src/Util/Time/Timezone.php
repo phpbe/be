@@ -167,13 +167,14 @@ class Timezone
     }
 
     /**
-     * 将指定的时间，转换时区
+     * 将指定的时间，转换成目标时区的时间
      *
-     * @param string $toFormat
-     * @param string $toTimezone
-     * @param string $fromDatetime
-     * @param string $fromTimezone
-     * @return string
+     * @param string $toFormat 目标时间格式
+     * @param string $toTimezone 目标时区
+     * @param string $fromDatetime 原时间
+     * @param string|null $fromTimezone 原时区
+     * @return string 转换后的时间
+     * @throws \Exception
      */
     public static function convert(string $toFormat, string $toTimezone, string $fromDatetime = 'now', string $fromTimezone = null): string
     {
