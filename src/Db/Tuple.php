@@ -766,10 +766,11 @@ abstract class Tuple
             }
         }
 
+        $this->$fieldName = $value;
+
         // 有更新
         if ($initValue !== $value) {
             $this->_changed = true;
-            $this->$fieldName = $value;
         }
     }
 
