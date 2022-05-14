@@ -114,7 +114,7 @@ class Timezone
             'Asia/Jakarta' => '(GMT+07:00) 雅加达',
             'Asia/Krasnoyarsk' => '(GMT+07:00) 克拉斯诺亚尔斯克',
             'Asia/Novosibirsk' => '(GMT+07:00) 新西伯利亚',
-            'Asia/Shanghai' => '(GMT+08:00) 北京',
+            'Asia/Shanghai' => '(GMT+08:00) 上海',
             'Asia/Chongqing' => '(GMT+08:00) 重庆',
             'Asia/Hong_Kong' => '(GMT+08:00) 香港',
             'Asia/Irkutsk' => '(GMT+08:00) 伊尔库次克',
@@ -175,9 +175,9 @@ class Timezone
      * @param string $fromTimezone
      * @return string
      */
-    public static function convert(string $toFormat, string $toTimezone, string $fromDatetime = 'now', string $fromTimezone = ''): string
+    public static function convert(string $toFormat, string $toTimezone, string $fromDatetime = 'now', string $fromTimezone = null): string
     {
-        $toDatetime = new \DateTime($fromDatetime, new \DateTimeZone($fromTimezone));
+        $toDatetime = $fromTimezone === null ? new \DateTime($fromDatetime) : new \DateTime($fromDatetime, new \DateTimeZone($fromTimezone));
         $toDatetime->setTimezone(new \DateTimeZone($toTimezone));
         return $toDatetime->format($toFormat);
     }
