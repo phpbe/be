@@ -309,6 +309,18 @@ class FormItemCode extends FormItem
         return $css;
     }
 
+    public function getCssCode()
+    {
+        return '
+.CodeMirror {
+    font-size: 13px;
+    line-height: 150%;
+    border: 1px solid #DCDFE6;
+    min-height: 60px;
+    height: auto !important;
+}';
+    }
+
     /**
      * 获取html内容
      *

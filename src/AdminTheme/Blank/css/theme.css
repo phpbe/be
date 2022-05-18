@@ -26,14 +26,6 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-.CodeMirror {
-    font-size: 13px;
-    line-height: 150%;
-    border: 1px solid #DCDFE6;
-    min-height: 60px;
-    height: auto !important;
-}
-
 .be-center-title {
     font-size: 1.25rem;
     height: 3.5rem;

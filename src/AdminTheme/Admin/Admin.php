@@ -51,7 +51,7 @@
 
     <link rel="stylesheet" href="<?php echo $beUrl; ?>/vendor/be/scss/src/be.css" />
 
-    <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/theme.css?v=20110301" />
+    <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/theme.css?v=2022051801" />
     <be-head>
     </be-head>
 </head>

@@ -1,0 +1,264 @@
+<?php
+
+namespace Be\AdminPlugin\Form\Item;
+
+use Be\Be;
+use Be\AdminPlugin\AdminPluginException;
+
+/**
+ * 表单项 Markdown 编辑器
+ */
+class FormItemMarkdown extends FormItem
+{
+
+    protected $baseUrl = null;
+    protected $js = []; // 需要引入的 JS 文件
+    protected $css = []; // 需要引入的 CSS 文件
+    protected $option = []; // 配置项
+    protected $valueFormat = 'markdown'; // 值枨式： markdown 、html
+
+    /**
+     * 构造函数
+     *
+     * @param array $params 参数
+     * @param array $row 数据对象
+     * @throws AdminPluginException
+     */
+    public function __construct($params = [], $row = [])
+    {
+        parent::__construct($params, $row);
+
+        if ($this->required) {
+            if (!isset($this->ui['form-item'][':rules'])) {
+                $this->ui['form-item'][':rules'] = '[{required: true, message: \'请输入' . $this->label . '\', trigger: \'blur\' }]';
+            }
+        }
+
+        $this->baseUrl = Be::getProperty('AdminPlugin.Form')->getUrl() . '/Template/editor.md-1.5.0/';
+
+        $this->css = [
+            'css/editormd.min.css',
+        ];
+
+        $this->js = [
+            'editormd.min.js',
+            'plugins/be-link-dialog/be-link-dialog.js',
+            'plugins/be-image-dialog/be-image-dialog.js',
+        ];
+
+        $beLinkCallback = base64_encode('parent.window.beLink.selectFile(files);');
+        $beImageCallback = base64_encode('parent.window.beImage.selectImage(files);');
+
+        $this->option = [
+            //'width' => '100%',
+            'height' => '500',
+            'tax' => true,
+            'tocm' => true,
+            'emoji' => true,
+            'taskList' => true,
+            'codeFold' => true,
+            'searchReplace' => true,
+            'htmlDecode' => 'style,script,iframe',
+            'flowChart' => true,
+            'sequenceDiagram' => true,
+            'path' => $this->baseUrl . 'lib/',
+            'toolbarIcons' => 'function() {
+                return [
+                    "undo", "redo", "|",
+                    "bold", "del", "italic", "quote", "|",
+                    "h1", "h2", "h3", "h4", "h5", "h6", "|",
+                    "list-ul", "list-ol", "hr", "|",
+                    "beLink", "reference-link", "beImage", "code", "preformatted-text", "code-block", "table", "datetime", "html-entities", "pagebreak", "|",
+                    "goto-line", "watch", "preview", "fullscreen", "clear", "search", "|",
+                    "help"
+                ];
+            }',
+
+            'be_storage_url' => beAdminUrl('System.Storage.pop', ['callback' => $beLinkCallback]),
+            'be_storage_url_filter_image' => beAdminUrl('System.Storage.pop', ['filterImage' => 1, 'callback' => $beImageCallback]),
+        ];
+
+        if ($this->valueFormat === 'html') {
+            $this->option['saveHTMLToTextarea'] = true;
+        }
+
+        if (isset($params['js'])) {
+            $js = $params['js'];
+            if ($js instanceof \Closure) {
+                $js = $js($row);
+            }
+
+            if (is_array($js)) {
+                $this->js = array_merge($this->js, $js);
+            }
+        }
+
+        if (isset($params['css'])) {
+            $css = $params['css'];
+            if ($css instanceof \Closure) {
+                $css = $css($row);
+            }
+
+            if (is_array($css)) {
+                $this->css = array_merge($this->css, $css);
+            }
+        }
+
+        if (isset($params['option'])) {
+            $option = $params['option'];
+            if ($option instanceof \Closure) {
+                $option = $option($row);
+            }
+
+            if (is_array($option)) {
+                $this->option = array_merge($this->option, $option);
+            }
+        }
+
+        if (isset($params['valueFormat'])) {
+            $valueFormat = $params['valueFormat'];
+            if ($valueFormat instanceof \Closure) {
+                $valueFormat = $valueFormat($row);
+            }
+
+            $this->valueFormat = $valueFormat;
+        }
+    }
+
+    /**
+     * 获取需要引入的 JS 文件
+     *
+     * @return false | array
+     */
+    public function getJs()
+    {
+        $js = [];
+        foreach ($this->js as $x) {
+            $js[] = $this->baseUrl . $x;
+        }
+
+        return $js;
+    }
+
+    /**
+     * 获取需要引入的 CSS 文件
+     *
+     * @return false | array
+     */
+    public function getCss()
+    {
+        $css = [];
+        foreach ($this->css as $x) {
+            $css[] = $this->baseUrl . $x;
+        }
+
+        return $css;
+    }
+
+    public function getCssCode()
+    {
+        return '
+.editormd-fullscreen {
+    z-index: 999999 !important;
+}';
+    }
+
+
+    /**
+     * 获取html内容
+     *
+     * @return string
+     */
+    public function getHtml()
+    {
+        $html = '<el-form-item';
+        foreach ($this->ui['form-item'] as $k => $v) {
+            if ($v === null) {
+                $html .= ' ' . $k;
+            } else {
+                $html .= ' ' . $k . '="' . $v . '"';
+            }
+        }
+        $html .= '>';
+        $html .= '<div id="formItemMarkdown_' . $this->name . '">';
+        $html .= '<textarea></textarea>';
+        $html .= '</div>';
+
+        if ($this->description) {
+            $html .= '<div class="be-c-bbb be-mt-50 be-lh-150">' . $this->description . '</div>';
+        }
+
+        $html .= '</el-form-item>';
+        return $html;
+    }
+
+    /**
+     * 获取 vue data
+     *
+     * @return false | array
+     */
+    public function getVueData()
+    {
+        return [
+            'formItems' => [
+                $this->name => [
+                    'instance' => false,
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * 获取 vue 钩子
+     *
+     * @return false | array
+     */
+    public function getVueHooks()
+    {
+        $onChangeCallback = '';
+        if (isset($this->ui['@change'])) {
+            $onChangeCallback = '_this.';
+            $onChangeCallback .= $this->ui['@change'];
+            if (strpos($onChangeCallback, '(') === false) {
+                $onChangeCallback .= '()';
+            }
+            $onChangeCallback .= ';';
+        }
+
+        $mountedCode = '';
+        $mountedCode .= 'let _this = this;';
+        $mountedCode .= 'let editor = editormd("formItemMarkdown_' . $this->name . '", {';
+        foreach ($this->option as $key => $val) {
+            if (is_string($val)) {
+                if (substr($val, 0, 9) === 'function(') {
+                    $mountedCode .=  $key . ':' . $val . ',';
+                } else {
+                    $mountedCode .=  $key . ':"' . str_replace('"', '&quote;', $val) . '",';
+                }
+            } else {
+                $mountedCode .=  $key . ':' . json_encode($val) . ',';
+            }
+        }
+
+        $mountedCode .= 'markdown: _this.formData.' . $this->name . ',';
+        $mountedCode .= 'onchange: function() {';
+        if ($this->valueFormat === 'html') {
+            $mountedCode .= ' _this.formData.' . $this->name . ' = this.getHTML();';
+        } else {
+            $mountedCode .= ' _this.formData.' . $this->name . ' = this.getMarkdown();';
+        }
+        $mountedCode .= $onChangeCallback;
+        $mountedCode .= '},';
+        $mountedCode .= 'toolbarIconsClass:{beLink:"fa-link", beImage:"fa-picture-o"},';
+        $mountedCode .= 'toolbarHandlers:{beLink:function(){this.beLinkDialog();}, beImage:function(){this.beImageDialog();}}';
+        $mountedCode .= '});';
+
+        $mountedCode .= 'this.formItems.' . $this->name . '.instance = editor';
+
+        return [
+            'mounted' => $mountedCode,
+        ];
+    }
+
+
+}
