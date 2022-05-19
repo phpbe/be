@@ -551,7 +551,9 @@ class Installer
         $response->display('App.System.Admin.Installer.complete', 'Installer');
 
         $config = Be::getConfig('App.System.System');
+        $config->home = 'System.Home.index';
         $config->installable = false;
+
         ConfigHelper::update('App.System.System', $config);
 
         if (Be::getRuntime()->isSwooleMode()) {
