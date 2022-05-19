@@ -214,6 +214,18 @@ class Task
      */
     public function run($task, $trigger)
     {
+        if ($task->parallel === 0) {
+            $cache = Be::newCache();
+            $cacheKey = 'be:task:running:' . $task->id;
+
+            // 计划任务串行且正在执行，直接返回
+            if ($cache->has($cacheKey)) {
+                return;
+            } else {
+                $cache->set($cacheKey, 1, $task->timeout);
+            }
+        }
+
         $db = Be::newDb();
 
         $class = '\\Be\\App\\' . $task->app . '\\Task\\' . $task->name;
@@ -307,6 +319,13 @@ class Task
 
             $db->insert('system_task_log', $taskLog);
         }
+
+        if ($task->parallel === 0) {
+            $cache = Be::newCache();
+            $cacheKey = 'be:task:running:' . $task->id;
+            $cache->delete($cacheKey);
+        }
+
     }
 
 

@@ -41,11 +41,17 @@ class Task
 
             if (count($tasks) === 0) return;
 
+            $cache = Be::newCache();
             $t = time();
             foreach ($tasks as $task) {
                 if (TaskHelper::isOnTime($task->schedule, $t)) {
-                    $task->trigger = 'SYSTEM';
-                    $swooleHttpServer->task($task);
+                    $cacheKey = 'be:task:running:' . $task->id;
+                    if (!$cache->has($cacheKey)) {
+                        $cache->set($cacheKey, 1, $task->timeout);
+
+                        $task->trigger = 'SYSTEM';
+                        $swooleHttpServer->task($task);
+                    }
                 }
             }
         }
