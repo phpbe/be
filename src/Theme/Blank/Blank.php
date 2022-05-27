@@ -11,7 +11,7 @@
     <base href="<?php echo $beUrl; ?>/">
     <script>var beUrl = "<?php echo $beUrl; ?>"; </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <script src="https://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
 
     <link rel="stylesheet" href="<?php echo $beUrl; ?>/vendor/be/scss/src/be.css" />
 
