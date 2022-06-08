@@ -107,42 +107,43 @@ abstract class Driver
         }
 
         $request = Be::getRequest();
+        if ($request) {
+            if (isset($configSystemLog->get) && $configSystemLog->get) {
+                $content['get'] = $request->get();
+            }
 
-        if (isset($configSystemLog->get) && $configSystemLog->get) {
-            $content['get'] = $request->get();
-        }
+            if (isset($configSystemLog->post) && $configSystemLog->post) {
+                $content['post'] = $request->post();
+            }
 
-        if (isset($configSystemLog->post) && $configSystemLog->post) {
-            $content['post'] = $request->post();
-        }
+            if (isset($configSystemLog->request) && $configSystemLog->request) {
+                $content['request'] = $request->request();
+            }
 
-        if (isset($configSystemLog->request) && $configSystemLog->request) {
-            $content['request'] = $request->request();
-        }
+            if (isset($configSystemLog->cookie) && $configSystemLog->cookie) {
+                $content['cookie'] = $request->cookie();
+            }
 
-        if (isset($configSystemLog->cookie) && $configSystemLog->cookie) {
-            $content['cookie'] = $request->cookie();
-        }
+            if (isset($configSystemLog->session) && $configSystemLog->session) {
+                $session = Be::getSession();
+                $content['session'] = $session->get();
+            }
 
-        if (isset($configSystemLog->session) && $configSystemLog->session) {
-            $session = Be::getSession();
-            $content['session'] = $session->get();
-        }
+            if (isset($configSystemLog->header) && $configSystemLog->header) {
+                $content['header'] = $request->header();
+            }
 
-        if (isset($configSystemLog->header) && $configSystemLog->header) {
-            $content['header'] = $request->header();
-        }
+            if (isset($configSystemLog->server) && $configSystemLog->server) {
+                $content['server'] = $request->server();
+            }
 
-        if (isset($configSystemLog->server) && $configSystemLog->server) {
-            $content['server'] = $request->server();
-        }
+            if (isset($configSystemLog->memery) && $configSystemLog->memery) {
+                $bytes = memory_get_usage();
+                $content['memory_usage'] = FileSize::int2String($bytes);
 
-        if (isset($configSystemLog->memery) && $configSystemLog->memery) {
-            $bytes = memory_get_usage();
-            $content['memory_usage'] = FileSize::int2String($bytes);
-
-            $bytes = memory_get_peak_usage();
-            $content['memory_peak_usage'] = FileSize::int2String($bytes);
+                $bytes = memory_get_peak_usage();
+                $content['memory_peak_usage'] = FileSize::int2String($bytes);
+            }
         }
 
         $this->write($content);
