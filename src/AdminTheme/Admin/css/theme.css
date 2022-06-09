@@ -33,6 +33,11 @@ body {
     display: block;
 }
 
+.el-table th.el-table__cell {
+    color: #666;
+    background-color: #EBEEF5;
+}
+
 .be-west {
     width: 200px;
     position: fixed;
