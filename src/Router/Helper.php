@@ -282,22 +282,22 @@ class Helper
                 // 网址到路由的映射键名
                 $uri2routeKey = 'be:uri2route:' . $uri;
 
-                // 将路由和网址的双向映射关系写入 redis
-                $redis = Be::getRedis($configRouter->redis);
-                $redisUri = $redis->get($route2uriKey);
-                if ($redisUri) {
+                // 将路由和网址的双向映射关系写入缓存
+                $cache = Be::getCache();
+                $cacheUri = $cache->get($route2uriKey);
+                if ($cacheUri) {
                     // 路由到网址的映射与Redis中存储的不一致， 更新 REDIS 中的网址
-                    if ($uri !== $redisUri) {
-                        $redis->set($route2uriKey, $uri);
-                        $redis->set($uri2routeKey, json_encode([$route, $params]));
+                    if ($uri !== $cacheUri) {
+                        $cache->set($route2uriKey, $uri);
+                        $cache->set($uri2routeKey, json_encode([$route, $params]));
 
-                        // 删除 redis 中的旧网址到路由的映射
-                        $redis->del('be:uri2route:' . $redisUri);
+                        // 删除缓存中的旧网址到路由的映射
+                        $cache->delete('be:uri2route:' . $cacheUri);
                     }
                 } else {
                     // 写入 Redis 网址
-                    $redis->set($route2uriKey, $uri);
-                    $redis->set($uri2routeKey, json_encode([$route, $params]));
+                    $cache->set($route2uriKey, $uri);
+                    $cache->set($uri2routeKey, json_encode([$route, $params]));
                 }
 
                 /*
@@ -373,8 +373,8 @@ class Helper
                 }
             }
 
-            $redis = Be::getRedis($configRouter->redis);
-            $routeJson = $redis->get($uri2routeKey);
+            $cache = Be::getCache();
+            $routeJson = $cache->get($uri2routeKey);
             if ($routeJson) {
                 $route = json_decode($routeJson, true);
                 if ($route) {
