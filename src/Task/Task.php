@@ -33,6 +33,13 @@ class Task
      */
     protected $parallel = false;
 
+    /**
+     * 执行超时时间
+     *
+     * @var int
+     */
+    protected $timeout = 300;
+
 
     public function __construct($task, $taskLog)
     {
@@ -78,6 +85,16 @@ class Task
     public function isParallel(): bool
     {
         return $this->parallel;
+    }
+
+    public function setTimeout(int $timeout = 300): int
+    {
+        return $this->timeout = $timeout;
+    }
+
+    public function getTimeout(): int
+    {
+        return $this->timeout;
     }
 
     public function complete()

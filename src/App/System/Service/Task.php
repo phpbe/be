@@ -40,8 +40,11 @@ class Task
 
                             $schedule = $task['schedule'] ?? '';
                             $parallel = $task['parallel'] ?? false;
+                            $timeout = $task['timeout'] ?? 300;
+
                             $scheduleLock = 0;
                             $defaultProperties = $reflection->getDefaultProperties();
+
                             if (isset($defaultProperties['schedule']) && $defaultProperties['schedule']) {
                                 $schedule = $defaultProperties['schedule'];
                                 $scheduleLock = 1;
@@ -49,6 +52,10 @@ class Task
 
                             if (isset($defaultProperties['parallel'])) {
                                 $parallel = (bool)$defaultProperties['parallel'];
+                            }
+
+                            if (isset($defaultProperties['timeout'])) {
+                                $timeout = (int)$defaultProperties['timeout'];
                             }
 
                             if (isset($dbTasks[$taskName])) {
@@ -59,6 +66,7 @@ class Task
                                     'parallel' => $parallel ? 1 : 0,
                                     'schedule' => $schedule,
                                     'schedule_lock' => $scheduleLock,
+                                    'timeout' => $timeout,
                                     'is_delete' => 0,
                                     'update_time' => date('Y-m-d H:i:s'),
                                 ];
@@ -75,6 +83,7 @@ class Task
                                     'parallel' => $parallel ? 1 : 0,
                                     'schedule' => $schedule,
                                     'schedule_lock' => $scheduleLock,
+                                    'timeout' => $timeout,
                                     'is_enable' => 0,
                                     'is_delete' => 0,
                                     //'last_execute_time' => null,
