@@ -16,6 +16,8 @@ class Task
      */
     public static function process($process)
     {
+        Be::getRuntime()->isTaskMode(true);
+
         while (true) {
 
             $swooleHttpServer = Be::getRuntime()->getSwooleHttpServer();
@@ -33,7 +35,7 @@ class Task
 
             $tasks = [];
             try {
-                $db = Be::newDb();
+                $db = Be::getDb();
                 $sql = 'SELECT * FROM system_task WHERE is_enable = 1 AND is_delete = 0 AND schedule != \'\'';
                 $tasks = $db->getObjects($sql);
             } catch (\Throwable $t) {
@@ -41,17 +43,11 @@ class Task
 
             if (count($tasks) === 0) return;
 
-            $cache = Be::newCache();
             $t = time();
             foreach ($tasks as $task) {
                 if (TaskHelper::isOnTime($task->schedule, $t)) {
-                    $cacheKey = 'be:task:running:' . $task->id;
-                    if (!$cache->has($cacheKey)) {
-                        $cache->set($cacheKey, 1, $task->timeout);
-
-                        $task->trigger = 'SYSTEM';
-                        $swooleHttpServer->task($task);
-                    }
+                    $task->trigger = 'SYSTEM';
+                    $swooleHttpServer->task($task);
                 }
             }
         }
@@ -65,13 +61,15 @@ class Task
      */
     public static function onTask(\Swoole\Http\Server $swooleHttpServer, \Swoole\Server\Task $swooleServerTask)
     {
+        Be::getRuntime()->isTaskMode(true);
+
         $task = $swooleServerTask->data;
         $trigger = $task->trigger;
         unset($task->trigger);
 
         $task->parallel = (int)$task->parallel;
 
-        Be::newService('App.System.Task')->run($task, $trigger);
+        Be::getService('App.System.Task')->run($task, $trigger);
     }
 
 

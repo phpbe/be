@@ -18,6 +18,8 @@ abstract class Driver
 
     protected $adminAlias = 'admin'; // 后台功能虑拟目录
 
+    protected $taskMode = false; // 是否在计划任务中
+
     public function __construct()
     {
     }
@@ -40,6 +42,20 @@ abstract class Driver
     public function isSwooleMode(): bool
     {
         return $this->mode === 'Swoole';
+    }
+
+    /**
+     * 当前是否计划任务模式
+     *
+     * @return bool
+     */
+    public function isTaskMode($taskMode = null): bool
+    {
+        if ($taskMode !== null) {
+            $this->taskMode = (bool) $taskMode;
+        }
+
+        return $this->taskMode;
     }
 
     /**

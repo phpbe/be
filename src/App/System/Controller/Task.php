@@ -102,6 +102,8 @@ class Task
             }
         }
 
+        Be::getRuntime()->isTaskMode(true);
+
         Be::getService('App.System.Task')->onTask($taskId, $timestamp, $trigger, $taskData);
     }
 

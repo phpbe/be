@@ -29,12 +29,39 @@
 
     <?php
     $configTheme = \Be\Be::getConfig('Theme.Sample.Theme');
+
+    $libCss = \Be\Be::getLib('Css');
+    $mainColor = $configTheme->mainColor;
+    $mainColor1 = $libCss->lighter($mainColor, 10);
+    $mainColor2 = $libCss->lighter($mainColor, 20);
+    $mainColor3 = $libCss->lighter($mainColor, 30);
+    $mainColor4 = $libCss->lighter($mainColor, 40);
+    $mainColor5 = $libCss->lighter($mainColor, 50);
+    $mainColor6 = $libCss->lighter($mainColor, 60);
+    $mainColor7 = $libCss->lighter($mainColor, 70);
+    $mainColor8 = $libCss->lighter($mainColor, 80);
+    $mainColor9 = $libCss->lighter($mainColor, 90);
+    $mainColorHover = $libCss->darker($mainColor, 10);
     ?>
     <style type="text/css">
         html {
-            font-size: <?php echo $configTheme->pageFontSize ?>px;
-            background-color: <?php echo $configTheme->pageBackgroundColor ?>;
-            color: <?php echo $configTheme->pageColor ?>;
+            font-size: <?php echo $configTheme->pageFontSize; ?>px;
+            background-color: <?php echo $configTheme->pageBackgroundColor; ?>;
+            color: <?php echo $configTheme->pageColor; ?>;
+        }
+
+        body {
+            --main-color: <?php echo $mainColor; ?>;
+            --main-color-1: <?php echo $mainColor1; ?>;
+            --main-color-2: <?php echo $mainColor2; ?>;
+            --main-color-3: <?php echo $mainColor3; ?>;
+            --main-color-4: <?php echo $mainColor4; ?>;
+            --main-color-5: <?php echo $mainColor5; ?>;
+            --main-color-6: <?php echo $mainColor6; ?>;
+            --main-color-7: <?php echo $mainColor7; ?>;
+            --main-color-8: <?php echo $mainColor8; ?>;
+            --main-color-9: <?php echo $mainColor9; ?>;
+            --main-color-hover: <?php echo $mainColorHover; ?>;
         }
 
         a {
@@ -47,26 +74,6 @@
 
         .link-hover:before {
             background-color: <?php echo $configTheme->linkHoverColor; ?>;
-        }
-
-        .be-btn {
-            color: <?php echo $configTheme->btnColor; ?>;
-            background-color: <?php echo $configTheme->btnBackgroundColor; ?>;
-            border: 1px solid <?php echo $configTheme->btnBorderColor; ?>;
-        }
-
-        .be-btn:hover,
-        .be-btn:focus {
-            color: <?php echo $configTheme->btnHoverColor; ?>;
-            background-color: <?php echo $configTheme->btnHoverBackgroundColor; ?>;
-            border-color: <?php echo $configTheme->btnHoverBorderColor; ?>;
-        }
-
-        .be-btn-outline:hover,
-        .be-btn-outline:focus {
-            color: #fff !important;
-            background-color: <?php echo $configTheme->btnBackgroundColor; ?> !important;
-            border-color: <?php echo $configTheme->btnBorderColor; ?> !important;
         }
     </style>
 
