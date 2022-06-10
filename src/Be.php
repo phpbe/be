@@ -23,7 +23,7 @@ abstract class Be
     public static function getCid(): int
     {
         $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if ($runtime->isSwooleMode()) {
             return \Swoole\Coroutine::getCid();
         }
 
@@ -57,7 +57,7 @@ abstract class Be
     public static function setRequest(\Be\Request\Driver $request)
     {
         $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if ($runtime->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             self::$cache[$cid]['request'] = $request;
         } else {
@@ -73,7 +73,7 @@ abstract class Be
     public static function getRequest()
     {
         $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if ($runtime->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['request'])) {
                 return self::$cache[$cid]['request'];
@@ -95,7 +95,7 @@ abstract class Be
     public static function setResponse(\Be\Response\Driver $response)
     {
         $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if ($runtime->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             self::$cache[$cid]['response'] = $response;
         } else {
@@ -111,7 +111,7 @@ abstract class Be
     public static function getResponse()
     {
         $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if ($runtime->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['response'])) {
                 return self::$cache[$cid]['response'];
@@ -188,7 +188,7 @@ abstract class Be
     public static function getLog(): \Be\Log\Driver
     {
         $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if ($runtime->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (!isset(self::$cache[$cid]['log'])) {
                 self::$cache[$cid]['log'] = self::newLog();
@@ -241,7 +241,8 @@ abstract class Be
     {
         $config = self::getConfig('App.System.Session');
         $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+
+        if ($runtime->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['session'])) {
                 return self::$cache[$cid]['session'];
@@ -276,7 +277,7 @@ abstract class Be
     public static function getCache(): \Be\Cache\Driver
     {
         $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if ($runtime->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (!isset(self::$cache[$cid]['cache'])) {
                 self::$cache[$cid]['cache'] = self::newCache();
@@ -312,8 +313,7 @@ abstract class Be
      */
     public static function getStorage(): \Be\Storage\Driver
     {
-        $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (!isset(self::$cache[$cid]['storage'])) {
                 self::$cache[$cid]['storage'] = self::newStorage();
@@ -391,7 +391,7 @@ abstract class Be
     public static function getRedis(string $name = 'master')
     {
         $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if ($runtime->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['redis'][$name])) return self::$cache[$cid]['redis'][$name];
 
@@ -401,7 +401,7 @@ abstract class Be
             }
 
             $driver = null;
-            if (isset(self::$cache['redis']['pools'][$name])) {
+            if ($runtime->isWorkerProcess() && isset(self::$cache['redis']['pools'][$name])) {
                 $pool = self::$cache['redis']['pools'][$name];
                 $redis = $pool->get();
                 $driver = new \Be\Redis\Driver($name, $redis);
@@ -445,7 +445,7 @@ abstract class Be
     public static function getEs()
     {
         $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if ($runtime->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (!isset(self::$cache[$cid]['es'])) {
                 self::$cache[$cid]['es'] = self::newEs();
@@ -520,7 +520,7 @@ abstract class Be
     public static function getDb(string $name = 'master')
     {
         $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if ($runtime->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['db'][$name])) return self::$cache[$cid]['db'][$name];
 
@@ -533,7 +533,7 @@ abstract class Be
             $driver = null;
             switch ($configData['driver']) {
                 case 'mysql':
-                    if (isset(self::$cache['db']['pools'][$name])) {
+                    if ($runtime->isWorkerProcess() && isset(self::$cache['db']['pools'][$name])) {
                         $pool = self::$cache['db']['pools'][$name];
                         $pdo = $pool->get();
                         $driver = new \Be\Db\Driver\Mysql($name, $pdo);
@@ -656,8 +656,7 @@ abstract class Be
      */
     public static function getMongoDb(string $name)
     {
-        $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (!isset(self::$cache[$cid]['mongoDb'][$name])) {
                 self::$cache[$cid]['mongoDb'][$name] = self::newMongoDb($name);
@@ -695,8 +694,7 @@ abstract class Be
      */
     public static function getService(string $name)
     {
-        $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (!isset(self::$cache[$cid]['service'][$name])) {
                 self::$cache[$cid]['service'][$name] = self::newService($name);
@@ -738,8 +736,7 @@ abstract class Be
      */
     public static function getLib(string $name)
     {
-        $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (!isset(self::$cache[$cid]['lib'][$name])) {
                 self::$cache[$cid]['lib'][$name] = self::newLib($name);
@@ -782,8 +779,7 @@ abstract class Be
      */
     public static function getPlugin(string $name)
     {
-        $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (!isset(self::$cache[$cid]['plugin'][$name])) {
                 self::$cache[$cid]['plugin'][$name] = self::newPlugin($name);
@@ -823,8 +819,7 @@ abstract class Be
      */
     public static function getAdminPlugin(string $name)
     {
-        $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (!isset(self::$cache[$cid]['adminPlugin'][$name])) {
                 self::$cache[$cid]['adminPlugin'][$name] = self::newAdminPlugin($name);
@@ -874,7 +869,7 @@ abstract class Be
         }
 
         $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if ($runtime->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['template'][$theme][$template])) {
                 return self::$cache[$cid]['template'][$theme][$template];
@@ -892,7 +887,7 @@ abstract class Be
 
         $class = '\\Be\\Data\\Cache\\Template\\' . $theme . '\\' . $type . '\\' . $name . '\\' . implode('\\', $parts);
 
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if ($runtime->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             self::$cache[$cid]['template'][$theme][$template] = new $class();
             return self::$cache[$cid]['template'][$theme][$template];
@@ -921,7 +916,7 @@ abstract class Be
         }
 
         $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if ($runtime->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['adminTemplate'][$theme][$template])) {
                 return self::$cache[$cid]['adminTemplate'][$theme][$template];
@@ -939,7 +934,7 @@ abstract class Be
 
         $class = '\\Be\\Data\\Cache\\AdminTemplate\\' . $theme . '\\' . $type . '\\' . $name . '\\' . implode('\\', $parts);
 
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if ($runtime->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             self::$cache[$cid]['adminTemplate'][$theme][$template] = new $class();
             return self::$cache[$cid]['adminTemplate'][$theme][$template];
@@ -1041,7 +1036,7 @@ abstract class Be
     {
         Be::getSession()->set('be-adminUser', $adminUser);
         $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if ($runtime->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['adminUser'])) {
                 if ($adminUser === null) {
@@ -1069,7 +1064,7 @@ abstract class Be
     public static function getAdminUser()
     {
         $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if ($runtime->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['adminUser'])) {
                 return self::$cache[$cid]['adminUser'];
@@ -1098,7 +1093,7 @@ abstract class Be
     {
         Be::getSession()->set('be-user', $user);
         $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if ($runtime->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['user'])) {
                 if ($user === null) {
@@ -1126,7 +1121,7 @@ abstract class Be
     public static function getUser()
     {
         $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if ($runtime->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['user'])) {
                 return self::$cache[$cid]['user'];
@@ -1190,8 +1185,7 @@ abstract class Be
      */
     public static function setContext(string $name, $value)
     {
-        $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             self::$cache[$cid]['context'][$name] = $value;
         } else {
@@ -1207,8 +1201,7 @@ abstract class Be
      */
     public static function getContext(string $name)
     {
-        $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             if (isset(self::$cache[$cid]['context'][$name])) {
                 return self::$cache[$cid]['context'][$name];
@@ -1230,8 +1223,7 @@ abstract class Be
      */
     public static function hasContext(string $name): bool
     {
-        $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
             return isset(self::$cache[$cid]['context'][$name]);
         } else {
@@ -1245,57 +1237,61 @@ abstract class Be
     public static function gc()
     {
         $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode() && !$runtime->isTaskMode()) {
+        if ($runtime->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
 
-            // 关闭 SESSION
-            if (isset(self::$cache[$cid]['session'])) {
-                /**
-                 * @var \Be\Session\Driver
-                 */
-                $driver = self::$cache[$cid]['session'];
-                $driver->close();
-            }
+            // worker 进程回收
+            if ($runtime->isWorkerProcess()) {
+                // 关闭 SESSION
+                if (isset(self::$cache[$cid]['session'])) {
+                    /**
+                     * @var \Be\Session\Driver
+                     */
+                    $driver = self::$cache[$cid]['session'];
+                    $driver->close();
+                }
 
-            // 回收 db 连接池
-            if (isset(self::$cache[$cid]['db'])) {
-                foreach (self::$cache[$cid]['db'] as $name => $driver) {
-                    if (isset(self::$cache['db']['pools'][$name])) {
-                        $pool = self::$cache['db']['pools'][$name];
+                // 回收 db 连接池
+                if (isset(self::$cache[$cid]['db'])) {
+                    foreach (self::$cache[$cid]['db'] as $name => $driver) {
+                        if (isset(self::$cache['db']['pools'][$name])) {
+                            $pool = self::$cache['db']['pools'][$name];
 
-                        /**
-                         * @var \Be\Db\Driver $driver
-                         */
-                        $pdo = $driver->getConnection()->getPdo();
-                        $driver->release();
+                            /**
+                             * @var \Be\Db\Driver $driver
+                             */
+                            $pdo = $driver->getConnection()->getPdo();
+                            $driver->release();
 
-                        if ($pdo->inTransaction()) {
-                            $pdo->rollBack();
+                            if ($pdo->inTransaction()) {
+                                $pdo->rollBack();
+                            }
+
+                            $pool->put($pdo);
                         }
-
-                        $pool->put($pdo);
                     }
                 }
-            }
 
-            // 回收 redis 连接池
-            if (isset(self::$cache[$cid]['redis'])) {
-                foreach (self::$cache[$cid]['redis'] as $name => $driver) {
-                    if (isset(self::$cache['redis']['pools'][$name])) {
-                        $pool = self::$cache['redis']['pools'][$name];
+                // 回收 redis 连接池
+                if (isset(self::$cache[$cid]['redis'])) {
+                    foreach (self::$cache[$cid]['redis'] as $name => $driver) {
+                        if (isset(self::$cache['redis']['pools'][$name])) {
+                            $pool = self::$cache['redis']['pools'][$name];
 
-                        /**
-                         * @var \Be\Redis\Driver $driver
-                         */
-                        $redis = $driver->getRedis();
-                        $driver->release();
-                        $pool->put($redis);
+                            /**
+                             * @var \Be\Redis\Driver $driver
+                             */
+                            $redis = $driver->getRedis();
+                            $driver->release();
+                            $pool->put($redis);
+                        }
                     }
                 }
             }
 
             // 释放用户协程创建的对象
             unset(self::$cache[$cid]);
+
         } else {
 
             // 关闭 SESSION

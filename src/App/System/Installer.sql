@@ -127,9 +127,11 @@ CREATE TABLE `system_task` (
   `name` varchar(60) NOT NULL DEFAULT '' COMMENT '名称',
   `label` varchar(60) NOT NULL DEFAULT '' COMMENT '中文名称',
   `parallel` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否可并行执行',
+  `parallel_lock` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否可并行执行 锁定',
   `schedule` varchar(30) NOT NULL DEFAULT '* * * * *' COMMENT '执行计划',
-  `schedule_lock` TINYINT NOT NULL DEFAULT '0' COMMENT '是否锁定执行计划',
+  `schedule_lock` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否锁定执行计划',
   `timeout` int(11) NOT NULL DEFAULT '0' COMMENT '超时时间',
+  `timeoput_lock` tinyint(4) NOT NULL DEFAULT '0' COMMENT '超时时间（秒）锁定',
   `data` VARCHAR(200) NOT NULL DEFAULT '' COMMENT '任务数据（JSON格式）',
   `is_enable` tinyint(4) NOT NULL DEFAULT '1' COMMENT '是否可用',
   `is_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否已删除',
@@ -139,6 +141,7 @@ CREATE TABLE `system_task` (
   PRIMARY KEY (`id`),
   KEY `app` (`app`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='计划任务';
+
 
 CREATE TABLE `system_task_log` (
   `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',

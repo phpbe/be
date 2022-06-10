@@ -16,16 +16,7 @@ class Task
      */
     public static function process($process)
     {
-        Be::getRuntime()->isTaskMode(true);
-
         while (true) {
-
-            $swooleHttpServer = Be::getRuntime()->getSwooleHttpServer();
-            $taskState = $swooleHttpServer->state->get('task', 'value');
-            if (!$taskState) {
-                return;
-            }
-
             // 每分钟执行一次
             $sec = (int)date('s', time());
             $sleep = 60 - $sec;
@@ -41,14 +32,16 @@ class Task
             } catch (\Throwable $t) {
             }
 
-            if (count($tasks) === 0) return;
-
-            $t = time();
-            foreach ($tasks as $task) {
-                if (TaskHelper::isOnTime($task->schedule, $t)) {
-                    $task->trigger = 'SYSTEM';
-                    $swooleHttpServer->task($task);
+            if (count($tasks) > 0) {
+                $t = time();
+                foreach ($tasks as $task) {
+                    if (TaskHelper::isOnTime($task->schedule, $t)) {
+                        $task->trigger = 'SYSTEM';
+                        Be::getRuntime()->getSwooleHttpServer()->task($task);
+                    }
                 }
+            } else {
+                \Swoole\Coroutine::sleep(600);
             }
         }
     }
@@ -61,15 +54,19 @@ class Task
      */
     public static function onTask(\Swoole\Http\Server $swooleHttpServer, \Swoole\Server\Task $swooleServerTask)
     {
-        Be::getRuntime()->isTaskMode(true);
-
         $task = $swooleServerTask->data;
         $trigger = $task->trigger;
         unset($task->trigger);
 
         $task->parallel = (int)$task->parallel;
 
-        Be::getService('App.System.Task')->run($task, $trigger);
+        try {
+            Be::getService('App.System.Task')->run($task, $trigger);
+        } catch (\Throwable $t) {
+            Be::getLog()->critical($t);
+        }
+
+        Be::gc();
     }
 
 

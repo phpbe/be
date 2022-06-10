@@ -18,8 +18,6 @@ abstract class Driver
 
     protected $adminAlias = 'admin'; // 后台功能虑拟目录
 
-    protected $taskMode = false; // 是否在计划任务中
-
     public function __construct()
     {
     }
@@ -45,17 +43,33 @@ abstract class Driver
     }
 
     /**
-     * 当前是否计划任务模式
+     * 当前是否Worker进程
      *
      * @return bool
      */
-    public function isTaskMode($taskMode = null): bool
+    public function isWorkerProcess(): bool
     {
-        if ($taskMode !== null) {
-            $this->taskMode = (bool) $taskMode;
-        }
+        return false;
+    }
 
-        return $this->taskMode;
+    /**
+     * 当前是否Task进程
+     *
+     * @return bool
+     */
+    public function isTaskProcess(): bool
+    {
+        return false;
+    }
+
+    /**
+     * 当前是否用户自定义进程
+     *
+     * @return bool
+     */
+    public function isUserProcess(): bool
+    {
+        return false;
     }
 
     /**

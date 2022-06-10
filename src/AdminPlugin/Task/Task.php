@@ -31,8 +31,6 @@ use Be\Util\Time\Datetime;
 class Task extends Driver
 {
 
-    private $loaded = [];
-
     /**
      * 执行指定任务
      *
@@ -52,12 +50,11 @@ class Task extends Driver
         }
 
         $appName = isset($this->setting['appName']) ? $this->setting['appName'] : $request->getAppName();
-        if (!isset($this->loaded[$appName])) {
-
+        $key = 'be:task:discover:' . $appName;
+        if (!Be::hasGlobal($key)) {
             $serviceTask = Be::getService('App.System.Task');
             $serviceTask->discover($appName);
-
-            $this->loaded[$appName] = 1;
+            Be::setGlobal($key, 1);
         }
 
         $titleToolbarItems = [];
@@ -197,24 +194,47 @@ class Task extends Driver
                             'label' => '类名',
                         ],
                         [
+                            'name' => 'parallel',
+                            'label' => '是否可并行',
+                            'width' => '120',
+                            'driver' => TableItemCustom::class,
+                            'value' => function ($row) {
+                                if ($row['parallel_lock']) {
+                                    return '<span class="el-tag el-tag--info el-tag--light el-tag--mini">' . ($row['parallel'] ? '是' : '否') . '</span>';
+                                } else {
+                                    return '<span class="el-tag el-tag--light el-tag--mini">' . ($row['parallel'] ? '是' : '否') . '</span>';
+                                }
+                            }
+                        ],
+                        [
                             'name' => 'schedule',
                             'label' => '执行计划',
                             'width' => '120',
-                        ],
-                        [
-                            'name' => 'schedule_lock',
-                            'label' => '执行计划锁',
                             'driver' => TableItemCustom::class,
-                            'keyValues' => [
-                                '1' => '<span class="el-tag el-tag--success el-tag--light el-tag--mini">锁定</span>',
-                                '0' => '',
-                            ],
-                            'width' => '100',
+                            'value' => function ($row) {
+                                if ($row['schedule']) {
+                                    if ($row['schedule_lock']) {
+                                        return '<span class="el-tag el-tag--info el-tag--light el-tag--mini">' . $row['schedule'] . '</span>';
+                                    } else {
+                                        return '<span class="el-tag el-tag--light el-tag--mini">' . $row['schedule'] . '</span>';
+                                    }
+                                } else {
+                                    return '';
+                                }
+                            }
                         ],
                         [
                             'name' => 'timeout',
                             'label' => '超时时间（秒）',
                             'width' => '120',
+                            'driver' => TableItemCustom::class,
+                            'value' => function ($row) {
+                                if ($row['timeout_lock']) {
+                                    return '<span class="el-tag el-tag--info el-tag--light el-tag--mini">' . $row['timeout'] . '</span>';
+                                } else {
+                                    return '<span class="el-tag el-tag--light el-tag--mini">' . $row['timeout'] . '</span>';
+                                }
+                            }
                         ],
                         [
                             'name' => 'last_execute_time',
@@ -281,6 +301,15 @@ class Task extends Driver
                             'label' => '类名',
                         ],
                         [
+                            'name' => 'parallel',
+                            'label' => '是否可并行',
+                        ],
+                        [
+                            'name' => 'parallel_lock',
+                            'label' => '是否可并行锁定',
+                            'driver' => DetailItemSwitch::class,
+                        ],
+                        [
                             'name' => 'schedule',
                             'label' => '执行计划',
                         ],
@@ -292,6 +321,11 @@ class Task extends Driver
                         [
                             'name' => 'timeout',
                             'label' => '超时时间（秒）',
+                        ],
+                        [
+                            'name' => 'timeout_lock',
+                            'label' => '超时时间（秒）锁定',
+                            'driver' => DetailItemSwitch::class,
                         ],
                         [
                             'name' => 'data',
@@ -342,6 +376,18 @@ class Task extends Driver
                             'readonly' => true,
                         ],
                         [
+                            'name' => 'parallel',
+                            'label' => '是否可并行',
+                            'driver' => FormItemSwitch::class,
+                            'ui' => function ($row) {
+                                return [
+                                    'form-item' => [
+                                        'v-if' => $row['parallel_lock'] === 0 ? 'true' : 'false'
+                                    ]
+                                ];
+                            }
+                        ],
+                        [
                             'name' => 'schedule',
                             'label' => '执行计划',
                             'driver' => FormItemCron::class,
@@ -357,6 +403,13 @@ class Task extends Driver
                             'name' => 'timeout',
                             'label' => '超时时间（秒）',
                             'driver' => FormItemInputNumberInt::class,
+                            'ui' => function ($row) {
+                                return [
+                                    'form-item' => [
+                                        'v-if' => $row['timeout_lock'] === 0 ? 'true' : 'false'
+                                    ]
+                                ];
+                            }
                         ],
                         [
                             'name' => 'data',

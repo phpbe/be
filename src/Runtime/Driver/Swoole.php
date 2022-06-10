@@ -26,11 +26,6 @@ class Swoole extends Driver
             return;
         }
 
-        $state = new \Swoole\Table(1024);
-        $state->column('value', \Swoole\Table::TYPE_INT, 64);
-        $state->create();
-        $state->set('task', ['value' => 1]);
-
         \Co::set(['hook_flags' => SWOOLE_HOOK_ALL]);
 
         $configSystem = Be::getConfig('App.System.System');
@@ -38,11 +33,10 @@ class Swoole extends Driver
 
         $configServer = Be::getConfig('App.System.Server');
         $this->swooleHttpServer = new \Swoole\Http\Server($configServer->host, $configServer->port);
-        $this->swooleHttpServer->state = $state;
 
         $setting = [
             'enable_coroutine' => true,
-            'task_worker_num' => 4,
+            'task_worker_num' => 2,
             'task_enable_coroutine' => true,
         ];
 
@@ -309,8 +303,7 @@ class Swoole extends Driver
 
         // 注册任务处理方法
         $this->swooleHttpServer->on('task', [\Be\Runtime\Task::class, 'onTask']);
-        $this->swooleHttpServer->on('finish', function ($swooleHttpServer, $taskId, $data) {
-        });
+        $this->swooleHttpServer->on('finish', function ($swooleHttpServer, $taskId, $data) {});
 
         // 定时任务进程
         $process = new \Swoole\Process([\Be\Runtime\Task::class, 'process'], false, 0, true);
@@ -338,6 +331,36 @@ class Swoole extends Driver
     public function getSwooleHttpServer()
     {
         return $this->swooleHttpServer;
+    }
+
+    /**
+     * 当前是否Worker进程
+     *
+     * @return bool
+     */
+    public function isWorkerProcess(): bool
+    {
+        return $this->swooleHttpServer->worker_id >= 0 && !$this->swooleHttpServer->taskworker;
+    }
+
+    /**
+     * 当前是否Task进程
+     *
+     * @return bool
+     */
+    public function isTaskProcess(): bool
+    {
+        return $this->swooleHttpServer->worker_id >= 0 && $this->swooleHttpServer->taskworker;
+    }
+
+    /**
+     * 当前是否用户自定义进程
+     *
+     * @return bool
+     */
+    public function isUserProcess(): bool
+    {
+        return $this->swooleHttpServer->worker_id  === -1;
     }
 
 }

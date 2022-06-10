@@ -38,24 +38,29 @@ class Task
                             $annotation = new BeTask($parseClassComments['BeTask'][0]);
                             $task = $annotation->toArray();
 
+                            $parallel = $task['parallel'] ?? 0;
                             $schedule = $task['schedule'] ?? '';
-                            $parallel = $task['parallel'] ?? false;
-                            $timeout = $task['timeout'] ?? 300;
+                            $timeout = $task['timeout'] ?? 60;
 
+                            $parallelLock = 0;
                             $scheduleLock = 0;
+                            $timeoutLock = 0;
+
                             $defaultProperties = $reflection->getDefaultProperties();
+
+                            if (isset($defaultProperties['parallel'])) {
+                                $parallel = $defaultProperties['parallel'] ? 1 : 0;
+                                $parallelLock = 1;
+                            }
 
                             if (isset($defaultProperties['schedule']) && $defaultProperties['schedule']) {
                                 $schedule = $defaultProperties['schedule'];
                                 $scheduleLock = 1;
                             }
 
-                            if (isset($defaultProperties['parallel'])) {
-                                $parallel = (bool)$defaultProperties['parallel'];
-                            }
-
                             if (isset($defaultProperties['timeout'])) {
                                 $timeout = (int)$defaultProperties['timeout'];
+                                $timeoutLock = 1;
                             }
 
                             if (isset($dbTasks[$taskName])) {
@@ -63,13 +68,25 @@ class Task
                                     'id' => $dbTasks[$taskName]->id,
                                     'name' => $taskName,
                                     'label' => $task['value'] ?? '',
-                                    'parallel' => $parallel ? 1 : 0,
-                                    'schedule' => $schedule,
-                                    'schedule_lock' => $scheduleLock,
-                                    'timeout' => $timeout,
                                     'is_delete' => 0,
                                     'update_time' => date('Y-m-d H:i:s'),
                                 ];
+
+                                if ($parallelLock) {
+                                    $data['parallel'] = $parallel;
+                                    $data['parallel_lock'] = $parallelLock;
+                                }
+
+                                if ($scheduleLock) {
+                                    $data['schedule'] = $schedule;
+                                    $data['schedule_lock'] = $scheduleLock;
+                                }
+
+                                if ($timeoutLock) {
+                                    $data['timeout'] = $timeout;
+                                    $data['timeout_lock'] = $timeoutLock;
+                                }
+
                                 $db->update('system_task', $data, 'id');
                             } else {
 
@@ -80,10 +97,12 @@ class Task
                                     'app' => $appName,
                                     'name' => $taskName,
                                     'label' => $task['value'] ?? '',
-                                    'parallel' => $parallel ? 1 : 0,
+                                    'parallel' => $parallel,
+                                    'parallel_lock' => $parallelLock,
                                     'schedule' => $schedule,
                                     'schedule_lock' => $scheduleLock,
                                     'timeout' => $timeout,
+                                    'timeout_lock' => $timeoutLock,
                                     'is_enable' => 0,
                                     'is_delete' => 0,
                                     //'last_execute_time' => null,
@@ -236,7 +255,6 @@ class Task
         }
 
         $db = Be::getDb();
-
         $class = '\\Be\\App\\' . $task->app . '\\Task\\' . $task->name;
         if (class_exists($class)) {
             // 计划任务不允许并行
@@ -336,7 +354,5 @@ class Task
         }
 
     }
-
-
 
 }

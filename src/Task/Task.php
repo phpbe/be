@@ -11,12 +11,12 @@ class Task
 {
 
     /**
-     * @var null|mixed
+     * @var null|object
      */
     protected $task = null;
 
     /**
-     * @var null|mixed
+     * @var null|object
      */
     protected $taskLog = null;
 
@@ -29,16 +29,16 @@ class Task
     /**
      * 是否可并行执行
      *
-     * @var bool
+     * @var null|bool
      */
-    protected $parallel = false;
+    protected $parallel = null;
 
     /**
      * 执行超时时间
      *
-     * @var int
+     * @var null|int
      */
-    protected $timeout = 300;
+    protected $timeout = null;
 
 
     public function __construct($task, $taskLog)
@@ -82,12 +82,16 @@ class Task
         return $this->schedule;
     }
 
-    public function isParallel(): bool
+    public function isParallel($parallel = null): bool
     {
+        if ($parallel !== null) {
+            $this->parallel = $parallel;
+        }
+
         return $this->parallel;
     }
 
-    public function setTimeout(int $timeout = 300): int
+    public function setTimeout(int $timeout = 60): int
     {
         return $this->timeout = $timeout;
     }
