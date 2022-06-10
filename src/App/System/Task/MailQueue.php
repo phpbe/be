@@ -24,7 +24,7 @@ class MailQueue extends \Be\Task\TaskInterval
             $mailQueueMaxTryTimes = $config->mailQueueMaxTryTimes;
         }
 
-        $db = Be::newDb();
+        $db = Be::getDb();
         while (true) {
             $sql = 'SELECT * FROM system_mail_queue WHERE sent = 0 AND times<' . $mailQueueMaxTryTimes . ' ORDER BY create_time ASC, times ASC';
             $queues = $db->getObjects($sql);

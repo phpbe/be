@@ -17,7 +17,7 @@ class SmsQueue extends \Be\Task\TaskInterval
     {
         $t0 = microtime(1);
 
-        $db = Be::newDb();
+        $db = Be::getDb();
         while (true) {
             $sql = 'SELECT * FROM system_sms_queue WHERE sent = 0 AND times<10 ORDER BY create_time ASC, times ASC';
             $queues = $db->getObjects($sql);
@@ -25,7 +25,7 @@ class SmsQueue extends \Be\Task\TaskInterval
                 foreach ($queues as $queue) {
 
                     try {
-                        $sms = Be::newService('System.Sms');
+                        $sms = Be::getService('System.Sms');
 
                         $sms->subject($queue->subject ?? '');
                         $sms->body($queue->body ?? '');

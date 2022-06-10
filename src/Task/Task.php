@@ -65,7 +65,7 @@ class Task
             $this->task->data = json_encode($this->task->data);
         }
 
-        Be::newDb()->update('system_task', $this->task, 'id');
+        Be::getDb()->update('system_task', $this->task, 'id');
     }
 
     public function updateTaskLog()
@@ -74,7 +74,7 @@ class Task
             $this->taskLog->data = json_encode($this->taskLog->data);
         }
 
-        Be::newDb()->update('system_task_log', $this->taskLog, 'id');
+        Be::getDb()->update('system_task_log', $this->taskLog, 'id');
     }
 
     public function getSchedule(): string
@@ -104,7 +104,7 @@ class Task
     public function complete()
     {
         $now = date('Y-m-d H:i:s');
-        $db = Be::newDb();
+        $db = Be::getDb();
 
         $this->taskLog->status = 'COMPLETE';
         $this->taskLog->complete_time = $now;
