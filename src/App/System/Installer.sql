@@ -132,7 +132,7 @@ CREATE TABLE `system_task` (
   `schedule_lock` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否锁定执行计划',
   `timeout` int(11) NOT NULL DEFAULT '0' COMMENT '超时时间',
   `timeoput_lock` tinyint(4) NOT NULL DEFAULT '0' COMMENT '超时时间（秒）锁定',
-  `data` VARCHAR(200) NOT NULL DEFAULT '' COMMENT '任务数据（JSON格式）',
+  `data` VARCHAR(300) NOT NULL DEFAULT '' COMMENT '任务数据（JSON格式）',
   `is_enable` tinyint(4) NOT NULL DEFAULT '1' COMMENT '是否可用',
   `is_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否已删除',
   `last_execute_time` timestamp NULL COMMENT '最后执行时间',
@@ -146,9 +146,9 @@ CREATE TABLE `system_task` (
 CREATE TABLE `system_task_log` (
   `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
   `task_id` varchar(36) NOT NULL DEFAULT '' COMMENT '任务ID',
-  `data` varchar(200) NOT NULL DEFAULT '' COMMENT '任务数据（JSON格式）',
+  `data` varchar(300) NOT NULL DEFAULT '' COMMENT '任务数据（JSON格式）',
   `status` varchar(30) NOT NULL DEFAULT 'RUNNING' COMMENT '状态（RUNNING：运行中/COMPLETE：执行完成/ERROR：出错）	',
-  `message` varchar(200) NOT NULL DEFAULT '' COMMENT '异常信息',
+  `message` varchar(600) NOT NULL DEFAULT '' COMMENT '异常信息',
   `trigger` varchar(30) NOT NULL DEFAULT 'SYSTEM' COMMENT '触发方式：SYSTEM：系统调度/MANUAL：人工启动',
   `complete_time` timestamp NULL COMMENT '完成时间',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -156,5 +156,4 @@ CREATE TABLE `system_task_log` (
   PRIMARY KEY (`id`),
   KEY `task_id` (`task_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='抽取数据';
-
 

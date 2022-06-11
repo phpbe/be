@@ -242,6 +242,8 @@ class Task
      */
     public function run($task, $trigger)
     {
+        $cache = null;
+        $cacheKey =  null;
         if ($task->parallel === 0) {
             $cache = Be::getCache();
             $cacheKey = 'be:task:running:' . $task->id;
@@ -312,17 +314,34 @@ class Task
                 //返回任务执行的结果
                 //$server->finish("{$data} -> OK");
             } catch (\Throwable $t) {
+
+                if ($task->parallel === 0) {
+                    $cache->delete($cacheKey);
+                }
+
                 Be::getLog()->critical($t);
 
+                $message = $t->getMessage();
+                if (function_exists('mb_strlen')) {
+                    if (mb_strlen($message, 'utf8') > 600) {
+                        $message = mb_substr($message, 0, 600, 'utf8');
+                    }
+                } else {
+                    if (strlen($message) > 600) {
+                        $message = substr($message, 0, 600);
+                    }
+                }
+
                 if ($instance !== null) {
-                    $instance->error($t->getMessage());
+                    $instance->error($message);
                 } else {
                     if ($taskLogId !== null) {
+
                         $now = date('Y-m-d H:i:s');
                         Be::getDb()->update('system_task_log', [
                             'id' => $taskLogId,
                             'status' => 'ERROR',
-                            'message' => $t->getMessage(),
+                            'message' => $message,
                             'update_time' => $now
                         ]);
                     }
@@ -330,6 +349,9 @@ class Task
             }
 
         } else {
+            if ($task->parallel === 0) {
+                $cache->delete($cacheKey);
+            }
 
             $now = date('Y-m-d H:i:s');
 
@@ -345,12 +367,6 @@ class Task
             $taskLog->update_time = $now;
 
             $db->insert('system_task_log', $taskLog);
-        }
-
-        if ($task->parallel === 0) {
-            $cache = Be::getCache();
-            $cacheKey = 'be:task:running:' . $task->id;
-            $cache->delete($cacheKey);
         }
 
     }
