@@ -322,14 +322,8 @@ class Task
                 Be::getLog()->critical($t);
 
                 $message = $t->getMessage();
-                if (function_exists('mb_strlen')) {
-                    if (mb_strlen($message, 'utf8') > 600) {
-                        $message = mb_substr($message, 0, 600, 'utf8');
-                    }
-                } else {
-                    if (strlen($message) > 600) {
-                        $message = substr($message, 0, 600);
-                    }
+                if (mb_strlen($message, 'utf8') > 600) {
+                    $message = mb_substr($message, 0, 600, 'utf8');
                 }
 
                 if ($instance !== null) {
