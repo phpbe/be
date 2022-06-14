@@ -3,20 +3,21 @@
 namespace Be\Log;
 
 use Be\Be;
+use Be\Exception;
 use Be\Runtime\RuntimeException;
 use Be\Util\File\FileSize;
 
 /**
  * 日志类
  *
- * @method static bool debug(\Throwable $t)
- * @method static bool info(\Throwable $t)
- * @method static bool notice(\Throwable $t)
- * @method static bool warning(\Throwable $t)
- * @method static bool error(\Throwable $t)
- * @method static bool critical(\Throwable $t)
- * @method static bool alert(\Throwable $t)
- * @method static bool emergency(\Throwable $t)
+ * @method static debug(\Throwable $t): string
+ * @method static info(\Throwable $t): string
+ * @method static notice(\Throwable $t): string
+ * @method static warning(\Throwable $t): string
+ * @method static error(\Throwable $t): string
+ * @method static critical(\Throwable $t): string
+ * @method static alert(\Throwable $t): string
+ * @method static emergency(\Throwable $t): string
  */
 abstract class Driver
 {
@@ -39,6 +40,7 @@ abstract class Driver
             case 'alert': return 700;
             case 'emergency': return 800;
         }
+
         return 0;
     }
 
@@ -46,7 +48,7 @@ abstract class Driver
      *
      * @param $name
      * @param $arguments
-     * @return string
+     * @return string 日志ID
      * @throws RuntimeException
      */
     public function __call($name, $arguments)
