@@ -309,10 +309,15 @@ class Task
                 $instance = new $class($task, $taskLog);
                 $instance->execute();
 
+                if ($task->parallel === 0) {
+                    $cache->delete($cacheKey);
+                }
+
                 $instance->complete();
 
                 //返回任务执行的结果
                 //$server->finish("{$data} -> OK");
+
             } catch (\Throwable $t) {
 
                 if ($task->parallel === 0) {
