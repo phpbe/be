@@ -41,7 +41,7 @@ class TemplateHelper
             }
         }
 
-        $path = $runtime->getCachePath() . '/' . $templateNamespace . '/' . $theme . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
+        $path = $runtime->getDataPath() . '/Runtime/' . $templateNamespace . '/' . $theme . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
@@ -232,7 +232,7 @@ class TemplateHelper
 
         $className = array_pop($parts);
 
-        $namespace = 'Be\\Data\\Cache\\' . $templateNamespace . '\\' . $theme . '\\' . $type . '\\' . $name;
+        $namespace = 'Be\\Data\\Runtime\\' . $templateNamespace . '\\' . $theme . '\\' . $type . '\\' . $name;
         if (count($parts) > 0) {
             $namespace .= '\\' . implode('\\', $parts);
         }

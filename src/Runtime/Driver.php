@@ -93,14 +93,6 @@ abstract class Driver
     }
 
     /**
-     * @return string
-     */
-    public function getCachePath()
-    {
-        return $this->rootPath . '/' . $this->dataDir . '/Cache';
-    }
-
-    /**
      * @param string $dataDir
      */
     public function setDataDir($dataDir)

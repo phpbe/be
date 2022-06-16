@@ -68,7 +68,7 @@ class AdminRole
         $suffix = str_replace('-', '', $roleId);
 
         $code = '<?php' . "\n";
-        $code .= 'namespace Be\\Data\\Cache\\AdminRole;' . "\n";
+        $code .= 'namespace Be\\Data\\Runtime\\AdminRole;' . "\n";
         $code .= "\n";
         $code .= 'class AdminRole_' . $suffix . ' extends \\Be\\AdminUser\\AdminRole' . "\n";
         $code .= '{' . "\n";
@@ -81,7 +81,7 @@ class AdminRole
         }
         $code .= '}' . "\n";
 
-        $path = Be::getRuntime()->getCachePath() . '/AdminRole/AdminRole_' . $suffix . '.php';
+        $path = Be::getRuntime()->getDataPath() . '/Runtime/AdminRole/AdminRole_' . $suffix . '.php';
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);

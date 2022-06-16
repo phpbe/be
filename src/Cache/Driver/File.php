@@ -20,7 +20,7 @@ class File extends Driver
      */
     public function __construct($config)
     {
-        $this->path = Be::getRuntime()->getCachePath() . '/cache';
+        $this->path = Be::getRuntime()->getDataPath() . '/cache';
     }
 
     /**
@@ -96,7 +96,9 @@ class File extends Driver
         }
         $path = $dir . '/' . $hash . '.php';
 
-        if (!is_bool($value) && !is_numeric($value)) $value = serialize($value);
+        if (!is_bool($value) && !is_numeric($value)) {
+            $value = serialize($value);
+        }
 
         if ($expire === 0) {
             $expire = 9999999999;

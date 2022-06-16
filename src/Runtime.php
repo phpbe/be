@@ -11,7 +11,6 @@ namespace Be;
  * @method static string getMode() 获取BE框架启动模式
  * @method static string setRootPath($rootPath) 设置BE框架的根路径
  * @method static string getRootPath() 获取BE框架的根路径
- * @method static string getCachePath() 获取BE框架的缓存路径
  * @method static setDataDir($dataDir) 设置数据目录
  * @method static string getDataDir() 获取数据目录
  * @method static string getDataPath() 获取数据路径

@@ -40,7 +40,11 @@ class SmsQueue extends \Be\Task\TaskInterval
                     }
                 }
             } else {
-                sleep(10);
+                if (Be::getRuntime()->isSwooleMode()) {
+                    \Swoole\Coroutine::sleep(10);
+                } else {
+                    sleep(10);
+                }
             }
 
             $t1 = microtime(1);

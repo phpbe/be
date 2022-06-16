@@ -13,7 +13,7 @@ class File extends Driver
     public function read()
     {
         if ($this->data === null) {
-            $path = Be::getRuntime()->getCachePath() . '/session/' . $this->id;
+            $path = Be::getRuntime()->getDataPath() . '/session/' . $this->id;
 
             $data = [];
             if (file_exists($path)) {
@@ -36,7 +36,7 @@ class File extends Driver
     public function write()
     {
         if ($this->data !== null) {
-            $dir =  Be::getRuntime()->getCachePath() . '/session';
+            $dir =  Be::getRuntime()->getDataPath() . '/session';
             if (!is_dir($dir)) {
                 mkdir($dir, 0777, true);
                 chmod($dir, 0777);
@@ -65,7 +65,7 @@ class File extends Driver
     {
         $this->data = null;
 
-        $path =  Be::getRuntime()->getCachePath() . '/session/' . $this->id;
+        $path =  Be::getRuntime()->getDataPath() . '/session/' . $this->id;
         if (file_exists($path)) {
             return unlink($path);
         }

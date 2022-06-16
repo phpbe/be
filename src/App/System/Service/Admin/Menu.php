@@ -298,7 +298,7 @@ class Menu
         $menus = $this->getItems($menuName);
 
         $code = '<?php' . "\n";
-        $code .= 'namespace Be\\Data\\Cache\\Menu;' . "\n";
+        $code .= 'namespace Be\\Data\\Runtime\\Menu;' . "\n";
         $code .= "\n";
         $code .= 'class ' . $menuName . ' extends \\Be\\Menu\\Driver' . "\n";
         $code .= '{' . "\n";
@@ -321,7 +321,7 @@ class Menu
 
         $runtime = Be::getRuntime();
 
-        $path = $runtime->getCachePath() . '/Menu/' . $menuName . '.php';
+        $path = $runtime->getDataPath() . '/Runtime/Menu/' . $menuName . '.php';
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);

@@ -110,9 +110,9 @@ class Redis extends Driver
         $formattedValues = array();
         foreach ($values as $key => $value) {
             if (!is_bool($value) && !is_numeric($value)) {
-                $formattedValues['be:cache:' . $key] = $value;
-            } else {
                 $formattedValues['be:cache:' . $key] = serialize($value);
+            } else {
+                $formattedValues['be:cache:' . $key] = $value;
             }
         }
 

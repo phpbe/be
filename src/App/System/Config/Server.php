@@ -62,8 +62,8 @@ class Server
     public $task_max_request = 0;
 
     /**
-     * @BeConfigItem("启动时清空Cache", driver="FormItemSwitch")
+     * @BeConfigItem("启动时清理运行时环境", description="运行时环境缓存了表结构，路由，实时编译的模板等" driver="FormItemSwitch")
      */
-    public $clearCacheOnStart = 1;
+    public $clearRuntimeOnStart = 1;
 
 }

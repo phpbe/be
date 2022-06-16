@@ -32,7 +32,7 @@ class AdminPermission
         }
 
         $code = '<?php' . "\n";
-        $code .= 'namespace Be\\Data\\Cache\\AdminPermission;' . "\n";
+        $code .= 'namespace Be\\Data\\Runtime\\AdminPermission;' . "\n";
         $code .= "\n";
         $code .= 'class AdminPermission extends \\Be\\AdminUser\\AdminPermission' . "\n";
         $code .= '{' . "\n";
@@ -43,7 +43,7 @@ class AdminPermission
         $code .= '  public $permissionKeys = [' . implode(',', $arr) . '];' . "\n";
         $code .= '}' . "\n";
 
-        $path = Be::getRuntime()->getCachePath() . '/AdminPermission/AdminPermission.php';
+        $path = Be::getRuntime()->getDataPath() . '/Runtime/AdminPermission/AdminPermission.php';
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);

@@ -182,7 +182,7 @@ class AdminMenu
         $items = $this->getMenus();
 
         $code = '<?php' . "\n";
-        $code .= 'namespace Be\\Data\\Cache;' . "\n";
+        $code .= 'namespace Be\\Data\\Runtime;' . "\n";
         $code .= "\n";
         $code .= 'class AdminMenu extends \\Be\\AdminMenu\\Driver' . "\n";
         $code .= '{' . "\n";
@@ -204,7 +204,7 @@ class AdminMenu
         $code .= '  }' . "\n";
         $code .= '}' . "\n";
 
-        $path = Be::getRuntime()->getCachePath() . '/AdminMenu.php';
+        $path = Be::getRuntime()->getDataPath() . '/Runtime/AdminMenu.php';
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);

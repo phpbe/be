@@ -45,7 +45,7 @@ class DbHelper
         unset($field);
 
         $code = '<?php' . "\n";
-        $code .= 'namespace Be\\Data\\Cache\\TableProperty\\' . $dbName . ';' . "\n";
+        $code .= 'namespace Be\\Data\\Runtime\\TableProperty\\' . $dbName . ';' . "\n";
         $code .= "\n";
         $code .= 'class ' . $tableName . ' extends \\Be\\Db\\TableProperty' . "\n";
         $code .= '{' . "\n";
@@ -56,7 +56,7 @@ class DbHelper
         $code .= '}' . "\n";
         $code .= "\n";
 
-        $path = $runtime->getCachePath() . '/TableProperty/' . $dbName . '/' . $tableName . '.php';
+        $path = $runtime->getDataPath() . '/Runtime/TableProperty/' . $dbName . '/' . $tableName . '.php';
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
@@ -79,7 +79,7 @@ class DbHelper
 
         $runtime = Be::getRuntime();
         $code = '<?php' . "\n";
-        $code .= 'namespace Be\\Data\\Cache\\Table\\' . $dbName . ';' . "\n";
+        $code .= 'namespace Be\\Data\\Runtime\\Table\\' . $dbName . ';' . "\n";
         $code .= "\n";
         $code .= 'class ' . $tableName . ' extends \\Be\\Db\\Table' . "\n";
         $code .= '{' . "\n";
@@ -90,7 +90,7 @@ class DbHelper
         $code .= '}' . "\n";
         $code .= "\n";
 
-        $path = $runtime->getCachePath() . '/Table/' . $dbName . '/' . $tableName . '.php';
+        $path = $runtime->getDataPath() . '/Runtime/Table/' . $dbName . '/' . $tableName . '.php';
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
@@ -114,7 +114,7 @@ class DbHelper
 
         $runtime = Be::getRuntime();
         $code = '<?php' . "\n";
-        $code .= 'namespace Be\\Data\\Cache\\Tuple\\' . $dbName . ';' . "\n";
+        $code .= 'namespace Be\\Data\\Runtime\\Tuple\\' . $dbName . ';' . "\n";
         $code .= "\n";
         $code .= 'class ' . $tableName . ' extends \\Be\\Db\\Tuple' . "\n";
         $code .= '{' . "\n";
@@ -140,7 +140,7 @@ class DbHelper
         $code .= '}' . "\n";
         $code .= "\n";
 
-        $path = $runtime->getCachePath() . '/Tuple/' . $dbName . '/' . $tableName . '.php';
+        $path = $runtime->getDataPath() . '/Runtime/Tuple/' . $dbName . '/' . $tableName . '.php';
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);

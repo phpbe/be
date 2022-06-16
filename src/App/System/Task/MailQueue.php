@@ -43,7 +43,11 @@ class MailQueue extends \Be\Task\TaskInterval
                     }
                 }
             } else {
-                \Swoole\Coroutine::sleep(10);
+                if (Be::getRuntime()->isSwooleMode()) {
+                    \Swoole\Coroutine::sleep(10);
+                } else {
+                    sleep(10);
+                }
             }
 
             $t1 = microtime(1);

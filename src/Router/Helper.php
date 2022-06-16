@@ -21,12 +21,12 @@ class Helper
     {
         $key = 'router:' . $app . '.' . $router;
         if (!isset(self::$cache[$key])) {
-            $path = Be::getRuntime()->getCachePath() . '/Router/' . $app . '/' . $router . '.php';
+            $path = Be::getRuntime()->getDataPath() . '/Runtime/Router/' . $app . '/' . $router . '.php';
             if (Be::getConfig('App.System.System')->developer || !file_exists($path)) {
                 self::updateRouter($app, $router);
             }
 
-            $class = '\\Be\\Data\\Cache\\Router\\' . $app . '\\' . $router;
+            $class = '\\Be\\Data\\Runtime\\Router\\' . $app . '\\' . $router;
             self::$cache[$key] = new $class();
         }
         return self::$cache[$key];
@@ -41,7 +41,7 @@ class Helper
     public static function updateRouter(string $app, string $router)
     {
         $code = '<?php' . "\n";
-        $code .= 'namespace Be\\Data\\Cache\\Router\\' . $app . ';' . "\n";
+        $code .= 'namespace Be\\Data\\Runtime\\Router\\' . $app . ';' . "\n";
         $code .= "\n";
         $code .= 'class ' . $router . "\n";
         $code .= '{' . "\n";
@@ -97,7 +97,7 @@ class Helper
 
         $code .= '}' . "\n";
 
-        $path = Be::getRuntime()->getCachePath() . '/Router/' . $app . '/' . $router . '.php';
+        $path = Be::getRuntime()->getDataPath() . '/Runtime/Router/' . $app . '/' . $router . '.php';
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
@@ -117,12 +117,12 @@ class Helper
     {
         $key = 'router:mapping';
         if (!isset(self::$cache[$key])) {
-            $path = Be::getRuntime()->getCachePath() . '/Router/Mapping.php';
+            $path = Be::getRuntime()->getDataPath() . '/Runtime/Router/Mapping.php';
             if (Be::getConfig('App.System.System')->developer || !file_exists($path)) {
                 self::updateMapping();
             }
 
-            $class = '\\Be\\Data\\Cache\\Router\\Mapping';
+            $class = '\\Be\\Data\\Runtime\\Router\\Mapping';
             self::$cache[$key] = new $class();
         }
         return self::$cache[$key];
@@ -195,7 +195,7 @@ class Helper
         }
 
         $code = '<?php' . "\n";
-        $code .= 'namespace Be\\Data\\Cache\\Router;' . "\n";
+        $code .= 'namespace Be\\Data\\Runtime\\Router;' . "\n";
         $code .= "\n";
         $code .= 'class Mapping' . "\n";
         $code .= '{' . "\n";
@@ -232,7 +232,7 @@ class Helper
 
         $code .= '}' . "\n";
 
-        $path = Be::getRuntime()->getCachePath() . '/Router/Mapping.php';
+        $path = Be::getRuntime()->getDataPath() . '/Runtime/Router/Mapping.php';
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);

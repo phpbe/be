@@ -11,19 +11,19 @@ use Be\Be;
  * @BeMenuGroup("控制台")
  * @BePermissionGroup("控制台")
  */
-class Cache extends Auth
+class RuntimeCache extends Auth
 {
 
     /**
-     * @BeMenu("缓存", icon = "el-icon-fa fa-database", ordering="2.6")
-     * @BePermission("缓存列表", ordering="2.6")
+     * @BeMenu("运行时缓存", icon = "el-icon-fa fa-database", ordering="2.6")
+     * @BePermission("运行时缓存列表", ordering="2.6")
      */
     public function index()
     {
         $request = Be::getRequest();
         $response = Be::getResponse();
         if ($request->isAjax()) {
-            $service = Be::getService('App.System.Admin.Cache');
+            $service = Be::getService('App.System.Admin.RuntimeCache');
             $gridData = $service->getCategories();
             $response->set('success', true);
             $response->set('data', [
@@ -33,7 +33,7 @@ class Cache extends Auth
             $response->json();
         } else {
             Be::getAdminPlugin('Grid')->setting([
-                'title' => '缓存',
+                'title' => '运行时缓存',
                 'pageSize' => 10,
                 'toolbar' => [
                     'items' => [
@@ -160,7 +160,7 @@ class Cache extends Auth
     }
 
     /**
-     * @BePermission("删除缓存", ordering="2.61")
+     * @BePermission("删除运行时缓存", ordering="2.61")
      */
     public function delete()
     {
@@ -169,10 +169,10 @@ class Cache extends Auth
         try {
             $postData = $request->json();
             $name = $postData['row']['name'] ?? null;
-            $serviceSystemCache = Be::getService('App.System.Admin.Cache');
+            $serviceSystemCache = Be::getService('App.System.Admin.RuntimeCache');
             $serviceSystemCache->delete($name);
-            beAdminOpLog($name ? ('清除缓存（' . $name. '）') : '清除所有缓存' );
-            $response->success('清除缓存成功！');
+            beAdminOpLog($name ? ('清除运行时缓存（' . $name. '）') : '清除所有运行时缓存' );
+            $response->success('清除运行时缓存成功！');
         } catch (\Exception $e) {
             $response->error($e->getMessage());
         }

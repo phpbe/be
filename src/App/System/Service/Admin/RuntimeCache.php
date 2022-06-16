@@ -5,7 +5,7 @@ namespace Be\App\System\Service\Admin;
 use Be\Be;
 use Be\Util\File\FileSize;
 
-class Cache
+class RuntimeCache
 {
 
     const CATEGORIES = [
@@ -85,7 +85,7 @@ class Cache
     {
         $categories = [];
         foreach (static::CATEGORIES as $v) {
-            $path = Be::getRuntime()->getCachePath() . '/' . $v['name'];
+            $path = Be::getRuntime()->getDataPath() . '/Runtime/' . $v['name'];
             $count = $this->getFileCount($path);
             $size = $this->getFileSize($path);
             $sizeStr = FileSize::int2String($size);
@@ -118,7 +118,7 @@ class Cache
             return $success;
         }
 
-        return \Be\Util\File\Dir::rm(Be::getRuntime()->getCachePath() . '/' . $name);
+        return \Be\Util\File\Dir::rm(Be::getRuntime()->getDataPath() . '/Runtime/' . $name);
     }
 
 
