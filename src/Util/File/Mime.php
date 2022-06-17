@@ -1131,6 +1131,17 @@ class Mime
      */
     public static function mimeToExt(string $mime, string $defaultExt = ''): string
     {
+        if ($defaultExt !== '') {
+            if ($mime === 'text/plain') {
+                if (isset(self::MAPPING[$defaultExt])) {
+                    $defaultMime = self::MAPPING[$defaultExt];
+                    if (substr($defaultMime, 0, 5) === 'text/') {
+                        return $defaultExt;
+                    }
+                }
+            }
+        }
+
         $ext = false;
         foreach (self::MAPPING as $key => $val) {
             if ($mime === $val) {
