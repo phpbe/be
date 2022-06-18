@@ -50,6 +50,8 @@ class FormItemTinymce extends FormItem
             'toolbar_mode' => 'sliding',
             'be_storage_url' => beAdminUrl('System.Storage.pop', ['callback' => $fileCallback]),
             'be_storage_url_filter_image' => beAdminUrl('System.Storage.pop', ['filterImage' => 1, 'callback' => $imageCallback]),
+            'relative_urls' => false,
+            //'convert_urls' => false,
         ];
 
         $layout = 'simple';
@@ -76,11 +78,18 @@ class FormItemTinymce extends FormItem
                 break;
             case 'full':
                 $this->option = array_merge($this->option, [
-                    'plugins' => 'advlist anchor autolink befile beimage charmap charmap code codesample directionality emoticons fullscreen help hr image importcss insertdatetime link lists media nonbreaking noneditable pagebreak paste preview print quickbars save searchreplace table template textpattern toc visualblocks visualchars wordcount',
-                    'toolbar' => 'undo redo | fontselect fontsizeselect formatselect bold italic underline strikethrough forecolor backcolor alignleft aligncenter alignright alignjustify removeformat | bullist numlist outdent indent | link befile beimage media table codesample anchor pagebreak charmap emoticons template | code preview fullscreen',
+                    'plugins' => 'advlist anchor autolink befile beimage charmap charmap code becodesample directionality emoticons fullscreen help hr image importcss insertdatetime link lists media nonbreaking noneditable pagebreak paste preview print quickbars save searchreplace table template textpattern toc visualblocks visualchars wordcount',
+                    'toolbar' => 'undo redo | fontselect fontsizeselect formatselect bold italic underline strikethrough forecolor backcolor alignleft aligncenter alignright alignjustify removeformat | bullist numlist outdent indent | link befile beimage media table becodesample anchor pagebreak charmap emoticons template | code preview fullscreen',
                     'menubar' => 'file edit view insert format tools table help',
                     'fontsize_formats' => '9px 10px 11px 12px 13px 14px 15px 16px 18px 20px 24px 28px 32px 36px 40px 48px 60px 72px',
                 ]);
+
+                $this->js[] = 'plugins/becodesample/highlight.js-11.5.1/highlight.min.js';
+
+                // $contentCss = Be::getProperty('AdminPlugin.Form')->getUrl() . '/Template/tinymce_5.10.2/plugins/becodesample/highlight.js-11.5.1/default.min.css';
+                $contentCss = Be::getProperty('AdminPlugin.Form')->getUrl() . '/Template/tinymce_5.10.2/plugins/becodesample/highlight.js-11.5.1/styles/atom-one-light.css';
+                $this->option['content_css'] = $contentCss;
+
                 break;
         }
 
