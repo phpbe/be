@@ -1,5 +1,13 @@
 <be-head>
-    <link type="text/css" rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/Template/Admin/Installer/css/complete.css">
+    <style>
+        .success-icon {
+            text-align: center; font-size: 120px; padding: 60px 0 20px 0; color: #67c23a;
+        }
+
+        .success-message {
+            text-align: center; font-size: 18px; height: 50px; line-height: 50px;
+        }
+    </style>
 </be-head>
 
 <be-center>

@@ -63,7 +63,7 @@ class Dir
                     $srcPath = $srcDir . '/' . $file;
                     $dstPath = $dstDir . '/' . $file;
                     if (is_dir($srcPath)) {
-                        self::copy($srcPath, $srcPath);
+                        self::copy($srcPath, $dstPath, $overWrite);
                     } else {
                         if (file_exists($dstPath)) {
                             if ($overWrite) {
@@ -107,7 +107,7 @@ class Dir
                     $dstPath = $dstDir . '/' . $file;
 
                     if (is_dir($srcPath)) {
-                        self::move($srcPath, $dstPath);
+                        self::move($srcPath, $dstPath, $overWrite);
                         rmdir($srcPath);
                     } else {
                         if (file_exists($dstPath)) {

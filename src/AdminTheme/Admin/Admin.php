@@ -7,51 +7,29 @@
 
     <?php
     $beUrl = beUrl();
-    $configTheme = \Be\Be::getConfig('AdminTheme.Admin.Theme');
-    $themeUrl = \Be\Be::getProperty('AdminTheme.Admin')->getUrl();
+    $appSystemWwwUrl = \Be\Be::getProperty('App.System')->getWwwUrl();
+    $adminThemeWwwUrl = \Be\Be::getProperty('AdminTheme.Admin')->getWwwUrl();
     ?>
     <base href="<?php echo $beUrl; ?>/" >
     <script>var beUrl = "<?php echo $beUrl; ?>"; </script>
 
-    <?php
-    if ($configTheme->localAssetLib) {
-        ?>
-        <script src="<?php echo $themeUrl; ?>/js/jquery-1.12.4.min.js"></script>
+    <script src="<?php echo $appSystemWwwUrl; ?>/lib/jquery/jquery-1.12.4.min.js"></script>
 
-        <script src="<?php echo $themeUrl; ?>/js/vue-2.6.11.min.js"></script>
+    <script src="<?php echo $appSystemWwwUrl; ?>/lib/vue/vue-2.6.11.min.js"></script>
 
-        <script src="<?php echo $themeUrl; ?>/js/axios-0.19.0.min.js"></script>
-        <script>Vue.prototype.$http = axios;</script>
+    <script src="<?php echo $appSystemWwwUrl; ?>/lib/axios/axios-0.19.0.min.js"></script>
+    <script>Vue.prototype.$http = axios;</script>
 
-        <script src="<?php echo $themeUrl; ?>/js/vue-cookies-1.5.13.js"></script>
+    <script src="<?php echo $appSystemWwwUrl; ?>/lib/vue-cookies/vue-cookies-1.5.13.js"></script>
 
-        <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/element-ui-2.15.7.css">
-        <script src="<?php echo $themeUrl; ?>/js/element-ui-2.15.7.js"></script>
+    <link rel="stylesheet" href="<?php echo $appSystemWwwUrl; ?>/lib/element-ui/element-ui-2.15.7.css">
+    <script src="<?php echo $appSystemWwwUrl; ?>/lib/element-ui/element-ui-2.15.7.js"></script>
 
-        <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/font-awesome-4.7.0.min.css" />
-        <?php
-    } else {
-        ?>
-        <script src="https://unpkg.com/jquery@1.12.4/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="<?php echo $appSystemWwwUrl; ?>/lib/font-awesome/font-awesome-4.7.0.min.css" />
 
-        <script src="https://unpkg.com/vue@2.6.11/dist/vue.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.phpbe.com/scss/be.css" />
+    <link rel="stylesheet" href="<?php echo $adminThemeWwwUrl; ?>/css/theme.css?v=20220620" />
 
-        <script src="https://unpkg.com/axios@0.19.0/dist/axios.min.js"></script>
-        <script>Vue.prototype.$http = axios;</script>
-
-        <script src="https://unpkg.com/vue-cookies@1.5.13/vue-cookies.js"></script>
-
-        <link rel="stylesheet" href="https://unpkg.com/element-ui@2.15.7/lib/theme-chalk/index.css">
-        <script src="https://unpkg.com/element-ui@2.15.7/lib/index.js"></script>
-
-        <link rel="stylesheet" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css" />
-        <?php
-    }
-    ?>
-
-    <link rel="stylesheet" href="<?php echo $beUrl; ?>/vendor/be/scss/src/be.css" />
-
-    <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/theme.css?v=20220608" />
     <be-head>
     </be-head>
 </head>
@@ -133,7 +111,7 @@
                     </div>
 
                     <div class="be-col-auto be-pr-150 north-links lh-60">
-                        <el-link href="http://www.phpbe.com/" icon="el-icon-warning-outline" target="_blank" :underline="false">技术支持</el-link>
+                        <el-link href="https://www.phpbe.com/" icon="el-icon-warning-outline" target="_blank" :underline="false">技术支持</el-link>
                     </div>
 
                     <div class="be-col-auto be-pr-150 lh-60">
@@ -147,9 +125,9 @@
                     <div class="be-col-auto be-pr-30 north-links lh-60">
                         <img src="<?php
                         if ($my->avatar === '') {
-                            echo \Be\Be::getProperty('App.System')->getUrl().'/Template/Admin/AdminUser/images/avatar.png';
+                            echo \Be\Be::getProperty('App.System')->getWwwUrl().'/admin/admin-user/images/avatar.png';
                         } else {
-                            echo \Be\Be::getRequest()->getUploadUrl().'/System/AdminUser/Avatar/'.$my->avatar;
+                            echo $my->avatar;
                         }
                         ?>" alt="<?php echo $my->name; ?>" style="max-width:24px;max-height:24px; vertical-align: middle" >
                     </div>
@@ -341,7 +319,7 @@
             </div>
         </el-drawer>
     </div>
-    <script src="<?php echo $themeUrl; ?>/js/theme.js?v=20200221"></script>
+    <script src="<?php echo $adminThemeWwwUrl; ?>/js/theme.js?v=20200221"></script>
 
 </body>
 </html>

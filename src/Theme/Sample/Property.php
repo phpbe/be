@@ -6,8 +6,8 @@ namespace Be\Theme\Sample;
 class Property extends \Be\Theme\Property
 {
 
-    public $label = '示例主题';
-    public $pages = [
+    public string  $label = '示例主题';
+    public array $pages = [
         'Home' => [
             'url' => ['System.Home.index'],
             'sections' => [

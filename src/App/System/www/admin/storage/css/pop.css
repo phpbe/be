@@ -1,0 +1,152 @@
+.storage {
+
+}
+
+.storage-toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 5px 10px;
+    border-top: 1px solid #f1f1f1;
+    border-bottom: 1px solid #f1f1f1;
+    background-color: #fff;
+    z-index: 999;
+}
+
+.storage-breadcrumb {
+    margin-top: 50px;
+    padding: 10px;
+    border-bottom: 1px solid #f6f6f6;
+}
+
+.storage-files {
+    position: fixed;
+    top: 80px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+}
+
+
+.storage-view-thumbnail {
+    padding: 10px;
+}
+
+.storage-view-thumbnail ul {
+    padding: 0;
+    margin: 0;
+}
+
+.storage-view-thumbnail li {
+    display: inline-block;
+    width: 120px;
+    height: 150px;
+}
+
+.storage-view-thumbnail li:hover {
+    background-color: #fafafa;
+}
+
+.storage-view-thumbnail .file {
+    padding: 5px;
+    position: relative;
+}
+
+.storage-view-thumbnail .file-selector {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 999;
+    display: none;
+}
+
+.storage-view-thumbnail .file-selector i {
+    font-size: 28px;
+}
+
+.storage-view-thumbnail li:hover .file-selector {
+    display: block;
+}
+
+.storage-view-thumbnail .file-check .file-selector {
+    display: block !important;
+}
+
+.storage-view-thumbnail .file-icon {
+    width: 110px;
+    height: 90px;
+    line-height: 90px;
+    overflow: hidden;
+    text-align: center;
+}
+
+.storage-view-thumbnail .file-icon img {
+    height: auto;
+    max-width: 80px;
+    max-height: 80px;
+    vertical-align: middle;
+}
+
+.storage-view-thumbnail .file-name {
+    height: 50px;
+    line-height: 25px;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+
+.storage-view-list {
+}
+
+.storage-view-list .file-icon {
+}
+
+.storage-view-list .file-icon img {
+    height: auto;
+    max-width: 24px;
+    max-height: 24px;
+    vertical-align: middle;
+}
+
+.storage-view-list .file-size {
+    color: #999;
+}
+
+.storage-view-list .file-update-time {
+    color: #999;
+}
+
+.storage-view-list .file-operation i {
+    font-size: 18px;
+}
+
+.storage-upload-image{
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.storage-upload-file .el-upload {
+    width: 100%;
+}
+
+.storage-upload-file .el-upload-dragger {
+    width: 100%;
+    height: 120px;
+}
+
+.storage-upload-file .el-upload-dragger .el-icon-upload {
+    margin-top: 10px;
+}
+
+.storage-upload-file .el-upload-list {
+    max-height: 200px;
+    overflow-y: auto;
+}

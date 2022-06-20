@@ -1,0 +1,145 @@
+body {
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+}
+#app {
+    display:grid;
+    grid-template-areas: "north north north"
+                    "west center east";
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 250px 1fr 250px;
+    height: 100vh;
+}
+
+.west-links,
+.west-links-disabled {
+    padding: 0;
+    margin: 0;
+}
+
+.middle-west-links {
+    padding: 2px 0 5px 0;
+    margin: 5px 0 2px 0;
+    border-top: #eee 1px solid;
+    border-bottom: #eee 1px solid;
+}
+
+.west-links li,
+.west-links-disabled li {
+    list-style: none;
+    margin-top: 3px;
+    padding: 0 5px;
+}
+
+.west-links li li {
+    padding: 0;
+}
+
+.west-links li a {
+    height: 30px;
+    line-height: 30px;
+    display: block;
+    padding: 0 3px;
+    color: #333;
+    text-decoration: none;
+}
+.west-links-disabled li a {
+    height: 30px;
+    line-height: 30px;
+    display: block;
+    padding: 0 3px;
+    color: #999;
+    text-decoration: none;
+}
+
+
+.west-links li:hover {
+    background-color: #fafafa;
+}
+
+.west-links li a:hover {
+    background-color: #eee;
+}
+
+.west-links li a.active {
+    background-color: rgba(242, 247, 254, 1);
+}
+
+.west-links li a .icon,
+.west-links-disabled li a .icon,
+.el-dropdown-menu .icon{
+    padding-right: 5px;
+}
+
+.west-links-disabled li a .icon { color: #999;}
+
+.west-links li a .icon img,
+.west-links li a .icon svg,
+.west-links-disabled li a .icon img,
+.west-links-disabled li a .icon svg,
+.el-dropdown-menu .icon img,
+.el-dropdown-menu .icon svg  {
+    max-width: 14px;
+    max-height: 14px;
+    vertical-align: middle;
+}
+
+.west-links-disabled li a .icon img,
+.west-links-disabled li a .icon svg {
+    opacity: 0.4;
+}
+
+.el-dropdown-menu__item {
+    white-space: nowrap;
+    padding-right: 30px;
+}
+
+.west-links li ul{
+    padding: 0 0 0 35px;
+    margin: 0;
+}
+
+.west-links li .el-dropdown {
+    cursor: pointer;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 3px;
+}
+
+.west-links li .el-dropdown:hover {
+    background-color: #eee;
+}
+
+.west-links li .close-icon,
+.west-links li .drag-icon{
+    display: none;
+}
+
+.west-links li:hover .close-icon,
+.west-links li:hover .drag-icon{
+    display: block;
+}
+
+.west-links li li .item-close-icon,
+.west-links li li .item-drag-icon{
+    display: none;
+}
+
+.west-links li li:hover .item-close-icon,
+.west-links li li:hover .item-drag-icon{
+    display: block;
+}
+
+.preview-desktop {
+    width: 100%;
+}
+
+.preview-mobile {
+    width: 375px;
+    margin: 0 auto;
+}
+
+.el-dropdown-link {
+    color: rgba(44, 110, 203, 1);
+}

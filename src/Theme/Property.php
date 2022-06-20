@@ -1,4 +1,5 @@
 <?php
+
 namespace Be\Theme;
 
 /**
@@ -7,26 +8,29 @@ namespace Be\Theme;
 abstract class Property extends \Be\Property\Driver
 {
 
+    protected string $type = 'theme';
+
     /**
      * 可䨒置的页面
      *
      * @var string[]
      */
-    public $pages = ['Home'];
+    public array $pages = ['Home'];
 
     /**
      * 预览图片
      *
      * @var string
      */
-    public $previewImage = '';
+    public string $previewImage = '';
 
 
-    public function getPreviewImageUrl () {
+    public function getPreviewImageUrl(): string
+    {
         if ($this->previewImage) {
-            return $this->getUrl() . '/' . $this->previewImage;
+            return $this->getWwwUrl() . '/' . $this->previewImage;
         } else {
-            return \Be\Be::getProperty('App.System')->getUrl() . '/Template/Admin/ThemeEditor/images/no-preview.jpg';
+            return \Be\Be::getProperty('App.System')->getWwwUrl() . '/admin/theme-editor/images/no-preview.jpg';
         }
     }
 

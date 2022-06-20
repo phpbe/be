@@ -11,9 +11,9 @@ $configAdminUser = \Be\Be::getConfig('App.System.AdminUser');
             <el-card shadow="hover" style="height: 180px;">
                 <el-image src="<?php
                 if ($this->adminUser->avatar === '') {
-                    echo \Be\Be::getProperty('App.System')->getUrl().'/Template/Admin/AdminUser/images/avatar.png';
+                    echo \Be\Be::getProperty('App.System')->getWwwUrl().'/admin/admin-user/images/avatar.png';
                 } else {
-                    echo \Be\Be::getRequest()->getUploadUrl().'/System/AdminUser/Avatar/'.$this->adminUser->avatar;
+                    echo $this->adminUser->avatar;
                 }
                 ?>"></el-image>
 

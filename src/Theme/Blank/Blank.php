@@ -10,11 +10,8 @@
     ?>
     <base href="<?php echo $beUrl; ?>/">
     <script>var beUrl = "<?php echo $beUrl; ?>"; </script>
-
     <script src="https://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
-
-    <link rel="stylesheet" href="<?php echo $beUrl; ?>/vendor/be/scss/src/be.css" />
-
+    <link rel="stylesheet" href="https://cdn.phpbe.com/scss/be.css" />
     <style type="text/css">
         html {
             font-size: 14px;

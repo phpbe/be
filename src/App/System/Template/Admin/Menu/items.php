@@ -1,95 +1,10 @@
 <be-head>
-
-    <script src="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/Template/Admin/js/sortable/Sortable.min.js"></script>
-    <script src="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/Template/Admin/js/vuedraggable/vuedraggable.umd.min.js"></script>
-
-    <style>
-
-        .menu-items-header {
-            color: #666;
-            background-color: #EBEEF5;
-            height: 3rem;
-            line-height: 3rem;
-            margin-bottom: .5rem;
-        }
-
-        .menu-items {
-
-        }
-
-        .menu-items .el-form-item {
-            margin-bottom: 0;
-        }
-
-        .menu-items .el-form-item.is-error {
-            margin-bottom: 1rem;
-        }
-
-        .menu-item {
-            background-color: #fff;
-            border-bottom: #EBEEF5 1px solid;
-            padding-top: .5rem;
-            padding-bottom: .5rem;
-            margin-bottom: 2px;
-        }
-
-        .menu-item-col-name {
-            padding-left: 10px;
-        }
-
-        .menu-item-col-link {
-            width: 300px;
-            text-align: center;
-        }
-
-        .menu-item-col-target {
-            width: 160px;
-            padding-left: 20px;
-            padding-right: 20px;
-            text-align: center;
-        }
-
-        .menu-item-col-op {
-            width: 200px;
-            text-align: right;
-        }
-
-        .menu-item-level-1 {
-            margin-left: 0;
-        }
-
-        .menu-item-level-2 {
-            margin-left: 35px;
-        }
-
-        .menu-item-level-3 {
-            margin-left: 70px;
-        }
-
-        .menu-item-ghost {
-            border: #ccc 1px dashed !important;
-            background-color: #fafafa !important;
-        }
-
-        .menu-item-chosen {
-        }
-
-        .menu-item-drag {
-        }
-
-        .menu-item-drag-icon {
-            color: #ccc;
-            font-size: 20px;
-            padding-top: .25rem;
-            padding-right: 1rem;
-            cursor: move;
-        }
-
-        .menu-item-drag-icon:hover {
-            color: #409EFF;
-        }
-
-    </style>
+    <?php
+    $appSystemWwwUrl = \Be\Be::getProperty('App.System')->getWwwUrl();
+    ?>
+    <script src="<?php echo $appSystemWwwUrl; ?>/lib/sortable/sortable.min.js"></script>
+    <script src="<?php echo $appSystemWwwUrl; ?>/lib/vuedraggable/vuedraggable.umd.min.js"></script>
+    <link rel="stylesheet" href="<?php echo $appSystemWwwUrl; ?>/admin/menu/css/items.css" type="text/css"/>
 </be-head>
 
 

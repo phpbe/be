@@ -102,14 +102,15 @@ class LocalDisk extends Driver
     }
 
     /**
-     * 上传文件
+     * 文件 - 上传 用户提交的临时文件
      *
      * @param string $path 文件存储路径
-     * @param string $tmpFile 上传的临时文件名
+     * @param string $tmpFile 上传的临时文件名或指定的文件
+     * @param bool $override 是否醒盖同名文件
+     * @param bool $existException 不醒盖但同名文件但存在时是否抛出异常
      * @return string 上传成功的文件的网址
-     * @throws StorageException
      */
-    public function uploadFile(string $path, string $tmpFile): string
+    public function uploadFile(string $path, string $tmpFile, bool $override = false, bool $existException = true): string
     {
         // 路径检查
         if (substr($path, 0, 1) !== '/' || strpos($path, './') !== false) {
@@ -126,21 +127,75 @@ class LocalDisk extends Driver
         }
 
         if (file_exists($newFilePath)) {
-            throw new StorageException('File ' . $path . ' already exists!');
+            if ($override) {
+                unlink($newFilePath);
+            } else {
+                if ($existException) {
+                    throw new StorageException('File ' . $path . ' already exists!');
+                } else {
+                    return $this->getRootUrl() . $path;
+                }
+            }
         }
 
-        if (strpos($tmpFile, $uploadPath) !== false) {
-            // 文件已传至 upload/tmp 文件夹下， 移动文件
-            if (file_exists($tmpFile)) {
-                copy($tmpFile, $newFilePath);
-                unlink($tmpFile);
-            } else {
-                throw new StorageException('Upload file error!!!');
-            }
-        } else {
+        if (is_uploaded_file($tmpFile)) {
             if (!move_uploaded_file($tmpFile, $newFilePath)) {
                 throw new StorageException('Upload file error!');
             }
+        } else {
+            if (file_exists($tmpFile)) {
+                copy($tmpFile, $newFilePath);
+                //unlink($tmpFile);
+            } else {
+                throw new StorageException('Upload file error!!!');
+            }
+        }
+
+        return $this->getRootUrl() . $path;
+    }
+
+    /**
+     * 文件 - 上传任意文件
+     *
+     * @param string $path 文件存储路径
+     * @param string $localPath 本地文件绝路路径
+     * @param bool $override 是否醒盖同名文件
+     * @param bool $existException 不醒盖但同名文件但存在时是否抛出异常
+     * @return string 上传成功的文件的网址
+     */
+    public function putFile(string $path, string $localPath, bool $override = false, bool $existException = true): string
+    {
+        // 路径检查
+        if (substr($path, 0, 1) !== '/' || strpos($path, './') !== false) {
+            throw new StorageException('Illegal file path：' . $path . '!');
+        }
+
+        $uploadPath = Be::getRuntime()->getUploadPath();
+
+        $newFilePath = $uploadPath . $path;
+        $dir = dirname($newFilePath);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+            chmod($dir, 0777);
+        }
+
+        if (file_exists($newFilePath)) {
+            if ($override) {
+                unlink($newFilePath);
+            } else {
+                if ($existException) {
+                    throw new StorageException('File ' . $path . ' already exists!');
+                } else {
+                    return $this->getRootUrl() . $path;
+                }
+            }
+        }
+
+        if (file_exists($localPath)) {
+            copy($localPath, $newFilePath);
+            unlink($localPath);
+        } else {
+            throw new StorageException('Put file error!!!');
         }
 
         return $this->getRootUrl() . $path;

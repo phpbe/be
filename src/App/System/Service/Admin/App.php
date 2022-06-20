@@ -5,6 +5,8 @@ namespace Be\App\System\Service\Admin;
 use Be\Config\ConfigHelper;
 use Be\Be;
 use Be\App\ServiceException;
+use Be\Util\File\Dir;
+use Be\Util\Str\CaseConverter;
 
 class App
 {
@@ -19,7 +21,7 @@ class App
         if ($this->apps === null) {
             $configApp = Be::getConfig('App.System.App');
             $apps = [];
-            foreach( $configApp->names as $appName) {
+            foreach ($configApp->names as $appName) {
                 $appProperty = Be::getProperty('App.' . $appName);
                 $apps[] = (object)[
                     'name' => $appName,
@@ -75,6 +77,8 @@ class App
             $installer->install();
         }
 
+        $this->updateWww($appName);
+
         $configApp = Be::getConfig('App.System.App');
         $names = $configApp->names;
         $names[] = $appName;
@@ -102,6 +106,8 @@ class App
             $unInstaller->uninstall();
         }
 
+        $this->deleteWww($appName);
+
         $configApp = Be::getConfig('App.System.App');
         $names = $configApp->names;
         $newNames = [];
@@ -117,5 +123,42 @@ class App
         return true;
     }
 
+    /**
+     * 更新 www 目录
+     * @param $appName
+     * @return void
+     */
+    public function updateWww($appName)
+    {
+        $property = Be::getProperty('App.' . $appName);
+        $src = $property->getPath() . '/www';
+        if (is_dir($src)) {
+            $dst = Be::getRuntime()->getRootPath() . '/www/app/' . CaseConverter::camel2Hyphen($appName);
+            Dir::copy($src, $dst, true);
+
+            $configWww = Be::getConfig('App.System.Www');
+            if ($configWww->storage === 1) {
+                $configStorage = Be::getConfig('App.System.Storage');
+                if ($configStorage->driver !== 'LocalDisk') {
+                    $dst = $configWww->storageRoot . 'app/' . \Be\Util\Str\CaseConverter::camel2Hyphen($appName);
+
+                    Be::getStorage()->uploadDir($dst, $src);
+                }
+            }
+        }
+    }
+
+    /**
+     * 删除 www 目录
+     * @param $appName
+     * @return void
+     */
+    public function deleteWww($appName)
+    {
+        $dst = Be::getRuntime()->getRootPath() . '/www/app/' . CaseConverter::camel2Hyphen($appName);
+        if (is_dir($dst)) {
+            Dir::rm($dst);
+        }
+    }
 
 }

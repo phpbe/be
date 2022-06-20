@@ -11,7 +11,7 @@
     <meta name="applicable-device" content="pc,mobile">
     <?php
     $beUrl = beUrl();
-    $themeUrl = \Be\Be::getProperty('Theme.Sample')->getUrl();
+    $themeWwwUrl = \Be\Be::getProperty('Theme.Sample')->getWwwUrl();
     ?>
     <base href="<?php echo $beUrl; ?>/" >
     <script>var beUrl = "<?php echo $beUrl; ?>"; </script>
@@ -20,12 +20,12 @@
 
     <script src="https://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
 
-    <link rel="stylesheet" href="<?php echo $beUrl; ?>/vendor/be/scss/src/be.css" />
+    <link rel="stylesheet" href="https://cdn.phpbe.com/scss/be.css" />
 
-    <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/drawer.css" />
-    <script src="<?php echo $themeUrl; ?>/js/drawer-menu.js"></script>
+    <link rel="stylesheet" href="<?php echo $themeWwwUrl; ?>/css/drawer.css" />
+    <script src="<?php echo $themeWwwUrl; ?>/js/drawer-menu.js"></script>
 
-    <link rel="stylesheet" href="<?php echo $themeUrl; ?>/css/theme.css" />
+    <link rel="stylesheet" href="<?php echo $themeWwwUrl; ?>/css/theme.css" />
 
     <?php
     $configTheme = \Be\Be::getConfig('Theme.Sample.Theme');

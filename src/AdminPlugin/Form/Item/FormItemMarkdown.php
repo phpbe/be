@@ -11,7 +11,6 @@ use Be\AdminPlugin\AdminPluginException;
 class FormItemMarkdown extends FormItem
 {
 
-    protected $baseUrl = null;
     protected $js = []; // 需要引入的 JS 文件
     protected $css = []; // 需要引入的 CSS 文件
     protected $option = []; // 配置项
@@ -34,16 +33,16 @@ class FormItemMarkdown extends FormItem
             }
         }
 
-        $this->baseUrl = Be::getProperty('AdminPlugin.Form')->getUrl() . '/Template/editor.md-1.5.0/';
+        $baseUrl = Be::getProperty('App.System')->getWwwUrl() . '/lib/editor.md/editor.md-1.5.0/';
 
         $this->css = [
-            'css/editormd.min.css',
+            $baseUrl . 'css/editormd.min.css',
         ];
 
         $this->js = [
-            'editormd.min.js',
-            'plugins/be-link-dialog/be-link-dialog.js',
-            'plugins/be-image-dialog/be-image-dialog.js',
+            $baseUrl . 'editormd.min.js',
+            $baseUrl . 'plugins/be-link-dialog/be-link-dialog.js',
+            $baseUrl . 'plugins/be-image-dialog/be-image-dialog.js',
         ];
 
         $beLinkCallback = base64_encode('parent.window.beLink.selectFile(files);');
@@ -61,7 +60,7 @@ class FormItemMarkdown extends FormItem
             'htmlDecode' => 'style,script,iframe',
             'flowChart' => true,
             'sequenceDiagram' => true,
-            'path' => $this->baseUrl . 'lib/',
+            'path' => $baseUrl . 'lib/',
             'toolbarIcons' => 'function() {
                 return [
                     "undo", "redo", "|",
@@ -132,12 +131,7 @@ class FormItemMarkdown extends FormItem
      */
     public function getJs()
     {
-        $js = [];
-        foreach ($this->js as $x) {
-            $js[] = $this->baseUrl . $x;
-        }
-
-        return $js;
+        return $this->js;
     }
 
     /**
@@ -147,12 +141,7 @@ class FormItemMarkdown extends FormItem
      */
     public function getCss()
     {
-        $css = [];
-        foreach ($this->css as $x) {
-            $css[] = $this->baseUrl . $x;
-        }
-
-        return $css;
+        return $this->css;
     }
 
     public function getCssCode()

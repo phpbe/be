@@ -1,5 +1,5 @@
 <be-head>
-<link type="text/css" rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/Template/Admin/AdminUserLogin/css/login.css?v=20211230" />
+<link type="text/css" rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getWwwUrl(); ?>/admin/admin-user-login/css/login.css?v=20211230" />
 </be-head>
 
 <be-body>

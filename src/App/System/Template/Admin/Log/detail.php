@@ -1,10 +1,9 @@
 <be-head>
     <?php
-    $appUrl = \Be\Be::getProperty('App.System')->getUrl();
+    $appWwwUrl = \Be\Be::getProperty('App.System')->getWwwUrl();
     ?>
-    <link type="text/css" rel="stylesheet" href="<?php echo $appUrl; ?>/Template/Admin/System/css/exception.css">
-    <link rel="stylesheet" href="<?php echo $appUrl; ?>/Template/System/google-code-prettify/prettify.css" type="text/css"/>
-    <script type="text/javascript" language="javascript" src="<?php echo $appUrl; ?>/Template/System/google-code-prettify/prettify.js"></script>
+    <link rel="stylesheet" href="<?php echo $appWwwUrl; ?>/lib/google-code-prettify/prettify.css" type="text/css"/>
+    <script type="text/javascript" language="javascript" src="<?php echo $appWwwUrl; ?>/lib/google-code-prettify/prettify.js"></script>
     <style type="text/css">
         pre.prettyprint {
             background-color: #fff;

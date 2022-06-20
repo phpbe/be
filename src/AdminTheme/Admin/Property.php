@@ -6,9 +6,9 @@ namespace Be\AdminTheme\Admin;
 class Property extends \Be\AdminTheme\Property
 {
 
-    public $label = '默认主题';
+    public string $label = '默认主题';
 
-    public $pages = [
+    public array $pages = [
         'Home' => [
             'url' => ['System.index.index'],
             'sections' => [
@@ -21,7 +21,7 @@ class Property extends \Be\AdminTheme\Property
      *
      * @var string
      */
-    public $previewImage = 'images/preview.jpg';
+    public string $previewImage = 'images/preview.jpg';
 
     public function __construct() {
         parent::__construct(__FILE__);

@@ -38,18 +38,20 @@ class FormItemCode extends FormItem
                 $language = $language($row);
             }
 
+            $baseUrl = Be::getProperty('App.System')->getWwwUrl() . '/lib/codemirror/codemirror-5.57.0/';
+
             switch ($language) {
                 case 'html':
                     $this->js = [
-                        'lib/codemirror.js',
-                        'mode/htmlmixed/htmlmixed.js',
-                        'mode/xml/xml.js',
-                        'mode/javascript/javascript.js',
-                        'mode/css/css.js',
+                        $baseUrl . 'lib/codemirror.js',
+                        $baseUrl . 'mode/htmlmixed/htmlmixed.js',
+                        $baseUrl . 'mode/xml/xml.js',
+                        $baseUrl . 'mode/javascript/javascript.js',
+                        $baseUrl . 'mode/css/css.js',
                     ];
 
                     $this->css = [
-                        'lib/codemirror.css',
+                        $baseUrl . 'lib/codemirror.css',
                     ];
 
                     $this->option = [
@@ -62,17 +64,17 @@ class FormItemCode extends FormItem
                     break;
                 case 'css':
                     $this->js = [
-                        'lib/codemirror.js',
-                        'mode/css/css.js',
-                        'addon/edit/matchbrackets.js',
-                        'addon/hint/show-hint.js',
-                        'addon/hint/css-hint.js',
-                        'addon/css/css.js',
+                        $baseUrl . 'lib/codemirror.js',
+                        $baseUrl . 'mode/css/css.js',
+                        $baseUrl . 'addon/edit/matchbrackets.js',
+                        $baseUrl . 'addon/hint/show-hint.js',
+                        $baseUrl . 'addon/hint/css-hint.js',
+                        $baseUrl . 'addon/css/css.js',
                     ];
 
                     $this->css = [
-                        'lib/codemirror.css',
-                        'addon/hint/show-hint.css',
+                        $baseUrl . 'lib/codemirror.css',
+                        $baseUrl . 'addon/hint/show-hint.css',
                     ];
 
                     $this->option = [
@@ -85,13 +87,13 @@ class FormItemCode extends FormItem
                     break;
                 case 'javascript':
                     $this->js = [
-                        'lib/codemirror.js',
-                        'mode/javascript/javascript.js',
-                        'addon/edit/matchbrackets.js',
+                        $baseUrl . 'lib/codemirror.js',
+                        $baseUrl . 'mode/javascript/javascript.js',
+                        $baseUrl . 'addon/edit/matchbrackets.js',
                     ];
 
                     $this->css = [
-                        'lib/codemirror.css',
+                        $baseUrl . 'lib/codemirror.css',
                     ];
 
                     $this->option = [
@@ -105,18 +107,18 @@ class FormItemCode extends FormItem
                     break;
                 case 'json':
                     $this->js = [
-                        'lib/codemirror.js',
-                        'mode/javascript/javascript.js',
-                        'addon/edit/matchbrackets.js',
-                        'addon/lint/jsonlint-1.6.0.js',
-                        'addon/lint/lint.js',
-                        'addon/lint/json-lint.js',
+                        $baseUrl . 'lib/codemirror.js',
+                        $baseUrl . 'mode/javascript/javascript.js',
+                        $baseUrl . 'addon/edit/matchbrackets.js',
+                        $baseUrl . 'addon/lint/jsonlint-1.6.0.js',
+                        $baseUrl . 'addon/lint/lint.js',
+                        $baseUrl . 'addon/lint/json-lint.js',
 
                     ];
 
                     $this->css = [
-                        'lib/codemirror.css',
-                        'addon/lint/lint.css',
+                        $baseUrl . 'lib/codemirror.css',
+                        $baseUrl . 'addon/lint/lint.css',
                     ];
 
                     $this->option = [
@@ -131,14 +133,14 @@ class FormItemCode extends FormItem
                     break;
                 case 'php':
                     $this->js = [
-                        'lib/codemirror.js',
-                        'mode/clike/clike.js',
-                        'mode/php/php.js',
-                        'addon/edit/matchbrackets.js',
+                        $baseUrl . 'lib/codemirror.js',
+                        $baseUrl . 'mode/clike/clike.js',
+                        $baseUrl . 'mode/php/php.js',
+                        $baseUrl . 'addon/edit/matchbrackets.js',
                     ];
 
                     $this->css = [
-                        'lib/codemirror.css',
+                        $baseUrl . 'lib/codemirror.css',
                     ];
 
                     $this->option = [
@@ -151,16 +153,16 @@ class FormItemCode extends FormItem
                     break;
                 case 'sql':
                     $this->js = [
-                        'lib/codemirror.js',
-                        'mode/sql/sql.js',
-                        'addon/edit/matchbrackets.js',
-                        'addon/hint/show-hint.js',
-                        'addon/hint/sql-hint.js',
+                        $baseUrl . 'lib/codemirror.js',
+                        $baseUrl . 'mode/sql/sql.js',
+                        $baseUrl . 'addon/edit/matchbrackets.js',
+                        $baseUrl . 'addon/hint/show-hint.js',
+                        $baseUrl . 'addon/hint/sql-hint.js',
                     ];
 
                     $this->css = [
-                        'lib/codemirror.css',
-                        'addon/hint/show-hint.css',
+                        $baseUrl . 'lib/codemirror.css',
+                        $baseUrl . 'addon/hint/show-hint.css',
                     ];
 
                     $this->option = [
@@ -174,12 +176,12 @@ class FormItemCode extends FormItem
                     break;
                 case 'xml':
                     $this->js = [
-                        'lib/codemirror.js',
-                        'mode/xml/xml.js',
+                        $baseUrl . 'lib/codemirror.js',
+                        $baseUrl . 'mode/xml/xml.js',
                     ];
 
                     $this->css = [
-                        'lib/codemirror.css',
+                        $baseUrl . 'lib/codemirror.css',
                     ];
 
                     $this->option = [
@@ -192,12 +194,12 @@ class FormItemCode extends FormItem
 
                 default:
                     $this->js = [
-                        'lib/codemirror.js',
-                        'mode/javascript/javascript.js',
+                        $baseUrl . 'lib/codemirror.js',
+                        $baseUrl . 'mode/javascript/javascript.js',
                     ];
 
                     $this->css = [
-                        'lib/codemirror.css',
+                        $baseUrl . 'lib/codemirror.css',
                     ];
 
                     $this->option = [
@@ -284,13 +286,7 @@ class FormItemCode extends FormItem
      */
     public function getJs()
     {
-        $baseUrl = Be::getProperty('AdminPlugin.Form')->getUrl() . '/Template/codemirror-5.57.0/';
-        $js = [];
-        foreach ($this->js as $x) {
-            $js[] = $baseUrl . $x;
-        }
-
-        return $js;
+        return $this->js;
     }
 
     /**
@@ -300,13 +296,7 @@ class FormItemCode extends FormItem
      */
     public function getCss()
     {
-        $baseUrl = Be::getProperty('AdminPlugin.Form')->getUrl() . '/Template/codemirror-5.57.0/';
-        $css = [];
-        foreach ($this->css as $x) {
-            $css[] = $baseUrl . $x;
-        }
-
-        return $css;
+        return $this->css;
     }
 
     public function getCssCode()

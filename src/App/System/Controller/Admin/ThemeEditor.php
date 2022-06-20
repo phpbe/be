@@ -100,6 +100,11 @@ class ThemeEditor
                     'operation' => [
                         'items' => [
                             [
+                                'label' => '更新 www',
+                                'action' => 'updateWww',
+                                'target' => 'blank',
+                            ],
+                            [
                                 'label' => '配置',
                                 'action' => 'goSetting',
                                 'target' => 'blank',

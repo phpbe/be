@@ -116,14 +116,15 @@ class TencentCos extends Driver
     }
 
     /**
-     * 上传文件
+     * 文件 - 上传 用户提交的临时文件
      *
      * @param string $path 文件存储路径
-     * @param string $tmpFile 上传的临时文件名
+     * @param string $tmpFile 上传的临时文件名或指定的文件
+     * @param bool $override 是否醒盖同名文件
+     * @param bool $existException 不醒盖但同名文件但存在时是否抛出异常
      * @return string 上传成功的文件的网址
-     * @throws StorageException
      */
-    public function uploadFile(string $path, string $tmpFile): string
+    public function uploadFile(string $path, string $tmpFile, bool $override = false, bool $existException = true): string
     {
         // 路径检查
         if (substr($path, 0, 1) !== '/' || strpos($path, './') !== false) {
@@ -138,7 +139,18 @@ class TencentCos extends Driver
 
             $exist = $cosClient->doesObjectExist($config->bucket, $cosPath);
             if ($exist) {
-                throw new StorageException('File ' . $path . ' already exists!');
+                if ($override) {
+                    $cosClient->deleteObject([
+                        'Bucket' => $config->bucket,
+                        'Key' => $cosPath,
+                    ]);
+                } else {
+                    if ($existException) {
+                        throw new StorageException('File ' . $path . ' already exists!');
+                    } else {
+                        return $config->rootUrl . $path;
+                    }
+                }
             }
 
             $cosClient->upload($config->bucket, $cosPath, fopen($tmpFile, 'rb'));

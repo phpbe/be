@@ -1,31 +1,5 @@
 <be-head>
-    <style>
-        body {
-            padding: 6px;
-            margin: 0;
-            font-size: 14px;
-        }
-
-        .el-form--label-top .el-form-item__label {
-            padding: 0;
-            line-height: 24px;
-        }
-
-        .el-form-item--mini.el-form-item,
-        .el-form-item--small.el-form-item {
-            margin-bottom: 12px;
-        }
-
-        .el-color-dropdown {
-            width: 200px;
-        }
-        .el-color-svpanel {
-            width: 180px;
-        }
-        .el-color-dropdown__value {
-            width: 100px;
-        }
-    </style>
+    <link rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getWwwUrl(); ?>/admin/theme-editor/css/edit-section-item.css" type="text/css"/>
 </be-head>
 
 <be-body>

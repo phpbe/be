@@ -10,7 +10,7 @@ use Be\AdminPlugin\AdminPluginException;
 class Driver
 {
     protected $name = null; // 键名
-    protected $label = ''; // 配置项中文名称
+    protected string $label = ''; // 配置项中文名称
     protected $value = ''; // 值
     protected $nullValue = ''; // 空值
     protected $defaultValue = ''; // 默认址

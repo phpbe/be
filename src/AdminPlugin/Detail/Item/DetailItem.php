@@ -9,7 +9,7 @@ abstract class DetailItem
 {
 
     protected $name = ''; // 键名
-    protected $label = ''; // 配置项中文名称
+    protected string $label = ''; // 配置项中文名称
     protected $value = ''; // 值
     protected $keyValues = null; // 可选值键值对
     protected $ui = []; // UI界面参数

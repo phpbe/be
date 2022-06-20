@@ -94,7 +94,7 @@ class FormItemStorageImage extends FormItem
     public function getCss()
     {
         return [
-            Be::getProperty('AdminPlugin.Form')->getUrl() . '/Template/css/form-item-storage-image.css',
+            Be::getProperty('App.System')->getWwwUrl() . '/admin-plugin/css/form-item-storage-image.css',
         ];
     }
 

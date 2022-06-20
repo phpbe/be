@@ -1,132 +1,11 @@
 <be-head>
-    <style type="text/css">
-        .storage {
-
-        }
-
-        .storage-toolbar {
-            padding: 5px 10px;
-            border-bottom: 1px solid #f1f1f1;
-            z-index: 999;
-        }
-
-        .storage-breadcrumb {
-            padding: 10px;
-            border-bottom: 1px solid #f6f6f6;
-        }
-
-        .storage-files {
-
-        }
-
-
-        .storage-view-thumbnail {
-            padding: 10px;
-        }
-
-        .storage-view-thumbnail ul {
-            padding: 0;
-            margin: 0;
-        }
-
-        .storage-view-thumbnail li {
-            display: inline-block;
-            width: 120px;
-            height: 150px;
-        }
-
-        .storage-view-thumbnail li:hover {
-            background-color: #fafafa;
-        }
-
-        .storage-view-thumbnail .file {
-            padding: 5px;
-        }
-
-        .storage-view-thumbnail .file-icon {
-            width: 110px;
-            height: 90px;
-            line-height: 90px;
-            overflow: hidden;
-            text-align: center;
-        }
-
-        .storage-view-thumbnail .file-icon img {
-            height: auto;
-            max-width: 80px;
-            max-height: 80px;
-            vertical-align: middle;
-        }
-
-        .storage-view-thumbnail .file-name {
-            height: 50px;
-            line-height: 25px;
-            overflow: hidden;
-            text-align: center;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 2;
-            word-wrap: break-word;
-            word-break: break-word;
-        }
-
-
-        .storage-view-list {
-        }
-
-        .storage-view-list .file-icon {
-        }
-
-        .storage-view-list .file-icon img {
-            height: auto;
-            max-width: 24px;
-            max-height: 24px;
-            vertical-align: middle;
-        }
-
-        .storage-view-list .file-size {
-            color: #999;
-        }
-
-        .storage-view-list .file-update-time {
-            color: #999;
-        }
-
-        .storage-view-list .file-operation i {
-            font-size: 18px;
-        }
-
-        .storage-upload-image{
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .storage-upload-file .el-upload {
-            width: 100%;
-        }
-
-        .storage-upload-file .el-upload-dragger {
-            width: 100%;
-            height: 120px;
-        }
-
-        .storage-upload-file .el-upload-dragger .el-icon-upload {
-            margin-top: 10px;
-        }
-
-        .storage-upload-file .el-upload-list {
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-    </style>
+    <link rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getWwwUrl(); ?>/admin/storage/css/index.css" type="text/css"/>
 </be-head>
 
 <be-center-body>
     <?php
     $configSystem = \Be\Be::getConfig('App.System.System');
-    $templateUrl = \Be\Be::getProperty('App.System')->getUrl();
+    $templateUrl = \Be\Be::getProperty('App.System')->getWwwUrl();
     ?>
 
     <div id="app" v-cloak>
@@ -168,7 +47,7 @@
                                     <div v-if="file.type === 'dir'" class="file">
                                         <div class="file-icon">
                                             <el-link :title="file.name" @click="setPath(formData.path + file.name + '/')" :underline="false">
-                                                <el-image src="<?php echo $templateUrl; ?>/Template/Admin/Storage/images/types/folder.png"></el-image>
+                                                <el-image src="<?php echo $templateUrl; ?>/admin/storage/images/types/folder.png"></el-image>
                                             </el-link>
                                         </div>
                                         <div class="file-name">
@@ -178,8 +57,8 @@
                                     <div v-else class="file">
                                         <div class="file-icon">
                                             <el-image v-if="imageTypes.indexOf(file.type) !== -1" :src="file.url"></el-image>
-                                            <el-image v-else-if="fileTypes.indexOf(file.type) !== -1" :src="'<?php echo $templateUrl; ?>/Template/Admin/Storage/images/types/' + file.type + '.png'"></el-image>
-                                            <el-image v-else src="<?php echo $templateUrl; ?>/Template/Admin/Storage/images/types/unknown.png"></el-image>
+                                            <el-image v-else-if="fileTypes.indexOf(file.type) !== -1" :src="'<?php echo $templateUrl; ?>/admin/storage/images/types/' + file.type + '.png'"></el-image>
+                                            <el-image v-else src="<?php echo $templateUrl; ?>/admin/storage/images/types/unknown.png"></el-image>
                                         </div>
                                         <div class="file-name">
                                             {{file.name}}
@@ -204,13 +83,13 @@
                                 <template slot-scope="scope">
                                     <div v-if="scope.row.type === 'dir'" class="file-icon">
                                         <el-link @click="setPath(formData.path + scope.row.name + '/')" :underline="false">
-                                            <el-image src="<?php echo $templateUrl; ?>/Template/Admin/Storage/images/types/folder_s.png"></el-image>
+                                            <el-image src="<?php echo $templateUrl; ?>/admin/storage/images/types/folder_s.png"></el-image>
                                         </el-link>
                                     </div>
                                     <div v-else class="file-icon">
                                         <el-image v-if="imageTypes.indexOf(scope.row.type) !== -1" :src="scope.row.url"></el-image>
-                                        <el-image v-else-if="fileTypes.indexOf(scope.row.type) !== -1" :src="'<?php echo $templateUrl; ?>/Template/Admin/Storage/images/types/' + scope.row.type + '_s.png'"></el-image>
-                                        <el-image v-else src="<?php echo $templateUrl; ?>/Template/Admin/Storage/images/types/unknown_s.png"></el-image>
+                                        <el-image v-else-if="fileTypes.indexOf(scope.row.type) !== -1" :src="'<?php echo $templateUrl; ?>/admin/storage/images/types/' + scope.row.type + '_s.png'"></el-image>
+                                        <el-image v-else src="<?php echo $templateUrl; ?>/admin/storage/images/types/unknown_s.png"></el-image>
                                     </div>
                                 </template>
                             </el-table-column>

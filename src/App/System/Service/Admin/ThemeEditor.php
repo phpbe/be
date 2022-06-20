@@ -23,7 +23,7 @@ abstract class ThemeEditor
             foreach ($configTheme->available as $name) {
                 $propertyClass = '\\Be\\' . $this->themeType . '\\' . $name . '\\Property';
                 if (!class_exists($propertyClass)) continue;
-                $themProperty = Be::getProperty($this->themeType  . '.' . $name);
+                $themProperty = Be::getProperty($this->themeType . '.' . $name);
                 $themes[] = [
                     'name' => $name,
                     'label' => $themProperty->getLabel(),
@@ -71,13 +71,13 @@ abstract class ThemeEditor
                         if ($subDir !== '..' && $subDir !== '.') {
 
                             // 应用中包含的 AdminTheme 或 Theme
-                            $themePath = $subVendorPath . '/' . $subDir . '/'.$this->themeType;
+                            $themePath = $subVendorPath . '/' . $subDir . '/' . $this->themeType;
                             if (!file_exists($themePath)) {
-                                $themePath = $subVendorPath . '/' . $subDir . '/src/'.$this->themeType;
+                                $themePath = $subVendorPath . '/' . $subDir . '/src/' . $this->themeType;
                                 if (!file_exists($themePath)) {
-                                    $themePath = $subVendorPath . '/' . $subDir . '/'.strtolower($this->themeType);
+                                    $themePath = $subVendorPath . '/' . $subDir . '/' . strtolower($this->themeType);
                                     if (!file_exists($themePath)) {
-                                        $themePath = $subVendorPath . '/' . $subDir . '/src/'.strtolower($this->themeType);
+                                        $themePath = $subVendorPath . '/' . $subDir . '/src/' . strtolower($this->themeType);
                                     }
                                 }
                             }
@@ -88,7 +88,7 @@ abstract class ThemeEditor
                                     $propertyPath = $themePath . '/' . $dir . '/Property.php';
                                     if (file_exists($propertyPath)) {
                                         $content = file_get_contents($propertyPath);
-                                        preg_match('/namespace\s+Be\\\\'.$this->themeType.'\\\\(\w+)/i', $content, $matches);
+                                        preg_match('/namespace\s+Be\\\\' . $this->themeType . '\\\\(\w+)/i', $content, $matches);
                                         if (isset($matches[1])) {
                                             $themes[] = $matches[1];
                                         }
@@ -105,7 +105,7 @@ abstract class ThemeEditor
 
                             if (file_exists($propertyPath)) {
                                 $content = file_get_contents($propertyPath);
-                                preg_match('/namespace\s+Be\\\\'.$this->themeType.'\\\\(\w+)/i', $content, $matches);
+                                preg_match('/namespace\s+Be\\\\' . $this->themeType . '\\\\(\w+)/i', $content, $matches);
                                 if (isset($matches[1])) {
                                     $themes[] = $matches[1];
                                 }
@@ -116,13 +116,13 @@ abstract class ThemeEditor
             }
         }
 
-        $themePath = $rootPath . '/'.$this->themeType;
+        $themePath = $rootPath . '/' . $this->themeType;
         if (!file_exists($themePath)) {
-            $themePath = $rootPath . '/src/'.$this->themeType;
+            $themePath = $rootPath . '/src/' . $this->themeType;
             if (!file_exists($themePath)) {
-                $themePath = $rootPath . '/'.strtolower($this->themeType);
+                $themePath = $rootPath . '/' . strtolower($this->themeType);
                 if (!file_exists($themePath)) {
-                    $themePath = $rootPath . '/src/'.strtolower($this->themeType);
+                    $themePath = $rootPath . '/src/' . strtolower($this->themeType);
                 }
             }
         }
@@ -136,7 +136,7 @@ abstract class ThemeEditor
                         $propertyPath = $subVendorPath . '/Property.php';
                         if (file_exists($propertyPath)) {
                             $content = file_get_contents($propertyPath);
-                            preg_match('/namespace\s+Be\\\\'.$this->themeType.'\\\\(\w+)/i', $content, $matches);
+                            preg_match('/namespace\s+Be\\\\' . $this->themeType . '\\\\(\w+)/i', $content, $matches);
                             if (isset($matches[1])) {
                                 $themes[] = $matches[1];
                             }
@@ -150,7 +150,7 @@ abstract class ThemeEditor
         $class = '\\Be\\App\\System\\Config\\' . $this->themeType;
         $originalConfigTheme = new $class();
 
-        $configATheme = Be::getConfig('App.System.'.$this->themeType);
+        $configATheme = Be::getConfig('App.System.' . $this->themeType);
         $configATheme->exclude = $originalConfigTheme->exclude;
 
         // 有效主题，先移除要排除的
@@ -177,14 +177,69 @@ abstract class ThemeEditor
                 $configATheme->available[] = $x;
                 $n++;
             }
+
+            $this->updateWww($this->themeType, $x);
         }
 
         if (!in_array($configATheme->default, $configATheme->available)) {
             $configATheme->default = reset($configATheme->available);
         }
 
-        ConfigHelper::update('App.System.'.$this->themeType, $configATheme);
+        ConfigHelper::update('App.System.' . $this->themeType, $configATheme);
         return $n;
+    }
+
+    /**
+     * 搞贝 www 目录
+     * @param $appName
+     * @return void
+     */
+    public function updateWww($themeType, $themeName)
+    {
+        $property = Be::getProperty($themeType . '.' . $themeName);
+        $src = $property->getPath() . '/www';
+        if (is_dir($src)) {
+            $dst = Be::getRuntime()->getRootPath() . '/www/' . \Be\Util\Str\CaseConverter::camel2Hyphen($themeType) . '/' . \Be\Util\Str\CaseConverter::camel2Hyphen($themeName);
+            \Be\Util\File\Dir::copy($src, $dst, true);
+
+            $configWww = Be::getConfig('App.System.Www');
+            if ($configWww->storage === 1) {
+                $configStorage = Be::getConfig('App.System.Storage');
+                if ($configStorage->driver !== 'LocalDisk') {
+                    $dst = $configWww->storageRoot . \Be\Util\Str\CaseConverter::camel2Hyphen($themeType) . '/' . \Be\Util\Str\CaseConverter::camel2Hyphen($themeName);
+
+                    Be::getStorage()->uploadDir($dst, $src);
+                }
+            }
+        }
+    }
+
+    /**
+     * 复制文件夹
+     *
+     * @param string $srcDir 源文件夹
+     * @param string $dstDir 目标文件夹
+     * @return bool
+     */
+    public function storageCopy(string $srcDir, string $dstDir): bool
+    {
+        $storage = Be::getStorage();
+        $srcDirSource = opendir($srcDir);
+        if ($srcDirSource) {
+            while (false !== ($file = readdir($srcDirSource))) {
+                if ($file !== '.' && $file !== '..') {
+                    $srcPath = $srcDir . '/' . $file;
+                    $dstPath = $dstDir . '/' . $file;
+                    if (is_dir($srcPath)) {
+                        $this->storageCopy($srcPath, $srcPath);
+                    } else {
+                        $storage->uploadFile($dstPath, $srcPath,true);
+                    }
+                }
+            }
+        }
+        closedir($srcDirSource);
+        return true;
     }
 
     /**
@@ -196,11 +251,11 @@ abstract class ThemeEditor
      */
     public function toggleDefault($themeName)
     {
-        $configTheme = Be::getConfig('App.System.'.$this->themeType);
+        $configTheme = Be::getConfig('App.System.' . $this->themeType);
 
         if ($configTheme->default !== $themeName) {
             $configTheme->default = $themeName;
-            ConfigHelper::update('App.System.'.$this->themeType, $configTheme);
+            ConfigHelper::update('App.System.' . $this->themeType, $configTheme);
         }
         return true;
     }

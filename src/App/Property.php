@@ -1,4 +1,5 @@
 <?php
+
 namespace Be\App;
 
 /**
@@ -6,5 +7,7 @@ namespace Be\App;
  */
 abstract class Property extends \Be\Property\Driver
 {
+
+    protected string $type = 'app';
 
 }

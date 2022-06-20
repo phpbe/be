@@ -1,6 +1,6 @@
 <be-head>
     <?php
-    $appUrl = \Be\Be::getProperty('App.System')->getUrl();
+    $appUrl = \Be\Be::getProperty('App.System')->getWwwUrl();
     ?>
     <link rel="stylesheet" href="<?php echo $appUrl; ?>/Template/System/css/be-tab.css" type="text/css"/>
     <script type="text/javascript" src="<?php echo $appUrl; ?>/Template/System/js/be-tab.js"></script>

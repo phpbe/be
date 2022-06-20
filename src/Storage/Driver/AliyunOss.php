@@ -120,14 +120,15 @@ class AliyunOss extends Driver
     }
 
     /**
-     * 上传文件
+     * 文件 - 上传 用户提交的临时文件
      *
      * @param string $path 文件存储路径
-     * @param string $tmpFile 上传的临时文件名
+     * @param string $tmpFile 上传的临时文件名或指定的文件
+     * @param bool $override 是否醒盖同名文件
+     * @param bool $existException 不醒盖但同名文件但存在时是否抛出异常
      * @return string 上传成功的文件的网址
-     * @throws StorageException
      */
-    public function uploadFile(string $path, string $tmpFile): string
+    public function uploadFile(string $path, string $tmpFile, bool $override = false, bool $existException = true): string
     {
         // 路径检查
         if (substr($path, 0, 1) !== '/' || strpos($path, './') !== false) {
@@ -142,12 +143,22 @@ class AliyunOss extends Driver
             $ossClient = new OssClient($config->accessKeyId, $config->accessKeySecret, $endpoint);
             $exist = $ossClient->doesObjectExist($config->bucket, $ossPath);
             if ($exist) {
-                throw new StorageException('File ' . $path . ' already exists!');
+                if ($override) {
+                    $ossClient->deleteObject($config->bucket, $ossPath);
+                } else {
+                    if ($existException) {
+                        throw new StorageException('File ' . $path . ' already exists!');
+                    } else {
+                        return $config->rootUrl . $path;
+                    }
+                }
             }
+
             $ossClient->uploadFile($config->bucket, $ossPath, $tmpFile);
         } catch (OssException $e) {
             throw new StorageException('Aliyun OSS error：' . $e->getMessage());
         }
+
         return $config->rootUrl . $path;
     }
 
@@ -157,7 +168,7 @@ class AliyunOss extends Driver
      * https://help.aliyun.com/document_detail/88514.html
      *
      * @param string $oldPath 旧文件夹路径 以 '/' 开头
-     * @param string string $newPath 新文件夹路径 以 '/' 开头
+     * @param string $newPath 新文件夹路径 以 '/' 开头
      * @return string 重命名成功的新文件的网址
      */
     public function renameFile(string $oldPath, string $newPath): string

@@ -23,7 +23,8 @@ abstract class Driver
      * @param string $path 文件存储路径
      * @return string 文件网址
      */
-    public function getFileUrl(string $path): string {
+    public function getFileUrl(string $path): string
+    {
         return $this->getRootUrl() . $path;
     }
 
@@ -37,13 +38,15 @@ abstract class Driver
     abstract function getFiles(string $dirPath, array $option = []): array;
 
     /**
-     * 文件 - 上传
+     * 文件 - 上传 用户提交的临时文件
      *
      * @param string $path 文件存储路径
-     * @param string $tmpFile 上传的临时文件名
+     * @param string $tmpFile 上传的临时文件名或指定的文件
+     * @param bool $override 是否醒盖同名文件
+     * @param bool $existException 不醒盖但同名文件但存在时是否抛出异常
      * @return string 上传成功的文件的网址
      */
-    abstract function uploadFile(string $path, string $tmpFile): string;
+    abstract function uploadFile(string $path, string $tmpFile, bool $override = false, bool $existException = true): string;
 
     /**
      * 文件 - 重命名
@@ -77,6 +80,35 @@ abstract class Driver
      * @return string 创建成功的文件的网址
      */
     abstract function createDir(string $dirPath): string;
+
+    /**
+     * 文件夹 - 上传文件夹
+     *
+     * @param string $path 文件存储路径
+     * @param string $localPath 本地文件绝路路径
+     * @param bool $override 是否醒盖同名文件
+     * @param bool $existException 不醒盖但同名文件但存在时是否抛出异常
+     * @return string 上传成功的文件的网址
+     */
+    public function uploadDir(string $path, string $localPath, bool $override = false, bool $existException = false): string
+    {
+        $srcDirSource = opendir($localPath);
+        if ($srcDirSource) {
+            while (false !== ($file = readdir($srcDirSource))) {
+                if ($file !== '.' && $file !== '..') {
+                    $tmpLocalPath = $localPath . '/' . $file;
+                    $tmpPath = $path . '/' . $file;
+                    if (is_dir($tmpLocalPath)) {
+                        $this->uploadDir($tmpPath, $tmpLocalPath, $override, $existException);
+                    } else {
+                        $this->uploadFile($tmpPath, $tmpLocalPath, $override, $existException);
+                    }
+                }
+            }
+        }
+        closedir($srcDirSource);
+        return true;
+    }
 
     /**
      * 文件夹 - 删除

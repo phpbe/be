@@ -86,6 +86,12 @@ class App extends Auth
                             'width' => '120',
                             'items' => [
                                 [
+                                    'label' => '更新 www',
+                                    'action' => 'updateWww',
+                                    'confirm' => '应用数据将被清除，且不可恢复，确认要卸载么？',
+                                    'target' => 'ajax',
+                                ],
+                                [
                                     'label' => '卸载',
                                     'action' => 'uninstall',
                                     'confirm' => '应用数据将被清除，且不可恢复，确认要卸载么？',
@@ -191,6 +197,38 @@ class App extends Auth
         }
     }
 
+    /**
+     * 更新 www
+     *
+     * @BePermission("更新 www", ordering="2.13")
+     */
+    public function updateWww()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $postData = $request->json();
+
+        if (!isset($postData['row']['name'])) {
+            $response->error('参数应用名缺失！');
+        }
+
+        $appName = $postData['row']['name'];
+
+        try {
+            $serviceApp = Be::getService('App.System.Admin.App');
+            $serviceApp->updateWww($appName);
+
+            beAdminOpLog('更新应用 www：' . $appName);
+            $response->success('更新应用 www成功！');
+
+            if (Be::getRuntime()->isSwooleMode()) {
+                Be::getRuntime()->reload();
+            }
+        } catch (\Throwable $t) {
+            $response->error($t->getMessage());
+        }
+    }
 
 }
 

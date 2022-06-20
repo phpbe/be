@@ -7,4 +7,6 @@ namespace Be\AdminPlugin;
 abstract class Property extends \Be\Property\Driver
 {
 
+    protected string $type = 'admin-plugin';
+
 }

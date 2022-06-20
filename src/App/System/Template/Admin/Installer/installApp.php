@@ -1,7 +1,3 @@
-<be-head>
-    <link type="text/css" rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getUrl(); ?>/Template/Admin/Installer/css/complete.css">
-</be-head>
-
 <be-center>
     <div id="app" v-cloak>
         <el-form size="medium" label-width="150px" ref="formRef">

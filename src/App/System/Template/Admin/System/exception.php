@@ -1,6 +1,6 @@
 <be-head>
     <?php
-    $appUrl = \Be\Be::getProperty('App.System')->getUrl();
+    $appUrl = \Be\Be::getProperty('App.System')->getWwwUrl();
     ?>
     <link type="text/css" rel="stylesheet" href="<?php echo $appUrl; ?>/Template/Admin/System/css/exception.css">
 

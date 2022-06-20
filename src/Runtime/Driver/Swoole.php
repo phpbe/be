@@ -92,9 +92,17 @@ class Swoole extends Driver
             if ($ext) {
                 $ext = strtolower(substr($ext, 1));
                 if (isset(\Be\Util\File\Mime::MAPPING[$ext])) {
-                    $rootPath = Be::getRuntime()->getRootPath();
+                    $rootPath = Be::getRuntime()->getRootPath() . '/www';
+
+                    if (strpos($uri, '../') !== false) {
+                        $swooleResponse->status(404);
+                        $swooleResponse->end();
+                        return true;
+                    }
+
                     if (file_exists($rootPath . $uri)) {
                         $swooleResponse->header('Content-Type', \Be\Util\File\Mime::MAPPING[$ext], false);
+
                         //缓存
                         $lastModified = gmdate('D, d M Y H:i:s', filemtime($rootPath . $uri)) . ' GMT';
                         if (isset($swooleRequest->header['if-modified-since']) && $swooleRequest->header['if-modified-since'] === $lastModified) {
@@ -116,7 +124,7 @@ class Swoole extends Driver
                         return true;
                     }
 
-                    if ($uri === '/favicon.ico') {
+                    if (strpos($uri, '/favicon.ico') !== false) {
                         $swooleResponse->end();
                         return true;
                     }

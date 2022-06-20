@@ -32,10 +32,12 @@ class FormItemTinymce extends FormItem
             }
         }
 
-        $this->js = [
-            'tinymce.min.js',
-        ];
+        $appSystemWwwUrl = Be::getProperty('App.System')->getWwwUrl();
+        $baseUrl = $appSystemWwwUrl . '/lib/tinymce/tinymce_5.10.2/';
 
+        $this->js = [
+            $baseUrl . '/tinymce.min.js',
+        ];
 
         $fileCallback = base64_encode('parent.window.befile.selectedFiles = files;');
         $imageCallback = base64_encode('parent.window.beimage.selectedFiles = files;');
@@ -84,10 +86,10 @@ class FormItemTinymce extends FormItem
                     'fontsize_formats' => '9px 10px 11px 12px 13px 14px 15px 16px 18px 20px 24px 28px 32px 36px 40px 48px 60px 72px',
                 ]);
 
-                $this->js[] = 'plugins/becodesample/highlight.js-11.5.1/highlight.min.js';
+                $this->js[] = $appSystemWwwUrl . '/lib/highlight.js/highlight.js-11.5.1/highlight.min.js';
 
-                // $contentCss = Be::getProperty('AdminPlugin.Form')->getUrl() . '/Template/tinymce_5.10.2/plugins/becodesample/highlight.js-11.5.1/default.min.css';
-                $contentCss = Be::getProperty('AdminPlugin.Form')->getUrl() . '/Template/tinymce_5.10.2/plugins/becodesample/highlight.js-11.5.1/styles/atom-one-light.css';
+                // $contentCss = Be::getProperty('App.System')->getWwwUrl() . '/lib/highlight.js/highlight.js-11.5.1/default.min.css';
+                $contentCss = $appSystemWwwUrl . '/lib/highlight.js/highlight.js-11.5.1/styles/atom-one-light.css';
                 $this->option['content_css'] = $contentCss;
 
                 break;
@@ -136,13 +138,7 @@ class FormItemTinymce extends FormItem
      */
     public function getJs()
     {
-        $baseUrl = Be::getProperty('AdminPlugin.Form')->getUrl() . '/Template/tinymce_5.10.2/';
-        $js = [];
-        foreach ($this->js as $x) {
-            $js[] = $baseUrl . $x;
-        }
-
-        return $js;
+        return $this->js;
     }
 
     /**
@@ -152,13 +148,7 @@ class FormItemTinymce extends FormItem
      */
     public function getCss()
     {
-        $baseUrl = Be::getProperty('AdminPlugin.Form')->getUrl() . '/Template/tinymce_5.10.2/';
-        $css = [];
-        foreach ($this->css as $x) {
-            $css[] = $baseUrl . $x;
-        }
-
-        return $css;
+        return $this->css;
     }
 
     /**
@@ -215,7 +205,7 @@ class FormItemTinymce extends FormItem
         $mountedCode .= 'var _this = this;';
         $mountedCode .= 'tinymce.init({';
         foreach ($this->option as $key => $val) {
-            $mountedCode .=  $key . ':' . json_encode($val) . ',';
+            $mountedCode .= $key . ':' . json_encode($val) . ',';
         }
 
         $onChangeCallback = '';
@@ -229,13 +219,13 @@ class FormItemTinymce extends FormItem
         }
 
         // 内容更新时回写到 formData
-        $mountedCode .=  'init_instance_callback: function(editor) {
+        $mountedCode .= 'init_instance_callback: function(editor) {
             _this.formItems.' . $this->name . '.instance = editor;
             editor.setContent(_this.formData.' . $this->name . ');
             editor.on(\'input change undo redo\', function() {
                 let content = this.getContent();
                 _this.formData.' . $this->name . ' = content;
-                '.$onChangeCallback.'
+                ' . $onChangeCallback . '
             });
         }';
 

@@ -1,6 +1,4 @@
-/index.php
 /server.php
-/.htaccess
 /composer.lock
 .DS_store
 Thumbs.db
@@ -9,3 +7,4 @@ Thumbs.db
 /upload
 /vendor
 /.idea
+/www

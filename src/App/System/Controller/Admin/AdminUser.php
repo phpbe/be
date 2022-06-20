@@ -190,7 +190,7 @@ class AdminUser extends Auth
                             'driver' => TableItemAvatar::class,
                             'value' => function ($row) {
                                 if ($row['avatar'] === '') {
-                                    return Be::getProperty('App.System')->getUrl() . '/Template/Admin/AdminUser/images/avatar.png';
+                                    return Be::getProperty('App.System')->getWwwUrl() . '/Template/Admin/AdminUser/images/avatar.png';
                                 } else {
                                     return Be::getRequest()->getUploadUrl() . '/System/AdminUser/Avatar/' . $row['avatar'];
                                 }
@@ -280,7 +280,7 @@ class AdminUser extends Auth
                             'driver' => DetailItemAvatar::class,
                             'value' => function ($row) {
                                 if ($row['avatar'] === '') {
-                                    return Be::getProperty('App.System')->getUrl() . '/Template/Admin/AdminUser/images/avatar.png';
+                                    return Be::getProperty('App.System')->getWwwUrl() . '/Template/Admin/AdminUser/images/avatar.png';
                                 } else {
                                     return Be::getRequest()->getUploadUrl() . '/System/AdminUser/Avatar/' . $row['avatar'];
                                 }
@@ -370,7 +370,7 @@ class AdminUser extends Auth
                             'path' => '/System/AdminUser/Avatar/',
                             'maxWidth' => $configAdminUser->avatarWidth,
                             'maxHeight' => $configAdminUser->avatarHeight,
-                            'defaultValue' => Be::getProperty('App.System')->getUrl() . '/Template/Admin/AdminUser/images/avatar.png',
+                            'defaultValue' => Be::getProperty('App.System')->getWwwUrl() . '/Template/Admin/AdminUser/images/avatar.png',
                         ],
                         [
                             'name' => 'username',
@@ -445,7 +445,7 @@ class AdminUser extends Auth
                             'path' => '/System/AdminUser/Avatar/',
                             'maxWidth' => $configAdminUser->avatarWidth,
                             'maxHeight' => $configAdminUser->avatarHeight,
-                            'defaultValue' => Be::getProperty('App.System')->getUrl() . '/Template/Admin/AdminUser/images/avatar.png',
+                            'defaultValue' => Be::getProperty('App.System')->getWwwUrl() . '/Template/Admin/AdminUser/images/avatar.png',
                         ],
                         [
                             'name' => 'username',
