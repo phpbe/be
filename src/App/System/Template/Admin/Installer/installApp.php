@@ -1,81 +1,60 @@
 <be-center>
-    <div id="app" v-cloak>
-        <el-form size="medium" label-width="150px" ref="formRef">
-            <div style="padding: 20px 0">
-                <el-table :data="tableData" ref="tableRef" @selection-change="selectionChange">
-                    <el-table-column type="selection" width="50"></el-table-column>
-                    <el-table-column prop="icon" label="图标" width="90" align="center">
-                        <template slot-scope="scope">
-                            <el-icon :class="scope.row.icon"></el-icon>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="name" label="名称" width="150" align="center"></el-table-column>
-                    <el-table-column prop="label" label="中文名称" width="150" align="center"></el-table-column>
-                    <el-table-column prop="description" label="描述"></el-table-column>
-                </el-table>
+    <form id="form" action="<?php echo \Be\Be::getRequest()->getUrl(); ?>" method="post">
+        <?php
+        foreach ($this->appProperties as $appProperty)
+        {
+            ?>
+            <div class="be-row be-mt-200 be-bt-eee be-pt-100">
+                <div class="be-col-0 be-col-md-3 be-col-lg-6"></div>
+                <div class="be-col-24 be-col-md-18 be-col-lg-12">
+                    <div class="be-row">
+                        <div class="be-col-auto">
+                            <input type="checkbox" class="be-checkbox" name="names[]" id="name-<?php echo $appProperty['name']; ?>" <?php echo $appProperty['name'] === 'System' ? 'onchange="this.checked=true"': '' ?> value="<?php echo $appProperty['name']; ?>" checked>
+                        </div>
+                        <div class="be-col-auto">
+                            <div class="be-pl-100">
+                                <label for="name-<?php echo $appProperty['name']; ?>">
+                                    <?php echo $appProperty['label']; ?> （<?php echo $appProperty['name']; ?> ）：
+                                </label>
+                            </div>
+                        </div>
+                        <div class="be-col be-c-666">
+                            <label for="name-<?php echo $appProperty['name']; ?>">
+                                <?php echo $appProperty['description']; ?>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="be-col-0 be-col-md-3 be-col-lg-6"></div>
             </div>
+            <?php
+        }
+        ?>
 
-            <el-form-item>
-                <el-button type="primary" @click="submit" :disabled="loading">继续安装</el-button>
-            </el-form-item>
+        <div class="be-mt-200 be-bt-eee be-pt-100 be-ta-center">
+            <a class="be-btn" href="<?php echo beAdminUrl('System.Installer.configDb'); ?>">上一步</a>
+            <input type="button" class="be-btn be-btn-main" value="继续安装" onclick="installApp()">
+        </div>
 
-        </el-form>
-    </div>
+    </form>
+
     <script>
-        new Vue({
-            el: '#app',
-            data: {
-                formData:{
-                    appNames: []
-                },
-                loading: false,
-                tableData: <?php echo json_encode($this->appProperties); ?>
-            },
-            methods: {
-                selectionChange: function(rows) {
-                    var arrAppNames = [];
-                    for (var i=0; i<rows.length; i++) {
-                        var row = rows[i];
-                        arrAppNames.push(row.name);
+        function installApp() {
+            $.ajax({
+                url: "<?php echo beAdminUrl('System.Installer.installApp'); ?>",
+                data : $("#form").serialize(),
+                method: "POST",
+                success: function (json) {
+                    if (json.success) {
+                        window.location.href=json.redirectUrl;
+                    } else {
+                        alert(json.message);
                     }
-
-                    if (arrAppNames.indexOf("System") === -1) {
-                        arrAppNames.push("System");
-                        this.$refs.tableRef.toggleRowSelection(this.tableData[0]);
-                    }
-
-                    this.formData.appNames = arrAppNames;
                 },
-                submit: function () {
-                    var _this = this;
-                    this.loading = true;
-                    this.$http.post("<?php echo beAdminUrl('System.Installer.installApp'); ?>", {
-                        formData: this.formData
-                    }).then(function (response) {
-                        _this.loading = false;
-                        console.log(response);
-                        if (response.status === 200) {
-                            var responseData = response.data;
-                            if (responseData.success) {
-                                window.location.href=responseData.redirectUrl;
-                            } else {
-                                if (responseData.message) {
-                                    _this.$message.error(responseData.message);
-                                }
-                            }
-                        }
-                    }).catch(function (error) {
-                        _this.loading = false;
-                        _this.$message.error(error);
-                    });
-
+                error: function () {
+                    alert("系统错误!");
                 }
-            },
-            mounted: function () {
-                for (var i=0; i<this.tableData.length; i++) {
-                    this.$refs.tableRef.toggleRowSelection(this.tableData[i]);
-                }
-            }
-        });
+            });
+        }
     </script>
 </be-center>

@@ -166,7 +166,15 @@ class AdminTheme extends Auth
         $this->themeEditor->sortSectionItem();
     }
 
-
+    /**
+     * 更新 www
+     *
+     * @BePermission("更新www", ordering="2.13")
+     */
+    public function updateWww()
+    {
+        $this->themeEditor->updateWww();
+    }
 
 }
 

@@ -761,9 +761,11 @@
                                                     }
 
                                                     echo '<div class="' . $cssClass . '">';
-                                                    echo '<card-operation :data="item">';
-                                                    echo '<template scope="scope">';
+                                                    $n = count($this->setting['card']['operation']['items']);
+                                                    $i = 0;
                                                     foreach ($this->setting['card']['operation']['items'] as $item) {
+                                                        echo '<card-operation :item="item">';
+                                                        echo '<template scope="scope">';
                                                         $driverClass = null;
                                                         if (isset($item['driver'])) {
                                                             if (substr($item['driver'], 0, 13) === 'OperationItem') {
@@ -787,9 +789,14 @@
                                                         if ($vueMethodsX) {
                                                             $vueMethods = array_merge($vueMethods, $vueMethodsX);
                                                         }
+                                                        echo '</template>';
+                                                        echo '</card-operation>';
+
+                                                        $i++;
+                                                        if ($i < $n) {
+                                                            echo '&nbsp;&nbsp;';
+                                                        }
                                                     }
-                                                    echo '</template>';
-                                                    echo '</card-operation>';
                                                     echo '</div>';
                                                 }
                                             }
@@ -913,9 +920,9 @@
 
         <?php if ($this->setting['actualLayout'] === 'card') { ?>
         Vue.component('card-operation', {
-            template: '<slot :row="data"></slot>',
+            template: '<slot :row="item"></slot><span>111</span>',
             props: {
-                data: {
+                item: {
                     type: Array,
                     required: true
                 }

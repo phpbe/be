@@ -83,12 +83,12 @@ class App extends Auth
                         ],
                         'operation' => [
                             'label' => '操作',
-                            'width' => '120',
+                            'width' => '240',
                             'items' => [
                                 [
-                                    'label' => '更新 www',
+                                    'label' => '更新www',
                                     'action' => 'updateWww',
-                                    'confirm' => '应用数据将被清除，且不可恢复，确认要卸载么？',
+                                    'confirm' => '应用的 www 目录较大时，更新需要耗时稍长时间，确定执行？',
                                     'target' => 'ajax',
                                 ],
                                 [
@@ -221,10 +221,6 @@ class App extends Auth
 
             beAdminOpLog('更新应用 www：' . $appName);
             $response->success('更新应用 www成功！');
-
-            if (Be::getRuntime()->isSwooleMode()) {
-                Be::getRuntime()->reload();
-            }
         } catch (\Throwable $t) {
             $response->error($t->getMessage());
         }

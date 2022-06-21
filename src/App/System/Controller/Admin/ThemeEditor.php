@@ -100,9 +100,9 @@ class ThemeEditor
                     'operation' => [
                         'items' => [
                             [
-                                'label' => '更新 www',
+                                'label' => '更新www',
                                 'action' => 'updateWww',
-                                'target' => 'blank',
+                                'target' => 'ajax',
                             ],
                             [
                                 'label' => '配置',
@@ -150,8 +150,13 @@ class ThemeEditor
                     ],
                     'operation' => [
                         'label' => '操作',
-                        'width' => '120',
+                        'width' => '240',
                         'items' => [
+                            [
+                                'label' => '更新www',
+                                'action' => 'updateWww',
+                                'target' => 'ajax',
+                            ],
                             [
                                 'label' => '配置',
                                 'action' => 'goSetting',
@@ -538,5 +543,33 @@ class ThemeEditor
         Be::getRuntime()->reload();
     }
 
+    /**
+     * 更新www
+     *
+     * @BePermission("更新www", ordering="2.13")
+     */
+    public function updateWww()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $postData = $request->json();
+
+        if (!isset($postData['row']['name'])) {
+            $response->error('参数主题名称缺失！');
+        }
+
+        $themeName = $postData['row']['name'];
+
+        try {
+            $serviceApp = Be::getService('App.System.Admin.Theme');
+            $serviceApp->updateWww($this->themeType, $themeName);
+
+            beAdminOpLog('更新主题www：' . $themeName);
+            $response->success('更新主题www成功！');
+        } catch (\Throwable $t) {
+            $response->error($t->getMessage());
+        }
+    }
 }
 

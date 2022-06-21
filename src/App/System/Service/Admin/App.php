@@ -130,10 +130,11 @@ class App
      */
     public function updateWww($appName)
     {
+        $rootPath = Be::getRuntime()->getRootPath();
         $property = Be::getProperty('App.' . $appName);
-        $src = $property->getPath() . '/www';
+        $src = $rootPath . $property->getPath() . '/www';
         if (is_dir($src)) {
-            $dst = Be::getRuntime()->getRootPath() . '/www/app/' . CaseConverter::camel2Hyphen($appName);
+            $dst = $rootPath . '/www/app/' . CaseConverter::camel2Hyphen($appName);
             Dir::copy($src, $dst, true);
 
             $configWww = Be::getConfig('App.System.Www');
@@ -158,6 +159,15 @@ class App
         $dst = Be::getRuntime()->getRootPath() . '/www/app/' . CaseConverter::camel2Hyphen($appName);
         if (is_dir($dst)) {
             Dir::rm($dst);
+
+            $configWww = Be::getConfig('App.System.Www');
+            if ($configWww->storage === 1) {
+                $configStorage = Be::getConfig('App.System.Storage');
+                if ($configStorage->driver !== 'LocalDisk') {
+                    $dst = $configWww->storageRoot . 'app/' . \Be\Util\Str\CaseConverter::camel2Hyphen($appName);
+                    Be::getStorage()->deleteDir($dst);
+                }
+            }
         }
     }
 

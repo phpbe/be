@@ -129,7 +129,7 @@
                         } else {
                             echo $my->avatar;
                         }
-                        ?>" alt="<?php echo $my->name; ?>" style="max-width:24px;max-height:24px; vertical-align: middle" >
+                        ?>" alt="" style="max-width:24px;max-height:24px; vertical-align: middle" >
                     </div>
 
                     <div class="be-col-auto be-pr-200 north-links" style="padding-top: 20px;">

@@ -67,7 +67,7 @@ class Installer
             $response->redirect(beAdminUrl('System.Installer.configDb'));
         } else {
             $value = [];
-            $value['isPhpVersionGtMatch'] = version_compare(PHP_VERSION, '7.1.0') >= 0 ? 1 : 0;
+            $value['isPhpVersionGtMatch'] = version_compare(PHP_VERSION, '7.4.0') >= 0 ? 1 : 0;
             $value['isPdoMysqlInstalled'] = extension_loaded('pdo_mysql') ? 1 : 0;
             $value['isRedisInstalled'] = extension_loaded('redis') ? 1 : 0;
 
@@ -87,80 +87,16 @@ class Installer
                 $value['isUploadDirWritable'] = is_writable($rootPath) ? 1 : 0;
             }
 
+            $response->set('value', $value);
+
             $isAllPassed = array_sum($value) === count($value);
+            $response->set('isAllPassed', $isAllPassed);
 
             $response->set('steps', $this->steps);
-            $response->set('step', 0);
+            $response->set('step', 1);
+            $response->set('title', $this->steps[0]);
 
-            Be::getAdminPlugin('Detail')
-                ->setting([
-                    'title' => '系统数据库配置',
-                    'theme' => 'Installer',
-                    'form' => [
-                        'ui' => [
-                            'label-width' => '300px',
-                        ],
-                        'items' => [
-                            [
-                                'name' => 'php',
-                                'label' => 'PHP版本（7.1+）',
-                                'driver' => DetailItemIcon::class,
-                                'value' => $value['isPhpVersionGtMatch'] ? 'el-icon-check' : 'el-icon-close',
-                                'ui' => [
-                                    'style' => 'color:' . ($value['isPhpVersionGtMatch'] ? '#67C23A' : '#F56C6C')
-                                ]
-                            ],
-                            [
-                                'name' => 'mysql',
-                                'label' => 'PDO Mysql 扩展',
-                                'driver' => DetailItemIcon::class,
-                                'value' => $value['isPdoMysqlInstalled'] ? 'el-icon-check' : 'el-icon-close',
-                                'ui' => [
-                                    'style' => 'color:' . ($value['isPdoMysqlInstalled'] ? '#67C23A' : '#F56C6C')
-                                ]
-                            ],
-                            [
-                                'name' => 'redis',
-                                'label' => 'Redis 扩展',
-                                'driver' => DetailItemIcon::class,
-                                'value' => $value['isRedisInstalled'] ? 'el-icon-check' : 'el-icon-close',
-                                'ui' => [
-                                    'style' => 'color:' . ($value['isRedisInstalled'] ? '#67C23A' : '#F56C6C')
-                                ]
-                            ],
-                            [
-                                'name' => 'data',
-                                'label' => 'data 目录可写',
-                                'driver' => DetailItemIcon::class,
-                                'value' => $value['isDataDirWritable'] ? 'el-icon-check' : 'el-icon-close',
-                                'ui' => [
-                                    'style' => 'color:' . ($value['isDataDirWritable'] ? '#67C23A' : '#F56C6C')
-                                ]
-                            ],
-                            [
-                                'name' => 'upload',
-                                'label' => 'upload 目录可写',
-                                'driver' => DetailItemIcon::class,
-                                'value' => $value['isUploadDirWritable'] ? 'el-icon-check' : 'el-icon-close',
-                                'ui' => [
-                                    'style' => 'color:' . ($value['isUploadDirWritable'] ? '#67C23A' : '#F56C6C')
-                                ]
-                            ],
-                        ],
-                        'actions' => [
-                            [
-                                'label' => '继续安装',
-                                'target' => 'self',
-                                'ui' => [
-                                    'type' => $isAllPassed ? 'primary' : 'danger',
-                                    ':disabled' => $isAllPassed ? 'false' : 'true',
-                                ]
-                            ]
-                        ]
-
-                    ],
-                ])
-                ->execute();
+            $response->display('App.System.Admin.Installer.detect', 'Installer');
         }
     }
 
@@ -174,16 +110,15 @@ class Installer
 
         if ($request->isPost()) {
             try {
-                $postData = $request->json();
-                $formData = $postData['formData'];
-                Be::getService('App.System.Admin.Installer')->testDb($formData);
+                $postData = $request->post();
+                Be::getService('App.System.Admin.Installer')->testDb($postData);
 
                 $configDb = Be::getConfig('App.System.Db');
 
                 $configDbDefault = new \Be\App\System\Config\Db();
                 foreach ($configDbDefault->master as $k => $v) {
-                    if (isset($formData[$k])) {
-                        $configDb->master[$k] = $formData[$k];
+                    if (isset($postData[$k])) {
+                        $configDb->master[$k] = $postData[$k];
                     }
                 }
 
@@ -192,7 +127,6 @@ class Installer
                 $response->set('success', true);
                 $response->set('redirectUrl', beAdminUrl('System.Installer.installApp'));
                 $response->json();
-
             } catch (\Throwable $t) {
                 $response->set('success', false);
                 $response->set('message', $t->getMessage());
@@ -200,156 +134,14 @@ class Installer
             }
         } else {
             $response->set('steps', $this->steps);
-            $response->set('step', 1);
+            $response->set('step', 2);
+
+            $response->set('title', $this->steps[1]);
 
             $configDb = Be::getConfig('App.System.Db');
-            Be::getAdminPlugin('Form')
-                ->setting([
-                    'title' => '系统数据库配置',
-                    'theme' => 'Installer',
-                    'form' => [
-                        'ui' => [
-                            'label-width' => '200px',
-                            'style' => 'width: 600px',
-                        ],
-                        'items' => [
-                            [
-                                'name' => 'host',
-                                'label' => '主机名',
-                                'required' => true,
-                                'value' => $configDb->master['host'],
-                            ],
-                            [
-                                'name' => 'port',
-                                'label' => '端口号',
-                                'driver' => FormItemInputNumberInt::class,
-                                'required' => true,
-                                'value' => $configDb->master['port'],
-                                'ui' => [':min' => 1, ':max' => 65535],
-                            ],
-                            [
-                                'name' => 'username',
-                                'label' => '用户名',
-                                'required' => true,
-                                'value' => $configDb->master['username'],
-                            ],
-                            [
-                                'name' => 'password',
-                                'label' => '密码',
-                                'required' => true,
-                                'value' => $configDb->master['password'],
-                            ],
-                            [
-                                'name' => 'testDb',
-                                'driver' => FormItemCustom::class,
-                                'html' => '<el-form-item><el-button type="success" @click="testDb" v-loading="testDbLoading" size="medium" plain>测试连接，并获取库名列表</el-button></el-form-item>'
-                            ],
-                            [
-                                'name' => 'name',
-                                'label' => '库名',
-                                'driver' => FormItemAutoComplete::class,
-                                'required' => true,
-                            ],
-                            [
-                                'name' => 'pool',
-                                'label' => '连接池大小（0：不启用）',
-                                'driver' => FormItemInputNumberInt::class,
-                                'required' => true,
-                                'value' => $configDb->master['pool'],
-                                'ui' => [':min' => 0, ':max' => 10000],
-                            ],
-                        ],
-                        'actions' => [
-                            [
-                                'label' => '上一步',
-                                'ui' => [
-                                    '@click' => 'window.location.href=\''.beAdminUrl('System.Installer.detect').'\'',
-                                ]
-                            ],
-                            [
-                                'label' => '继续安装',
-                                'ui' => [
-                                    'type' => 'primary',
-                                    '@click' => 'saveDb',
-                                ]
-                            ]
-                        ]
-                    ],
-                    'vueData' => [
-                        'testDbLoading' => false, // 测试数据库连接中
-                    ],
-                    'vueMethods' => [
-                        'testDb' => 'function() {
-                            var _this = this;
-                            this.testDbLoading = true;
-                            this.$http.post("'.beAdminUrl('System.Installer.testDb').'", {
-                                    formData: _this.formData
-                                }).then(function (response) {
-                                    _this.testDbLoading = false;
-                                    //console.log(response);
-                                    if (response.status === 200) {
-                                        var responseData = response.data;
-                                        if (responseData.success) {
-                                            var message;
-                                            if (responseData.message) {
-                                                message = responseData.message;
-                                            } else {
-                                                message = \'连接成功！\';
-                                            }
-                                            _this.$message.success(message);
-                                            var suggestions = [];
-                                            for(var x in responseData.data.databases) {
-                                                suggestions.push({
-                                                    "value" : responseData.data.databases[x]
-                                                });
-                                            }
-                                            _this.formItems.name.suggestions = suggestions;
-                                        } else {
-                                            if (responseData.message) {
-                                                _this.$message.error(responseData.message);
-                                            }
-                                        }
-                                    }
-                                }).catch(function (error) {
-                                    _this.testDbLoading = false;
-                                    _this.$message.error(error);
-                                });
-                        }',
+            $response->set('configDb', $configDb);
 
-                        'saveDb' => 'function () {
-                            var _this = this;
-                            this.$refs["formRef"].validate(function (valid) {
-                                if (valid) {
-                                    _this.loading = true;
-                                    _this.$http.post("'.beAdminUrl('System.Installer.configDb').'", {
-                                        formData: _this.formData
-                                    }).then(function (response) {
-                                        _this.loading = false;
-                                        console.log(response);
-                                        if (response.status === 200) {
-                                            var responseData = response.data;
-                                            if (responseData.success) {
-                                                window.location.href=responseData.redirectUrl;
-                                            } else {
-                                                if (responseData.message) {
-                                                    _this.$message.error(responseData.message);
-                                                }
-                                            }
-                                        }
-                                    }).catch(function (error) {
-                                        _this.loading = false;
-                                        _this.$message.error(error);
-                                    });
-        
-                                } else {
-                                    return false;
-                                }
-                            });
-                        }',
-                    ],
-                ])
-                ->setValue(Be::getConfig('App.System.Db')->master)
-                ->execute();
+            $response->display('App.System.Admin.Installer.configDb', 'Installer');
         }
     }
 
@@ -361,9 +153,10 @@ class Installer
         $request = Be::getRequest();
         $response = Be::getResponse();
         try {
-            $postData = $request->json();
-            $databases = Be::getService('App.System.Admin.Installer')->testDb($postData['formData']);
+            $postData = $request->post();
+            $databases = Be::getService('App.System.Admin.Installer')->testDb($postData);
             $response->set('success', true);
+            $response->set('message', '数据库连接成功！');
             $response->set('data', [
                 'databases' => $databases,
             ]);
@@ -384,12 +177,11 @@ class Installer
         $response = Be::getResponse();
         if ($request->isPost()) {
             try {
-                $postData = $request->json();
-                $formData = $postData['formData'];
-                $service = Be::getService('App.System.Admin.Installer');
-                if (isset($formData['appNames']) && is_array($formData['appNames']) && count($formData['appNames'])) {
-                    foreach ($formData['appNames'] as $appName) {
-                        $service->installApp($appName);
+                $postData = $request->post();
+                $service = Be::getService('App.System.Admin.App');
+                if (isset($postData['names']) && is_array($postData['names']) && count($postData['names'])) {
+                    foreach ($postData['names'] as $appName) {
+                        $service->install($appName);
                     }
                 }
                 $response->set('success', true);
@@ -402,7 +194,8 @@ class Installer
             }
         } else {
             $response->set('steps', $this->steps);
-            $response->set('step', 2);
+            $response->set('step', 3);
+            $response->set('title', $this->steps[2]);
 
             $appProperties = [];
             $property = Be::getProperty('App.System');
@@ -440,100 +233,56 @@ class Installer
         $tuple->loadBy('username', 'admin');
 
         if ($request->isPost()) {
-            $postData = $request->json();
-            $formData = $postData['formData'];
+            try {
+                $postData = $request->post();
 
-            $tuple->username = $formData['username'];
-            $tuple->salt = Random::complex(32);
-            $tuple->password = Be::getService('App.System.Admin.AdminUser')->encryptPassword($formData['password'], $tuple->salt);
-            $tuple->name = $formData['name'];
-            $tuple->email = $formData['email'];
-            $tuple->update_time = date('Y-m-d H:i:s');
-            $tuple->update();
+                if (!isset($postData['username'])) {
+                    throw new ControllerException('超级管理员账号缺失！');
+                }
+                $postData['username'] = trim($postData['username']);
+                if ($postData['username'] === '') {
+                    throw new ControllerException('超级管理员账号不能为空！');
+                }
 
-            $response->set('success', true);
-            $response->set('redirectUrl', beAdminUrl('System.Installer.complete'));
-            $response->json();
+                if (!isset($postData['password']) || !$postData['password']) {
+                    throw new ControllerException('密码缺失！');
+                }
+                $postData['password'] = trim($postData['password']);
+                if ($postData['password'] === '') {
+                    throw new ControllerException('密码不能为空！');
+                }
+
+                if (!isset($postData['name']) || !$postData['name']) {
+                    throw new ControllerException('名称缺失！');
+                }
+                $postData['name'] = trim($postData['name']);
+                if ($postData['name'] === '') {
+                    throw new ControllerException('名称不能为空！');
+                }
+
+                $tuple->username = $postData['username'];
+                $tuple->salt = Random::complex(32);
+                $tuple->password = Be::getService('App.System.Admin.AdminUser')->encryptPassword($postData['password'], $tuple->salt);
+                $tuple->name = $postData['name'];
+                $tuple->email = $postData['email'];
+                $tuple->update_time = date('Y-m-d H:i:s');
+                $tuple->update();
+
+                $response->set('success', true);
+                $response->set('redirectUrl', beAdminUrl('System.Installer.complete'));
+                $response->json();
+            } catch (\Throwable $t) {
+                $response->set('success', false);
+                $response->set('message', $t->getMessage());
+                $response->json();
+            }
 
         } else {
             $response->set('steps', $this->steps);
-            $response->set('step', 3);
+            $response->set('step', 4);
+            $response->set('title', $this->steps[3]);
 
-            Be::getAdminPlugin('Form')
-                ->setting([
-                    'title' => '后台账号',
-                    'theme' => 'Installer',
-                    'form' => [
-                        'ui' => [
-                            'label-width' => '200px',
-                        ],
-                        'items' => [
-                            [
-                                'name' => 'username',
-                                'label' => '超级管理员账号',
-                                'required' => true,
-                                'value' => 'admin',
-                            ],
-                            [
-                                'name' => 'password',
-                                'label' => '密码',
-                                'required' => true,
-                                'value' => 'admin',
-                            ],
-                            [
-                                'name' => 'name',
-                                'label' => '名称',
-                            ],
-                            [
-                                'name' => 'email',
-                                'label' => '邮箱',
-                            ],
-                        ],
-                        'actions' => [
-                            [
-                                'label' => '完成安装',
-                                'ui' => [
-                                    'type' => 'success',
-                                    '@click' => 'setting',
-                                ]
-                            ]
-                        ]
-                    ],
-                    'vueMethods' => [
-                        'setting' => 'function () {
-                            var _this = this;
-                            this.$refs["formRef"].validate(function (valid) {
-                                if (valid) {
-                                    _this.loading = true;
-                                    _this.$http.post("'.beAdminUrl('System.Installer.setting').'", {
-                                        formData: _this.formData
-                                    }).then(function (response) {
-                                        _this.loading = false;
-                                        console.log(response);
-                                        if (response.status === 200) {
-                                            var responseData = response.data;
-                                            if (responseData.success) {
-                                                window.location.href=responseData.redirectUrl;
-                                            } else {
-                                                if (responseData.message) {
-                                                    _this.$message.error(responseData.message);
-                                                }
-                                            }
-                                        }
-                                    }).catch(function (error) {
-                                        _this.loading = false;
-                                        _this.$message.error(error);
-                                    });
-        
-                                } else {
-                                    return false;
-                                }
-                            });
-                        }',
-                    ],
-                ])
-                ->setValue($tuple)
-                ->execute();
+            $response->display('App.System.Admin.Installer.setting', 'Installer');
         }
     }
 
@@ -546,13 +295,13 @@ class Installer
         $response = Be::getResponse();
 
         $response->set('steps', $this->steps);
-        $response->set('step', 4);
+        $response->set('step', 5);
         $response->set('url', beAdminUrl());
         $response->display('App.System.Admin.Installer.complete', 'Installer');
 
         $config = Be::getConfig('App.System.System');
         $config->home = 'System.Home.index';
-        $config->installable = false;
+        $config->installable = 0;
 
         ConfigHelper::update('App.System.System', $config);
 

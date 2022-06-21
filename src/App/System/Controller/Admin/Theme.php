@@ -171,5 +171,15 @@ class Theme extends Auth
         $this->themeEditor->sortSectionItem();
     }
 
+    /**
+     * 更新www
+     *
+     * @BePermission("更新www", ordering="2.13")
+     */
+    public function updateWww()
+    {
+        $this->themeEditor->updateWww();
+    }
+
 }
 

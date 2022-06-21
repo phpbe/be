@@ -12,26 +12,23 @@
         </div>
 
         <?php
-        if (isset($this->redirect))
-        {
-            $redirectTimeout = $this->redirect['timeout'];
-            if ($redirectTimeout > 0) {
-                $redirectUrl = $this->redirect['url'];
-                $redirectMessage = $this->redirect['message'];
-                if (!$redirectMessage) {
-                    $redirectMessage = 'Return after {timeout} seconds.';
-                }
-
-                foreach ([
-                             '{url}' => $redirectUrl,
-                             '{link}' => '<a href="' . $redirectUrl . '">' . $redirectUrl . '</a>',
-                             '{timeout}' => '<span id="redirect-timeout">' . $redirectTimeout . '</span>',
-                         ] as $key => $val) {
-                    $redirectMessage = str_replace($key, $val, $redirectMessage);
-                }
-
-                echo '<div class="be-ta-center be-c-999 be-mt-100">' . $redirectMessage . '</div>';
+        $redirectTimeout = $this->redirect['timeout'];
+        if ($redirectTimeout > 0) {
+            $redirectUrl = $this->historyUrl;
+            $redirectMessage = $this->redirect['message'] ?? '';
+            if (!$redirectMessage) {
+                $redirectMessage = 'Return after {timeout} seconds.';
             }
+
+            foreach ([
+                         '{url}' => $redirectUrl,
+                         '{link}' => '<a href="' . $redirectUrl . '">' . $redirectUrl . '</a>',
+                         '{timeout}' => '<span id="redirect-timeout">' . $redirectTimeout . '</span>',
+                     ] as $key => $val) {
+                $redirectMessage = str_replace($key, $val, $redirectMessage);
+            }
+
+            echo '<div class="be-ta-center be-c-999 be-mt-100">' . $redirectMessage . '</div>';
         }
         ?>
 
@@ -49,9 +46,7 @@
 
 
     <?php
-    if (isset($this->redirect))
-    {
-        $redirectTimeout = $this->redirect['timeout'];
+    $redirectTimeout = $this->redirect['timeout'];
     if ($redirectTimeout > 0) {
         ?>
         <script>
@@ -61,15 +56,14 @@
                 document.getElementById("redirect-timeout").innerHTML = redirectTimer;
                 if (redirectTimer <= 0) {
                     clearInterval(timer);
-                    //document.getElementById("form-history").submit();
+                    document.getElementById("form-history").submit();
                 }
             }, 1000);
         </script>
-    <?php
-    }
+        <?php
     } else {
-    ?>
-        <script>//document.getElementById("form-history").submit();</script>
+        ?>
+        <script>document.getElementById("form-history").submit();</script>
         <?php
     }
     ?>

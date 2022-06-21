@@ -18,7 +18,7 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 
-    <script src="https://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
 
     <link rel="stylesheet" href="https://cdn.phpbe.com/scss/be.css" />
 

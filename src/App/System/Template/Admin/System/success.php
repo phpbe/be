@@ -1,5 +1,5 @@
 <be-head>
-    <link type="text/css" rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getWwwUrl(); ?>/Template/Admin/System/css/success.css">
+    <link type="text/css" rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getWwwUrl(); ?>/admin/system/css/success.css">
 </be-head>
 
 <be-body>
@@ -13,14 +13,13 @@
             <?php echo $this->message; ?>
         </div>
 
-
         <?php
         if (isset($this->redirect))
         {
             $redirectTimeout = $this->redirect['timeout'];
             if ($redirectTimeout > 0) {
                 $redirectUrl = $this->redirect['url'];
-                $redirectMessage = $this->redirect['message'];
+                $redirectMessage = $this->redirect['message'] ?? '';
                 if (!$redirectMessage) {
                     $redirectMessage = '{timeout} 秒后跳转到：{link}';
                 }

@@ -147,16 +147,20 @@ abstract class Driver
         if ($request->isAjax()) {
             $this->set('success', true);
             $this->set('message', $message);
-            if ($redirect !== null) {
+            if ($redirect !== null && isset($redirect['url'])) {
                 $this->set('redirectUrl', $redirect['url']);
             }
 
             $this->json();
         } else {
-            if ($redirect !== null) {
-                if (isset($redirect['timeout']) && $redirect['timeout'] === 0) {
-                    $this->redirect($redirect['url']);
-                    return;
+            if ($redirect !== null && isset($redirect['url'])) {
+                if (isset($redirect['timeout'])) {
+                    if ($redirect['timeout'] === 0) {
+                        $this->redirect($redirect['url']);
+                        return;
+                    }
+                } else {
+                    $redirect['timeout'] = 3;
                 }
 
                 $this->set('redirect', $redirect);
@@ -184,18 +188,21 @@ abstract class Driver
         if ($request->isAjax()) {
             $this->set('success', false);
             $this->set('message', $message);
-            if ($redirect !== null) {
+            if ($redirect !== null && isset($redirect['url'])) {
                 $this->set('redirectUrl', $redirect['url']);
             }
 
             $this->json();
         } else {
-            if ($redirect !== null) {
-                if (isset($redirect['timeout']) && $redirect['timeout'] === 0) {
-                    $this->redirect($redirect['url']);
-                    return;
+            if ($redirect !== null && isset($redirect['url'])) {
+                if (isset($redirect['timeout'])) {
+                    if ($redirect['timeout'] === 0) {
+                        $this->redirect($redirect['url']);
+                        return;
+                    }
+                } else {
+                    $redirect['timeout'] = 3;
                 }
-
                 $this->set('redirect', $redirect);
             }
 
@@ -256,7 +263,7 @@ abstract class Driver
      *
      * @param string $message 消息
      * @param string $historyKey 历史节点键名
-     * @param array $redirect 跳转
+     * @param array $redirect 跳转参数，其中 url 参数无效
      */
     public function successAndBack(string $message, string $historyKey = null, array $redirect = [])
     {
@@ -286,10 +293,11 @@ abstract class Driver
 
         $this->set('historyPostData', $historyPostData);
 
-        if ($redirect !== null) {
-            $redirect['url'] = $historyUrl;
-            $this->set('redirect', $redirect);
+        if (!isset($redirect['timeout'])) {
+            $redirect['timeout'] = 3;
         }
+
+        $this->set('redirect', $redirect);
 
         if ($request->isAdmin()) {
             $this->display('App.System.Admin.System.successAndBack', 'Blank');
@@ -303,9 +311,9 @@ abstract class Driver
      *
      * @param string $message 消息
      * @param string $historyKey 历史节点键名
-     * @param array $redirect 跳转
+     * @param array $redirect 跳转参数，其中 url 参数无效
      */
-    public function errorAndBack(string $message, string $historyKey = null, array $redirect = null)
+    public function errorAndBack(string $message, string $historyKey = null, array $redirect = [])
     {
         $request = Be::getRequest();
         if ($historyKey === null) {
@@ -333,10 +341,11 @@ abstract class Driver
 
         $this->set('historyPostData', $historyPostData);
 
-        if ($redirect !== null) {
-            $redirect['url'] = $historyUrl;
-            $this->set('redirect', $redirect);
+        if (!isset($redirect['timeout'])) {
+            $redirect['timeout'] = 3;
         }
+
+        $this->set('redirect', $redirect);
 
         if ($request->isAdmin()) {
             $this->display('App.System.Admin.System.errorAndBack', 'Blank');

@@ -17,7 +17,7 @@
             $redirectTimeout = $this->redirect['timeout'];
             if ($redirectTimeout > 0) {
                 $redirectUrl = $this->redirect['url'];
-                $redirectMessage = $this->redirect['message'];
+                $redirectMessage = $this->redirect['message'] ?? '';
                 if (!$redirectMessage) {
                     $redirectMessage = 'Redirect to {link} after {timeout} seconds.';
                 }

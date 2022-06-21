@@ -1,6 +1,7 @@
 <?php
 namespace Be\App\System\Controller\Admin;
 
+use Be\App\ControllerException;
 use Be\Be;
 
 /**
