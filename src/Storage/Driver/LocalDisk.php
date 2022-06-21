@@ -5,6 +5,7 @@ namespace Be\Storage\Driver;
 use Be\Be;
 use Be\Storage\StorageException;
 use Be\Storage\Driver;
+use Be\Util\File\Dir;
 use Be\Util\File\FileSize;
 
 /**
@@ -26,7 +27,7 @@ class LocalDisk extends Driver
             return $config->rootUrl;
         }
 
-        return Be::getRequest()->getUploadUrl();
+        return Be::getRequest()->getRootUrl();
     }
 
     /**
@@ -43,7 +44,7 @@ class LocalDisk extends Driver
             throw new StorageException('Illegal folder path!');
         }
 
-        $uploadPath = Be::getRuntime()->getUploadPath();
+        $uploadPath = Be::getRuntime()->getRootPath() . '/www';
         $path = $uploadPath . $dirPath;
         if (!is_dir($path)) {
             throw new StorageException('Folder ' . $dirPath . ' does not exists！');
@@ -117,7 +118,7 @@ class LocalDisk extends Driver
             throw new StorageException('Illegal file path：' . $path . '!');
         }
 
-        $uploadPath = Be::getRuntime()->getUploadPath();
+        $uploadPath = Be::getRuntime()->getRootPath() . '/www';
 
         $newFilePath = $uploadPath . $path;
         $dir = dirname($newFilePath);
@@ -170,7 +171,7 @@ class LocalDisk extends Driver
             throw new StorageException('Illegal file path：' . $path . '!');
         }
 
-        $uploadPath = Be::getRuntime()->getUploadPath();
+        $uploadPath = Be::getRuntime()->getRootPath() . '/www';
 
         $newFilePath = $uploadPath . $path;
         $dir = dirname($newFilePath);
@@ -226,7 +227,7 @@ class LocalDisk extends Driver
             throw new StorageException('Forbidden file type：' . $type . '!');
         }
 
-        $uploadPath = Be::getRuntime()->getUploadPath();
+        $uploadPath = Be::getRuntime()->getRootPath() . '/www';
         $srcPath = $uploadPath . $oldPath;
         if (!file_exists($srcPath)) {
             throw new StorageException('Original file ' . $oldPath . ' does not exist!');
@@ -257,7 +258,7 @@ class LocalDisk extends Driver
             throw new StorageException('Illegal file path：' . $path . '!');
         }
 
-        $filePath = Be::getRuntime()->getUploadPath() . $path;
+        $filePath = Be::getRuntime()->getRootPath() . '/www' . $path;
         if (file_exists($filePath)) {
             unlink($filePath);
         }
@@ -278,7 +279,7 @@ class LocalDisk extends Driver
             throw new StorageException('Illegal file path：' . $path . '!');
         }
 
-        $filePath = Be::getRuntime()->getUploadPath() . $path;
+        $filePath = Be::getRuntime()->getRootPath() . '/www' . $path;
         return file_exists($filePath);
     }
 
@@ -295,7 +296,7 @@ class LocalDisk extends Driver
             throw new StorageException('Illegal folder path!');
         }
 
-        $uploadPath = Be::getRuntime()->getUploadPath();
+        $uploadPath = Be::getRuntime()->getRootPath() . '/www';
         $path = $uploadPath . $dirPath;
         if (is_dir($path)) {
             throw new StorageException('Folder ' . $dirPath . ' already exists!');
@@ -320,10 +321,10 @@ class LocalDisk extends Driver
             throw new StorageException('Illegal folder path!');
         }
 
-        $uploadPath = Be::getRuntime()->getUploadPath();
+        $uploadPath = Be::getRuntime()->getRootPath() . '/www';
         $path = $uploadPath . $dirPath;
         if (is_dir($path)) {
-            \Be\Util\File\Dir::rm($path);
+            Dir::rm($path);
         }
 
         return true;
@@ -348,7 +349,7 @@ class LocalDisk extends Driver
             throw new StorageException('Illegal destination folder path!');
         }
 
-        $uploadPath = Be::getRuntime()->getUploadPath();
+        $uploadPath = Be::getRuntime()->getRootPath() . '/www';
         $oldPath = $uploadPath . $oldDirPath;
         if (!file_exists($oldPath)) {
             throw new StorageException('Original folder ' . $oldDirPath . ' does not exist!');
@@ -380,7 +381,7 @@ class LocalDisk extends Driver
             throw new StorageException('Illegal folder path：' . $dirPath . '!');
         }
 
-        $filePath = Be::getRuntime()->getUploadPath() . $dirPath;
+        $filePath = Be::getRuntime()->getRootPath() . '/www' . $dirPath;
         return is_dir($filePath);
     }
 

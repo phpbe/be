@@ -83,7 +83,7 @@ class FormItemStorageFile extends FormItem
         $html .= '>选择文件</el-button></div>';
 
         if ($this->description) {
-            $html .= '<div class="be-c-bbb be-mt-50 be-lh-150">' . $this->description . '</div>';
+            $html .= '<div class="be-c-999 be-mt-50 be-lh-150">' . $this->description . '</div>';
         }
 
         $html .= '</el-form-item>';

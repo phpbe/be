@@ -190,9 +190,9 @@ class AdminUser extends Auth
                             'driver' => TableItemAvatar::class,
                             'value' => function ($row) {
                                 if ($row['avatar'] === '') {
-                                    return Be::getProperty('App.System')->getWwwUrl() . '/Template/Admin/AdminUser/images/avatar.png';
+                                    return Be::getProperty('App.System')->getWwwUrl() . '/admin/admin-user/images/avatar.png';
                                 } else {
-                                    return Be::getRequest()->getUploadUrl() . '/System/AdminUser/Avatar/' . $row['avatar'];
+                                    return Be::getStorage()->getRootUrl() . '/app/system/admin-user/avatar/'. $row['avatar'];
                                 }
                             },
                             'width' => '60',
@@ -280,9 +280,9 @@ class AdminUser extends Auth
                             'driver' => DetailItemAvatar::class,
                             'value' => function ($row) {
                                 if ($row['avatar'] === '') {
-                                    return Be::getProperty('App.System')->getWwwUrl() . '/Template/Admin/AdminUser/images/avatar.png';
+                                    return Be::getProperty('App.System')->getWwwUrl() . '/admin/admin-user/images/avatar.png';
                                 } else {
-                                    return Be::getRequest()->getUploadUrl() . '/System/AdminUser/Avatar/' . $row['avatar'];
+                                    return Be::getStorage()->getRootUrl() . '/app/system/admin-user/avatar/'. $row['avatar'];
                                 }
                             },
                         ],
@@ -367,10 +367,10 @@ class AdminUser extends Auth
                             'name' => 'avatar',
                             'label' => '头像',
                             'driver' => FormItemAvatar::class,
-                            'path' => '/System/AdminUser/Avatar/',
+                            'path' => '/app/system/admin-user/avatar/',
                             'maxWidth' => $configAdminUser->avatarWidth,
                             'maxHeight' => $configAdminUser->avatarHeight,
-                            'defaultValue' => Be::getProperty('App.System')->getWwwUrl() . '/Template/Admin/AdminUser/images/avatar.png',
+                            'defaultValue' => Be::getProperty('App.System')->getWwwUrl() . '/admin/admin-user/images/avatar.png',
                         ],
                         [
                             'name' => 'username',
@@ -442,7 +442,7 @@ class AdminUser extends Auth
                             'name' => 'avatar',
                             'label' => '头像',
                             'driver' => FormItemAvatar::class,
-                            'path' => '/System/AdminUser/Avatar/',
+                            'path' => '/app/system/admin-user/avatar/',
                             'maxWidth' => $configAdminUser->avatarWidth,
                             'maxHeight' => $configAdminUser->avatarHeight,
                             'defaultValue' => Be::getProperty('App.System')->getWwwUrl() . '/Template/Admin/AdminUser/images/avatar.png',

@@ -7,6 +7,8 @@ use Be\App\ServiceException;
 use Be\Config\Annotation\BeConfig;
 use Be\Config\Annotation\BeConfigItem;
 use Be\Config\ConfigHelper;
+use Be\Util\File\Dir;
+use Be\Util\Str\CaseConverter;
 
 abstract class ThemeEditor
 {
@@ -199,47 +201,18 @@ abstract class ThemeEditor
         $property = Be::getProperty($themeType . '.' . $themeName);
         $src = $property->getPath() . '/www';
         if (is_dir($src)) {
-            $dst = Be::getRuntime()->getRootPath() . '/www/' . \Be\Util\Str\CaseConverter::camel2Hyphen($themeType) . '/' . \Be\Util\Str\CaseConverter::camel2Hyphen($themeName);
-            \Be\Util\File\Dir::copy($src, $dst, true);
+            $dst = Be::getRuntime()->getRootPath() . '/www/' . CaseConverter::camel2Hyphen($themeType) . '/' . CaseConverter::camel2Hyphen($themeName);
+            Dir::copy($src, $dst, true);
 
             $configWww = Be::getConfig('App.System.Www');
-            if ($configWww->storage === 1) {
+            if ($configWww->cdnWrite === 1) {
                 $configStorage = Be::getConfig('App.System.Storage');
                 if ($configStorage->driver !== 'LocalDisk') {
-                    $dst = $configWww->storageRoot . \Be\Util\Str\CaseConverter::camel2Hyphen($themeType) . '/' . \Be\Util\Str\CaseConverter::camel2Hyphen($themeName);
-
+                    $dst = '/' . CaseConverter::camel2Hyphen($themeType) . '/' . CaseConverter::camel2Hyphen($themeName);
                     Be::getStorage()->uploadDir($dst, $src);
                 }
             }
         }
-    }
-
-    /**
-     * 复制文件夹
-     *
-     * @param string $srcDir 源文件夹
-     * @param string $dstDir 目标文件夹
-     * @return bool
-     */
-    public function storageCopy(string $srcDir, string $dstDir): bool
-    {
-        $storage = Be::getStorage();
-        $srcDirSource = opendir($srcDir);
-        if ($srcDirSource) {
-            while (false !== ($file = readdir($srcDirSource))) {
-                if ($file !== '.' && $file !== '..') {
-                    $srcPath = $srcDir . '/' . $file;
-                    $dstPath = $dstDir . '/' . $file;
-                    if (is_dir($srcPath)) {
-                        $this->storageCopy($srcPath, $srcPath);
-                    } else {
-                        $storage->uploadFile($dstPath, $srcPath,true);
-                    }
-                }
-            }
-        }
-        closedir($srcDirSource);
-        return true;
     }
 
     /**

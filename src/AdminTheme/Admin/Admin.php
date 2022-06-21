@@ -127,7 +127,7 @@
                         if ($my->avatar === '') {
                             echo \Be\Be::getProperty('App.System')->getWwwUrl().'/admin/admin-user/images/avatar.png';
                         } else {
-                            echo $my->avatar;
+                            echo \Be\Be::getStorage()->getRootUrl() . '/app/system/admin-user/avatar/' . $my->avatar;
                         }
                         ?>" alt="" style="max-width:24px;max-height:24px; vertical-align: middle" >
                     </div>

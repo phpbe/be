@@ -637,7 +637,7 @@ abstract class Be
     {
         if (isset(self::$cache['tableProperty'][$db][$name])) return self::$cache['tableProperty'][$db][$name];
 
-        $runtime = 
+        $runtime =
         $path = self::getRuntime()->getDataPath() . '/Runtime/TableProperty/' . $db . '/' . $name . '.php';
         if (Be::getConfig('App.System.System')->developer || !file_exists($path)) {
             \Be\Db\DbHelper::updateTableProperty($name, $db);
@@ -880,7 +880,7 @@ abstract class Be
                 return self::$cache['template'][$theme][$template];
             }
         }
-        
+
         $path = $runtime->getDataPath() . '/Runtime/Template/' . $theme . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
         if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
             \Be\Template\TemplateHelper::update($template, $theme);

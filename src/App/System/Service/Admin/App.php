@@ -138,10 +138,10 @@ class App
             Dir::copy($src, $dst, true);
 
             $configWww = Be::getConfig('App.System.Www');
-            if ($configWww->storage === 1) {
+            if ($configWww->cdnWrite === 1) {
                 $configStorage = Be::getConfig('App.System.Storage');
                 if ($configStorage->driver !== 'LocalDisk') {
-                    $dst = $configWww->storageRoot . 'app/' . \Be\Util\Str\CaseConverter::camel2Hyphen($appName);
+                    $dst = '/app/' . CaseConverter::camel2Hyphen($appName);
 
                     Be::getStorage()->uploadDir($dst, $src);
                 }
@@ -161,10 +161,10 @@ class App
             Dir::rm($dst);
 
             $configWww = Be::getConfig('App.System.Www');
-            if ($configWww->storage === 1) {
+            if ($configWww->cdnWrite === 1) {
                 $configStorage = Be::getConfig('App.System.Storage');
                 if ($configStorage->driver !== 'LocalDisk') {
-                    $dst = $configWww->storageRoot . 'app/' . \Be\Util\Str\CaseConverter::camel2Hyphen($appName);
+                    $dst = '/app/' . CaseConverter::camel2Hyphen($appName);
                     Be::getStorage()->deleteDir($dst);
                 }
             }

@@ -51,7 +51,7 @@ class AdminPlugin
             }
 
             $newFileName = md5_file($file['tmp_name']) .'.' .$ext;
-            $newFilePath = Be::getRuntime()->getUploadPath() . '/tmp/' . $newFileName;
+            $newFilePath = Be::getRuntime()->getRootPath() . '/www/tmp/' . $newFileName;
 
             $dir = dirname($newFilePath);
             if (!is_dir($dir)) {
@@ -60,7 +60,7 @@ class AdminPlugin
             }
 
             if (move_uploaded_file($file['tmp_name'], $newFilePath)) {
-                $newFileUrl = Be::getRequest()->getUploadUrl(). '/tmp/' . $newFileName;
+                $newFileUrl = Be::getRequest()->getRootUrl(). '/tmp/' . $newFileName;
                 $response->set('newValue', $newFileName);
                 $response->set('url', $newFileUrl);
                 $response->set('success', true);
@@ -117,7 +117,7 @@ class AdminPlugin
             $libImage->open($file['tmp_name']);
             if ($libImage->isImage()) {
                 $newImageName = md5_file($file['tmp_name']) .'.' .$libImage->getType();
-                $newImagePath = Be::getRuntime()->getUploadPath() . '/tmp/' . $newImageName;
+                $newImagePath = Be::getRuntime()->getRootPath() . '/www/tmp/' . $newImageName;
 
                 $dir = dirname($newImagePath);
                 if (!is_dir($dir)) {
@@ -141,7 +141,7 @@ class AdminPlugin
                     move_uploaded_file($file['tmp_name'], $newImagePath);
                 }
 
-                $newImageUrl = Be::getRequest()->getUploadUrl(). '/tmp/' . $newImageName;
+                $newImageUrl = Be::getRequest()->getRootUrl(). '/tmp/' . $newImageName;
                 $response->set('newValue', $newImageName);
                 $response->set('url', $newImageUrl);
                 $response->set('success', true);
@@ -214,7 +214,7 @@ class AdminPlugin
                 } else {
                     $newImageName = md5_file($file['tmp_name']) .'.' .$libImage->getType();
                 }
-                $newImagePath = Be::getRuntime()->getUploadPath() . '/tmp/' . $newImageName;
+                $newImagePath = Be::getRuntime()->getRootPath() . '/www/tmp/' . $newImageName;
 
                 $dir = dirname($newImagePath);
                 if (!is_dir($dir)) {
@@ -237,7 +237,7 @@ class AdminPlugin
                     move_uploaded_file($file['tmp_name'], $newImagePath);
                 }
 
-                $newImageUrl = Be::getRequest()->getUploadUrl(). '/tmp/' . $newImageName;
+                $newImageUrl = Be::getRequest()->getRootUrl(). '/tmp/' . $newImageName;
                 $response->set('newValue', $newImageName);
                 $response->set('url', $newImageUrl);
                 $response->set('success', true);

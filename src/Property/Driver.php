@@ -83,14 +83,12 @@ abstract class Driver
     {
         if ($this->wwwUrl === null) {
 
-            $dir = $this->type . '/' . \Be\Util\Str\CaseConverter::camel2Hyphen($this->name);
+            $dir = '/' . $this->type . '/' . \Be\Util\Str\CaseConverter::camel2Hyphen($this->name);
 
             $configWww = Be::getConfig('App.System.Www');
-            if ($configWww->storage === 1) {
-                if ($configWww->storageEffect && Be::getConfig('App.System.Storage')->driver !== 'LocalDisk') {
-                    $this->wwwUrl = Be::getStorage()->getRootUrl() . $configWww->storageRoot . $dir;
-                    return $this->wwwUrl;
-                }
+            if ($configWww->cdnEffect) {
+                $this->wwwUrl = Be::getStorage()->getRootUrl() .  $dir;
+                return $this->wwwUrl;
             }
 
             if (Be::getConfig('App.System.System')->developer === 1) {
