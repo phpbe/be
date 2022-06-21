@@ -41,7 +41,7 @@ class TemplateHelper
             }
         }
 
-        $path = $runtime->getDataPath() . '/Runtime/' . $templateNamespace . '/' . $theme . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
+        $path = $runtime->getRootPath() . '/data/Runtime/' . $templateNamespace . '/' . $theme . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);

@@ -445,7 +445,7 @@ class AdminUser extends Auth
                             'path' => '/app/system/admin-user/avatar/',
                             'maxWidth' => $configAdminUser->avatarWidth,
                             'maxHeight' => $configAdminUser->avatarHeight,
-                            'defaultValue' => Be::getProperty('App.System')->getWwwUrl() . '/Template/Admin/AdminUser/images/avatar.png',
+                            'defaultValue' => Be::getProperty('App.System')->getWwwUrl() . '/admin/admin-user/images/avatar.png',
                         ],
                         [
                             'name' => 'username',

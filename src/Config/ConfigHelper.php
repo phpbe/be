@@ -37,7 +37,7 @@ class ConfigHelper
         }
         $code .= "}\n";
 
-        $path = $runtime->getDataPath() . '/' . $type . '/' . $catalog . '/Config/' . implode('/', $parts) . '/' . $className . '.php';
+        $path = $runtime->getRootPath() . '/data/' . $type . '/' . $catalog . '/Config/' . implode('/', $parts) . '/' . $className . '.php';
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);

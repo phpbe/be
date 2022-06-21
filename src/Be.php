@@ -597,7 +597,7 @@ abstract class Be
      */
     public static function getTuple(string $name, string $db = 'master')
     {
-        $path = self::getRuntime()->getDataPath() . '/Runtime/Tuple/' . $db . '/' . $name . '.php';
+        $path = self::getRuntime()->getRootPath() . '/data/Runtime/Tuple/' . $db . '/' . $name . '.php';
         if (Be::getConfig('App.System.System')->developer || !file_exists($path)) {
             \Be\Db\DbHelper::updateTuple($name, $db);
             include_once $path;
@@ -616,7 +616,7 @@ abstract class Be
      */
     public static function getTable(string $name, string $db = 'master')
     {
-        $path = self::getRuntime()->getDataPath() . '/Runtime/Table/' . $db . '/' . $name . '.php';
+        $path = self::getRuntime()->getRootPath() . '/data/Runtime/Table/' . $db . '/' . $name . '.php';
         if (Be::getConfig('App.System.System')->developer || !file_exists($path)) {
             \Be\Db\DbHelper::updateTable($name, $db);
             include_once $path;
@@ -637,7 +637,7 @@ abstract class Be
     {
         if (isset(self::$cache['tableProperty'][$db][$name])) return self::$cache['tableProperty'][$db][$name];
 
-        $path = self::getRuntime()->getDataPath() . '/Runtime/TableProperty/' . $db . '/' . $name . '.php';
+        $path = self::getRuntime()->getRootPath() . '/data/Runtime/TableProperty/' . $db . '/' . $name . '.php';
         if (Be::getConfig('App.System.System')->developer || !file_exists($path)) {
             \Be\Db\DbHelper::updateTableProperty($name, $db);
             include_once $path;
@@ -880,7 +880,7 @@ abstract class Be
             }
         }
 
-        $path = $runtime->getDataPath() . '/Runtime/Template/' . $theme . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
+        $path = $runtime->getRootPath() . '/data/Runtime/Template/' . $theme . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
         if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
             \Be\Template\TemplateHelper::update($template, $theme);
         }
@@ -927,7 +927,7 @@ abstract class Be
             }
         }
 
-        $path = $runtime->getDataPath() . '/Runtime/AdminTemplate/' . $theme . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
+        $path = $runtime->getRootPath() . '/data/Runtime/AdminTemplate/' . $theme . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
         if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
             \Be\Template\TemplateHelper::update($template, $theme, true);
         }
@@ -953,7 +953,7 @@ abstract class Be
     {
         if (isset(self::$cache['Menu'][$name])) return self::$cache['Menu'][$name];
 
-        $path = self::getRuntime()->getDataPath() . '/Runtime/Menu/' . $name . '.php';
+        $path = self::getRuntime()->getRootPath() . '/data/Runtime/Menu/' . $name . '.php';
         if (!file_exists($path)) {
             $service = Be::getService('App.System.Admin.Menu');
             $service->update($name);
@@ -973,7 +973,7 @@ abstract class Be
     {
         if (isset(self::$cache['adminMenu'])) return self::$cache['adminMenu'];
 
-        $path = self::getRuntime()->getDataPath() . '/Runtime/AdminMenu.php';
+        $path = self::getRuntime()->getRootPath() . '/data/Runtime/AdminMenu.php';
         if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
             $service = Be::getService('App.System.Admin.AdminMenu');
             $service->update();
@@ -995,7 +995,7 @@ abstract class Be
         if (isset(self::$cache['adminRole'][$roleId])) return self::$cache['adminRole'][$roleId];
 
         $suffix = str_replace('-', '', $roleId);
-        $path = self::getRuntime()->getDataPath() . '/Runtime/AdminRole/AdminRole_' . $suffix . '.php';
+        $path = self::getRuntime()->getRootPath() . '/data/Runtime/AdminRole/AdminRole_' . $suffix . '.php';
         if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
             $service = Be::getService('App.System.Admin.AdminRole');
             $service->updateAdminRole($roleId);
@@ -1015,7 +1015,7 @@ abstract class Be
     {
         if (isset(self::$cache['adminPermission'])) return self::$cache['adminPermission'];
 
-        $path = self::getRuntime()->getDataPath() . '/Runtime/AdminPermission/AdminPermission.php';
+        $path = self::getRuntime()->getRootPath() . '/data/Runtime/AdminPermission/AdminPermission.php';
         if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
             $service = Be::getService('App.System.Admin.AdminPermission');
             $service->updateAdminPermission();

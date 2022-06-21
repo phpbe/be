@@ -56,7 +56,7 @@ class DbHelper
         $code .= '}' . "\n";
         $code .= "\n";
 
-        $path = $runtime->getDataPath() . '/Runtime/TableProperty/' . $dbName . '/' . $tableName . '.php';
+        $path = $runtime->getRootPath() . '/data/Runtime/TableProperty/' . $dbName . '/' . $tableName . '.php';
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
@@ -90,7 +90,7 @@ class DbHelper
         $code .= '}' . "\n";
         $code .= "\n";
 
-        $path = $runtime->getDataPath() . '/Runtime/Table/' . $dbName . '/' . $tableName . '.php';
+        $path = $runtime->getRootPath() . '/data/Runtime/Table/' . $dbName . '/' . $tableName . '.php';
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
@@ -140,7 +140,7 @@ class DbHelper
         $code .= '}' . "\n";
         $code .= "\n";
 
-        $path = $runtime->getDataPath() . '/Runtime/Tuple/' . $dbName . '/' . $tableName . '.php';
+        $path = $runtime->getRootPath() . '/data/Runtime/Tuple/' . $dbName . '/' . $tableName . '.php';
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);

@@ -321,7 +321,7 @@ class Menu
 
         $runtime = Be::getRuntime();
 
-        $path = $runtime->getDataPath() . '/Runtime/Menu/' . $menuName . '.php';
+        $path = $runtime->getRootPath() . '/data/Runtime/Menu/' . $menuName . '.php';
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
