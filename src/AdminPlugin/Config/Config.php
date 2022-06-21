@@ -243,7 +243,7 @@ class Config extends Driver
 
             $code .= "}\n";
 
-            $path = Be::getRuntime()->getDataPath() . '/App/' . $appName . '/Config/' . $configName . '.php';
+            $path = Be::getRuntime()->getRootPath() . '/data/App/' . $appName . '/Config/' . $configName . '.php';
             $dir = dirname($path);
             if (!is_dir($dir)) {
                 mkdir($dir, 0777, true);
@@ -278,7 +278,7 @@ class Config extends Driver
                 throw new AdminPluginException('参数（configName）缺失！');
             }
 
-            $path = Be::getRuntime()->getDataPath() . '/App/' . $appName . '/Config/' . $configName . '.php';
+            $path = Be::getRuntime()->getRootPath() . '/data/App/' . $appName . '/Config/' . $configName . '.php';
             if (file_exists($path)) @unlink($path);
 
             // 更新 config 实例

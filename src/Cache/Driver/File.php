@@ -20,7 +20,7 @@ class File extends Driver
      */
     public function __construct($config)
     {
-        $this->path = Be::getRuntime()->getDataPath() . '/cache';
+        $this->path = Be::getRuntime()->getRootPath() . '/data/cache';
     }
 
     /**

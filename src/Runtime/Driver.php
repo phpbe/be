@@ -12,10 +12,6 @@ abstract class Driver
 
     protected $rootPath = null;
 
-    protected $dataDir = 'data'; // 存放系统生成的永久性文件，如配置文件
-
-    protected $uploadDir = 'upload'; // 用户上传的数据
-
     protected $adminAlias = 'admin'; // 后台功能虑拟目录
 
     public function __construct()
@@ -90,54 +86,6 @@ abstract class Driver
     public function getRootPath()
     {
         return $this->rootPath;
-    }
-
-    /**
-     * @param string $dataDir
-     */
-    public function setDataDir($dataDir)
-    {
-        $this->dataDir = $dataDir;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDataDir()
-    {
-        return $this->dataDir;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDataPath()
-    {
-        return $this->rootPath . '/' . $this->dataDir;
-    }
-
-    /**
-     * @param string $uploadDir
-     */
-    public function setUploadDir($uploadDir)
-    {
-        $this->uploadDir = $uploadDir;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUploadDir()
-    {
-        return $this->uploadDir;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUploadPath()
-    {
-        return $this->rootPath . '/' . $this->uploadDir;
     }
 
     /**

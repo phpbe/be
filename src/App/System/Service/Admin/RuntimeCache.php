@@ -85,7 +85,7 @@ class RuntimeCache
     {
         $categories = [];
         foreach (static::CATEGORIES as $v) {
-            $path = Be::getRuntime()->getDataPath() . '/Runtime/' . $v['name'];
+            $path = Be::getRuntime()->getRootPath() . '/data/Runtime/' . $v['name'];
             $count = $this->getFileCount($path);
             $size = $this->getFileSize($path);
             $sizeStr = FileSize::int2String($size);
@@ -118,7 +118,7 @@ class RuntimeCache
             return $success;
         }
 
-        return \Be\Util\File\Dir::rm(Be::getRuntime()->getDataPath() . '/Runtime/' . $name);
+        return \Be\Util\File\Dir::rm(Be::getRuntime()->getRootPath() . '/data/Runtime/' . $name);
     }
 
 

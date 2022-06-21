@@ -70,7 +70,7 @@ class Importer extends Driver
                     'name' => 'file',
                     'label' => '选择文件',
                     'driver' => FormItemFile::class,
-                    'path' => Be::getRuntime()->getUploadPath() . '/System/Plugin/Importer/', // 保存咱径
+                    'path' => '/System/Plugin/Importer/', // 保存咱径
                     'allowUploadFileTypes' => ['.csv', '.xls', '.xlsx'],
                     'required' => true,
                 ],
@@ -217,7 +217,7 @@ class Importer extends Driver
         $file = $formData['file'] ?? 'file';
         $charset = $formData['charset'] ?? 'detect';
 
-        $path = Be::getRuntime()->getUploadPath() . '/tmp/' . $file;
+        $path = Be::getRuntime()->getRootPath() . '/www/tmp/' . $file;
 
         if ($type === 'csv') {
 

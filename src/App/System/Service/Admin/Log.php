@@ -15,7 +15,7 @@ class Log
      */
     public function getYears()
     {
-        $dir = Be::getRuntime()->getDataPath() . '/log';
+        $dir = Be::getRuntime()->getRootPath() . '/data/log';
         $years = array();
         if (file_exists($dir) && is_dir($dir)) {
             $fileNames = scandir($dir);
@@ -36,7 +36,7 @@ class Log
      */
     public function getMonths($year)
     {
-        $dir = Be::getRuntime()->getDataPath() . '/log/' . $year;
+        $dir = Be::getRuntime()->getRootPath() . '/data/log/' . $year;
         $months = array();
         if (file_exists($dir) && is_dir($dir)) {
             $fileNames = scandir($dir);
@@ -58,7 +58,7 @@ class Log
      */
     public function getDays($year, $month)
     {
-        $dir = Be::getRuntime()->getDataPath() . '/log/' . $year . '/' . $month;
+        $dir = Be::getRuntime()->getRootPath() . '/data/log/' . $year . '/' . $month;
         $days = array();
         if (file_exists($dir) && is_dir($dir)) {
             $fileNames = scandir($dir);
@@ -82,8 +82,8 @@ class Log
      */
     public function getLogs($year, $month, $day, $offset = 0, $limit = 100)
     {
-        $dataDir = Be::getRuntime()->getDataPath() . '/log/' . $year . '/' . $month . '/' . $day . '/';
-        $indexPath = Be::getRuntime()->getDataPath() . '/log/' . $year . '/' . $month . '/' . $day . '/index';
+        $dataDir = Be::getRuntime()->getRootPath() . '/data/log/' . $year . '/' . $month . '/' . $day . '/';
+        $indexPath = Be::getRuntime()->getRootPath() . '/data/log/' . $year . '/' . $month . '/' . $day . '/index';
         if (!is_file($indexPath)) return [];
 
         if ($offset < 0) $offset = 0;
@@ -142,7 +142,7 @@ class Log
      */
     public function getLogCount($year, $month, $day)
     {
-        $path = Be::getRuntime()->getDataPath() . '/log/' . $year . '/' . $month . '/' . $day . '/index';
+        $path = Be::getRuntime()->getRootPath() . '/data/log/' . $year . '/' . $month . '/' . $day . '/index';
         if (!is_file($path)) return 0;
         return intval(filesize($path) / 20);
     }
@@ -158,7 +158,7 @@ class Log
      */
     public function getLog($year, $month, $day, $hashName)
     {
-        $dataPath = Be::getRuntime()->getDataPath() . '/log/' . $year . '/' . $month . '/' . $day . '/' . $hashName;
+        $dataPath = Be::getRuntime()->getRootPath() . '/data/log/' . $year . '/' . $month . '/' . $day . '/' . $hashName;
         if (!is_file($dataPath)) {
             throw new ServiceException('打开日志数据文件不存在！');
         }
@@ -180,11 +180,11 @@ class Log
     {
         $dir = null;
         if ($range === 'year') {
-            $dir = Be::getRuntime()->getDataPath() . '/log/' . $year;
+            $dir = Be::getRuntime()->getRootPath() . '/data/log/' . $year;
         } elseif ($range === 'month') {
-            $dir = Be::getRuntime()->getDataPath() . '/log/' . $year . '/' . $month;
+            $dir = Be::getRuntime()->getRootPath() . '/data/log/' . $year . '/' . $month;
         } elseif ($range === 'day') {
-            $dir = Be::getRuntime()->getDataPath() . '/log/' . $year . '/' . $month . '/' . $day;
+            $dir = Be::getRuntime()->getRootPath() . '/data/log/' . $year . '/' . $month . '/' . $day;
         }
 
         \Be\Util\File\Dir::rm($dir);

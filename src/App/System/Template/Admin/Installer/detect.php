@@ -22,8 +22,8 @@
                 'values' => ['否', '是'],
             ],
             [
-                'name' => 'upload 目录可写',
-                'value' => $this->value['isUploadDirWritable'],
+                'name' => 'www 目录可写',
+                'value' => $this->value['isWwwDirWritable'],
                 'values' => ['否', '是'],
             ],
              ] as $item) {

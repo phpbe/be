@@ -233,7 +233,7 @@ class FormItemImage extends FormItem
 
                 $newPath = $this->path . $newValue;
                 if (!$storage->isFileExist($newPath)) {
-                    $file = Be::getRuntime()->getUploadPath() . '/tmp/' . $newValue;
+                    $file = Be::getRuntime()->getRootPath() . '/www/tmp/' . $newValue;
                     $url = $storage->uploadFile($newPath, $file);
                 }
             }

@@ -295,16 +295,6 @@ abstract class Driver
     abstract function getRootUrl(): string;
 
     /**
-     * 获取upload上传目录的网址
-     *
-     * @return string 上传目录的网址
-     */
-    public function getUploadUrl(): string
-    {
-        return $this->getRootUrl() . '/' . Be::getRuntime()->getUploadDir();
-    }
-
-    /**
      * 获取来源网址
      *
      * @return string 来源网址

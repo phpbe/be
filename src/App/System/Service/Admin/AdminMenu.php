@@ -204,7 +204,7 @@ class AdminMenu
         $code .= '  }' . "\n";
         $code .= '}' . "\n";
 
-        $path = Be::getRuntime()->getDataPath() . '/Runtime/AdminMenu.php';
+        $path = Be::getRuntime()->getRootPath() . '/data/Runtime/AdminMenu.php';
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);

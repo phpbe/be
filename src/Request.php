@@ -23,7 +23,6 @@ namespace Be;
  * @method static string getUrl() 获取请求网址
  * @method static string getIp(bool $detectProxy = true) 获取请求者的 IP 地址
  * @method static string getRootUrl() 获取当前请求的完整网址
- * @method static string getUploadUrl() 获取upload上传目录的网址
  * @method static string getReferer() 获取来源网址
  * @method static bool isAdmin() 获取当前执行的是否后台功能
  * @method static null | string getAppName() 获取当前执行的 APP 名

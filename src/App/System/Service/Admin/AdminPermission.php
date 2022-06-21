@@ -43,7 +43,7 @@ class AdminPermission
         $code .= '  public $permissionKeys = [' . implode(',', $arr) . '];' . "\n";
         $code .= '}' . "\n";
 
-        $path = Be::getRuntime()->getDataPath() . '/Runtime/AdminPermission/AdminPermission.php';
+        $path = Be::getRuntime()->getRootPath() . '/data/Runtime/AdminPermission/AdminPermission.php';
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);

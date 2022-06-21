@@ -637,7 +637,6 @@ abstract class Be
     {
         if (isset(self::$cache['tableProperty'][$db][$name])) return self::$cache['tableProperty'][$db][$name];
 
-        $runtime =
         $path = self::getRuntime()->getDataPath() . '/Runtime/TableProperty/' . $db . '/' . $name . '.php';
         if (Be::getConfig('App.System.System')->developer || !file_exists($path)) {
             \Be\Db\DbHelper::updateTableProperty($name, $db);

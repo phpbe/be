@@ -21,7 +21,7 @@ class Helper
     {
         $key = 'router:' . $app . '.' . $router;
         if (!isset(self::$cache[$key])) {
-            $path = Be::getRuntime()->getDataPath() . '/Runtime/Router/' . $app . '/' . $router . '.php';
+            $path = Be::getRuntime()->getRootPath() . '/data/Runtime/Router/' . $app . '/' . $router . '.php';
             if (Be::getConfig('App.System.System')->developer || !file_exists($path)) {
                 self::updateRouter($app, $router);
             }
@@ -97,7 +97,7 @@ class Helper
 
         $code .= '}' . "\n";
 
-        $path = Be::getRuntime()->getDataPath() . '/Runtime/Router/' . $app . '/' . $router . '.php';
+        $path = Be::getRuntime()->getRootPath() . '/data/Runtime/Router/' . $app . '/' . $router . '.php';
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
@@ -117,7 +117,7 @@ class Helper
     {
         $key = 'router:mapping';
         if (!isset(self::$cache[$key])) {
-            $path = Be::getRuntime()->getDataPath() . '/Runtime/Router/Mapping.php';
+            $path = Be::getRuntime()->getRootPath() . '/data/Runtime/Router/Mapping.php';
             if (Be::getConfig('App.System.System')->developer || !file_exists($path)) {
                 self::updateMapping();
             }
@@ -232,7 +232,7 @@ class Helper
 
         $code .= '}' . "\n";
 
-        $path = Be::getRuntime()->getDataPath() . '/Runtime/Router/Mapping.php';
+        $path = Be::getRuntime()->getRootPath() . '/data/Runtime/Router/Mapping.php';
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);

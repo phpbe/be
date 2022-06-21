@@ -24,7 +24,7 @@ class File extends Driver
         $month = date('m', $t);
         $day = date('d', $t);
 
-        $dir = Be::getRuntime()->getDataPath() . '/log/' .  $year . '/' . $month . '/' . $day . '/';
+        $dir = Be::getRuntime()->getRootPath() . '/data/log/' .  $year . '/' . $month . '/' . $day . '/';
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
             chmod($dir, 0777);

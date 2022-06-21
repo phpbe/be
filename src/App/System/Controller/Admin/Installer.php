@@ -51,17 +51,18 @@ class Installer
 
         if ($request->isPost()) {
 
-            $dataPath = $runtime->getDataPath();
-            $uploadPath = $runtime->getUploadPath();
+            $rootPath = $runtime->getRootPath();
+            $dataPath = $rootPath . '/data';
+            $wwwPath = $rootPath . '/www';
 
             if (!is_dir($dataPath)) {
                 mkdir($dataPath, 0777, true);
                 chmod($dataPath, 0777);
             }
 
-            if (!is_dir($uploadPath)) {
-                mkdir($uploadPath, 0777, true);
-                chmod($uploadPath, 0777);
+            if (!is_dir($wwwPath)) {
+                mkdir($wwwPath, 0777, true);
+                chmod($wwwPath, 0777);
             }
 
             $response->redirect(beAdminUrl('System.Installer.configDb'));
@@ -72,8 +73,8 @@ class Installer
             $value['isRedisInstalled'] = extension_loaded('redis') ? 1 : 0;
 
             $rootPath = $runtime->getRootPath();
-            $dataPath = $runtime->getDataPath();
-            $uploadPath = $runtime->getUploadPath();
+            $dataPath = $rootPath . '/data';
+            $wwwPath = $rootPath . '/www';
 
             if (is_dir($dataPath)) {
                 $value['isDataDirWritable'] = is_writable($dataPath) ? 1 : 0;
@@ -81,10 +82,10 @@ class Installer
                 $value['isDataDirWritable'] = is_writable($rootPath) ? 1 : 0;
             }
 
-            if (is_dir($uploadPath)) {
-                $value['isUploadDirWritable'] = is_writable($uploadPath) ? 1 : 0;
+            if (is_dir($wwwPath)) {
+                $value['isWwwDirWritable'] = is_writable($wwwPath) ? 1 : 0;
             } else {
-                $value['isUploadDirWritable'] = is_writable($rootPath) ? 1 : 0;
+                $value['isWwwDirWritable'] = is_writable($rootPath) ? 1 : 0;
             }
 
             $response->set('value', $value);

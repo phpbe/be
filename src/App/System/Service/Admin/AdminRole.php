@@ -81,7 +81,7 @@ class AdminRole
         }
         $code .= '}' . "\n";
 
-        $path = Be::getRuntime()->getDataPath() . '/Runtime/AdminRole/AdminRole_' . $suffix . '.php';
+        $path = Be::getRuntime()->getRootPath() . '/data/Runtime/AdminRole/AdminRole_' . $suffix . '.php';
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
