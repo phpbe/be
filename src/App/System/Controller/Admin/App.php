@@ -90,6 +90,9 @@ class App extends Auth
                                     'action' => 'updateWww',
                                     'confirm' => '应用的 www 目录较大时，更新需要耗时稍长时间，确定执行？',
                                     'target' => 'ajax',
+                                    'ui' => [
+                                        'type' => 'success',
+                                    ],
                                 ],
                                 [
                                     'label' => '卸载',
@@ -98,7 +101,7 @@ class App extends Auth
                                     'target' => 'ajax',
                                     'ui' => [
                                         'type' => 'danger'
-                                    ]
+                                    ],
                                 ],
                             ]
                         ],

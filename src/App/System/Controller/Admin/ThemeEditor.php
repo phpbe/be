@@ -103,6 +103,9 @@ class ThemeEditor
                                 'label' => '更新www',
                                 'action' => 'updateWww',
                                 'target' => 'ajax',
+                                'ui' => [
+                                    'type' => 'success',
+                                ],
                             ],
                             [
                                 'label' => '配置',
@@ -156,6 +159,9 @@ class ThemeEditor
                                 'label' => '更新www',
                                 'action' => 'updateWww',
                                 'target' => 'ajax',
+                                'ui' => [
+                                    'type' => 'success',
+                                ],
                             ],
                             [
                                 'label' => '配置',

@@ -93,7 +93,7 @@ abstract class Driver
 
             if (Be::getConfig('App.System.System')->developer === 1) {
                 $rootPath = Be::getRuntime()->getRootPath();
-                $dst = $rootPath . '/www/' . $dir;
+                $dst = $rootPath . '/www' . $dir;
                 if (!is_dir($dst)) {
                     $src = $rootPath . $this->path . '/www';
                     if (is_dir($src)) {
@@ -102,7 +102,7 @@ abstract class Driver
                 }
             }
 
-            $this->wwwUrl = Be::getRequest()->getRootUrl() . '/' . $dir;
+            $this->wwwUrl = Be::getRequest()->getRootUrl() . $dir;
         }
 
         return $this->wwwUrl;
