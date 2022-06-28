@@ -81,7 +81,22 @@ class Storage extends Auth
             }
             $response->set('view', $view);
 
-            $response->set('title', '存储');
+            $configStorage = Be::getConfig('App.System.Storage');
+
+            $storageDriver = '';
+            switch ($configStorage->driver) {
+                case 'LocalDisk':
+                    $storageDriver = '本地磁盘';
+                    break;
+                case 'AliyunOss':
+                    $storageDriver = '阿里云OSS';
+                    break;
+                case 'TencentCos':
+                    $storageDriver = '腾讯云COS';
+                    break;
+            }
+
+            $response->set('title', '存储（' . $storageDriver . '）');
             $response->display();
         }
     }
