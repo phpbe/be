@@ -6,11 +6,11 @@ use Be\Theme\Section;
 
 class Template extends Section
 {
-    protected array $position = ['North'];
+    public array $positions = ['north'];
 
     private function css()
     {
-        $configTheme = \Be\Be::getConfig('Theme.Sample.Theme');
+        $configTheme = \Be\Be::getConfig('Theme.System.Theme');
         echo '<style type="text/css">';
 
         echo '#' . $this->id . ' .header-mobile,';
@@ -96,7 +96,7 @@ class Template extends Section
 
         if ($this->config->logoType == 'text') {
             echo '#' . $this->id . ' .header-mobile-logo a {';
-            echo 'color: #fff;';
+            echo 'color: ' . $this->config->logoTextColor . ';';
             echo 'font-size: 30px;';
             echo 'line-height: 30px;';
             echo '}';
@@ -145,7 +145,7 @@ class Template extends Section
 
         if ($this->config->logoType == 'text') {
             echo '#' . $this->id . ' .header-desktop-logo a {';
-            echo 'color: #fff;';
+            echo 'color: ' . $this->config->logoTextColor . ';';
             echo 'font-size: 30px;';
             echo 'line-height: 30px;';
             echo '}';
@@ -233,7 +233,7 @@ class Template extends Section
 
             $beUrl = beUrl();
 
-            echo '<div id="' . $this->id . '">';
+            echo '<div class="header">';
 
             echo '<div class="header-mobile">';
             echo '<div class="be-container">';

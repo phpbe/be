@@ -148,35 +148,104 @@ abstract class Be
     public static function newConfig(string $name)
     {
         $parts = explode('.', $name);
+
         $type = array_shift($parts);
         $catalog = array_shift($parts);
 
+        $classSuffix = implode('\\', $parts);
+
         $instance1 = null;
-        $instance2 = null;
-        $class = '\\Be\\Data\\' . $type . '\\' . $catalog . '\\Config\\' . implode('\\', $parts);
+        $class = '\\Be\\Data\\' . $type . '\\' . $catalog . '\\Config\\' . $classSuffix;
         if (class_exists($class)) {
             $instance1 = new $class();
         }
 
-        $class = '\\Be\\' . $type . '\\' . $catalog . '\\Config\\' . implode('\\', $parts);
-        if (class_exists($class)) {
-            $instance2 = new $class();
+        // 如果获取的是主题配置文件
+        if (($type === 'Theme' || $type === 'AdminTheme') && $parts[0] === 'Page' && count($parts) > 2) {
+
+            if ($instance1 === null) {
+                // 则检测对应页面在APP中是否存在指定配置
+                $class = '\\Be\\App\\' . $parts[1] . '\\Config\\Page\\' . ($type === 'AdminTheme' ? 'Admin\\' : '') . implode('\\', array_slice($parts, 2));
+                if (class_exists($class)) {
+                    $instance1 = new $class();
+                }
+            }
+
+            if ($instance1 === null) {
+                // 则检测对应页面在主题中是否存在指定配置
+                $class = '\\Be\\' . $type . '\\' . $catalog . '\\Config\\' . $classSuffix;
+                if (class_exists($class)) {
+                    $instance1 = new $class();
+                }
+            }
+
+            // 合并默认配置项
+            if ($instance1 !== null) {
+
+                // 默认页面配置项
+                $class = '\\Be\\Data\\' . $type . '\\' . $catalog . '\\Config\\Page';
+                if (class_exists($class)) {
+                    $instance0 = new $class();
+                } else {
+                    $class = '\\Be\\' . $type . '\\' . $catalog . '\\Config\\Page';
+                    if (!class_exists($class)) {
+                        throw new RuntimeException('Config (' . $type . '.' . $catalog . '.Page) does not exist!');
+                    }
+                    $instance0 = new $class();
+                }
+
+                // 合并
+                $vars = get_object_vars($instance0);
+                foreach ($vars as $key => $val) {
+                    if (in_array($key, ['north', 'middle', 'west', 'center', 'east', 'south'])) {
+                        if (!isset($instance1->$key) || $instance1->$key < 0) {
+                            // 方位属性如果是继承的公共的，用负数标记
+                            $instance1->$key = -$val;
+                        }
+                    } else {
+                        if (!isset($instance1->$key)) {
+                            $instance1->$key = $val;
+                        }
+                    }
+                }
+
+                if ($instance1->middle !== 0) {
+                    $instance1->west = 0;
+                    $instance1->center = 0;
+                    $instance1->east = 0;
+                }
+
+                if ($instance1->west !== 0 || $instance1->center !== 0 || $instance1->east !== 0) {
+                    $instance1->middle = 0;
+                }
+
+                return $instance1;
+            }
         }
 
+        if (($type === 'Theme' || $type === 'AdminTheme') && $parts[0] === 'Page') {
+            $class = '\\Be\\' . $type . '\\' . $catalog . '\\Config\\Page';
+            if (!class_exists($class)) {
+                throw new RuntimeException('Config (' . $type . '.' . $catalog . '.Page) does not exist!');
+            }
+        } else {
+            $class = '\\Be\\' . $type . '\\' . $catalog . '\\Config\\' . $classSuffix;
+            if (!class_exists($class)) {
+                throw new RuntimeException('Config ' . $name . ' does not exist!');
+            }
+        }
+
+        $instance2 = new $class();
         if ($instance1 === null) {
             return $instance2;
         } else {
-            if ($instance2 === null) {
-                throw new RuntimeException('Config ' . $name . ' does not exist!');
-            } else {
-                $vars = get_object_vars($instance2);
-                foreach ($vars as $key => $val) {
-                    if (!isset($instance1->$key)) {
-                        $instance1->$key = $val;
-                    }
+            $vars = get_object_vars($instance2);
+            foreach ($vars as $key => $val) {
+                if (!isset($instance1->$key)) {
+                    $instance1->$key = $val;
                 }
-                return $instance1;
             }
+            return $instance1;
         }
     }
 

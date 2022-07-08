@@ -11,13 +11,6 @@ abstract class Property extends \Be\Property\Driver
     protected string $type = 'theme';
 
     /**
-     * 可䨒置的页面
-     *
-     * @var string[]
-     */
-    public array $pages = ['Home'];
-
-    /**
      * 预览图片
      *
      * @var string
@@ -28,7 +21,12 @@ abstract class Property extends \Be\Property\Driver
     public function getPreviewImageUrl(): string
     {
         if ($this->previewImage) {
-            return $this->getWwwUrl() . '/' . $this->previewImage;
+            $prefix = substr($this->previewImage, 0 , 7);
+            if ($prefix === 'http://' || $prefix === 'https:/') {
+                return $this->previewImage;
+            } else {
+                return $this->getWwwUrl() . '/' . $this->previewImage;
+            }
         } else {
             return \Be\Be::getProperty('App.System')->getWwwUrl() . '/admin/theme-editor/images/no-preview.jpg';
         }

@@ -15,6 +15,15 @@ class Config
     public int $enable = 1;
 
     /**
+     * @BeConfigItem("宽度",
+     *     description="位于middle时有效",
+     *     driver="FormItemSelect",
+     *     keyValues = "return ['default' => '默认', 'fullWidth' => '全屏'];"
+     * )
+     */
+    public string $width = 'default';
+
+    /**
      * @BeConfigItem("背景颜色",
      *     driver = "FormItemColorPicker"
      * )
@@ -29,8 +38,22 @@ class Config
     public string $itemBackgroundColor = '#f7f7f7';
 
     /**
+     * @BeConfigItem("子项标题颜色",
+     *     driver = "FormItemColorPicker"
+     * )
+     */
+    public string $itemTitleColor = '#333333';
+
+    /**
+     * @BeConfigItem("子项链接颜色",
+     *     driver = "FormItemColorPicker"
+     * )
+     */
+    public string $itemLinkColor = '#999';
+
+    /**
      * @BeConfigItem("顶部内边距 - 电脑端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
@@ -38,7 +61,7 @@ class Config
 
     /**
      * @BeConfigItem("顶部内边距 - 平板端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
@@ -46,7 +69,7 @@ class Config
 
     /**
      * @BeConfigItem("顶部内边距 - 手机端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
@@ -54,7 +77,7 @@ class Config
 
     /**
      * @BeConfigItem("底部内边距 - 电脑端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
@@ -62,7 +85,7 @@ class Config
 
     /**
      * @BeConfigItem("底部内边距 - 平板端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
@@ -70,7 +93,7 @@ class Config
 
     /**
      * @BeConfigItem("底部内边距 - 手机端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
@@ -78,7 +101,7 @@ class Config
 
     /**
      * @BeConfigItem("间距 - 电脑端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
@@ -86,7 +109,7 @@ class Config
 
     /**
      * @BeConfigItem("间距 - 平板端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
@@ -94,7 +117,7 @@ class Config
 
     /**
      * @BeConfigItem("间距 - 手机端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
@@ -109,7 +132,5 @@ class Config
      * )
      */
     public array $items = [];
-
-
 
 }

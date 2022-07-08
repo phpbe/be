@@ -72,23 +72,13 @@ class Theme extends Auth
     }
 
     /**
-     * 启用 section type
+     * 配置主题
      *
      * @BePermission("配置前台主题", ordering="2.24")
      */
-    public function enableSectionType()
+    public function editPosition()
     {
-        $this->themeEditor->enableSectionType();
-    }
-
-    /**
-     * 禁用 section type
-     *
-     * @BePermission("配置前台主题", ordering="2.24")
-     */
-    public function disableSectionType()
-    {
-        $this->themeEditor->disableSectionType();
+        $this->themeEditor->editPosition();
     }
 
     /**
@@ -142,7 +132,7 @@ class Theme extends Auth
     }
 
     /**
-     * 编辑组件子项
+     * 编辑 模板/部件/部件子项
      *
      * @BePermission("配置前台主题", ordering="2.24")
      */
@@ -150,15 +140,24 @@ class Theme extends Auth
     {
         $this->themeEditor->editSectionItem();
     }
-
     /**
-     * 编辑组件子项保存
+     * 编辑 模板/部件/部件子项 保存
      *
      * @BePermission("配置前台主题", ordering="2.24")
      */
     public function saveSectionItem()
     {
         $this->themeEditor->saveSectionItem();
+    }
+
+    /**
+     * 模板/部件/部件子项 恢复默认值
+     *
+     * @BePermission("配置前台主题", ordering="2.24")
+     */
+    public function resetSectionItem()
+    {
+        $this->themeEditor->resetSectionItem();
     }
 
     /**

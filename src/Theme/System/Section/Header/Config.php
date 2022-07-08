@@ -2,7 +2,7 @@
 namespace Be\Theme\System\Section\Header;
 
 /**
- * @BeConfig("头部")
+ * @BeConfig("头部", ordering="1")
  */
 class Config
 {
@@ -19,7 +19,7 @@ class Config
      *     keyValues = "return ['text' => '文字', 'image' => '图像']"
      * )
      */
-    public string $logoType = 'text';
+    public string $logoType = 'image';
 
     /**
      * @BeConfigItem("Logo文字",
@@ -30,12 +30,20 @@ class Config
     public string $logoText = 'Beyond Exception';
 
     /**
+     * @BeConfigItem("Logo文字颜色",
+     *     driver="FormItemColorPicker",
+     *     ui="return ['form-item' => ['v-show' => 'formData.logoType == \'text\'']];"
+     * )
+     */
+    public string $logoTextColor = '#666';
+
+    /**
      * @BeConfigItem("Logo图像",
      *     driver="FormItemStorageImage",
      *     ui="return ['form-item' => ['v-show' => 'formData.logoType == \'image\'']];"
      * )
      */
-    public string $logoImage = '';
+    public string $logoImage = 'https://cdn.phpbe.com/images/logo/be.png';
 
     /**
      * @BeConfigItem("Logo图像最大宽度",

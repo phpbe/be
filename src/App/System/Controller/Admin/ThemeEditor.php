@@ -246,13 +246,13 @@ class ThemeEditor
         $response = Be::getResponse();
 
         $themeName = $request->get('themeName', '');
-        $pageName = $request->get('pageName', 'Home');
+        $pageName = $request->get('pageName', 'default');
+        $position = $request->get('position', '');
 
-        $sectionType = $request->get('sectionType', '');
-        $sectionKey = $request->get('sectionKey', '');
+        $sectionIndex = $request->get('sectionIndex', -1, 'int');
         $sectionName = $request->get('sectionName', '');
 
-        $itemKey = $request->get('itemKey', '');
+        $itemIndex = $request->get('itemIndex', -1, 'int');
         $itemName = $request->get('itemName', '');
 
         $service = Be::getService('App.System.Admin.' . $this->themeType);
@@ -262,64 +262,70 @@ class ThemeEditor
         $response->set('themeName', $themeName);
         $response->set('theme', $theme);
 
-        $page = $service->getThemePage($themeName, $pageName);
+        $pageTree = $service->getPageTree($themeName);
+        $response->set('pageTree', $pageTree);
+
+        $page = $service->getPage($themeName, $pageName);
         $response->set('pageName', $pageName);
         $response->set('page', $page);
-        //print_r($page);
 
-        if ($pageName !== 'Home') {
-            $pageHome = $service->getThemePage($themeName, 'Home');
-            $response->set('pageHome', $pageHome);
+        if ($pageName !== 'default') {
+            $pageDefault = $service->getPage($themeName, 'default');
+            $response->set('pageDefault', $pageDefault);
         }
 
-        $response->set('sectionType', $sectionType);
-        $response->set('sectionKey', $sectionKey);
+        $response->set('position', $position);
+
+        $response->set('sectionIndex', $sectionIndex);
         $response->set('sectionName', $sectionName);
 
-        $response->set('itemKey', $itemKey);
+        $response->set('itemIndex', $itemIndex);
         $response->set('itemName', $itemName);
 
         $response->display('App.System.Admin.ThemeEditor.setting');
     }
 
-
-    public function enableSectionType()
+    /**
+     * 配置方位
+     *
+     * @return void
+     */
+    public function editPosition()
     {
         $request = Be::getRequest();
         $response = Be::getResponse();
 
         $themeName = $request->get('themeName', '');
         $pageName = $request->get('pageName', '');
-
-        $sectionType = $request->get('sectionType', '');
-
-        $service = Be::getService('App.System.Admin.' . $this->themeType);
-        $service->enableSectionType($themeName, $pageName, $sectionType);
-
-        $url = beAdminUrl('System.' . $this->themeType . '.setting', ['themeName' => $themeName, 'pageName' => $pageName]);
-        $response->redirect($url);
-
-        Be::getRuntime()->reload();
-    }
-
-    public function disableSectionType()
-    {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
-
-        $themeName = $request->get('themeName', '');
-        $pageName = $request->get('pageName', '');
-
-        $sectionType = $request->get('sectionType', '');
+        $position = $request->get('position', '');
 
         $service = Be::getService('App.System.Admin.' . $this->themeType);
-        $service->disableSectionType($themeName, $pageName, $sectionType);
 
-        $url = beAdminUrl('System.' . $this->themeType . '.setting', ['themeName' => $themeName, 'pageName' => $pageName]);
-        $response->redirect($url);
+        if ($request->isAjax()) {
+            $service->editPosition($themeName, $pageName, $position, $request->json('formData'));
+            $response->set('success', true);
+            $response->json();
+        } else {
+            $response->set('themeType', $this->themeType);
+            $response->set('themeName', $themeName);
+            $response->set('pageName', $pageName);
+            $response->set('position', $position);
 
-        Be::getRuntime()->reload();
+            $positionDescription = $service->getPositionDescription($position);
+            $response->set('positionDescription', $positionDescription);
+
+            // 获取当前页数的配置信息
+            if ($pageName === 'default') {
+                $configPage = Be::getConfig($this->themeType . '.' . $themeName . '.Page');
+            } else {
+                $configPage = Be::getConfig($this->themeType . '.' . $themeName . '.Page.' . $pageName);
+            }
+            $response->set('configPage', $configPage);
+
+            $response->display('App.System.Admin.ThemeEditor.editPosition', 'Blank');
+        }
     }
+
 
     /**
      * 新增组件
@@ -332,13 +338,14 @@ class ThemeEditor
         $themeName = $request->get('themeName', '');
         $pageName = $request->get('pageName', '');
 
-        $sectionType = $request->json('sectionType', '');
+        $position = $request->json('position', '');
+
         $sectionName = $request->json('sectionName', '');
 
         $service = Be::getService('App.System.Admin.' . $this->themeType);
-        $service->addSection($themeName, $pageName, $sectionType, $sectionName);
+        $service->addSection($themeName, $pageName, $position, $sectionName);
 
-        $page = $service->getThemePage($themeName, $pageName);
+        $page = $service->getPage($themeName, $pageName);
         $response->set('page', $page);
 
         $response->success('保存成功！');
@@ -357,13 +364,14 @@ class ThemeEditor
         $themeName = $request->get('themeName', '');
         $pageName = $request->get('pageName', '');
 
-        $sectionType = $request->json('sectionType', '');
-        $sectionKey = $request->json('sectionKey', '');
+        $position = $request->json('position', '');
+
+        $sectionIndex = $request->json('sectionIndex', -1, 'int');
 
         $service = Be::getService('App.System.Admin.' . $this->themeType);
-        $service->deleteSection($themeName, $pageName, $sectionType, $sectionKey);
+        $service->deleteSection($themeName, $pageName, $position, $sectionIndex);
 
-        $page = $service->getThemePage($themeName, $pageName);
+        $page = $service->getPage($themeName, $pageName);
         $response->set('page', $page);
 
         $response->success('保存成功！');
@@ -382,15 +390,15 @@ class ThemeEditor
         $themeName = $request->get('themeName', '');
         $pageName = $request->get('pageName', '');
 
-        $sectionType = $request->json('sectionType', '');
+        $position = $request->json('position', '');
 
-        $oldIndex = $request->json('oldIndex', '');
-        $newIndex = $request->json('newIndex', '');
+        $oldIndex = $request->json('oldIndex', -1, 'int');
+        $newIndex = $request->json('newIndex', -1, 'int');
 
         $service = Be::getService('App.System.Admin.' . $this->themeType);
-        $service->sortSection($themeName, $pageName, $sectionType, $oldIndex, $newIndex);
+        $service->sortSection($themeName, $pageName, $position, $oldIndex, $newIndex);
 
-        $page = $service->getThemePage($themeName, $pageName);
+        $page = $service->getPage($themeName, $pageName);
         $response->set('page', $page);
 
         $response->success('保存成功！');
@@ -409,17 +417,15 @@ class ThemeEditor
         $themeName = $request->get('themeName', '');
         $pageName = $request->get('pageName', '');
 
-        $sectionType = $request->get('sectionType', '');
-        $sectionKey = $request->get('sectionKey', '');
-        $sectionName = $request->get('sectionName', '');
+        $position = $request->get('position', '');
+        $sectionIndex = $request->get('sectionIndex', -1, 'int');
 
-        $itemKey = $request->get('itemKey', '');
         $itemName = $request->get('itemName', '');
 
         $service = Be::getService('App.System.Admin.' . $this->themeType);
-        $service->addSectionItem($themeName, $pageName, $sectionType, $sectionKey, $itemName);
+        $service->addSectionItem($themeName, $pageName, $position, $sectionIndex, $itemName);
 
-        $page = $service->getThemePage($themeName, $pageName);
+        $page = $service->getPage($themeName, $pageName);
         $response->set('page', $page);
 
         $response->success('保存成功！');
@@ -438,15 +444,15 @@ class ThemeEditor
         $themeName = $request->get('themeName', '');
         $pageName = $request->get('pageName', '');
 
-        $sectionType = $request->json('sectionType', '');
-        $sectionKey = $request->json('sectionKey', '');
+        $position = $request->json('position', '');
+        $sectionIndex = $request->json('sectionIndex', -1, 'int');
 
-        $itemKey = $request->json('itemKey', '');
+        $itemIndex = $request->json('itemIndex', -1, 'int');
 
         $service = Be::getService('App.System.Admin.' . $this->themeType);
-        $service->deleteSectionItem($themeName, $pageName, $sectionType, $sectionKey, $itemKey);
+        $service->deleteSectionItem($themeName, $pageName, $position, $sectionIndex, $itemIndex);
 
-        $page = $service->getThemePage($themeName, $pageName);
+        $page = $service->getPage($themeName, $pageName);
         $response->set('page', $page);
 
         $response->success('保存成功！');
@@ -455,7 +461,7 @@ class ThemeEditor
     }
 
     /**
-     * 编辑组件子项
+     * 编辑 模板/部件/部件子项
      */
     public function editSectionItem()
     {
@@ -465,37 +471,37 @@ class ThemeEditor
         $themeName = $request->get('themeName', '');
         $pageName = $request->get('pageName', 'Home');
 
-        $sectionType = $request->get('sectionType', '');
-        $sectionKey = $request->get('sectionKey', '');
+        $position = $request->get('position', '');
+        $sectionIndex = $request->get('sectionIndex', -1, 'int');
 
-        $itemKey = $request->get('itemKey', '');
+        $itemIndex = $request->get('itemIndex', -1, 'int');
 
         $response->set('themeType', $this->themeType);
         $response->set('themeName', $themeName);
         $response->set('pageName', $pageName);
-        $response->set('sectionType', $sectionType);
-        $response->set('sectionKey', $sectionKey);
-        $response->set('itemKey', $itemKey);
+        $response->set('position', $position);
+        $response->set('sectionIndex', $sectionIndex);
+        $response->set('itemIndex', $itemIndex);
 
         $service = Be::getService('App.System.Admin.' . $this->themeType);
-        if ($sectionType && $sectionKey !== '') {
-            if ($itemKey !== '') {
-                $drivers = $service->getThemeSectionItemDrivers($themeName, $pageName, $sectionType, $sectionKey, $itemKey);
-                $response->set('drivers', $drivers);
-            } else {
-                $drivers = $service->getThemeSectionDrivers($themeName, $pageName, $sectionType, $sectionKey);
-                $response->set('drivers', $drivers);
-            }
-        } else {
+        if ($position === '') {
             $drivers = $service->getThemeDrivers($themeName);
             $response->set('drivers', $drivers);
+        } else {
+            if ($itemIndex === -1) {
+                $drivers = $service->getSectionDrivers($themeName, $pageName, $position, $sectionIndex);
+                $response->set('drivers', $drivers);
+            } else {
+                $drivers = $service->getSectionItemDrivers($themeName, $pageName, $position, $sectionIndex, $itemIndex);
+                $response->set('drivers', $drivers);
+            }
         }
 
         $response->display('App.System.Admin.ThemeEditor.editSectionItem', 'Blank');
     }
 
     /**
-     * 编辑组件子项保存
+     * 编辑 模板/部件/部件子项 保存
      */
     public function saveSectionItem()
     {
@@ -508,15 +514,49 @@ class ThemeEditor
         $themeName = $request->get('themeName', '');
         $pageName = $request->get('pageName', '');
 
-        $sectionType = $request->get('sectionType', '');
-        $sectionKey = $request->get('sectionKey', '');
+        $position = $request->get('position', '');
+        $sectionIndex = $request->get('sectionIndex', -1, 'int');
 
-        $itemKey = $request->get('itemKey', '');
+        $itemIndex = $request->get('itemIndex', -1, 'int');
 
         $service = Be::getService('App.System.Admin.' . $this->themeType);
-        $service->saveSectionItem($themeName, $pageName, $sectionType, $sectionKey, $itemKey, $formData);
+
+        if ($position === '') {
+            $service->editThemeItem($themeName, $formData);
+        } else {
+            $service->editSectionItem($themeName, $pageName, $position, $sectionIndex, $itemIndex, $formData);
+        }
 
         $response->success('保存成功！');
+
+        Be::getRuntime()->reload();
+    }
+
+    /**
+     * 模板/部件/部件子项 恢复默认值
+     */
+    public function resetSectionItem()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $themeName = $request->get('themeName', '');
+        $pageName = $request->get('pageName', '');
+
+        $position = $request->get('position', '');
+        $sectionIndex = $request->get('sectionIndex', -1, 'int');
+
+        $itemIndex = $request->get('itemIndex', -1, 'int');
+
+        $service = Be::getService('App.System.Admin.' . $this->themeType);
+
+        if ($position === '') {
+            $service->resetThemeItem($themeName);
+        } else {
+            $service->resetSectionItem($themeName, $pageName, $position, $sectionIndex, $itemIndex);
+        }
+
+        $response->success('重置成功！');
 
         Be::getRuntime()->reload();
     }
@@ -532,16 +572,17 @@ class ThemeEditor
         $themeName = $request->get('themeName', '');
         $pageName = $request->get('pageName', '');
 
-        $sectionType = $request->json('sectionType', '');
-        $sectionKey = $request->json('sectionKey', '', 'int');
+        $position = $request->json('position', '');
 
-        $oldIndex = $request->json('oldIndex', '');
-        $newIndex = $request->json('newIndex', '');
+        $sectionIndex = $request->json('sectionIndex', -1, 'int');
+
+        $oldIndex = $request->json('oldIndex', -1, 'int');
+        $newIndex = $request->json('newIndex', -1, 'int');
 
         $service = Be::getService('App.System.Admin.' . $this->themeType);
-        $service->sortSectionItem($themeName, $pageName, $sectionType, $sectionKey, $oldIndex, $newIndex);
+        $service->sortSectionItem($themeName, $pageName, $position, $sectionIndex, $oldIndex, $newIndex);
 
-        $page = $service->getThemePage($themeName, $pageName);
+        $page = $service->getPage($themeName, $pageName);
         $response->set('page', $page);
 
         $response->success('保存成功！');

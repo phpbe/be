@@ -51,7 +51,7 @@ class MenuPicker extends Curd
             $response->set('url', $request->getUrl());
 
             if (!isset($this->setting['grid']['form']['action'])) {
-                $this->setting['grid']['form']['action'] = Be::getRequest()->getUrl();
+                $this->setting['grid']['form']['action'] = $request->getUrl();
             }
 
             if (!isset($this->setting['grid']['form']['actions'])) {

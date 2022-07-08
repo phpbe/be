@@ -420,7 +420,7 @@ class Menu
      * @param string $route 路由
      * @return array|bool
      */
-    public function getMenuPicker(string $route): array
+    public function getMenuPicker(string $route)
     {
         $routes = explode('.', $route);
         if (count($routes) !== 3) {

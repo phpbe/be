@@ -48,6 +48,18 @@ class ConfigHelper
         chmod($path, 0777);
     }
 
+    public static function reset($name)
+    {
+        $parts = explode('.', $name);
+        $type = array_shift($parts);
+        $catalog = array_shift($parts);
+        $className = array_pop($parts);
+
+        $path = Be::getRuntime()->getRootPath() . '/data/' . $type . '/' . $catalog . '/Config/' . implode('/', $parts) . '/' . $className . '.php';
+        if (file_exists($path)) {
+            unlink($path);
+        }
+    }
 }
 
 

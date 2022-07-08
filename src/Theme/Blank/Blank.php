@@ -33,13 +33,9 @@
 </head>
 <body>
     <be-body>
-    <div class="be-body">
-        <be-middle>
-            <be-center>
-                <be-center-body></be-center-body>
-            </be-center>
-        </be-middle>
-    </div>
+        <be-center>
+            <be-content-body></be-content-body>
+        </be-center>
     </be-body>
 </body>
 </html>

@@ -1,4 +1,4 @@
-<be-body>
+<be-page-content>
     <div class="p-2">
         <div class="text-center display-1 text-success mt-5">
             <i class="bi bi-check-circle-fill"></i>
@@ -8,4 +8,4 @@
             Be framework is working...
         </div>
     </div>
-</be-body>
+</be-page-content>

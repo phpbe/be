@@ -93,7 +93,7 @@ class ImageWithTextOverlay
 
     /**
      * @BeConfigItem("内容区宽度（像素）",
-     *     driver = "FormItemInputNumberInt"
+     *     driver = "FormItemInputNumberInt",
      * )
      */
     public string $contentWidth = '400';

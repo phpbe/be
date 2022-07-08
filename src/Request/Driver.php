@@ -15,6 +15,7 @@ abstract class Driver
     protected $controllerName = null;
     protected $actionName = null;
     protected $route = null;
+    protected $themeName = null;
 
     protected $json = null;
 
@@ -374,6 +375,29 @@ abstract class Driver
     public function setAdmin(bool $admin)
     {
         $this->admin = $admin;
+    }
+
+    /**
+     * 获取当前请求生效的主题
+     *
+     * @return string
+     */
+    public function getThemeName(): string
+    {
+        if ($this->themeName === null) {
+            $themeName = $this->get('be-theme', false);
+            if ($themeName) {
+                $this->themeName = $themeName;
+            } else {
+                if ($this->admin) {
+                    $this->themeName = Be::getConfig('App.System.AdminTheme')->default;
+                } else {
+                    $this->themeName = Be::getConfig('App.System.Theme')->default;
+                }
+            }
+        }
+
+        return $this->themeName;
     }
 
     /**

@@ -34,6 +34,6 @@ class Copyright
      *     values="return [1, 2, 3, 4]",
      *     driver="FormItemSelect")
      */
-    public int $cols = 2;
+    public int $cols = 4;
 
 }

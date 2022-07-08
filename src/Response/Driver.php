@@ -365,18 +365,29 @@ abstract class Driver
     /**
      * 获取模板内容
      *
-     * @param string $template 模板名
-     * @param string $theme 主题名
+     * @param string $templateName 模板名
+     * @param string $themeName 主题名
      * @return  string
      */
-    public function fetch(string $template, string $theme = null)
+    public function fetch(string $templateName, string $themeName = null)
     {
+        $request = Be::getRequest();
+
+        if ($themeName === null) {
+            $themeName = $request->getThemeName();
+        }
+
         ob_start();
         ob_clean();
-        $templateInstance = Be::getRequest()->isAdmin() ? Be::getAdminTemplate($template, $theme) : Be::getTemplate($template, $theme);
+        $templateInstance = $request->isAdmin() ? Be::getAdminTemplate($templateName, $themeName) : Be::getTemplate($templateName, $themeName);
         foreach ($this->data as $key => $val) {
             $templateInstance->$key = $val;
         }
+
+        if (!isset($this->data['_page'])) {
+            $templateInstance->_page = Be::getService('App.System.Theme')->getPage($request->isAdmin() ? 'AdminTheme' : 'Theme', $themeName, $request->getRoute());
+        }
+
         $templateInstance->display();
         $content = ob_get_contents();
         ob_end_clean();

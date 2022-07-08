@@ -6,7 +6,7 @@ use Be\Theme\Section;
 
 class Template extends Section
 {
-    protected array $position = ['Middle', 'Center'];
+    public array $positions = ['middle', 'center'];
 
     public function display()
     {
@@ -14,45 +14,8 @@ class Template extends Section
 
             echo '<style type="text/css">';
 
-            echo '#' . $this->id . ' {';
-            echo 'background-color: ' . $this->config->backgroundColor . ';';
-            echo '}';
-
-            // 手机端
-            echo '@media (max-width: 768px) {';
-            echo '#' . $this->id . ' {';
-            if ($this->config->paddingTopMobile) {
-                echo 'padding-top: ' . $this->config->paddingTopMobile . 'px;';
-            }
-            if ($this->config->paddingBottomMobile) {
-                echo 'padding-bottom: ' . $this->config->paddingBottomMobile . 'px;';
-            }
-            echo '}';
-            echo '}';
-
-            // 平析端
-            echo '@media (min-width: 768px) {';
-            echo '#' . $this->id . ' {';
-            if ($this->config->paddingTopTablet) {
-                echo 'padding-top: ' . $this->config->paddingTopTablet . 'px;';
-            }
-            if ($this->config->paddingBottomTablet) {
-                echo 'padding-bottom: ' . $this->config->paddingBottomTablet . 'px;';
-            }
-            echo '}';
-            echo '}';
-
-            // 电脑端
-            echo '@media (min-width: 992px) {';
-            echo '#' . $this->id . ' {';
-            if ($this->config->paddingTopDesktop) {
-                echo 'padding-top: ' . $this->config->paddingTopDesktop . 'px;';
-            }
-            if ($this->config->paddingBottomDesktop) {
-                echo 'padding-bottom: ' . $this->config->paddingBottomDesktop . 'px;';
-            }
-            echo '}';
-            echo '}';
+            echo $this->getCssBackgroundColor('banner-with-text-overlay');
+            echo $this->getCssPadding('banner-with-text-overlay');
 
             // 手机版，电脑版上传不同的图片
             echo '@media (max-width: 768px) {';
@@ -99,7 +62,7 @@ class Template extends Section
             echo 'overflow: hidden;';
             echo '}';
 
-            if ($this->config->width === 'fullWidth') {
+            if ($this->position === 'middle' && $this->config->width === 'fullWidth') {
                 echo '#' . $this->id . ' .banner-with-text-overlay-content-container {';
                 echo 'position: absolute;';
                 echo 'padding-left: 0.75rem;';
@@ -216,8 +179,8 @@ class Template extends Section
 
             echo '</style>';
 
-            echo '<div id="' . $this->id . '">';
-            if ($this->config->width === 'default') {
+            echo '<div class="banner-with-text-overlay">';
+            if ($this->position === 'middle' && $this->config->width === 'default') {
                 echo '<div class="be-container">';
             }
             echo '<div class="banner-with-text-overlay-container">';
@@ -237,7 +200,7 @@ class Template extends Section
             }
             echo '</div>';
 
-            if ($this->config->width === 'fullWidth') {
+            if ($this->position === 'middle' && $this->config->width === 'fullWidth') {
                 echo '<div class="banner-with-text-overlay-content-container">';
             }
             echo '<div class="banner-with-text-overlay-content">';
@@ -247,12 +210,12 @@ class Template extends Section
             echo '<a href="' . $this->config->contentButtonLink . '" class="be-btn be-btn-large">' . $this->config->contentButton . '</a>';
             echo '</div>';
             echo '</div>';
-            if ($this->config->width === 'fullWidth') {
+            if ($this->position === 'middle' && $this->config->width === 'fullWidth') {
                 echo '</div>';
             }
 
             echo '</div>';
-            if ($this->config->width === 'default') {
+            if ($this->position === 'middle' && $this->config->width === 'default') {
                 echo '</div>';
             }
             echo '</div>';

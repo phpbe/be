@@ -16,11 +16,12 @@ class Config
 
     /**
      * @BeConfigItem("宽度",
+     *     description="位于middle时有效",
      *     driver="FormItemSelect",
      *     keyValues = "return ['default' => '默认', 'fullWidth' => '全屏'];"
      * )
      */
-    public string $width = 'fullWidth';
+    public string $width = 'default';
 
     /**
      * @BeConfigItem("背景颜色",
@@ -84,7 +85,7 @@ class Config
      *     driver = "FormItemInputNumberInt",
      * )
      */
-    public int $contentDescriptionFontSize = 12;
+    public int $contentDescriptionFontSize = 16;
 
     /**
      * @BeConfigItem("内容详细颜色",
@@ -123,7 +124,7 @@ class Config
 
     /**
      * @BeConfigItem("顶部内边距 - 电脑端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
@@ -131,7 +132,7 @@ class Config
 
     /**
      * @BeConfigItem("顶部内边距 - 平板端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
@@ -139,7 +140,7 @@ class Config
 
     /**
      * @BeConfigItem("顶部内边距 - 手机端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
@@ -147,7 +148,7 @@ class Config
 
     /**
      * @BeConfigItem("底部内边距 - 电脑端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
@@ -155,7 +156,7 @@ class Config
 
     /**
      * @BeConfigItem("底部内边距 - 平板端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
@@ -163,7 +164,7 @@ class Config
 
     /**
      * @BeConfigItem("底部内边距 - 手机端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */

@@ -3,7 +3,7 @@ namespace Be\Theme\System\Section\Banner;
 
 
 /**
- * @BeConfig("横幅", icon="el-icon-picture")
+ * @BeConfig("横幅", icon="el-icon-picture", ordering="4")
  */
 class Config
 {
@@ -16,6 +16,7 @@ class Config
 
     /**
      * @BeConfigItem("宽度",
+     *     description="位于middle时有效",
      *     driver="FormItemSelect",
      *     keyValues = "return ['default' => '默认', 'fullWidth' => '全屏'];"
      * )
@@ -52,7 +53,7 @@ class Config
 
     /**
      * @BeConfigItem("顶部内边距 - 电脑端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
@@ -60,7 +61,7 @@ class Config
 
     /**
      * @BeConfigItem("顶部内边距 - 平板端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
@@ -68,7 +69,7 @@ class Config
 
     /**
      * @BeConfigItem("顶部内边距 - 手机端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
@@ -76,7 +77,7 @@ class Config
 
     /**
      * @BeConfigItem("底部内边距 - 电脑端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
@@ -84,7 +85,7 @@ class Config
 
     /**
      * @BeConfigItem("底部内边距 - 平板端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
@@ -92,7 +93,7 @@ class Config
 
     /**
      * @BeConfigItem("底部内边距 - 手机端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */

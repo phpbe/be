@@ -28,17 +28,15 @@
     <link rel="stylesheet" href="<?php echo $appSystemWwwUrl; ?>/lib/font-awesome/font-awesome-4.7.0.min.css" />
 
     <link rel="stylesheet" href="https://cdn.phpbe.com/scss/be.css" />
-    <link rel="stylesheet" href="<?php echo $adminThemeWwwUrl; ?>/css/theme.css?v=20220620" />
+    <link rel="stylesheet" href="<?php echo $adminThemeWwwUrl; ?>/css/theme.css?v=20220707" />
 
     <be-head>
     </be-head>
 </head>
 <body>
     <be-body>
-    <div class="be-body">
-
         <be-north>
-            <div class="be-north" id="be-north" v-cloak>
+            <div id="be-north" v-cloak>
 
                 <div class="be-row">
                     <div class="be-col be-pl-200">
@@ -165,7 +163,7 @@
 
 
         <be-west>
-            <div id="app-west" :class="{'be-west': true, 'be-west-collapse': collapse}" v-cloak>
+            <div id="app-west" :class="{'be-west-collapse': collapse}" v-cloak>
                 <?php
                 /*
                 <div class="logo">
@@ -284,16 +282,11 @@
 
 
         <be-middle>
-            <div class="be-middle" id="be-middle">
-                <be-center>
-                    <div class="be-center">
-                        <div class="be-center-title"><?php echo $this->title; ?></div>
-                        <div class="be-center-body"><be-center-body></be-center-body></div>
-                    </div>
-                </be-center>
-            </div>
+            <be-center>
+                <be-content-title><?php echo $this->title; ?></be-content-title>
+                <be-content-body></be-content-body>
+            </be-center>
         </be-middle>
-    </div>
     </be-body>
 
     <div id="app-be" v-cloak>

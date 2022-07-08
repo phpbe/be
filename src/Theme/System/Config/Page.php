@@ -6,88 +6,63 @@ namespace Be\Theme\System\Config;
  */
 class Page
 {
-    /**
-     * @BeConfigItem("是否启用项部",
-     *     driver = "FormItemSwitch")
-     */
+
     public int $north = 1;
 
-    /**
-     * @BeConfigItem("是否启用中部",
-     *     driver = "FormItemSwitch")
-     */
-    public int $middle = 1;
+    public int $middle = 0;
 
-    /**
-     * @BeConfigItem("是否启用左侧",
-     *     driver = "FormItemSwitch")
-     */
-    public int $west = 0;
+    public int $west = 25;
 
-    /**
-     * @BeConfigItem("是否启用左侧",
-     *     driver = "FormItemSwitch")
-     */
-    public int $center = 0;
+    public int $center = 50;
 
-    /**
-     * @BeConfigItem("是否启用右",
-     *     driver = "FormItemSwitch")
-     */
-    public int $east = 0;
+    public int $east = 25;
 
-    /**
-     * @BeConfigItem("是否启用底",
-     *     driver = "FormItemSwitch")
-     */
     public int $south = 1;
 
-    /**
-     * @BeConfigItem("是否启用底",
-     *     driver = "FormItemPageSection")
-     */
     public array $northSections = [
-        'Theme.System.Header'
+        [
+            'name' => 'Theme.System.Header',
+            'config' => [
+                'enable' => 1,
+                'logoType' => 'image',
+                'logoImage' => 'https://cdn.phpbe.com/images/logo/be.png',
+                'logoImageMaxWidth' => 240,
+                'logoImageMaxHeight' => 64,
+                'backgroundColor' => '#fff',
+            ],
+        ],
     ];
 
-    /**
-     * @BeConfigItem("是否启用底",
-     *     driver = "FormItemPageSection")
-     */
     public array $middleSections = [
-        'be-content',
+        [
+            'name' => 'be-page-title',
+        ],
+        [
+            'name' => 'be-page-content',
+        ],
     ];
 
-    /**
-     * @BeConfigItem("是否启用底",
-     *     driver = "FormItemPageSection")
-     */
     public array $westSections = [
 
     ];
 
-    /**
-     * @BeConfigItem("是否启用底",
-     *     driver = "FormItemPageSection")
-     */
     public array $centerSections = [
-        'be-content',
+        [
+            'name' => 'be-page-title',
+        ],
+        [
+            'name' => 'be-page-content',
+        ],
     ];
 
-    /**
-     * @BeConfigItem("是否启用底",
-     *     driver = "FormItemPageSection")
-     */
     public array $eastSections = [
 
     ];
 
-    /**
-     * @BeConfigItem("是否启用底",
-     *     driver = "FormItemPageSection")
-     */
     public array $southSections = [
-        'Theme.System.Footer',
+        [
+            'name' => 'Theme.System.Footer',
+        ],
     ];
 
 }

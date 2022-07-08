@@ -176,7 +176,7 @@
         ?>
 
         <be-center>
-            <be-center-body></be-center-body>
+            <be-content-body></be-content-body>
         </be-center>
     </div>
 </be-body>

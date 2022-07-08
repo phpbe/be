@@ -179,8 +179,8 @@ class Swoole extends Driver
      */
     public function isMobile(): bool
     {
-        if (isset($this->request->get['_isMobile'])) {
-            return $this->request->get['_isMobile'] ? true : false;
+        if (isset($this->request->get['be-is-mobile'])) {
+            return (bool)$this->request->get['be-is-mobile'];
         }
 
         if (empty($this->request->header['user-agent'])) {

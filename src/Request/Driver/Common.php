@@ -185,8 +185,8 @@ class Common extends Driver
      */
     public function isMobile(): bool
     {
-        if (isset($_GET['_isMobile'])) {
-            return $_GET['_isMobile'] ? true : false;
+        if (isset($_GET['be-is-mobile'])) {
+            return (bool)$_GET['be-is-mobile'];
         }
 
         if (empty($_SERVER['HTTP_USER_AGENT'])) {

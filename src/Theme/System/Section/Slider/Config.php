@@ -3,7 +3,7 @@ namespace Be\Theme\System\Section\Slider;
 
 
 /**
- * @BeConfig("轮播图", icon="el-icon-video-play")
+ * @BeConfig("轮播图", icon="el-icon-video-play", ordering="3")
  */
 class Config
 {
@@ -12,6 +12,15 @@ class Config
      *     driver = "FormItemSwitch")
      */
     public int $enable = 1;
+
+    /**
+     * @BeConfigItem("宽度",
+     *     description="位于middle时有效",
+     *     driver="FormItemSelect",
+     *     keyValues = "return ['default' => '默认', 'fullWidth' => '全屏'];"
+     * )
+     */
+    public string $width = 'fullWidth';
 
     /**
      * @BeConfigItem("自动播放",
@@ -67,51 +76,51 @@ class Config
 
     /**
      * @BeConfigItem("顶部内边距 - 电脑端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
-    public int $paddingTopDesktop = 40;
+    public int $paddingTopDesktop = 0;
 
     /**
      * @BeConfigItem("顶部内边距 - 平板端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
-    public int $paddingTopTablet = 30;
+    public int $paddingTopTablet = 0;
 
     /**
      * @BeConfigItem("顶部内边距 - 手机端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
-    public int $paddingTopMobile = 20;
+    public int $paddingTopMobile = 0;
 
     /**
      * @BeConfigItem("底部内边距 - 电脑端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
-    public int $paddingBottomDesktop = 40;
+    public int $paddingBottomDesktop = 0;
 
     /**
      * @BeConfigItem("底部内边距 - 平板端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
-    public int $paddingBottomTablet = 30;
+    public int $paddingBottomTablet = 0;
 
     /**
      * @BeConfigItem("底部内边距 - 手机端（像素）",
-     *     driver = "FormItemSlider"
+     *     driver = "FormItemInputNumberInt",
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
-    public int $paddingBottomMobile = 20;
+    public int $paddingBottomMobile = 0;
 
     /**
      * @BeConfigItem("子项",

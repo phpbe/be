@@ -2,7 +2,7 @@
     <link rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getWwwUrl(); ?>/admin/storage/css/index.css" type="text/css"/>
 </be-head>
 
-<be-center-body>
+<be-content-body>
     <?php
     $configSystem = \Be\Be::getConfig('App.System.System');
     $templateUrl = \Be\Be::getProperty('App.System')->getWwwUrl();
@@ -533,4 +533,4 @@
         });
     </script>
 
-</be-center-body>
+</be-content-body>

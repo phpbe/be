@@ -4,7 +4,8 @@
     ?>
     <script src="<?php echo $appSystemWwwUrl; ?>/lib/sortable/sortable.min.js"></script>
     <script src="<?php echo $appSystemWwwUrl; ?>/lib/vuedraggable/vuedraggable.umd.min.js"></script>
-    <link rel="stylesheet" href="<?php echo $appSystemWwwUrl; ?>/admin/theme-editor/css/setting.css" type="text/css"/>
+    <link rel="stylesheet" href="<?php echo $appSystemWwwUrl; ?>/admin/theme-editor/css/setting.css?v=<?php echo rand(); ?>" type="text/css"/>
+
 </be-head>
 
 <be-body>
@@ -14,32 +15,36 @@
 
             <div style="display: flex; padding: 5px 10px; box-shadow: 0 0 2px 2px #eee; ">
                 <div style="flex: 0 0 auto;">
-                    <h1 style="margin: 0; font-size: 1.2rem; line-height: 40px;">{{theme.property.label}}（{{theme.name}}）</h1>
+                    <h1 style="margin: 0; font-size: 1.2rem; line-height: 40px;">{{theme.label}}（{{theme.name}}）</h1>
                 </div>
 
                 <div style="flex: 1 1 auto; text-align: center;">
-                    <el-select v-model="pageName" placeholder="请选择" @change="changePage">
-                        <el-option v-for="page in theme.pages" :key="page.name" :label="page.label" :value="page.name"></el-option>
-                    </el-select>
+                    <el-cascader v-model="pageTreeValue" :options="pageTree" @change="changePage">
+                        <template slot-scope="{node, data}">
+                            <i v-if="data.icon" :class="data.icon"></i>
+                            <span>{{data.label}}</span>
+                            <span v-if="!node.isLeaf">（{{data.children.length}}）</span>
+                        </template>
+                    </el-cascader>
                 </div>
 
                 <div style="flex: 0 0 auto;">
                     <?php if ($this->themeType === 'Theme') { ?>
-                    <el-dropdown @command="toggleScreen">
-                        <el-button size="medium" style="border: none">
-                            <template v-if="screen === 'mobile'">
-                                <i class="el-icon-mobile-phone" style="font-size: 1.5rem;"></i>
-                            </template>
-                            <template v-else-if="screen === 'desktop'">
-                                <i class="el-icon-s-platform" style="font-size: 1.5rem;"></i>
-                            </template>
-                        </el-button>
+                        <el-dropdown @command="toggleScreen">
+                            <el-button size="medium" style="border: none">
+                                <template v-if="screen === 'mobile'">
+                                    <i class="el-icon-mobile-phone" style="font-size: 1.5rem;"></i>
+                                </template>
+                                <template v-else-if="screen === 'desktop'">
+                                    <i class="el-icon-s-platform" style="font-size: 1.5rem;"></i>
+                                </template>
+                            </el-button>
 
-                        <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item command="mobile"><i class="el-icon-mobile-phone" style="font-size: 1.2rem;"></i> 手机版</el-dropdown-item>
-                            <el-dropdown-item command="desktop"><i class="el-icon-s-platform" style="font-size: 1.2rem;"></i> 桌面版</el-dropdown-item>
-                        </el-dropdown-menu>
-                    </el-dropdown>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item command="mobile"><i class="el-icon-mobile-phone" style="font-size: 1.2rem;"></i> 手机版</el-dropdown-item>
+                                <el-dropdown-item command="desktop"><i class="el-icon-s-platform" style="font-size: 1.2rem;"></i> 桌面版</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
                     <?php } ?>
                 </div>
 
@@ -48,24 +53,117 @@
 
         <aside style="grid-area: west; position: relative;">
             <div style="position: absolute; left:0; right:0 ;top: 0; bottom: 30px; overflow-y: auto;">
-                <h2 style="padding: 10px 0 10px 20px; margin: 0; border-bottom: #eee 1px solid; font-size: 1rem;">
-                    {{page.page.label}}
-                </h2>
 
                 <?php
-                foreach (array_keys($this->theme['property']->pages[$this->pageName]['sections']) as $sectionType) {
-                    $key = $sectionType . 'Sections';
-                    if (!isset($this->page[$key]) && isset($this->pageHome[$key])) {
+                $currentPosition = '';
+                $positionOn = false;
+                $positionClasses = [];
+                $positionUrls = [];
+                foreach (['north', 'middle', 'west', 'center', 'east', 'south'] as $position) {
+                    $positionUrls[$position] = beAdminUrl('System.' . $this->themeType . '.editPosition', ['themeName' => $this->themeName, 'pageName' => $this->pageName, 'position' => $position]);
+                    $positionClasses[$position] = '{\'position-' . $position.'\':true,';
+                    if ($this->page->$position < 0) {
+                        $positionClasses[$position] .= '\'position-' . $position.'-extend\':true,';
+                    } elseif ($this->page->$position === 0) {
+                        $positionClasses[$position] .= '\'position-' . $position.'-disable\':true,';
+                    } else {
+                        $positionClasses[$position] .= '\'position-' . $position.'-enable\':true,';
+                        if (!$positionOn) {
+                            $positionOn = true;
+                            $currentPosition = $position;
+                        }
+                    }
+                    $positionClasses[$position] .= '\'position-on\':currentPosition === \''.$position.'\'}';
+                }
+
+                if (!$positionOn) {
+                    foreach (['north', 'middle', 'west', 'center', 'east', 'south'] as $position) {
+                        if ($this->page->$position < 0) {
+                            $currentPosition = $position;
+                            break;
+                        }
+                    }
+                }
+
+                $totalWidth = 0;
+                if ($this->page->west !== 0) {
+                    $totalWidth += abs($this->page->west);
+                }
+
+                if ($this->page->center !== 0) {
+                    $totalWidth += abs($this->page->center);
+                }
+
+                if ($this->page->east !== 0) {
+                    $totalWidth += abs($this->page->east);
+                }
+
+                $widthWest = 25;
+                $widthCenter = 50;
+                $widthEast = 25;
+
+                $leftWidth = 100;
+                if ($totalWidth > 0) {
+                    if ($this->page->west === 0) {
+                        $widthWest = 10;
+                        $leftWidth -= 10;
+                    }
+
+                    if ($this->page->east === 0) {
+                        $widthEast = 10;
+                        $leftWidth -= 10;
+                    }
+
+                    if ($this->page->center === 0) {
+                        $widthCenter = 10;
+                        $leftWidth -= 10;
+                    }
+
+                    if ($this->page->west !== 0) {
+                        $widthWest = (int)($this->page->west * $leftWidth / $totalWidth);
+                    }
+
+                    if ($this->page->east !== 0) {
+                        $widthEast = (int)($this->page->east * $leftWidth / $totalWidth);
+                    }
+
+                    if ($this->page->center !== 0) {
+                        $widthCenter = (int)($this->page->center * $leftWidth / $totalWidth);
+                    }
+                }
+                ?>
+
+                <div class="be-p-100">
+                    <div :class="<?php echo $positionClasses['north']; ?>" @click="togglePosition('north', '<?php echo $positionUrls['north']; ?>')">页面顶部（North）</div>
+
+                    <div style="padding: 2px 0;">
+                        <div :class="<?php echo $positionClasses['middle']; ?>" @click="togglePosition('middle', '<?php echo $positionUrls['middle']; ?>')">
+                            <div class="be-pb-25">页面中部（Middle）</div>
+                            <div style="display: flex;">
+                                <div style="flex:0 0 <?php echo $widthWest; ?>%"><div :class="<?php echo $positionClasses['west']; ?>" @click.stop="togglePosition('west', '<?php echo $positionUrls['west']; ?>')">左</div></div>
+                                <div style="flex:0 0 <?php echo $widthCenter; ?>%"><div style="padding: 0 4px;"><div :class="<?php echo $positionClasses['center']; ?>" @click.stop="togglePosition('center', '<?php echo $positionUrls['center']; ?>')">中</div></div></div>
+                                <div style="flex:0 0 <?php echo $widthEast; ?>%"><div :class="<?php echo $positionClasses['east']; ?>" @click.stop="togglePosition('east', '<?php echo $positionUrls['east']; ?>')">右</div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div :class="<?php echo $positionClasses['south']; ?>" @click="togglePosition('south', '<?php echo $positionUrls['south']; ?>')">页面底部（South）</div>
+                </div>
+
+                <?php
+                foreach (['north', 'middle', 'west', 'center', 'east', 'south'] as $position) {
+                    $field = $position . 'Sections';
+                    if ($this->page->$position < 0 && isset($this->pageDefault->$field)) {
                         ?>
-                        <ul class="west-links-disabled <?php echo $sectionType; ?>-west-links">
+                        <ul class="west-links-disabled <?php echo $position; ?>-west-links" v-if="currentPosition === '<?php echo $position; ?>'">
                             <?php
-                            foreach ($this->pageHome[$key] as $section) {
+                            foreach ($this->pageDefault->$field as $section) {
                                 ?>
                                 <li>
                                     <div style="display: flex">
                                         <div style="flex: 0 0 20px; height: 30px; line-height: 30px;">
                                             <?php
-                                            if (isset($section['items']) && $section['items']) {
+                                            if (isset($section->items) && $section->items) {
                                                 ?>
                                                 <a href="javascript:void(0);">
                                                     <i class="el-icon-caret-right"></i>
@@ -77,7 +175,7 @@
 
                                         <div style="flex: 1">
                                             <a href="javascript:void(0);">
-                                                <span class="icon"><?php echo $section['icon']; ?></span><?php echo $section['label']; ?>
+                                                <span class="icon"><?php echo $section->icon; ?></span><?php echo $section->label; ?>
                                             </a>
                                         </div>
                                     </div>
@@ -85,38 +183,31 @@
                                 <?php
                             }
                             ?>
-                            <li style="padding-left: 28px;">
-                                <el-tooltip>
-                                    <div slot="content">默认继承使用了首页的配置，<br>如果当前页面需要自定义样式，<br>请先点击右侧链接启用</div>
-                                    <i class="el-icon-question" style="color: #999;"></i>
-                                </el-tooltip>
-
-                                <el-link style="display: inline" href="<?php echo beAdminUrl('System.'.$this->themeType.'.enableSectionType', ['themeName' => $this->themeName, 'pageName' => $this->pageName, 'sectionType' => $sectionType]); ?>">启用自定义配置</el-link>
-                            </li>
                         </ul>
                         <?php
                         continue;
                     }
                     ?>
-                    <ul class="west-links <?php echo $sectionType; ?>-west-links">
-                        <draggable v-model="page.<?php echo $sectionType; ?>Sections" handle=".drag-icon" force-fallback="true" group="<?php echo $sectionType; ?>" animation="100" @update="sectionDragUpdate">
+
+                    <ul class="west-links <?php echo $position; ?>-west-links" v-if="currentPosition === '<?php echo $position; ?>'">
+                        <draggable v-model="page.<?php echo $position; ?>Sections" handle=".drag-icon" force-fallback="true" group="<?php echo $position; ?>" animation="100" @update="sectionDragUpdate">
                             <transition-group>
-                                <li v-for="(section, sectionKey) in page.<?php echo $sectionType; ?>Sections" :key="sectionKey" data-sectiontype="<?php echo $sectionType; ?>">
+                                <li v-for="(section, sectionIndex) in page.<?php echo $position; ?>Sections" :key="sectionIndex" data-sectiontype="<?php echo $position; ?>">
                                     <div style="display: flex">
                                         <div style="flex: 0 0 20px; height: 30px; line-height: 30px;">
-                                            <a v-if="section.items" href="javascript:void(0);" @click="toggleSection('<?php echo $sectionType; ?>', sectionKey)">
-                                                <i :class="toggle['<?php echo $sectionType; ?>'][sectionKey] ? 'el-icon-caret-bottom' : 'el-icon-caret-right'"></i>
+                                            <a v-if="section.items" href="javascript:void(0);" @click="toggleSectionItems('<?php echo $position; ?>', sectionIndex)">
+                                                <i :class="sectionItemsToggle['<?php echo $position; ?>'][sectionIndex] ? 'el-icon-caret-bottom' : 'el-icon-caret-right'"></i>
                                             </a>
                                         </div>
 
                                         <div style="flex: 1">
-                                            <a href="javascript:void(0);" @click="editItem(section.url, '<?php echo $sectionType; ?>', sectionKey)" :class="activeUrl === section.url ? 'active' : ''">
+                                            <a href="javascript:void(0);" @click="editItem(section.url, '<?php echo $position; ?>', sectionIndex)" :class="activeUrl === section.url ? 'active' : ''">
                                                 <span class="icon" v-html="section.icon"></span>{{section.label}}
                                             </a>
                                         </div>
 
                                         <div class="close-icon" style="flex: 0 0 20px; height: 30px; line-height: 30px;">
-                                            <a href="javascript:void(0);" @click="deleteSection('<?php echo $sectionType; ?>', sectionKey)">
+                                            <a href="javascript:void(0);" @click="deleteSection('<?php echo $position; ?>', sectionIndex)">
                                                 <i class="el-icon-close"></i>
                                             </a>
                                         </div>
@@ -127,20 +218,20 @@
                                         </div>
                                     </div>
 
-                                    <ul v-if="section.items && toggle['<?php echo $sectionType; ?>'][sectionKey]">
+                                    <ul v-if="section.items && sectionItemsToggle['<?php echo $position; ?>'][sectionIndex]">
                                         <template v-if="section.items.existItems">
-                                            <draggable v-model="section.items.existItems" :disabled="!section.items.newItems" handle=".item-drag-icon" force-fallback="true" :group="'<?php echo $sectionType; ?>' + sectionKey" animation="100" @update="sectionItemDragUpdate">
+                                            <draggable v-model="section.items.existItems" :disabled="!section.items.newItems" handle=".item-drag-icon" force-fallback="true" :group="'<?php echo $position; ?>' + sectionIndex" animation="100" @update="sectionItemDragUpdate">
                                                 <transition-group>
-                                                    <li v-for="(existItem, existItemKey) in section.items.existItems" :key="existItemKey" data-sectiontype="<?php echo $sectionType; ?>" :data-sectionkey="sectionKey">
+                                                    <li v-for="(existItem, existItemKey) in section.items.existItems" :key="existItemKey" data-sectiontype="<?php echo $position; ?>" :data-sectionkey="sectionIndex">
                                                         <div style="display: flex">
                                                             <div style="flex: 1">
-                                                                <a href="javascript:void(0);" @click="editItem(existItem.url, '<?php echo $sectionType; ?>', sectionKey)" :class="activeUrl === existItem.url ? 'active' : ''">
+                                                                <a href="javascript:void(0);" @click="editItem(existItem.url, '<?php echo $position; ?>', sectionIndex)" :class="activeUrl === existItem.url ? 'active' : ''">
                                                                     <span class="icon" v-html="existItem.icon"></span>{{existItem.label}}
                                                                 </a>
                                                             </div>
 
                                                             <div class="item-close-icon" style="flex: 0 0 20px; height: 30px; line-height: 30px;">
-                                                                <a v-if="section.items.newItems" href="javascript:void(0);" @click="deleteSectionItem('<?php echo $sectionType; ?>', sectionKey, existItemKey)">
+                                                                <a v-if="section.items.newItems" href="javascript:void(0);" @click="deleteSectionItem('<?php echo $position; ?>', sectionIndex, existItemKey)">
                                                                     <i class="el-icon-close"></i>
                                                                 </a>
                                                             </div>
@@ -160,7 +251,7 @@
                                             <el-dropdown @command="addSectionItem">
                                                 <span class="el-dropdown-link">
                                                     <i class="el-icon-circle-plus"></i>
-                                                    {{section.items.labelNewItem}}
+                                                    新增子部件
                                                 </span>
                                                 <el-dropdown-menu slot="dropdown">
                                                     <el-dropdown-item v-for="(newItem, newItemKey) in section.items.newItems" :command="newItem.url">
@@ -176,36 +267,70 @@
                             </transition-group>
                         </draggable>
 
-                        <li style="padding-left: 25px;">
-                            <el-dropdown @command="addSection">
-                                <span class="el-dropdown-link">
-                                    <i class="el-icon-circle-plus"></i>
-                                    新增组件
-                                </span>
-                                <el-dropdown-menu slot="dropdown">
-                                    <el-dropdown-item v-for="(section, sectionKey) in page.<?php echo $sectionType; ?>SectionsAvailable" :command="'<?php echo $sectionType; ?>-' + section.name">
-                                        <span class="icon" v-html="section.icon"></span>{{section.label}}
-                                    </el-dropdown-item>
-                                </el-dropdown-menu>
-                            </el-dropdown>
-                        </li>
 
                         <?php
-                        if ($this->pageName !== 'Home' && isset($this->page[$sectionType . 'Extended']) && $this->page[$sectionType . 'Extended']) {
+                        if ($this->page->$position > 0) {
                             ?>
-                            <li style="padding-left: 28px;">
-                                <el-tooltip>
-                                    <div slot="content">移除自定义配置后，将默认继承使用了首页的配置。</div>
-                                    <i class="el-icon-question" style="color: #999;"></i>
-                                </el-tooltip>
+                            <li style="padding-left: 25px; margin-top: 10px">
 
-                                <el-link style="display: inline" href="<?php echo beAdminUrl('System.'.$this->themeType.'.disableSectionType', ['themeName' => $this->themeName, 'pageName' => $this->pageName, 'sectionType' => $sectionType]); ?>">移除自定义配置</el-link>
+                                <!--el-dropdown @command="addSection">
+                                <span class="el-dropdown-link">
+                                    <i class="el-icon-circle-plus"></i>
+                                    新增部件
+                                </span>
+                                    <el-dropdown-menu slot="dropdown">
+                                        <el-dropdown-item v-for="(section, sectionIndex) in page.<?php echo $position; ?>SectionsAvailable" :command="'<?php echo $position; ?>-' + section.name">
+                                            <span class="icon" v-html="section.icon"></span>{{section.label}}
+                                        </el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </el-dropdown>-->
+
+                                <el-button type="primary" size="mini" icon="el-icon-plus" @click="sectionDrawerToggle.<?php echo $position; ?> = true">新增部件</el-button>
+
+                                <el-drawer
+                                        title="新增部件"
+                                        :visible.sync="sectionDrawerToggle.<?php echo $position; ?>"
+                                        direction="ltr">
+                                    <div class="be-px-100">
+                                        <el-tabs type="card">
+                                            <el-tab-pane label="主题部件" v-if="page.<?php echo $position; ?>AvailableSections.themeSections.length > 0">
+                                                <el-tabs tab-position="left">
+                                                    <template v-for="availableSections in page.<?php echo $position; ?>AvailableSections.themeSections">
+                                                        <el-tab-pane :label="availableSections.theme.label">
+                                                            <div class="be-px-100" v-for="section in availableSections.sections">
+                                                                <a href="javascript:void(0);" @click="addSection('<?php echo $position; ?>', section.name)">
+                                                                    <span class="icon" v-html="section.icon"></span> {{section.label}}
+                                                                </a>
+                                                            </div>
+                                                        </el-tab-pane>
+                                                    </template>
+                                                </el-tabs>
+                                            </el-tab-pane>
+                                            <el-tab-pane label="应用部件" v-if="page.<?php echo $position; ?>AvailableSections.appSections.length > 0">
+                                                <el-tabs tab-position="left">
+                                                    <template v-for="availableSections in page.<?php echo $position; ?>AvailableSections.appSections">
+                                                        <el-tab-pane :label="availableSections.app.label">
+                                                            <div class="be-px-100" v-for="section in availableSections.sections">
+                                                                <a href="javascript:void(0);" @click="addSection('<?php echo $position; ?>', section.name)">
+                                                                    <span class="icon" v-html="section.icon"></span> {{section.label}}
+                                                                </a>
+                                                            </div>
+                                                        </el-tab-pane>
+                                                    </template>
+                                                </el-tabs>
+                                            </el-tab-pane>
+                                        </el-tabs>
+
+                                    </div>
+                                </el-drawer>
                             </li>
+
+
                             <?php
                         }
                         ?>
 
-                        </ul>
+                    </ul>
                     <?php
                 }
                 ?>
@@ -230,7 +355,7 @@
         </main>
 
         <aside style="grid-area: east; position: relative;">
-            <div style="position: absolute; left:0; right:0 ;top: 0; bottom: 0;">
+            <div style="position: absolute; left:0; right:0 ;top: 0; bottom: 0; overflow: hidden;">
                 <iframe name="frame-setting" id="frame-setting" :src="activeUrl" style="width: 100%; height: 100%; border: none;"></iframe>
             </div>
         </aside>
@@ -239,13 +364,24 @@
 
 
     <?php
-    $toggle = [];
-    foreach (array_keys($this->theme['property']->pages[$this->pageName]['sections']) as $sectionType) {
-        if (isset($this->page[$sectionType.'Sections'])) {
-            foreach ($this->page[$sectionType.'Sections'] as $sectionKey => $sectionName) {
-                $toggle[$sectionType][$sectionKey] = 0;
+    $sectionDrawerToggle = [];
+    $sectionItemsToggle = [];
+    foreach (['north', 'middle', 'west', 'center', 'east', 'south'] as $position) {
+        $field = $position.'Sections';
+        $sectionDrawerToggle[$position] = 0;
+        if (isset($this->page->$field)) {
+            foreach ($this->page->$field as $sectionIndex => $sectionName) {
+                $sectionItemsToggle[$position][$sectionIndex] = 0;
             }
         }
+    }
+
+    $pageTreeValue = null;
+    if ($this->pageName === 'default') {
+        $pageTreeValue = [$this->pageName];
+    } else {
+        $appName = substr($this->pageName, 0, strpos($this->pageName, '.'));
+        $pageTreeValue = [$appName, $this->pageName];
     }
     ?>
 
@@ -255,15 +391,21 @@
         var vue = new Vue({
             el: '#app',
             components: {
-                vuedraggable: window.vuedraggable,//当前页面注册组件
+                vuedraggable: window.vuedraggable,//当前页面注册部件
             },
             data: {
                 theme : <?php echo json_encode($this->theme); ?>,
+                pageTree : <?php echo json_encode($this->pageTree); ?>,
+                pageTreeValue : <?php echo json_encode($pageTreeValue); ?>,
                 pageName : "<?php echo $this->pageName; ?>",
                 page : <?php echo json_encode($this->page); ?>,
-                toggle: <?php echo json_encode($toggle); ?>,
-                activeUrl: "<?php echo beAdminUrl('System.'.$this->themeType.'.editSectionItem', ['themeName' => $this->themeName, 'pageName' => $this->pageName, 'sectionType' => $this->sectionType, 'sectionKey' => $this->sectionKey, 'sectionName' => $this->sectionName, 'itemKey' => $this->itemKey, 'itemName' => $this->itemName]); ?>",
-                previewUrl: "<?php echo $this->page['desktopPreviewUrl']; ?>",
+                currentPosition: "<?php echo $currentPosition; ?>",
+
+                sectionDrawerToggle: <?php echo json_encode($sectionDrawerToggle); ?>,
+                sectionItemsToggle: <?php echo json_encode($sectionItemsToggle); ?>,
+
+                activeUrl: "<?php echo $positionUrls[$currentPosition]; //beAdminUrl('System.'.$this->themeType.'.editSectionItem', ['themeName' => $this->themeName, 'pageName' => $this->pageName, 'position' => $this->position, 'sectionIndex' => $this->sectionIndex, 'sectionName' => $this->sectionName, 'itemIndex' => $this->itemIndex, 'itemName' => $this->itemName]); ?>",
+                previewUrl: "<?php echo $this->page->desktopPreviewUrl; ?>",
                 previewUrlTag: "",
                 screen: "desktop"
             },
@@ -292,33 +434,45 @@
                             break;
                     }
                 },
-                changePage: function(pageName) {
-                    var page;
-                    for(var x in this.theme.pages) {
-                        page = this.theme.pages[x];
-                        if (page.name === pageName) {
-                            window.location.href = page.url;
-                            break;
+                reloadPreviewFrameSection: function($section) {
+
+                },
+                changePage: function(value) {
+                    if (value.length === 1) {
+                        window.location.href = this.pageTree[0].url;
+                    } else {
+                        for(let page of this.pageTree) {
+                            if (page.value === value[0]) {
+                                for(let p of page.children) {
+                                    if (p.value === value[1]) {
+                                        window.location.href = p.url;
+                                        return;
+                                    }
+                                }
+                            }
                         }
                     }
                 },
-                toggleSection: function(sectionType, sectionKey) {
-                    this.toggle[sectionType][sectionKey] = !this.toggle[sectionType][sectionKey];
+                togglePosition: function (position, url) {
+                    this.currentPosition = position;
+                    this.activeUrl = url;
+                },
+                toggleSectionItems: function(position, sectionIndex) {
+                    this.sectionItemsToggle[position][sectionIndex] = !this.sectionItemsToggle[position][sectionIndex];
                     this.$forceUpdate();
                     //console.log(this.page);
                 },
-                addSection: function(command) {
-                    var loading = this.$loading();
-                    var commands = command.split("-");
-
+                addSection: function(position, sectionName) {
                     var _this = this;
+                    var loading = _this.$loading();
                     _this.$http.post("<?php echo beAdminUrl('System.'.$this->themeType.'.addSection', ['themeName' => $this->themeName, 'pageName' => $this->pageName]); ?>", {
-                        sectionType: commands[0],
-                        sectionName: commands[1]
+                        position: position,
+                        sectionName: sectionName
                     }).then(function (response) {
                         loading.close();
                         if (response.status === 200) {
                             if (response.data.success) {
+                                _this.sectionDrawerToggle[position] = false;
                                 _this.page = response.data.page;
                             } else {
                                 _this.$message.error(response.data.message);
@@ -329,17 +483,17 @@
                         _this.$message.error(error);
                     });
                 },
-                deleteSection: function(sectionType, sectionKey) {
+                deleteSection: function(position, sectionIndex) {
                     var _this = this;
-                    this.$confirm('确定要删除组件吗?', '删除确认', {
+                    this.$confirm('确定要删除部件吗?', '删除确认', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(function () {
                         var loading = _this.$loading();
                         _this.$http.post("<?php echo beAdminUrl('System.'.$this->themeType.'.deleteSection', ['themeName' => $this->themeName, 'pageName' => $this->pageName]); ?>", {
-                            sectionType: sectionType,
-                            sectionKey: sectionKey
+                            position: position,
+                            sectionIndex: sectionIndex
                         }).then(function (response) {
                             loading.close();
                             if (response.status === 200) {
@@ -363,7 +517,7 @@
 
                     var _this = this;
                     _this.$http.post("<?php echo beAdminUrl('System.'.$this->themeType.'.sortSection', ['themeName' => $this->themeName, 'pageName' => $this->pageName]); ?>", {
-                        sectionType: event.item.dataset.sectiontype,
+                        position: event.item.dataset.sectiontype,
                         oldIndex: event.oldIndex,
                         newIndex: event.newIndex,
                     }).then(function (response) {
@@ -380,10 +534,10 @@
                         _this.$message.error(error);
                     });
                 },
-                editItem: function(url, sectionType, sectionKey) {
+                editItem: function(url, position, sectionIndex) {
                     this.activeUrl = url;
 
-                    var previewUrlTag = "#be-section-" + sectionType + "-" + sectionKey;
+                    var previewUrlTag = "#be-section-" + position + "-" + sectionIndex;
                     if (this.previewUrlTag !== previewUrlTag) {
                         this.previewUrlTag = previewUrlTag;
                         this.reloadPreviewFrame();
@@ -409,18 +563,18 @@
 
                     console.log(command);
                 },
-                deleteSectionItem: function(sectionType, sectionKey, itemKey) {
+                deleteSectionItem: function(position, sectionIndex, itemIndex) {
                     var _this = this;
-                    this.$confirm('确定要删除子组件吗?', '删除确认', {
+                    this.$confirm('确定要删除子部件吗?', '删除确认', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(function () {
                         var loading = _this.$loading();
                         _this.$http.post("<?php echo beAdminUrl('System.'.$this->themeType.'.deleteSectionItem', ['themeName' => $this->themeName, 'pageName' => $this->pageName]); ?>", {
-                            sectionType: sectionType,
-                            sectionKey: sectionKey,
-                            itemKey: itemKey
+                            position: position,
+                            sectionIndex: sectionIndex,
+                            itemIndex: itemIndex
                         }).then(function (response) {
                             loading.close();
                             if (response.status === 200) {
@@ -444,8 +598,8 @@
 
                     var _this = this;
                     _this.$http.post("<?php echo beAdminUrl('System.'.$this->themeType.'.sortSectionItem', ['themeName' => $this->themeName, 'pageName' => $this->pageName]); ?>", {
-                        sectionType: event.item.dataset.sectiontype,
-                        sectionKey: event.item.dataset.sectionkey,
+                        position: event.item.dataset.position,
+                        sectionIndex: event.item.dataset.sectionIndex,
                         oldIndex: event.oldIndex,
                         newIndex: event.newIndex,
                     }).then(function (response) {
@@ -464,9 +618,13 @@
                 }
             }
         });
-        
+
         function reloadPreviewFrame () {
             vue.reloadPreviewFrame();
+        }
+
+        function reload () {
+            window.location.reload();
         }
     </script>
 

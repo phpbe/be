@@ -9,7 +9,7 @@ body {
     padding: 0;
 }
 
-[v-cloak] {display: none;}
+[v-cloak] {display: none !important;}
 [class^="el-icon-fa"],
 [class*="el-icon-fa"] {
     display: inline-block;
@@ -260,13 +260,13 @@ body {
     padding: 0 2rem;
 }
 
-.be-center .be-center-title {
+.be-center .be-content-title {
     font-size: 1.25rem;
     height: 3.5rem;
     line-height: 3.5rem;
 }
 
-.be-center .be-center-body {
+.be-center .be-content-body {
     padding: 1rem 1rem .5rem 1rem;
     background-color: #fff;
 }

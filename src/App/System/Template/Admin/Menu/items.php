@@ -38,7 +38,7 @@
 <be-center>
     <div id="app" v-cloak>
         <div class="be-center">
-            <div class="be-center-title"><?php echo $this->title; ?></div>
+            <div class="be-content-title"><?php echo $this->title; ?></div>
 
             <div class="be-center-box">
                 <el-form ref="menuItemsFormRef" :model="formData">

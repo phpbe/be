@@ -105,35 +105,35 @@ class Common extends Driver
     /**
      * 显示模板
      *
-     * @param string $template 模板名
-     * @param string $theme 主题名
+     * @param string|null $templateName 模板名
+     * @param string|null $themeName 主题名
      */
-    public function display(string $template = null, string $theme = null)
+    public function display(string $templateName = null, string $themeName = null)
     {
         $request = Be::getRequest();
-        if ($template === null) {
+        if ($templateName === null) {
             if ($request->isAdmin()) {
-                $template = 'App.' . $request->getAppName() . '.Admin.' . $request->getControllerName() . '.' . $request->getActionName();
+                $templateName = 'App.' . $request->getAppName() . '.Admin.' . $request->getControllerName() . '.' . $request->getActionName();
             } else {
-                $template = 'App.' . $request->getRoute();
+                $templateName = 'App.' . $request->getRoute();
             }
         }
 
-        if ($theme === null) {
-            $_theme = $request->get('_theme', false);
-            if ($_theme) {
-                $theme = $_theme;
-            }
+        if ($themeName === null) {
+            $themeName = $request->getThemeName();
         }
 
-        $templateInstance = $request->isAdmin() ? Be::getAdminTemplate($template, $theme) : Be::getTemplate($template, $theme);
+        $templateInstance = $request->isAdmin() ? Be::getAdminTemplate($templateName, $themeName) : Be::getTemplate($templateName, $themeName);
         foreach ($this->data as $key => $val) {
             $templateInstance->$key = $val;
         }
 
+        if (!isset($this->data['_page'])) {
+            $templateInstance->_page = Be::getService('App.System.Theme')->getPage($request->isAdmin() ? 'AdminTheme' : 'Theme', $themeName, $request->getRoute());
+        }
+
         $templateInstance->display();
     }
-
 
 
 }

@@ -15,18 +15,10 @@ class IconWithText
     /**
      * @BeConfigItem("图标类型",
      *     driver="FormItemSelect",
-     *     keyValues = "return ['name' => 'Bootstrap图标', 'svg' => 'SVG图像数据', 'image' => '上传图像'];"
+     *     keyValues = "return ['svg' => 'SVG图像数据', 'image' => '上传图像'];"
      * )
      */
-    public string $icon = 'name';
-
-    /**
-     * @BeConfigItem("Bootstrap图标",
-     *     driver="FormItemInput",
-     *     ui="return ['form-item' => ['v-show' => 'formData.icon === \'name\'']];"
-     * )
-     */
-    public string $iconName = 'bi bi-x-diamond';
+    public string $iconType = 'image';
 
     /**
      * @BeConfigItem("SVG图像数据",

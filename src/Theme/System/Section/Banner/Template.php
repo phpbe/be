@@ -5,7 +5,7 @@ use Be\Theme\Section;
 
 class Template extends Section
 {
-    protected array $position = ['Middle', 'Center'];
+    public array $positions = ['middle', 'center'];
 
     public function display()
     {
@@ -13,45 +13,8 @@ class Template extends Section
 
             echo '<style type="text/css">';
 
-            echo '#' . $this->id . ' {';
-            echo 'background-color: ' . $this->config->backgroundColor . ';';
-            echo '}';
-
-            // 手机端
-            echo '@media (max-width: 768px) {';
-            echo '#' . $this->id . ' {';
-            if ($this->config->paddingTopMobile) {
-                echo 'padding-top: ' . $this->config->paddingTopMobile . 'px;';
-            }
-            if ($this->config->paddingBottomMobile) {
-                echo 'padding-bottom: ' . $this->config->paddingBottomMobile . 'px;';
-            }
-            echo '}';
-            echo '}';
-
-            // 平析端
-            echo '@media (min-width: 768px) {';
-            echo '#' . $this->id . ' {';
-            if ($this->config->paddingTopTablet) {
-                echo 'padding-top: ' . $this->config->paddingTopTablet . 'px;';
-            }
-            if ($this->config->paddingBottomTablet) {
-                echo 'padding-bottom: ' . $this->config->paddingBottomTablet . 'px;';
-            }
-            echo '}';
-            echo '}';
-
-            // 电脑端
-            echo '@media (min-width: 992px) {';
-            echo '#' . $this->id . ' {';
-            if ($this->config->paddingTopDesktop) {
-                echo 'padding-top: ' . $this->config->paddingTopDesktop . 'px;';
-            }
-            if ($this->config->paddingBottomDesktop) {
-                echo 'padding-bottom: ' . $this->config->paddingBottomDesktop . 'px;';
-            }
-            echo '}';
-            echo '}';
+            echo $this->getCssBackgroundColor('banner');
+            echo $this->getCssPadding('banner');
 
             // 手机版，电脑版上传不同的图片
             echo '@media (max-width: 768px) {';
@@ -77,8 +40,8 @@ class Template extends Section
             echo 'width: 100%;';
             echo '}';
 
-            echo '#' . $this->id . ' .banner-image .no-image,';
-            echo '#' . $this->id . ' .banner-mobile-image .no-image {';
+            echo '#' . $this->id . ' .banner-image .banner-no-image,';
+            echo '#' . $this->id . ' .banner-mobile-image .banner-no-image {';
             echo 'width: 100%;';
             echo 'height: 400px;';
             echo 'line-height: 400px;';
@@ -86,13 +49,13 @@ class Template extends Section
             echo 'font-size: 24px;';
             echo 'text-align: center;';
             echo 'text-shadow:  5px 5px 5px #999;';
-            echo 'background-color: rgba(35, 35, 35, 0.2);';
+            echo 'background-color: #f5f5f5;';
             echo '}';
 
             echo '</style>';
 
-            echo '<div id="' . $this->id . '">';
-            if ($this->config->width === 'default') {
+            echo '<div class="banner">';
+            if ($this->position === 'middle' && $this->config->width === 'default') {
                 echo '<div class="be-container">';
             }
 
@@ -123,7 +86,7 @@ class Template extends Section
             }
             echo '</div>';
 
-            if ($this->config->width === 'default') {
+            if ($this->position === 'middle' && $this->config->width === 'default') {
                 echo '</div>';
             }
             echo '</div>';

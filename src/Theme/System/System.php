@@ -46,9 +46,9 @@
     ?>
     <style type="text/css">
         html {
-            font-size: <?php echo $configTheme->pageFontSize; ?>px;
-            background-color: <?php echo $configTheme->pageBackgroundColor; ?>;
-            color: <?php echo $configTheme->pageColor; ?>;
+            font-size: <?php echo $configTheme->fontSize; ?>px;
+            background-color: <?php echo $configTheme->backgroundColor; ?>;
+            color: <?php echo $configTheme->fontColor; ?>;
         }
 
         body {
@@ -84,13 +84,13 @@
 <body>
 <be-body>
     <?php
-    if ($this->_page->north) {
+    if ($this->_page->north !== 0) {
         ?>
         <be-north>
             <?php
             if (count($this->_page->northSections)) {
                 foreach ($this->_page->northSections as $section) {
-                    echo '<div class="be-section" id="be-section-' . $section->id . '">';
+                    echo '<div class="be-section" id="' . $section->id . '">';
                     $section->template->display();
                     echo '</div>';
                 }
@@ -100,14 +100,29 @@
         <?php
     }
 
-    if ($this->_page->middle) {
+    if ($this->_page->middle !== 0) {
         ?>
         <be-middle>
             <?php
             if (count($this->_page->middleSections)) {
                 foreach ($this->_page->middleSections as $section) {
-                    echo '<div class="be-section" id="be-section-' . $section->id . '">';
-                    $section->template->display();
+                    echo '<div class="be-section" id="' . $section->id . '">';
+
+                    if ($section->key === 'be-page-title') {
+                        $section->template->before();
+                        ?>
+                        <be-page-title><?php echo $this->title; ?></be-page-title>
+                        <?php
+                        $section->template->after();
+                    } else if ($section->key === 'be-page-content') {
+                        $section->template->before();
+                        ?>
+                        <be-page-content></be-page-content>
+                        <?php
+                        $section->template->after();
+                    } else {
+                        $section->template->display();
+                    }
                     echo '</div>';
                 }
             }
@@ -117,76 +132,104 @@
     } else {
         ?>
         <be-middle>
+            <div class="be-row">
             <?php
-            if ($this->_page->west) {
+            $totalWidth = 0;
+            if ($this->_page->west !== 0) {
+                $totalWidth += abs($this->_page->west);
+            }
+
+            if ($this->_page->center !== 0) {
+                $totalWidth += abs($this->_page->center);
+            }
+
+            if ($this->_page->east !== 0) {
+                $totalWidth += abs($this->_page->east);
+            }
+
+            if ($this->_page->west !== 0) {
+                $width = (abs($this->_page->west) * 100 / $totalWidth) . '%';
                 ?>
+                <div class="be-col" style="flex-basis: <?php echo $width; ?>;">
                 <be-west>
                     <?php
                     if (count($this->_page->westSections)) {
                         foreach ($this->_page->westSections as $section) {
-                            echo '<div class="be-section" id="be-section-' . $section->id . '">';
+                            echo '<div class="be-section" id="' . $section->id . '">';
                             $section->template->display();
                             echo '</div>';
                         }
                     }
                     ?>
                 </be-west>
+                </div>
                 <?php
             }
 
-            if ($this->_page->center) {
+            if ($this->_page->center !== 0) {
+                $width = (abs($this->_page->center) * 100 / $totalWidth) . '%';
                 ?>
+                <div class="be-col" style="flex-basis: <?php echo $width; ?>;">
                 <be-center>
                     <?php
                     if (count($this->_page->centerSections)) {
                         foreach ($this->_page->centerSections as $section) {
-                            echo '<div class="be-section" id="be-section-' . $section->id . '">';
-                            $section->template->display();
+                            echo '<div class="be-section" id="' . $section->id . '">';
+                            if ($section->key === 'be-page-title') {
+                                $section->template->before();
+                                ?>
+                                <be-page-title><?php echo $this->title; ?></be-page-title>
+                                <?php
+                                $section->template->after();
+                            } else if ($section->key === 'be-page-content') {
+                                $section->template->before();
+                                ?>
+                                <be-page-content></be-page-content>
+                                <?php
+                                $section->template->after();
+                            } else {
+                                $section->template->display();
+                            }
                             echo '</div>';
                         }
                     }
                     ?>
                 </be-center>
-                <?php
-            } else {
-                ?>
-                <be-center>
-                    <be-center-title><?php echo $this->title; ?></be-center-title>
-
-
-                    <be-center-body></be-center-body>
-                </be-center>
+                </div>
                 <?php
             }
 
-            if ($this->_page->east) {
+            if ($this->_page->east !== 0) {
+                $width = (abs($this->_page->east) * 100 / $totalWidth) . '%';
                 ?>
+                <div class="be-col" style="flex-basis: <?php echo $width; ?>;">
                 <be-east>
                     <?php
                     if (count($this->_page->eastSections)) {
                         foreach ($this->_page->eastSections as $section) {
-                            echo '<div class="be-section" id="be-section-' . $section->id . '">';
+                            echo '<div class="be-section" id="' . $section->id . '">';
                             $section->template->display();
                             echo '</div>';
                         }
                     }
                     ?>
                 </be-east>
+                </div>
                 <?php
             }
             ?>
-
+            </div>
         </be-middle>
         <?php
     }
 
-    if ($this->_page->south) {
+    if ($this->_page->south !== 0) {
         ?>
         <be-south>
             <?php
             if (count($this->_page->southSections)) {
                 foreach ($this->_page->southSections as $section) {
-                    echo '<div class="be-section" id="be-section-' . $section->id . '">';
+                    echo '<div class="be-section" id="' . $section->id . '">';
                     $section->template->display();
                     echo '</div>';
                 }

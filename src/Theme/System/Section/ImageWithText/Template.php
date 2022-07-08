@@ -5,7 +5,7 @@ use Be\Theme\Section;
 
 class Template extends Section
 {
-    protected array $position = ['Middle', 'Center'];
+    public array $positions = ['middle', 'center'];
 
     public function display()
     {
@@ -14,81 +14,44 @@ class Template extends Section
 
             echo '<style type="text/css">';
 
-            echo '#image-with-text-' . $this->id . ' {';
-            echo 'background-color: ' . $this->config->backgroundColor . ';';
-            echo '}';
+            echo $this->getCssBackgroundColor('image-with-text');
+            echo $this->getCssPadding('image-with-text');
 
-            // 手机端
-            echo '@media (max-width: 768px) {';
-            echo '#image-with-text-' . $this->id . ' {';
-            if ($this->config->paddingTopMobile) {
-                echo 'padding-top: ' . $this->config->paddingTopMobile . 'px;';
-            }
-            if ($this->config->paddingBottomMobile) {
-                echo 'padding-bottom: ' . $this->config->paddingBottomMobile . 'px;';
-            }
-            echo '}';
-            echo '}';
-
-            // 平析端
-            echo '@media (min-width: 768px) {';
-            echo '#image-with-text-' . $this->id . ' {';
-            if ($this->config->paddingTopTablet) {
-                echo 'padding-top: ' . $this->config->paddingTopTablet . 'px;';
-            }
-            if ($this->config->paddingBottomTablet) {
-                echo 'padding-bottom: ' . $this->config->paddingBottomTablet . 'px;';
-            }
-            echo '}';
-            echo '}';
-
-            // 电脑端
-            echo '@media (min-width: 992px) {';
-            echo '#image-with-text-' . $this->id . ' {';
-            if ($this->config->paddingTopDesktop) {
-                echo 'padding-top: ' . $this->config->paddingTopDesktop . 'px;';
-            }
-            if ($this->config->paddingBottomDesktop) {
-                echo 'padding-bottom: ' . $this->config->paddingBottomDesktop . 'px;';
-            }
-            echo '}';
-            echo '}';
-
-            echo '#image-with-text-' . $this->id . ' .image-with-text-content {';
+            echo '#' . $this->id . ' .image-with-text-content {';
             echo 'background-color: ' . $this->config->contentBackgroundColor . ';';
             echo '}';
 
             // 手机端 图像 和 内容 均 100%
             echo '@media only screen and (max-width: 768px) {';
-            echo '#image-with-text-' . $this->id . ' {';
+            echo '#' . $this->id . ' image-with-text {';
             echo '}';
-            echo '#image-with-text-' . $this->id . ' .image-with-text-iamge {';
+            echo '#' . $this->id . ' .image-with-text-iamge {';
             echo 'width: 100%;';
             echo '}';
-            echo '#image-with-text-' . $this->id . ' .image-with-text-content {';
+            echo '#' . $this->id . ' .image-with-text-content {';
             echo 'width: 100%;';
             echo '}';
-            echo '#image-with-text-' . $this->id . ' .image-with-text-content-wrap {';
+            echo '#' . $this->id . ' .image-with-text-content-wrap {';
             echo 'padding: 25px 15px 30px;';
             echo '}';
             echo '}';
 
             // 电脑版，图像 50%, 内容 50%
             echo '@media only screen and (min-width: 769px) {';
-            echo '#image-with-text-' . $this->id . ' .image-with-text-container {';
+            echo '#' . $this->id . ' .image-with-text-container {';
             echo 'display: flex;';
             if ($this->config->imagePosition === 'right') { // 图像居右
                 echo 'flex-direction: row-reverse !important;';
             }
             echo '}';
-            echo '#image-with-text-' . $this->id . ' .image-with-text-image {';
+            echo '#' . $this->id . ' .image-with-text-image {';
             echo 'flex: 0 0 50%;';
             echo '}';
-            echo '#image-with-text-' . $this->id . ' .image-with-text-content {';
+            echo '#' . $this->id . ' .image-with-text-content {';
             echo 'flex: 0 0 50%;';
             echo 'position: relative;';
             echo '}';
-            echo '#image-with-text-' . $this->id . ' .image-with-text-content-wrap {';
+            echo '#' . $this->id . ' .image-with-text-content-wrap {';
             echo 'position: absolute;';
             echo 'top: 50%;';
             echo 'transform: translateY(-50%);';
@@ -97,11 +60,11 @@ class Template extends Section
             echo '}';
             echo '}';
 
-            echo '#image-with-text-' . $this->id . ' .image-with-text-image img {';
+            echo '#' . $this->id . ' .image-with-text-image img {';
             echo 'width: 100%;';
             echo '}';
 
-            echo '#image-with-text-' . $this->id . ' .image-with-text-image .no-image {';
+            echo '#' . $this->id . ' .image-with-text-image .no-image {';
             echo 'width: 100%;';
             echo 'height: 300px;';
             echo 'line-height: 300px;';
@@ -112,28 +75,28 @@ class Template extends Section
             echo 'background-color: rgba(35, 35, 35, 0.2);';
             echo '}';
 
-            echo '#image-with-text-' . $this->id . ' .image-with-text-title {';
+            echo '#' . $this->id . ' .image-with-text-title {';
             echo 'text-align: center;';
             echo 'font-size: ' . $this->config->contentTitleFontSize . 'px;';
             echo 'color: ' . $this->config->contentTitleColor . ';';
             echo '}';
 
-            echo '#image-with-text-' . $this->id . ' .image-with-text-description {';
+            echo '#' . $this->id . ' .image-with-text-description {';
             echo 'text-align: center;';
             echo 'font-size: ' . $this->config->contentDescriptionFontSize . 'px;';
             echo 'color: ' . $this->config->contentDescriptionColor . ';';
             echo 'margin-bottom: 35px;';
             echo '}';
 
-            echo '#image-with-text-' . $this->id . ' .image-with-text-button {';
+            echo '#' . $this->id . ' .image-with-text-button {';
             echo 'text-align: center;';
             echo '}';
 
             echo '</style>';
 
-            echo '<div id="image-with-text-' . $this->id . '">';
+            echo '<div class="image-with-text">';
 
-            if ($this->config->width === 'default') {
+            if ($this->position === 'middle' && $this->config->width === 'default') {
                 echo '<div class="be-container">';
             }
 
@@ -157,7 +120,7 @@ class Template extends Section
             echo '</div>';
             echo '</div>';
 
-            if ($this->config->width === 'default') {
+            if ($this->position === 'middle' && $this->config->width === 'default') {
                 echo '</div>';
             }
             echo '</div>';

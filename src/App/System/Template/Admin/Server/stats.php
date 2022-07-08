@@ -1,9 +1,9 @@
 <be-center>
     <div id="app" v-cloak>
         <div class="be-center">
-            <div class="be-center-title">服务器状态</div>
+            <div class="be-content-title">服务器状态</div>
 
-            <div class="be-center-body">
+            <div class="be-content-body">
 
                 <div class="be-row be-fs-120">
                     <div class="be-col-auto">

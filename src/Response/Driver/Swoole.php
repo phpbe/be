@@ -117,28 +117,21 @@ class Swoole extends Driver
     /**
      * 显示模板
      *
-     * @param string $template 模板名
-     * @param string $theme 主题名
+     * @param string $templateName 模板名
+     * @param string $themeName 主题名
      */
-    public function display(string $template = null, string $theme = null)
+    public function display(string $templateName = null, string $themeName = null)
     {
         $request = Be::getRequest();
-        if ($template === null) {
+        if ($templateName === null) {
             if ($request->isAdmin()) {
-                $template = 'App.' . $request->getAppName() . '.Admin.' . $request->getControllerName() . '.' . $request->getActionName();
+                $templateName = 'App.' . $request->getAppName() . '.Admin.' . $request->getControllerName() . '.' . $request->getActionName();
             } else {
-                $template = 'App.' . $request->getRoute();
+                $templateName = 'App.' . $request->getRoute();
             }
         }
 
-        if ($theme === null) {
-            $_theme = $request->get('_theme', false);
-            if ($_theme) {
-                $theme = $_theme;
-            }
-        }
-
-        $this->response->end($this->fetch($template, $theme));
+        $this->response->end($this->fetch($templateName, $themeName));
     }
 
     /**
