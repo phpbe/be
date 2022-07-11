@@ -50,71 +50,20 @@ body {
     overflow: hidden;
 }
 
-.be-west-collapse {
-    width: 64px !important;
+.be-west a {
+    display: inline-block;
 }
-
-/*
-.be-west .logo {
-    height: 60px;
-    line-height: 60px;
-    background: #22273b url("../images/logo.png") no-repeat;
-}
-
-.be-west .logo a{
-    display: block;
-    height: 60px;
-}
- */
 
 .be-west .logo {
     height: 60px;
     background-color: #22273b;
 }
 
-.be-west a {
-    display: inline-block;
-}
-
-.be-west .logo .be-row {
-    padding-top: 10px;
-}
-
+.be-west .logo img,
 .be-west .logo svg {
-    width: 40px;
-    height: 40px;
-    margin-left: 10px;
-    margin-right: 15px;
+    width: 200px;
+    height: 60px;
 }
-
-.be-west-collapse .logo-text-1,
-.be-west-collapse .logo-text-2 {
-    display: none;
-}
-
-.be-west .logo .logo-text-1,
-.be-west .logo .logo-text-2 {
-    color: #fff;
-    font-size: 16px;
-    line-height: 20px;
-    font-weight: lighter;
-}
-
-.be-west .logo .logo-text-1 span,
-.be-west .logo .logo-text-2 span {
-    color: #f60;
-    font-weight: normal;
-}
-
-.be-west .logo .logo-text-1 {
-    margin-top: 2px;
-}
-
-.be-west .logo .logo-text-2 {
-    padding-left: 35px;
-    margin-top: -5px;
-}
-
 
 .be-west .menu {
     position: absolute;
@@ -260,13 +209,13 @@ body {
     padding: 0 2rem;
 }
 
-.be-center .be-content-title {
+.be-center .be-page-title {
     font-size: 1.25rem;
     height: 3.5rem;
     line-height: 3.5rem;
 }
 
-.be-center .be-content-body {
+.be-center .be-page-content {
     padding: 1rem 1rem .5rem 1rem;
     background-color: #fff;
 }

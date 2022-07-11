@@ -267,23 +267,26 @@ abstract class ThemeEditor
             'url' => beAdminUrl('System.' . $this->themeType . '.setting', ['themeName' => $themeName, 'pageName' => 'default']),
         ];
 
-        $menuPickers = Be::getService('App.System.Admin.Menu')->getMenuPickers();
-        foreach ($menuPickers as $appMenuPicker) {
-            $children = [];
-            foreach ($appMenuPicker['menuPickers'] as $menuPicker) {
-                $children[] = [
-                    'value' => $menuPicker['route'],
-                    'label' => $menuPicker['label'],
-                    'url' => beAdminUrl('System.' . $this->themeType . '.setting', ['themeName' => $themeName, 'pageName' => $menuPicker['route']]),
+        // 后台功能不南要针对项磁的配置
+        if ($this->themeType === 'Theme') {
+            $menuPickers = Be::getService('App.System.Admin.Menu')->getMenuPickers();
+            foreach ($menuPickers as $appMenuPicker) {
+                $children = [];
+                foreach ($appMenuPicker['menuPickers'] as $menuPicker) {
+                    $children[] = [
+                        'value' => $menuPicker['route'],
+                        'label' => $menuPicker['label'],
+                        'url' => beAdminUrl('System.' . $this->themeType . '.setting', ['themeName' => $themeName, 'pageName' => $menuPicker['route']]),
+                    ];
+                }
+
+                $pageTree[] = [
+                    'value' => $appMenuPicker['app']->name,
+                    'label' => $appMenuPicker['app']->label,
+                    'icon' => $appMenuPicker['app']->icon,
+                    'children' => $children,
                 ];
             }
-
-            $pageTree[] = [
-                'value' => $appMenuPicker['app']->name,
-                'label' => $appMenuPicker['app']->label,
-                'icon' => $appMenuPicker['app']->icon,
-                'children' => $children,
-            ];
         }
 
         return $pageTree;
@@ -304,32 +307,33 @@ abstract class ThemeEditor
         //$page->label = '';
 
         // ------------------------------------------------------------------------------------------------------------- 生成页面预览网址
-        $route = $pageName === 'default' ? 'System.Preview.page' : $pageName;
-
-        $menuPicker = Be::getService('App.System.Admin.Menu')->getMenuPicker($route);
-
-        $params = [];
-        if (isset($menuPicker['annotation']->picker)) {
-            $table = Be::getTable($menuPicker['annotation']->picker['table']);
-            if (isset($menuPicker['annotation']->picker['grid']['filter'])) {
-                $table->where($menuPicker['annotation']->picker['grid']['filter']);
-            }
-
-            if ($table->count() === 0) {
-                throw new ServiceException('暂时无法配置此页面，请先添加内容！');
-            }
-
-            $key = $menuPicker['annotation']->picker['name'];
-            $value = $table->getValue($key);
-            $params[$key] = $value;
-        }
-
         if ($this->themeType === 'Theme') {
+            $route = $pageName === 'default' ? 'System.Preview.page' : $pageName;
+
+            $params = [];
+            $menuPicker = Be::getService('App.System.Admin.Menu')->getMenuPicker($route);
+            if (isset($menuPicker['annotation']->picker)) {
+                $table = Be::getTable($menuPicker['annotation']->picker['table']);
+                if (isset($menuPicker['annotation']->picker['grid']['filter'])) {
+                    $table->where($menuPicker['annotation']->picker['grid']['filter']);
+                }
+
+                if ($table->count() === 0) {
+                    throw new ServiceException('暂时无法配置此页面，请先添加内容！');
+                }
+
+                $key = $menuPicker['annotation']->picker['name'];
+                $value = $table->getValue($key);
+                $params[$key] = $value;
+            }
+
             $desktopPreviewUrl = beUrl($route, array_merge($params, ['be-theme' => $themeName]));
             $mobilePreviewUrl = beUrl($route, array_merge($params, ['be-theme' => $themeName, 'be-is-mobile' => 1]));
         } else {
-            $desktopPreviewUrl = beAdminUrl($route, array_merge($params, ['be-theme' => $themeName]));
-            $mobilePreviewUrl = beAdminUrl($route, array_merge($params, ['be-theme' => $themeName, 'be-is-mobile' => 1]));
+            $route = $pageName === 'default' ? 'System.Preview.page' : $pageName;
+
+            $desktopPreviewUrl = beAdminUrl($route, ['be-theme' => $themeName]);
+            $mobilePreviewUrl = beAdminUrl($route, ['be-theme' => $themeName, 'be-is-mobile' => 1]);
         }
         $page->desktopPreviewUrl = $desktopPreviewUrl;
         $page->mobilePreviewUrl = $mobilePreviewUrl;
@@ -349,7 +353,7 @@ abstract class ThemeEditor
             $property = $position . 'Sections';
             if ($configPage->$position !== 0) {
                 $sections = [];
-                if (count($configPage->$property)) {
+                if (isset($configPage->$property) && count($configPage->$property)) {
                     foreach ($configPage->$property as $sectionIndex => $sectionData) {
                         if ($sectionData['name'] === 'be-page-title') {
                             $sectionName = $configPage->pageTitleSection ?? ($this->themeType . '.System.PageTitle');

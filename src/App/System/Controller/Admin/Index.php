@@ -20,7 +20,7 @@ class Index
     public function index()
     {
         $request = Be::getRequest();
-        $response = Be::getResponse();
+        $response = Be::getResponse();;
 
         $my = Be::getAdminUser();
         if ($my->id === '') {
@@ -37,7 +37,7 @@ class Index
             $response->redirect(beAdminUrl('System.AdminUserLogin.logout'));
             return;
         }
-        
+
         unset($tupleAdminUser->password, $tupleAdminUser->salt, $tupleAdminUser->remember_me_token);
         $response->set('adminUser', $tupleAdminUser);
 

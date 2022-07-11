@@ -1,5 +1,5 @@
 <be-head>
-<link type="text/css" rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getWwwUrl(); ?>/admin/admin-user-login/css/login.css?v=20211230" />
+<link type="text/css" rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getWwwUrl(); ?>/admin/admin-user-login/css/login.css?v=20220711" />
 </be-head>
 
 <be-body>
@@ -9,19 +9,20 @@ $config = \Be\Be::getConfig('App.System.System');
 <div id="app" v-cloak>
 
     <div class="logo">
-
-        <div class="be-row">
-            <div class="be-col-auto">
-                <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                    <rect rx="5" height="40" width="40" y="0" x="0" fill="#ff6600"/>
-                    <path d="M6 19 L11 19 M11 32 L6 32 L6 7 L11 7 C20 7 20 19 11 19 C20 20 20 32 11 32 M35 7 L24 7 L24 32 L36 32 M25 19 L34 19" stroke="#ffffff" stroke-width="2" fill="none" />
-                </svg>
-            </div>
-            <div class="be-col">
-                <div class="logo-text"><span>B</span>eyond <span>E</span>xception</div>
-            </div>
-        </div>
-
+        <?php
+        $configTheme = \Be\Be::getConfig('AdminTheme.Admin.Theme');
+        if ($configTheme->logo !== '') {
+            echo '<img src="' . $configTheme->logo . '">';
+        } else {
+            ?>
+            <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                <rect rx="5" height="40" width="40" x="10" y="10" fill="#ff6600"/>
+                <path d="M16 29 L21 29 M21 42 L16 42 L16 17 L21 17 C30 17 30 29 21 29 C30 30 30 42 21 42 M45 17 L34 17 L34 42 L46 42 M35 29 L44 29" stroke="#ffffff" stroke-width="2" fill="none" />
+                <text x="65" y="35" style="font-size: 14px;"><tspan fill="#ff6600">B</tspan><tspan fill="#999999">eyound</tspan> <tspan fill="#ff6600">E</tspan><tspan fill="#999999">xception</tspan></text>
+            </svg>
+            <?php
+        }
+        ?>
     </div>
 
     <div class="login-box">

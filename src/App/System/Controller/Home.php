@@ -2,6 +2,7 @@
 
 namespace Be\App\System\Controller;
 
+use Be\App\ControllerException;
 use Be\Be;
 
 class Home

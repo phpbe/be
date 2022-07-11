@@ -33,7 +33,18 @@ class ConfigHelper
 
         $vars = get_object_vars($instance);
         foreach ($vars as $k => $v) {
-            $code .= '  public $' . $k . ' = ' . var_export($v, true) . ';' . "\n";
+            $varType = '';
+            if (is_array($v)) {
+                $varType .= 'array ';
+            } elseif (is_int($v)) {
+                $varType .= 'int ';
+            } elseif (is_float($v)) {
+                $varType .= 'float ';
+            } else {
+                $varType .= 'string ';
+            }
+
+            $code .= '  public ' . $varType . '$' . $k . ' = ' . var_export($v, true) . ';' . "\n";
         }
         $code .= "}\n";
 

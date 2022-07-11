@@ -1,9 +1,6 @@
 <?php
 namespace Be\Theme\System\Config;
 
-/**
- * @BeConfig("页面配置")
- */
 class Page
 {
 

@@ -175,9 +175,7 @@
         }
         ?>
 
-        <be-center>
-            <be-content-body></be-content-body>
-        </be-center>
+        <be-center></be-center>
     </div>
 </be-body>
 

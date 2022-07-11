@@ -5,11 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php echo $this->title; ?></title>
-    <?php
-    $beUrl = beUrl();
-    ?>
-    <base href="<?php echo $beUrl; ?>/">
-    <script>var beUrl = "<?php echo $beUrl; ?>"; </script>
+    <base href="<?php echo beUrl(); ?>/">
     <script src="https://libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.phpbe.com/scss/be.css" />
     <style type="text/css">
@@ -33,9 +29,11 @@
 </head>
 <body>
     <be-body>
-        <be-center>
-            <be-content-body></be-content-body>
-        </be-center>
+        <be-middle>
+            <be-center>
+                <be-page-content></be-page-content>
+            </be-center>
+        </be-middle>
     </be-body>
 </body>
 </html>

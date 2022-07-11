@@ -7,4 +7,13 @@ namespace Be\AdminTheme\Admin\Config;
 class Theme
 {
 
+    /**
+     * @BeConfigItem("Logo",
+     *     driver="FormItemStorageImage",
+     *     description="200px x 60px，左侧菜单折叠时，显示最左侧 64px"
+     * )
+     */
+    public string $logo = '';
+
+
 }

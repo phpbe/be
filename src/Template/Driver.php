@@ -9,16 +9,16 @@ use Be\Be;
  */
 class Driver
 {
-    public $title = ''; // 标题
-    public $metaKeywords = ''; // meta keywords
-    public $metaDescription = '';  // meta description
+    public string $title = ''; // 标题
+    public string $metaKeywords = ''; // meta keywords
+    public string $metaDescription = '';  // meta description
 
-    public $_tags = []; // 可用的标签
+    public array $_tags = []; // 可用的标签
 
     /**
      * @var object
      */
-    public $_page = null; // 页面配置信息对象
+    public object $_page; // 页面配置信息对象
 
     public function get(string $key, $default = null)
     {
@@ -44,6 +44,7 @@ class Driver
         <meta name="keywords" content="<?php echo $this->metaKeywords ?? ''; ?>">
         <meta name="description" content="<?php echo $this->metaDescription ?? ''; ?>">
         <meta name="applicable-device" content="pc,mobile">
+        <base href="<?php echo beUrl(); ?>/">
         <link rel="icon" href="favicon.ico" type="image/x-icon"/>
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
         <script src="https://libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>

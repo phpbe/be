@@ -35,9 +35,11 @@
 </head>
 <body>
 <be-body>
-    <be-center>
-        <be-content-body></be-content-body>
-    </be-center>
+    <be-middle>
+        <be-center>
+            <be-page-content></be-page-content>
+        </be-center>
+    </be-middle>
 </be-body>
 </body>
 </html>

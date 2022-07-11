@@ -16,22 +16,10 @@ body {
     margin: 50px 0 0 0;
 }
 
+.logo img,
 .logo svg {
-    width: 64px;
-    height: 64px;
-    margin: 0 20px;
-}
-
-.logo .logo-text {
-    text-align: left;
-    font-size: 28px;
-    line-height: 64px;
-    color: #999;
-    font-weight: lighter;
-}
-
-.logo .logo-text span {
-    color: #f60;
+    width: 300px;
+    height: 90px;
 }
 
 .login-box {

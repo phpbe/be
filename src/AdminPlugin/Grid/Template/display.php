@@ -294,14 +294,13 @@
             </div>
             <?php
         } else {
-            ?>
-            <div class="be-center-title"><?php echo $this->title; ?></div>
-            <?php
+            echo $this->tag0('be-page-title');
+            echo $this->title;
+            echo $this->tag1('be-page-title');
         }
+
+        echo $this->tag0('be-page-content');
         ?>
-
-        <div class="be-center-body">
-
             <el-form<?php
             $formUi = [
                 ':inline' => 'true',
@@ -856,10 +855,9 @@
             </el-drawer>
 
         </div>
-
-    </div>
-
     <?php
+    echo $this->tag1('be-page-content');
+
     if (isset($this->setting['js'])) {
         $js = array_merge($js, $this->setting['js']);
     }

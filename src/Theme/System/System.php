@@ -9,12 +9,7 @@
     <meta name="keywords" content="<?php echo $this->metaKeywords ?? ''; ?>">
     <meta name="description" content="<?php echo $this->metaDescription ?? ''; ?>">
     <meta name="applicable-device" content="pc,mobile">
-    <?php
-    $beUrl = beUrl();
-    $themeWwwUrl = \Be\Be::getProperty('Theme.System')->getWwwUrl();
-    ?>
-    <base href="<?php echo $beUrl; ?>/">
-    <script>var beUrl = "<?php echo $beUrl; ?>"; </script>
+    <base href="<?php echo beUrl(); ?>/">
     <link rel="icon" href="favicon.ico" type="image/x-icon"/>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
 
@@ -22,6 +17,9 @@
 
     <link rel="stylesheet" href="https://cdn.phpbe.com/scss/be.css"/>
 
+    <?php
+    $themeWwwUrl = \Be\Be::getProperty('Theme.System')->getWwwUrl();
+    ?>
     <link rel="stylesheet" href="<?php echo $themeWwwUrl; ?>/css/drawer.css"/>
     <script src="<?php echo $themeWwwUrl; ?>/js/drawer-menu.js"></script>
 

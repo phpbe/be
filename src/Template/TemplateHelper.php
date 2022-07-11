@@ -178,7 +178,7 @@ class TemplateHelper
             }
         }
 
-        foreach (['html', 'head', 'body', 'north', 'middle', 'west', 'center', 'east', 'south', 'be-page-title', 'be-page-content'] as $key) {
+        foreach (['be-page-title', 'be-page-content', 'west', 'east', 'north', 'south', 'center', 'middle', 'body', 'head', 'html',] as $key) {
             $pattern = '/<be-' . $key . '>(.*?)<\/be-' . $key . '>/s';
             if (preg_match($pattern, $codeHtml, $matches)) {
                 $codeHtml = preg_replace($pattern, '<?php $this->' . $key . '(); ?>', $codeHtml);
@@ -203,7 +203,7 @@ class TemplateHelper
         $codePhp .= "\n";
         $codePhp .= 'class ' . $className . ' extends ' . $extends . "\n";
         $codePhp .= '{' . "\n";
-        $codePhp .= '  public $_tags = ' . var_export($tags, true) . ';' . "\n";
+        $codePhp .= '  public array $_tags = ' . var_export($tags, true) . ';' . "\n";
         $codePhp .= '  public function html()' . "\n";
         $codePhp .= '  {' . "\n";
         $codePhp .= '    ?>' . "\n";
@@ -213,6 +213,7 @@ class TemplateHelper
 
         if (count($codeFunctions) > 0) {
             foreach ($codeFunctions as $key => $codeFunction) {
+                $codeFunction = trim($codeFunction);
 
                 switch ($key) {
                     case 'head':
@@ -233,12 +234,23 @@ class TemplateHelper
                         $codePhp .= '    echo $this->tag1(\'be-' . $key . '\');' . "\n";
                         $codePhp .= '}' . "\n\n";
                         break;
-                    case 'north':
                     case 'middle':
+                        $codePhp .= 'public function ' . $key . '()' . "\n";
+                        $codePhp .= '{' . "\n";
+                        $codePhp .= '  if ($this->_page->middle !== 0 || $this->_page->west !== 0 || $this->_page->east !== 0 || $this->_page->center !== 0) {' . "\n";
+                        $codePhp .= '    echo $this->tag0(\'be-' . $key . '\');' . "\n";
+                        $codePhp .= '    ?>' . "\n";
+                        $codePhp .= $codeFunction . "\n";
+                        $codePhp .= '    <?php' . "\n";
+                        $codePhp .= '    echo $this->tag1(\'be-' . $key . '\');' . "\n";
+                        $codePhp .= '  }' . "\n";
+                        $codePhp .= '}' . "\n\n";
+                        break;
+                    case 'north':
                     case 'west':
                     case 'center':
                     case 'east':
-                    case 'soutn':
+                    case 'south':
                         $codePhp .= 'public function ' . $key . '()' . "\n";
                         $codePhp .= '{' . "\n";
                         $codePhp .= '  if ($this->_page->' . $key . ' !== 0) {' . "\n";
@@ -266,6 +278,9 @@ class TemplateHelper
         }
 
         $codePhp .= '}' . "\n\n";
+
+        $pattern = '/\?>\s+<\?php/s';
+        $codePhp = preg_replace($pattern, "\n", $codePhp);
 
         file_put_contents($path, $codePhp, LOCK_EX);
         chmod($path, 0777);
