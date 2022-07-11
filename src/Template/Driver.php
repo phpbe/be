@@ -114,7 +114,6 @@ class Driver
             } else {
 
                 echo '<div class="be-container">';
-                echo '<div style="display: flex; justify-content: space-between;">';
 
                 $cols = 0;
                 $totalWidth = 0;
@@ -134,6 +133,17 @@ class Driver
                 }
 
                 $spacing = $cols > 1 ? ($cols - 1) * 20 : 0;
+
+                echo '<style type="text/css">';
+                echo '.middle-container{display: flex; justify-content: space-between;}';
+                echo '.west-container,.center-container,.east-container{flex:0 0 0%; overflow:hidden;}';
+                echo '@media (max-width: 992px) {';
+                echo '.west-container{display: none;}';
+                echo '.center-container{flex-basis:100%;}';
+                echo '.east-container{display: none;}';
+                echo '}';
+
+                echo '@media (min-width: 992px) {';
                 if ($this->_page->west !== 0) {
                     $widthRatio = (abs($this->_page->west) / $totalWidth);
                     if ($spacing > 0) {
@@ -142,9 +152,7 @@ class Driver
                         $widthStyle = $widthRatio * 100 . '%';
                     }
 
-                    echo '<div class="be-d-none be-d-md-block" style="flex: 0 0 ' . $widthStyle . ';">';
-                    $this->west();
-                    echo '</div>';
+                    echo '.west-container{flex-basis:'.$widthStyle.';}';
                 }
 
                 if ($this->_page->center !== 0) {
@@ -154,10 +162,7 @@ class Driver
                     } else {
                         $widthStyle = $widthRatio * 100 . '%';
                     }
-
-                    echo '<div style="flex: 0 0 ' . $widthStyle . ';">';
-                    $this->center();
-                    echo '</div>';
+                    echo '.center-container{flex-basis:'.$widthStyle.';}';
                 }
 
                 if ($this->_page->east !== 0) {
@@ -167,8 +172,26 @@ class Driver
                     } else {
                         $widthStyle = $widthRatio * 100 . '%';
                     }
+                    echo '.east-container{flex-basis:'.$widthStyle.';}';
+                }
+                echo '}';
+                echo '</style>';
 
-                    echo '<div class="be-d-none be-d-md-block" style="flex: 0 0 ' . $widthStyle . ';">';
+                echo '<div class="middle-container">';
+                if ($this->_page->west !== 0) {
+                    echo '<div class="west-container">';
+                    $this->west();
+                    echo '</div>';
+                }
+
+                if ($this->_page->center !== 0) {
+                    echo '<div class="center-container">';
+                    $this->center();
+                    echo '</div>';
+                }
+
+                if ($this->_page->east !== 0) {
+                    echo '<div class="east-container">';
                     $this->east();
                     echo '</div>';
                 }

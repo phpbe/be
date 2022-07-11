@@ -35,9 +35,8 @@ class Template extends Section
 
         // 手机端
         echo '@media (max-width: 991px) {';
-
         echo '#' . $this->id . ' {';
-        echo 'height: 5rem;';
+        echo 'height: 4rem;';
         echo '}';
 
         echo '#' . $this->id . ' .header-mobile {';
@@ -91,7 +90,7 @@ class Template extends Section
 
         echo '#' . $this->id . ' .header-mobile-logo {';
         echo 'flex: 0 1 auto;';
-        echo 'max-width: 120px;';
+        echo 'max-width: 160px;';
         echo '}';
 
         if ($this->config->logoType == 'text') {
@@ -107,7 +106,7 @@ class Template extends Section
         } else {
             echo '#' . $this->id . ' .header-mobile-logo img {';
             echo 'max-width: 100%;';
-            echo 'max-height: 90px;';
+            echo 'max-height: 3rem;';
             echo '}';
         }
 
