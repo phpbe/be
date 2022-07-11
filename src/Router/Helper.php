@@ -142,7 +142,7 @@ class Helper
 
             $appProperty = Be::getProperty('App.' . $app->name);
             $appName = $app->name;
-            $controllerDir = Be::getRuntime()->getRootPath() . $appProperty->getPath() . '/Controller';
+            $controllerDir = $appProperty->getPath() . '/Controller';
             if (!file_exists($controllerDir) && !is_dir($controllerDir)) continue;
 
             $controllers = scandir($controllerDir);

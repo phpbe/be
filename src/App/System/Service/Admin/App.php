@@ -27,7 +27,7 @@ class App
                     'name' => $appName,
                     'label' => $appProperty->getLabel(),
                     'icon' => $appProperty->getIcon(),
-                    'path' => $appProperty->getPath(),
+                    'path' => $appProperty->getRelativePath(),
                 ];
             }
 
@@ -133,7 +133,7 @@ class App
     {
         $rootPath = Be::getRuntime()->getRootPath();
         $property = Be::getProperty('App.' . $appName);
-        $src = $rootPath . $property->getPath() . '/www';
+        $src = $property->getPath() . '/www';
         if (is_dir($src)) {
             $dst = $rootPath . '/www/app/' . CaseConverter::camel2Hyphen($appName);
             Dir::copy($src, $dst, true);

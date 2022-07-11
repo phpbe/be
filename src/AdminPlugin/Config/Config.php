@@ -28,7 +28,7 @@ class Config extends Driver
         $response->set('title', $this->setting['title'] ?? ($appProperty->getLabel() . '配置'));
 
         $configs = [];
-        $dir = Be::getRuntime()->getRootPath() . Be::getProperty('App.' . $appName)->getPath() . '/Config';
+        $dir =  Be::getProperty('App.' . $appName)->getPath() . '/Config';
         if (file_exists($dir) && is_dir($dir)) {
             $fileNames = scandir($dir);
             foreach ($fileNames as $fileName) {

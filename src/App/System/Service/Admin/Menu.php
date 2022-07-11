@@ -356,7 +356,7 @@ class Menu
 
             $appMenuPickers = [];
             $appProperty = Be::getProperty('App.' . $app->name);
-            $controllerDir = Be::getRuntime()->getRootPath() . $appProperty->getPath() . '/Controller';
+            $controllerDir = $appProperty->getPath() . '/Controller';
             $controllerNames = scandir($controllerDir);
             foreach ($controllerNames as $controllerName) {
                 if ($controllerName === '.' || $controllerName === '..' || is_dir($controllerName . '/' . $controllerName)) continue;

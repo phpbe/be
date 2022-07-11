@@ -24,7 +24,7 @@ class AdminMenu
 
             $appProperty = Be::getProperty('App.'.$app->name);
             $appName = $app->name;
-            $controllerDir = Be::getRuntime()->getRootPath() . $appProperty->getPath(). '/Controller/Admin';
+            $controllerDir = $appProperty->getPath(). '/Controller/Admin';
             if (!file_exists($controllerDir) && !is_dir($controllerDir)) continue;
 
             $app->route = '';

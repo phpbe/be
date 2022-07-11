@@ -94,7 +94,7 @@ class AdminPermission
 
             $children = [];
             $appProperty = Be::getProperty('App.' . $appName);
-            $controllerDir = Be::getRuntime()->getRootPath() . $appProperty->getPath() . '/Controller/Admin';
+            $controllerDir = $appProperty->getPath() . '/Controller/Admin';
             if (!file_exists($controllerDir) && !is_dir($controllerDir)) continue;
             $controllers = scandir($controllerDir);
             foreach ($controllers as $controller) {

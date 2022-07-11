@@ -23,7 +23,7 @@ class Task
         $sql = 'SELECT * FROM system_task WHERE app=' . $db->quoteValue($appName);
         $dbTasks = $db->getKeyObjects($sql, null, 'name');
 
-        $dir = Be::getRuntime()->getRootPath() . Be::getProperty('App.' . $appName)->getPath() . '/Task';
+        $dir =  Be::getProperty('App.' . $appName)->getPath() . '/Task';
         if (file_exists($dir) && is_dir($dir)) {
             $fileNames = scandir($dir);
             foreach ($fileNames as $fileName) {

@@ -30,7 +30,7 @@ abstract class ThemeEditor
                 $themes[] = (object)[
                     'name' => $name,
                     'label' => $themProperty->getLabel(),
-                    'path' => $themProperty->getPath(),
+                    'path' => $themProperty->getRelativePath(),
                     'previewImageUrl' => $themProperty->getPreviewImageUrl(),
                     'is_default' => $name === $configTheme->default ? '1' : '0',
                 ];

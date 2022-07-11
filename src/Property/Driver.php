@@ -31,7 +31,7 @@ abstract class Driver
         $name = substr($name, strrpos($name, '\\') + 1);
         $this->name = $name;
 
-        $this->path = str_replace(Be::getRuntime()->getRootPath(), '', substr($path, 0, strrpos($path, DIRECTORY_SEPARATOR)));
+        $this->path = substr($path, 0, strrpos($path, DIRECTORY_SEPARATOR));
     }
 
     /**
@@ -72,6 +72,16 @@ abstract class Driver
     public function getPath(): string
     {
         return $this->path;
+    }
+
+    /**
+     * 相对路径
+     *
+     * @return string
+     */
+    public function getRelativePath(): string
+    {
+        return str_replace(Be::getRuntime()->getRootPath(), '', $this->path);
     }
 
     /**

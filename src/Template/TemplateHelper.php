@@ -22,8 +22,7 @@ class TemplateHelper
         $templateType = $admin ? 'AdminTemplate' : 'Template';
 
         $themeProperty = Be::getProperty($themeType . '.' . $themeName);
-        $runtime = Be::getRuntime();
-        $fileTheme = $runtime->getRootPath() . $themeProperty->getPath() . '/' . $themeName . '.php';
+        $fileTheme = $themeProperty->getPath() . '/' . $themeName . '.php';
         if (!file_exists($fileTheme)) {
             throw new RuntimeException($themeType . ' ' . $themeName . ' does not exist!');
         }
@@ -32,7 +31,7 @@ class TemplateHelper
         $type = array_shift($parts);
         $name = array_shift($parts);
 
-        $path = $runtime->getRootPath() . '/data/Runtime/' . $templateType . '/' . $themeName . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
+        $path = Be::getRuntime()->getRootPath() . '/data/Runtime/' . $templateType . '/' . $themeName . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
@@ -43,7 +42,7 @@ class TemplateHelper
 
         $tags = [];
         foreach (['be-body', 'be-north', 'be-middle', 'be-west', 'be-center', 'be-east', 'be-south', 'be-page-title', 'be-page-content', 'be-section-title', 'be-section-content'] as $key) {
-            $wrapperPath = Be::getRuntime()->getRootPath() . $themeProperty->getPath() . '/Tag/' . $key . '.php';
+            $wrapperPath = $themeProperty->getPath() . '/Tag/' . $key . '.php';
             if (file_exists($wrapperPath)) {
                 $wrapperContent = file_get_contents($wrapperPath);
                 $wrapperParts = explode('|||', $wrapperContent);
@@ -63,7 +62,7 @@ class TemplateHelper
         $extends = '\\Be\\Template\\Driver';
 
         $property = Be::getProperty($type . '.' . $name);
-        $fileTemplate = $runtime->getRootPath() . $property->getPath() . '/Template/' . implode('/', $parts) . '.php';
+        $fileTemplate = $property->getPath() . '/Template/' . implode('/', $parts) . '.php';
         if (file_exists($fileTemplate)) {
             $contentTemplate = file_get_contents($fileTemplate);
             $contentTemplate = str_replace('\\\\', '\\\\\\\\', $contentTemplate);
@@ -85,7 +84,7 @@ class TemplateHelper
                         $tmpName = array_shift($includes);
 
                         $tmpProperty = Be::getProperty($tmpType . '.' . $tmpName);
-                        $fileInclude = $runtime->getRootPath() . $tmpProperty->getPath() . '/' . $templateType . '/' . implode('/', $includes) . '.php';
+                        $fileInclude = $tmpProperty->getPath() . '/' . $templateType . '/' . implode('/', $includes) . '.php';
                         if (!file_exists($fileInclude)) {
                             // 模板中包含的文件 $m 不存在
                             throw new RuntimeException($templateType . ' include file ' . $m . ' does not exist!');
