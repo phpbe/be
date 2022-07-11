@@ -29,6 +29,7 @@ class Theme
                 if (isset($configPage->$property) && is_array($configPage->$property) && count($configPage->$property) > 0) {
                     $sections = [];
                     foreach ($configPage->$property as $sectionIndex => $sectionData) {
+
                         $sectionName = $sectionData['name'];
                         if ($sectionData['name'] === 'be-page-title') {
                             $sectionName = $configPage->pageTitleSection ?? ($themeType . '.System.PageTitle');
@@ -46,7 +47,7 @@ class Theme
                     }
                     $page->$property = $sections;
                 } else {
-                    $configPage->$property = [];
+                    $page->$property = [];
                 }
             }
         }
@@ -98,7 +99,7 @@ class Theme
                         if (!isset($item['config'])) {
                             $class = '\\Be\\' . $type . '\\' . $name . '\\Section\\' . $classPart . '\\Item\\' . $item['name'];
                             if (!class_exists($class)) {
-                                throw new ServiceException('Section config item (' . $sectionName . '.Item.' . $item['name'] . ') does not exist!');
+                                throw new ServiceException('Section item config (' . $sectionName . '.Item.' . $item['name'] . ') does not exist!');
                             }
 
                             $item['config'] = new $class();
@@ -116,7 +117,7 @@ class Theme
                         if (!isset($item['config'])) {
                             $class = '\\Be\\' . $type . '\\' . $name . '\\Section\\' . $classPart . '\\Item\\' . $item['name'];
                             if (!class_exists($class)) {
-                                throw new ServiceException('Section config item (' . $sectionName . '.Item.' . $item['name'] . ') does not exist!');
+                                throw new ServiceException('Section item config  (' . $sectionName . '.Item.' . $item['name'] . ') does not exist!');
                             }
 
                             $item['config'] = new $class();

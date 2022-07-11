@@ -6,7 +6,7 @@ class CaseConverter
 {
 
     /**
-     * 下划线转驼峰，不特殊处理首字母
+     * 下划线转驼峰
      *
      * @param string $str
      * @param bool|null $ucFirst 是否转换首字母大小写， null：不转换、true：转为大写、false：转为小写
@@ -29,7 +29,6 @@ class CaseConverter
         return $str;
     }
 
-
     /**
      * 下划线转首字母大写驼峰
      *
@@ -40,7 +39,6 @@ class CaseConverter
     {
         return self::underline2Camel($str, true);
     }
-
 
     /**
      * 下划线转首字母小写驼峰
@@ -53,6 +51,51 @@ class CaseConverter
         return self::underline2Camel($str, false);
     }
 
+    /**
+     * 连字号（中划线）转驼峰
+     *
+     * @param string $str
+     * @param bool|null $ucFirst 是否转换首字母大小写， null：不转换、true：转为大写、false：转为小写
+     * @return string
+     */
+    public static function Hyphen2Camel(string $str, bool $ucFirst = null):string
+    {
+        $str = str_replace([
+            '-a', '-b', '-c', '-d', '-e', '-f', '-g', '-h', '-i', '-j', '-k', '-l', '-m', '-n', '-o', '-p', '-q', '-r', '-s', '-t', '-u', '-v', '-w', '-x', '-y', '-z'
+        ], [
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+        ], $str);
+
+        if ($ucFirst === true) {
+            return ucfirst($str);
+        } elseif ($ucFirst === false) {
+            return lcfirst($str);
+        }
+
+        return $str;
+    }
+
+    /**
+     * 连字号（中划线）转首字母大写驼峰
+     *
+     * @param string $str
+     * @return string
+     */
+    public static function Hyphen2CamelUcFirst(string $str):string
+    {
+        return self::Hyphen2Camel($str, true);
+    }
+
+    /**
+     * 连字号（中划线）转转首字母小写驼峰
+     *
+     * @param string $str
+     * @return string
+     */
+    public static function Hyphen2CamelLcFirst(string $str):string
+    {
+        return self::Hyphen2Camel($str, false);
+    }
 
     /**
      * 驼峰转下划线

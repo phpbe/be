@@ -19,6 +19,9 @@ abstract class Section
     // 配置数据
     public object $config;
 
+    // 调用此部件的主题
+    public object $theme;
+
     /**
      * 输出内容
      *

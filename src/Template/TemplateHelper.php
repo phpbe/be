@@ -40,8 +40,9 @@ class TemplateHelper
         }
 
         $contentTheme = file_get_contents($fileTheme);
+
         $tags = [];
-        foreach (['be-body', 'be-north', 'be-middle', 'be-west', 'be-center', 'be-east', 'be-south', 'be-page-title', 'be-page-content'] as $key) {
+        foreach (['be-body', 'be-north', 'be-middle', 'be-west', 'be-center', 'be-east', 'be-south', 'be-page-title', 'be-page-content', 'be-section-title', 'be-section-content'] as $key) {
             $wrapperPath = Be::getRuntime()->getRootPath() . $themeProperty->getPath() . '/Tag/' . $key . '.php';
             if (file_exists($wrapperPath)) {
                 $wrapperContent = file_get_contents($wrapperPath);
@@ -52,47 +53,12 @@ class TemplateHelper
                 }
             }
 
-            $beginWrapper = null;
-            $endWrapper = null;
-            $pattern = '/<' . $key . '-begin>(.*)<\/' . $key . '-begin>/s';
-            if (preg_match($pattern, $contentTheme, $matches)) {
-                $beginWrapper = $matches[1];
-                $contentTheme = preg_replace($pattern, '<' . $key . '>', $contentTheme);
-            } else {
-                $beginWrapper = '<div class="' . $key . '">';
-            }
-
-            $pattern = '/<' . $key . '-end>(.*)<\/' . $key . '-end>/s';
-            if (preg_match($pattern, $contentTheme, $matches)) {
-                $endWrapper = $matches[1];
-                $contentTheme = preg_replace($pattern, '</' . $key . '>', $contentTheme);
-            } else {
-                $endWrapper = '</div>';
-            }
-
-            $tags[$key] = [$beginWrapper, $endWrapper];
-        }
-
-        $codeUse = '';
-        $pattern = '/use\s+(.+);/';
-        $uses = null;
-        if (preg_match_all($pattern, $contentTheme, $matches)) {
-            $uses = $matches[1];
-            foreach ($matches[1] as $m) {
-                $codeUse .= 'use ' . $m . ';' . "\n";
-            }
-        }
-
-        $codePre = '';
-        $pattern = '/<\?php(.*?)\?>\s+<be-html>/s';
-        if (preg_match($pattern, $contentTheme, $matches)) {
-            $codePreTheme = trim($matches[1]);
-            $codePreTheme = preg_replace('/use\s+(.+);/', '', $codePreTheme);
-            $codePreTheme = preg_replace('/\s+$/m', '', $codePreTheme);
-            $codePre = $codePreTheme . "\n";
+            $tags[$key] = ['<div class="' . $key . '">', '</div>'];
         }
 
         $codeHtml = '';
+
+        $codeFunctions = [];
 
         $extends = '\\Be\\Template\\Driver';
 
@@ -135,125 +101,75 @@ class TemplateHelper
             $pattern = '/<be-html>(.*?)<\/be-html>/s';
             if (preg_match($pattern, $contentTemplate, $matches)) { // 查找替换 html
                 $codeHtml = trim($matches[1]);
-
-                if (preg_match_all('/use\s+(.+);/', $contentTemplate, $matches)) {
-                    foreach ($matches[1] as $m) {
-                        $codeUse .= 'use ' . $m . ';' . "\n";
-                    }
-                }
-
-                $pattern = '/<\?php(.*?)\?>\s*<be-html>/s';
-                if (preg_match($pattern, $contentTemplate, $matches)) {
-                    $codePre = trim($matches[1]);
-                    $codePre = preg_replace('/use\s+(.+);/', '', $codePre);
-                    $codePre = preg_replace('/\s+$/m', '', $codePre);
-                }
-
             } else {
 
                 if (preg_match($pattern, $contentTheme, $matches)) {
                     $codeHtml = trim($matches[1]);
 
-                    $templateNameNoTags = true;
                     $pattern = '/<be-head>(.*?)<\/be-head>/s';
                     if (preg_match($pattern, $contentTemplate, $matches)) { // 查找替换 head
-                        $codeHead = $matches[1];
-                        $codeHtml = preg_replace($pattern, $codeHead, $codeHtml);
-                        $templateNameNoTags = false;
+                        $codeHtml = preg_replace($pattern, '<?php $this->head(); ?>', $codeHtml);
+                        $codeFunctions['head'] = $matches[1];
                     }
 
                     $pattern = '/<be-body>(.*?)<\/be-body>/s';
                     if (preg_match($pattern, $contentTemplate, $matches)) { // 查找替换 body
-                        $codeBody = $matches[1];
-                        $codeHtml = preg_replace($pattern, $tags['be-body'][0] . $codeBody . $tags['be-body'][1], $codeHtml);
-                        $templateNameNoTags = false;
+                        $codeHtml = preg_replace($pattern, '<?php $this->body(); ?>', $codeHtml);
+                        $codeFunctions['body'] = $matches[1];
                     } else {
 
                         $pattern = '/<be-north>(.*?)<\/be-north>/s';
                         if (preg_match($pattern, $contentTemplate, $matches)) { // 查找替换 north
-                            $codeNorth = $matches[1];
-                            $codeHtml = preg_replace($pattern, $tags['be-north'][0] . $codeNorth . $tags['be-north'][1], $codeHtml);
-                            $templateNameNoTags = false;
+                            $codeHtml = preg_replace($pattern, '<?php $this->north(); ?>', $codeHtml);
+                            $codeFunctions['north'] = $matches[1];
                         }
 
                         $pattern = '/<be-middle>(.*?)<\/be-middle>/s';
                         if (preg_match($pattern, $contentTemplate, $matches)) { // 查找替换 north
-                            $codeMiddle = $matches[1];
-                            $codeHtml = preg_replace($pattern, $tags['be-middle'][0] . $codeMiddle . $tags['be-middle'][1], $codeHtml);
-                            $templateNameNoTags = false;
+                            $codeHtml = preg_replace($pattern, '<?php $this->middle(); ?>', $codeHtml);
+                            $codeFunctions['middle'] = $matches[1];
                         } else {
                             $pattern = '/<be-west>(.*?)<\/be-west>/s';
                             if (preg_match($pattern, $contentTemplate, $matches)) { // 查找替换 west
-                                $codeWest = $matches[1];
-                                $codeHtml = preg_replace($pattern, $tags['be-west'][0] . $codeWest . $tags['be-west'][1], $codeHtml);
-                                $templateNameNoTags = false;
+                                $codeHtml = preg_replace($pattern, '<?php $this->west(); ?>', $codeHtml);
+                                $codeFunctions['west'] = $matches[1];
                             }
 
                             $pattern = '/<be-center>(.*?)<\/be-center>/s';
                             if (preg_match($pattern, $contentTemplate, $matches)) { // 查找替换 center
-                                $codeCenter = $matches[1];
-                                $codeHtml = preg_replace($pattern, $tags['be-center'][0] . $codeCenter . $tags['be-center'][1], $codeHtml);
-                                $templateNameNoTags = false;
+                                $codeHtml = preg_replace($pattern, '<?php $this->center(); ?>', $codeHtml);
+                                $codeFunctions['center'] = $matches[1];;
                             } else {
                                 $pattern = '/<be-page-title>(.*?)<\/be-page-title>/s';
-                                if (preg_match($pattern, $contentTemplate, $matches)) { // 查找替换 center
-                                    $codeCenterTitle = $matches[1];
-                                    $codeHtml = preg_replace($pattern, $tags['be-page-title'][0] . $codeCenterTitle . $tags['be-page-title'][1], $codeHtml);
-                                    $templateNameNoTags = false;
+                                if (preg_match($pattern, $contentTemplate, $matches)) { // 查找替换 page-title
+                                    $codeHtml = preg_replace($pattern, '<?php $this->pageTitle(); ?>', $codeHtml);
+                                    $codeFunctions['page-title'] = $matches[1];
                                 }
 
                                 $pattern = '/<be-page-content>(.*?)<\/be-page-content>/s';
-                                if (preg_match($pattern, $contentTemplate, $matches)) { // 查找替换 content
-                                    $codeCenterBody = $matches[1];
-                                    $codeHtml = preg_replace($pattern, $tags['be-page-content'][0] . $codeCenterBody . $tags['be-page-content'][1], $codeHtml);
-                                    $templateNameNoTags = false;
+                                if (preg_match($pattern, $contentTemplate, $matches)) { // 查找替换 page-content
+                                    $codeHtml = preg_replace($pattern, '<?php $this->pageContent(); ?>', $codeHtml);
+                                    $codeFunctions['page-content'] = $matches[1];
                                 }
                             }
 
                             $pattern = '/<be-east>(.*?)<\/be-east>/s';
                             if (preg_match($pattern, $contentTemplate, $matches)) { // 查找替换 east
-                                $codeEast = $matches[1];
-                                $codeHtml = preg_replace($pattern, $tags['be-east'][0] . $codeEast . $tags['be-east'][1], $codeHtml);
-                                $templateNameNoTags = false;
+                                $codeHtml = preg_replace($pattern, '<?php $this->east(); ?>', $codeHtml);
+                                $codeFunctions['east'] = $matches[1];
                             }
                         }
 
                         $pattern = '/<be-south>(.*?)<\/be-south>/s';
                         if (preg_match($pattern, $contentTemplate, $matches)) { // 查找替换 north
-                            $codeSouth = $matches[1];
-                            $codeHtml = preg_replace($pattern, $tags['be-south'][0] . $codeSouth . $tags['be-south'][1], $codeHtml);
-                            $templateNameNoTags = false;
+                            $codeHtml = preg_replace($pattern, '<?php $this->south(); ?>', $codeHtml);
+                            $codeFunctions['south'] = $matches[1];
                         }
                     }
-
-                    // 没有指定标签，所有内容放放 content
-                    if ($templateNameNoTags) {
-                        $pattern = '/<be-page-content>(.*?)<\/be-page-content>/s';
-                        $codeHtml = preg_replace($pattern, $tags['be-page-content'][0] . $contentTemplate . $tags['be-page-content'][1], $codeHtml);
-                    }
-                }
-
-                $pattern = '/use\s+(.+);/';
-                if (preg_match_all($pattern, $contentTemplate, $matches)) {
-                    foreach ($matches[1] as $m) {
-                        if ($uses !== null && !in_array($m, $uses)) {
-                            $codeUse .= 'use ' . $m . ';' . "\n";
-                        }
-                    }
-                }
-
-                $pattern = '/<\?php(.*?)\?>\s+<be-(?:html|head|body|north|middle|west|center|east|south|page-title|page-content)>/s';
-                if (preg_match($pattern, $contentTemplate, $matches)) {
-                    $codePreTemplate = trim($matches[1]);
-                    $codePreTemplate = preg_replace('/use\s+(.+);/', '', $codePreTemplate);
-                    $codePreTemplate = preg_replace('/\s+$/m', '', $codePreTemplate);
-
-                    $codePre .= $codePreTemplate . "\n";
                 }
             }
 
         } else {
-
             $pattern = '/<be-html>(.*?)<\/be-html>/s';
 
             // 无 template 的页面，直接使用 theme
@@ -262,27 +178,18 @@ class TemplateHelper
             }
         }
 
-        foreach (['be-html', 'be-head'] as $key) {
-            if (strpos($codeHtml, '<' . $key . '>') !== false) {
-                $codeHtml = str_replace('<' . $key . '>', '', $codeHtml);
-            }
+        foreach (['html', 'head', 'body', 'north', 'middle', 'west', 'center', 'east', 'south', 'be-page-title', 'be-page-content'] as $key) {
+            $pattern = '/<be-' . $key . '>(.*?)<\/be-' . $key . '>/s';
+            if (preg_match($pattern, $codeHtml, $matches)) {
+                $codeHtml = preg_replace($pattern, '<?php $this->' . $key . '(); ?>', $codeHtml);
 
-            if (strpos($codeHtml, '</' . $key . '>') !== false) {
-                $codeHtml = str_replace('</' . $key . '>', '', $codeHtml);
-            }
-        }
-
-        foreach (['be-body', 'be-north', 'be-middle', 'be-west', 'be-center', 'be-east', 'be-south', 'be-page-title', 'be-page-content',] as $key) {
-            if (strpos($codeHtml, '<' . $key . '>') !== false) {
-                $codeHtml = str_replace('<' . $key . '>', $tags[$key][0], $codeHtml);
-            }
-
-            if (strpos($codeHtml, '</' . $key . '>') !== false) {
-                $codeHtml = str_replace('</' . $key . '>', $tags[$key][1], $codeHtml);
+                $codeBody = $matches[1];
+                $codeBody = trim($codeBody);
+                if ($codeBody !== '') {
+                    $codeFunctions[$key] = $codeBody;
+                }
             }
         }
-
-        $codeVars = '';
 
         $className = array_pop($parts);
 
@@ -293,21 +200,72 @@ class TemplateHelper
 
         $codePhp = '<?php' . "\n";
         $codePhp .= 'namespace ' . $namespace . ";\n\n";
-        $codePhp .= $codeUse;
         $codePhp .= "\n";
         $codePhp .= 'class ' . $className . ' extends ' . $extends . "\n";
         $codePhp .= '{' . "\n";
-        $codePhp .= $codeVars;
-        $codePhp .= "\n";
-        $codePhp .= '  public function display()' . "\n";
+        $codePhp .= '  public $_tags = ' . var_export($tags, true) . ';' . "\n";
+        $codePhp .= '  public function html()' . "\n";
         $codePhp .= '  {' . "\n";
-        $codePhp .= $codePre;
         $codePhp .= '    ?>' . "\n";
         $codePhp .= $codeHtml . "\n";
         $codePhp .= '    <?php' . "\n";
-        $codePhp .= '  }' . "\n";
-        $codePhp .= '}' . "\n";
-        $codePhp .= "\n";
+        $codePhp .= '  }' . "\n\n";
+
+        if (count($codeFunctions) > 0) {
+            foreach ($codeFunctions as $key => $codeFunction) {
+
+                switch ($key) {
+                    case 'head':
+                        $codePhp .= 'public function ' . $key . '()' . "\n";
+                        $codePhp .= '{' . "\n";
+                        $codePhp .= '    ?>' . "\n";
+                        $codePhp .= $codeFunction . "\n";
+                        $codePhp .= '    <?php' . "\n";
+                        $codePhp .= '}' . "\n\n";
+                        break;
+                    case 'body':
+                        $codePhp .= 'public function ' . $key . '()' . "\n";
+                        $codePhp .= '{' . "\n";
+                        $codePhp .= '    echo $this->tag0(\'be-' . $key . '\');' . "\n";
+                        $codePhp .= '    ?>' . "\n";
+                        $codePhp .= $codeFunction . "\n";
+                        $codePhp .= '    <?php' . "\n";
+                        $codePhp .= '    echo $this->tag1(\'be-' . $key . '\');' . "\n";
+                        $codePhp .= '}' . "\n\n";
+                        break;
+                    case 'north':
+                    case 'middle':
+                    case 'west':
+                    case 'center':
+                    case 'east':
+                    case 'soutn':
+                        $codePhp .= 'public function ' . $key . '()' . "\n";
+                        $codePhp .= '{' . "\n";
+                        $codePhp .= '  if ($this->_page->' . $key . ' !== 0) {' . "\n";
+                        $codePhp .= '    echo $this->tag0(\'be-' . $key . '\');' . "\n";
+                        $codePhp .= '    ?>' . "\n";
+                        $codePhp .= $codeFunction . "\n";
+                        $codePhp .= '    <?php' . "\n";
+                        $codePhp .= '    echo $this->tag1(\'be-' . $key . '\');' . "\n";
+                        $codePhp .= '  }' . "\n";
+                        $codePhp .= '}' . "\n\n";
+                        break;
+                    case 'page-title':
+                    case 'page-content':
+                        $codePhp .= 'public function ' . \Be\Util\Str\CaseConverter::Hyphen2CamelLcFirst($key) . '()' . "\n";
+                        $codePhp .= '{' . "\n";
+                        $codePhp .= '    echo $this->tag0(\'be-' . $key . '\');' . "\n";
+                        $codePhp .= '    ?>' . "\n";
+                        $codePhp .= $codeFunction . "\n";
+                        $codePhp .= '    <?php' . "\n";
+                        $codePhp .= '    echo $this->tag1(\'be-' . $key . '\');' . "\n";
+                        $codePhp .= '}' . "\n\n";
+                        break;
+                }
+            }
+        }
+
+        $codePhp .= '}' . "\n\n";
 
         file_put_contents($path, $codePhp, LOCK_EX);
         chmod($path, 0777);

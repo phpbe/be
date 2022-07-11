@@ -13,6 +13,13 @@ class Driver
     public $metaKeywords = ''; // meta keywords
     public $metaDescription = '';  // meta description
 
+    public $_tags = []; // 可用的标签
+
+    /**
+     * @var object
+     */
+    public $_page = null; // 页面配置信息对象
+
     public function get(string $key, $default = null)
     {
         if (isset($this->$key)) return $this->$key;
@@ -21,7 +28,284 @@ class Driver
 
     public function display()
     {
-
+        $this->html();
     }
 
+    public function html()
+    {
+        ?>
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+        <title><?php echo $this->title; ?></title>
+        <meta name="keywords" content="<?php echo $this->metaKeywords ?? ''; ?>">
+        <meta name="description" content="<?php echo $this->metaDescription ?? ''; ?>">
+        <meta name="applicable-device" content="pc,mobile">
+        <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+        <script src="https://libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.phpbe.com/scss/be.css"/>
+        <?php $this->head(); ?>
+    </head>
+<body>
+    <?php $this->body(); ?>
+</body>
+</html>
+        <?php
+    }
+
+
+    public function head()
+    {
+    }
+
+    public function body()
+    {
+        $this->north();
+        $this->middle();
+        $this->south();
+    }
+
+    public function north()
+    {
+        if ($this->_page->north !== 0) {
+            echo $this->tag0('be-north');
+            if (count($this->_page->northSections)) {
+                foreach ($this->_page->northSections as $section) {
+                    echo '<div class="be-section" id="' . $section->id . '">';
+                    $section->template->theme = $this;
+                    $section->template->display();
+                    echo '</div>';
+                }
+            }
+            echo $this->tag1('be-north');
+        }
+    }
+
+    public function middle()
+    {
+        if ($this->_page->middle !== 0 || $this->_page->west !== 0 || $this->_page->east !== 0 || $this->_page->center !== 0) {
+            echo $this->tag0('be-middle');
+            if ($this->_page->middle !== 0) {
+                if (count($this->_page->middleSections)) {
+                    foreach ($this->_page->middleSections as $section) {
+                        echo '<div class="be-section" id="' . $section->id . '">';
+
+                        $section->template->theme = $this;
+
+                        if ($section->key === 'be-page-title') {
+                            $section->template->before();
+                            $this->pageTitle();
+                            $section->template->after();
+                        } else if ($section->key === 'be-page-content') {
+                            $section->template->before();
+                            $this->pageContent();
+                            $section->template->after();
+                        } else {
+                            $section->template->display();
+                        }
+
+                        echo '</div>';
+                    }
+                }
+            } else {
+
+                echo '<div class="be-container">';
+                echo '<div style="display: flex; justify-content: space-between;">';
+
+                $cols = 0;
+                $totalWidth = 0;
+                if ($this->_page->west !== 0) {
+                    $totalWidth += abs($this->_page->west);
+                    $cols++;
+                }
+
+                if ($this->_page->center !== 0) {
+                    $totalWidth += abs($this->_page->center);
+                    $cols++;
+                }
+
+                if ($this->_page->east !== 0) {
+                    $totalWidth += abs($this->_page->east);
+                    $cols++;
+                }
+
+                $spacing = $cols > 1 ? ($cols - 1) * 20 : 0;
+                if ($this->_page->west !== 0) {
+                    $widthRatio = (abs($this->_page->west) / $totalWidth);
+                    if ($spacing > 0) {
+                        $widthStyle = 'calc((100% - ' . $spacing . 'px) * ' . $widthRatio . ')';
+                    } else {
+                        $widthStyle = $widthRatio * 100 . '%';
+                    }
+
+                    echo '<div class="be-d-none be-d-md-block" style="flex: 0 0 ' . $widthStyle . ';">';
+                    $this->west();
+                    echo '</div>';
+                }
+
+                if ($this->_page->center !== 0) {
+                    $widthRatio = (abs($this->_page->center) / $totalWidth);
+                    if ($spacing > 0) {
+                        $widthStyle = 'calc((100% - ' . $spacing . 'px) * ' . $widthRatio . ')';
+                    } else {
+                        $widthStyle = $widthRatio * 100 . '%';
+                    }
+
+                    echo '<div style="flex: 0 0 ' . $widthStyle . ';">';
+                    $this->center();
+                    echo '</div>';
+                }
+
+                if ($this->_page->east !== 0) {
+                    $widthRatio = (abs($this->_page->east) / $totalWidth);
+                    if ($spacing > 0) {
+                        $widthStyle = 'calc((100% - ' . $spacing . 'px) * ' . $widthRatio . ')';
+                    } else {
+                        $widthStyle = $widthRatio * 100 . '%';
+                    }
+
+                    echo '<div class="be-d-none be-d-md-block" style="flex: 0 0 ' . $widthStyle . ';">';
+                    $this->east();
+                    echo '</div>';
+                }
+
+                echo '</div>';
+                echo '</div>';
+            }
+            echo $this->tag1('be-middle');
+        }
+    }
+
+    public function west()
+    {
+        if ($this->_page->west !== 0) {
+            echo $this->tag0('be-west');
+            if (count($this->_page->westSections)) {
+                foreach ($this->_page->westSections as $section) {
+                    echo '<div class="be-section" id="' . $section->id . '">';
+                    $section->template->theme = $this;
+                    $section->template->display();
+                    echo '</div>';
+                }
+            }
+            echo $this->tag1('be-west');
+        }
+    }
+
+    public function center()
+    {
+        if ($this->_page->center !== 0) {
+            echo $this->tag0('be-center');
+            if (count($this->_page->centerSections)) {
+                foreach ($this->_page->centerSections as $section) {
+                    echo '<div class="be-section" id="' . $section->id . '">';
+
+                    $section->template->theme = $this;
+
+                    if ($section->key === 'be-page-title') {
+                        $section->template->before();
+                        $this->pageTitle();
+                        $section->template->after();
+                    } else if ($section->key === 'be-page-content') {
+                        $section->template->before();
+                        $this->pageContent();
+                        $section->template->after();
+                    } else {
+                        $section->template->display();
+                    }
+
+                    echo '</div>';
+                }
+            }
+            echo $this->tag1('be-center');
+        }
+    }
+
+    public function east()
+    {
+        if ($this->_page->east !== 0) {
+            echo $this->tag0('be-east');
+            if (count($this->_page->eastSections)) {
+                foreach ($this->_page->eastSections as $section) {
+                    echo '<div class="be-section" id="' . $section->id . '">';
+                    $section->template->theme = $this;
+                    $section->template->display();
+                    echo '</div>';
+                }
+            }
+            echo $this->tag1('be-east');
+        }
+    }
+
+    public function south()
+    {
+        if ($this->_page->south !== 0) {
+            echo $this->tag0('be-south');
+            if (count($this->_page->southSections)) {
+                foreach ($this->_page->southSections as $section) {
+                    echo '<div class="be-section" id="' . $section->id . '">';
+                    $section->template->theme = $this;
+                    $section->template->display();
+                    echo '</div>';
+                }
+            }
+            echo $this->tag1('be-south');
+        }
+    }
+
+    public function pageTitle() {
+        echo $this->tag0('be-page-title');
+        echo $this->title;
+        echo $this->tag1('be-page-title');
+    }
+
+    public function pageContent() {
+    }
+
+    /**
+     * 标签 - 封装内容
+     *
+     * @param string $tagName 标签名
+     * @param string $content 要封装的内容
+     * @return string
+     */
+    public function tag(string $tagName, string $content): string
+    {
+        if (isset($this->_tags[$tagName]) && is_array($this->_tags[$tagName]) && count($this->_tags[$tagName]) >= 2) {
+            return $this->_tags[$tagName][0] . $content . $this->_tags[$tagName][1];
+        }
+        return $content;
+    }
+
+    /**
+     * 标签 - 获取前半部分内容
+     *
+     * @param string $tagName 标签名
+     * @return string
+     */
+    public function tag0(string $tagName): string
+    {
+        if (isset($this->_tags[$tagName]) && is_array($this->_tags[$tagName]) && count($this->_tags[$tagName]) >= 1) {
+            return $this->_tags[$tagName][0];
+        }
+        return '';
+    }
+
+    /**
+     * 标签 - 获取后半部分内容
+     *
+     * @param string $tagName 标签名
+     * @return string
+     */
+    public function tag1(string $tagName): string
+    {
+        if (isset($this->_tags[$tagName]) && is_array($this->_tags[$tagName]) && count($this->_tags[$tagName]) >= 2) {
+            return $this->_tags[$tagName][1];
+        }
+        return '';
+    }
 }

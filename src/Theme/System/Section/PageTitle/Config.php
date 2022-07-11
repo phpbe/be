@@ -34,7 +34,7 @@ class Config
     /**
      * @BeConfigItem("对齐方式",
      *     driver="FormItemSelect",
-     *     keyValues = "return ['left' => '居左', 'center' => '居中', 'center' => '居右'];"
+     *     keyValues = "return ['left' => '居左', 'center' => '居中', 'center' => '居中'];"
      * )
      */
     public string $align = 'center';
