@@ -147,7 +147,7 @@ class Ip
 
         if (preg_match('/http/i', $addr2)) $addr2 = '';
         $addr = "$addr1 $addr2";
-        $addr = iconv('GB2312', 'UTF-8', $addr);
+        $addr = iconv('GB2312', 'UTF-8//IGNORE', $addr);
         $addr = preg_replace('/CZ88.Net/is', '', $addr);
         $addr = preg_replace('/^s*/is', '', $addr);
         $addr = preg_replace('/s*$/is', '', $addr);
