@@ -4,6 +4,7 @@ namespace Be\Template;
 
 use Be\Be;
 use Be\Runtime\RuntimeException;
+use Be\Util\Str\CaseConverter;
 
 class TemplateHelper
 {
@@ -177,10 +178,10 @@ class TemplateHelper
             }
         }
 
-        foreach (['be-page-title', 'be-page-content', 'west', 'east', 'north', 'south', 'center', 'middle', 'body', 'head', 'html',] as $key) {
+        foreach (['page-title', 'page-content', 'west', 'east', 'north', 'south', 'center', 'middle', 'body', 'head', 'html',] as $key) {
             $pattern = '/<be-' . $key . '>(.*?)<\/be-' . $key . '>/s';
             if (preg_match($pattern, $codeHtml, $matches)) {
-                $codeHtml = preg_replace($pattern, '<?php $this->' . $key . '(); ?>', $codeHtml);
+                $codeHtml = preg_replace($pattern, '<?php $this->' . CaseConverter::Hyphen2CamelLcFirst($key) . '(); ?>', $codeHtml);
 
                 $codeBody = $matches[1];
                 $codeBody = trim($codeBody);
@@ -263,7 +264,7 @@ class TemplateHelper
                         break;
                     case 'page-title':
                     case 'page-content':
-                        $codePhp .= 'public function ' . \Be\Util\Str\CaseConverter::Hyphen2CamelLcFirst($key) . '()' . "\n";
+                        $codePhp .= 'public function ' . CaseConverter::Hyphen2CamelLcFirst($key) . '()' . "\n";
                         $codePhp .= '{' . "\n";
                         $codePhp .= '    echo $this->tag0(\'be-' . $key . '\');' . "\n";
                         $codePhp .= '    ?>' . "\n";
@@ -278,7 +279,7 @@ class TemplateHelper
 
         $codePhp .= '}' . "\n\n";
 
-        $pattern = '/\?>\s+<\?php/s';
+        $pattern = '/\s*\?>\s+<\?php\s*/s';
         $codePhp = preg_replace($pattern, "\n", $codePhp);
 
         file_put_contents($path, $codePhp, LOCK_EX);

@@ -5,7 +5,7 @@
     </style>
 </be-head>
 
-<be-center-body>
+<be-page-content>
     <div id="app" v-cloak>
         <h3>部置密码</h3>
         <hr>
@@ -48,4 +48,4 @@
             el: '#app'
         });
     </script>
-</be-center-body>
+</be-page-content>

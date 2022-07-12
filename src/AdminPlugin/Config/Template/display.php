@@ -7,7 +7,7 @@
 </be-head>
 
 
-<be-center-body>
+<be-page-content>
     <?php
     $js = [];
     $jsCode = '';
@@ -248,4 +248,4 @@
             ?>
         });
     </script>
-</be-center-body>
+</be-page-content>

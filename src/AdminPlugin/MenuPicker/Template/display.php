@@ -26,7 +26,7 @@
 </be-head>
 
 
-<be-center>
+<be-page-content>
     <?php
     $js = [];
     $css = [];
@@ -36,196 +36,60 @@
     $vueHooks = [];
     ?>
     <div id="app" v-cloak>
-        <div class="be-center-body">
-            <el-form<?php
-            $formUi = [
-                ':inline' => 'true',
-                'size' => 'medium',
-            ];
-            if (isset($this->setting['grid']['form']['ui'])) {
-                $formUi = array_merge($formUi, $this->setting['grid']['form']['ui']);
+        <el-form<?php
+        $formUi = [
+            ':inline' => 'true',
+            'size' => 'medium',
+        ];
+        if (isset($this->setting['grid']['form']['ui'])) {
+            $formUi = array_merge($formUi, $this->setting['grid']['form']['ui']);
+        }
+
+        foreach ($formUi as $k => $v) {
+            if ($v === null) {
+                echo ' ' . $k;
+            } else {
+                echo ' ' . $k . '="' . $v . '"';
+            }
+        }
+        ?>>
+            <?php
+            if (isset($this->setting['grid']['headnote'])) {
+                echo $this->setting['grid']['headnote'];
             }
 
-            foreach ($formUi as $k => $v) {
-                if ($v === null) {
-                    echo ' ' . $k;
-                } else {
-                    echo ' ' . $k . '="' . $v . '"';
-                }
-            }
-            ?>>
-                <?php
-                if (isset($this->setting['grid']['headnote'])) {
-                    echo $this->setting['grid']['headnote'];
-                }
-
-                if (isset($this->setting['grid']['form']['items']) && count($this->setting['grid']['form']['items']) > 0) {
-                    ?>
-                    <div id="form-items" ref="formItemsRef">
-                        <?php
-                        foreach ($this->setting['grid']['form']['items'] as $item) {
-                            $driverClass = null;
-                            if (isset($item['driver'])) {
-                                if (substr($item['driver'], 0, 8) === 'FormItem') {
-                                    $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $item['driver'];
-                                } else {
-                                    $driverClass = $item['driver'];
-                                }
-                            } else {
-                                $driverClass = \Be\AdminPlugin\Form\Item\FormItemInput::class;
-                            }
-                            $driver = new $driverClass($item);
-
-                            echo $driver->getHtml();
-
-                            if ($driver->name !== null) {
-                                $formData[$driver->name] = $driver->getValueString();
-                            }
-
-                            $jsX = $driver->getJs();
-                            if ($jsX) {
-                                $js = array_merge($js, $jsX);
-                            }
-
-                            $cssX = $driver->getCss();
-                            if ($cssX) {
-                                $css = array_merge($css, $cssX);
-                            }
-
-                            $vueDataX = $driver->getVueData();
-                            if ($vueDataX) {
-                                $vueData = \Be\Util\Arr::merge($vueData, $vueDataX);
-                            }
-
-                            $vueMethodsX = $driver->getVueMethods();
-                            if ($vueMethodsX) {
-                                $vueMethods = array_merge($vueMethods, $vueMethodsX);
-                            }
-
-                            $vueHooksX = $driver->getVueHooks();
-                            if ($vueHooksX) {
-                                foreach ($vueHooksX as $k => $v) {
-                                    if (isset($vueHooks[$k])) {
-                                        $vueHooks[$k] .= "\r\n" . $v;
-                                    } else {
-                                        $vueHooks[$k] = $v;
-                                    }
-                                }
-                            }
-                        }
-
-                        if (isset($this->setting['grid']['form']['actions']) && count($this->setting['grid']['form']['actions']) > 0) {
-                            $html = '';
-                            foreach ($this->setting['grid']['form']['actions'] as $key => $item) {
-                                if ($key === 'submit') {
-                                    if ($item) {
-                                        if ($item === true) {
-                                            $html .= '<el-button type="primary" icon="el-icon-search" @click="search" :disabled="loading">查询</el-button> ';
-                                            continue;
-                                        } elseif (is_string($item)) {
-                                            $html .= '<el-button type="primary" icon="el-icon-search" @click="search" :disabled="loading">' . $item . '</el-button> ';
-                                            continue;
-                                        }
-                                    } else {
-                                        continue;
-                                    }
-                                }
-
-                                $driverClass = null;
-                                if (isset($item['driver'])) {
-                                    if (substr($item['driver'], 0, 10) === 'FormAction') {
-                                        $driverClass = '\\Be\\AdminPlugin\\Form\\Action\\' . $item['driver'];
-                                    } else {
-                                        $driverClass = $item['driver'];
-                                    }
-                                } else {
-                                    $driverClass = \Be\AdminPlugin\Form\Action\FormActionButton::class;
-                                }
-                                $driver = new $driverClass($item);
-
-                                $html .= $driver->getHtml() . ' ';
-
-                                $vueDataX = $driver->getVueData();
-                                if ($vueDataX) {
-                                    $vueData = \Be\Util\Arr::merge($vueData, $vueDataX);
-                                }
-
-                                $vueMethodsX = $driver->getVueMethods();
-                                if ($vueMethodsX) {
-                                    $vueMethods = array_merge($vueMethods, $vueMethodsX);
-                                }
-                            }
-
-                            if ($html) {
-                                echo '<el-form-item>' . $html . '</el-form-item>';
-                            }
-                        }
-                        ?>
-                    </div>
-                    <?php
-                }
+            if (isset($this->setting['grid']['form']['items']) && count($this->setting['grid']['form']['items']) > 0) {
                 ?>
-
-                <el-table<?php
-                $tableUi = [
-                    ':data' => 'gridData',
-                    'ref' => 'tableRef',
-                    'v-loading' => 'loading',
-                    'size' => 'medium',
-                    ':height' => 'tableHeight',
-                    ':default-sort' => '{prop:orderBy,order:orderByDir}',
-                    'highlight-current-row' => 'true',
-                    '@sort-change' => 'sort',
-                    '@row-click' => 'selectRow',
-                ];
-                if (isset($this->setting['grid']['table']['ui'])) {
-                    $tableUi = array_merge($tableUi, $this->setting['grid']['table']['ui']);
-                }
-
-                foreach ($tableUi as $k => $v) {
-                    if ($v === null) {
-                        echo ' ' . $k;
-                    } else {
-                        echo ' ' . $k . '="' . $v . '"';
-                    }
-                }
-                ?>>
-                    <template slot="empty">
-                        <?php
-                        if (isset($this->setting['grid']['table']['empty']) && is_string($this->setting['grid']['table']['empty'])) {
-                            echo $this->setting['grid']['table']['empty'];
-                        } else {
-                            echo '<el-empty description="暂无数据"></el-empty>';
-                        }
-                        ?>
-                    </template>
-
-                    <el-table-column
-                            align="center"
-                            header-align="center"
-                            label=""
-                            width="60">
-                        <template scope="scope">
-                            <el-radio :label="scope.row.<?php echo $this->setting['name']; ?>" v-model="selectedValue" @change.native="selectRow(scope.row)">&nbsp</el-radio>
-                        </template>
-                    </el-table-column>
-
+                <div id="form-items" ref="formItemsRef">
                     <?php
-                    foreach ($this->setting['grid']['table']['items'] as $item) {
-
+                    foreach ($this->setting['grid']['form']['items'] as $item) {
                         $driverClass = null;
                         if (isset($item['driver'])) {
-                            if (substr($item['driver'], 0, 9) === 'TableItem') {
-                                $driverClass = '\\Be\\AdminPlugin\\Table\\Item\\' . $item['driver'];
+                            if (substr($item['driver'], 0, 8) === 'FormItem') {
+                                $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $item['driver'];
                             } else {
                                 $driverClass = $item['driver'];
                             }
                         } else {
-                            $driverClass = \Be\AdminPlugin\Table\Item\TableItemText::class;
+                            $driverClass = \Be\AdminPlugin\Form\Item\FormItemInput::class;
                         }
                         $driver = new $driverClass($item);
 
                         echo $driver->getHtml();
+
+                        if ($driver->name !== null) {
+                            $formData[$driver->name] = $driver->getValueString();
+                        }
+
+                        $jsX = $driver->getJs();
+                        if ($jsX) {
+                            $js = array_merge($js, $jsX);
+                        }
+
+                        $cssX = $driver->getCss();
+                        if ($cssX) {
+                            $css = array_merge($css, $cssX);
+                        }
 
                         $vueDataX = $driver->getVueData();
                         if ($vueDataX) {
@@ -236,39 +100,171 @@
                         if ($vueMethodsX) {
                             $vueMethods = array_merge($vueMethods, $vueMethodsX);
                         }
+
+                        $vueHooksX = $driver->getVueHooks();
+                        if ($vueHooksX) {
+                            foreach ($vueHooksX as $k => $v) {
+                                if (isset($vueHooks[$k])) {
+                                    $vueHooks[$k] .= "\r\n" . $v;
+                                } else {
+                                    $vueHooks[$k] = $v;
+                                }
+                            }
+                        }
+                    }
+
+                    if (isset($this->setting['grid']['form']['actions']) && count($this->setting['grid']['form']['actions']) > 0) {
+                        $html = '';
+                        foreach ($this->setting['grid']['form']['actions'] as $key => $item) {
+                            if ($key === 'submit') {
+                                if ($item) {
+                                    if ($item === true) {
+                                        $html .= '<el-button type="primary" icon="el-icon-search" @click="search" :disabled="loading">查询</el-button> ';
+                                        continue;
+                                    } elseif (is_string($item)) {
+                                        $html .= '<el-button type="primary" icon="el-icon-search" @click="search" :disabled="loading">' . $item . '</el-button> ';
+                                        continue;
+                                    }
+                                } else {
+                                    continue;
+                                }
+                            }
+
+                            $driverClass = null;
+                            if (isset($item['driver'])) {
+                                if (substr($item['driver'], 0, 10) === 'FormAction') {
+                                    $driverClass = '\\Be\\AdminPlugin\\Form\\Action\\' . $item['driver'];
+                                } else {
+                                    $driverClass = $item['driver'];
+                                }
+                            } else {
+                                $driverClass = \Be\AdminPlugin\Form\Action\FormActionButton::class;
+                            }
+                            $driver = new $driverClass($item);
+
+                            $html .= $driver->getHtml() . ' ';
+
+                            $vueDataX = $driver->getVueData();
+                            if ($vueDataX) {
+                                $vueData = \Be\Util\Arr::merge($vueData, $vueDataX);
+                            }
+
+                            $vueMethodsX = $driver->getVueMethods();
+                            if ($vueMethodsX) {
+                                $vueMethods = array_merge($vueMethods, $vueMethodsX);
+                            }
+                        }
+
+                        if ($html) {
+                            echo '<el-form-item>' . $html . '</el-form-item>';
+                        }
                     }
                     ?>
-                </el-table>
+                </div>
                 <?php
+            }
+            ?>
 
-                if (isset($this->setting['grid']['footnote'])) {
-                    echo $this->setting['grid']['footnote'];
+            <el-table<?php
+            $tableUi = [
+                ':data' => 'gridData',
+                'ref' => 'tableRef',
+                'v-loading' => 'loading',
+                'size' => 'medium',
+                ':height' => 'tableHeight',
+                ':default-sort' => '{prop:orderBy,order:orderByDir}',
+                'highlight-current-row' => 'true',
+                '@sort-change' => 'sort',
+                '@row-click' => 'selectRow',
+            ];
+            if (isset($this->setting['grid']['table']['ui'])) {
+                $tableUi = array_merge($tableUi, $this->setting['grid']['table']['ui']);
+            }
+
+            foreach ($tableUi as $k => $v) {
+                if ($v === null) {
+                    echo ' ' . $k;
+                } else {
+                    echo ' ' . $k . '="' . $v . '"';
+                }
+            }
+            ?>>
+                <template slot="empty">
+                    <?php
+                    if (isset($this->setting['grid']['table']['empty']) && is_string($this->setting['grid']['table']['empty'])) {
+                        echo $this->setting['grid']['table']['empty'];
+                    } else {
+                        echo '<el-empty description="暂无数据"></el-empty>';
+                    }
+                    ?>
+                </template>
+
+                <el-table-column
+                        align="center"
+                        header-align="center"
+                        label=""
+                        width="60">
+                    <template scope="scope">
+                        <el-radio :label="scope.row.<?php echo $this->setting['name']; ?>" v-model="selectedValue" @change.native="selectRow(scope.row)">&nbsp</el-radio>
+                    </template>
+                </el-table-column>
+
+                <?php
+                foreach ($this->setting['grid']['table']['items'] as $item) {
+
+                    $driverClass = null;
+                    if (isset($item['driver'])) {
+                        if (substr($item['driver'], 0, 9) === 'TableItem') {
+                            $driverClass = '\\Be\\AdminPlugin\\Table\\Item\\' . $item['driver'];
+                        } else {
+                            $driverClass = $item['driver'];
+                        }
+                    } else {
+                        $driverClass = \Be\AdminPlugin\Table\Item\TableItemText::class;
+                    }
+                    $driver = new $driverClass($item);
+
+                    echo $driver->getHtml();
+
+                    $vueDataX = $driver->getVueData();
+                    if ($vueDataX) {
+                        $vueData = \Be\Util\Arr::merge($vueData, $vueDataX);
+                    }
+
+                    $vueMethodsX = $driver->getVueMethods();
+                    if ($vueMethodsX) {
+                        $vueMethods = array_merge($vueMethods, $vueMethodsX);
+                    }
                 }
                 ?>
+            </el-table>
+            <?php
 
-                <div class="be-row be-mt-50">
-                    <div class="be-col be-ta-center">
-                        <el-pagination
-                                v-if="total > 0"
-                                @size-change="changePageSize"
-                                @current-change="gotoPage"
-                                :current-page="page"
-                                :page-sizes="[10, 15, 20, 25, 30, 50, 100, 200, 500]"
-                                :page-size="pageSize"
-                                layout="total, sizes, prev, pager, next, jumper"
-                                :total="total">
-                        </el-pagination>
-                    </div>
-                    <div class="be-col-auto">
-                        <el-button type="primary" icon="el-icon-check" @click="selectRowConfirm" :disabled="selectedValue === ''">确定</el-button>
-                    </div>
+            if (isset($this->setting['grid']['footnote'])) {
+                echo $this->setting['grid']['footnote'];
+            }
+            ?>
+
+            <div class="be-row be-mt-50">
+                <div class="be-col be-ta-center">
+                    <el-pagination
+                            v-if="total > 0"
+                            @size-change="changePageSize"
+                            @current-change="gotoPage"
+                            :current-page="page"
+                            :page-sizes="[10, 15, 20, 25, 30, 50, 100, 200, 500]"
+                            :page-size="pageSize"
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :total="total">
+                    </el-pagination>
                 </div>
+                <div class="be-col-auto">
+                    <el-button type="primary" icon="el-icon-check" @click="selectRowConfirm" :disabled="selectedValue === ''">确定</el-button>
+                </div>
+            </div>
 
-            </el-form>
-        </div>
-
+        </el-form>
     </div>
-
     <?php
     if (isset($this->setting['grid']['js'])) {
         $js = array_merge($js, $this->setting['grid']['js']);
@@ -505,4 +501,4 @@
             ?>
         });
     </script>
-</be-center>
+</be-page-content>

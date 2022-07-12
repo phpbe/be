@@ -62,6 +62,9 @@ class Server extends Auth
         }
 
         $response->set('serverStats', $serverStats);
+
+
+        $response->set('title', '服务器状态');
         $response->display();
     }
 

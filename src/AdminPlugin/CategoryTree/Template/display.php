@@ -1,4 +1,4 @@
-<be-center-body>
+<be-page-content>
     <?php
     $js = [];
     $css = [];
@@ -142,4 +142,4 @@
             ?>
         });
     </script>
-</be-center-body>
+</be-page-content>

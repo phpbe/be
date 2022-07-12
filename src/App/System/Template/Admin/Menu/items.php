@@ -35,154 +35,146 @@
 </be-north>
 
 
-<be-center>
+<be-page-content>
     <div id="app" v-cloak>
-        <div class="be-center">
-            <div class="be-page-title"><?php echo $this->title; ?></div>
+        <el-form ref="menuItemsFormRef" :model="formData">
 
-            <div class="be-center-box">
-                <el-form ref="menuItemsFormRef" :model="formData">
-
-                    <div class="be-row menu-items-header">
-                        <div class="be-col">
-                            <div class="menu-item-col-name be-fw-bold">
-                                名称
-                            </div>
-                        </div>
-                        <div class="be-col-auto">
-                            <div class="menu-item-col-link be-fw-bold">
-                                链接
-                            </div>
-                        </div>
-                        <div class="be-col-auto">
-                            <div class="menu-item-col-target be-fw-bold">
-                                打开方式
-                            </div>
-                        </div>
-                        <div class="be-col-auto">
-                            <div class="menu-item-col-op be-fw-bold be-pr-400">
-                                操作
-                            </div>
-                        </div>
+            <div class="be-row menu-items-header">
+                <div class="be-col">
+                    <div class="menu-item-col-name be-fw-bold">
+                        名称
                     </div>
+                </div>
+                <div class="be-col-auto">
+                    <div class="menu-item-col-link be-fw-bold">
+                        链接
+                    </div>
+                </div>
+                <div class="be-col-auto">
+                    <div class="menu-item-col-target be-fw-bold">
+                        打开方式
+                    </div>
+                </div>
+                <div class="be-col-auto">
+                    <div class="menu-item-col-op be-fw-bold be-pr-400">
+                        操作
+                    </div>
+                </div>
+            </div>
 
-                    <div class="menu-items">
-                        <draggable
-                                v-model="formData.menuItems"
-                                ghost-class="menu-item-ghost"
-                                chosen-class="menu-item-chosen"
-                                drag-class="menu-item-drag"
-                                handle=".menu-item-drag-icon"
-                                force-fallback="true"
-                                animation="100"
-                                @start="dragStart"
-                                :move="dragMove"
-                                @update="dragUpdate"
-                                @end="dragEnd"
-                        >
-                            <transition-group>
-                                <div
-                                        :class="{'be-row': true, 'menu-item': true, 'menu-item-level-2': menuItem.level===2, 'menu-item-level-3': menuItem.level===3, 'menu-item-ghost': dragIndexFrom===menuItemIndex}"
-                                        v-for="menuItem, menuItemIndex in formData.menuItems"
-                                        :key="menuItem.id">
-                                    <div class="be-col">
-                                        <div class="menu-item-col-name">
-                                            <div class="be-row">
-                                                <div class="be-col-auto menu-item-drag-icon">
-                                                    <i class="el-icon-rank"></i>
-                                                </div>
+            <div class="menu-items">
+                <draggable
+                        v-model="formData.menuItems"
+                        ghost-class="menu-item-ghost"
+                        chosen-class="menu-item-chosen"
+                        drag-class="menu-item-drag"
+                        handle=".menu-item-drag-icon"
+                        force-fallback="true"
+                        animation="100"
+                        @start="dragStart"
+                        :move="dragMove"
+                        @update="dragUpdate"
+                        @end="dragEnd"
+                >
+                    <transition-group>
+                        <div
+                                :class="{'be-row': true, 'menu-item': true, 'menu-item-level-2': menuItem.level===2, 'menu-item-level-3': menuItem.level===3, 'menu-item-ghost': dragIndexFrom===menuItemIndex}"
+                                v-for="menuItem, menuItemIndex in formData.menuItems"
+                                :key="menuItem.id">
+                            <div class="be-col">
+                                <div class="menu-item-col-name">
+                                    <div class="be-row">
+                                        <div class="be-col-auto menu-item-drag-icon">
+                                            <i class="el-icon-rank"></i>
+                                        </div>
 
-                                                <div class="be-col">
-                                                    <el-form-item
-                                                            :key="menuItem.id"
-                                                            :prop="'menuItems.' + menuItemIndex + '.name'"
-                                                            :rules="{required:true,message:'请输入名称',trigger:'blur'}">
+                                        <div class="be-col">
+                                            <el-form-item
+                                                    :key="menuItem.id"
+                                                    :prop="'menuItems.' + menuItemIndex + '.name'"
+                                                    :rules="{required:true,message:'请输入名称',trigger:'blur'}">
 
-                                                        <el-input
-                                                                style="min-width:200px;max-width:400px;width:80%;"
-                                                                type="text"
-                                                                placeholder="名称"
-                                                                v-model="menuItem.name"
-                                                                size="medium"
-                                                                maxlength="60">
-                                                        </el-input>
-                                                    </el-form-item>
-                                                </div>
-                                            </div>
-
+                                                <el-input
+                                                        style="min-width:200px;max-width:400px;width:80%;"
+                                                        type="text"
+                                                        placeholder="名称"
+                                                        v-model="menuItem.name"
+                                                        size="medium"
+                                                        maxlength="60">
+                                                </el-input>
+                                            </el-form-item>
                                         </div>
                                     </div>
-                                    <div class="be-col-auto">
-                                        <div class="menu-item-col-link">
-                                            <el-select
-                                                    style="width:100%;"
-                                                    v-model="menuItem.selectedValue"
-                                                    size="medium"
-                                                    @change="(val)=>{setMenuLink(val, menuItemIndex);}"
-                                            >
-                                                <el-option-group key="common" label="通用">
-                                                    <el-option style="padding-left: 2.5rem;" value="None" label="无"></el-option>
-                                                    <el-option style="padding-left: 2.5rem;" value="Home" label="默认首页"></el-option>
-                                                    <el-option style="padding-left: 2.5rem;" value="Url" label="指定网址"></el-option>
-                                                </el-option-group>
+
+                                </div>
+                            </div>
+                            <div class="be-col-auto">
+                                <div class="menu-item-col-link">
+                                    <el-select
+                                            style="width:100%;"
+                                            v-model="menuItem.selectedValue"
+                                            size="medium"
+                                            @change="(val)=>{setMenuLink(val, menuItemIndex);}"
+                                    >
+                                        <el-option-group key="common" label="通用">
+                                            <el-option style="padding-left: 2.5rem;" value="None" label="无"></el-option>
+                                            <el-option style="padding-left: 2.5rem;" value="Home" label="默认首页"></el-option>
+                                            <el-option style="padding-left: 2.5rem;" value="Url" label="指定网址"></el-option>
+                                        </el-option-group>
+                                        <?php
+                                        foreach ($this->menuPickers as $menuPicker)
+                                        {
+                                            ?>
+                                            <el-option-group key="<?php echo $menuPicker['app']->name; ?>" label="<?php echo $menuPicker['app']->label; ?>">
                                                 <?php
-                                                foreach ($this->menuPickers as $menuPicker)
+                                                foreach ($menuPicker['menuPickers'] as $picker)
                                                 {
                                                     ?>
-                                                    <el-option-group key="<?php echo $menuPicker['app']->name; ?>" label="<?php echo $menuPicker['app']->label; ?>">
-                                                        <?php
-                                                        foreach ($menuPicker['menuPickers'] as $picker)
-                                                        {
-                                                            ?>
-                                                            <el-option style="padding-left: 2.5rem;" value="<?php echo $picker['route']; ?>" label="<?php echo $picker['label']; ?>"></el-option>
-                                                            <?php
-                                                        }
-                                                        ?>
-                                                    </el-option-group>
+                                                    <el-option style="padding-left: 2.5rem;" value="<?php echo $picker['route']; ?>" label="<?php echo $picker['label']; ?>"></el-option>
                                                     <?php
                                                 }
                                                 ?>
-                                            </el-select>
-                                        </div>
-                                    </div>
-
-                                    <div class="be-col-auto">
-                                        <div class="menu-item-col-target">
-                                            <el-select
-                                                    style="width:100%;"
-                                                    v-model="menuItem.target"
-                                                    size="medium">
-                                                <el-option value="_self" label="当前页面"></el-option>
-                                                <el-option value="_blank" label="新窗口"></el-option>
-                                            </el-select>
-                                        </div>
-                                    </div>
-                                    <div class="be-col-auto">
-                                        <div class="menu-item-col-op be-pt-25 be-pr-50">
-                                            <template v-if="menuItem.level === 1">
-                                                <el-link type="primary" class="be-mr-100" @click="addChildMenuItem(menuItemIndex)">添加二级菜单项</el-link>
-                                            </template>
-
-                                            <template v-else-if="menuItem.level === 2">
-                                                <el-link type="primary" class="be-mr-100" @click="addChildMenuItem(menuItemIndex)">添加三级菜单项</el-link>
-                                            </template>
-
-                                            <el-link type="danger" @click="removeMenuItem(menuItemIndex)">删除</el-link>
-                                        </div>
-                                    </div>
+                                            </el-option-group>
+                                            <?php
+                                        }
+                                        ?>
+                                    </el-select>
                                 </div>
-                            </transition-group>
-                        </draggable>
-                    </div>
-                </el-form>
+                            </div>
 
-                <div class="be-my-100">
-                    <el-button type="primary" size="medium" icon="el-icon-plus" @click="addMenuItem">新增菜单项</el-button>
-                </div>
+                            <div class="be-col-auto">
+                                <div class="menu-item-col-target">
+                                    <el-select
+                                            style="width:100%;"
+                                            v-model="menuItem.target"
+                                            size="medium">
+                                        <el-option value="_self" label="当前页面"></el-option>
+                                        <el-option value="_blank" label="新窗口"></el-option>
+                                    </el-select>
+                                </div>
+                            </div>
+                            <div class="be-col-auto">
+                                <div class="menu-item-col-op be-pt-25 be-pr-50">
+                                    <template v-if="menuItem.level === 1">
+                                        <el-link type="primary" class="be-mr-100" @click="addChildMenuItem(menuItemIndex)">添加二级菜单项</el-link>
+                                    </template>
 
+                                    <template v-else-if="menuItem.level === 2">
+                                        <el-link type="primary" class="be-mr-100" @click="addChildMenuItem(menuItemIndex)">添加三级菜单项</el-link>
+                                    </template>
+
+                                    <el-link type="danger" @click="removeMenuItem(menuItemIndex)">删除</el-link>
+                                </div>
+                            </div>
+                        </div>
+                    </transition-group>
+                </draggable>
             </div>
-        </div>
+        </el-form>
 
+        <div class="be-my-100">
+            <el-button type="primary" size="medium" icon="el-icon-plus" @click="addMenuItem">新增菜单项</el-button>
+        </div>
 
         <el-drawer
                 :visible.sync="drawer.visible"
@@ -532,4 +524,4 @@
         }
     </script>
 
-</be-center>
+</be-page-content>

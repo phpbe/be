@@ -1,4 +1,4 @@
-<be-center>
+<be-page-content>
     <div id="app" v-cloak>
 
         <div class="be-mt-200">
@@ -115,4 +115,4 @@
             },
         });
     </script>
-</be-center>
+</be-page-content>
