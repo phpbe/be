@@ -36,7 +36,7 @@ class Config
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
-    public int $paddingTopDesktop = 0;
+    public int $paddingTopDesktop = 40;
 
     /**
      * @BeConfigItem("顶部内边距 - 平板端（像素）",
@@ -44,7 +44,7 @@ class Config
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
-    public int $paddingTopTablet = 0;
+    public int $paddingTopTablet = 30;
 
     /**
      * @BeConfigItem("顶部内边距 - 手机端（像素）",
@@ -52,7 +52,7 @@ class Config
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
-    public int $paddingTopMobile = 0;
+    public int $paddingTopMobile = 20;
 
     /**
      * @BeConfigItem("底部内边距 - 电脑端（像素）",
@@ -60,7 +60,7 @@ class Config
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
-    public int $paddingBottomDesktop = 0;
+    public int $paddingBottomDesktop = 40;
 
     /**
      * @BeConfigItem("底部内边距 - 平板端（像素）",
@@ -68,7 +68,7 @@ class Config
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
-    public int $paddingBottomTablet = 0;
+    public int $paddingBottomTablet = 30;
 
     /**
      * @BeConfigItem("底部内边距 - 手机端（像素）",
@@ -76,6 +76,6 @@ class Config
      *     ui="return [':min' => 0, ':max' => 100];"
      * )
      */
-    public int $paddingBottomMobile = 0;
+    public int $paddingBottomMobile = 20;
 
 }
