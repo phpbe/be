@@ -89,6 +89,7 @@ class Driver
     public function middle()
     {
         if ($this->_page->middle !== 0 || $this->_page->west !== 0 || $this->_page->east !== 0 || $this->_page->center !== 0) {
+
             echo $this->tag0('be-middle');
             if ($this->_page->middle !== 0) {
                 if (count($this->_page->middleSections)) {
@@ -114,7 +115,50 @@ class Driver
                 }
             } else {
 
+                $spacingMobile = $this->_page->spacingMobile ?? '';
+                $spacingTablet = $this->_page->spacingTablet ?? '';
+                $spacingDesktop = $this->_page->spacingDesktop ?? '';
+
                 echo '<div class="be-container">';
+
+                echo '<style type="text/css">';
+                echo '.middle-container{display: flex; justify-content: space-between;}';
+
+                if ($spacingMobile !== '' || $spacingTablet !== '' || $spacingDesktop !== '') {
+                    // 手机端
+                    if ($spacingMobile !== '') {
+                        echo '@media (max-width: 768px) {';
+                        echo '.middle-container {';
+                        echo 'margin: ' . $spacingMobile. ' 0;';
+                        echo '}';
+                        echo '}';
+                    }
+
+                    // 平析端
+                    if ($spacingTablet !== '') {
+                        echo '@media (min-width: 768px) {';
+                        echo '.middle-container {';
+                        echo 'margin: ' . $spacingTablet . ' 0;';
+                        echo '}';
+                        echo '}';
+                    }
+
+                    // 电脑端
+                    if ($spacingDesktop !== '') {
+                        echo '@media (min-width: 992px) {';
+                        echo '.middle-container {';
+                        echo 'margin: ' . $spacingDesktop . ' 0;';
+                        echo '}';
+                        echo '}';
+                    }
+                }
+
+                echo '.west-container,.center-container,.east-container{flex:0 0 0%; overflow:hidden;}';
+                echo '@media (max-width: 992px) {';
+                echo '.west-container{display: none;}';
+                echo '.center-container{flex-basis:100%;}';
+                echo '.east-container{display: none;}';
+                echo '}';
 
                 $cols = 0;
                 $totalWidth = 0;
@@ -133,22 +177,16 @@ class Driver
                     $cols++;
                 }
 
-                $spacing = $cols > 1 ? ($cols - 1) * 20 : 0;
-
-                echo '<style type="text/css">';
-                echo '.middle-container{display: flex; justify-content: space-between;}';
-                echo '.west-container,.center-container,.east-container{flex:0 0 0%; overflow:hidden;}';
-                echo '@media (max-width: 992px) {';
-                echo '.west-container{display: none;}';
-                echo '.center-container{flex-basis:100%;}';
-                echo '.east-container{display: none;}';
-                echo '}';
+                $calcStyle = '';
+                if ($spacingMobile !== '' && $cols > 1) {
+                    $calcStyle = '(100% - ' . $spacingMobile . ' * ' . ($cols - 1) . ')';
+                }
 
                 echo '@media (min-width: 992px) {';
                 if ($this->_page->west !== 0) {
                     $widthRatio = (abs($this->_page->west) / $totalWidth);
-                    if ($spacing > 0) {
-                        $widthStyle = 'calc((100% - ' . $spacing . 'px) * ' . $widthRatio . ')';
+                    if ($calcStyle !== '') {
+                        $widthStyle = 'calc(' . $calcStyle . ' * ' . $widthRatio . ')';
                     } else {
                         $widthStyle = $widthRatio * 100 . '%';
                     }
@@ -158,8 +196,8 @@ class Driver
 
                 if ($this->_page->center !== 0) {
                     $widthRatio = (abs($this->_page->center) / $totalWidth);
-                    if ($spacing > 0) {
-                        $widthStyle = 'calc((100% - ' . $spacing . 'px) * ' . $widthRatio . ')';
+                    if ($calcStyle !== '') {
+                        $widthStyle = 'calc(' . $calcStyle . ' * ' . $widthRatio . ')';
                     } else {
                         $widthStyle = $widthRatio * 100 . '%';
                     }
@@ -168,8 +206,8 @@ class Driver
 
                 if ($this->_page->east !== 0) {
                     $widthRatio = (abs($this->_page->east) / $totalWidth);
-                    if ($spacing > 0) {
-                        $widthStyle = 'calc((100% - ' . $spacing . 'px) * ' . $widthRatio . ')';
+                    if ($calcStyle !== '') {
+                        $widthStyle = 'calc(' . $calcStyle . ' * ' . $widthRatio . ')';
                     } else {
                         $widthStyle = $widthRatio * 100 . '%';
                     }
@@ -201,6 +239,7 @@ class Driver
                 echo '</div>';
             }
             echo $this->tag1('be-middle');
+
         }
     }
 

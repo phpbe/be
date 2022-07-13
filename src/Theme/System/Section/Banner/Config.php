@@ -52,12 +52,12 @@ class Config
     public string $backgroundColor = '';
 
     /**
-     * @BeConfigItem("内边距 （电脑端）",
+     * @BeConfigItem("内边距 （手机端）",
      *     driver = "FormItemInput",
      *     description = "上右下左（CSS padding 语法）"
      * )
      */
-    public string $paddingDesktop = '0';
+    public string $paddingMobile = '0';
 
     /**
      * @BeConfigItem("内边距 （平板端）",
@@ -68,20 +68,20 @@ class Config
     public string $paddingTablet = '0';
 
     /**
-     * @BeConfigItem("内边距 （手机端）",
+     * @BeConfigItem("内边距 （电脑端）",
      *     driver = "FormItemInput",
      *     description = "上右下左（CSS padding 语法）"
      * )
      */
-    public string $paddingMobile = '0';
+    public string $paddingDesktop = '0';
 
     /**
-     * @BeConfigItem("外边距 （电脑端）",
+     * @BeConfigItem("外边距 （手机端）",
      *     driver = "FormItemInput",
      *     description = "上右下左（CSS margin 语法）"
      * )
      */
-    public string $marginDesktop = '40px 0 40px 0';
+    public string $marginMobile = '20px 0 20px 0';
 
     /**
      * @BeConfigItem("外边距 （平板端）",
@@ -92,12 +92,12 @@ class Config
     public string $marginTablet = '30px 0 30px 0';
 
     /**
-     * @BeConfigItem("外边距 （手机端）",
+     * @BeConfigItem("外边距 （电脑端）",
      *     driver = "FormItemInput",
      *     description = "上右下左（CSS margin 语法）"
      * )
      */
-    public string $marginMobile = '20px 0 20px 0';
+    public string $marginDesktop = '40px 0 40px 0';
 
 
 }

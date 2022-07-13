@@ -62,4 +62,9 @@ class Page
         ],
     ];
 
+    // 五方位间的间距
+    public string $spacingMobile = '1.5rem';
+    public string $spacingTablet = '1.75rem';
+    public string $spacingDesktop = '2rem';
+
 }

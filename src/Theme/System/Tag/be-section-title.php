@@ -1,1 +1,1 @@
-<h1 class="be-h1 be-ta-center be-lh-300">|||</h1>
+<div class="be-fs-125 be-ta-left be-bb-eee be-pb-50 be-mb-50">|||</div>

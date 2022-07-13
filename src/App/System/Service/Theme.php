@@ -52,6 +52,10 @@ class Theme
             }
         }
 
+        $page->spacingMobile = $configPage->spacingMobile ?? '';
+        $page->spacingTablet = $configPage->spacingTablet ?? '';
+        $page->spacingDesktop = $configPage->spacingDesktop ?? '';
+
         return $page;
     }
 
