@@ -178,8 +178,8 @@ class Driver
                 }
 
                 $calcStyle = '';
-                if ($spacingMobile !== '' && $cols > 1) {
-                    $calcStyle = '(100% - ' . $spacingMobile . ' * ' . ($cols - 1) . ')';
+                if ($spacingDesktop !== '' && $cols > 1) {
+                    $calcStyle = '(100% - ' . $spacingDesktop . ' * ' . ($cols - 1) . ')';
                 }
 
                 echo '@media (min-width: 992px) {';
