@@ -23,7 +23,7 @@ class Theme
      * @BeConfigItem("背景颜色",
      *     driver="FormItemColorPicker")
      */
-    public string $backgroundColor = '#FFFFFF';
+    public string $backgroundColor = '#f5f5f5';
 
     /**
      * @BeConfigItem("字体颜色",

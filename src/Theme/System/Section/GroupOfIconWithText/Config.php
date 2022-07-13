@@ -23,19 +23,13 @@ class Config
      */
     public string $width = 'default';
 
-    /**
-     * @BeConfigItem("背景颜色",
-     *     driver = "FormItemColorPicker"
-     * )
-     */
-    public string $backgroundColor = '#fff';
 
     /**
      * @BeConfigItem("子项背景颜色",
      *     driver = "FormItemColorPicker"
      * )
      */
-    public string $itemBackgroundColor = '#f7f7f7';
+    public string $itemBackgroundColor = '#F5F5F5';
 
     /**
      * @BeConfigItem("子项标题颜色",
@@ -49,79 +43,83 @@ class Config
      *     driver = "FormItemColorPicker"
      * )
      */
-    public string $itemLinkColor = '#999';
+    public string $itemLinkColor = '#999999';
 
     /**
-     * @BeConfigItem("顶部内边距 - 电脑端（像素）",
-     *     driver = "FormItemInputNumberInt",
-     *     ui="return [':min' => 0, ':max' => 100];"
+     * @BeConfigItem("背景颜色",
+     *     driver = "FormItemColorPicker"
      * )
      */
-    public int $paddingTopDesktop = 40;
+    public string $backgroundColor = '#FFFFFF';
 
     /**
-     * @BeConfigItem("顶部内边距 - 平板端（像素）",
-     *     driver = "FormItemInputNumberInt",
-     *     ui="return [':min' => 0, ':max' => 100];"
+     * @BeConfigItem("内边距 （电脑端）",
+     *     driver = "FormItemInput",
+     *     description = "上右下左（CSS padding 语法）"
      * )
      */
-    public int $paddingTopTablet = 30;
+    public string $paddingDesktop = '2rem 0';
 
     /**
-     * @BeConfigItem("顶部内边距 - 手机端（像素）",
-     *     driver = "FormItemInputNumberInt",
-     *     ui="return [':min' => 0, ':max' => 100];"
+     * @BeConfigItem("内边距 （平板端）",
+     *     driver = "FormItemInput",
+     *     description = "上右下左（CSS padding 语法）"
      * )
      */
-    public int $paddingTopMobile = 20;
+    public string $paddingTablet = '1.75rem 0';
 
     /**
-     * @BeConfigItem("底部内边距 - 电脑端（像素）",
-     *     driver = "FormItemInputNumberInt",
-     *     ui="return [':min' => 0, ':max' => 100];"
+     * @BeConfigItem("内边距 （手机端）",
+     *     driver = "FormItemInput",
+     *     description = "上右下左（CSS padding 语法）"
      * )
      */
-    public int $paddingBottomDesktop = 40;
+    public string $paddingMobile = '1.5rem 0';
 
     /**
-     * @BeConfigItem("底部内边距 - 平板端（像素）",
-     *     driver = "FormItemInputNumberInt",
-     *     ui="return [':min' => 0, ':max' => 100];"
+     * @BeConfigItem("外边距 （电脑端）",
+     *     driver = "FormItemInput",
+     *     description = "上右下左（CSS margin 语法）"
      * )
      */
-    public int $paddingBottomTablet = 30;
+    public string $marginDesktop = '0';
 
     /**
-     * @BeConfigItem("底部内边距 - 手机端（像素）",
-     *     driver = "FormItemInputNumberInt",
-     *     ui="return [':min' => 0, ':max' => 100];"
+     * @BeConfigItem("外边距 （平板端）",
+     *     driver = "FormItemInput",
+     *     description = "上右下左（CSS margin 语法）"
      * )
      */
-    public int $paddingBottomMobile = 20;
+    public string $marginTablet = '0';
 
     /**
-     * @BeConfigItem("间距 - 电脑端（像素）",
-     *     driver = "FormItemInputNumberInt",
-     *     ui="return [':min' => 0, ':max' => 100];"
+     * @BeConfigItem("外边距 （手机端）",
+     *     driver = "FormItemInput",
+     *     description = "上右下左（CSS margin 语法）"
      * )
      */
-    public int $spacingDesktop = 40;
+    public string $marginMobile = '0';
 
     /**
-     * @BeConfigItem("间距 - 平板端（像素）",
-     *     driver = "FormItemInputNumberInt",
-     *     ui="return [':min' => 0, ':max' => 100];"
+     * @BeConfigItem("间距 （电脑端）",
+     *     driver = "FormItemInput"
      * )
      */
-    public int $spacingTablet = 30;
+    public string $spacingDesktop = '2rem';
 
     /**
-     * @BeConfigItem("间距 - 手机端（像素）",
-     *     driver = "FormItemInputNumberInt",
-     *     ui="return [':min' => 0, ':max' => 100];"
+     * @BeConfigItem("间距 （平板端）",
+     *     driver = "FormItemInput"
      * )
      */
-    public int $spacingMobile = 20;
+    public string $spacingTablet = '1.75rem';
+
+    /**
+     * @BeConfigItem("间距 （手机端）",
+     *     driver = "FormItemInput"
+     * )
+     */
+    public string $spacingMobile = '1.5rem';
 
     /**
      * @BeConfigItem("子项",

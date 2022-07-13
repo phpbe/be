@@ -474,6 +474,7 @@
                             if (response.data.success) {
                                 _this.sectionDrawerToggle[position] = false;
                                 _this.page = response.data.page;
+                                _this.reloadPreviewFrame();
                             } else {
                                 _this.$message.error(response.data.message);
                             }
@@ -499,6 +500,7 @@
                             if (response.status === 200) {
                                 if (response.data.success) {
                                     _this.page = response.data.page;
+                                    _this.reloadPreviewFrame();
                                 } else {
                                     _this.$message.error(response.data.message);
                                 }

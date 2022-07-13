@@ -16,6 +16,7 @@ class Template extends Section
 
             echo $this->getCssBackgroundColor('image-with-text');
             echo $this->getCssPadding('image-with-text');
+            echo $this->getCssMargin('image-with-text');
 
             echo '#' . $this->id . ' .image-with-text-content {';
             echo 'background-color: ' . $this->config->contentBackgroundColor . ';';

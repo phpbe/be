@@ -15,6 +15,7 @@ class Template extends Section
 
             echo $this->getCssBackgroundColor('banner');
             echo $this->getCssPadding('banner');
+            echo $this->getCssMargin('banner');
 
             // 手机版，电脑版上传不同的图片
             echo '@media (max-width: 768px) {';

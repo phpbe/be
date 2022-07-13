@@ -16,6 +16,7 @@ class Template extends Section
 
             echo $this->getCssBackgroundColor('banner-with-text-overlay');
             echo $this->getCssPadding('banner-with-text-overlay');
+            echo $this->getCssMargin('banner-with-text-overlay');;
 
             // 手机版，电脑版上传不同的图片
             echo '@media (max-width: 768px) {';

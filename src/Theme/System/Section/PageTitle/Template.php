@@ -15,6 +15,7 @@ class Template extends Section
             echo '<style type="text/css">';
             echo $this->getCssBackgroundColor('page-title');
             echo $this->getCssPadding('page-title');
+            echo $this->getCssMargin('page-title');
             echo '</style>';
 
             echo '<div class="page-title">';
@@ -23,7 +24,7 @@ class Template extends Section
                 echo '<div class="be-container">';
             }
 
-            echo '<h1 class="be-'. $this->config->size .' be-ta-'. $this->config->align .' be-lh-300">';
+            echo '<h1 class="be-' . $this->config->size . ' be-ta-' . $this->config->align . '">';
         }
     }
 

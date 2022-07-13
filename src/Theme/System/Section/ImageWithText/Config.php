@@ -24,13 +24,6 @@ class Config
     public string $width = 'default';
 
     /**
-     * @BeConfigItem("背景颜色",
-     *     driver="FormItemColorPicker"
-     * )
-     */
-    public string $backgroundColor = '#fff';
-
-    /**
      * @BeConfigItem("图像",
      *     driver="FormItemStorageImage"
      * )
@@ -113,7 +106,7 @@ class Config
      *     driver = "FormItemColorPicker"
      * )
      */
-    public string $contentButtonColor = '#FFF';
+    public string $contentButtonColor = '#FFFFFF';
 
     /**
      * @BeConfigItem("内容背景颜色",
@@ -123,51 +116,59 @@ class Config
     public string $contentBackgroundColor = '#FAFAFA';
 
     /**
-     * @BeConfigItem("顶部内边距 - 电脑端（像素）",
-     *     driver = "FormItemInputNumberInt",
-     *     ui="return [':min' => 0, ':max' => 100];"
+     * @BeConfigItem("背景颜色",
+     *     driver="FormItemColorPicker"
      * )
      */
-    public int $paddingTopDesktop = 40;
+    public string $backgroundColor = '#FFFFFF';
 
     /**
-     * @BeConfigItem("顶部内边距 - 平板端（像素）",
-     *     driver = "FormItemInputNumberInt",
-     *     ui="return [':min' => 0, ':max' => 100];"
+     * @BeConfigItem("内边距 （电脑端）",
+     *     driver = "FormItemInput",
+     *     description = "上右下左（CSS padding 语法）"
      * )
      */
-    public int $paddingTopTablet = 30;
+    public string $paddingDesktop = '0';
 
     /**
-     * @BeConfigItem("顶部内边距 - 手机端（像素）",
-     *     driver = "FormItemInputNumberInt",
-     *     ui="return [':min' => 0, ':max' => 100];"
+     * @BeConfigItem("内边距 （平板端）",
+     *     driver = "FormItemInput",
+     *     description = "上右下左（CSS padding 语法）"
      * )
      */
-    public int $paddingTopMobile = 20;
+    public string $paddingTablet = '0';
 
     /**
-     * @BeConfigItem("底部内边距 - 电脑端（像素）",
-     *     driver = "FormItemInputNumberInt",
-     *     ui="return [':min' => 0, ':max' => 100];"
+     * @BeConfigItem("内边距 （手机端）",
+     *     driver = "FormItemInput",
+     *     description = "上右下左（CSS padding 语法）"
      * )
      */
-    public int $paddingBottomDesktop = 40;
+    public string $paddingMobile = '0';
 
     /**
-     * @BeConfigItem("底部内边距 - 平板端（像素）",
-     *     driver = "FormItemInputNumberInt",
-     *     ui="return [':min' => 0, ':max' => 100];"
+     * @BeConfigItem("外边距 （电脑端）",
+     *     driver = "FormItemInput",
+     *     description = "上右下左（CSS margin 语法）"
      * )
      */
-    public int $paddingBottomTablet = 30;
+    public string $marginDesktop = '2rem 0';
 
     /**
-     * @BeConfigItem("底部内边距 - 手机端（像素）",
-     *     driver = "FormItemInputNumberInt",
-     *     ui="return [':min' => 0, ':max' => 100];"
+     * @BeConfigItem("外边距 （平板端）",
+     *     driver = "FormItemInput",
+     *     description = "上右下左（CSS margin 语法）"
      * )
      */
-    public int $paddingBottomMobile = 20;
+    public string $marginTablet = '1.75rem 0';
+
+    /**
+     * @BeConfigItem("外边距 （手机端）",
+     *     driver = "FormItemInput",
+     *     description = "上右下左（CSS margin 语法）"
+     * )
+     */
+    public string $marginMobile = '1.5rem 0';
+
 
 }

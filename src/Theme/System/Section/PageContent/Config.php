@@ -28,54 +28,54 @@ class Config
      *     driver="FormItemColorPicker"
      * )
      */
-    public string $backgroundColor = '#fff';
+    public string $backgroundColor = '#FFFFFF';
 
     /**
-     * @BeConfigItem("顶部内边距 - 电脑端（像素）",
-     *     driver = "FormItemInputNumberInt",
-     *     ui="return [':min' => 0, ':max' => 100];"
+     * @BeConfigItem("内边距 （电脑端）",
+     *     driver = "FormItemInput",
+     *     description = "上右下左（CSS padding 语法）"
      * )
      */
-    public int $paddingTopDesktop = 40;
+    public string $paddingDesktop = '2rem';
 
     /**
-     * @BeConfigItem("顶部内边距 - 平板端（像素）",
-     *     driver = "FormItemInputNumberInt",
-     *     ui="return [':min' => 0, ':max' => 100];"
+     * @BeConfigItem("内边距 （平板端）",
+     *     driver = "FormItemInput",
+     *     description = "上右下左（CSS padding 语法）"
      * )
      */
-    public int $paddingTopTablet = 30;
+    public string $paddingTablet = '2rem';
 
     /**
-     * @BeConfigItem("顶部内边距 - 手机端（像素）",
-     *     driver = "FormItemInputNumberInt",
-     *     ui="return [':min' => 0, ':max' => 100];"
+     * @BeConfigItem("内边距 （手机端）",
+     *     driver = "FormItemInput",
+     *     description = "上右下左（CSS padding 语法）"
      * )
      */
-    public int $paddingTopMobile = 20;
+    public string $paddingMobile = '2rem';
 
     /**
-     * @BeConfigItem("底部内边距 - 电脑端（像素）",
-     *     driver = "FormItemInputNumberInt",
-     *     ui="return [':min' => 0, ':max' => 100];"
+     * @BeConfigItem("外边距 （电脑端）",
+     *     driver = "FormItemInput",
+     *     description = "上右下左（CSS margin 语法）"
      * )
      */
-    public int $paddingBottomDesktop = 40;
+    public string $marginDesktop = '0';
 
     /**
-     * @BeConfigItem("底部内边距 - 平板端（像素）",
-     *     driver = "FormItemInputNumberInt",
-     *     ui="return [':min' => 0, ':max' => 100];"
+     * @BeConfigItem("外边距 （平板端）",
+     *     driver = "FormItemInput",
+     *     description = "上右下左（CSS margin 语法）"
      * )
      */
-    public int $paddingBottomTablet = 30;
+    public string $marginTablet = '0';
 
     /**
-     * @BeConfigItem("底部内边距 - 手机端（像素）",
-     *     driver = "FormItemInputNumberInt",
-     *     ui="return [':min' => 0, ':max' => 100];"
+     * @BeConfigItem("外边距 （手机端）",
+     *     driver = "FormItemInput",
+     *     description = "上右下左（CSS margin 语法）"
      * )
      */
-    public int $paddingBottomMobile = 20;
+    public string $marginMobile = '0';
 
 }

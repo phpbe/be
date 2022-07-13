@@ -15,6 +15,8 @@ class Template extends Section
             echo '<style type="text/css">';
             echo $this->getCssBackgroundColor('page-content');
             echo $this->getCssPadding('page-content');
+            echo $this->getCssMargin('page-content');
+
             echo '</style>';
 
             echo '<div class="page-content">';

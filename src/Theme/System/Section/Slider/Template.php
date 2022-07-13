@@ -33,6 +33,7 @@ class Template extends Section
 
             echo $this->getCssBackgroundColor('slider');
             echo $this->getCssPadding('slider');
+            echo $this->getCssMargin('slider');
 
             if ($this->config->pagination) {
                 echo '#' . $this->id . ' .swiper-pagination-bullet-active {';

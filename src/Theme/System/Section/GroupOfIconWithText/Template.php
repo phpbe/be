@@ -25,6 +25,7 @@ class Template extends Section
 
             echo $this->getCssBackgroundColor('group-of-icon-with-text');
             echo $this->getCssPadding('group-of-icon-with-text');
+            echo $this->getCssMargin('group-of-icon-with-text');
 
             $itemWidthMobile = '100%';
             $itemWidthTablet = $count > 1 ? '50%' : '50%';

@@ -19,8 +19,8 @@ abstract class Section
     // 配置数据
     public object $config;
 
-    // 调用此部件的主题
-    public object $theme;
+    // 调用此部件的页面模板
+    public object $pageTemplate;
 
     /**
      * 输出内容
@@ -34,7 +34,7 @@ abstract class Section
     /**
      * 输出前置内容
      *
-     * 用于 be-content
+     * 用于 be-page-title be-page-content 等用作包装功能的部件
      * @return void
      */
     public function before()
@@ -44,7 +44,7 @@ abstract class Section
     /**
      * 输出后置内容
      *
-     * 用于 be-content
+     * 用于 be-page-title be-page-content 等用作包装功能的部件
      * @return void
      */
     public function after()
@@ -60,7 +60,7 @@ abstract class Section
     public function getCssBackgroundColor(string $cssClass): string
     {
         $css = '';
-        if ($this->config->backgroundColor) {
+        if (isset($this->config->backgroundColor) && $this->config->backgroundColor) {
             $css .= '#' . $this->id . ' .' . $cssClass . ' {';
             $css .= 'background-color: ' . $this->config->backgroundColor . ';';
             $css .= '}';
@@ -78,44 +78,83 @@ abstract class Section
     {
         $css = '';
 
+        if (isset($this->config->padding) && $this->config->padding !== '') {
+            $css .= '#' . $this->id . ' .' . $cssClass . ' {';
+            $css .= 'padding: ' . $this->config->padding . ';';
+            $css .= '}';
+        }
+
         // 手机端
-        if ($this->config->paddingTopMobile || $this->config->paddingBottomMobile) {
+        if (isset($this->config->paddingMobile) && $this->config->paddingMobile !== '') {
             $css .= '@media (max-width: 768px) {';
             $css .= '#' . $this->id . ' .' . $cssClass . ' {';
-            if ($this->config->paddingTopMobile) {
-                $css .= 'padding-top: ' . $this->config->paddingTopMobile . 'px;';
-            }
-            if ($this->config->paddingBottomMobile) {
-                $css .= 'padding-bottom: ' . $this->config->paddingBottomMobile . 'px;';
-            }
+            $css .= 'padding: ' . $this->config->paddingMobile . ';';
             $css .= '}';
             $css .= '}';
         }
 
         // 平析端
-        if ($this->config->paddingTopTablet || $this->config->paddingBottomTablet) {
+        if (isset($this->config->paddingTablet) && $this->config->paddingTablet !== '') {
             $css .= '@media (min-width: 768px) {';
             $css .= '#' . $this->id . ' .' . $cssClass . ' {';
-            if ($this->config->paddingTopTablet) {
-                $css .= 'padding-top: ' . $this->config->paddingTopTablet . 'px;';
-            }
-            if ($this->config->paddingBottomTablet) {
-                $css .= 'padding-bottom: ' . $this->config->paddingBottomTablet . 'px;';
-            }
+            $css .= 'padding: ' . $this->config->paddingTablet . ';';
             $css .= '}';
             $css .= '}';
         }
 
         // 电脑端
-        if ($this->config->paddingTopDesktop || $this->config->paddingBottomDesktop) {
+        if (isset($this->config->paddingDesktop) && $this->config->paddingDesktop !== '') {
             $css .= '@media (min-width: 992px) {';
             $css .= '#' . $this->id . ' .' . $cssClass . ' {';
-            if ($this->config->paddingTopDesktop) {
-                $css .= 'padding-top: ' . $this->config->paddingTopDesktop . 'px;';
-            }
-            if ($this->config->paddingBottomDesktop) {
-                $css .= 'padding-bottom: ' . $this->config->paddingBottomDesktop . 'px;';
-            }
+            $css .= 'padding: ' . $this->config->paddingDesktop . ';';
+            $css .= '}';
+            $css .= '}';
+        }
+
+        return $css;
+    }
+
+
+    /**
+     * 外边距 CSS
+     *
+     * @param string $cssClass 样式类名
+     * @return string
+     */
+    public function getCssMargin(string $cssClass): string
+    {
+        $css = '';
+
+        if (isset($this->config->margin) && $this->config->margin !== '') {
+            $css .= '#' . $this->id . ' .' . $cssClass . ' {';
+            $css .= 'margin: ' . $this->config->margin . ';';
+            $css .= '}';
+        }
+
+        // 手机端
+        if (isset($this->config->marginMobile) && $this->config->marginMobile !== '') {
+            $css .= '@media (max-width: 768px) {';
+            $css .= '#' . $this->id . ' .' . $cssClass . ' {';
+            $css .= 'margin: ' . $this->config->marginMobile . ';';
+            $css .= '}';
+            $css .= '}';
+        }
+
+
+        // 平析端
+        if (isset($this->config->marginTablet) && $this->config->marginTablet !== '') {
+            $css .= '@media (min-width: 768px) {';
+            $css .= '#' . $this->id . ' .' . $cssClass . ' {';
+            $css .= 'margin: ' . $this->config->marginTablet . ';';
+            $css .= '}';
+            $css .= '}';
+        }
+
+        // 电脑端
+        if (isset($this->config->marginDesktop) && $this->config->marginDesktop !== '') {
+            $css .= '@media (min-width: 992px) {';
+            $css .= '#' . $this->id . ' .' . $cssClass . ' {';
+            $css .= 'margin: ' . $this->config->marginDesktop . ';';
             $css .= '}';
             $css .= '}';
         }
@@ -149,66 +188,60 @@ abstract class Section
         $css .= '}';
 
         // 手机端
-        if ($this->config->spacingMobile) {
+        if (isset($this->config->spacingMobile) && $this->config->spacingMobile !== '') {
             $css .= '@media (max-width: 768px) {';
 
             $css .= '#' . $this->id . ' .' . $cssClass . ' {';
-            $css .= 'margin-left: -' . ($this->config->spacingMobile / 2) . 'px;';
-            $css .= 'margin-right: -' . ($this->config->spacingMobile / 2) . 'px;';
-            $css .= 'margin-bottom: -' . $this->config->spacingMobile . 'px;';
+            $css .= 'margin-left: calc(-' . $this->config->spacingMobile . ' / 2);';
+            $css .= 'margin-right: calc(-' . $this->config->spacingMobile . ' / 2);';
+            $css .= 'margin-bottom: -' . $this->config->spacingMobile . ';';
             $css .= '}';
 
             $css .= '#' . $this->id . ' .' . $cssItemClass . ' {';
             $css .= 'width: ' . $itemWidthMobile . ';';
-            if ($this->config->spacingMobile) {
-                $css .= 'padding-left: ' . ($this->config->spacingMobile / 2) . 'px;';
-                $css .= 'padding-right: ' . ($this->config->spacingMobile / 2) . 'px;';
-                $css .= 'margin-bottom: ' . $this->config->spacingMobile . 'px;';
-            }
+            $css .= 'padding-left: calc(' . $this->config->spacingMobile . ' / 2);';
+            $css .= 'padding-right: calc(' . $this->config->spacingMobile . ' / 2);';
+            $css .= 'margin-bottom: ' . $this->config->spacingMobile . ';';
             $css .= '}';
 
             $css .= '}';
         }
 
         // 平析端
-        if ($this->config->spacingTablet) {
+        if (isset($this->config->spacingTablet) && $this->config->spacingTablet !== '') {
             $css .= '@media (min-width: 768px) {';
 
             $css .= '#' . $this->id . ' .' . $cssClass . ' {';
-            $css .= 'margin-left: -' . ($this->config->spacingTablet / 2) . 'px;';
-            $css .= 'margin-right: -' . ($this->config->spacingTablet / 2) . 'px;';
-            $css .= 'margin-bottom: -' . $this->config->spacingTablet . 'px;';
+            $css .= 'margin-left: calc(-' . $this->config->spacingTablet . ' / 2);';
+            $css .= 'margin-right: calc(-' . $this->config->spacingTablet . ' / 2);';
+            $css .= 'margin-bottom: -' . $this->config->spacingTablet . ';';
             $css .= '}';
 
             $css .= '#' . $this->id . ' .' . $cssItemClass . ' {';
             $css .= 'width: ' . $itemWidthTablet . ';';
-            if ($this->config->spacingTablet) {
-                $css .= 'padding-left: ' . ($this->config->spacingTablet / 2) . 'px;';
-                $css .= 'padding-right: ' . ($this->config->spacingTablet / 2) . 'px;';
-                $css .= 'margin-bottom: ' . $this->config->spacingTablet . 'px;';
-            }
+            $css .= 'padding-left: calc(' . $this->config->spacingTablet . ' / 2);';
+            $css .= 'padding-right: calc(' . $this->config->spacingTablet . ' / 2);';
+            $css .= 'margin-bottom: ' . $this->config->spacingTablet . ';';
             $css .= '}';
 
             $css .= '}';
         }
 
         // 电脑端
-        if ($this->config->spacingDesktop) {
+        if (isset($this->config->spacingDesktop) && $this->config->spacingDesktop !== '') {
             $css .= '@media (min-width: 992px) {';
 
             $css .= '#' . $this->id . ' .' . $cssClass . ' {';
-            $css .= 'margin-left: -' . ($this->config->spacingDesktop / 2) . 'px;';
-            $css .= 'margin-right: -' . ($this->config->spacingDesktop / 2) . 'px;';
-            $css .= 'margin-bottom: -' . $this->config->spacingDesktop . 'px;';
+            $css .= 'margin-left: calc(-' . $this->config->spacingDesktop . ' / 2);';
+            $css .= 'margin-right: calc(-' . $this->config->spacingDesktop . ' / 2);';
+            $css .= 'margin-bottom: -' . $this->config->spacingDesktop . ';';
             $css .= '}';
 
             $css .= '#' . $this->id . ' .' . $cssItemClass . ' {';
             $css .= 'width: ' . $itemWidthDesktop . ';';
-            if ($this->config->spacingDesktop) {
-                $css .= 'padding-left: ' . ($this->config->spacingDesktop / 2) . 'px;';
-                $css .= 'padding-right: ' . ($this->config->spacingDesktop / 2) . 'px;';
-                $css .= 'margin-bottom: ' . $this->config->spacingDesktop . 'px;';
-            }
+            $css .= 'padding-left: calc(' . $this->config->spacingDesktop . ' / 2);';
+            $css .= 'padding-right: calc(' . $this->config->spacingDesktop . ' / 2);';
+            $css .= 'margin-bottom: ' . $this->config->spacingDesktop . ';';
             $css .= '}';
 
             $css .= '}';

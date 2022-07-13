@@ -77,7 +77,7 @@ class Driver
             if (count($this->_page->northSections)) {
                 foreach ($this->_page->northSections as $section) {
                     echo '<div class="be-section" id="' . $section->id . '">';
-                    $section->template->theme = $this;
+                    $section->template->pageTemplate = $this;
                     $section->template->display();
                     echo '</div>';
                 }
@@ -95,7 +95,7 @@ class Driver
                     foreach ($this->_page->middleSections as $section) {
                         echo '<div class="be-section" id="' . $section->id . '">';
 
-                        $section->template->theme = $this;
+                        $section->template->pageTemplate = $this;
 
                         if ($section->key === 'be-page-title') {
                             $section->template->before();
@@ -211,7 +211,7 @@ class Driver
             if (count($this->_page->westSections)) {
                 foreach ($this->_page->westSections as $section) {
                     echo '<div class="be-section" id="' . $section->id . '">';
-                    $section->template->theme = $this;
+                    $section->template->pageTemplate = $this;
                     $section->template->display();
                     echo '</div>';
                 }
@@ -228,7 +228,7 @@ class Driver
                 foreach ($this->_page->centerSections as $section) {
                     echo '<div class="be-section" id="' . $section->id . '">';
 
-                    $section->template->theme = $this;
+                    $section->template->pageTemplate = $this;
 
                     if ($section->key === 'be-page-title') {
                         $section->template->before();
@@ -256,7 +256,7 @@ class Driver
             if (count($this->_page->eastSections)) {
                 foreach ($this->_page->eastSections as $section) {
                     echo '<div class="be-section" id="' . $section->id . '">';
-                    $section->template->theme = $this;
+                    $section->template->pageTemplate = $this;
                     $section->template->display();
                     echo '</div>';
                 }
@@ -272,7 +272,7 @@ class Driver
             if (count($this->_page->southSections)) {
                 foreach ($this->_page->southSections as $section) {
                     echo '<div class="be-section" id="' . $section->id . '">';
-                    $section->template->theme = $this;
+                    $section->template->pageTemplate = $this;
                     $section->template->display();
                     echo '</div>';
                 }

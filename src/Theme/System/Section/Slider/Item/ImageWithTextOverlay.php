@@ -47,7 +47,7 @@ class ImageWithTextOverlay
      *     driver = "FormItemColorPicker"
      * )
      */
-    public string $contentTitleColor = '#fff';
+    public string $contentTitleColor = '#FFFFFF';
 
     /**
      * @BeConfigItem("描述",
@@ -68,7 +68,7 @@ class ImageWithTextOverlay
      *     driver = "FormItemColorPicker"
      * )
      */
-    public string $contentDescriptionColor = '#fff';
+    public string $contentDescriptionColor = '#FFFFFF';
 
     /**
      * @BeConfigItem("按钮",

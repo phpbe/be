@@ -66,7 +66,7 @@ class Config
      *     driver="FormItemColorPicker"
      * )
      */
-    public string $backgroundColor = '#fff';
+    public string $backgroundColor = '#FFFFFF';
 
 
     public function __icon() {

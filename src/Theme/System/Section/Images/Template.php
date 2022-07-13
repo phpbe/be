@@ -25,6 +25,7 @@ class Template extends Section
 
             echo $this->getCssBackgroundColor('images');
             echo $this->getCssPadding('images');
+            echo $this->getCssMargin('images');
 
             $itemWidthMobile = '100%';
             $itemWidthTablet = $count > 1 ? '50%' : '50%';

@@ -6,7 +6,7 @@
     <?php
     $filterName = $this->filterImage === 1 ? '图片' : '文件';
     $configSystem = \Be\Be::getConfig('App.System.System');
-    $templateUrl = \Be\Be::getProperty('App.System')->getWwwUrl();
+    $appSystemWwwUrl = \Be\Be::getProperty('App.System')->getWwwUrl();
     ?>
 
     <div id="app" v-cloak>
@@ -48,7 +48,7 @@
                                     <div v-if="file.type === 'dir'" class="file">
                                         <div class="file-icon">
                                             <el-link :title="file.name" @click="setPath(formData.path + file.name + '/')" :underline="false">
-                                                <el-image src="<?php echo $templateUrl; ?>/admin/storage/images/types/folder.png"></el-image>
+                                                <el-image src="<?php echo $appSystemWwwUrl; ?>/admin/storage/images/types/folder.png"></el-image>
                                             </el-link>
                                         </div>
                                         <div class="file-name">
@@ -63,8 +63,8 @@
                                         <div class="file-icon">
                                             <el-link :title="file.name" @click="selectFile(file)" :underline="false">
                                                 <el-image v-if="imageTypes.indexOf(file.type) !== -1" :src="file.url"></el-image>
-                                                <el-image v-else-if="fileTypes.indexOf(file.type) !== -1" :src="'<?php echo $templateUrl; ?>/admin/storage/images/types/' + file.type + '.png'"></el-image>
-                                                <el-image v-else src="<?php echo $templateUrl; ?>/admin/storage/images/types/unknown.png"></el-image>
+                                                <el-image v-else-if="fileTypes.indexOf(file.type) !== -1" :src="'<?php echo $appSystemWwwUrl; ?>/admin/storage/images/types/' + file.type + '.png'"></el-image>
+                                                <el-image v-else src="<?php echo $appSystemWwwUrl; ?>/admin/storage/images/types/unknown.png"></el-image>
                                             </el-link>
                                         </div>
                                         <div class="file-name">
@@ -92,14 +92,14 @@
                                 <template slot-scope="scope">
                                     <div v-if="scope.row.type === 'dir'" class="file-icon">
                                         <el-link @click="setPath(formData.path + scope.row.name + '/')" :underline="false">
-                                            <el-image src="<?php echo $templateUrl; ?>/Template/Admin/Storage/images/types/folder_s.png"></el-image>
+                                            <el-image src="<?php echo $appSystemWwwUrl; ?>/Template/Admin/Storage/images/types/folder_s.png"></el-image>
                                         </el-link>
                                     </div>
                                     <div v-else class="file-icon">
                                         <el-link @click="selectFile(scope.row)" :underline="false">
                                             <el-image v-if="imageTypes.indexOf(scope.row.type) !== -1" :src="scope.row.url"></el-image>
-                                            <el-image v-else-if="fileTypes.indexOf(scope.row.type) !== -1" :src="'<?php echo $templateUrl; ?>/admin/storage/images/types/' + scope.row.type + '_s.png'"></el-image>
-                                            <el-image v-else src="<?php echo $templateUrl; ?>/admin/storage/images/types/unknown_s.png"></el-image>
+                                            <el-image v-else-if="fileTypes.indexOf(scope.row.type) !== -1" :src="'<?php echo $appSystemWwwUrl; ?>/admin/storage/images/types/' + scope.row.type + '_s.png'"></el-image>
+                                            <el-image v-else src="<?php echo $appSystemWwwUrl; ?>/admin/storage/images/types/unknown_s.png"></el-image>
                                         </el-link>
                                     </div>
                                 </template>

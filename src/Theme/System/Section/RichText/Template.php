@@ -13,12 +13,13 @@ class Template extends Section
             echo '<style type="text/css">';
             echo $this->getCssBackgroundColor('rich-text');
             echo $this->getCssPadding('rich-text');
+            echo $this->getCssMargin('rich-text');
             echo '</style>';
 
             echo '<div class="rich-text">';
-            echo $this->theme->tag0('be-section-content');
+            echo $this->pageTemplate->tag0('be-section-content');
             echo $this->config->content;
-            echo $this->theme->tag1('be-section-content');
+            echo $this->pageTemplate->tag1('be-section-content');
             echo '</div>';
         }
     }
