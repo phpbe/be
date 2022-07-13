@@ -29,3 +29,9 @@ li {
 .be-east .be-section:first-child > div  {
     margin-top: 0 !important;
 }
+
+.be-west .be-section:last-child > div,
+.be-center .be-section:last-child > div,
+.be-east .be-section:last-child > div  {
+    margin-bottom: 0 !important;
+}
