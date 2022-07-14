@@ -23,7 +23,7 @@ class Theme
      * @BeConfigItem("背景颜色",
      *     driver="FormItemColorPicker")
      */
-    public string $backgroundColor = '#f5f5f5';
+    public string $backgroundColor = '#F5F5F5';
 
     /**
      * @BeConfigItem("字体颜色",
@@ -35,7 +35,7 @@ class Theme
      * @BeConfigItem("超链接颜色",
      *     driver="FormItemColorPicker")
      */
-    public string $linkColor = '#3365ba';
+    public string $linkColor = '#333333';
 
     /**
      * @BeConfigItem("超链接悬停颜色",
