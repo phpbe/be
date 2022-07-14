@@ -102,10 +102,9 @@ abstract class Driver
             }
 
             if (Be::getConfig('App.System.System')->developer === 1) {
-                $rootPath = Be::getRuntime()->getRootPath();
-                $dst = $rootPath . '/www' . $dir;
+                $dst = Be::getRuntime()->getRootPath() . '/www' . $dir;
                 if (!is_dir($dst)) {
-                    $src = $rootPath . $this->path . '/www';
+                    $src = $this->path . '/www';
                     if (is_dir($src)) {
                         Dir::copy($src, $dst, true);
                     }
