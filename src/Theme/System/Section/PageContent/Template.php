@@ -21,7 +21,7 @@ class Template extends Section
             echo '#' . $this->id . ' .page-content img {';
             echo 'max-width: 100%;';
             echo '}';
-            
+
             echo '</style>';
 
             echo '<div class="page-content">';
