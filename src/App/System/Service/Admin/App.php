@@ -131,6 +131,9 @@ class App
      */
     public function updateWww($appName)
     {
+        // 如果写入外部CDN，需要较多时间
+        set_time_limit(600);
+
         $rootPath = Be::getRuntime()->getRootPath();
         $property = Be::getProperty('App.' . $appName);
         $src = $property->getPath() . '/www';

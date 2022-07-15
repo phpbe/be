@@ -199,6 +199,9 @@ abstract class ThemeEditor
      */
     public function updateWww($themeType, $themeName)
     {
+        // 如果写入外部CDN，需要较多时间
+        set_time_limit(600);
+
         $property = Be::getProperty($themeType . '.' . $themeName);
         $src = $property->getPath() . '/www';
         if (is_dir($src)) {
