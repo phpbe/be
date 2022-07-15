@@ -13,10 +13,15 @@ class Template extends Section
     {
         if ($this->config->enable) {
             echo '<style type="text/css">';
+
             echo $this->getCssBackgroundColor('page-content');
             echo $this->getCssPadding('page-content');
             echo $this->getCssMargin('page-content');
 
+            echo '#' . $this->id . ' .page-content img {';
+            echo 'max-width: 100%;';
+            echo '}';
+            
             echo '</style>';
 
             echo '<div class="page-content">';
