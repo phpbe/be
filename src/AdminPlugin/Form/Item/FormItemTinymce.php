@@ -33,7 +33,7 @@ class FormItemTinymce extends FormItem
         }
 
         $appSystemWwwUrl = Be::getProperty('App.System')->getWwwUrl();
-        $baseUrl = $appSystemWwwUrl . '/lib/tinymce/tinymce_5.10.2/';
+        $baseUrl = $appSystemWwwUrl . '/lib/tinymce/tinymce_5.10.2';
 
         $this->js = [
             $baseUrl . '/tinymce.min.js',
