@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="<?php echo $appSystemWwwUrl; ?>/lib/font-awesome/font-awesome-4.7.0.min.css" />
 
     <link rel="stylesheet" href="https://cdn.phpbe.com/scss/be.css" />
-    <link rel="stylesheet" href="<?php echo $adminThemeWwwUrl; ?>/css/theme.css?v=20220716" />
+    <link rel="stylesheet" href="<?php echo $adminThemeWwwUrl; ?>/css/theme.css?v=20220716001" />
 
     <be-head>
     </be-head>

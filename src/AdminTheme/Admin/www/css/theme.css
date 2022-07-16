@@ -209,6 +209,9 @@ body {
     line-height: 3.5rem;
 }
 
+.be-page-content {
+}
+
 .be-dialog,
 .be-drawer {
     z-index: 999999 !important;

@@ -6,7 +6,7 @@
 </be-head>
 
 <be-page-content>
-    <div id="app" v-cloak>
+    <div class="be-bc-ccc be-px-100 be-pt-100 be-pb-50" id="app" v-cloak>
         <h3>部置密码</h3>
         <hr>
         <ul>
