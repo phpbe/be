@@ -1,6 +1,6 @@
 
 if (window.$cookies.isKey('be-admin-west-collapse') && window.$cookies.get('be-admin-west-collapse') === '1') {
-    document.getElementById("be-middle").style.left = "64px";
+    document.getElementById("be-middle").style.marginLeft = "64px";
     document.getElementById("be-west").style.width = "64px";
     document.getElementById("be-north").style.left = "64px";
 }

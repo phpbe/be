@@ -42,12 +42,23 @@ class FormItemTinymce extends FormItem
         $fileCallback = base64_encode('parent.window.befile.selectedFiles = files;');
         $imageCallback = base64_encode('parent.window.beimage.selectedFiles = files;');
 
+        $layout = 'simple';
+        if (isset($params['layout'])) {
+            $layout = $params['layout'];
+        }
+
+        $autoresize = true;
+        if (isset($params['autoresize'])) {
+            $autoresize = $params['autoresize'];
+        }
+
         $this->option = [
             'selector' => '#formItemTinymce_' . $this->name,
             'language' => 'zh_CN',
+            //'inline' => true,
+            'toolbar_sticky' => true,
+            'toolbar_sticky_offset' => 60,
             'branding' => false,
-            'min_height' => '100',
-            'height' => '500',
             'forced_root_block' => false,
             'toolbar_mode' => 'sliding',
             'be_storage_url' => beAdminUrl('System.Storage.pop', ['callback' => $fileCallback]),
@@ -56,15 +67,11 @@ class FormItemTinymce extends FormItem
             //'convert_urls' => false,
         ];
 
-        $layout = 'simple';
-        if (isset($params['layout'])) {
-            $layout = $params['layout'];
-        }
-
         switch ($layout) {
             case 'basic':
                 $this->option = array_merge($this->option, [
-                    'plugins' => 'advlist lists',
+                    'min_height' => 200,
+                    'plugins' => 'advlist' .  ($autoresize ? ' autoresize' : '') . ' lists',
                     'toolbar' => 'formatselect bold italic strikethrough underline forecolor alignleft aligncenter alignright alignjustify removeformat | bullist numlist outdent indent',
                     'menubar' => false,
                     'statusbar' => false,
@@ -72,7 +79,8 @@ class FormItemTinymce extends FormItem
                 break;
             case 'simple':
                 $this->option = array_merge($this->option, [
-                    'plugins' => 'advlist code fullscreen befile beimage link lists media table',
+                    'min_height' => 300,
+                    'plugins' => 'advlist' .  ($autoresize ? ' autoresize' : '') . ' code fullscreen befile beimage link lists media table',
                     'toolbar' => 'formatselect bold italic strikethrough underline forecolor backcolor align removeformat | bullist numlist outdent indent | link befile beimage media table | code fullscreen',
                     'menubar' => false,
                     'statusbar' => false,
@@ -80,9 +88,13 @@ class FormItemTinymce extends FormItem
                 break;
             case 'full':
                 $this->option = array_merge($this->option, [
-                    'plugins' => 'advlist anchor autolink befile beimage charmap charmap code becodesample directionality emoticons fullscreen help hr image importcss insertdatetime link lists media nonbreaking noneditable pagebreak paste preview print save searchreplace table template textpattern toc visualblocks visualchars wordcount',
-                    'toolbar' => 'undo redo | fontselect fontsizeselect formatselect bold italic underline strikethrough forecolor backcolor alignleft aligncenter alignright alignjustify removeformat | bullist numlist outdent indent | link befile beimage media table becodesample anchor pagebreak charmap emoticons template | code preview fullscreen',
-                    'menubar' => 'file edit view insert format tools table help',
+                    'min_height' => 400,
+                    'plugins' => 'advlist anchor autolink' .  ($autoresize ? ' autoresize' : '') . ' befile beimage charmap charmap code becodesample directionality emoticons fullscreen help hr image importcss insertdatetime link lists media nonbreaking noneditable pagebreak paste preview print save searchreplace table template textpattern toc visualblocks visualchars wordcount',
+                    'toolbar' => 'undo redo | fontsizeselect formatselect bold italic underline strikethrough forecolor backcolor align removeformat | bullist numlist outdent indent | link befile beimage media table becodesample anchor pagebreak charmap emoticons template | code preview fullscreen',
+                    //'menubar' => 'file edit view insert format tools table help',
+                    'menubar' => false,
+                    'statusbar' => false,
+                    //'fontsize_formats' => '0.75rem 0.8rem 0.9rem 1rem 1.1rem 1.2rem 1.25rem 1.3rem 1.4rem 1.5rem 1.75rem 2rem 2.5rem 3rem 3.5rem 4rem 5rem 6rem',
                     'fontsize_formats' => '9px 10px 11px 12px 13px 14px 15px 16px 18px 20px 24px 28px 32px 36px 40px 48px 60px 72px',
                 ]);
 
@@ -168,7 +180,11 @@ class FormItemTinymce extends FormItem
         }
         $html .= '>';
 
-        $html .= '<textarea id="formItemTinymce_' . $this->name . '"></textarea>';
+        if (isset($this->option['inline']) && $this->option['inline']) {
+            $html .= '<div class="be-p-100" style="border:#DCDFE6 1px solid;" id="formItemTinymce_' . $this->name . '"></div>';
+        } else {
+            $html .= '<textarea id="formItemTinymce_' . $this->name . '"></textarea>';
+        }
 
         if ($this->description) {
             $html .= '<div class="be-c-999 be-mt-50 be-lh-150">' . $this->description . '</div>';

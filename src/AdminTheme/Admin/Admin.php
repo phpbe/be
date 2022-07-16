@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="<?php echo $appSystemWwwUrl; ?>/lib/font-awesome/font-awesome-4.7.0.min.css" />
 
     <link rel="stylesheet" href="https://cdn.phpbe.com/scss/be.css" />
-    <link rel="stylesheet" href="<?php echo $adminThemeWwwUrl; ?>/css/theme.css?v=20220711" />
+    <link rel="stylesheet" href="<?php echo $adminThemeWwwUrl; ?>/css/theme.css?v=20220716" />
 
     <be-head>
     </be-head>
@@ -270,7 +270,7 @@
                             console.log(this.collapse);
                             document.getElementById("be-west").style.width = this.collapse ? "64px" : "200px";
                             document.getElementById("be-north").style.left = this.collapse ? "64px" : "200px";
-                            document.getElementById("be-middle").style.left = this.collapse ? "64px" : "200px";
+                            document.getElementById("be-middle").style.marginLeft = this.collapse ? "64px" : "200px";
                             this.$cookies.set(westCollapseKey, this.collapse ? '1' : '0', 86400 * 180);
                         }
                     }
@@ -309,7 +309,7 @@
             </div>
         </el-drawer>
     </div>
-    <script src="<?php echo $adminThemeWwwUrl; ?>/js/theme.js?v=20220711"></script>
+    <script src="<?php echo $adminThemeWwwUrl; ?>/js/theme.js?v=20220716"></script>
 
 </body>
 </html>
