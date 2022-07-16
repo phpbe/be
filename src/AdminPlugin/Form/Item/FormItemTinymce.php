@@ -56,14 +56,23 @@ class FormItemTinymce extends FormItem
             'selector' => '#formItemTinymce_' . $this->name,
             'language' => 'zh_CN',
             //'inline' => true,
+
+            // 工具栏浮动
             'toolbar_sticky' => true,
             'toolbar_sticky_offset' => 60,
+
+            // 移除 Powered by TinyMCE
             'branding' => false,
-            'forced_root_block' => false,
+            
+            // 工具栏一行显示不全时的展示样式
             'toolbar_mode' => 'sliding',
+
             'be_storage_url' => beAdminUrl('System.Storage.pop', ['callback' => $fileCallback]),
             'be_storage_url_filter_image' => beAdminUrl('System.Storage.pop', ['filterImage' => 1, 'callback' => $imageCallback]),
+
+            // 禁用插入资源的相对网址，与伪静态冲突
             'relative_urls' => false,
+
             //'convert_urls' => false,
         ];
 
