@@ -63,7 +63,7 @@ class FormItemTinymce extends FormItem
 
             // 移除 Powered by TinyMCE
             'branding' => false,
-            
+
             // 工具栏一行显示不全时的展示样式
             'toolbar_mode' => 'sliding',
 
@@ -80,8 +80,8 @@ class FormItemTinymce extends FormItem
             case 'basic':
                 $this->option = array_merge($this->option, [
                     'min_height' => 200,
-                    'plugins' => 'advlist' .  ($autoresize ? ' autoresize' : '') . ' lists',
-                    'toolbar' => 'formatselect bold italic strikethrough underline forecolor alignleft aligncenter alignright alignjustify removeformat | bullist numlist outdent indent',
+                    'plugins' => 'advlist' .  ($autoresize ? ' autoresize' : '') . ' indent2em lists',
+                    'toolbar' => 'formatselect bold italic strikethrough underline forecolor alignleft aligncenter alignright alignjustify removeformat | bullist numlist outdent indent indent2em',
                     'menubar' => false,
                     'statusbar' => false,
                 ]);
@@ -89,8 +89,8 @@ class FormItemTinymce extends FormItem
             case 'simple':
                 $this->option = array_merge($this->option, [
                     'min_height' => 300,
-                    'plugins' => 'advlist' .  ($autoresize ? ' autoresize' : '') . ' code fullscreen befile beimage link lists media table',
-                    'toolbar' => 'formatselect bold italic strikethrough underline forecolor backcolor align removeformat | bullist numlist outdent indent | link befile beimage media table | code fullscreen',
+                    'plugins' => 'advlist' .  ($autoresize ? ' autoresize' : '') . ' code fullscreen befile beimage indent2em link lists media table',
+                    'toolbar' => 'formatselect bold italic strikethrough underline forecolor backcolor align removeformat | bullist numlist outdent indent indent2em | link befile beimage media table | code fullscreen',
                     'menubar' => false,
                     'statusbar' => false,
                 ]);
@@ -98,8 +98,8 @@ class FormItemTinymce extends FormItem
             case 'full':
                 $this->option = array_merge($this->option, [
                     'min_height' => 400,
-                    'plugins' => 'advlist anchor autolink' .  ($autoresize ? ' autoresize' : '') . ' befile beimage charmap charmap code becodesample directionality emoticons fullscreen help hr image importcss insertdatetime link lists media nonbreaking noneditable pagebreak paste preview print save searchreplace table template textpattern toc visualblocks visualchars wordcount',
-                    'toolbar' => 'undo redo | fontsizeselect formatselect bold italic underline strikethrough forecolor backcolor align removeformat | bullist numlist outdent indent | link befile beimage media table becodesample anchor pagebreak charmap emoticons template | code preview fullscreen',
+                    'plugins' => 'advlist anchor autolink' .  ($autoresize ? ' autoresize' : '') . ' befile beimage charmap charmap code becodesample directionality emoticons fullscreen help hr image importcss insertdatetime indent2em link lists media nonbreaking noneditable pagebreak paste preview print save searchreplace table template textpattern toc visualblocks visualchars wordcount',
+                    'toolbar' => 'undo redo | fontsizeselect formatselect bold italic underline strikethrough forecolor backcolor align removeformat | bullist numlist outdent indent indent2em | link befile beimage media table becodesample anchor pagebreak charmap emoticons template | code preview fullscreen',
                     //'menubar' => 'file edit view insert format tools table help',
                     'menubar' => false,
                     'statusbar' => false,
