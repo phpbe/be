@@ -1,5 +1,5 @@
 <be-page-content>
-    <div class="be-bc-ccc be-px-100 be-pt-100 be-pb-50" id="app" v-cloak>
+    <div class="be-bc-fff be-px-100 be-pt-100 be-pb-50" id="app" v-cloak>
 
         <div class="be-row be-fs-120">
             <div class="be-col-auto">

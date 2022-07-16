@@ -7,7 +7,7 @@
     $vueMethods = [];
     $vueHooks = [];
     ?>
-    <div class="be-bc-ccc be-px-100 be-pt-100 be-pb-50" id="app" v-cloak>
+    <div class="be-bc-fff be-px-150 be-pt-150 be-pb-50" id="app" v-cloak>
 
         <el-tree
                 :data="data"

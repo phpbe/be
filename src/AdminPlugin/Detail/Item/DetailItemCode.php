@@ -277,7 +277,7 @@ class DetailItemCode extends DetailItem
      */
     public function getJs()
     {
-        $baseUrl = Be::getProperty('AdminPlugin.Form')->getWwwUrl() . '/Template/codemirror-5.57.0/';
+        $baseUrl = Be::getProperty('App.System')->getWwwUrl() . '/lib/codemirror/codemirror-5.57.0/';
         $js = [];
         foreach ($this->js as $x) {
             $js[] = $baseUrl . $x;
@@ -294,7 +294,7 @@ class DetailItemCode extends DetailItem
      */
     public function getCss()
     {
-        $baseUrl = Be::getProperty('AdminPlugin.Form')->getWwwUrl() . '/Template/codemirror-5.57.0/';
+        $baseUrl = Be::getProperty('App.System')->getWwwUrl() . '/lib/codemirror/codemirror-5.57.0/';
         $css = [];
         foreach ($this->css as $x) {
             $css[] = $baseUrl . $x;

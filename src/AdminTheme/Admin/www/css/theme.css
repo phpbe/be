@@ -1,6 +1,6 @@
 html {
     font-size: 14px;
-    background-color: #fff;
+    background-color: #eef0f5;
     color: #333;
 }
 
@@ -199,7 +199,6 @@ body {
 .be-middle {
     margin-top: 60px;
     margin-left: 200px;
-    background-color: #eef0f5;
     overflow: auto;
 }
 

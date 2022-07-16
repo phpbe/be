@@ -29,7 +29,32 @@
 
     <link rel="stylesheet" href="https://cdn.phpbe.com/scss/be.css" />
 
-    <link rel="stylesheet" href="<?php echo $adminThemeWwwUrl; ?>/css/theme.css?v=20220620" />
+    <style>
+        html {
+            font-size: 14px;
+            background-color: #fff;
+            color: #333;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        [v-cloak] {display: none !important;}
+        [class^="el-icon-fa"],
+        [class*="el-icon-fa"] {
+            display: inline-block;
+            font-style: normal;
+            font-variant: normal;
+            font-weight: normal;
+            font-family: FontAwesome!important;
+            font-size: inherit;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
 
     <be-head>
     </be-head>
