@@ -42,7 +42,7 @@ class TemplateHelper
         $contentTheme = file_get_contents($fileTheme);
 
         $tags = [];
-        foreach (['be-body', 'be-north', 'be-middle', 'be-west', 'be-center', 'be-east', 'be-south', 'be-page-title', 'be-page-content', 'be-section-title', 'be-section-content'] as $key) {
+        foreach (['be-body', 'be-north', 'be-middle', 'be-west', 'be-center', 'be-east', 'be-south', 'be-page-title', 'be-page-content', 'be-section', 'be-section-title', 'be-section-content'] as $key) {
             $wrapperPath = $themeProperty->getPath() . '/Tag/' . $key . '.php';
             if (file_exists($wrapperPath)) {
                 $wrapperContent = file_get_contents($wrapperPath);
@@ -175,6 +175,18 @@ class TemplateHelper
             // 无 template 的页面，直接使用 theme
             if (preg_match($pattern, $contentTheme, $matches)) {
                 $codeHtml = trim($matches[1]);
+            }
+        }
+
+        foreach (['be-section', 'be-section-title', 'be-section-content'] as $key) {
+            $replace = '<be' . $key . '>';
+            if (strpos($codeHtml, $replace) !== false) {
+                $codeHtml = str_replace($replace, '<?php $this->tag0(\'' . $key . '\'); ?>', $codeHtml);
+            }
+
+            $replace = '</' . $key . '>';
+            if (strpos($codeHtml, $replace) !== false) {
+                $codeHtml = str_replace($replace, '<?php $this->tag1(\'' . $key . '\'); ?>', $codeHtml);
             }
         }
 
