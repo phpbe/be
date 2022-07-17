@@ -73,7 +73,8 @@ class FormItemTinymce extends FormItem
             // 禁用插入资源的相对网址，与伪静态冲突
             'relative_urls' => false,
 
-            //'convert_urls' => false,
+            // 不处理资源网址
+            'convert_urls' => false,
         ];
 
         switch ($layout) {
