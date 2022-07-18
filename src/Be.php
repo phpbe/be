@@ -161,15 +161,15 @@ abstract class Be
             $instance1 = new $class();
         } elseif ($isPageConfig && count($parts) > 2)  {
 
-            // 则检测对应页面在APP中是否存在指定配置
-            $class = '\\Be\\App\\' . $parts[1] . '\\Config\\Page\\' . ($type === 'AdminTheme' ? 'Admin\\' : '') . implode('\\', array_slice($parts, 2));
+            // 则检测对应页面在主题中是否存在指定配置
+            $class = '\\Be\\' . $type . '\\' . $catalog . '\\Config\\' . $classSuffix;
             if (class_exists($class)) {
                 $instance1 = new $class();
             }
-
+            
             if ($instance1 === null) {
-                // 则检测对应页面在主题中是否存在指定配置
-                $class = '\\Be\\' . $type . '\\' . $catalog . '\\Config\\' . $classSuffix;
+                // 则检测对应页面在APP中是否存在指定配置
+                $class = '\\Be\\App\\' . $parts[1] . '\\Config\\Page\\' . ($type === 'AdminTheme' ? 'Admin\\' : '') . implode('\\', array_slice($parts, 2));
                 if (class_exists($class)) {
                     $instance1 = new $class();
                 }
