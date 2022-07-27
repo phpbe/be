@@ -8,15 +8,15 @@ use Be\Be;
 use Be\Db\Tuple;
 
 /**
- * @BeMenuGroup("控制台")
- * @BePermissionGroup("控制台")
+ * @BeMenuGroup("网站装修")
+ * @BePermissionGroup("网站装修")
  */
 class Menu extends Auth
 {
 
     /**
-     * @BeMenu("菜单导航", icon="el-icon-position", ordering="2.4")
-     * @BePermission("菜单导航", ordering="2.4")
+     * @BeMenu("菜单导航", icon="el-icon-position", ordering="2.3")
+     * @BePermission("菜单导航", ordering="2.3")
      */
     public function menus()
     {
@@ -174,7 +174,7 @@ class Menu extends Auth
     /**
      * 菜单项
      *
-     * @BePermission("菜单项", ordering="2.41")
+     * @BePermission("菜单项", ordering="2.31")
      */
     public function goItems()
     {
@@ -192,7 +192,7 @@ class Menu extends Auth
     /**
      * 菜单项
      *
-     * @BePermission("菜单项", ordering="2.41")
+     * @BePermission("菜单项", ordering="2.31")
      */
     public function items()
     {
@@ -231,7 +231,7 @@ class Menu extends Auth
     /**
      * 菜单项 - 设置网址
      *
-     * @BePermission("菜单项", ordering="2.41")
+     * @BePermission("菜单项", ordering="2.31")
      */
     public function picker()
     {
@@ -253,7 +253,7 @@ class Menu extends Auth
     /**
      * 菜单项 - 设置网址
      *
-     * @BePermission("菜单项", ordering="2.41")
+     * @BePermission("菜单项", ordering="2.31")
      */
     public function setUrl()
     {

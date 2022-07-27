@@ -15,8 +15,8 @@ class RuntimeCache extends Auth
 {
 
     /**
-     * @BeMenu("运行时缓存", icon = "el-icon-fa fa-database", ordering="2.6")
-     * @BePermission("运行时缓存列表", ordering="2.6")
+     * @BeMenu("运行时缓存", icon = "el-icon-fa fa-database", ordering="3.6")
+     * @BePermission("运行时缓存列表", ordering="3.6")
      */
     public function index()
     {
@@ -160,7 +160,7 @@ class RuntimeCache extends Auth
     }
 
     /**
-     * @BePermission("删除运行时缓存", ordering="2.61")
+     * @BePermission("删除运行时缓存", ordering="3.61")
      */
     public function delete()
     {

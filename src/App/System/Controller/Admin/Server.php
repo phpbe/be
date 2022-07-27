@@ -13,8 +13,8 @@ class Server extends Auth
 {
 
     /**
-     * @BeMenu("服务器状态", icon="el-icon-info", ordering="2.8")
-     * @BePermission("服务器状态", ordering="2.8")
+     * @BeMenu("服务器状态", icon="el-icon-info", ordering="3.5")
+     * @BePermission("服务器状态", ordering="3.5")
      */
     public function stats()
     {

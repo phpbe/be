@@ -12,8 +12,8 @@ class Config extends Auth
 {
 
     /**
-     * @BeMenu("参数", icon="el-icon-setting", ordering="2.8")
-     * @BePermission("参数", ordering="2.8")
+     * @BeMenu("参数", icon="el-icon-setting", ordering="3.2")
+     * @BePermission("参数", ordering="3.2")
      */
     public function dashboard()
     {

@@ -7,8 +7,8 @@ use Be\Be;
 use Be\Db\Tuple;
 
 /**
- * @BeMenuGroup("控制台")
- * @BePermissionGroup("控制台")
+ * @BeMenuGroup("网站装修", icon="el-icon-magic-stick", ordering="3")
+ * @BePermissionGroup("网站装修", ordering="3")
  */
 class Theme extends Auth
 {
@@ -23,8 +23,8 @@ class Theme extends Auth
     }
 
     /**
-     * @BeMenu("前台主题", icon="el-icon-view", ordering="2.2")
-     * @BePermission("前台主题列表", ordering="2.2")
+     * @BeMenu("前台主题", icon="el-icon-view", ordering="2.1")
+     * @BePermission("前台主题列表", ordering="2.1")
      */
     public function themes()
     {
@@ -34,7 +34,7 @@ class Theme extends Auth
     /**
      * 发现
      *
-     * @BePermission("发现前台主题", ordering="2.21")
+     * @BePermission("发现前台主题", ordering="2.11")
      */
     public function discover()
     {
@@ -44,7 +44,7 @@ class Theme extends Auth
     /**
      * 设置默认主题
      *
-     * @BePermission("设置默认前台主题", ordering="2.23")
+     * @BePermission("设置默认前台主题", ordering="2.12")
      */
     public function toggleDefault()
     {
@@ -54,7 +54,7 @@ class Theme extends Auth
     /**
      * 配置主题
      *
-     * @BePermission("配置前台主题", ordering="2.24")
+     * @BePermission("配置前台主题", ordering="2.13")
      */
     public function goSetting()
     {
@@ -64,7 +64,7 @@ class Theme extends Auth
     /**
      * 配置主题
      *
-     * @BePermission("配置前台主题", ordering="2.24")
+     * @BePermission("配置前台主题", ordering="2.13")
      */
     public function setting()
     {
@@ -74,7 +74,7 @@ class Theme extends Auth
     /**
      * 配置主题
      *
-     * @BePermission("配置前台主题", ordering="2.24")
+     * @BePermission("配置前台主题", ordering="2.13")
      */
     public function editPosition()
     {
@@ -84,7 +84,7 @@ class Theme extends Auth
     /**
      * 新增组件
      *
-     * @BePermission("配置前台主题", ordering="2.24")
+     * @BePermission("配置前台主题", ordering="2.13")
      */
     public function addSection()
     {
@@ -94,7 +94,7 @@ class Theme extends Auth
     /**
      * 删除组件
      *
-     * @BePermission("配置前台主题", ordering="2.24")
+     * @BePermission("配置前台主题", ordering="2.13")
      */
     public function deleteSection()
     {
@@ -104,7 +104,7 @@ class Theme extends Auth
     /**
      * 组件排序
      *
-     * @BePermission("配置前台主题", ordering="2.24")
+     * @BePermission("配置前台主题", ordering="2.13")
      */
     public function sortSection()
     {
@@ -114,7 +114,7 @@ class Theme extends Auth
     /**
      * 新增组件子项
      *
-     * @BePermission("配置前台主题", ordering="2.24")
+     * @BePermission("配置前台主题", ordering="2.13")
      */
     public function addSectionItem()
     {
@@ -124,7 +124,7 @@ class Theme extends Auth
     /**
      * 删除子组件
      *
-     * @BePermission("配置前台主题", ordering="2.24")
+     * @BePermission("配置前台主题", ordering="2.13")
      */
     public function deleteSectionItem()
     {
@@ -134,7 +134,7 @@ class Theme extends Auth
     /**
      * 编辑 模板/部件/部件子项
      *
-     * @BePermission("配置前台主题", ordering="2.24")
+     * @BePermission("配置前台主题", ordering="2.13")
      */
     public function editSectionItem()
     {
@@ -143,7 +143,7 @@ class Theme extends Auth
     /**
      * 编辑 模板/部件/部件子项 保存
      *
-     * @BePermission("配置前台主题", ordering="2.24")
+     * @BePermission("配置前台主题", ordering="2.13")
      */
     public function saveSectionItem()
     {
@@ -153,7 +153,7 @@ class Theme extends Auth
     /**
      * 模板/部件/部件子项 恢复默认值
      *
-     * @BePermission("配置前台主题", ordering="2.24")
+     * @BePermission("配置前台主题", ordering="2.13")
      */
     public function resetSectionItem()
     {
@@ -163,7 +163,7 @@ class Theme extends Auth
     /**
      * 组件排序
      *
-     * @BePermission("配置前台主题", ordering="2.24")
+     * @BePermission("配置前台主题", ordering="2.13")
      */
     public function sortSectionItem()
     {
@@ -173,7 +173,7 @@ class Theme extends Auth
     /**
      * 更新www
      *
-     * @BePermission("更新www", ordering="2.13")
+     * @BePermission("更新www", ordering="2.14")
      */
     public function updateWww()
     {

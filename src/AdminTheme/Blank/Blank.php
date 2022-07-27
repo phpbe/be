@@ -8,7 +8,7 @@
     <?php
     $beUrl = beUrl();
     $appSystemWwwUrl = \Be\Be::getProperty('App.System')->getWwwUrl();
-    $adminThemeWwwUrl = \Be\Be::getProperty('AdminTheme.Admin')->getWwwUrl();
+    $adminThemeWwwUrl = \Be\Be::getProperty('AdminTheme.System')->getWwwUrl();
     ?>
     <base href="<?php echo $beUrl; ?>/" >
     <script>var beUrl = "<?php echo $beUrl; ?>"; </script>

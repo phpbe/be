@@ -9,9 +9,9 @@ class AdminTheme
     public $exclude = ['Blank', 'Installer'];
 
     // 已发现可用主题
-    public $available = ['Admin'];
+    public $available = ['System'];
 
     // 默认主题
-    public $default = 'Admin';
+    public $default = 'System';
 
 }

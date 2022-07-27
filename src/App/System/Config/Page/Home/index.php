@@ -1,6 +1,6 @@
 <?php
 
-namespace Be\Theme\System\Config\Page\System\Home;
+namespace Be\App\System\Config\Page\Home;
 
 class index
 {

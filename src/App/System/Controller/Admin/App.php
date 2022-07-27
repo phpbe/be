@@ -5,15 +5,15 @@ use Be\AdminPlugin\Table\Item\TableItemIcon;
 use Be\Be;
 
 /**
- * @BeMenuGroup("控制台", icon="el-icon-monitor", ordering="2")
- * @BePermissionGroup("控制台", ordering="2")
+ * @BeMenuGroup("控制台", icon="el-icon-monitor", ordering="3")
+ * @BePermissionGroup("控制台", ordering="3")
  */
 class App extends Auth
 {
 
     /**
-     * @BeMenu("应用", icon="el-icon-files", ordering="2.1")
-     * @BePermission("应用列表", ordering="2.1")
+     * @BeMenu("应用", icon="el-icon-files", ordering="3.1")
+     * @BePermission("应用列表", ordering="3.1")
      */
     public function apps()
     {
@@ -117,7 +117,7 @@ class App extends Auth
     /**
      * 安装新应用
      *
-     * @BePermission("安装应用", ordering="2.11")
+     * @BePermission("安装应用", ordering="3.11")
      */
     public function install()
     {
@@ -170,7 +170,7 @@ class App extends Auth
     /**
      * 卸载应用
      *
-     * @BePermission("卸载应用", ordering="2.12")
+     * @BePermission("卸载应用", ordering="3.12")
      */
     public function uninstall()
     {
@@ -203,7 +203,7 @@ class App extends Auth
     /**
      * 更新 www
      *
-     * @BePermission("更新 www", ordering="2.13")
+     * @BePermission("更新 www", ordering="3.13")
      */
     public function updateWww()
     {

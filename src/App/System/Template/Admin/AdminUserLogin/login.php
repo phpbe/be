@@ -10,7 +10,7 @@ $config = \Be\Be::getConfig('App.System.System');
 
     <div class="logo">
         <?php
-        $configTheme = \Be\Be::getConfig('AdminTheme.Admin.Theme');
+        $configTheme = \Be\Be::getConfig('AdminTheme.System.Theme');
         if ($configTheme->logo !== '') {
             echo '<img src="' . $configTheme->logo . '">';
         } else {

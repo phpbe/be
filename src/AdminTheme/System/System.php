@@ -8,7 +8,7 @@
     <?php
     $beUrl = beUrl();
     $appSystemWwwUrl = \Be\Be::getProperty('App.System')->getWwwUrl();
-    $adminThemeWwwUrl = \Be\Be::getProperty('AdminTheme.Admin')->getWwwUrl();
+    $adminThemeWwwUrl = \Be\Be::getProperty('AdminTheme.System')->getWwwUrl();
     ?>
     <base href="<?php echo $beUrl; ?>/" >
     <script>var beUrl = "<?php echo $beUrl; ?>"; </script>
@@ -175,7 +175,7 @@
                 <div class="logo">
                     <a href="<?php echo beAdminUrl(); ?>">
                         <?php
-                        $configTheme = \Be\Be::getConfig('AdminTheme.Admin.Theme');
+                        $configTheme = \Be\Be::getConfig('AdminTheme.System.Theme');
                         if ($configTheme->logo !== '') {
                             echo '<img src="' . $configTheme->logo . '">';
                         } else {
@@ -280,8 +280,6 @@
 
         <be-middle>
             <be-center>
-                <be-page-title><?php echo $this->title; ?></be-page-title>
-                <be-page-content></be-page-content>
             </be-center>
         </be-middle>
     </be-body>
