@@ -6,15 +6,7 @@ namespace Be\AdminTheme\System;
 class Property extends \Be\AdminTheme\Property
 {
 
-    public string $label = '默认主题';
-
-    public array $pages = [
-        'Home' => [
-            'url' => ['System.index.index'],
-            'sections' => [
-            ],
-        ],
-    ];
+    public string $label = '系统主题';
 
     /**
      * 预览图片
