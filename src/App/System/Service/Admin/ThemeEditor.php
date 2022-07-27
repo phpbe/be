@@ -434,7 +434,7 @@ abstract class ThemeEditor
                 $items = scandir($path);
                 foreach ($items as $name) {
                     if ($name === '.' || $name === '..') continue;
-                    $section = $this->getSectionSummary('Aoo.' . $app->name . '.' . $name);
+                    $section = $this->getSectionSummary('App.' . $app->name . '.' . $name);
                     if (count($section->positons) > 0 && (in_array($position, $section->positons) || in_array('*', $section->positons))) {
                         $sections[] = $section;
                     }
