@@ -15,9 +15,7 @@ use Be\Util\File\FileSize;
  * @method static notice(\Throwable $t): string
  * @method static warning(\Throwable $t): string
  * @method static error(\Throwable $t): string
- * @method static critical(\Throwable $t): string
- * @method static alert(\Throwable $t): string
- * @method static emergency(\Throwable $t): string
+ * @method static fatal(\Throwable $t): string
  */
 abstract class Driver
 {
@@ -36,9 +34,7 @@ abstract class Driver
             case 'notice': return 300;
             case 'warning': return 400;
             case 'error': return 500;
-            case 'critical': return 600;
-            case 'alert': return 700;
-            case 'emergency': return 800;
+            case 'fatal': return 600;
         }
 
         return 0;

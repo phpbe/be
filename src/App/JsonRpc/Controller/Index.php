@@ -109,7 +109,7 @@ class Index
             if ($result === null) $result = false;
             return $this->success($id, $result);
         } catch (\Throwable $t) {
-            Be::getLog()->emergency($t);
+            Be::getLog()->fatal($t);
             return $this->error($id, $t->getCode(), $t->getMessage());
         }
     }

@@ -148,7 +148,9 @@ class Task
                 'name' => $name,
             ]);
         } catch (\Throwable $t) {
-            throw new ServiceException('Task does not register!');
+            Be::getLog()->warning($t);
+            // throw new ServiceException('Task does not register!');
+            return;
         }
 
         $task = $tupleTask->toObject();
@@ -324,7 +326,7 @@ class Task
                     $cache->delete($cacheKey);
                 }
 
-                Be::getLog()->critical($t);
+                Be::getLog()->fatal($t);
 
                 $message = $t->getMessage();
                 if (mb_strlen($message, 'utf8') > 600) {

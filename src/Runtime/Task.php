@@ -63,7 +63,7 @@ class Task
         try {
             Be::getService('App.System.Task')->run($task, $trigger);
         } catch (\Throwable $t) {
-            Be::getLog()->critical($t);
+            Be::getLog()->fatal($t);
         }
 
         Be::gc();

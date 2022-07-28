@@ -293,13 +293,13 @@ class Swoole extends Driver
                      */
                     $code = $t->getCode();
                     if ($code !== 0) {
-                        $logId = Be::getLog()->critical($t);
+                        $logId = Be::getLog()->fatal($t);
                         $response->set('logId', $logId);
                         $response->set('code', $t->getCode());
                     }
                     $response->error($t->getMessage(), $t->getRedirect());
                 } else {
-                    $logId = Be::getLog()->critical($t);
+                    $logId = Be::getLog()->fatal($t);
                     $response->set('logId', $logId);
                     $response->exception($t);
                 }
