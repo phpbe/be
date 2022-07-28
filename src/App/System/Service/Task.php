@@ -23,6 +23,7 @@ class Task
         $sql = 'SELECT * FROM system_task WHERE app=' . $db->quoteValue($appName);
         $dbTasks = $db->getKeyObjects($sql, null, 'name');
 
+        $taskNames = [];
         $dir =  Be::getProperty('App.' . $appName)->getPath() . '/Task';
         if (file_exists($dir) && is_dir($dir)) {
             $fileNames = scandir($dir);
@@ -64,6 +65,9 @@ class Task
                             }
 
                             if (isset($dbTasks[$taskName])) {
+
+                                $taskNames[] = $taskName;
+
                                 $data = [
                                     'id' => $dbTasks[$taskName]->id,
                                     'name' => $taskName,
@@ -117,6 +121,17 @@ class Task
                 }
             }
         }
+
+        // 删除已不存在的 task
+        if (count($dbTasks) !== count($taskNames)) {
+            foreach ($dbTasks as $taskName => $dbTask) {
+                if (!is_array($taskName, $taskNames)) {
+                    $sql = 'UPDATE system_task SET is_enable=1, is_delete=1 WHERE id=' . $db->quoteValue($dbTask->id);
+                    $db->query($sql);
+                }
+            }
+        }
+
         return $n;
     }
 
