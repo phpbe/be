@@ -126,7 +126,7 @@ class Task
         if (count($dbTasks) !== count($taskNames)) {
             foreach ($dbTasks as $taskName => $dbTask) {
                 if (!in_array($taskName, $taskNames)) {
-                    $sql = 'UPDATE system_task SET is_enable=1, is_delete=1 WHERE id=' . $db->quoteValue($dbTask->id);
+                    $sql = 'UPDATE system_task SET is_enable=0, is_delete=1 WHERE id=' . $db->quoteValue($dbTask->id);
                     $db->query($sql);
                 }
             }
