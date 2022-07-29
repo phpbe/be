@@ -61,7 +61,11 @@
 </head>
 <body>
 <be-body>
-    <be-page-content></be-page-content>
+    <be-middle>
+        <be-center>
+            <be-page-content></be-page-content>
+        </be-center>
+    </be-middle>
 </be-body>
 </body>
 </html>
