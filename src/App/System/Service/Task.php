@@ -125,7 +125,7 @@ class Task
         // 删除已不存在的 task
         if (count($dbTasks) !== count($taskNames)) {
             foreach ($dbTasks as $taskName => $dbTask) {
-                if (!is_array($taskName, $taskNames)) {
+                if (!in_array($taskName, $taskNames)) {
                     $sql = 'UPDATE system_task SET is_enable=1, is_delete=1 WHERE id=' . $db->quoteValue($dbTask->id);
                     $db->query($sql);
                 }
