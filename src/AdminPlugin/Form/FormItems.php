@@ -16,7 +16,6 @@ class FormItems
 
     private $js = [];
     private $css = [];
-    private $formData = [];
     private $vueData = [];
     private $vueMethods = [];
     private $vueHooks = [];
@@ -179,7 +178,11 @@ class FormItems
      */
     public function setVueHook(string $name, string $code)
     {
-        $this->vueHooks[$name] .= "\r\n" . $code;
+        if (isset($this->vueHooks[$name])) {
+            $this->vueHooks[$name] .= "\r\n" . $code;
+        } else {
+            $this->vueHooks[$name] = $code;
+        }
     }
 
     /**
