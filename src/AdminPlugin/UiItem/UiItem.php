@@ -3,7 +3,7 @@
 namespace Be\AdminPlugin\UiItem;
 
 /**
- * Vue 项目
+ * UI项
  *
  */
 class UiItem
