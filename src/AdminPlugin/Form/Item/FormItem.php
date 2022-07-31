@@ -3,12 +3,12 @@
 namespace Be\AdminPlugin\Form\Item;
 
 use Be\AdminPlugin\AdminPluginException;
-use Be\AdminPlugin\VueItem\VueItem;
+use Be\AdminPlugin\UiItem\UiItem;
 
 /**
  * 表单项
  */
-abstract class FormItem extends VueItem
+abstract class FormItem extends UiItem
 {
 
     protected $name = null; // 键名

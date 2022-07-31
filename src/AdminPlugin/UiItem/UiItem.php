@@ -1,12 +1,12 @@
 <?php
 
-namespace Be\AdminPlugin\VueItem;
+namespace Be\AdminPlugin\UiItem;
 
 /**
  * Vue 项目
  *
  */
-class VueItem
+class UiItem
 {
 
     /**

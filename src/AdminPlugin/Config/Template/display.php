@@ -10,7 +10,7 @@
 <be-page-content>
     <?php
     $formData = [];
-    $vueItems = new \Be\AdminPlugin\VueItem\VueItems();
+    $uiItems = new \Be\AdminPlugin\UiItem\UiItems();
     ?>
     <div class="be-bc-fff be-px-150 be-pt-150 be-pb-50" id="app" v-cloak>
 
@@ -44,7 +44,7 @@
                                             }
                                         }
 
-                                        $vueItems->add($driver);
+                                        $uiItems->add($driver);
                                     }
                                     ?>
                                     <el-form-item>
@@ -68,8 +68,8 @@
     </div>
 
     <?php
-    echo $vueItems->getJs();
-    echo $vueItems->getCss();
+    echo $uiItems->getJs();
+    echo $uiItems->getCss();
     ?>
 
     <script>
@@ -79,7 +79,7 @@
                 formData: <?php echo json_encode($formData); ?>,
                 loading: false
                 <?php
-                echo $vueItems->getVueData();
+                echo $uiItems->getVueData();
                 ?>
             },
             methods: {
@@ -139,12 +139,12 @@
                 }
 
                 <?php
-                echo $vueItems->getVueMethods();
+                echo $uiItems->getVueMethods();
                 ?>
             }
 
             <?php
-            echo $vueItems->getVueHooks();
+            echo $uiItems->getVueHooks();
             ?>
         });
     </script>

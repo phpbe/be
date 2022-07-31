@@ -2,13 +2,13 @@
 
 namespace Be\AdminPlugin\Table\Item;
 
-use Be\AdminPlugin\VueItem\VueItem;
+use Be\AdminPlugin\UiItem\UiItem;
 use Be\Be;
 
 /**
  * 字段驱动
  */
-abstract class TableItem extends VueItem
+abstract class TableItem extends UiItem
 {
 
     public $name = null; // 键名

@@ -29,7 +29,7 @@
 <be-page-content>
     <?php
     $formData = [];
-    $vueItems = new \Be\AdminPlugin\VueItem\VueItems();
+    $uiItems = new \Be\AdminPlugin\UiItem\UiItems();
     ?>
     <div class="be-bc-fff be-px-100 be-pt-100 be-pb-50" id="app" v-cloak>
         <el-form<?php
@@ -77,7 +77,7 @@
                             $formData[$driver->name] = $driver->getValueString();
                         }
 
-                        $vueItems->add($driver);
+                        $uiItems->add($driver);
                     }
 
                     if (isset($this->setting['grid']['form']['actions']) && count($this->setting['grid']['form']['actions']) > 0) {
@@ -111,7 +111,7 @@
 
                             $html .= $driver->getHtml() . ' ';
 
-                            $vueItems->add($driver);
+                            $uiItems->add($driver);
                         }
 
                         if ($html) {
@@ -185,7 +185,7 @@
 
                     echo $driver->getHtml();
 
-                    $vueItems->add($driver);
+                    $uiItems->add($driver);
                 }
                 ?>
             </el-table>
@@ -219,10 +219,10 @@
 
 
     <?php
-    $vueItems->setting($this->setting);
+    $uiItems->setting($this->setting);
 
-    echo $vueItems->getJs();
-    echo $vueItems->getCss();
+    echo $uiItems->getJs();
+    echo $uiItems->getCss();
     ?>
 
     <script>
@@ -253,7 +253,7 @@
 
                 t: false
                 <?php
-                echo $vueItems->getVueData();
+                echo $uiItems->getVueData();
                 ?>
             },
             methods: {
@@ -351,13 +351,13 @@
                 }
 
                 <?php
-                echo $vueItems->getVueMethods();
+                echo $uiItems->getVueMethods();
                 ?>
             }
 
             <?php
-            $vueItems->setVueHook('created', 'this.search();');
-            $vueItems->setVueHook('mounted', '
+            $uiItems->setVueHook('created', 'this.search();');
+            $uiItems->setVueHook('mounted', '
                 this.$nextTick(function () {
                     this.resize();
                     let _this = this;
@@ -366,13 +366,13 @@
                     };
                 });
             ');
-            $vueItems->setVueHook('updated', '
+            $uiItems->setVueHook('updated', '
                 let _this = this;
                 this.$nextTick(function () {
                     _this.$refs.tableRef.doLayout();
                 });
             ');
-            echo $vueItems->getVueHooks();
+            echo $uiItems->getVueHooks();
             ?>
 
         });

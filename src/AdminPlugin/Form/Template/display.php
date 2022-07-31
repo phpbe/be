@@ -1,7 +1,7 @@
 <be-page-content>
     <?php
     $formData = [];
-    $vueItems = new \Be\AdminPlugin\VueItem\VueItems();
+    $uiItems = new \Be\AdminPlugin\UiItem\UiItems();
     ?>
     <div class="be-bc-fff be-px-100 be-pt-100 be-pb-50" id="app" v-cloak>
 
@@ -57,7 +57,7 @@
                         }
                     }
 
-                    $vueItems->add($driver);
+                    $uiItems->add($driver);
                 }
             }
             ?>
@@ -118,7 +118,7 @@
 
                         echo $driver->getHtml() . ' ';
 
-                        $vueItems->add($driver);
+                        $uiItems->add($driver);
                     }
                 }
                 ?>
@@ -152,10 +152,10 @@
     </div>
 
     <?php
-    $vueItems->setting($this->setting);
+    $uiItems->setting($this->setting);
 
-    echo $vueItems->getJs();
-    echo $vueItems->getCss();
+    echo $uiItems->getJs();
+    echo $uiItems->getCss();
     ?>
 
     <script>
@@ -167,7 +167,7 @@
                 dialog: {visible: false, width: "600px", height: "400px", title: ""},
                 drawer: {visible: false, width: "40%", title: ""}
                 <?php
-                echo $vueItems->getVueData();
+                echo $uiItems->getVueData();
                 ?>
             },
             methods: {
@@ -309,12 +309,12 @@
                 }
 
                 <?php
-                echo $vueItems->getVueMethods();
+                echo $uiItems->getVueMethods();
                 ?>
             }
 
             <?php
-            echo $vueItems->getVueHooks();
+            echo $uiItems->getVueHooks();
             ?>
         });
 

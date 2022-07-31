@@ -3,12 +3,12 @@
 namespace Be\AdminPlugin\Tab;
 
 use Be\AdminPlugin\AdminPluginException;
-use Be\AdminPlugin\VueItem\VueItem;
+use Be\AdminPlugin\UiItem\UiItem;
 
 /**
  * 选项卡
  */
-class Driver extends VueItem
+class Driver extends UiItem
 {
     protected $name = null; // 键名
     protected string $label = ''; // 配置项中文名称

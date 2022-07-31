@@ -2,13 +2,13 @@
 
 namespace Be\AdminPlugin\Form\Action;
 
-use Be\AdminPlugin\VueItem\VueItem;
+use Be\AdminPlugin\UiItem\UiItem;
 use Be\Be;
 
 /**
  * 表单操作项 驱动
  */
-abstract class FormAction extends VueItem
+abstract class FormAction extends UiItem
 {
 
     public $name = null; // 键名

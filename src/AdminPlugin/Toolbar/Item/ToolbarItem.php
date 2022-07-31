@@ -2,13 +2,13 @@
 
 namespace Be\AdminPlugin\Toolbar\Item;
 
-use Be\AdminPlugin\VueItem\VueItem;
+use Be\AdminPlugin\UiItem\UiItem;
 use Be\Be;
 
 /**
  * 工具栏驱动
  */
-abstract class ToolbarItem extends VueItem
+abstract class ToolbarItem extends UiItem
 {
     public $name = null; // 键名
     public $label = ''; // 配置项中文名称

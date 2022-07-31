@@ -2,12 +2,12 @@
 
 namespace Be\AdminPlugin\Detail\Item;
 
-use Be\AdminPlugin\VueItem\VueItem;
+use Be\AdminPlugin\UiItem\UiItem;
 
 /**
  * 明细驱动
  */
-abstract class DetailItem extends VueItem
+abstract class DetailItem extends UiItem
 {
 
     protected $name = ''; // 键名

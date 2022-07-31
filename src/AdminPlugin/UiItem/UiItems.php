@@ -1,12 +1,12 @@
 <?php
 
-namespace Be\AdminPlugin\VueItem;
+namespace Be\AdminPlugin\UiItem;
 
 /**
  * Vue 项目管理
  *
  */
-class VueItems
+class UiItems
 {
 
     //private $this = [];
@@ -19,41 +19,41 @@ class VueItems
     private $vueMethods = [];
     private $vueHooks = [];
 
-    public function add(VueItem $vueItem)
+    public function add(UiItem $uiItem)
     {
-        //$this->vueItems[] = $vueItem;
+        //$this->uiItems[] = $uiItem;
 
-        $js = $vueItem->getJs();
+        $js = $uiItem->getJs();
         if ($js) {
             $this->js = array_merge($this->js, $js);
         }
 
-        $jsCode = $vueItem->getJsCode();
+        $jsCode = $uiItem->getJsCode();
         if ($jsCode) {
             $this->jsCode[] = $jsCode;
         }
 
-        $css = $vueItem->getCss();
+        $css = $uiItem->getCss();
         if ($css) {
             $this->css = array_merge($this->css, $css);
         }
 
-        $cssCode = $vueItem->getCssCode();
+        $cssCode = $uiItem->getCssCode();
         if ($cssCode) {
             $this->cssCode[] = $cssCode;
         }
 
-        $vueData = $vueItem->getVueData();
+        $vueData = $uiItem->getVueData();
         if ($vueData) {
             $this->vueData = \Be\Util\Arr::merge($this->vueData, $vueData);
         }
 
-        $vueMethods = $vueItem->getVueMethods();
+        $vueMethods = $uiItem->getVueMethods();
         if ($vueMethods) {
             $this->vueMethods = array_merge($this->vueMethods, $vueMethods);
         }
 
-        $vueHooks = $vueItem->getVueHooks();
+        $vueHooks = $uiItem->getVueHooks();
         if ($vueHooks) {
             foreach ($vueHooks as $k => $v) {
                 if (isset($this->vueHooks[$k])) {

@@ -172,7 +172,7 @@
 <be-center>
     <?php
     $formData = [];
-    $vueItems = new \Be\AdminPlugin\VueItem\VueItems();
+    $uiItems = new \Be\AdminPlugin\UiItem\UiItems();
 
     $titleToolbarItems = [];
     $titleRightToolbarItems = [];
@@ -246,7 +246,7 @@
                         $toolbarItems[] = $toolbar;
                 }
 
-                $vueItems->add($driver);
+                $uiItems->add($driver);
             }
         }
     }
@@ -323,7 +323,7 @@
 
                     $formData[$driver->name] = $driver->value;
 
-                    $vueItems->add($driver);
+                    $uiItems->add($driver);
                 }
 
                 if ($tabHtml && $tabPosition === 'beforeForm') {
@@ -354,7 +354,7 @@
                                     $formData[$driver->name] = $driver->getValueString();
                                 }
 
-                                $vueItems->add($driver);
+                                $uiItems->add($driver);
                             }
 
                             if (isset($this->setting['form']['actions']) && count($this->setting['form']['actions']) > 0) {
@@ -388,7 +388,7 @@
 
                                     $html .= $driver->getHtml() . ' ';
 
-                                    $vueItems->add($driver);
+                                    $uiItems->add($driver);
                                 }
 
                                 if ($html) {
@@ -516,7 +516,7 @@
 
                                     $opHtml .= $driver->getHtml();
 
-                                    $vueItems->add($driver);
+                                    $uiItems->add($driver);
                                 }
                             }
 
@@ -544,7 +544,7 @@
 
                             echo $driver->getHtml();
 
-                            $vueItems->add($driver);
+                            $uiItems->add($driver);
                         }
 
                         if (isset($this->setting['table']['operation']) && $opPosition === 'right') {
@@ -659,7 +659,7 @@
 
                                                     echo $driver->getHtml();
 
-                                                    $vueItems->add($driver);
+                                                    $uiItems->add($driver);
                                                 }
                                             }
                                             echo '</div>';
@@ -698,7 +698,7 @@
 
                                                         echo $driver->getHtml();
 
-                                                        $vueItems->add($driver);
+                                                        $uiItems->add($driver);
 
                                                         echo '</template>';
                                                         echo '</card-operation>';
@@ -773,10 +773,10 @@
     <?php
     echo $this->tag1('be-page-content');
 
-    $vueItems->setting($this->setting);
+    $uiItems->setting($this->setting);
 
-    echo $vueItems->getJs();
-    echo $vueItems->getCss();
+    echo $uiItems->getJs();
+    echo $uiItems->getCss();
 
     $tableActionLeft = '50px';
     if (isset($this->setting['table']['items'][0]) ) {
@@ -836,7 +836,7 @@
                 dialog: {visible: false, width: "600px", height: "400px", title: ""},
                 drawer: {visible: false, width: "40%", title: ""}
                 <?php
-                echo $vueItems->getVueData();
+                echo $uiItems->getVueData();
                 ?>
             },
             methods: {
@@ -1138,7 +1138,7 @@
                 }
 
                 <?php
-                echo $vueItems->getVueMethods();
+                echo $uiItems->getVueMethods();
                 ?>
             }
 
@@ -1148,9 +1148,9 @@
                 $created .= 'var _this = this;';
                 $created .= 'setInterval(function () {_this.reloadGridData();}, ' . ($this->setting['reload'] * 1000) . ');';
             }
-            $vueItems->setVueHook('created', $created);
+            $uiItems->setVueHook('created', $created);
 
-            $vueItems->setVueHook('mounted', '
+            $uiItems->setVueHook('mounted', '
                 this.$nextTick(function () {
                     this.resize();
                     let _this = this;
@@ -1161,7 +1161,7 @@
             ');
 
             if ($this->setting['actualLayout'] === 'table') {
-                $vueItems->setVueHook('updated', '
+                $uiItems->setVueHook('updated', '
                     let _this = this;
                     this.$nextTick(function () {
                         _this.$refs.tableRef.doLayout();
@@ -1177,7 +1177,7 @@
                 ');
             }
 
-            echo $vueItems->getVueHooks();
+            echo $uiItems->getVueHooks();
             ?>
         });
 

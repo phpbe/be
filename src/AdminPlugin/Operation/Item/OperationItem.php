@@ -2,13 +2,13 @@
 
 namespace Be\AdminPlugin\Operation\Item;
 
-use Be\AdminPlugin\VueItem\VueItem;
+use Be\AdminPlugin\UiItem\UiItem;
 use Be\Be;
 
 /**
  * 操作项 驱动
  */
-abstract class OperationItem extends VueItem
+abstract class OperationItem extends UiItem
 {
 
     public $name = null; // 键名
