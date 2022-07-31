@@ -5,6 +5,9 @@ if (window.$cookies.isKey('be-admin-west-collapse') && window.$cookies.get('be-a
     document.getElementById("be-north").style.left = "64px";
 }
 
+
+
+
 window.be = {
 
     activeIframe: null,
@@ -17,23 +20,22 @@ window.be = {
         return this.activeIframe;
     },
 
-    openDialog: function (title, url, options = {}) {
-        vueBe.openDialog(title, url, options);
+    openDialog: function (title, url, options = {}, formData = null) {
+        vueBe.openDialog(title, url, options, formData);
     },
 
     closeDialog: function () {
         vueBe.closeDialog();
     },
 
-    openDrawer: function (title, url, options = {}) {
-        vueBe.openDrawer(title, url, options);
+    openDrawer: function (title, url, options = {}, formData = null) {
+        vueBe.openDrawer(title, url, options, formData);
     },
 
     closeDrawer: function () {
         vueBe.closeDrawer();
     },
 }
-
 
 let vueBe = new Vue({
     el: '#app-be',
@@ -42,20 +44,19 @@ let vueBe = new Vue({
         drawer: {visible: false, title: "", url: "about:blank", width: ""}
     },
     methods: {
-        openDialog: function (title, url, option = {}) {
+        openDialog: function (title, url, options = {}, formData = null) {
             this.dialog.visible = true;
-
             this.dialog.title = title;
 
-            if (option.hasOwnProperty("width")) {
-                this.dialog.width = option.width;
+            if (options.hasOwnProperty("width")) {
+                this.dialog.width = options.width;
             } else {
                 let width = document.documentElement.clientWidth;
                 this.dialog.width = width * 0.75 + "px";
             }
 
-            if (option.hasOwnProperty("height")) {
-                this.dialog.height = option.height;
+            if (options.hasOwnProperty("height")) {
+                this.dialog.height = options.height;
             } else {
                 let clientHeight = document.documentElement.clientHeight;
                 let height = clientHeight * 0.75;
@@ -67,7 +68,31 @@ let vueBe = new Vue({
 
             url += url.indexOf("?") === -1 ? "?" : "&"
             url += "_=" + Math.random();
-            this.dialog.url = url;
+
+            if (formData === null) {
+                this.dialog.url = url;
+            } else {
+                let form = document.createElement("form");
+                form.action = url;
+                form.target = "frame-be-dialog";
+                form.method = "post";
+                form.style.display = "none";
+
+                var e = document.createElement("textarea");
+                e.name = 'data';
+                e.value = JSON.stringify(formData);
+                form.appendChild(e);
+
+                document.body.appendChild(form);
+
+                setTimeout(function () {
+                    form.submit();
+                }, 50);
+
+                setTimeout(function () {
+                    document.body.removeChild(form);
+                }, 3000);
+            }
         },
 
         closeDialog: function () {
@@ -75,20 +100,43 @@ let vueBe = new Vue({
             this.dialog.url = "about:blank";
         },
 
-        openDrawer: function (title, url, option) {
+        openDrawer: function (title, url, options, formData = null) {
             this.drawer.visible = true;
-
             this.drawer.title = title;
 
-            if (option.hasOwnProperty("width")) {
-                this.drawer.width = option.width;
+            if (options.hasOwnProperty("width")) {
+                this.drawer.width = options.width;
             } else {
                 this.drawer.width = "40%";
             }
 
             url += url.indexOf("?") === -1 ? "?" : "&"
             url += "_=" + Math.random();
-            this.drawer.url = url;
+
+            if (formData === null) {
+                this.drawer.url = url;
+            } else {
+                let form = document.createElement("form");
+                form.action = url;
+                form.target = "frame-be-drawer";
+                form.method = "post";
+                form.style.display = "none";
+
+                var e = document.createElement("textarea");
+                e.name = 'data';
+                e.value = JSON.stringify(formData);
+                form.appendChild(e);
+
+                document.body.appendChild(form);
+
+                setTimeout(function () {
+                    form.submit();
+                }, 50);
+
+                setTimeout(function () {
+                    document.body.removeChild(form);
+                }, 3000);
+            }
         },
 
         closeDrawer: function () {
