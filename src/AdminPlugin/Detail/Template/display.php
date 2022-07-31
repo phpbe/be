@@ -1,11 +1,7 @@
 <be-page-content>
     <?php
-    $js = [];
-    $css = [];
     $formData = [];
-    $vueData = [];
-    $vueMethods = [];
-    $vueHooks = [];
+    $vueItems = new \Be\AdminPlugin\VueItem\VueItems();
     ?>
     <div class="be-bc-fff be-px-100 be-pt-100 be-pb-50" id="app" v-cloak>
 
@@ -52,37 +48,7 @@
 
                     $formData[$driver->name] = $driver->value;
 
-                    $jsX = $driver->getJs();
-                    if ($jsX) {
-                        $js = array_merge($js, $jsX);
-                    }
-
-                    $cssX = $driver->getCss();
-                    if ($cssX) {
-                        $css = array_merge($css, $cssX);
-                    }
-
-                    $vueDataX = $driver->getVueData();
-                    if ($vueDataX) {
-                        $vueData = \Be\Util\Arr::merge($vueData, $vueDataX);
-                    }
-
-                    $vueMethodsX = $driver->getVueMethods();
-                    if ($vueMethodsX) {
-                        $vueMethods = array_merge($vueMethods, $vueMethodsX);
-                    }
-
-                    $vueHooksX = $driver->getVueHooks();
-                    if ($vueHooksX) {
-                        foreach ($vueHooksX as $k => $v) {
-                            if (isset($vueHooks[$k])) {
-                                $vueHooks[$k] .= "\r\n" . $v;
-                            } else {
-                                $vueHooks[$k] = $v;
-                            }
-                        }
-                    }
-
+                    $vueItems->add($driver);
                 }
             }
             ?>
@@ -118,16 +84,7 @@
 
                         echo $driver->getHtml() . ' ';
 
-                        $vueDataX = $driver->getVueData();
-                        if ($vueDataX) {
-                            $vueData = \Be\Util\Arr::merge($vueData, $vueDataX);
-                        }
-
-                        $vueMethodsX = $driver->getVueMethods();
-                        if ($vueMethodsX) {
-                            $vueMethods = array_merge($vueMethods, $vueMethodsX);
-                        }
-
+                        $vueItems->add($driver);
                     }
                 }
                 ?>
@@ -142,19 +99,10 @@
     </div>
 
     <?php
-    if (count($js) > 0) {
-        $js = array_unique($js);
-        foreach ($js as $x) {
-            echo '<script src="'.$x.'"></script>';
-        }
-    }
+    $vueItems->setting($this->setting);
 
-    if (count($css) > 0) {
-        $css = array_unique($css);
-        foreach ($css as $x) {
-            echo '<link rel="stylesheet" href="'.$x.'">';
-        }
-    }
+    echo $vueItems->getJs();
+    echo $vueItems->getCss();
     ?>
 
     <script>
@@ -163,11 +111,7 @@
             data: {
                 formData: <?php echo json_encode($formData); ?>
                 <?php
-                if ($vueData) {
-                    foreach ($vueData as $k => $v) {
-                        echo ',' . $k . ':' . json_encode($v);
-                    }
-                }
+                echo $vueItems->getVueData();
                 ?>
             },
             methods: {
@@ -246,47 +190,14 @@
 
                     return false;
                 }
+
                 <?php
-                if ($vueMethods) {
-                    foreach ($vueMethods as $k => $v) {
-                        echo ',' . $k . ':' . $v;
-                    }
-                }
+                echo $vueItems->getVueMethods();
                 ?>
             }
 
             <?php
-            if (isset($vueHooks['beforeCreate'])) {
-                echo ',beforeCreate: function () {'.$vueHooks['beforeCreate'].'}';
-            }
-
-            if (isset($vueHooks['created'])) {
-                echo ',created: function () {'.$vueHooks['created'].'}';
-            }
-
-            if (isset($vueHooks['beformMount'])) {
-                echo ',beformMount: function () {'.$vueHooks['beformMount'].'}';
-            }
-
-            if (isset($vueHooks['mounted'])) {
-                echo ',mounted: function () {'.$vueHooks['mounted'].'}';
-            }
-
-            if (isset($vueHooks['beforeUpdate'])) {
-                echo ',beforeUpdate: function () {'.$vueHooks['beforeUpdate'].'}';
-            }
-
-            if (isset($vueHooks['updated'])) {
-                echo ',updated: function () {'.$vueHooks['updated'].'}';
-            }
-
-            if (isset($vueHooks['beforeDestroy'])) {
-                echo ',beforeDestroy: function () {'.$vueHooks['beforeDestroy'].'}';
-            }
-
-            if (isset($vueHooks['destroyed'])) {
-                echo ',destroyed: function () {'.$vueHooks['destroyed'].'}';
-            }
+            echo $vueItems->getVueHooks();
             ?>
         });
     </script>

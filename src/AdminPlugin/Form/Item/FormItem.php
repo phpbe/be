@@ -3,11 +3,12 @@
 namespace Be\AdminPlugin\Form\Item;
 
 use Be\AdminPlugin\AdminPluginException;
+use Be\AdminPlugin\VueItem\VueItem;
 
 /**
  * 表单项
  */
-abstract class FormItem
+abstract class FormItem extends VueItem
 {
 
     protected $name = null; // 键名
@@ -154,87 +155,6 @@ abstract class FormItem
         if (!isset($this->ui['form-item']['label']) && !isset($this->ui['form-item'][':label'])) {
             $this->ui['form-item']['label'] = htmlspecialchars($this->label);
         }
-
-    }
-
-    /**
-     * 获取需要引入的 JS 文件
-     *
-     * @return false | array
-     */
-    public function getJs()
-    {
-        return false;
-    }
-
-    /**
-     * 获取需要引入的 JS 代码
-     *
-     * @return false | string
-     */
-    public function getJsCode()
-    {
-        return false;
-    }
-
-    /**
-     * 获取需要引入的 CSS 代码
-     *
-     * @return false | array
-     */
-    public function getCss()
-    {
-        return false;
-    }
-
-    /**
-     * 获取需要引入的 CSS 文件
-     *
-     * @return false | string
-     */
-    public function getCssCode()
-    {
-        return false;
-    }
-
-    /**
-     * 获取HTML内容
-     *
-     * @return string
-     */
-    public function getHtml()
-    {
-        return '';
-    }
-
-    /**
-     * 获取 vue data
-     *
-     * @return false | array
-     */
-    public function getVueData()
-    {
-        return false;
-    }
-
-    /**
-     * 获取 vue 方法
-     *
-     * @return false | array
-     */
-    public function getVueMethods()
-    {
-        return false;
-    }
-
-    /**
-     * 获取 vue 钩子
-     *
-     * @return false | array
-     */
-    public function getVueHooks()
-    {
-        return false;
     }
 
     public function __get($property)

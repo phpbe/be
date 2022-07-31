@@ -2,12 +2,13 @@
 
 namespace Be\AdminPlugin\Toolbar\Item;
 
+use Be\AdminPlugin\VueItem\VueItem;
 use Be\Be;
 
 /**
  * 工具栏驱动
  */
-abstract class ToolbarItem
+abstract class ToolbarItem extends VueItem
 {
     public $name = null; // 键名
     public $label = ''; // 配置项中文名称
@@ -166,17 +167,6 @@ abstract class ToolbarItem
             }
         }
     }
-
-    /**
-     * 获取HTML内容
-     *
-     * @return string
-     */
-    public function getHtml()
-    {
-        return '';
-    }
-
 
     /**
      * 获取 vue data

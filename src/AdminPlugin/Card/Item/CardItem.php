@@ -2,12 +2,13 @@
 
 namespace Be\AdminPlugin\Card\Item;
 
+use Be\AdminPlugin\VueItem\VueItem;
 use Be\Be;
 
 /**
  * 字段驱动
  */
-abstract class CardItem
+abstract class CardItem extends VueItem
 {
 
     public $name = null; // 键名

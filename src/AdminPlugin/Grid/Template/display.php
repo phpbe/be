@@ -171,12 +171,8 @@
 
 <be-center>
     <?php
-    $js = [];
-    $css = [];
     $formData = [];
-    $vueData = [];
-    $vueMethods = [];
-    $vueHooks = [];
+    $vueItems = new \Be\AdminPlugin\VueItem\VueItems();
 
     $titleToolbarItems = [];
     $titleRightToolbarItems = [];
@@ -250,15 +246,7 @@
                         $toolbarItems[] = $toolbar;
                 }
 
-                $vueDataX = $driver->getVueData();
-                if ($vueDataX) {
-                    $vueData = \Be\Util\Arr::merge($vueData, $vueDataX);
-                }
-
-                $vueMethodsX = $driver->getVueMethods();
-                if ($vueMethodsX) {
-                    $vueMethods = array_merge($vueMethods, $vueMethodsX);
-                }
+                $vueItems->add($driver);
             }
         }
     }
@@ -335,15 +323,7 @@
 
                     $formData[$driver->name] = $driver->value;
 
-                    $vueDataX = $driver->getVueData();
-                    if ($vueDataX) {
-                        $vueData = \Be\Util\Arr::merge($vueData, $vueDataX);
-                    }
-
-                    $vueMethodsX = $driver->getVueMethods();
-                    if ($vueMethodsX) {
-                        $vueMethods = array_merge($vueMethods, $vueMethodsX);
-                    }
+                    $vueItems->add($driver);
                 }
 
                 if ($tabHtml && $tabPosition === 'beforeForm') {
@@ -374,36 +354,7 @@
                                     $formData[$driver->name] = $driver->getValueString();
                                 }
 
-                                $jsX = $driver->getJs();
-                                if ($jsX) {
-                                    $js = array_merge($js, $jsX);
-                                }
-
-                                $cssX = $driver->getCss();
-                                if ($cssX) {
-                                    $css = array_merge($css, $cssX);
-                                }
-
-                                $vueDataX = $driver->getVueData();
-                                if ($vueDataX) {
-                                    $vueData = \Be\Util\Arr::merge($vueData, $vueDataX);
-                                }
-
-                                $vueMethodsX = $driver->getVueMethods();
-                                if ($vueMethodsX) {
-                                    $vueMethods = array_merge($vueMethods, $vueMethodsX);
-                                }
-
-                                $vueHooksX = $driver->getVueHooks();
-                                if ($vueHooksX) {
-                                    foreach ($vueHooksX as $k => $v) {
-                                        if (isset($vueHooks[$k])) {
-                                            $vueHooks[$k] .= "\r\n" . $v;
-                                        } else {
-                                            $vueHooks[$k] = $v;
-                                        }
-                                    }
-                                }
+                                $vueItems->add($driver);
                             }
 
                             if (isset($this->setting['form']['actions']) && count($this->setting['form']['actions']) > 0) {
@@ -437,15 +388,7 @@
 
                                     $html .= $driver->getHtml() . ' ';
 
-                                    $vueDataX = $driver->getVueData();
-                                    if ($vueDataX) {
-                                        $vueData = \Be\Util\Arr::merge($vueData, $vueDataX);
-                                    }
-
-                                    $vueMethodsX = $driver->getVueMethods();
-                                    if ($vueMethodsX) {
-                                        $vueMethods = array_merge($vueMethods, $vueMethodsX);
-                                    }
+                                    $vueItems->add($driver);
                                 }
 
                                 if ($html) {
@@ -573,15 +516,7 @@
 
                                     $opHtml .= $driver->getHtml();
 
-                                    $vueDataX = $driver->getVueData();
-                                    if ($vueDataX) {
-                                        $vueData = \Be\Util\Arr::merge($vueData, $vueDataX);
-                                    }
-
-                                    $vueMethodsX = $driver->getVueMethods();
-                                    if ($vueMethodsX) {
-                                        $vueMethods = array_merge($vueMethods, $vueMethodsX);
-                                    }
+                                    $vueItems->add($driver);
                                 }
                             }
 
@@ -609,15 +544,7 @@
 
                             echo $driver->getHtml();
 
-                            $vueDataX = $driver->getVueData();
-                            if ($vueDataX) {
-                                $vueData = \Be\Util\Arr::merge($vueData, $vueDataX);
-                            }
-
-                            $vueMethodsX = $driver->getVueMethods();
-                            if ($vueMethodsX) {
-                                $vueMethods = array_merge($vueMethods, $vueMethodsX);
-                            }
+                            $vueItems->add($driver);
                         }
 
                         if (isset($this->setting['table']['operation']) && $opPosition === 'right') {
@@ -732,15 +659,7 @@
 
                                                     echo $driver->getHtml();
 
-                                                    $vueDataX = $driver->getVueData();
-                                                    if ($vueDataX) {
-                                                        $vueData = \Be\Util\Arr::merge($vueData, $vueDataX);
-                                                    }
-
-                                                    $vueMethodsX = $driver->getVueMethods();
-                                                    if ($vueMethodsX) {
-                                                        $vueMethods = array_merge($vueMethods, $vueMethodsX);
-                                                    }
+                                                    $vueItems->add($driver);
                                                 }
                                             }
                                             echo '</div>';
@@ -779,15 +698,8 @@
 
                                                         echo $driver->getHtml();
 
-                                                        $vueDataX = $driver->getVueData();
-                                                        if ($vueDataX) {
-                                                            $vueData = \Be\Util\Arr::merge($vueData, $vueDataX);
-                                                        }
+                                                        $vueItems->add($driver);
 
-                                                        $vueMethodsX = $driver->getVueMethods();
-                                                        if ($vueMethodsX) {
-                                                            $vueMethods = array_merge($vueMethods, $vueMethodsX);
-                                                        }
                                                         echo '</template>';
                                                         echo '</card-operation>';
 
@@ -861,45 +773,10 @@
     <?php
     echo $this->tag1('be-page-content');
 
-    if (isset($this->setting['js'])) {
-        $js = array_merge($js, $this->setting['js']);
-    }
+    $vueItems->setting($this->setting);
 
-    if (isset($this->setting['css'])) {
-        $css = array_merge($css, $this->setting['css']);
-    }
-
-    if (isset($this->setting['vueData'])) {
-        $vueData = \Be\Util\Arr::merge($vueData, $this->setting['vueData']);
-    }
-
-    if (isset($this->setting['vueMethods'])) {
-        $vueMethods = \Be\Util\Arr::merge($vueMethods, $this->setting['vueMethods']);
-    }
-
-    if (isset($this->setting['vueHooks'])) {
-        foreach ($this->setting['vueHooks'] as $k => $v) {
-            if (isset($vueHooks[$k])) {
-                $vueHooks[$k] .= "\r\n" . $v;
-            } else {
-                $vueHooks[$k] = $v;
-            }
-        }
-    }
-
-    if (count($js) > 0) {
-        $js = array_unique($js);
-        foreach ($js as $x) {
-            echo '<script src="' . $x . '"></script>';
-        }
-    }
-
-    if (count($css) > 0) {
-        $css = array_unique($css);
-        foreach ($css as $x) {
-            echo '<link rel="stylesheet" href="' . $x . '">';
-        }
-    }
+    echo $vueItems->getJs();
+    echo $vueItems->getCss();
 
     $tableActionLeft = '50px';
     if (isset($this->setting['table']['items'][0]) ) {
@@ -957,12 +834,9 @@
                 tableActionLeft: "<?php echo $tableActionLeft; ?>",
                 tableActionHeight: "55px",
                 dialog: {visible: false, width: "600px", height: "400px", title: ""},
-                drawer: {visible: false, width: "40%", title: ""}<?php
-                if ($vueData) {
-                    foreach ($vueData as $k => $v) {
-                        echo ',' . $k . ':' . json_encode($v);
-                    }
-                }
+                drawer: {visible: false, width: "40%", title: ""}
+                <?php
+                echo $vueItems->getVueData();
                 ?>
             },
             methods: {
@@ -1262,28 +1136,21 @@
                     this.tableHeight = Math.max(document.documentElement.clientHeight - rect.top - offset, 100);
                     <?php } ?>
                 }
-                <?php
-                if ($vueMethods) {
-                    foreach ($vueMethods as $k => $v) {
-                        echo ',' . $k . ':' . $v;
-                    }
-                }
-                ?>
-            },
-            created: function () {
-                this.submit();
-                <?php
-                if (isset($this->setting['reload']) && is_numeric($this->setting['reload'])) {
-                    echo 'var _this = this;';
-                    echo 'setInterval(function () {_this.reloadGridData();}, ' . ($this->setting['reload'] * 1000) . ');';
-                }
 
-                if (isset($vueHooks['created'])) {
-                    echo $vueHooks['created'];
-                }
+                <?php
+                echo $vueItems->getVueMethods();
                 ?>
-            },
-            mounted: function () {
+            }
+
+            <?php
+            $created = 'this.submit();';
+            if (isset($this->setting['reload']) && is_numeric($this->setting['reload'])) {
+                $created .= 'var _this = this;';
+                $created .= 'setInterval(function () {_this.reloadGridData();}, ' . ($this->setting['reload'] * 1000) . ');';
+            }
+            $vueItems->setVueHook('created', $created);
+
+            $vueItems->setVueHook('mounted', '
                 this.$nextTick(function () {
                     this.resize();
                     let _this = this;
@@ -1291,56 +1158,26 @@
                         _this.resize();
                     };
                 });
+            ');
 
-                <?php
-                if (isset($vueHooks['mounted'])) {
-                    echo $vueHooks['mounted'];
-                }
-                ?>
-            },
-            updated: function () {
-                <?php if ($this->setting['actualLayout'] === 'table') { ?>
-                let _this = this;
-                this.$nextTick(function () {
-                    _this.$refs.tableRef.doLayout();
-
-                    if (_this.selectedRows.length > 0) {
-                        let tableActionLeft = _this.$refs.tableRef.$el.getElementsByClassName('el-table-column--selection')[0].clientWidth;
-                        _this.tableActionLeft = tableActionLeft + "px";
-
-                        let tableActionHeight = _this.$refs.tableRef.$el.getElementsByClassName('el-table__header')[0].clientHeight;
-                        _this.tableActionHeight = tableActionHeight + "px";
-                    }
-                });
-                <?php
-                }
-
-                if (isset($vueHooks['updated'])) {
-                    echo $vueHooks['updated'];
-                }
-                ?>
-            }
-            <?php
-            if (isset($vueHooks['beforeCreate'])) {
-                echo ',beforeCreate: function () {' . $vueHooks['beforeCreate'] . '}';
+            if ($this->setting['actualLayout'] === 'table') {
+                $vueItems->setVueHook('updated', '
+                    let _this = this;
+                    this.$nextTick(function () {
+                        _this.$refs.tableRef.doLayout();
+    
+                        if (_this.selectedRows.length > 0) {
+                            let tableActionLeft = _this.$refs.tableRef.$el.getElementsByClassName(\'el-table-column--selection\')[0].clientWidth;
+                            _this.tableActionLeft = tableActionLeft + "px";
+    
+                            let tableActionHeight = _this.$refs.tableRef.$el.getElementsByClassName(\'el-table__header\')[0].clientHeight;
+                            _this.tableActionHeight = tableActionHeight + "px";
+                        }
+                    });
+                ');
             }
 
-            if (isset($vueHooks['beformMount'])) {
-                echo ',beformMount: function () {' . $vueHooks['beformMount'] . '}';
-            }
-
-            if (isset($vueHooks['beforeUpdate'])) {
-                echo ',beforeUpdate: function () {' . $vueHooks['beforeUpdate'] . '}';
-            }
-
-
-            if (isset($vueHooks['beforeDestroy'])) {
-                echo ',beforeDestroy: function () {' . $vueHooks['beforeDestroy'] . '}';
-            }
-
-            if (isset($vueHooks['destroyed'])) {
-                echo ',destroyed: function () {' . $vueHooks['destroyed'] . '}';
-            }
+            echo $vueItems->getVueHooks();
             ?>
         });
 

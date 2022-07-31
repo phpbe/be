@@ -2,12 +2,13 @@
 
 namespace Be\AdminPlugin\Operation\Item;
 
+use Be\AdminPlugin\VueItem\VueItem;
 use Be\Be;
 
 /**
  * 操作项 驱动
  */
-abstract class OperationItem
+abstract class OperationItem extends VueItem
 {
 
     public $name = null; // 键名
@@ -180,16 +181,6 @@ abstract class OperationItem
                 $this->drawer['width'] = '40%';
             }
         }
-    }
-
-    /**
-     * 获取HTML内容
-     *
-     * @return string
-     */
-    public function getHtml()
-    {
-        return '';
     }
 
     /**

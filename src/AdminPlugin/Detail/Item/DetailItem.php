@@ -2,10 +2,12 @@
 
 namespace Be\AdminPlugin\Detail\Item;
 
+use Be\AdminPlugin\VueItem\VueItem;
+
 /**
  * 明细驱动
  */
-abstract class DetailItem
+abstract class DetailItem extends VueItem
 {
 
     protected $name = ''; // 键名
@@ -70,37 +72,6 @@ abstract class DetailItem
     }
 
     /**
-     * 获取需要引入的 JS 文件
-     *
-     * @return false | array
-     */
-    public function getJs()
-    {
-        return false;
-    }
-
-
-    /**
-     * 获取需要引入的 CSS 文件
-     *
-     * @return false | array
-     */
-    public function getCss()
-    {
-        return false;
-    }
-
-    /**
-     * 获取HTML内容
-     *
-     * @return string
-     */
-    public function getHtml()
-    {
-        return '';
-    }
-
-    /**
      * 获取 vue data
      *
      * @return false | array
@@ -125,25 +96,6 @@ abstract class DetailItem
         ];
     }
 
-    /**
-     * 获取 vue 方法
-     *
-     * @return false | array
-     */
-    public function getVueMethods()
-    {
-        return false;
-    }
-
-    /**
-     * 获取 vue 钩子
-     *
-     * @return false | array
-     */
-    public function getVueHooks()
-    {
-        return false;
-    }
 
     public function __get($property)
     {

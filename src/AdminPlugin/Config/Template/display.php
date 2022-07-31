@@ -9,14 +9,8 @@
 
 <be-page-content>
     <?php
-    $js = [];
-    $jsCode = '';
-    $css = [];
-    $cssCode = '';
     $formData = [];
-    $vueData = [];
-    $vueMethods = [];
-    $vueHooks = [];
+    $vueItems = new \Be\AdminPlugin\VueItem\VueItems();
     ?>
     <div class="be-bc-fff be-px-150 be-pt-150 be-pb-50" id="app" v-cloak>
 
@@ -50,47 +44,7 @@
                                             }
                                         }
 
-                                        $jsX = $driver->getJs();
-                                        if ($jsX) {
-                                            $js = array_merge($js, $jsX);
-                                        }
-
-                                        $jsCodeX = $driver->getJsCode();
-                                        if ($jsCodeX) {
-                                            $jsCode .= $jsCodeX . "\n";
-                                        }
-
-                                        $cssX = $driver->getCss();
-                                        if ($cssX) {
-                                            $css = array_merge($css, $cssX);
-                                        }
-
-                                        $cssCodeX = $driver->getCssCode();
-                                        if ($cssCodeX) {
-                                            $cssCode .= $cssCodeX . "\n";
-                                        }
-
-                                        $vueDataX = $driver->getVueData();
-                                        if ($vueDataX) {
-                                            $vueData = \Be\Util\Arr::merge($vueData, $vueDataX);
-                                        }
-
-                                        $vueMethodsX = $driver->getVueMethods();
-                                        if ($vueMethodsX) {
-                                            $vueMethods = array_merge($vueMethods, $vueMethodsX);
-                                        }
-
-                                        $vueHooksX = $driver->getVueHooks();
-                                        if ($vueHooksX) {
-                                            foreach ($vueHooksX as $k => $v) {
-                                                if (isset($vueHooks[$k])) {
-                                                    $vueHooks[$k] .= "\r\n" . $v;
-                                                } else {
-                                                    $vueHooks[$k] = $v;
-                                                }
-                                            }
-                                        }
-
+                                        $vueItems->add($driver);
                                     }
                                     ?>
                                     <el-form-item>
@@ -114,27 +68,8 @@
     </div>
 
     <?php
-    if (count($js) > 0) {
-        $js = array_unique($js);
-        foreach ($js as $x) {
-            echo '<script src="'.$x.'"></script>';
-        }
-    }
-
-    if (count($css) > 0) {
-        $css = array_unique($css);
-        foreach ($css as $x) {
-            echo '<link rel="stylesheet" href="'.$x.'">';
-        }
-    }
-
-    if ($jsCode) {
-        echo '<script>' . $jsCode . '</script>';
-    }
-
-    if ($cssCode) {
-        echo '<style>' . $cssCode . '</style>';
-    }
+    echo $vueItems->getJs();
+    echo $vueItems->getCss();
     ?>
 
     <script>
@@ -142,12 +77,9 @@
             el: '#app',
             data: {
                 formData: <?php echo json_encode($formData); ?>,
-                loading: false<?php
-                if ($vueData) {
-                    foreach ($vueData as $k => $v) {
-                        echo ',' . $k . ':' . json_encode($v);
-                    }
-                }
+                loading: false
+                <?php
+                echo $vueItems->getVueData();
                 ?>
             },
             methods: {
@@ -205,46 +137,14 @@
                     sUrl += "configName=" + tab.name;
                     window.location.href = sUrl;
                 }
+
                 <?php
-                if ($vueMethods) {
-                    foreach ($vueMethods as $k => $v) {
-                        echo ',' . $k . ':' . $v;
-                    }
-                }
+                echo $vueItems->getVueMethods();
                 ?>
             }
+
             <?php
-            if (isset($vueHooks['beforeCreate'])) {
-                echo ',beforeCreate: function () {'.$vueHooks['beforeCreate'].'}';
-            }
-
-            if (isset($vueHooks['created'])) {
-                echo ',created: function () {'.$vueHooks['created'].'}';
-            }
-
-            if (isset($vueHooks['beforeMount'])) {
-                echo ',beforeMount: function () {'.$vueHooks['beforeMount'].'}';
-            }
-
-            if (isset($vueHooks['mounted'])) {
-                echo ',mounted: function () {'.$vueHooks['mounted'].'}';
-            }
-
-            if (isset($vueHooks['beforeUpdate'])) {
-                echo ',beforeUpdate: function () {'.$vueHooks['beforeUpdate'].'}';
-            }
-
-            if (isset($vueHooks['updated'])) {
-                echo ',updated: function () {'.$vueHooks['updated'].'}';
-            }
-
-            if (isset($vueHooks['beforeDestroy'])) {
-                echo ',beforeDestroy: function () {'.$vueHooks['beforeDestroy'].'}';
-            }
-
-            if (isset($vueHooks['destroyed'])) {
-                echo ',destroyed: function () {'.$vueHooks['destroyed'].'}';
-            }
+            echo $vueItems->getVueHooks();
             ?>
         });
     </script>

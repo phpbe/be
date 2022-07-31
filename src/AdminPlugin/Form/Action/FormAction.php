@@ -2,12 +2,13 @@
 
 namespace Be\AdminPlugin\Form\Action;
 
+use Be\AdminPlugin\VueItem\VueItem;
 use Be\Be;
 
 /**
  * 表单操作项 驱动
  */
-abstract class FormAction
+abstract class FormAction extends VueItem
 {
 
     public $name = null; // 键名
@@ -153,16 +154,6 @@ abstract class FormAction
                 $this->drawer['width'] = '40%';
             }
         }
-    }
-
-    /**
-     * 获取HTML内容
-     *
-     * @return string
-     */
-    public function getHtml()
-    {
-        return '';
     }
 
     /**
