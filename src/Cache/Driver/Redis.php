@@ -130,6 +130,18 @@ class Redis extends Driver
     }
 
     /**
+     * 设置超时时间
+     *
+     * @param string $key    键名
+     * @param int $expire 有效时间（秒）
+     * @return bool
+     */
+    public function setExpire($key,  $expire = 0): bool
+    {
+        return $this->redis->expire('be:cache:' . $key, $expire);
+    }
+
+    /**
      * 指定键名的缓存是否存在
      *
      * @param string $key 缓存键名

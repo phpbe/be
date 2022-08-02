@@ -128,6 +128,42 @@ class File extends Driver
     }
 
     /**
+     * 设置超时时间
+     *
+     * @param string $key    键名
+     * @param int $expire 有效时间（秒）
+     * @return bool
+     */
+    public function setExpire($key,  $expire = 0): bool
+    {
+        $hash = sha1($key);
+        $path = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2) . '/' . $hash . '.php';
+
+        if (!is_file($path)) {
+            return false;
+        };
+
+        $content = file_get_contents($path);
+
+        if (false !== $content) {
+
+            if ($expire === 0) {
+                $expire = 9999999999;
+            } else {
+                $expire = time() + $expire;
+                if ($expire > 9999999999) $expire = 9999999999;
+            }
+
+            $data = "<?php\n//" . $expire . substr($content, 18);
+            if (!file_put_contents($path, $data)) return false;
+            chmod($path, 0777);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * 指定键名的缓存是否存在
      *
      * @param string $key 缓存键名

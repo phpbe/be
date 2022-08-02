@@ -56,6 +56,15 @@ abstract class Driver
     abstract function setMany($values, $expire = 0): bool;
 
     /**
+     * 设置超时时间
+     *
+     * @param string $key    键名
+     * @param int $expire 有效时间（秒）
+     * @return bool
+     */
+    abstract function setExpire($key, $expire = 0): bool;
+
+    /**
      * 指定键名的缓存是否存在
      *
      * @param string $key 缓存键名
