@@ -117,10 +117,15 @@ class AdminMenu
                     }
 
                     if (!$menuGroup) {
-                        $menuGroup = [
-                            'label' => 'null-' . uniqid(rand(1, 999999)),
-                            'ordering' => $item['ordering'],
-                        ];
+                        $menuGroup = [];
+                    }
+
+                    if (!isset($menuGroup['label']) || $menuGroup['label'] === '' && $menuGroup['label'] === 'null') {
+                        $menuGroup['label'] =  'null-' . uniqid(rand(1, 999999));
+
+                        if (!isset($menuGroup['ordering'])) {
+                            $menuGroup['ordering'] = $item['ordering'];
+                        }
                     }
 
                     $menuGroup['key'] = $appName . '.' . $controller;
