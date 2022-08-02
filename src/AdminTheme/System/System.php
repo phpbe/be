@@ -72,18 +72,6 @@
                                     echo '</template>';
 
                                     foreach ($item->subItems as $subItem) {
-                                        echo '<el-submenu index="north-menu-'.$subItem->id.'" popper-class="be-north-popup-menu">';
-
-                                        echo '<template slot="title">';
-                                        if ($subItem->url) {
-                                            echo '<el-link href="'.$subItem->url.'" icon="'.$subItem->icon.'" :underline="false">';
-                                            echo $subItem->label;
-                                            echo '</el-link>';
-                                        } else {
-                                            echo '<i class="'.$subItem->icon.'"></i>';
-                                            echo '<span>'.$subItem->label.'</span>';
-                                        }
-                                        echo '</template>';
 
                                         $hasSubSubItem = false;
                                         if (isset($subItem->subItems) && is_array($subItem->subItems) && count($subItem->subItems) > 0) {
@@ -91,6 +79,19 @@
                                         }
 
                                         if ($hasSubSubItem) {
+                                            echo '<el-submenu index="north-menu-'.$subItem->id.'" popper-class="be-north-popup-menu">';
+
+                                            echo '<template slot="title">';
+                                            if ($subItem->url) {
+                                                echo '<el-link href="'.$subItem->url.'" icon="'.$subItem->icon.'" :underline="false">';
+                                                echo $subItem->label;
+                                                echo '</el-link>';
+                                            } else {
+                                                echo '<i class="'.$subItem->icon.'"></i>';
+                                                echo '<span>'.$subItem->label.'</span>';
+                                            }
+                                            echo '</template>';
+
                                             foreach ($subItem->subItems as $subSubItem) {
                                                 echo '<el-menu-item index="north-menu-'.$subSubItem->id.'">';
                                                 echo '<el-link href="'.$subSubItem->url.'" icon="'.$subSubItem->icon.'" :underline="false">';
@@ -98,8 +99,14 @@
                                                 echo '</el-link>';
                                                 echo '</el-menu-item>';
                                             }
+                                            echo '</el-submenu>';
+                                        } else {
+                                            echo '<el-menu-item index="north-menu-'.$subItem->id.'">';
+                                            echo '<el-link href="'.$subItem->url.'" icon="'.$subItem->icon.'" :underline="false">';
+                                            echo $subItem->label;
+                                            echo '</el-link>';
+                                            echo '</el-menu-item>';
                                         }
-                                        echo '</el-submenu>';
                                     }
                                     echo '</el-submenu>';
                                 }
@@ -219,12 +226,6 @@
                                 // 有子菜单
                                 if ($hasSubItem) {
                                     foreach ($item->subItems as $subItem) {
-                                        echo '<el-submenu index="west-menu-'.$subItem->id.'" popper-class="be-west-popup-menu">';
-
-                                        echo '<template slot="title">';
-                                        echo '<i class="'.$subItem->icon.'"></i>';
-                                        echo '<span>'.$subItem->label.'</span>';
-                                        echo '</template>';
 
                                         $hasSubSubItem = false;
                                         if (isset($subItem->subItems) && is_array($subItem->subItems) && count($subItem->subItems) > 0) {
@@ -232,6 +233,12 @@
                                         }
 
                                         if ($hasSubSubItem) {
+                                            echo '<el-submenu index="west-menu-'.$subItem->id.'" popper-class="be-west-popup-menu">';
+                                            echo '<template slot="title">';
+                                            echo '<i class="'.$subItem->icon.'"></i>';
+                                            echo '<span>'.$subItem->label.'</span>';
+                                            echo '</template>';
+
                                             foreach ($subItem->subItems as $subSubItem) {
                                                 echo '<el-menu-item index="west-menu-'.$subSubItem->id.'">';
                                                 echo '<template slot="title">';
@@ -241,8 +248,18 @@
                                                 echo '</template>';
                                                 echo '</el-menu-item>';
                                             }
+
+                                            echo '</el-submenu>';
+                                        } else {
+                                            echo '<el-menu-item index="west-menu-'.$subItem->id.'">';
+                                            echo '<template slot="title">';
+                                            echo '<el-link href="'.$subItem->url.'" icon="'.$subItem->icon.'" :underline="false">';
+                                            echo $subItem->label;
+                                            echo '</el-link>';
+                                            echo '</template>';
+                                            echo '</el-menu-item>';
                                         }
-                                        echo '</el-submenu>';
+
                                     }
                                 }
                                 break;

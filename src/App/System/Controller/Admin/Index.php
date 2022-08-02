@@ -14,8 +14,7 @@ class Index
     /**
      * 控制台
      *
-     * @throws \Be\Db\DbException
-     * @throws \Be\Runtime\RuntimeException
+     * @BeMenu("首页", icon="el-icon-s-home", ordering="0")
      */
     public function index()
     {

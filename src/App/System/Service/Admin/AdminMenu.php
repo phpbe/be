@@ -104,18 +104,26 @@ class AdminMenu
                         $menuGroup = $classMenuGroup;
                     }
 
-                    if (!$menuGroup || !$item) {
+                    if (!$item) {
                         continue;
                     }
 
                     $app->key = $appName;
-                    $menuGroup['key'] = $appName . '.' . $controller;
 
                     $item['key'] = $appName . '.' . $controller . '.' . $methodName;
                     $item['route'] = $appName . '.' . $controller . '.' . $methodName;
                     if (!isset($item['ordering'])) {
                         $item['ordering'] = 1000000;
                     }
+
+                    if (!$menuGroup) {
+                        $menuGroup = [
+                            'label' => 'null-' . uniqid(rand(1, 999999)),
+                            'ordering' => $item['ordering'],
+                        ];
+                    }
+
+                    $menuGroup['key'] = $appName . '.' . $controller;
 
                     if (!isset($menus[$appName])) {
                         $menus[$appName] = [
@@ -194,10 +202,16 @@ class AdminMenu
             $code .= '    $this->addItem(\'' . $app->key . '\', \'\', \'' . $app->icon . '\',\'' . $app->label . '\', \'' . $app->route . '\', [], \'\', \'\');' . "\n";
             foreach ($v['groups'] as $key => $val) {
                 $group = $val['group'];
-                $firstItem = current($val['items']);
-                $code .= '    $this->addItem(\'' . $group['key'] . '\',\'' . $app->key . '\',\'' . (isset($group['icon']) ? $group['icon'] : 'el-icon-folder') . '\',\'' . $group['label'] . '\', \'' . $firstItem['route'] . '\', [], \'\', \'\');' . "\n";
-                foreach ($val['items'] as $item) {
-                    $code .= '    $this->addItem(\'' . $item['key'] . '\', \'' . $group['key'] . '\', \'' . (isset($item['icon']) ? $item['icon'] : 'el-icon-arrow-right') . '\', \'' . $item['label'] . '\', \'' . $item['route'] . '\', [], \'\', \'' . (isset($item['target']) ? $item['target'] : '') . '\');' . "\n";
+                if (substr($group['label'], 0, 5) === 'null-') {
+                    foreach ($val['items'] as $item) {
+                        $code .= '    $this->addItem(\'' . $item['key'] . '\', \'' . $app->key . '\', \'' . (isset($item['icon']) ? $item['icon'] : 'el-icon-arrow-right') . '\', \'' . $item['label'] . '\', \'' . $item['route'] . '\', [], \'\', \'' . (isset($item['target']) ? $item['target'] : '') . '\');' . "\n";
+                    }
+                } else {
+                    $firstItem = current($val['items']);
+                    $code .= '    $this->addItem(\'' . $group['key'] . '\',\'' . $app->key . '\',\'' . (isset($group['icon']) ? $group['icon'] : 'el-icon-folder') . '\',\'' . $group['label'] . '\', \'' . $firstItem['route'] . '\', [], \'\', \'\');' . "\n";
+                    foreach ($val['items'] as $item) {
+                        $code .= '    $this->addItem(\'' . $item['key'] . '\', \'' . $group['key'] . '\', \'' . (isset($item['icon']) ? $item['icon'] : 'el-icon-arrow-right') . '\', \'' . $item['label'] . '\', \'' . $item['route'] . '\', [], \'\', \'' . (isset($item['target']) ? $item['target'] : '') . '\');' . "\n";
+                    }
                 }
             }
         }
