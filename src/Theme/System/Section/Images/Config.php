@@ -35,7 +35,7 @@ class Config
      *     description = "上右下左（CSS padding 语法）"
      * )
      */
-    public string $paddingMobile = '1.5rem 0';
+    public string $paddingMobile = '1rem 0';
 
     /**
      * @BeConfigItem("内边距 （平板端）",
@@ -43,7 +43,7 @@ class Config
      *     description = "上右下左（CSS padding 语法）"
      * )
      */
-    public string $paddingTablet = '1.75rem 0';
+    public string $paddingTablet = '1.5rem 0';
 
     /**
      * @BeConfigItem("内边距 （电脑端）",
@@ -59,7 +59,7 @@ class Config
      *     description = "上右下左（CSS margin 语法）"
      * )
      */
-    public string $marginMobile = '1.5rem 0';
+    public string $marginMobile = '1rem 0';
 
     /**
      * @BeConfigItem("外边距 （平板端）",
@@ -67,7 +67,7 @@ class Config
      *     description = "上右下左（CSS margin 语法）"
      * )
      */
-    public string $marginTablet = '1.75rem 0';
+    public string $marginTablet = '1.5rem 0';
 
     /**
      * @BeConfigItem("外边距 （电脑端）",
@@ -82,14 +82,14 @@ class Config
      *     driver = "FormItemInput"
      * )
      */
-    public string $spacingMobile = '1.5rem';
+    public string $spacingMobile = '1rem';
 
     /**
      * @BeConfigItem("间距 （平板端）",
      *     driver = "FormItemInput"
      * )
      */
-    public string $spacingTablet = '1.75rem';
+    public string $spacingTablet = '1.5rem';
 
     /**
      * @BeConfigItem("间距 （电脑端）",
