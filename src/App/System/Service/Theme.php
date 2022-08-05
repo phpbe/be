@@ -39,7 +39,7 @@ class Theme
 
                         $sectionConfig = $sectionData['config'] ?? null;
 
-                        $section = $this->getSection($sectionName, $sectionConfig, $position, $sectionIndex);
+                        $section = $this->getSection($route, $sectionName, $sectionConfig, $position, $sectionIndex);
                         $section->key = $sectionData['name'];
                         $section->name = $sectionName;
 
@@ -62,6 +62,7 @@ class Theme
     /**
      * 获取部件
      *
+     * @param string $route 页面路由
      * @param string $themeType 主题类型
      * @param string $themeName 主题名
      * @param string $sectionName 部件名
@@ -69,7 +70,7 @@ class Theme
      * @param int $sectionIndex 部件索引编号
      * @return object
      */
-    private function getSection(string $sectionName, array $sectionConfig = null, string $position, int $sectionIndex): object
+    private function getSection(string $route, string $sectionName, array $sectionConfig = null, string $position, int $sectionIndex): object
     {
         $parts = explode('.', $sectionName);
         $type = array_shift($parts);
@@ -84,10 +85,12 @@ class Theme
         $section = new \stdClass();
         $section->id = 'be-section-' . $position . '-' . $sectionIndex;
         $section->position = $position;
+        $section->route = $route;
 
         $template = new $class();
         $template->id = $section->id;
         $template->position = $position;
+        $template->route = $route;
 
         if ($sectionConfig === null) {
             $class = '\\Be\\' . $type . '\\' . $name . '\\Section\\' . $classPart . '\\Config';

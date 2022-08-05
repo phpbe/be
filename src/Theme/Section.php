@@ -13,6 +13,12 @@ abstract class Section
     // 当前位置
     public string $position;
 
+    // 设置指定咱由的页面可用
+    public array $routes = ['*'];
+
+    // 当前路由
+    public string $route;
+
     // 唯一ID
     public string $id;
 

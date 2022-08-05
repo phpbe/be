@@ -377,7 +377,7 @@ abstract class ThemeEditor
                 }
                 $page->$property = $sections;
 
-                $availableSections = $this->getAvailableSections($position);
+                $availableSections = $this->getAvailableSections($route, $position);
                 $property2 = $position . 'AvailableSections';
                 $page->$property2 = $availableSections;
             }
@@ -418,7 +418,7 @@ abstract class ThemeEditor
      * @param string $position 位置
      * @return array[]
      */
-    public function getAvailableSections(string $position): array
+    public function getAvailableSections(string $route, string $position): array
     {
         $appSections = [];
 
@@ -436,7 +436,9 @@ abstract class ThemeEditor
                     if ($name === '.' || $name === '..') continue;
                     $section = $this->getSectionSummary('App.' . $app->name . '.' . $name);
                     if (count($section->positons) > 0 && (in_array($position, $section->positons) || in_array('*', $section->positons))) {
-                        $sections[] = $section;
+                        if (count($section->routes) > 0 && (in_array($route, $section->routes) || in_array('*', $section->routes))) {
+                            $sections[] = $section;
+                        }
                     }
                 }
             }
@@ -473,7 +475,9 @@ abstract class ThemeEditor
                     if ($name === '.' || $name === '..') continue;
                     $section = $this->getSectionSummary($this->themeType . '.' . $theme->name . '.' . $name);
                     if (count($section->positions) > 0 && (in_array($position, $section->positions) || in_array('*', $section->positions))) {
-                        $sections[] = $section;
+                        if (count($section->routes) > 0 && (in_array($route, $section->routes) || in_array('*', $section->routes))) {
+                            $sections[] = $section;
+                        }
                     }
                 }
             }
@@ -534,6 +538,7 @@ abstract class ThemeEditor
         $section->label = $sectionConfigAnnotation['label'];
         $section->ordering = $sectionConfigAnnotation['ordering'] ?? 100;
         $section->positions = $sectionTemplateInstance->positions;
+        $section->routes = $sectionTemplateInstance->routes;
 
         $icon = null;
         if (isset($sectionConfigAnnotation['icon'])) {
@@ -599,6 +604,7 @@ abstract class ThemeEditor
         $section->label = $sectionConfigAnnotation['label'];
         $section->ordering = $sectionConfigAnnotation['ordering'] ?? 100;
         $section->positions = $sectionTemplateInstance->positions;
+        $section->routes = $sectionTemplateInstance->routes;
 
         $icon = null;
         if (isset($sectionConfigAnnotation['icon'])) {
