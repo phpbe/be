@@ -57,7 +57,7 @@ class UiItems
         if ($vueHooks) {
             foreach ($vueHooks as $k => $v) {
                 if (isset($this->vueHooks[$k])) {
-                    $this->ueHooks[$k] .= "\r\n" . $v;
+                    $this->vueHooks[$k] .= "\r\n" . $v;
                 } else {
                     $this->vueHooks[$k] = $v;
                 }
