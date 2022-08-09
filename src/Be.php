@@ -940,8 +940,14 @@ abstract class Be
         }
 
         $path = $runtime->getRootPath() . '/data/Runtime/Template/' . $theme . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
-        if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
+        if (!file_exists($path)) {
             \Be\Template\TemplateHelper::update($template, $theme);
+        } else {
+            if (self::getConfig('App.System.System')->developer) {
+                if (\Be\Template\TemplateHelper::isModified($template, $theme)) {
+                    \Be\Template\TemplateHelper::update($template, $theme);
+                }
+            }
         }
 
         $class = '\\Be\\Data\\Runtime\\Template\\' . $theme . '\\' . $type . '\\' . $name . '\\' . implode('\\', $parts);
@@ -987,8 +993,14 @@ abstract class Be
         }
 
         $path = $runtime->getRootPath() . '/data/Runtime/AdminTemplate/' . $theme . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
-        if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
+        if (!file_exists($path)) {
             \Be\Template\TemplateHelper::update($template, $theme, true);
+        } else {
+            if (self::getConfig('App.System.System')->developer) {
+                if (\Be\Template\TemplateHelper::isModified($template, $theme, true)) {
+                    \Be\Template\TemplateHelper::update($template, $theme, true);
+                }
+            }
         }
 
         $class = '\\Be\\Data\\Runtime\\AdminTemplate\\' . $theme . '\\' . $type . '\\' . $name . '\\' . implode('\\', $parts);

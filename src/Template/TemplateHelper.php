@@ -298,6 +298,37 @@ class TemplateHelper
         chmod($path, 0777);
     }
 
+    /**
+     * 文件是否有改动
+     *
+     * @param string $templateName 模析名
+     * @param string $themeName 主题名
+     * @param bool $admin 是否后台模板
+     * @return bool
+     * @throws \Exception
+     */
+    public static function isModified($templateName, $themeName, $admin = false): bool
+    {
+        $themeType = $admin ? 'AdminTheme' : 'Theme';
+        $templateType = $admin ? 'AdminTemplate' : 'Template';
+
+        $parts = explode('.', $templateName);
+        $type = array_shift($parts);
+        $name = array_shift($parts);
+        $compiledFile = Be::getRuntime()->getRootPath() . '/data/Runtime/' . $templateType . '/' . $themeName . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
+
+        $property = Be::getProperty($type . '.' . $name);
+        $templateFile = $property->getPath() . '/Template/' . implode('/', $parts) . '.php';
+
+        $themeProperty = Be::getProperty($themeType . '.' . $themeName);
+        $themeFile = $themeProperty->getPath() . '/' . $themeName . '.php';
+
+        $compileTime = file_exists($compiledFile) ? filemtime($compiledFile) : 0;
+        $templateModifyTime = file_exists($templateFile) ? filemtime($templateFile) : 0;
+        $themeModifyTime = file_exists($themeFile) ? filemtime($themeFile) : 0;
+
+        return $templateModifyTime > $compileTime || $themeModifyTime > $compileTime;
+    }
 
 }
 
