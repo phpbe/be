@@ -240,7 +240,7 @@ class AdminMenu
      * @return bool
      * @throws \Exception
      */
-    public function isModified(): bool
+    public function isChanged(): bool
     {
         $latestModifyTime = 0;
 
