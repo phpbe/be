@@ -944,7 +944,7 @@ abstract class Be
             \Be\Template\TemplateHelper::update($template, $theme);
         } else {
             if (self::getConfig('App.System.System')->developer) {
-                if (\Be\Template\TemplateHelper::isChanged($template, $theme)) {
+                if (\Be\Template\TemplateHelper::hasChange($template, $theme)) {
                     \Be\Template\TemplateHelper::update($template, $theme);
                 }
             }
@@ -997,7 +997,7 @@ abstract class Be
             \Be\Template\TemplateHelper::update($template, $theme, true);
         } else {
             if (self::getConfig('App.System.System')->developer) {
-                if (\Be\Template\TemplateHelper::isChanged($template, $theme, true)) {
+                if (\Be\Template\TemplateHelper::hasChange($template, $theme, true)) {
                     \Be\Template\TemplateHelper::update($template, $theme, true);
                 }
             }
@@ -1051,7 +1051,7 @@ abstract class Be
         } else {
             if (self::getConfig('App.System.System')->developer) {
                 $service = Be::getService('App.System.Admin.AdminMenu');
-                if ($service->isChanged()) {
+                if ($service->hasChange()) {
                     $service->update();
                 }
             }
@@ -1080,7 +1080,7 @@ abstract class Be
         } else {
             if (self::getConfig('App.System.System')->developer) {
                 $service = Be::getService('App.System.Admin.AdminRole');
-                if ($service->isChanged($roleId)) {
+                if ($service->hasChange($roleId)) {
                     $service->update();
                 }
             }

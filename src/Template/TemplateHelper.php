@@ -307,7 +307,7 @@ class TemplateHelper
      * @return bool
      * @throws \Exception
      */
-    public static function isChanged($templateName, $themeName, $admin = false): bool
+    public static function hasChange($templateName, $themeName, $admin = false): bool
     {
         $themeType = $admin ? 'AdminTheme' : 'Theme';
         $templateType = $admin ? 'AdminTemplate' : 'Template';

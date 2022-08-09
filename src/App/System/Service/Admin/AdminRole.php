@@ -98,7 +98,7 @@ class AdminRole
      * @param string $roleId
      * @throws \Exception
      */
-    public function isChanged(string $roleId): bool
+    public function hasChange(string $roleId): bool
     {
         $tuple = Be::getTuple('system_admin_role');
         $tuple->load($roleId);
