@@ -234,4 +234,42 @@ class AdminMenu
         chmod($path, 0777);
     }
 
+    /**
+     * 文件是否有改动
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    public function isModified(): bool
+    {
+        $latestModifyTime = 0;
+
+        $apps = Be::getService('App.System.Admin.App')->getApps();
+        foreach ($apps as $app) {
+
+            $appProperty = Be::getProperty('App.'.$app->name);
+            $controllerDir = $appProperty->getPath(). '/Controller/Admin';
+            if (!file_exists($controllerDir) && !is_dir($controllerDir)) continue;
+
+            $controllers = scandir($controllerDir);
+            foreach ($controllers as $controller) {
+                if ($controller === '.' || $controller === '..') continue;
+
+                $controllerFile = $controllerDir .  '/' . $controller;
+
+                if (is_dir($controllerFile)) continue;
+
+                $controllerModifyTime = filemtime($controllerFile);
+                if ($controllerModifyTime > $latestModifyTime) {
+                    $latestModifyTime = $controllerModifyTime;
+                }
+            }
+        }
+
+        $compiledFile = Be::getRuntime()->getRootPath() . '/data/Runtime/AdminMenu.php';
+        $compileTime = file_exists($compiledFile) ? filemtime($compiledFile) : 0;
+
+        return $latestModifyTime > $compileTime;
+    }
+
 }

@@ -92,4 +92,28 @@ class AdminRole
         chmod($path, 0777);
     }
 
+    /**
+     * 是否有改动
+     *
+     * @param string $roleId
+     * @throws \Exception
+     */
+    public function isModified(string $roleId): bool
+    {
+        $tuple = Be::getTuple('system_admin_role');
+        $tuple->load($roleId);
+        if (!$tuple->id) {
+            throw new ServiceException('未找到指定编号（#' . $roleId . '）的角色！');
+        }
+
+        $suffix = str_replace('-', '', $roleId);
+        $roleModifyTime = strtotime($tuple->update_time);
+
+        $compiledFile = Be::getRuntime()->getRootPath() . '/data/Runtime/AdminRole/AdminRole_' . $suffix . '.php';
+        $compileTime = file_exists($compiledFile) ? filemtime($compiledFile) : 0;
+
+        return $roleModifyTime > $compileTime;
+    }
+
+
 }

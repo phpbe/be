@@ -1045,9 +1045,16 @@ abstract class Be
         if (isset(self::$cache['adminMenu'])) return self::$cache['adminMenu'];
 
         $path = self::getRuntime()->getRootPath() . '/data/Runtime/AdminMenu.php';
-        if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
+        if (!file_exists($path)) {
             $service = Be::getService('App.System.Admin.AdminMenu');
             $service->update();
+        } else {
+            if (self::getConfig('App.System.System')->developer) {
+                $service = Be::getService('App.System.Admin.AdminMenu');
+                if ($service->isModified()) {
+                    $service->update();
+                }
+            }
         }
 
         $class = '\\Be\\Data\\Runtime\\AdminMenu';
@@ -1067,9 +1074,16 @@ abstract class Be
 
         $suffix = str_replace('-', '', $roleId);
         $path = self::getRuntime()->getRootPath() . '/data/Runtime/AdminRole/AdminRole_' . $suffix . '.php';
-        if (self::getConfig('App.System.System')->developer || !file_exists($path)) {
+        if (!file_exists($path)) {
             $service = Be::getService('App.System.Admin.AdminRole');
             $service->updateAdminRole($roleId);
+        } else {
+            if (self::getConfig('App.System.System')->developer) {
+                $service = Be::getService('App.System.Admin.AdminRole');
+                if ($service->isModified($roleId)) {
+                    $service->update();
+                }
+            }
         }
 
         $class = '\\Be\\Data\\Runtime\\AdminRole\\AdminRole_' . $suffix;
