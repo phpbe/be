@@ -4,6 +4,7 @@ namespace Be\AdminPlugin\Form\Item;
 
 use Be\Be;
 use Be\AdminPlugin\AdminPluginException;
+use Be\Util\Crypt\Random;
 
 /**
  * 表单项 Tinymce 编辑器
@@ -227,8 +228,10 @@ class FormItemTinymce extends FormItem
      */
     public function getVueHooks()
     {
+        $rand = Random::lowercaseLetters(16);
+
         $mountedCode = '';
-        $mountedCode .= 'var _this = this;';
+        $mountedCode .= 'let this_' . $rand . ' = this;';
         $mountedCode .= 'tinymce.init({';
         foreach ($this->option as $key => $val) {
             $mountedCode .= $key . ':' . json_encode($val) . ',';
@@ -236,7 +239,7 @@ class FormItemTinymce extends FormItem
 
         $onChangeCallback = '';
         if (isset($this->ui['@change'])) {
-            $onChangeCallback = '_this.';
+            $onChangeCallback = 'this_' . $rand . '.';
             $onChangeCallback .= $this->ui['@change'];
             if (strpos($onChangeCallback, '(') === false) {
                 $onChangeCallback .= '()';
@@ -246,11 +249,11 @@ class FormItemTinymce extends FormItem
 
         // 内容更新时回写到 formData
         $mountedCode .= 'init_instance_callback: function(editor) {
-            _this.formItems.' . $this->name . '.instance = editor;
-            editor.setContent(_this.formData.' . $this->name . ');
+            this_' . $rand . '.formItems.' . $this->name . '.instance = editor;
+            editor.setContent(this_' . $rand . '.formData.' . $this->name . ');
             editor.on(\'input change undo redo\', function() {
                 let content = this.getContent();
-                _this.formData.' . $this->name . ' = content;
+                this_' . $rand . '.formData.' . $this->name . ' = content;
                 ' . $onChangeCallback . '
             });
         }';

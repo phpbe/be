@@ -4,6 +4,7 @@ namespace Be\AdminPlugin\Form\Item;
 
 use Be\Be;
 use Be\AdminPlugin\AdminPluginException;
+use Be\Util\Crypt\Random;
 
 /**
  * 表单项 Markdown 编辑器
@@ -204,9 +205,11 @@ class FormItemMarkdown extends FormItem
      */
     public function getVueHooks()
     {
+        $rand = Random::lowercaseLetters(16);
+
         $onChangeCallback = '';
         if (isset($this->ui['@change'])) {
-            $onChangeCallback = '_this.';
+            $onChangeCallback = 'this_' . $rand . '.';
             $onChangeCallback .= $this->ui['@change'];
             if (strpos($onChangeCallback, '(') === false) {
                 $onChangeCallback .= '()';
@@ -215,26 +218,27 @@ class FormItemMarkdown extends FormItem
         }
 
         $mountedCode = '';
-        $mountedCode .= 'let _this = this;';
-        $mountedCode .= 'let editor = editormd("formItemMarkdown_' . $this->name . '", {';
+        $mountedCode .= 'let this_' . $rand . ' = this;';
+
+        $mountedCode .= 'let editor_' . $rand . ' = editormd("formItemMarkdown_' . $this->name . '", {';
         foreach ($this->option as $key => $val) {
             if (is_string($val)) {
                 if (substr($val, 0, 9) === 'function(') {
-                    $mountedCode .=  $key . ':' . $val . ',';
+                    $mountedCode .= $key . ':' . $val . ',';
                 } else {
-                    $mountedCode .=  $key . ':"' . str_replace('"', '&quote;', $val) . '",';
+                    $mountedCode .= $key . ':"' . str_replace('"', '&quote;', $val) . '",';
                 }
             } else {
-                $mountedCode .=  $key . ':' . json_encode($val) . ',';
+                $mountedCode .= $key . ':' . json_encode($val) . ',';
             }
         }
 
-        $mountedCode .= 'markdown: _this.formData.' . $this->name . ',';
+        $mountedCode .= 'markdown: this_' . $rand . '.formData.' . $this->name . ',';
         $mountedCode .= 'onchange: function() {';
         if ($this->valueFormat === 'html') {
-            $mountedCode .= ' _this.formData.' . $this->name . ' = this.getHTML();';
+            $mountedCode .= ' this_' . $rand . '.formData.' . $this->name . ' = this.getHTML();';
         } else {
-            $mountedCode .= ' _this.formData.' . $this->name . ' = this.getMarkdown();';
+            $mountedCode .= ' this_' . $rand . '.formData.' . $this->name . ' = this.getMarkdown();';
         }
         $mountedCode .= $onChangeCallback;
         $mountedCode .= '},';
@@ -242,7 +246,7 @@ class FormItemMarkdown extends FormItem
         $mountedCode .= 'toolbarHandlers:{beLink:function(){this.beLinkDialog();}, beImage:function(){this.beImageDialog();}}';
         $mountedCode .= '});';
 
-        $mountedCode .= 'this.formItems.' . $this->name . '.instance = editor';
+        $mountedCode .= 'this.formItems.' . $this->name . '.instance = editor_' . $rand . '';
 
         return [
             'mounted' => $mountedCode,
