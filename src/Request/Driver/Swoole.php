@@ -2,6 +2,7 @@
 
 namespace Be\Request\Driver;
 
+use Be\Be;
 use Be\Request\Driver;
 
 /**
@@ -328,13 +329,17 @@ class Swoole extends Driver
     public function getRootUrl(): string
     {
         if ($this->rootUrl === null) {
-            $rootUrl = null;
-            if (isset($this->request->header['scheme']) && ($this->request->header['scheme'] === 'http' || $this->request->header['scheme'] === 'https')) {
-                $rootUrl = $this->request->header['scheme'] . '://';
+            $configSystem = Be::getConfig('App.System.System');
+            if ($configSystem->rootUrl !== '') {
+                $rootUrl = $configSystem->rootUrl;
             } else {
-                $rootUrl = 'http://';
+                if (isset($this->request->header['scheme']) && ($this->request->header['scheme'] === 'http' || $this->request->header['scheme'] === 'https')) {
+                    $rootUrl = $this->request->header['scheme'] . '://';
+                } else {
+                    $rootUrl = 'http://';
+                }
+                $rootUrl .= $this->request->header['host'];
             }
-            $rootUrl .= $this->request->header['host'];
 
             $this->rootUrl = $rootUrl;
         }

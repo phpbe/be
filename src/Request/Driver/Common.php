@@ -2,6 +2,7 @@
 
 namespace Be\Request\Driver;
 
+use Be\Be;
 use Be\Request\Driver;
 
 /**
@@ -317,24 +318,29 @@ class Common extends Driver
     public function getRootUrl(): string
     {
         if ($this->rootUrl === null) {
-            $rootUrl = null;
-            if (isset($_SERVER['HTTP_SCHEME']) && ($_SERVER['HTTP_SCHEME'] === 'http' || $_SERVER['HTTP_SCHEME'] === 'https')) {
-                $rootUrl = $_SERVER['HTTP_SCHEME'] . '://';
+            $configSystem = Be::getConfig('App.System.System');
+            if ($configSystem->rootUrl !== '') {
+                $rootUrl = $configSystem->rootUrl;
             } else {
-                $rootUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
-            }
+                if (isset($_SERVER['HTTP_SCHEME']) && ($_SERVER['HTTP_SCHEME'] === 'http' || $_SERVER['HTTP_SCHEME'] === 'https')) {
+                    $rootUrl = $_SERVER['HTTP_SCHEME'] . '://';
+                } else {
+                    $rootUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
+                }
 
-            $rootUrl .= isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ($_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT']));
+                $rootUrl .= isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ($_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT']));
 
-            $scriptName = $_SERVER['SCRIPT_NAME'];
-            $indexName = '/index.php';
-            $pos = strrpos($scriptName, $indexName);
-            if ($pos !== false) {
-                $path = substr($scriptName, 0, $pos);
-                if ($path) {
-                    $rootUrl .= $path;
+                $scriptName = $_SERVER['SCRIPT_NAME'];
+                $indexName = '/index.php';
+                $pos = strrpos($scriptName, $indexName);
+                if ($pos !== false) {
+                    $path = substr($scriptName, 0, $pos);
+                    if ($path) {
+                        $rootUrl .= $path;
+                    }
                 }
             }
+
             $this->rootUrl = $rootUrl;
         }
 

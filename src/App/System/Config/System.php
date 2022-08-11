@@ -6,6 +6,14 @@ namespace Be\App\System\Config;
  */
 class System
 {
+
+    /**
+     * @BeConfigItem("网站根网址",
+     *     description="为空时系统将自动检测（适合多域名的情况）,例：https://www.phpbe.com，结尾不加斜杠"
+     *     driver = "FormItemInput")
+     */
+    public $rootUrl = '';
+
     /**
      * @BeConfigItem("是否开启伪静态"
      *     driver = "FormItemSelect",
