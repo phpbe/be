@@ -42,20 +42,20 @@ class File extends Driver
     public function get($key)
     {
         $hash = sha1($key);
-        $path = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2) . '/' . $hash . '.php';
+        $path = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2) . '/' . $hash;
 
         if (!is_file($path)) return false;
 
         $content = file_get_contents($path);
 
         if (false !== $content) {
-            $expire = substr($content, 8, 10);
+            $expire = substr($content, 0, 10);
             if (time() > intval($expire)) {
                 unlink($path);
                 return false;
             }
 
-            $value = substr($content, 18);
+            $value = substr($content, 10);
             if (!is_bool($value) && !is_numeric($value)) $value = unserialize($value);
             return $value;
         } else {
@@ -94,7 +94,7 @@ class File extends Driver
             mkdir($dir, 0777, true);
             chmod($dir, 0777);
         }
-        $path = $dir . '/' . $hash . '.php';
+        $path = $dir . '/' . $hash;
 
         if (!is_bool($value) && !is_numeric($value)) {
             $value = serialize($value);
@@ -106,7 +106,7 @@ class File extends Driver
             $expire = time() + $expire;
             if ($expire > 9999999999) $expire = 9999999999;
         }
-        $data = "<?php\n//" . $expire . $value;
+        $data = $expire . $value;
         if (!file_put_contents($path, $data)) return false;
         chmod($path, 0777);
         return true;
@@ -137,7 +137,7 @@ class File extends Driver
     public function setExpire($key,  $expire = 0): bool
     {
         $hash = sha1($key);
-        $path = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2) . '/' . $hash . '.php';
+        $path = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2) . '/' . $hash;
 
         if (!is_file($path)) {
             return false;
@@ -154,7 +154,7 @@ class File extends Driver
                 if ($expire > 9999999999) $expire = 9999999999;
             }
 
-            $data = "<?php\n//" . $expire . substr($content, 18);
+            $data = $expire . substr($content, 10);
             if (!file_put_contents($path, $data)) return false;
             chmod($path, 0777);
             return true;
@@ -172,7 +172,7 @@ class File extends Driver
     public function has($key): bool
     {
         $hash = sha1($key);
-        $path = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2) . '/' . $hash . '.php';
+        $path = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2) . '/' . $hash ;
 
         return is_file($path) ? true : false;
     }
@@ -186,7 +186,7 @@ class File extends Driver
     public function delete($key): bool
     {
         $hash = sha1($key);
-        $path = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2) . '/' . $hash . '.php';
+        $path = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2) . '/' . $hash;
         if (!is_file($path)) return true;
         return unlink($path);
     }
@@ -206,11 +206,11 @@ class File extends Driver
             mkdir($dir, 0777, true);
             chmod($dir, 0777);
         }
-        $path = $dir . '/' . $hash . '.php';
+        $path = $dir . '/' . $hash;
 
         if (!is_file($path)) {
             $value = $step;
-            $data = "<?php\n//9999999999" . $value;
+            $data = '9999999999' . $value;
             if (!file_put_contents($path, $data)) return false;
             chmod($path, 0777);
             return $value;
@@ -219,12 +219,12 @@ class File extends Driver
         $content = file_get_contents($path);
 
         if (false !== $content) {
-            $expire = substr($content, 8, 10);
+            $expire = substr($content, 0, 10);
             if (time() > intval($expire)) return false;
 
-            $content = substr($content, 18);
+            $content = substr($content, 10);
             $value = intval($content) + $step;
-            $data = "<?php\n//" . $expire . $value;
+            $data = $expire . $value;
             if (!file_put_contents($path, $data)) return false;
             chmod($path, 0777);
             return $value;
@@ -248,11 +248,11 @@ class File extends Driver
             mkdir($dir, 0777, true);
             chmod($dir, 0777);
         }
-        $path = $dir . '/' . $hash . '.php';
+        $path = $dir . '/' . $hash;
 
         if (!is_file($path)) {
             $value = -$step;
-            $data = "<?php\n//9999999999" . $value;
+            $data = '9999999999' . $value;
             if (!file_put_contents($path, $data)) return false;
             chmod($path, 0777);
             return $value;
@@ -261,12 +261,12 @@ class File extends Driver
         $content = file_get_contents($path);
 
         if (false !== $content) {
-            $expire = substr($content, 8, 10);
+            $expire = substr($content, 0, 10);
             if (time() > intval($expire)) return false;
 
-            $content = substr($content, 18);
+            $content = substr($content, 10);
             $value = intval($content) - $step;
-            $data = "<?php\n//" . $expire . $value;
+            $data = $expire . $value;
             if (!file_put_contents($path, $data)) return false;
             chmod($path, 0777);
             return $value;
