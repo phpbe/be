@@ -254,7 +254,12 @@ class Helper
      */
     public static function encode(string $route, array $params = null)
     {
-        $rootUrl = Be::getRequest()->getRootUrl();
+        $configSystem = Be::getConfig('App.System.System');
+        if ($configSystem->rootUrl === '') {
+            $rootUrl = Be::getRequest()->getRootUrl();
+        } else {
+            $rootUrl = $configSystem->rootUrl;
+        }
 
         $parts = explode('.', $route);
         $appName = $parts[0];
