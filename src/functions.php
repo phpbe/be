@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * 处理网址
  * 启用 SEF 时生成伪静态页， 为空时返回网站网址
@@ -11,18 +10,32 @@
  */
 function beUrl($route = null, array $params = null)
 {
-    $request = \Be\Be::getRequest();
+    $runtime = \Be\Be::getRuntime();
+    $configSystem = \Be\Be::getConfig('App.System.System');
+    if ($configSystem->rootUrl === '') {
+        if (!$runtime->isSwooleMode() || $runtime->isWorkerProcess()) {
+            $rootUrl = \Be\Be::getRequest()->getRootUrl();
+        } else {
+            $rootUrl = '';
+        }
+    } else {
+        $rootUrl = $configSystem->rootUrl;
+    }
+
     if ($route === null) {
         if ($params !== null) {
-            $route = $request->getRoute();
+            if (!$runtime->isSwooleMode() || $runtime->isWorkerProcess()) {
+                $route = \Be\Be::getRequest()->getRoute();
+            } else {
+                $route = $configSystem->home;
+            }
         } else {
-            return $request->getRootUrl();
+            return $rootUrl;
         }
     }
 
-    $configSystem = \Be\Be::getConfig('App.System.System');
     if ($configSystem->urlRewrite === '1') {
-        $url = $request->getRootUrl() . '/' . str_replace('.', '/', $route);
+        $url = $rootUrl . '/' . str_replace('.', '/', $route);
         if ($params !== null && $params) {
             $urlParams = '';
             foreach ($params as $key => $val) {
@@ -35,7 +48,7 @@ function beUrl($route = null, array $params = null)
     } elseif ($configSystem->urlRewrite === '2') {
         return \Be\Router\Helper::encode($route, $params);
     } else {
-        $url = $request->getRootUrl() . '/?route=' . $route;
+        $url = $rootUrl . '/?route=' . $route;
         if ($params !== null && $params) {
             $url .=  '&' . http_build_query($params);
         }
@@ -53,23 +66,37 @@ function beUrl($route = null, array $params = null)
  */
 function beAdminUrl($route = null, array $params = null)
 {
-    $request = \Be\Be::getRequest();
-    $adminAlias = \Be\Be::getRuntime()->getAdminAlias();
+    $runtime = \Be\Be::getRuntime();
     $configSystem = \Be\Be::getConfig('App.System.System');
+    if ($configSystem->rootUrl === '') {
+        if (!$runtime->isSwooleMode() || $runtime->isWorkerProcess()) {
+            $rootUrl = \Be\Be::getRequest()->getRootUrl();
+        } else {
+            $rootUrl = '';
+        }
+    } else {
+        $rootUrl = $configSystem->rootUrl;
+    }
+
+    $adminAlias = \Be\Be::getRuntime()->getAdminAlias();
     if ($route === null) {
         if ($params !== null) {
-            $route = $request->getRoute();
+            if (!$runtime->isSwooleMode() || $runtime->isWorkerProcess()) {
+                $route = \Be\Be::getRequest()->getRoute();
+            } else {
+                $route = Be\Be::getConfig('App.System.Admin')->home;
+            }
         } else {
             if ($configSystem->urlRewrite) {
-                return $request->getRootUrl() . '/' . $adminAlias;
+                return $rootUrl . '/' . $adminAlias;
             } else {
-                return $request->getRootUrl() . '/?' . $adminAlias . '=1';
+                return $rootUrl . '/?' . $adminAlias . '=1';
             }
         }
     }
 
     if ($configSystem->urlRewrite) {
-        $url = $request->getRootUrl() . '/' . $adminAlias . '/' . str_replace('.', '/', $route);
+        $url = $rootUrl . '/' . $adminAlias . '/' . str_replace('.', '/', $route);
         if ($params !== null && $params) {
             $urlParams = '';
             foreach ($params as $key => $val) {
@@ -82,7 +109,7 @@ function beAdminUrl($route = null, array $params = null)
         }
         return $url;
     } else {
-        $url = $request->getRootUrl() . '/?' . $adminAlias . '=1&route=' . $route;
+        $url = $rootUrl . '/?' . $adminAlias . '=1&route=' . $route;
         if ($params !== null && $params) {
             $url .= '&' . http_build_query($params);
         }
