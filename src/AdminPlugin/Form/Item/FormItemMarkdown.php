@@ -242,12 +242,12 @@ class FormItemMarkdown extends FormItem
         }
         $mountedCode .= $onChangeCallback;
         $mountedCode .= '},';
+        $mountedCode .= 'onload: function() {';
+        $mountedCode .= 'this_' . $rand . '.formItems.' . $this->name . '.instance = editor_' . $rand . '';
+        $mountedCode .= '},';
         $mountedCode .= 'toolbarIconsClass:{beLink:"fa-link", beImage:"fa-picture-o"},';
         $mountedCode .= 'toolbarHandlers:{beLink:function(){this.beLinkDialog();}, beImage:function(){this.beImageDialog();}}';
         $mountedCode .= '});';
-
-        $mountedCode .= 'this.formItems.' . $this->name . '.instance = editor_' . $rand . '';
-
         return [
             'mounted' => $mountedCode,
         ];
