@@ -164,7 +164,7 @@
                         label=""
                         width="60">
                     <template scope="scope">
-                        <el-radio :label="scope.row.<?php echo $this->setting['name']; ?>" v-model="selectedValue" @change.native="selectRow(scope.row)">&nbsp</el-radio>
+                        <el-radio :label="scope.row.<?php echo $this->setting['field']; ?>" v-model="selectedValue" @change.native="selectRow(scope.row)">&nbsp</el-radio>
                     </template>
                 </el-table-column>
 
@@ -263,7 +263,7 @@
                 },
                 selectRow(row) {
                     this.selectedRow = row;
-                    this.selectedValue = row.<?php echo $this->setting['name']; ?>;
+                    this.selectedValue = row.<?php echo $this->setting['field']; ?>;
                 },
 
                 selectRowConfirm() {

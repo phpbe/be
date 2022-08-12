@@ -59,6 +59,11 @@ class MenuPicker extends Curd
                     'submit' => true,
                 ];
             }
+
+            if (!isset($this->setting['field'])) {
+                $this->setting['field'] = $this->setting['name'];
+            }
+
             $response->set('setting', $this->setting);
 
             $pageSize = null;
