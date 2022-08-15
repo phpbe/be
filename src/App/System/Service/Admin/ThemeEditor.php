@@ -315,19 +315,23 @@ abstract class ThemeEditor
 
             $params = [];
             $menuPicker = Be::getService('App.System.Admin.Menu')->getMenuPicker($route);
-            if (isset($menuPicker['annotation']->picker)) {
-                $table = Be::getTable($menuPicker['annotation']->picker['table']);
-                if (isset($menuPicker['annotation']->picker['grid']['filter'])) {
-                    $table->where($menuPicker['annotation']->picker['grid']['filter']);
-                }
+            if (isset($menuPicker['annotation'])) {
+                $picker = $menuPicker['annotation']->picker;
+                if ($picker) {
+                    $table = Be::getTable($picker['table']);
+                    if (isset($picker['grid']['filter'])) {
+                        $table->where($picker['grid']['filter']);
+                    }
 
-                if ($table->count() === 0) {
-                    throw new ServiceException('暂时无法配置此页面，请先添加内容！');
-                }
+                    if ($table->count() === 0) {
+                        throw new ServiceException('暂时无法配置此页面，请先添加内容！');
+                    }
 
-                $key = $menuPicker['annotation']->picker['name'];
-                $value = $table->getValue($key);
-                $params[$key] = $value;
+                    $name = $picker['name'];
+                    $field = $picker['field'] ?? $name;
+                    $value = $table->getValue($field);
+                    $params[$name] = $value;
+                }
             }
 
             $desktopPreviewUrl = beUrl($route, array_merge($params, ['be-theme' => $themeName]));
