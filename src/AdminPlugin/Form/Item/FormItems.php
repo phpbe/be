@@ -3,11 +3,12 @@
 namespace Be\AdminPlugin\Form\Item;
 
 use Be\AdminPlugin\AdminPluginException;
+use Be\AdminPlugin\UiItem\UiItem;
 
 /**
  * 表单项组
  */
-abstract class FormItems
+abstract class FormItems extends UiItem
 {
 
     protected $name = null; // 键名
