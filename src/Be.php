@@ -126,10 +126,10 @@ abstract class Be
     }
 
     /**
-     * 获取指定的配置文件
+     * 获取指定的配置文件，单例
      *
      * @param string $name 配置文件名
-     * @return mixed
+     * @return object
      */
     public static function getConfig(string $name)
     {
@@ -140,10 +140,10 @@ abstract class Be
     }
 
     /**
-     * 新创建一个指定的配置文件
+     * 获取指定的配置文件，创新新实例
      *
      * @param string $name 配置文件名
-     * @return mixed
+     * @return object
      */
     public static function newConfig(string $name)
     {
@@ -240,7 +240,7 @@ abstract class Be
     }
 
     /**
-     * 获取日志记录器
+     * 获取 日志记录器 单例
      *
      * @return \Be\Log\Driver
      */
@@ -262,7 +262,7 @@ abstract class Be
     }
 
     /**
-     * 创建 日志记录器
+     * 创建 日志记录器 新的实例
      *
      * @return \Be\Log\Driver
      */
@@ -272,13 +272,13 @@ abstract class Be
     }
 
     /**
-     * 获取一个属性
+     * 获取一个属性 单例
      *
      * @param string $name 名称
      * @return \Be\Property\Driver
      * @throws RuntimeException
      */
-    public static function getProperty(string $name)
+    public static function getProperty(string $name): \Be\Property\Driver
     {
         if (isset(self::$cache['property'][$name])) return self::$cache['property'][$name];
 
@@ -329,7 +329,7 @@ abstract class Be
     }
 
     /**
-     * 获取Cache
+     * 获取 缓存对象 单例
      *
      * @return \Be\Cache\Driver
      */
@@ -351,7 +351,7 @@ abstract class Be
     }
 
     /**
-     * 创建 Cache
+     * 创建 缓存对象 实例
      *
      * @return \Be\Cache\Driver
      */
@@ -366,7 +366,7 @@ abstract class Be
     }
 
     /**
-     * 获取 Storage
+     * 获取 存储 单例
      *
      * @return \Be\Storage\Driver
      */
@@ -387,7 +387,7 @@ abstract class Be
     }
 
     /**
-     * 创建 Storage
+     * 创建 存储 实例
      *
      * @return \Be\Storage\Driver
      */
@@ -441,7 +441,7 @@ abstract class Be
     }
 
     /**
-     * 获取Redis对象
+     * 获取Redis对象 单例
      *
      * @param string $name Redis名
      * @return \Be\Redis\Driver|\Redis
@@ -479,7 +479,7 @@ abstract class Be
     }
 
     /**
-     * 新创建一个Redis对象
+     * 创建一个 Redis对象 实例
      *
      * @param string $name Redis名
      * @return \Be\Redis\Driver|\Redis
@@ -496,7 +496,7 @@ abstract class Be
     }
 
     /**
-     * 获取ES对象
+     * 获取ES对象 单例
      *
      * @return \Elasticsearch\Client
      * @throws RuntimeException
@@ -519,7 +519,7 @@ abstract class Be
     }
 
     /**
-     * 新创建一个ES对象
+     * 创建一个 ES对象 实例
      *
      * @return \Elasticsearch\Client
      * @throws RuntimeException
@@ -532,7 +532,7 @@ abstract class Be
     }
 
     /**
-     * 初始货Redis连接池
+     * 初始货数据库连接池
      */
     public static function initDbPools()
     {
@@ -570,7 +570,7 @@ abstract class Be
     }
 
     /**
-     * 获取数据库对象
+     * 获取 数据库对象 单例
      *
      * @param string $name 数据库名
      * @return \Be\Db\Driver
@@ -618,7 +618,7 @@ abstract class Be
     }
 
     /**
-     * 新创建一个数据库对象
+     * 创建一个 数据库对象 实例
      *
      * @param string $name 数据库名
      * @return \Be\Db\Driver
@@ -708,7 +708,7 @@ abstract class Be
     }
 
     /**
-     * 获取 MongoDb 对象
+     * 获取 MongoDb 对象 单例
      *
      * @param string $name 名称
      * @return \Be\MongoDb\Driver
@@ -730,7 +730,7 @@ abstract class Be
     }
 
     /**
-     * 新创建一个 MongoDb 对象
+     * 创建一个 MongoDb 对象 实例
      *
      * @param string $name 名称
      * @return \Be\MongoDb\Driver
@@ -746,7 +746,7 @@ abstract class Be
     }
 
     /**
-     * 获取指定的一个服务
+     * 获取指定的一个服务 单例
      *
      * @param string $name 服务名
      * @return mixed
@@ -768,7 +768,7 @@ abstract class Be
     }
 
     /**
-     * 新创建一个服务
+     * 新创建一个服务 实例
      *
      * @param string $name 服务名
      * @return mixed
@@ -810,7 +810,7 @@ abstract class Be
     }
 
     /**
-     * 新创建一个指定的库
+     * 创建 一个指定的库 实例
      *
      * @param string $name 库名，可指定命名空间，调用第三方库
      * @return mixed
@@ -830,7 +830,7 @@ abstract class Be
     }
 
     /**
-     * 获取指定的一个扩展
+     * 获取指定的一个扩展 单例
      *
      * @param string $name 扩展名
      * @return mixed
@@ -853,7 +853,7 @@ abstract class Be
     }
 
     /**
-     * 新创建一个指定的扩展
+     * 创建一个新的指定的扩展 实例
      *
      * @param string $name 扩展名
      * @return mixed
@@ -963,7 +963,7 @@ abstract class Be
     }
 
     /**
-     * 获取指定的一个模板
+     * 获取指定的一个后台模板
      *
      * @param string $template 模板名
      * @param string $theme 主题名
@@ -1036,7 +1036,7 @@ abstract class Be
     }
 
     /**
-     * 获取指定的一个菜单
+     * 获取指定的一个后台菜单
      *
      * @return \Be\AdminMenu\Driver
      */

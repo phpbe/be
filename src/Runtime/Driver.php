@@ -73,7 +73,7 @@ abstract class Driver
      *
      * @param string $rootPath BE框架的根路径，绝对路径
      */
-    public function setRootPath($rootPath)
+    public function setRootPath(string $rootPath)
     {
         $this->rootPath = $rootPath;
     }
@@ -83,7 +83,7 @@ abstract class Driver
      *
      * @return string
      */
-    public function getRootPath()
+    public function getRootPath(): string
     {
         return $this->rootPath;
     }
@@ -91,7 +91,7 @@ abstract class Driver
     /**
      * @param string $adminAlias
      */
-    public function setAdminAlias($adminAlias)
+    public function setAdminAlias(string $adminAlias)
     {
         $this->adminAlias = $adminAlias;
     }
@@ -99,7 +99,7 @@ abstract class Driver
     /**
      * @return string
      */
-    public function getAdminAlias()
+    public function getAdminAlias(): string
     {
         return $this->adminAlias;
     }

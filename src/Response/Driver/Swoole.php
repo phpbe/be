@@ -89,7 +89,7 @@ class Swoole extends Driver
     }
 
     /**
-     * 结束输出
+     * 输出内容并结束响应
      *
      * @param string $string 输出内空
      */

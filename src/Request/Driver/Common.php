@@ -89,7 +89,7 @@ class Common extends Driver
     }
 
     /**
-     * 获取 ajax 请求发送的 JSON 数据
+     * 获取请求体中的 JSON 数据
      * @param string $name 参数量
      * @param mixed $default 默认值
      * @param string|\Closure $format 格式化
@@ -111,7 +111,7 @@ class Common extends Driver
     }
 
     /**
-     * 获取请求的原始数据
+     * 获取请求体中的原始数据
      *
      * @return string
      */
@@ -250,7 +250,7 @@ class Common extends Driver
     }
 
     /**
-     * 获取当前请求的主机，包含端口号
+     * 获取当前请求的端口号
      *
      * @return int 端口号
      */
@@ -260,7 +260,7 @@ class Common extends Driver
     }
 
     /**
-     * 获取请求者的 IP 地址
+     * 获取访问者的 IP 地址
      *
      * @return string
      */
@@ -288,7 +288,7 @@ class Common extends Driver
     }
 
     /**
-     * 获取当前请求的完整网址
+     * 获取当前访问的完整网址
      *
      * @return string 网址
      */
@@ -311,9 +311,9 @@ class Common extends Driver
     }
 
     /**
-     * 获取当前请求的根网址
+     * 获取当前访问的根网址
      *
-     * @return string 请求的根网址
+     * @return string 访问的根网址
      */
     public function getRootUrl(): string
     {
