@@ -2,14 +2,17 @@
 
 namespace Be\Menu;
 
+use Be\Be;
+
 /**
  * 菜单基类
  */
 class Driver
 {
 
-    protected $items = [];
-    protected $tree = null;
+    protected array $items = [];
+    protected ?array $tree = null;
+    protected ?string $activeId = null;
 
     /**
      * 添加菜单项
@@ -45,7 +48,7 @@ class Driver
      *
      * @return array
      */
-    public function getItems()
+    public function getItems(): array
     {
         return $this->items;
     }
@@ -53,9 +56,9 @@ class Driver
     /**
      * 获取菜单树
      *
-     * @return array()
+     * @return array
      */
-    public function getTree()
+    public function getTree(): array
     {
         if ($this->tree === null) {
             $this->tree = $this->createTree();
@@ -68,7 +71,7 @@ class Driver
      * @param string $itemId
      * @return array
      */
-    protected function createTree(string $itemId = '')
+    protected function createTree(string $itemId = ''): array
     {
         $subItems = [];
         foreach ($this->items as $item) {
@@ -81,5 +84,55 @@ class Driver
         return $subItems;
     }
 
+    /**
+     * 设置当前生效的菜单ID
+     * @param string $activeId
+     * @return void
+     */
+    public function setActiveId(string $activeId)
+    {
+        $this->activeId = $activeId;
+    }
+
+    /**
+     * 获取当前生效的菜单ID
+     *
+     * @return string
+     */
+    public function getActiveId(): string
+    {
+        if ($this->activeId === null) {
+            $activeId = '';
+            $request = Be::getRequest();
+            $route = $request->getRoute();
+            foreach ($this->items as $item) {
+                if ($item->params) {
+                    if ($route === $item->route) {
+                        $paramsMatched = true;
+                        foreach ($item->params as $key => $val) {
+                            if ($val != $request->get($key, '')) {
+                                $paramsMatched = false;
+                                break;
+                            }
+                        }
+
+                        if ($paramsMatched) {
+                            $activeId = $item->id;
+                            break;
+                        }
+                    }
+                } else {
+                    if ($route === $item->route) {
+                        $activeId = $item->id;
+                        break;
+                    }
+                }
+            }
+
+            $this->activeId = $activeId;
+        };
+
+        return $this->activeId;
+    }
 
 }

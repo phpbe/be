@@ -184,6 +184,10 @@ class Template extends Section
         echo 'position: relative;';
         echo '}';
 
+        echo '#' . $this->id . ' .header-desktop-menu-lv1-item-active > a {';
+        echo 'color: var(--main-color);';
+        echo '}';
+
         echo '#' . $this->id . ' .header-desktop-menu-lv1-item-with-dropdown:after {';
         echo 'display: inline-block;';
         echo 'margin-left: .35em;';
@@ -207,16 +211,17 @@ class Template extends Section
         echo 'visibility: hidden;';
         echo '}';
 
-        echo '#' . $this->id . '.header-desktop-menu-lv1-item-with-dropdown:hover .header-desktop-menu-lv2 {';
+        echo '#' . $this->id . ' .header-desktop-menu-lv1-item-with-dropdown:hover .header-desktop-menu-lv2 {';
         echo 'visibility: visible;';
         echo 'transform: translateY(-1px)';
         echo '}';
 
-        echo '#' . $this->id . '.header-desktop-menu-lv2-item {';
+        echo '#' . $this->id . ' .header-desktop-menu-lv2-item {';
         echo 'padding: .2rem 2rem;';
         echo '}';
 
-        echo '#' . $this->id . '.header-desktop-menu-lv2-item:hover  {';
+        echo '#' . $this->id . ' .header-desktop-menu-lv2-item-active, ';
+        echo '#' . $this->id . ' .header-desktop-menu-lv2-item:hover  {';
         echo 'background-color: #f1f1f1;';
         echo '}';
 
@@ -280,13 +285,39 @@ class Template extends Section
             echo '<ul class="header-desktop-menu-lv1">';
             $menu = \Be\Be::getMenu('North');
             $menuTree = $menu->getTree();
+            $menuActiveId = $menu->getActiveId();
             foreach ($menuTree as $item) {
                 $hasSubItem = false;
                 if (isset($item->subItems) && is_array($item->subItems) && count($item->subItems) > 0) {
                     $hasSubItem = true;
                 }
 
-                echo '<li class="header-desktop-menu-lv1-item' . ($hasSubItem ? '-with-dropdown' : '') . '">';
+                $active = false;
+                if ($hasSubItem) {
+                    foreach ($item->subItems as &$subItem) {
+                        if ($item->id === $menuActiveId) {
+                            $subItem->active = true;
+                            $active = true;
+                            break;
+                        }
+                    }
+                    unset($subItem);
+                } else {
+                    if ($item->id === $menuActiveId) {
+                        $active = true;
+                    }
+                }
+
+                echo '<li class="header-desktop-menu-lv1-item';
+
+                if ($hasSubItem) {
+                    echo '-with-dropdown';
+                }
+
+                if ($active) {
+                    echo ' header-desktop-menu-lv1-item-active';
+                }
+                echo '">';
 
                 $url = 'javascript:void(0);';
                 if ($item->route) {
@@ -313,6 +344,12 @@ class Template extends Section
                 if ($hasSubItem) {
                     echo '<ul class="header-desktop-menu-lv2">';
                     foreach ($item->subItems as $subItem) {
+                        echo '<li class="header-desktop-menu-lv2-item';
+                        if (isset($subItem->active) && $subItem->active) {
+                            echo ' header-desktop-menu-lv2-item-active';
+                        }
+                        echo '">';
+
                         $url = 'javascript:void(0);';
                         if ($subItem->route) {
                             if ($subItem->params) {
@@ -322,18 +359,17 @@ class Template extends Section
                             }
                         } else {
                             if ($subItem->url) {
-                                if ($subItem->url === '/') {
-                                    $url = beUrl();
-                                } else {
-                                    $url = $subItem->url;
-                                }
+                                $url = $subItem->url;
                             }
                         }
-                        echo '<li class="header-desktop-menu-lv2-item"><a class="link-hover" href="' . $url . '"';
+
+                        echo '<a class="header-desktop-menu-lv2-item-link link-hover" href="' . $url . '"';
                         if ($subItem->target === '_blank') {
                             echo ' target="_blank"';
                         }
-                        echo '>' . $subItem->label . '</a></li>';
+                        echo '>' . $subItem->label . '</a>';
+
+                        echo '</li>';
                     }
                     echo '</ul>';
                 }

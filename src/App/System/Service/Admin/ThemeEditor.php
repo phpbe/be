@@ -320,7 +320,9 @@ abstract class ThemeEditor
                 if ($picker) {
                     $table = Be::getTable($picker['table']);
                     if (isset($picker['grid']['filter'])) {
-                        $table->where($picker['grid']['filter']);
+                        foreach($picker['grid']['filter'] as $filter) {
+                            $table->where($filter);
+                        }
                     }
 
                     if ($table->count() === 0) {

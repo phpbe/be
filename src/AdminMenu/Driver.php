@@ -10,8 +10,8 @@ use Be\Be;
 class Driver
 {
 
-    protected $items = [];
-    protected $tree = null;
+    protected array $items = [];
+    protected ?array $tree = null;
 
     /**
      * 添加菜单项
@@ -127,7 +127,7 @@ class Driver
      *
      * @return array
      */
-    public function getItems()
+    public function getItems(): array
     {
         return $this->items;
     }
@@ -135,9 +135,9 @@ class Driver
     /**
      * 获取菜单树
      *
-     * @return array()
+     * @return array
      */
-    public function getTree()
+    public function getTree(): array
     {
         if ($this->tree === null) {
             $this->tree = $this->createTree();
@@ -151,7 +151,7 @@ class Driver
      * @param string $url 网址
      * @return array
      */
-    public function getPathwayByUrl($url)
+    public function getPathwayByUrl($url): array
     {
         $itemId = null;
         foreach ($this->items as $item) {
@@ -171,7 +171,7 @@ class Driver
      * @param string $itemId
      * @return array
      */
-    public function getPathway(string $itemId = '')
+    public function getPathway(string $itemId = ''): array
     {
         $route = [];
         if (isset($this->items[$itemId])) {
@@ -195,7 +195,7 @@ class Driver
      * @param string $itemId
      * @return array
      */
-    protected function createTree(string $itemId = '')
+    protected function createTree(string $itemId = ''): array
     {
         $subItems = [];
         foreach ($this->items as $item) {
