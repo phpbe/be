@@ -147,7 +147,7 @@ class App
                 if ($configStorage->driver !== 'LocalDisk') {
                     $dst = '/app/' . CaseConverter::camel2Hyphen($appName);
 
-                    Be::getStorage()->uploadDir($dst, $src);
+                    Be::getStorage()->uploadDir($dst, $src, true);
                 }
             }
         }

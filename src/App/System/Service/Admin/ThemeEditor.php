@@ -213,7 +213,7 @@ abstract class ThemeEditor
                 $configStorage = Be::getConfig('App.System.Storage');
                 if ($configStorage->driver !== 'LocalDisk') {
                     $dst = '/' . CaseConverter::camel2Hyphen($themeType) . '/' . CaseConverter::camel2Hyphen($themeName);
-                    Be::getStorage()->uploadDir($dst, $src);
+                    Be::getStorage()->uploadDir($dst, $src, true);
                 }
             }
         }
