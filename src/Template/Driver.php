@@ -9,9 +9,11 @@ use Be\Be;
  */
 class Driver
 {
-    public string $title = ''; // 标题
+    public string $title = ''; // 标题（<head>中）
     public string $metaKeywords = ''; // meta keywords
     public string $metaDescription = '';  // meta description
+
+    public ?string $pageTitle = null; // 页面标题，未设置时取 title，
 
     public array $_tags = []; // 可用的标签
 
@@ -322,7 +324,7 @@ class Driver
 
     public function pageTitle() {
         echo $this->tag0('be-page-title');
-        echo $this->title;
+        echo $this->pageTitle === null ? $this->title : $this->pageTitle;
         echo $this->tag1('be-page-title');
     }
 
