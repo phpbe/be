@@ -307,11 +307,11 @@ abstract class Driver
     }
 
     /**
-     * 插入一个对象到数据库
+     * 插入一个对象或数组到数据库
      *
      * @param string $table 表名
-     * @param array | object $object 要插入数据库的对象或对象数组，对象属性需要和该表字段一致
-     * @return int 插入的主键ID
+     * @param array | object $object 要插入数据库的对象或数组，对象属性或数组键名需要和该表字段一致
+     * @return int|string|array 插入的主键
      * @throws DbException
      */
     public function insert($table, $object)
@@ -338,11 +338,11 @@ abstract class Driver
     }
 
     /**
-     * 批量插入多个对象到数据库
+     * 批量插入多个对象或数组到数据库
      *
      * @param string $table 表名
-     * @param array $objects 要插入数据库的对象数组，对象属性需要和该表字段一致
-     * @return array 批量插入的ID列表
+     * @param array $objects 要插入数据库的对象数组或二维数组，对象属性或数组键名需要和该表字段一致
+     * @return array 批量插入的主键列表
      * @throws DbException
      */
     public function insertMany($table, $objects)
@@ -390,11 +390,11 @@ abstract class Driver
     }
 
     /**
-     * 快速插入一个对象到数据库
+     * 快速插入一个对象或数组到数据库
      *
      * @param string $table 表名
-     * @param array | object $object 要插入数据库的对象，对象属性需要和该表字段一致
-     * @return int 插入的主键ID
+     * @param array | object $object 要插入数据库的对象或数组，对象属性或数组锓名需要和该表字段一致
+     * @return int|string|array 插入的主键
      * @throws DbException
      */
     public function quickInsert($table, $object)

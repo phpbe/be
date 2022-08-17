@@ -71,7 +71,7 @@ class Redis extends Driver
             if (!is_bool($value) && !is_numeric($value)) {
                 $value = unserialize($value);
             }
-            $return[$keys[$index]] = $value;
+            $return[] = $value;
         }
 
         return $return;
