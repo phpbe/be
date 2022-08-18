@@ -112,6 +112,7 @@ CREATE TABLE `system_menu_item` (
   `description` varchar(120) NOT NULL DEFAULT '' COMMENT '菜单描述',
   `target` varchar(7) NOT NULL DEFAULT '' COMMENT '打开方式',
   `ordering` int NOT NULL DEFAULT '0' COMMENT '排序（越小越靠前）',
+  `is_enable` tinyint(4) NOT NULL DEFAULT '1' COMMENT '是否可用',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),

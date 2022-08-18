@@ -56,6 +56,11 @@
                     </div>
                 </div>
                 <div class="be-col-auto">
+                    <div class="menu-item-col-is-enable be-fw-bold">
+                        是否启用
+                    </div>
+                </div>
+                <div class="be-col-auto">
                     <div class="menu-item-col-op be-fw-bold be-pr-400">
                         操作
                     </div>
@@ -153,6 +158,13 @@
                                     </el-select>
                                 </div>
                             </div>
+
+                            <div class="be-col-auto">
+                                <div class="menu-item-col-is-enable be-pt-50">
+                                    <el-switch v-model.number="menuItem.is_enable" :active-value="1" :inactive-value="0" size="medium"></el-switch>
+                                </div>
+                            </div>
+
                             <div class="be-col-auto">
                                 <div class="menu-item-col-op be-pt-25 be-pr-50">
                                     <template v-if="menuItem.level === 1">
@@ -293,6 +305,7 @@
                         url: "",
                         description: "无",
                         target: "_self",
+                        is_enable: 1,
                         level: 1
                     });
                 },
@@ -307,6 +320,7 @@
                         url: "",
                         description: "无",
                         target: "_self",
+                        is_enable: 1,
                         level: menuItem.level + 1
                     });
                 },

@@ -107,6 +107,7 @@ class Menu
                     'url' => $menuItem->url,
                     'description' => $menuItem->description,
                     'target' => $menuItem->target,
+                    'is_enable' => (int)$menuItem->is_enable,
                     'level' => $level,
                 ];
 
@@ -155,6 +156,7 @@ class Menu
                     'url' => $menuItem->url,
                     'description' => $menuItem->description,
                     'target' => $menuItem->target,
+                    'is_enable' => (int)$menuItem->is_enable,
                     'level' => $level,
                 ];
 
@@ -235,6 +237,7 @@ class Menu
                 $url = $menuItem['url'] ?? '';
                 $description = $menuItem['description'] ?? '';
                 $target = $menuItem['target'] ?? '';
+                $isEnable = $menuItem['is_enable'] ?? 1;
 
                 if (substr($parentId, 0, 1) === '-') {
                     $parentId = $parentIds[$parentId];
@@ -250,6 +253,10 @@ class Menu
                     $target = '_self';
                 }
 
+                if (!in_array($isEnable, [0, 1])) {
+                    $isEnable = 1;
+                }
+
                 $tupleMenuItem->parent_id = $parentId;
                 $tupleMenuItem->name = $name;
                 $tupleMenuItem->route = $route;
@@ -257,6 +264,7 @@ class Menu
                 $tupleMenuItem->url = $url;
                 $tupleMenuItem->description = $description;
                 $tupleMenuItem->target = $target;
+                $tupleMenuItem->is_enable = $isEnable;
 
                 $tupleMenuItem->ordering = $ordering;
 
@@ -306,6 +314,10 @@ class Menu
         $code .= '  {' . "\n";
 
         foreach ($menus as $k => $v) {
+            if ($v->is_enable !== '1') {
+                continue;
+            }
+
             $params = [];
             if ($v->params) {
                 $decodedParams = json_decode($v->params, true);
