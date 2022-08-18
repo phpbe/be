@@ -12,7 +12,6 @@ class Driver
 
     protected array $items = [];
     protected ?array $tree = null;
-    protected ?string $activeId = null;
 
     /**
      * 添加菜单项
@@ -91,7 +90,13 @@ class Driver
      */
     public function setActiveId(string $activeId)
     {
-        $this->activeId = $activeId;
+        $class = get_called_class();
+        $pos = strrpos($class, '\\');
+        if ($pos !== false) {
+            $class = substr($class, $pos + 1);
+        }
+        $contextKey = 'Be:Menu:' . $class . ':activeId';
+        Be::setContext($contextKey, $activeId);
     }
 
     /**
@@ -101,38 +106,45 @@ class Driver
      */
     public function getActiveId(): string
     {
-        if ($this->activeId === null) {
-            $activeId = '';
-            $request = Be::getRequest();
-            $route = $request->getRoute();
-            foreach ($this->items as $item) {
-                if ($item->params) {
-                    if ($route === $item->route) {
-                        $paramsMatched = true;
-                        foreach ($item->params as $key => $val) {
-                            if ($val != $request->get($key, '')) {
-                                $paramsMatched = false;
-                                break;
-                            }
-                        }
+        $class = get_called_class();
+        $pos = strrpos($class, '\\');
+        if ($pos !== false) {
+            $class = substr($class, $pos + 1);
+        }
+        $contextKey = 'Be:Menu:' . $class . ':activeId';
+        if (Be::hasContext($contextKey)) {
+            return Be::getContext($contextKey);
+        }
 
-                        if ($paramsMatched) {
-                            $activeId = $item->id;
+        $activeId = '';
+        $request = Be::getRequest();
+        $route = $request->getRoute();
+        foreach ($this->items as $item) {
+            if ($item->params) {
+                if ($route === $item->route) {
+                    $paramsMatched = true;
+                    foreach ($item->params as $key => $val) {
+                        if ($val != $request->get($key, '')) {
+                            $paramsMatched = false;
                             break;
                         }
                     }
-                } else {
-                    if ($route === $item->route) {
+
+                    if ($paramsMatched) {
                         $activeId = $item->id;
                         break;
                     }
                 }
+            } else {
+                if ($route === $item->route) {
+                    $activeId = $item->id;
+                    break;
+                }
             }
+        }
 
-            $this->activeId = $activeId;
-        };
-
-        return $this->activeId;
+        Be::setContext($contextKey, $activeId);
+        return $activeId;
     }
 
 }
