@@ -9,23 +9,23 @@ namespace Be\Db;
 abstract class Driver
 {
 
-    protected $name = null; // 数据库名称
+    protected ?string $name = null; // 数据库名称
 
     /**
      * @var Connection
      */
-    protected $connection = null; // 查询器
+    protected ?Connection $connection = null; // 查询器
 
-    protected $cache = [];
+    protected array $cache = [];
 
-    abstract function __construct($name, $pdo = null);
+    abstract function __construct(string $name, \PDO $pdo = null);
 
     /**
      * 获取数据库名称
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -35,7 +35,7 @@ abstract class Driver
      *
      * @return Connection
      */
-    public function getConnection()
+    public function getConnection(): Connection
     {
         return $this->connection;
     }
@@ -43,9 +43,9 @@ abstract class Driver
     /**
      * 获取数据库名称
      *
-     * @return \Pdo
+     * @return \PDO
      */
-    public function getPdo()
+    public function getPdo(): \PDO
     {
         return $this->connection->getPdo();
     }
@@ -75,7 +75,7 @@ abstract class Driver
      * @return \PDOStatement
      * @throws DbException | \PDOException | \Exception
      */
-    public function prepare($sql, array $options = null)
+    public function prepare(string $sql, array $options = null): \PDOStatement
     {
         return $this->connection->prepare($sql, $options);
     }
@@ -89,7 +89,7 @@ abstract class Driver
      * @return \PDOStatement
      * @throws DbException | \PDOException | \Exception
      */
-    public function execute($sql, array $bind = null, array $prepareOptions = null)
+    public function execute(string $sql, array $bind = null, array $prepareOptions = null): \PDOStatement
     {
         return $this->connection->execute($sql, $bind, $prepareOptions);
     }
@@ -101,7 +101,7 @@ abstract class Driver
      * @return int 影响的行数
      * @throws DbException | \PDOException | \Exception
      */
-    public function query($sql, array $bind = null, array $prepareOptions = null)
+    public function query(string $sql, array $bind = null, array $prepareOptions = null): int
     {
         return $this->connection->query($sql, $bind, $prepareOptions);
     }
@@ -114,7 +114,7 @@ abstract class Driver
      * @return string
      * @throws DbException
      */
-    public function getValue($sql, array $bind = null)
+    public function getValue(string $sql, array $bind = null)
     {
         $statement = $this->connection->execute($sql, $bind);
         $tuple = $statement->fetch(\PDO::FETCH_NUM);
@@ -131,7 +131,7 @@ abstract class Driver
      * @return array
      * @throws DbException
      */
-    public function getValues($sql, array $bind = null)
+    public function getValues(string $sql, array $bind = null): array
     {
         $statement = $this->connection->execute($sql, $bind);
         $values = $statement->fetchAll(\PDO::FETCH_COLUMN);
@@ -148,7 +148,7 @@ abstract class Driver
      * @return array
      * @throws DbException
      */
-    public function getKeyValues($sql, array $bind = null)
+    public function getKeyValues(string $sql, array $bind = null): array
     {
         $statement = $this->connection->execute($sql, $bind);
         $keyValues = $statement->fetchAll(\PDO::FETCH_UNIQUE | \PDO::FETCH_COLUMN);
@@ -163,7 +163,7 @@ abstract class Driver
      * @param array $bind 参数
      * @return \Generator
      */
-    abstract function getYieldValues($sql, array $bind = null);
+    abstract function getYieldValues(string $sql, array $bind = null): \Generator;
 
     /**
      * 返回一个数组
@@ -173,7 +173,7 @@ abstract class Driver
      * @return array
      * @throws DbException
      */
-    public function getArray($sql, array $bind = null)
+    public function getArray(string $sql, array $bind = null): array
     {
         $statement = $this->connection->execute($sql, $bind);
         $array = $statement->fetch(\PDO::FETCH_ASSOC);
@@ -189,7 +189,7 @@ abstract class Driver
      * @return array
      * @throws DbException
      */
-    public function getArrays($sql, array $bind = null)
+    public function getArrays(string $sql, array $bind = null): array
     {
         $statement = $this->connection->execute($sql, $bind);
         $arrays = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -206,7 +206,7 @@ abstract class Driver
      * @return array
      * @throws DbException
      */
-    public function getKeyArrays($sql, array $bind = null, $key = null)
+    public function getKeyArrays(string $sql, array $bind = null, string $key = null): array
     {
         $statement = $this->connection->execute($sql, $bind);
         $arrays = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -233,7 +233,7 @@ abstract class Driver
      * @param array $bind 参数
      * @return \Generator
      */
-    abstract function getYieldArrays($sql, array $bind = null);
+    abstract function getYieldArrays(string $sql, array $bind = null): \Generator;
 
     /**
      * 返回一个数据库记录对象
@@ -243,7 +243,7 @@ abstract class Driver
      * @return object
      * @throws DbException
      */
-    public function getObject($sql, array $bind = null)
+    public function getObject(string $sql, array $bind = null): object
     {
         $statement = $this->connection->execute($sql, $bind);
         $object = $statement->fetchObject();
@@ -259,7 +259,7 @@ abstract class Driver
      * @return array(object)
      * @throws DbException
      */
-    public function getObjects($sql, array $bind = null)
+    public function getObjects(string $sql, array $bind = null): array
     {
         $statement = $this->connection->execute($sql, $bind);
         $objects = $statement->fetchAll(\PDO::FETCH_OBJ);
@@ -274,7 +274,7 @@ abstract class Driver
      * @param array $bind 参数
      * @return \Generator
      */
-    abstract function getYieldObjects($sql, array $bind = null);
+    abstract function getYieldObjects(string $sql, array $bind = null): \Generator;
 
     /**
      * 返回一个带下标索引的对象数组
@@ -285,7 +285,7 @@ abstract class Driver
      * @return array(object)
      * @throws DbException
      */
-    public function getKeyObjects($sql, array $bind = null, $key = null)
+    public function getKeyObjects(string $sql, array $bind = null, string $key = null): array
     {
         $statement = $this->connection->execute($sql, $bind);
         $objects = $statement->fetchAll(\PDO::FETCH_OBJ);
@@ -314,7 +314,7 @@ abstract class Driver
      * @return int|string|array 插入的主键
      * @throws DbException
      */
-    public function insert($table, $object)
+    public function insert(string $table, $object)
     {
         $vars = null;
         if (is_array($object)) {
@@ -345,7 +345,7 @@ abstract class Driver
      * @return array 批量插入的主键列表
      * @throws DbException
      */
-    public function insertMany($table, $objects)
+    public function insertMany(string $table, array $objects): array
     {
         if (!is_array($objects) || count($objects) === 0) return [];
 
@@ -397,7 +397,7 @@ abstract class Driver
      * @return int|string|array 插入的主键
      * @throws DbException
      */
-    public function quickInsert($table, $object)
+    public function quickInsert(string $table, $object)
     {
         $effectLines = null;
 
@@ -440,7 +440,7 @@ abstract class Driver
      * @return int 影响的行数
      * @throws DbException
      */
-    public function quickInsertMany($table, $objects)
+    public function quickInsertMany(string $table, array $objects): int
     {
         if (!is_array($objects) || count($objects) === 0) return 0;
 
@@ -502,7 +502,7 @@ abstract class Driver
      * @return int 更新的行数，如果数据无变化，则返回0
      * @throws DbException
      */
-    public function update($table, $object, $primaryKey = null)
+    public function update(string $table, $object, $primaryKey = null): int
     {
         $fields = [];
         $fieldValues = [];
@@ -579,7 +579,7 @@ abstract class Driver
      * @return int 更新的行数，如果数据无变化，则返回0
      * @throws DbException
      */
-    public function quickUpdate($table, $object, $primaryKey = null)
+    public function quickUpdate(string $table, $object, $primaryKey = null): int
     {
         $where = [];
         $fields = [];
@@ -652,7 +652,7 @@ abstract class Driver
      * @return int 更新的行数，如果数据无变化，则返回0
      * @throws DbException
      */
-    public function updateMany($table, $objects, $primaryKey = null)
+    public function updateMany(string $table, array $objects, $primaryKey = null): int
     {
         if (!is_array($objects) || count($objects) === 0) return 0;
 
@@ -775,7 +775,7 @@ abstract class Driver
      * @return int 更新的行数，如果数据无变化，则返回0
      * @throws DbException
      */
-    public function quickUpdateMany($table, $objects, $primaryKey = null)
+    public function quickUpdateMany(string $table, array $objects, $primaryKey = null): int
     {
         if (!is_array($objects) || count($objects) === 0) return 0;
 
@@ -930,7 +930,7 @@ abstract class Driver
      * @return int 影响的行数
      * @throws DbException
      */
-    abstract function replace($table, $object);
+    abstract function replace(string $table, $object): int;
 
     /**
      * 批量替换多个对象或数组到数据库
@@ -940,7 +940,7 @@ abstract class Driver
      * @return int 影响的行数
      * @throws DbException
      */
-    abstract function replaceMany($table, $objects);
+    abstract function replaceMany(string $table, array $objects): int;
 
     /**
      * 快速替换一个对象或数组到数据库
@@ -950,7 +950,7 @@ abstract class Driver
      * @return int 影响的行数
      * @throws DbException
      */
-    abstract function quickReplace($table, $object);
+    abstract function quickReplace(string $table, $object): int;
 
     /**
      * 快速批量替换多个对象或数组到数据库
@@ -960,14 +960,14 @@ abstract class Driver
      * @return int 影响的行数
      * @throws DbException
      */
-    abstract function quickReplaceMany($table, $objects);
+    abstract function quickReplaceMany(string $table, array $objects): int;
 
     /**
      * 生成 UUID
      *
      * @return string
      */
-    abstract function uuid();
+    abstract function uuid(): string;
 
     /**
      * 快速生成 UUID
@@ -988,7 +988,7 @@ abstract class Driver
     /**
      * 获取 insert 插入后产生的 id
      *
-     * @return int
+     * @return string|false
      */
     public function getLastInsertId()
     {
@@ -1000,28 +1000,28 @@ abstract class Driver
      *
      * @return array
      */
-    abstract function getTables();
+    abstract function getTables(): array;
 
     /**
      * 获取当前数据库所有表名
      *
      * @return array
      */
-    abstract function getTableNames();
+    abstract function getTableNames(): array;
 
     /**
      * 获取当前连接的所有库信息
      *
      * @return array
      */
-    abstract function getDatabases();
+    abstract function getDatabases(): array;
 
     /**
      * 获取当前连接的所有库名
      *
      * @return array
      */
-    abstract function getDatabaseNames();
+    abstract function getDatabaseNames(): array;
 
     /**
      * 获取一个表的字段列表
@@ -1040,7 +1040,7 @@ abstract class Driver
      *      'nullAble' => '是否允许为空',
      * }
      */
-    abstract function getTableFields($table);
+    abstract function getTableFields(string $table): array;
 
     /**
      * 获取指定表的主银
@@ -1048,14 +1048,14 @@ abstract class Driver
      * @param string $table 表名
      * @return string | array | null
      */
-    abstract function getTablePrimaryKey($table);
+    abstract function getTablePrimaryKey(string $table);
 
     /**
      * 删除表
      *
      * @param string $table 表名
      */
-    abstract function dropTable($table);
+    abstract function dropTable(string $table);
 
     /**
      * 开启事务处理
@@ -1103,7 +1103,7 @@ abstract class Driver
      * @return bool
      * @throws DbException
      */
-    public function inTransaction()
+    public function inTransaction(): bool
     {
         return $this->connection->inTransaction();
     }
@@ -1114,7 +1114,7 @@ abstract class Driver
      * @return string
      * @throws DbException
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         return $this->connection->getVersion();
     }
@@ -1125,7 +1125,7 @@ abstract class Driver
      * @param string $field
      * @return string
      */
-    public function quoteKey($field)
+    public function quoteKey(string $field): string
     {
         return $this->connection->quoteKey($field);
     }
@@ -1136,7 +1136,7 @@ abstract class Driver
      * @param array $fields
      * @return array
      */
-    public function quoteKeys($fields)
+    public function quoteKeys(array $fields): array
     {
         return $this->connection->quoteKeys($fields);
     }
@@ -1148,7 +1148,7 @@ abstract class Driver
      * @return string
      * @throws DbException
      */
-    public function quoteValue($value)
+    public function quoteValue($value): string
     {
         return $this->connection->quoteValue($value);
     }
@@ -1160,7 +1160,7 @@ abstract class Driver
      * @return array
      * @throws DbException
      */
-    public function quoteValues($values)
+    public function quoteValues(array $values): array
     {
         return $this->connection->quoteValues($values);
     }
@@ -1172,7 +1172,7 @@ abstract class Driver
      * @param string $value
      * @return string
      */
-    public function escape($value)
+    public function escape($value): string
     {
         return $this->connection->escape($value);
     }

@@ -11,7 +11,7 @@ use Be\Db\DbException;
 class Mysql extends Driver
 {
 
-    public function __construct($name, $pdo = null)
+    public function __construct(string $name, \PDO $pdo = null)
     {
         $this->name = $name;
         $this->connection = new \Be\Db\Connection\Mysql($name, $pdo);
@@ -24,7 +24,7 @@ class Mysql extends Driver
      * @param array $bind 参数
      * @return \Generator
      */
-    public function getYieldValues($sql, array $bind = null)
+    public function getYieldValues(string $sql, array $bind = null): \Generator
     {
         $connection = new \Be\Db\Connection\Mysql($this->name);
         $connection->getPdo()->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, false);
@@ -43,7 +43,7 @@ class Mysql extends Driver
      * @param array $bind 参数
      * @return \Generator
      */
-    public function getYieldArrays($sql, array $bind = null)
+    public function getYieldArrays(string $sql, array $bind = null): \Generator
     {
         $connection = new \Be\Db\Connection\Mysql($this->name);
         $connection->getPdo()->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, false);
@@ -62,7 +62,7 @@ class Mysql extends Driver
      * @param array $bind 参数
      * @return \Generator
      */
-    public function getYieldObjects($sql, array $bind = null)
+    public function getYieldObjects(string $sql, array $bind = null): \Generator
     {
         $connection = new \Be\Db\Connection\Mysql($this->name);
         $connection->getPdo()->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, false);
@@ -82,7 +82,7 @@ class Mysql extends Driver
      * @return int 影响的行数
      * @throws DbException
      */
-    public function replace($table, $object)
+    public function replace(string $table, $object): int
     {
         $vars = null;
         if (is_array($object)) {
@@ -114,7 +114,7 @@ class Mysql extends Driver
      * @return int 影响的行数
      * @throws DbException
      */
-    public function replaceMany($table, $objects)
+    public function replaceMany(string $table, array $objects): int
     {
         if (!is_array($objects) || count($objects) === 0) return 0;
 
@@ -165,7 +165,7 @@ class Mysql extends Driver
      * @return int 影响的行数
      * @throws DbException
      */
-    public function quickReplace($table, $object)
+    public function quickReplace(string $table, $object): int
     {
         $vars = null;
         if (is_array($object)) {
@@ -206,7 +206,7 @@ class Mysql extends Driver
      * @return int 影响的行数
      * @throws DbException
      */
-    public function quickReplaceMany($table, $objects)
+    public function quickReplaceMany(string $table, array $objects): int
     {
         if (!is_array($objects) || count($objects) === 0) return 0;
 
@@ -261,7 +261,8 @@ class Mysql extends Driver
      *
      * @return string
      */
-    public function uuid() {
+    public function uuid(): string
+    {
         return $this->getValue('SELECT UUID()');
     }
 
@@ -270,7 +271,7 @@ class Mysql extends Driver
      *
      * @return array
      */
-    public function getTables()
+    public function getTables(): array
     {
         return $this->getObjects('SHOW TABLE STATUS');
     }
@@ -280,7 +281,7 @@ class Mysql extends Driver
      *
      * @return array
      */
-    public function getTableNames()
+    public function getTableNames(): array
     {
         return $this->getValues('SHOW TABLES');
     }
@@ -290,7 +291,7 @@ class Mysql extends Driver
      *
      * @return array
      */
-    public function getDatabases()
+    public function getDatabases(): array
     {
         return $this->getObjects('SELECT * FROM information_schema.SCHEMATA WHERE `SCHEMA_NAME`!=\'information_schema\'');
     }
@@ -300,7 +301,7 @@ class Mysql extends Driver
      *
      * @return array
      */
-    public function getDatabaseNames()
+    public function getDatabaseNames(): array
     {
         return $this->getValues('SELECT `SCHEMA_NAME` FROM information_schema.SCHEMATA WHERE `SCHEMA_NAME`!=\'information_schema\'');
     }
@@ -322,7 +323,7 @@ class Mysql extends Driver
      *      'nullAble' => '是否允许为空',
      * }
      */
-    public function getTableFields($table)
+    public function getTableFields(string $table): array
     {
         $cacheKey = 'TableFields:' . $table;
         if (isset($this->cache[$cacheKey])) {
@@ -415,7 +416,7 @@ class Mysql extends Driver
      * @param string $table 表名
      * @return string | array | null
      */
-    public function getTablePrimaryKey($table)
+    public function getTablePrimaryKey(string $table)
     {
         $tableFields = $this->getTableFields($table);
 
@@ -441,7 +442,7 @@ class Mysql extends Driver
      *
      * @param string $table 表名
      */
-    public function dropTable($table)
+    public function dropTable(string $table)
     {
         $statement = $this->connection->execute('DROP TABLE IF EXISTS ' . $this->connection->quoteKey($table));
         $statement->closeCursor();

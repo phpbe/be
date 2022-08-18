@@ -8,28 +8,28 @@ namespace Be\Db;
 abstract class Connection
 {
 
-    protected $name = null; // 数据库名称
+    protected ?string $name = null; // 数据库名称
 
     /**
      * @var \PDO
      */
-    protected $pdo = null; // 数据库连接
+    protected ?\PDO $pdo = null; // 数据库连接
 
     /**
      * @var \PDOStatement
      */
-    protected $statement = null; // 预编译 sql
+    protected ?\PDOStatement $statement = null; // 预编译 sql
 
-    protected $transactions = 0; // 开启的事务数，防止嵌套
+    protected int $transactions = 0; // 开启的事务数，防止嵌套
 
-    abstract public function __construct($name, $pdo = null);
+    abstract public function __construct(string $name, \PDO $pdo = null);
 
     /**
      * 获取数据库名称
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -39,7 +39,7 @@ abstract class Connection
      *
      * @return \PDO
      */
-    public function getPdo()
+    public function getPdo(): \PDO
     {
         return $this->pdo;
     }
@@ -68,7 +68,8 @@ abstract class Connection
     /**
      * 重新连接数据库
      */
-    public function reconnect() {
+    public function reconnect()
+    {
         $this->pdo = null;
         $this->connect();
     }
@@ -81,7 +82,7 @@ abstract class Connection
      * @return \PDOStatement
      * @throws DbException | \PDOException | \Exception
      */
-    public function prepare($sql, array $options = null)
+    public function prepare(string $sql, array $options = null): \PDOStatement
     {
         try {
             $statement = null;
@@ -113,7 +114,7 @@ abstract class Connection
      * @return \PDOStatement
      * @throws DbException | \PDOException | \Exception
      */
-    public function execute($sql, array $bind = null, array $prepareOptions = null)
+    public function execute(string $sql, array $bind = null, array $prepareOptions = null): \PDOStatement
     {
         try {
             if ($bind === null) {
@@ -144,7 +145,7 @@ abstract class Connection
      * @return int 影响的行数
      * @throws DbException | \PDOException | \Exception
      */
-    public function query($sql, array $bind = null, array $prepareOptions = null)
+    public function query(string $sql, array $bind = null, array $prepareOptions = null): int
     {
         $statement = $this->execute($sql, $bind, $prepareOptions);
         $effectLines = $statement->rowCount();
@@ -155,7 +156,7 @@ abstract class Connection
     /**
      * 获取 insert 插入后产生的 id
      *
-     * @return int
+     * @return string|false
      */
     public function getLastInsertId()
     {
@@ -241,7 +242,7 @@ abstract class Connection
      * @return bool
      * @throws DbException
      */
-    public function inTransaction()
+    public function inTransaction(): bool
     {
         return $this->pdo->inTransaction();
     }
@@ -252,7 +253,7 @@ abstract class Connection
      * @return string
      * @throws DbException
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         try {
             return $this->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION);
@@ -275,7 +276,7 @@ abstract class Connection
      * @param string $field
      * @return string
      */
-    abstract function quoteKey($field);
+    abstract function quoteKey(string $field): string;
 
     /**
      * 处理多个插入数据库的字段名或表名
@@ -283,7 +284,7 @@ abstract class Connection
      * @param array $fields
      * @return array
      */
-    public function quoteKeys($fields)
+    public function quoteKeys(array $fields): array
     {
         $quotedKeys = [];
         foreach ($fields as $field) {
@@ -299,7 +300,7 @@ abstract class Connection
      * @return string
      * @throws DbException
      */
-    public function quoteValue($value)
+    public function quoteValue($value): string
     {
         try {
             return $this->pdo->quote((string)$value);
@@ -323,7 +324,7 @@ abstract class Connection
      * @return array
      * @throws DbException
      */
-    public function quoteValues($values)
+    public function quoteValues(array $values): array
     {
         $quotedValues = [];
         foreach ($values as $value) {
@@ -351,6 +352,6 @@ abstract class Connection
      * @param string $value
      * @return string
      */
-    abstract function escape($value);
+    abstract function escape($value): string;
 
 }

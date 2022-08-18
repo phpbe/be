@@ -12,7 +12,7 @@ use Be\Db\DbException;
 class Mysql extends Connection
 {
 
-    public function __construct($name, $pdo = null)
+    public function __construct(string $name, \PDO $pdo = null)
     {
         $this->name = $name;
         if ($pdo === null) {
@@ -66,7 +66,7 @@ class Mysql extends Connection
      * @param string $field
      * @return string
      */
-    public function quoteKey($field)
+    public function quoteKey(string $field): string
     {
         if (strpos($field, '.')) {
             $field = str_replace('.', '`.`', $field);
@@ -82,7 +82,7 @@ class Mysql extends Connection
      * @param string $value
      * @return string
      */
-    public function escape($value)
+    public function escape($value): string
     {
         return addslashes($value);
     }

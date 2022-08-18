@@ -11,7 +11,7 @@ use Be\Db\DbException;
 class Oracle extends Driver
 {
 
-    public function __construct($name, $pdo = null)
+    public function __construct(string $name, \PDO $pdo = null)
     {
         $this->name = $name;
         $this->connection = new \Be\Db\Connection\Oracle($name, $pdo);
@@ -24,7 +24,7 @@ class Oracle extends Driver
      * @param array $bind 参数
      * @return \Generator
      */
-    public function getYieldValues($sql, array $bind = null)
+    public function getYieldValues(string $sql, array $bind = null): \Generator
     {
         $connection = new \Be\Db\Connection\Mssql($this->name);
         $statement = $connection->execute($sql, $bind);
@@ -43,7 +43,7 @@ class Oracle extends Driver
      * @param array $bind 参数
      * @return \Generator
      */
-    public function getYieldArrays($sql, array $bind = null)
+    public function getYieldArrays(string $sql, array $bind = null): \Generator
     {
         $connection = new \Be\Db\Connection\Mssql($this->name);
         $statement = $connection->execute($sql, $bind);
@@ -62,7 +62,7 @@ class Oracle extends Driver
      * @param array $bind 参数
      * @return \Generator
      */
-    public function getYieldObjects($sql, array $bind = null)
+    public function getYieldObjects(string $sql, array $bind = null): \Generator
     {
         $connection = new \Be\Db\Connection\Mssql($this->name);
         $statement = $connection->execute($sql, $bind);
@@ -79,10 +79,10 @@ class Oracle extends Driver
      *
      * @param string $table 表名
      * @param array | object $object 要插入数据库的对象或对象数组，对象属性需要和该表字段一致
-     * @return int 插入的主键ID
+     * @return int|string|array 插入的主键
      * @throws DbException
      */
-    public function insert($table, $object)
+    public function insert(string $table, $object)
     {
         $vars = null;
         if (is_array($object)) {
@@ -169,7 +169,7 @@ class Oracle extends Driver
      * @return array 批量插入的ID列表
      * @throws DbException
      */
-    public function insertMany($table, $objects)
+    public function insertMany(string $table, array $objects): array
     {
         if (!is_array($objects) || count($objects) === 0) return [];
 
@@ -281,7 +281,7 @@ class Oracle extends Driver
      * @return int 插入的主键ID
      * @throws DbException
      */
-    public function quickInsert($table, $object)
+    public function quickInsert(string $table, $object): int
     {
         $effectLines = null;
 
@@ -362,7 +362,7 @@ class Oracle extends Driver
      * @return int 影响的行数
      * @throws DbException
      */
-    public function quickInsertMany($table, $objects)
+    public function quickInsertMany(string $table, array $objects): int
     {
         if (!is_array($objects) || count($objects) === 0) return 0;
 
@@ -452,7 +452,6 @@ class Oracle extends Driver
     }
 
 
-
     /**
      * 更新一个对象到数据库
      *
@@ -462,7 +461,7 @@ class Oracle extends Driver
      * @return int 影响的行数
      * @throws DbException
      */
-    public function update($table, $object, $primaryKey = null)
+    public function update(string $table, $object, $primaryKey = null): int
     {
         $tableFields = $this->getTableFields($table);
 
@@ -621,7 +620,7 @@ class Oracle extends Driver
      * @return int 影响的行数
      * @throws DbException
      */
-    public function quickUpdate($table, $object, $primaryKey = null)
+    public function quickUpdate(string $table, $object, $primaryKey = null): int
     {
         $tableFields = $this->getTableFields($table);
 
@@ -766,7 +765,7 @@ class Oracle extends Driver
      * @return int 影响的行数
      * @throws DbException
      */
-    public function updateMany($table, $objects, $primaryKey = null)
+    public function updateMany(string $table, array $objects, $primaryKey = null): int
     {
         return 0;
     }
@@ -780,7 +779,7 @@ class Oracle extends Driver
      * @return int 影响的行数
      * @throws DbException
      */
-    public function quickUpdateMany($table, $objects, $primaryKey = null)
+    public function quickUpdateMany(string $table, array $objects, $primaryKey = null): int
     {
         return 0;
     }
@@ -793,7 +792,7 @@ class Oracle extends Driver
      * @return int 影响的行数
      * @throws DbException
      */
-    public function replace($table, $object)
+    public function replace(string $table, $object): int
     {
         throw new DbException('Oracle 数据库不支持 Replace Into！');
     }
@@ -806,7 +805,7 @@ class Oracle extends Driver
      * @return int 影响的行数
      * @throws DbException
      */
-    public function replaceMany($table, $objects)
+    public function replaceMany(string $table, array $objects): int
     {
         throw new DbException('Oracle 数据库不支持 Replace Into！');
     }
@@ -819,7 +818,7 @@ class Oracle extends Driver
      * @return int 影响的行数
      * @throws DbException
      */
-    public function quickReplace($table, $object)
+    public function quickReplace(string $table, $object): int
     {
         throw new DbException('Oracle 数据库不支持 Replace Into！');
     }
@@ -832,7 +831,7 @@ class Oracle extends Driver
      * @return int 影响的行数
      * @throws DbException
      */
-    public function quickReplaceMany($table, $objects)
+    public function quickReplaceMany(string $table, array $objects): int
     {
         throw new DbException('Oracle 数据库不支持 Replace Into！');
     }
@@ -842,7 +841,8 @@ class Oracle extends Driver
      *
      * @return string
      */
-    public function uuid() {
+    public function uuid(): string
+    {
         return $this->getValue('SELECT SYS_GUID() FROM DUAL');
     }
 
@@ -851,7 +851,7 @@ class Oracle extends Driver
      *
      * @return array
      */
-    public function getTables()
+    public function getTables(): array
     {
         return $this->getObjects('SELECT * FROM "USER_TAB_COMMENTS"');
     }
@@ -861,7 +861,7 @@ class Oracle extends Driver
      *
      * @return array
      */
-    public function getTableNames()
+    public function getTableNames(): array
     {
         return $this->getValues('SELECT "TABLE_NAME" FROM "USER_TAB_COMMENTS"');
     }
@@ -871,7 +871,7 @@ class Oracle extends Driver
      *
      * @return array
      */
-    public function getAllTables()
+    public function getAllTables(): array
     {
         return $this->getObjects('SELECT * FROM "ALL_TAB_COMMENTS"');
     }
@@ -881,7 +881,7 @@ class Oracle extends Driver
      *
      * @return array
      */
-    public function getAllTableNames()
+    public function getAllTableNames(): array
     {
         return $this->getValues('SELECT "TABLE_NAME" FROM "ALL_TAB_COMMENTS"');
     }
@@ -891,7 +891,7 @@ class Oracle extends Driver
      *
      * @return array
      */
-    public function getDatabases()
+    public function getDatabases(): array
     {
         return $this->getObjects('SELECT * FROM v$database');
     }
@@ -901,7 +901,7 @@ class Oracle extends Driver
      *
      * @return array
      */
-    public function getDatabaseNames()
+    public function getDatabaseNames(): array
     {
         return $this->getValues('SELECT "name" FROM v$database');
     }
@@ -923,7 +923,7 @@ class Oracle extends Driver
      *      'nullAble' => '是否允许为空',
      * }
      */
-    public function getTableFields($table)
+    public function getTableFields(string $table): array
     {
         $cacheKey = 'TableFields:' . $table;
         if (isset($this->cache[$cacheKey])) {
@@ -974,7 +974,6 @@ class Oracle extends Driver
 
         $data = [];
         foreach ($fields as $field) {
-
             $data[$field->COLUMN_NAME] = [
                 'name' => $field->COLUMN_NAME,
                 'type' => strtolower($field->DATA_TYPE),
@@ -985,7 +984,6 @@ class Oracle extends Driver
                 'default' => $field->DATA_DEFAULT,
                 'nullAble' => $field->NULLABLE === 'Y' ? true : false,
             ];
-
         }
 
         $this->cache[$cacheKey] = $data;
@@ -998,7 +996,7 @@ class Oracle extends Driver
      * @param string $table 表名
      * @return string | array | null
      */
-    public function getTablePrimaryKey($table)
+    public function getTablePrimaryKey(string $table)
     {
         $cacheKey = 'TablePrimaryKey:' . $table;
         if (isset($this->cache[$cacheKey])) {
@@ -1014,7 +1012,7 @@ class Oracle extends Driver
 
             $sql = 'SELECT "CONSTRAINT_NAME" 
                     FROM "ALL_CONSTRAINTS" 
-                    WHERE "OWNER" = '.$this->connection->quoteValue($owner).' 
+                    WHERE "OWNER" = ' . $this->connection->quoteValue($owner) . ' 
                     AND "TABLE_NAME" = ' . $this->connection->quoteValue($table) . '
                     AND "CONSTRAINT_TYPE" =\'P\'';
 
@@ -1023,7 +1021,7 @@ class Oracle extends Driver
             if ($constraintName) {
                 $sql = 'SELECT "COLUMN_NAME" 
                         FROM "ALL_COL_COMMENTS" 
-                        WHERE "CONSTRAINT_NAME" = ' . $this->connection->quoteValue($constraintName) ;
+                        WHERE "CONSTRAINT_NAME" = ' . $this->connection->quoteValue($constraintName);
 
                 $primaryKeys = $this->getValues($sql);
             }
@@ -1040,7 +1038,7 @@ class Oracle extends Driver
             if ($constraintName) {
                 $sql = 'SELECT "COLUMN_NAME" 
                         FROM "USER_CONS_COLUMNS" 
-                        WHERE "CONSTRAINT_NAME" = ' . $this->connection->quoteValue($constraintName) ;
+                        WHERE "CONSTRAINT_NAME" = ' . $this->connection->quoteValue($constraintName);
 
                 $primaryKeys = $this->getValues($sql);
             }
@@ -1063,7 +1061,7 @@ class Oracle extends Driver
      *
      * @param string $table 表名
      */
-    public function dropTable($table)
+    public function dropTable(string $table)
     {
         $statement = $this->connection->execute('DROP TABLE ' . $this->connection->quoteKey($table));
         $statement->closeCursor();

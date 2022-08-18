@@ -12,7 +12,7 @@ class Mssql extends Driver
 {
 
 
-    public function __construct($name, $pdo = null)
+    public function __construct(string $name, \PDO $pdo = null)
     {
         $this->name = $name;
         $this->connection = new \Be\Db\Connection\Mssql($name, $pdo);
@@ -25,7 +25,7 @@ class Mssql extends Driver
      * @param array $bind 参数
      * @return \Generator
      */
-    public function getYieldValues($sql, array $bind = null)
+    public function getYieldValues(string $sql, array $bind = null): \Generator
     {
         $connection = new \Be\Db\Connection\Mssql($this->name);
         $statement = $connection->execute($sql, $bind);
@@ -43,7 +43,7 @@ class Mssql extends Driver
      * @param array $bind 参数
      * @return \Generator
      */
-    public function getYieldArrays($sql, array $bind = null)
+    public function getYieldArrays(string $sql, array $bind = null): \Generator
     {
         $connection = new \Be\Db\Connection\Mssql($this->name);
         $statement = $connection->execute($sql, $bind);
@@ -61,7 +61,7 @@ class Mssql extends Driver
      * @param array $bind 参数
      * @return \Generator
      */
-    public function getYieldObjects($sql, array $bind = null)
+    public function getYieldObjects(string $sql, array $bind = null): \Generator
     {
         $connection = new \Be\Db\Connection\Mssql($this->name);
         $statement = $connection->execute($sql, $bind);
@@ -80,7 +80,7 @@ class Mssql extends Driver
      * @return int 影响的行数
      * @throws DbException
      */
-    public function replace($table, $object)
+    public function replace(string $table, $object): int
     {
         throw new DbException('Mssql 数据库不支持 Replace Into！');
     }
@@ -93,7 +93,7 @@ class Mssql extends Driver
      * @return int 影响的行数
      * @throws DbException
      */
-    public function replaceMany($table, $objects)
+    public function replaceMany(string $table, array $objects): int
     {
         throw new DbException('Mssql 数据库不支持 Replace Into！');
     }
@@ -106,7 +106,7 @@ class Mssql extends Driver
      * @return int 影响的行数
      * @throws DbException
      */
-    public function quickReplace($table, $object)
+    public function quickReplace(string $table, $object): int
     {
         throw new DbException('Mssql 数据库不支持 Replace Into！');
     }
@@ -119,7 +119,7 @@ class Mssql extends Driver
      * @return int 影响的行数
      * @throws DbException
      */
-    public function quickReplaceMany($table, $objects)
+    public function quickReplaceMany(string $table, array $objects): int
     {
         throw new DbException('Mssql 数据库不支持 Replace Into！');
     }
@@ -127,11 +127,11 @@ class Mssql extends Driver
     /**
      * 获取 insert 插入后产生的 id
      *
-     * @return int
+     * @return string|false
      */
     public function getLastInsertId()
     {
-        return (int)$this->getValue('SELECT ISNULL(SCOPE_IDENTITY(), 0)');
+        return $this->getValue('SELECT ISNULL(SCOPE_IDENTITY(), 0)');
     }
 
     /**
@@ -139,7 +139,8 @@ class Mssql extends Driver
      *
      * @return string
      */
-    public function uuid() {
+    public function uuid(): string
+    {
         return $this->getValue('SELECT NEWID()');
     }
 
@@ -148,7 +149,7 @@ class Mssql extends Driver
      *
      * @return array
      */
-    public function getTables()
+    public function getTables(): array
     {
         // SELECT * FROM sysobjects WHERE xType='u';
         // SELECT * FROM sys.objects WHERE type='U';
@@ -167,7 +168,7 @@ class Mssql extends Driver
      *
      * @return array
      */
-    public function getTableNames()
+    public function getTableNames(): array
     {
         // SELECT [TABLE_NAME] FROM [INFORMATION_SCHEMA].[TABLES] WHERE [TABLE_TYPE] = 'BASE TABLE'
         return $this->getValues('SELECT [name] FROM sys.tables WHERE [type] = \'U\'');
@@ -178,7 +179,7 @@ class Mssql extends Driver
      *
      * @return array
      */
-    public function getDatabases()
+    public function getDatabases(): array
     {
         return $this->getObjects('SELECT * FROM master..sysdatabasesWHERE [name]!=\'master\'');
     }
@@ -188,7 +189,7 @@ class Mssql extends Driver
      *
      * @return array
      */
-    public function getDatabaseNames()
+    public function getDatabaseNames(): array
     {
         return $this->getValues('SELECT [name] FROM master..sysdatabasesWHERE [name]!=\'master\'');
     }
@@ -210,7 +211,7 @@ class Mssql extends Driver
      *      'nullAble' => '是否允许为空',
      * }
      */
-    public function getTableFields($table)
+    public function getTableFields(string $table): array
     {
         $cacheKey = 'TableFields:' . $table;
         if (isset($this->cache[$cacheKey])) {
@@ -256,7 +257,7 @@ class Mssql extends Driver
      * @param string $table 表名
      * @return string | array | null
      */
-    public function getTablePrimaryKey($table)
+    public function getTablePrimaryKey(string $table)
     {
         $cacheKey = 'TablePrimaryKey:' . $table;
         if (isset($this->cache[$cacheKey])) {
@@ -287,7 +288,7 @@ class Mssql extends Driver
      *
      * @param string $table 表名
      */
-    public function dropTable($table)
+    public function dropTable(string $table)
     {
         $statement = $this->connection->execute('DROP TABLE ' . $this->quoteKey($table));
         $statement->closeCursor();
