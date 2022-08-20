@@ -73,11 +73,11 @@ class Mssql extends Driver
     }
 
     /**
-     * 更新一个对象到数据库
+     * 替换一个对象或数组到数据库
      *
      * @param string $table 表名
-     * @param array | object $object 要更新的对象，对象属性需要和该表字段一致
-     * @return int 影响的行数
+     * @param array | object $object 要替换的对象或数组，对象属性或数组键名需要和该表字段一致
+     * @return int 影响的行数，如果数据无变化，则返回0，失败时抛出异常
      * @throws DbException
      */
     public function replace(string $table, $object): int
@@ -86,11 +86,11 @@ class Mssql extends Driver
     }
 
     /**
-     * 批量更新多个对象到数据库
+     * 批量替换多个对象或数组到数据库
      *
      * @param string $table 表名
-     * @param array $objects 要更新的对象数组，对象属性需要和该表字段一致
-     * @return int 影响的行数
+     * @param array $objects 要替换数据库的对象数组或二维数组，对象属性或数组键名需要和该表字段一致
+     * @return int 影响的行数，如果数据无变化，则返回0，失败时抛出异常
      * @throws DbException
      */
     public function replaceMany(string $table, array $objects): int
@@ -99,11 +99,11 @@ class Mssql extends Driver
     }
 
     /**
-     * 快速更新一个对象到数据库
+     * 快速替换一个对象或数组到数据库
      *
      * @param string $table 表名
-     * @param array | object $object 要更新的对象，对象属性需要和该表字段一致
-     * @return int 影响的行数
+     * @param array | object $object 要替换的对象或数组，对象属性或数组锓名需要和该表字段一致
+     * @return int 影响的行数，如果数据无变化，则返回0，失败时抛出异常
      * @throws DbException
      */
     public function quickReplace(string $table, $object): int
@@ -112,11 +112,11 @@ class Mssql extends Driver
     }
 
     /**
-     * 快速批量更新多个对象到数据库
+     * 快速批量替换多个对象或数组到数据库
      *
      * @param string $table 表名
-     * @param array $objects 要更新的对象数组，对象属性需要和该表字段一致
-     * @return int 影响的行数
+     * @param array $objects 要替换的对象数组或二维数组，对象属性或数组键名需要和该表字段一致
+     * @return int 影响的行数，如果数据无变化，则返回0，失败时抛出异常
      * @throws DbException
      */
     public function quickReplaceMany(string $table, array $objects): int

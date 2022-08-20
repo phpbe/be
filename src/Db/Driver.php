@@ -83,11 +83,11 @@ abstract class Driver
     /**
      * 执行 sql 语句
      *
-     * @param string $sql 查询语句
-     * @param array $bind 占位参数
-     * @param array $prepareOptions 参数
+     * @param string $sql 要执行的SQL语句
+     * @param array|null $bind 占位符替换数据
+     * @param array|null $prepareOptions 预编译选项
      * @return \PDOStatement
-     * @throws DbException | \PDOException | \Exception
+     * @throws DbException
      */
     public function execute(string $sql, array $bind = null, array $prepareOptions = null): \PDOStatement
     {
@@ -97,9 +97,11 @@ abstract class Driver
     /**
      * 执行 sql 语句
      *
-     * @param string $sql 查询语句
+     * @param string $sql 要执行的SQL语句
+     * @param array|null $bind 占位符替换数据
+     * @param array|null $prepareOptions 预编译选项
      * @return int 影响的行数
-     * @throws DbException | \PDOException | \Exception
+     * @throws DbException
      */
     public function query(string $sql, array $bind = null, array $prepareOptions = null): int
     {
@@ -110,8 +112,8 @@ abstract class Driver
      * 返回单一查询结果, 多行多列记录时, 只返回第一行第一列
      *
      * @param string $sql 查询语句
-     * @param array $bind 参数
-     * @return string
+     * @param array|null $bind 参数
+     * @return string|bool
      * @throws DbException
      */
     public function getValue(string $sql, array $bind = null)
@@ -926,8 +928,8 @@ abstract class Driver
      * 替换一个对象或数组到数据库
      *
      * @param string $table 表名
-     * @param array | object $object 要替换的对象，对象属性需要和该表字段一致
-     * @return int 影响的行数
+     * @param array | object $object 要替换的对象或数组，对象属性或数组键名需要和该表字段一致
+     * @return int 影响的行数，如果数据无变化，则返回0，失败时抛出异常
      * @throws DbException
      */
     abstract function replace(string $table, $object): int;
@@ -936,8 +938,8 @@ abstract class Driver
      * 批量替换多个对象或数组到数据库
      *
      * @param string $table 表名
-     * @param array $objects 要替换的对象数组，对象属性需要和该表字段一致
-     * @return int 影响的行数
+     * @param array $objects 要替换数据库的对象数组或二维数组，对象属性或数组键名需要和该表字段一致
+     * @return int 影响的行数，如果数据无变化，则返回0，失败时抛出异常
      * @throws DbException
      */
     abstract function replaceMany(string $table, array $objects): int;
@@ -946,8 +948,8 @@ abstract class Driver
      * 快速替换一个对象或数组到数据库
      *
      * @param string $table 表名
-     * @param array | object $object 要替换的对象，对象属性需要和该表字段一致
-     * @return int 影响的行数
+     * @param array | object $object 要替换的对象或数组，对象属性或数组锓名需要和该表字段一致
+     * @return int 影响的行数，如果数据无变化，则返回0，失败时抛出异常
      * @throws DbException
      */
     abstract function quickReplace(string $table, $object): int;
@@ -956,8 +958,8 @@ abstract class Driver
      * 快速批量替换多个对象或数组到数据库
      *
      * @param string $table 表名
-     * @param array $objects 要替换的对象数组，对象属性需要和该表字段一致
-     * @return int 影响的行数
+     * @param array $objects 要替换的对象数组或二维数组，对象属性或数组键名需要和该表字段一致
+     * @return int 影响的行数，如果数据无变化，则返回0，失败时抛出异常
      * @throws DbException
      */
     abstract function quickReplaceMany(string $table, array $objects): int;
