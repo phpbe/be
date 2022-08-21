@@ -12,7 +12,7 @@ use Be\Db\DbException;
 class Mysql extends Connection
 {
 
-    public function __construct(string $name, \PDO $pdo = null)
+    public function __construct(string $name, $pdo = null)
     {
         $this->name = $name;
         if ($pdo === null) {

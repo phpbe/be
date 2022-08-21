@@ -11,18 +11,18 @@ abstract class Connection
     protected ?string $name = null; // 数据库名称
 
     /**
-     * @var \PDO
+     * @var \PDO|\Swoole\Database\PDOProxy
      */
-    protected ?\PDO $pdo = null; // 数据库连接
+    protected $pdo = null; // 数据库连接
 
     /**
-     * @var \PDOStatement
+     * @var \PDOStatement||\Swoole\Database\PDOStatementProxy
      */
-    protected ?\PDOStatement $statement = null; // 预编译 sql
+    protected $statement = null; // 预编译 sql
 
     protected int $transactions = 0; // 开启的事务数，防止嵌套
 
-    abstract public function __construct(string $name, \PDO $pdo = null);
+    abstract public function __construct(string $name, $pdo = null);
 
     /**
      * 获取数据库名称
@@ -79,10 +79,10 @@ abstract class Connection
      *
      * @param string $sql 查询语句
      * @param array $options 参数
-     * @return \PDOStatement
+     * @return \PDOStatement|\Swoole\Database\PDOStatementProxy
      * @throws DbException | \PDOException | \Exception
      */
-    public function prepare(string $sql, array $options = null): \PDOStatement
+    public function prepare(string $sql, array $options = null)
     {
         try {
             $statement = null;
@@ -111,10 +111,10 @@ abstract class Connection
      * @param string $sql 查询语句
      * @param array $bind 占位参数
      * @param array $prepareOptions 参数
-     * @return \PDOStatement
+     * @return \PDOStatement|\Swoole\Database\PDOStatementProxy
      * @throws DbException | \PDOException | \Exception
      */
-    public function execute(string $sql, array $bind = null, array $prepareOptions = null): \PDOStatement
+    public function execute(string $sql, array $bind = null, array $prepareOptions = null)
     {
         try {
             if ($bind === null) {

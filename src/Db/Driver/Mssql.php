@@ -12,7 +12,7 @@ class Mssql extends Driver
 {
 
 
-    public function __construct(string $name, \PDO $pdo = null)
+    public function __construct(string $name, $pdo = null)
     {
         $this->name = $name;
         $this->connection = new \Be\Db\Connection\Mssql($name, $pdo);

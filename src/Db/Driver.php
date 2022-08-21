@@ -18,7 +18,7 @@ abstract class Driver
 
     protected array $cache = [];
 
-    abstract function __construct(string $name, \PDO $pdo = null);
+    abstract function __construct(string $name, $pdo = null);
 
     /**
      * 获取数据库名称
@@ -43,9 +43,9 @@ abstract class Driver
     /**
      * 获取数据库名称
      *
-     * @return \PDO
+     * @return  \PDO|\Swoole\Database\PDOProxy
      */
-    public function getPdo(): \PDO
+    public function getPdo()
     {
         return $this->connection->getPdo();
     }
@@ -72,10 +72,10 @@ abstract class Driver
      *
      * @param string $sql 查询语句
      * @param array $options 参数
-     * @return \PDOStatement
+     * @return \PDOStatement|\Swoole\Database\PDOStatementProxy
      * @throws DbException | \PDOException | \Exception
      */
-    public function prepare(string $sql, array $options = null): \PDOStatement
+    public function prepare(string $sql, array $options = null)
     {
         return $this->connection->prepare($sql, $options);
     }
@@ -86,10 +86,10 @@ abstract class Driver
      * @param string $sql 要执行的SQL语句
      * @param array|null $bind 占位符替换数据
      * @param array|null $prepareOptions 预编译选项
-     * @return \PDOStatement
+     * @return \PDOStatement|\Swoole\Database\PDOStatementProxy
      * @throws DbException
      */
-    public function execute(string $sql, array $bind = null, array $prepareOptions = null): \PDOStatement
+    public function execute(string $sql, array $bind = null, array $prepareOptions = null)
     {
         return $this->connection->execute($sql, $bind, $prepareOptions);
     }

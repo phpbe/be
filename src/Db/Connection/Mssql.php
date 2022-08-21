@@ -13,7 +13,7 @@ use Be\Db\DbException;
 class Mssql extends Connection
 {
 
-    public function __construct(string $name, \PDO $pdo = null)
+    public function __construct(string $name, $pdo = null)
     {
         $this->name = $name;
         $this->connect();
