@@ -14,14 +14,14 @@ class Table
      *
      * @var string
      */
-    protected $_dbName = 'master';
+    protected string $_dbName = 'master';
 
     /**
      * 表全名
      *
      * @var string
      */
-    protected $_tableName = '';
+    protected string $_tableName = '';
 
     /**
      * 主键
@@ -30,18 +30,18 @@ class Table
      */
     protected $_primaryKey = null;
 
-    protected $_fields = []; // 字段列表
+    protected array $_fields = []; // 字段列表
 
-    protected $_alias = ''; // 当前表的别名
-    protected $_join = []; // 表连接
-    protected $_where = []; // where 条件
-    protected $_groupBy = ''; // 分组
-    protected $_having = ''; // having
-    protected $_offset = 0; // 分页编移
-    protected $_limit = 0; // 分页大小
-    protected $_orderBy = ''; // 排序
+    protected string $_alias = ''; // 当前表的别名
+    protected array $_join = []; // 表连接
+    protected array $_where = []; // where 条件
+    protected string $_groupBy = ''; // 分组
+    protected string $_having = ''; // having
+    protected int $_offset = 0; // 分页编移
+    protected int $_limit = 0; // 分页大小
+    protected string $_orderBy = ''; // 排序
 
-    protected $_lastSql = null; // 上次执行的 SQL
+    protected ?array $_lastSql = null; // 上次执行的 SQL
 
     /**
      * 给当前表设置别名
@@ -193,25 +193,25 @@ class Table
     /**
      * 设置一组查询条件
      *
-     * @param array $wheres 一组查询条件
+     * @param array $conditions 一组查询条件
      * @return Table
      * @example
      * <pre>
-     * $table->wheres([
+     * $table->conditon([
      *     ['username','Tom'],
      *     'OR',
      *     ['age','>',18],
      *]); // 最终SQL: WHERE (username='Tom' OR age>18)
      * </pre>
      */
-    public function wheres(array $wheres): Table
+    public function condition(array $conditions): Table
     {
-        $fieldCount = count($wheres);
+        $fieldCount = count($conditions);
 
         if ($fieldCount === 0) return $this;
 
         if ($fieldCount === 1) {
-            return $this->where($wheres[0]);
+            return $this->where($conditions[0]);
         }
 
         if (count($this->_where) > 0) {
@@ -219,7 +219,7 @@ class Table
         }
 
         $this->_where[] = '(';
-        foreach ($wheres as $w) {
+        foreach ($conditions as $w) {
             if (is_array($w)) {
                 $len = count($w);
                 if ($len === 1) {

@@ -131,7 +131,7 @@ abstract class Be
      * @param string $name 配置文件名
      * @return object
      */
-    public static function getConfig(string $name)
+    public static function getConfig(string $name): object
     {
         if (!isset(self::$cache['config'][$name])) {
             self::$cache['config'][$name] = self::newConfig($name);
@@ -145,7 +145,7 @@ abstract class Be
      * @param string $name 配置文件名
      * @return object
      */
-    public static function newConfig(string $name)
+    public static function newConfig(string $name): object
     {
         $parts = explode('.', $name);
 
@@ -447,7 +447,7 @@ abstract class Be
      * @return \Be\Redis\Driver|\Redis
      * @throws RuntimeException
      */
-    public static function getRedis(string $name = 'master')
+    public static function getRedis(string $name = 'master'): \Be\Redis\Driver
     {
         $runtime = self::getRuntime();
         if ($runtime->isSwooleMode()) {
@@ -485,7 +485,7 @@ abstract class Be
      * @return \Be\Redis\Driver|\Redis
      * @throws RuntimeException
      */
-    public static function newRedis(string $name = 'master')
+    public static function newRedis(string $name = 'master'): \Be\Redis\Driver
     {
         $config = Be::getConfig('App.System.Redis');
         if (!isset($config->$name)) {
@@ -501,7 +501,7 @@ abstract class Be
      * @return \Elasticsearch\Client
      * @throws RuntimeException
      */
-    public static function getEs()
+    public static function getEs(): \Elasticsearch\Client
     {
         $runtime = self::getRuntime();
         if ($runtime->isSwooleMode()) {
@@ -524,7 +524,7 @@ abstract class Be
      * @return \Elasticsearch\Client
      * @throws RuntimeException
      */
-    public static function newEs()
+    public static function newEs(): \Elasticsearch\Client
     {
         $config = self::getConfig('App.System.Es');
         $driver = \Elasticsearch\ClientBuilder::create()->setHosts($config->hosts)->build();
@@ -576,7 +576,7 @@ abstract class Be
      * @return \Be\Db\Driver
      * @throws RuntimeException
      */
-    public static function getDb(string $name = 'master')
+    public static function getDb(string $name = 'master'): \Be\Db\Driver
     {
         $runtime = self::getRuntime();
         if ($runtime->isSwooleMode()) {
@@ -624,7 +624,7 @@ abstract class Be
      * @return \Be\Db\Driver
      * @throws RuntimeException
      */
-    public static function newDb(string $name = 'master')
+    public static function newDb(string $name = 'master'): \Be\Db\Driver
     {
         $config = Be::getConfig('App.System.Db');
         if (!isset($config->$name)) {
@@ -652,9 +652,9 @@ abstract class Be
      *
      * @param string $name 数据库行记灵对象名
      * @param string $db 库名
-     * @return \Be\Db\Tuple | mixed
+     * @return \Be\Db\Tuple
      */
-    public static function getTuple(string $name, string $db = 'master')
+    public static function getTuple(string $name, string $db = 'master'): \Be\Db\Tuple
     {
         $path = self::getRuntime()->getRootPath() . '/data/Runtime/Tuple/' . $db . '/' . $name . '.php';
         if (Be::getConfig('App.System.System')->developer || !file_exists($path)) {
@@ -673,7 +673,7 @@ abstract class Be
      * @param string $db 库名
      * @return \Be\Db\Table
      */
-    public static function getTable(string $name, string $db = 'master')
+    public static function getTable(string $name, string $db = 'master'): \Be\Db\Table
     {
         $path = self::getRuntime()->getRootPath() . '/data/Runtime/Table/' . $db . '/' . $name . '.php';
         if (Be::getConfig('App.System.System')->developer || !file_exists($path)) {
@@ -692,7 +692,7 @@ abstract class Be
      * @param string $db 库名
      * @return \Be\Db\TableProperty
      */
-    public static function getTableProperty(string $name, string $db = 'master')
+    public static function getTableProperty(string $name, string $db = 'master'): \Be\Db\TableProperty
     {
         if (isset(self::$cache['tableProperty'][$db][$name])) return self::$cache['tableProperty'][$db][$name];
 
@@ -713,7 +713,7 @@ abstract class Be
      * @param string $name 名称
      * @return \Be\MongoDb\Driver
      */
-    public static function getMongoDb(string $name)
+    public static function getMongoDb(string $name): \Be\MongoDb\Driver
     {
         if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
@@ -833,10 +833,10 @@ abstract class Be
      * 获取指定的一个扩展 单例
      *
      * @param string $name 扩展名
-     * @return mixed
+     * @return \Be\Plugin\Driver
      * @throws RuntimeException
      */
-    public static function getPlugin(string $name)
+    public static function getPlugin(string $name): \Be\Plugin\Driver
     {
         if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
@@ -856,10 +856,10 @@ abstract class Be
      * 创建一个新的指定的扩展 实例
      *
      * @param string $name 扩展名
-     * @return mixed
+     * @return \Be\Plugin\Driver
      * @throws RuntimeException
      */
-    public static function newPlugin(string $name)
+    public static function newPlugin(string $name): \Be\Plugin\Driver
     {
         $class = '\\Be\\Plugin\\' . $name . '\\' . $name;
         if (!class_exists($class)) {
@@ -873,10 +873,10 @@ abstract class Be
      * 获取指定的一个后台扩展
      *
      * @param string $name 扩展名
-     * @return mixed
+     * @return \Be\AdminPlugin\Driver
      * @throws RuntimeException
      */
-    public static function getAdminPlugin(string $name)
+    public static function getAdminPlugin(string $name): \Be\AdminPlugin\Driver
     {
         if (self::getRuntime()->isSwooleMode()) {
             $cid = \Swoole\Coroutine::getCid();
@@ -896,10 +896,10 @@ abstract class Be
      * 新创建一个指定的后台扩展
      *
      * @param string $name 扩展名
-     * @return mixed
+     * @return \Be\AdminPlugin\Driver
      * @throws RuntimeException
      */
-    public static function newAdminPlugin(string $name)
+    public static function newAdminPlugin(string $name): \Be\AdminPlugin\Driver
     {
         $class = '\\Be\\AdminPlugin\\' . $name . '\\' . $name;
         if (!class_exists($class)) {
@@ -917,7 +917,7 @@ abstract class Be
      * @return \Be\Template\Driver
      * @throws RuntimeException
      */
-    public static function getTemplate(string $template, string $theme = null)
+    public static function getTemplate(string $template, string $theme = null): \Be\Template\Driver
     {
         $parts = explode('.', $template);
         $type = array_shift($parts);
@@ -970,7 +970,7 @@ abstract class Be
      * @return \Be\Template\Driver
      * @throws RuntimeException
      */
-    public static function getAdminTemplate(string $template, string $theme = null)
+    public static function getAdminTemplate(string $template, string $theme = null): \Be\Template\Driver
     {
         $parts = explode('.', $template);
         $type = array_shift($parts);
@@ -1020,7 +1020,7 @@ abstract class Be
      *
      * @return \Be\Menu\Driver
      */
-    public static function getMenu($name)
+    public static function getMenu($name): \Be\Menu\Driver
     {
         if (isset(self::$cache['Menu'][$name])) return self::$cache['Menu'][$name];
 
@@ -1040,7 +1040,7 @@ abstract class Be
      *
      * @return \Be\AdminMenu\Driver
      */
-    public static function getAdminMenu()
+    public static function getAdminMenu(): \Be\AdminMenu\Driver
     {
         if (isset(self::$cache['adminMenu'])) return self::$cache['adminMenu'];
 
@@ -1068,7 +1068,7 @@ abstract class Be
      * @param string $roleId 角色ID
      * @return \Be\AdminUser\AdminRole
      */
-    public static function getAdminRole(string $roleId)
+    public static function getAdminRole(string $roleId): \Be\AdminUser\AdminRole
     {
         if (isset(self::$cache['adminRole'][$roleId])) return self::$cache['adminRole'][$roleId];
 
@@ -1096,7 +1096,7 @@ abstract class Be
      *
      * @return \Be\AdminUser\AdminPermission
      */
-    public static function getAdminPermission()
+    public static function getAdminPermission(): \Be\AdminUser\AdminPermission
     {
         if (isset(self::$cache['adminPermission'])) return self::$cache['adminPermission'];
 
@@ -1115,7 +1115,7 @@ abstract class Be
     /**
      * 设置当前后台用户
      *
-     * @param \stdClass | null $adminUser
+     * @param object|null $adminUser
      */
     public static function setAdminUser($adminUser = null)
     {
@@ -1144,9 +1144,9 @@ abstract class Be
     /**
      * 获取当前后台用户
      *
-     * @return \Be\AdminUser\AdminUser | mixed
+     * @return \Be\AdminUser\AdminUser|object
      */
-    public static function getAdminUser()
+    public static function getAdminUser(): \Be\AdminUser\AdminUser
     {
         $runtime = self::getRuntime();
         if ($runtime->isSwooleMode()) {
@@ -1172,7 +1172,7 @@ abstract class Be
     /**
      * 设置当前用户
      *
-     * @param \stdClass | null $user
+     * @param object|null $user
      */
     public static function setUser($user = null)
     {
@@ -1201,9 +1201,9 @@ abstract class Be
     /**
      * 获取当前用户
      *
-     * @return \Be\User\User | mixed
+     * @return \Be\User\User|object
      */
-    public static function getUser()
+    public static function getUser(): \Be\User\User
     {
         $runtime = self::getRuntime();
         if ($runtime->isSwooleMode()) {

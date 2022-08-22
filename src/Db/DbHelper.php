@@ -49,10 +49,10 @@ class DbHelper
         $code .= "\n";
         $code .= 'class ' . $tableName . ' extends \\Be\\Db\\TableProperty' . "\n";
         $code .= '{' . "\n";
-        $code .= '    protected $_dbName = \'' . $dbName . '\'; // 数据库名' . "\n";
-        $code .= '    protected $_tableName = \'' . $tableName . '\'; // 表名' . "\n";
+        $code .= '    protected string $_dbName = \'' . $dbName . '\'; // 数据库名' . "\n";
+        $code .= '    protected string $_tableName = \'' . $tableName . '\'; // 表名' . "\n";
         $code .= '    protected $_primaryKey = ' . var_export($primaryKey, true) . '; // 主键' . "\n";
-        $code .= '    protected $_fields = ' . var_export($fields, true) . '; // 字段列表' . "\n";
+        $code .= '    protected array $_fields = ' . var_export($fields, true) . '; // 字段列表' . "\n";
         $code .= '}' . "\n";
         $code .= "\n";
 
@@ -83,10 +83,10 @@ class DbHelper
         $code .= "\n";
         $code .= 'class ' . $tableName . ' extends \\Be\\Db\\Table' . "\n";
         $code .= '{' . "\n";
-        $code .= '    protected $_dbName = \'' . $dbName . '\'; // 数据库名' . "\n";
-        $code .= '    protected $_tableName = \'' . $tableName . '\'; // 表名' . "\n";
+        $code .= '    protected string $_dbName = \'' . $dbName . '\'; // 数据库名' . "\n";
+        $code .= '    protected string $_tableName = \'' . $tableName . '\'; // 表名' . "\n";
         $code .= '    protected $_primaryKey = ' . var_export($tableProperty->getPrimaryKey(), true) . '; // 主键' . "\n";
-        $code .= '    protected $_fields = [\'' . implode('\',\'', array_column($tableProperty->getFields(), 'name')) . '\']; // 字段列表' . "\n";
+        $code .= '    protected array $_fields = [\'' . implode('\',\'', array_column($tableProperty->getFields(), 'name')) . '\']; // 字段列表' . "\n";
         $code .= '}' . "\n";
         $code .= "\n";
 
@@ -118,8 +118,8 @@ class DbHelper
         $code .= "\n";
         $code .= 'class ' . $tableName . ' extends \\Be\\Db\\Tuple' . "\n";
         $code .= '{' . "\n";
-        $code .= '    protected $_dbName = \'' . $dbName . '\'; // 数据库名' . "\n";
-        $code .= '    protected $_tableName = \'' . $tableName . '\'; // 表名' . "\n";
+        $code .= '    protected string $_dbName = \'' . $dbName . '\'; // 数据库名' . "\n";
+        $code .= '    protected string $_tableName = \'' . $tableName . '\'; // 表名' . "\n";
         $code .= '    protected $_primaryKey = ' . var_export($tableProperty->getPrimaryKey(), true) . '; // 主键' . "\n";
 
         foreach ($fields as $field) {

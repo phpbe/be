@@ -12,13 +12,13 @@ class TableProperty
      *
      * @var string
      */
-    protected $_dbName = 'master';
+    protected string $_dbName = 'master';
     /**
      * 表名
      *
      * @var string
      */
-    protected $_tableName = '';
+    protected string $_tableName = '';
 
     /**
      * 主键
@@ -32,14 +32,14 @@ class TableProperty
      *
      * @var array
      */
-    protected $_fields = [];
+    protected array $_fields = [];
 
     /**
      * 获取数据库名
      *
      * @return string
      */
-    public function getDbName()
+    public function getDbName(): string
     {
         return $this->_dbName;
     }
@@ -49,7 +49,7 @@ class TableProperty
      *
      * @return string
      */
-    public function getTableName()
+    public function getTableName(): string
     {
         return $this->_tableName;
     }
@@ -57,7 +57,7 @@ class TableProperty
     /**
      * 获取主键名
      *
-     * @return string
+     * @return string|array|null
      */
     public function getPrimaryKey()
     {
@@ -69,7 +69,7 @@ class TableProperty
      *
      * @return array
      */
-    public function getFields()
+    public function getFields(): array
     {
         return $this->_fields;
     }
@@ -80,7 +80,7 @@ class TableProperty
      * @param string $fieldName 字段名
      * @return array
      */
-    public function getField($fieldName)
+    public function getField(string $fieldName)
     {
         return isset($this->_fields[$fieldName]) ? $this->_fields[$fieldName] : null;
     }

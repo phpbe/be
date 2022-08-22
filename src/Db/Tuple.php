@@ -15,14 +15,14 @@ abstract class Tuple
      *
      * @var string
      */
-    protected $_dbName = 'master';
+    protected string $_dbName = 'master';
 
     /**
      * 表全名
      *
      * @var string
      */
-    protected $_tableName = '';
+    protected string $_tableName = '';
 
     /**
      * 主键
@@ -36,21 +36,21 @@ abstract class Tuple
      *
      * @var bool
      */
-    protected $_loaded = false;
+    protected bool $_loaded = false;
 
     /**
      * 原始数据
      *
      * @var array
      */
-    protected $_init = [];
+    protected array $_init = [];
 
     /**
      * 是否有改变
      *
      * @var bool
      */
-    protected $_changed = false;
+    protected bool $_changed = false;
 
 
     /**
@@ -729,9 +729,9 @@ abstract class Tuple
     /**
      * 转成简单对象
      *
-     * @return Object
+     * @return object
      */
-    public function toObject()
+    public function toObject(): object
     {
         return (object)$this->toArray();
     }
