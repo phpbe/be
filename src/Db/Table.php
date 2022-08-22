@@ -321,9 +321,9 @@ class Table
     }
 
     /**
-     * 查询单个字段的所有记录
+     * 获取由符合条件的记录中的指定字段的值组成的一维数组
      *
-     * @param string $field 查询的字段
+     * @param string $field 字段名
      * @return array 数组
      */
     public function getValues(string $field): array
@@ -357,7 +357,7 @@ class Table
     /**
      * 查询单条记录
      *
-     * @param string $fields 查询用到的字段列表
+     * @param string|null $fields 查询用到的字段列表
      * @return array 数组
      */
     public function getArray(string $fields = null): array
@@ -366,9 +366,9 @@ class Table
     }
 
     /**
-     * 查询多条记录
+     * 获取多条二维数组格式的记录
      *
-     * @param string|null $fields 查询用到的字段列表
+     * @param string|null $fields 字段列表，未指定时返回该表所有字段。
      * @return array 二维数组
      */
     public function getArrays(string $fields = null): array
@@ -402,7 +402,7 @@ class Table
     /**
      * 查询单条记录
      *
-     * @param string $fields 查询用到的字段列表
+     * @param string|null $fields 查询用到的字段列表
      * @return object 对象
      */
     public function getObject(string $fields = null)
@@ -411,9 +411,9 @@ class Table
     }
 
     /**
-     * 查询多条记录
+     * 获取多条对象数组格式的记录
      *
-     * @param string $fields 查询用到的字段列表
+     * @param string|null $fields 字段列表，未指定时返回该表所有字段。
      * @return array
      */
     public function getObjects(string $fields = null): array
