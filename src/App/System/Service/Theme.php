@@ -19,11 +19,8 @@ class Theme
      */
     public function getPage(string $themeType, string $themeName, string $route): object
     {
-        $page = new \stdClass();
-
         $configPage = Be::getConfig($themeType . '.' . $themeName . '.Page.' . $route);
         foreach (['north', 'middle', 'west', 'center', 'east', 'south'] as $position) {
-            $page->$position = $configPage->$position;
             if ($configPage->$position !== 0) {
                 $property = $position . 'Sections';
                 if (isset($configPage->$property) && is_array($configPage->$property) && count($configPage->$property) > 0) {
@@ -45,32 +42,31 @@ class Theme
 
                         $sections[] = $section;
                     }
-                    $page->$property = $sections;
+                    $configPage->$property = $sections;
                 } else {
-                    $page->$property = [];
+                    $configPage->$property = [];
                 }
             }
         }
 
-        $page->spacingMobile = $configPage->spacingMobile ?? '';
-        $page->spacingTablet = $configPage->spacingTablet ?? '';
-        $page->spacingDesktop = $configPage->spacingDesktop ?? '';
+        $configPage->spacingMobile = $configPage->spacingMobile ?? '';
+        $configPage->spacingTablet = $configPage->spacingTablet ?? '';
+        $configPage->spacingDesktop = $configPage->spacingDesktop ?? '';
 
-        return $page;
+        return $configPage;
     }
 
     /**
      * 获取部件
      *
      * @param string $route 页面路由
-     * @param string $themeType 主题类型
-     * @param string $themeName 主题名
      * @param string $sectionName 部件名
-     * @param object $sectionConfig 部件配置数据
+     * @param array|null $sectionConfig 部件配置数据
+     * @param string $position 方位
      * @param int $sectionIndex 部件索引编号
      * @return object
      */
-    private function getSection(string $route, string $sectionName, array $sectionConfig = null, string $position, int $sectionIndex): object
+    private function getSection(string $route, string $sectionName, ?array $sectionConfig, string $position, int $sectionIndex): object
     {
         $parts = explode('.', $sectionName);
         $type = array_shift($parts);

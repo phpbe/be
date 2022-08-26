@@ -33,7 +33,7 @@ class Table
     protected array $_fields = []; // 字段列表
 
     protected string $_alias = ''; // 当前表的别名
-    protected array $_join = []; // 表连接
+    protected array $_join = []; // 表联接
     protected array $_where = []; // where 条件
     protected string $_groupBy = ''; // 分组
     protected string $_having = ''; // having
@@ -49,7 +49,7 @@ class Table
      * @param string $alias 别名
      * @return Table
      */
-    public function alias($alias): Table
+    public function alias(string $alias): Table
     {
         $this->_alias = $alias;
         return $this;
@@ -57,10 +57,10 @@ class Table
 
 
     /**
-     * 左连接
+     * 左联接
      *
      * @param string $table 表名
-     * @param string $on 连接条件
+     * @param string $on 联接条件
      * @return Table
      */
     public function leftJoin(string $table, string $on): Table
@@ -69,10 +69,10 @@ class Table
     }
 
     /**
-     * 右连接
+     * 右联接
      *
      * @param string $table 表名
-     * @param string $on 连接条件
+     * @param string $on 联接条件
      * @return Table
      */
     public function rightJoin(string $table, string $on): Table
@@ -81,10 +81,10 @@ class Table
     }
 
     /**
-     * 内连接
+     * 内联接
      *
      * @param string $table 表名
-     * @param string $on 连接条件
+     * @param string $on 联接条件
      * @return Table
      */
     public function innerJoin(string $table, string $on): Table
@@ -93,10 +93,10 @@ class Table
     }
 
     /**
-     * 内连接 同 innerJoin
+     * 内联接 同 innerJoin
      *
      * @param string $table 表名
-     * @param string $on 连接条件
+     * @param string $on 联接条件
      * @return Table
      */
     public function join(string $table, string $on): Table
@@ -105,10 +105,10 @@ class Table
     }
 
     /**
-     * 全连接
+     * 全联接
      *
      * @param string $table 表名
-     * @param string $on 连接条件
+     * @param string $on 联接条件
      * @return Table
      */
     public function fullJoin(string $table, string $on): Table
@@ -117,10 +117,10 @@ class Table
     }
 
     /**
-     * 交叉连接
+     * 交叉联接
      *
      * @param string $table 表名
-     * @param string $on 连接条件
+     * @param string $on 联接条件
      * @return Table
      */
     public function crossJoin(string $table, string $on): Table
@@ -241,7 +241,7 @@ class Table
     /**
      * 分组
      *
-     * @param string $field 分组条件
+     * @param string $field 分组字段或条件
      * @return Table
      */
     public function groupBy(string $field): Table
@@ -343,11 +343,11 @@ class Table
     }
 
     /**
-     * 查询键值对
+     * 获取以指定的两个字段键值对形式的数据
      *
-     * @param string $keyField 键字段
-     * @param string $valueField 值字段
-     * @return array 数组
+     * @param string $keyField 键字段名
+     * @param string $valueField 值字段名
+     * @return array 键值对数组
      */
     public function getKeyValues(string $keyField, string $valueField): array
     {
@@ -355,9 +355,9 @@ class Table
     }
 
     /**
-     * 查询单条记录
+     * 获取一条数组格式的记录
      *
-     * @param string|null $fields 查询用到的字段列表
+     * @param string|null $fields 字段列表，未指定时返回该表所有字段
      * @return array 数组
      */
     public function getArray(string $fields = null): array
@@ -377,10 +377,10 @@ class Table
     }
 
     /**
-     * 查询多条记录, 跌代器方式
+     * 获取迭代器形式的多条二维数组格式的记录
      *
-     * @param string|null $fields 查询用到的字段列表
-     * @return \Generator
+     * @param string|null $fields 字段列表，未指定时返回该表所有字段
+     * @return \Generator 迭代器形式的二维数组
      */
     public function getYieldArrays(string $fields = null): \Generator
     {
@@ -388,10 +388,10 @@ class Table
     }
 
     /**
-     * 查询多条记录
+     * 获取以指定键名作为索引的多条二维数组格式的记录
      *
-     * @param string $keyField 键字段
-     * @param string $fields 查询用到的字段列表
+     * @param string $keyField 索引键名（即表的某个字段）
+     * @param string $fields 字段列表，未指定时返回该表所有字段
      * @return array 二维数组
      */
     public function getKeyArrays(string $keyField, string $fields = null): array
@@ -400,12 +400,12 @@ class Table
     }
 
     /**
-     * 查询单条记录
+     * 获取一条对象格式的记录
      *
-     * @param string|null $fields 查询用到的字段列表
+     * @param string|null $fields 字段列表，未指定时返回该表所有字段
      * @return object 对象
      */
-    public function getObject(string $fields = null)
+    public function getObject(string $fields = null): object
     {
         return $this->query('getObject', $fields);
     }
@@ -422,10 +422,10 @@ class Table
     }
 
     /**
-     * 查询多条记录, 跌代器方式
+     * 获取迭代器形式的多条对象数组格式的记录
      *
-     * @param string|null $fields 查询用到的字段列表
-     * @return \Generator
+     * @param string|null $fields 字段列表，未指定时返回该表所有字段
+     * @return \Generator 迭代器形式的对象数组
      */
     public function getYieldObjects(string $fields = null): \Generator
     {
@@ -433,10 +433,10 @@ class Table
     }
 
     /**
-     * 查询多条记发
+     * 获取以指定键名作为索引的多条对象数组格式的记录
      *
-     * @param string $keyField 键字段
-     * @param string|null $fields 查询用到的字段列表
+     * @param string $keyField 索引键名（即表的某个字段）
+     * @param string|null $fields 字段列表，未指定时返回该表所有字段
      * @return array 对象列表
      */
     public function getKeyObjects(string $keyField, string $fields = null): array
@@ -488,7 +488,7 @@ class Table
     }
 
     /**
-     * 纺计数量
+     * 统计数量
      *
      * @param string $field 字段
      * @return int
@@ -549,7 +549,7 @@ class Table
      * @param int $step 自增量
      * @return Table
      */
-    public function increment(string $field, int $step = 1): Table
+    public function increase(string $field, int $step = 1): Table
     {
         $db = Be::getDb($this->_dbName);
 
@@ -598,7 +598,7 @@ class Table
      * @param int $step 自减量
      * @return Table
      */
-    public function decrement(string $field, int $step = 1): Table
+    public function decrease(string $field, int $step = 1): Table
     {
         $db = Be::getDb($this->_dbName);
 
@@ -693,7 +693,7 @@ class Table
 
     /**
      * 删除数据
-     * @param string|null $tableName 表名，有连表时需指定
+     * @param string|null $tableName 表名，有联表时需指定
      * @return Table
      */
     public function delete(string $tableName = null): Table

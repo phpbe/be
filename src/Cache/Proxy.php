@@ -2,22 +2,22 @@
 
 namespace Be\Cache;
 
-use Be\Be;
-
 /**
  * 缓存代理
  */
 class Proxy
 {
 
-    private $cache = null;
+    private ?Driver $cache = null;
     private $instance = null;
-    private $expire = 0;
+    private int $expire = 0;
 
     /**
      * 构造函数
      *
      * @param Driver $cache 缓存类
+     * @param mixed $instance 代理对象
+     * @param int $expire 超时时间
      */
     public function __construct(Driver $cache, $instance, int $expire)
     {

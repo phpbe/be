@@ -28,18 +28,18 @@ class File extends Driver
      *
      * @return bool
      */
-    public function close()
+    public function close(): bool
     {
         return true;
     }
 
     /**
-     * 获取 指定的缓存 值
+     * 读取
      *
      * @param string $key 键名
      * @return mixed|false
      */
-    public function get($key)
+    public function get(string $key)
     {
         $hash = sha1($key);
         $path = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2) . '/' . $hash;
@@ -64,14 +64,14 @@ class File extends Driver
     }
 
     /**
-     * 获取 多个指定的缓存 值
+     * 批量读取
      *
      * @param array $keys 键名 数组
      * @return array
      */
-    public function getMany($keys)
+    public function getMany(array $keys): array
     {
-        $values = array();
+        $values = [];
         foreach ($keys as $key) {
             $values[] = $this->get($key);
         }
@@ -79,14 +79,14 @@ class File extends Driver
     }
 
     /**
-     * 设置缓存
+     * 写入
      *
      * @param string $key 键名
      * @param mixed $value 值
      * @param int $expire 有效时间（秒）
      * @return bool
      */
-    public function set($key, $value, $expire = 0): bool
+    public function set(string $key, $value, int $expire = 0): bool
     {
         $hash = sha1($key);
         $dir = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2);
@@ -113,15 +113,15 @@ class File extends Driver
     }
 
     /**
-     * 设置缓存
+     * 批量写入
      *
      * @param array $values 键值对
      * @param int $expire 有效时间（秒）
      * @return bool
      */
-    public function setMany($values, $expire = 0): bool
+    public function setMany(array $keyValues, int $expire = 0): bool
     {
-        foreach ($values as $key => $value) {
+        foreach ($keyValues as $key => $value) {
             $this->set($key, $value, $expire);
         }
         return true;
@@ -134,7 +134,7 @@ class File extends Driver
      * @param int $expire 有效时间（秒）
      * @return bool
      */
-    public function setExpire($key,  $expire = 0): bool
+    public function setExpire(string $key, int $expire = 0): bool
     {
         $hash = sha1($key);
         $path = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2) . '/' . $hash;
@@ -169,7 +169,7 @@ class File extends Driver
      * @param string $key 缓存键名
      * @return bool
      */
-    public function has($key): bool
+    public function has(string $key): bool
     {
         $hash = sha1($key);
         $path = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2) . '/' . $hash ;
@@ -183,7 +183,7 @@ class File extends Driver
      * @param string $key 缓存键名
      * @return bool
      */
-    public function delete($key): bool
+    public function delete(string $key): bool
     {
         $hash = sha1($key);
         $path = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2) . '/' . $hash;
@@ -198,7 +198,7 @@ class File extends Driver
      * @param int $step 步长
      * @return false|int
      */
-    public function increment($key, $step = 1)
+    public function increase(string $key, int $step = 1)
     {
         $hash = sha1($key);
         $dir = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2);
@@ -240,7 +240,7 @@ class File extends Driver
      * @param int $step 步长
      * @return false|int
      */
-    public function decrement($key, $step = 1)
+    public function decrease(string $key, int $step = 1)
     {
         $hash = sha1($key);
         $dir = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2);

@@ -54,10 +54,11 @@ abstract class Tuple
 
 
     /**
-     * 绑定一个数据源， GET, POST, 或者一个数组, 对象
+     * 绑定数据
+     * 可绑定 GET, POST, 或者一个数组, 对象
      *
-     * @param string | array | object $data 要绑定的数据对象
-     * @return Tuple | mixed
+     * @param array | object $data 要绑定的数据数组或对象
+     * @return Tuple
      * @throws TupleException
      */
     public function bind($data): Tuple
@@ -95,7 +96,7 @@ abstract class Tuple
      * 按主锓加载记录
      *
      * @param string | array $primaryKeyValue 主锓的值，当为数组时格式为键值对
-     * @return Tuple | mixed
+     * @return Tuple
      * @throws TupleException
      */
     public function load($primaryKeyValue): Tuple
@@ -158,10 +159,11 @@ abstract class Tuple
 
     /**
      * 按条件加载记录
+     * 当 $value === null 时， $field 必须为键值对数据，按指定的键值对加载，
      *
-     * @param string|int|array $field 要加载数据的键名，$val === null 时，为指定的主键值加载，
+     * @param string | array $field 要加载数据的键名或銉值对
      * @param string $value 要加载的键的值
-     * @return Tuple | mixed
+     * @return Tuple
      * @throws TupleException
      */
     public function loadBy($field, $value = null): Tuple
@@ -264,7 +266,7 @@ abstract class Tuple
     /**
      * 更新数据到数据库
      *
-     * @return Tuple | mixed
+     * @return Tuple
      * @throws TupleException
      */
     public function update(): Tuple
@@ -315,7 +317,7 @@ abstract class Tuple
      * 保存数据到数据库
      * 跟据主键是否有值自动识别插入或更新
      *
-     * @return Tuple | mixed
+     * @return Tuple
      */
     public function save(): Tuple
     {
@@ -535,8 +537,8 @@ abstract class Tuple
     /**
      * 删除指定主键值的记录
      *
-     * @param int $primaryKeyValue 主键值
-     * @return Tuple | mixed
+     * @param int | string | array | null $primaryKeyValue 主键值
+     * @return Tuple
      * @throws TupleException
      */
     public function delete($primaryKeyValue = null): Tuple
@@ -590,10 +592,10 @@ abstract class Tuple
      *
      * @param string $field 字段名
      * @param int $step 自增量
-     * @return Tuple | mixed
+     * @return Tuple
      * @throws TupleException
      */
-    public function increment($field, $step = 1): Tuple
+    public function increase(string $field, int $step = 1): Tuple
     {
         if ($this->_primaryKey === null) {
             // 表 $this->_tableName 无主键, 不支持字段自增
@@ -624,10 +626,10 @@ abstract class Tuple
      *
      * @param string $field 字段名
      * @param int $step 自减量
-     * @return Tuple | mixed
+     * @return Tuple
      * @throws TupleException
      */
-    public function decrement($field, $step = 1): Tuple
+    public function decrease(string $field, int $step = 1): Tuple
     {
         if ($this->_primaryKey === null) {
             // 表 $this->_tableName 无主键, 不支持字段自减
@@ -714,7 +716,7 @@ abstract class Tuple
     }
 
     /**
-     * 转成简单数组
+     * 将行模型数据转成简单数组
      *
      * @return array
      */
@@ -727,7 +729,7 @@ abstract class Tuple
     }
 
     /**
-     * 转成简单对象
+     * 将行模型数据转成简单对象
      *
      * @return object
      */

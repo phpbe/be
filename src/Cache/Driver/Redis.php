@@ -32,19 +32,19 @@ class Redis extends Driver
      *
      * @return bool
      */
-    public function close()
+    public function close(): bool
     {
         $this->redis = null;
         return true;
     }
 
     /**
-     * 获取 指定的缓存 值
+     * 读取
      *
      * @param string $key 键名
      * @return mixed|false
      */
-    public function get($key)
+    public function get(string $key)
     {
         $value = $this->redis->get('be:cache:' . $key);
         if (is_bool($value) || is_numeric($value)) return $value;
@@ -52,20 +52,19 @@ class Redis extends Driver
     }
 
     /**
-     * 获取 多个指定的缓存 值
+     * 批量读取
      *
      * @param array $keys 键名 数组
      * @return array
      */
-    public function getMany($keys)
+    public function getMany(array $keys): array
     {
-        $return = array();
-
-        $prefixedKeys = array();
+        $prefixedKeys = [];
         foreach ($keys as $key) {
             $prefixedKeys[] = 'be:cache:' . $key;
         }
 
+        $return = [];
         $values = $this->redis->mget($prefixedKeys);
         foreach ($values as $index => $value) {
             if (!is_bool($value) && !is_numeric($value)) {
@@ -78,14 +77,14 @@ class Redis extends Driver
     }
 
     /**
-     * 设置缓存
+     * 写入
      *
      * @param string $key 键名
      * @param mixed $value 值
      * @param int $expire 有效时间（秒）
      * @return bool
      */
-    public function set($key, $value, $expire = 0): bool
+    public function set(string $key, $value, int $expire = 0): bool
     {
         if (!is_bool($value) && !is_numeric($value)) {
             $value = serialize($value);
@@ -99,16 +98,16 @@ class Redis extends Driver
     }
 
     /**
-     * 设置缓存
+     * 批量写入
      *
      * @param array $values 键值对
      * @param int $expire 有效时间（秒）
      * @return bool
      */
-    public function setMany($values, $expire = 0): bool
+    public function setMany(array $keyValues, int $expire = 0): bool
     {
         $formattedValues = array();
-        foreach ($values as $key => $value) {
+        foreach ($keyValues as $key => $value) {
             if (!is_bool($value) && !is_numeric($value)) {
                 $formattedValues['be:cache:' . $key] = serialize($value);
             } else {
@@ -136,7 +135,7 @@ class Redis extends Driver
      * @param int $expire 有效时间（秒）
      * @return bool
      */
-    public function setExpire($key,  $expire = 0): bool
+    public function setExpire(string $key,  int $expire = 0): bool
     {
         return $this->redis->expire('be:cache:' . $key, $expire);
     }
@@ -147,7 +146,7 @@ class Redis extends Driver
      * @param string $key 缓存键名
      * @return bool
      */
-    public function has($key): bool
+    public function has(string $key): bool
     {
         return $this->redis->exists('be:cache:' . $key) ? true : false;
     }
@@ -158,7 +157,7 @@ class Redis extends Driver
      * @param string $key 缓存键名
      * @return bool
      */
-    public function delete($key): bool
+    public function delete(string $key): bool
     {
         return $this->redis->del('be:cache:' . $key);
     }
@@ -170,7 +169,7 @@ class Redis extends Driver
      * @param int $step 步长
      * @return false|int
      */
-    public function increment($key, $step = 1)
+    public function increase(string $key, int $step = 1)
     {
         return $this->redis->incrby('be:cache:' . $key, $step);
     }
@@ -182,7 +181,7 @@ class Redis extends Driver
      * @param int $step 步长
      * @return false|int
      */
-    public function decrement($key, $step = 1)
+    public function decrease(string $key, int $step = 1)
     {
         return $this->redis->decrby('be:cache:' . $key, $step);
     }

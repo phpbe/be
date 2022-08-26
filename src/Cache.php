@@ -15,8 +15,8 @@ namespace Be;
  * @method static bool setMany($values, $expire = 0) 设置缓存
  * @method static bool has($key) 指定键名的缓存是否存在
  * @method static bool delete($key) 删除指定键名的缓存
- * @method static false|int increment($key, $step = 1) 自增缓存（针对数值缓存）
- * @method static false|int decrement($key, $step = 1) 自减缓存（针对数值缓存）
+ * @method static false|int increase($key, $step = 1) 自增缓存（针对数值缓存）
+ * @method static false|int decrease($key, $step = 1) 自减缓存（针对数值缓存）
  * @method static bool flush() 清除缓存
  * @method static mixed proxy($name, $callable, $expire = 0) 缓存代理
  */

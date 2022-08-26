@@ -18,42 +18,42 @@ abstract class Driver
      * 手动关闭
      * @return bool
      */
-    abstract function close();
+    abstract function close(): bool;
 
     /**
-     * 获取 指定的缓存 值
+     * 读取
      *
      * @param string $key     键名
      * @return mixed
      */
-    abstract function get($key);
+    abstract function get(string $key);
 
     /**
-     * 获取 多个指定的缓存 值
+     * 批量读取
      *
      * @param array $keys    键名 数组
      * @return array
      */
-    abstract function getMany($keys);
+    abstract function getMany(array $keys): array;
 
     /**
-     * 设置缓存
+     * 写入
      *
      * @param string $key    键名
      * @param mixed  $value  值
      * @param int    $expire 有效时间（秒）
      * @return bool
      */
-    abstract function set($key, $value, $expire = 0): bool;
+    abstract function set(string $key, $value, int $expire = 0): bool;
 
     /**
-     * 设置缓存
+     * 批量写入
      *
-     * @param array $values 键值对
+     * @param array $keyValues 键值对
      * @param int   $expire 有效时间（秒）
      * @return bool
      */
-    abstract function setMany($values, $expire = 0): bool;
+    abstract function setMany(array $keyValues, int $expire = 0): bool;
 
     /**
      * 设置超时时间
@@ -62,7 +62,7 @@ abstract class Driver
      * @param int $expire 有效时间（秒）
      * @return bool
      */
-    abstract function setExpire($key, $expire = 0): bool;
+    abstract function setExpire(string $key, int $expire = 0): bool;
 
     /**
      * 指定键名的缓存是否存在
@@ -70,7 +70,7 @@ abstract class Driver
      * @param string $key 缓存键名
      * @return bool
      */
-    abstract function has($key): bool;
+    abstract function has(string $key): bool;
 
     /**
      * 删除指定键名的缓存
@@ -78,7 +78,7 @@ abstract class Driver
      * @param string $key 缓存键名
      * @return bool
      */
-    abstract function delete($key): bool;
+    abstract function delete(string $key): bool;
 
     /**
      * 自增缓存（针对数值缓存）
@@ -87,7 +87,7 @@ abstract class Driver
      * @param int    $step 步长
      * @return false|int
      */
-    abstract function increment($key, $step = 1);
+    abstract function increase(string $key, int $step = 1);
 
     /**
      * 自减缓存（针对数值缓存）
@@ -96,7 +96,7 @@ abstract class Driver
      * @param int    $step 步长
      * @return false|int
      */
-    abstract function decrement($key, $step = 1);
+    abstract function decrease(string $key, int $step = 1);
 
     /**
      * 清除缓存
