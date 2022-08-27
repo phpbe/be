@@ -119,10 +119,10 @@ abstract class Driver
     public function getValue(string $sql, array $bind = null)
     {
         $statement = $this->connection->execute($sql, $bind);
-        $tuple = $statement->fetch(\PDO::FETCH_NUM);
+        $array = $statement->fetch(\PDO::FETCH_NUM);
         $statement->closeCursor();
-        if ($tuple === false) return false;
-        return $tuple[0];
+        if ($array === false) return false;
+        return $array[0];
     }
 
     /**
@@ -172,10 +172,10 @@ abstract class Driver
      *
      * @param string $sql 查询语句
      * @param array $bind 参数
-     * @return array
+     * @return array|false 数组，不存在时返回false
      * @throws DbException
      */
-    public function getArray(string $sql, array $bind = null): array
+    public function getArray(string $sql, array $bind = null)
     {
         $statement = $this->connection->execute($sql, $bind);
         $array = $statement->fetch(\PDO::FETCH_ASSOC);
@@ -242,10 +242,10 @@ abstract class Driver
      *
      * @param string $sql 查询语句
      * @param array $bind 参数
-     * @return object
+     * @return object|false  对象，不存在时返回false
      * @throws DbException
      */
-    public function getObject(string $sql, array $bind = null): object
+    public function getObject(string $sql, array $bind = null)
     {
         $statement = $this->connection->execute($sql, $bind);
         $object = $statement->fetchObject();

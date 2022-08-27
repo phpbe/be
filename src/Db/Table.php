@@ -358,9 +358,9 @@ class Table
      * 获取一条数组格式的记录
      *
      * @param string|null $fields 字段列表，未指定时返回该表所有字段
-     * @return array 数组
+     * @return array|false 数组，不存在时返回false
      */
-    public function getArray(string $fields = null): array
+    public function getArray(string $fields = null)
     {
         return $this->query('getArray', $fields);
     }
@@ -403,9 +403,9 @@ class Table
      * 获取一条对象格式的记录
      *
      * @param string|null $fields 字段列表，未指定时返回该表所有字段
-     * @return object 对象
+     * @return object|false 对象，不存在时返回false
      */
-    public function getObject(string $fields = null): object
+    public function getObject(string $fields = null)
     {
         return $this->query('getObject', $fields);
     }

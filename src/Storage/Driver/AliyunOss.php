@@ -19,7 +19,7 @@ class AliyunOss extends Driver
     /**
      * 获取跟网址
      *
-     * @return string 跟网址
+     * @return string 根网址
      */
     public function getRootUrl(): string
     {
@@ -167,8 +167,8 @@ class AliyunOss extends Driver
      *
      * https://help.aliyun.com/document_detail/88514.html
      *
-     * @param string $oldPath 旧文件夹路径 以 '/' 开头
-     * @param string $newPath 新文件夹路径 以 '/' 开头
+     * @param string $oldPath 旧文件路径 以 '/' 开头
+     * @param string $newPath 新文件路径 以 '/' 开头
      * @return string 重命名成功的新文件的网址
      */
     public function renameFile(string $oldPath, string $newPath): string
@@ -223,7 +223,7 @@ class AliyunOss extends Driver
      *
      * https://help.aliyun.com/document_detail/88513.html
      *
-     * @param string $path 文件存储路径
+     * @param string $path 文件存储路径，以 '/' 开头
      * @return true
      */
     public function deleteFile(string $path): bool
@@ -253,7 +253,7 @@ class AliyunOss extends Driver
     /**
      * 文件是否存在
      *
-     * @param string $path 文件存储路径
+     * @param string $path 文件存储路径，以 '/' 开头
      * @return bool 是否存在
      * @throws StorageException
      */

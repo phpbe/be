@@ -13,7 +13,7 @@ abstract class Driver
     /**
      * 获取跟网址
      *
-     * @return string 跟网址
+     * @return string 根网址
      */
     abstract function getRootUrl(): string;
 
@@ -51,8 +51,8 @@ abstract class Driver
     /**
      * 文件 - 重命名
      *
-     * @param string $oldPath 旧文件夹路径 以 '/' 开头
-     * @param string string $newPath 新文件夹路径 以 '/' 开头
+     * @param string $oldPath 旧文件路径 以 '/' 开头
+     * @param string $newPath 新文件路径 以 '/' 开头
      * @return string 重命名成功的新文件的网址
      */
     abstract function renameFile(string $oldPath, string $newPath): string;
@@ -60,14 +60,14 @@ abstract class Driver
     /**
      * 文件 - 删除
      *
-     * @param string $path 文件存储路径
+     * @param string $path 文件存储路径，以 '/' 开头
      */
     abstract function deleteFile(string $path): bool;
 
     /**
      * 文件是否存在
      *
-     * @param string $path 文件存储路径
+     * @param string $path 文件存储路径，以 '/' 开头
      * @return bool 是否存在
      * @throws StorageException
      */

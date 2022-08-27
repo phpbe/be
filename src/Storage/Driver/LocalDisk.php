@@ -18,7 +18,7 @@ class LocalDisk extends Driver
     /**
      * 获取跟网址
      *
-     * @return string 跟网址
+     * @return string 根网址
      */
     public function getRootUrl(): string
     {
@@ -156,57 +156,10 @@ class LocalDisk extends Driver
     }
 
     /**
-     * 文件 - 上传任意文件
-     *
-     * @param string $path 文件存储路径
-     * @param string $localPath 本地文件绝路路径
-     * @param bool $override 是否醒盖同名文件
-     * @param bool $existException 不醒盖但同名文件但存在时是否抛出异常
-     * @return string 上传成功的文件的网址
-     */
-    public function putFile(string $path, string $localPath, bool $override = false, bool $existException = true): string
-    {
-        // 路径检查
-        if (substr($path, 0, 1) !== '/' || strpos($path, './') !== false) {
-            throw new StorageException('Illegal file path：' . $path . '!');
-        }
-
-        $uploadPath = Be::getRuntime()->getRootPath() . '/www';
-
-        $newFilePath = $uploadPath . $path;
-        $dir = dirname($newFilePath);
-        if (!is_dir($dir)) {
-            mkdir($dir, 0777, true);
-            chmod($dir, 0777);
-        }
-
-        if (file_exists($newFilePath)) {
-            if ($override) {
-                unlink($newFilePath);
-            } else {
-                if ($existException) {
-                    throw new StorageException('File ' . $path . ' already exists!');
-                } else {
-                    return $this->getRootUrl() . $path;
-                }
-            }
-        }
-
-        if (file_exists($localPath)) {
-            copy($localPath, $newFilePath);
-            unlink($localPath);
-        } else {
-            throw new StorageException('Put file error!!!');
-        }
-
-        return $this->getRootUrl() . $path;
-    }
-
-    /**
      * 文件 - 重命名
      *
-     * @param string $oldPath 旧文件夹路径 以 '/' 开头
-     * @param string string $newPath 新文件夹路径 以 '/' 开头
+     * @param string $oldPath 旧文件路径 以 '/' 开头
+     * @param string $newPath 新文件路径 以 '/' 开头
      * @return string 重命名成功的新文件的网址
      */
     public function renameFile(string $oldPath, string $newPath): string
@@ -248,7 +201,7 @@ class LocalDisk extends Driver
     /**
      * 删除文件
      *
-     * @param string $path 文件存储路径
+     * @param string $path 文件存储路径，以 '/' 开头
      * @return true
      */
     public function deleteFile(string $path): bool
@@ -268,7 +221,7 @@ class LocalDisk extends Driver
     /**
      * 文件是否存在
      *
-     * @param string $path 文件存储路径
+     * @param string $path 文件存储路径，以 '/' 开头
      * @return bool 是否存在
      * @throws StorageException
      */
