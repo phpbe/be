@@ -6,7 +6,7 @@
     <title><?php echo $this->title; ?></title>
     <base href="<?php echo beUrl(); ?>/" >
 
-    <script src="https://libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
             $.ajaxSetup({cache: false});
@@ -19,7 +19,7 @@
         });
     </script>
 
-    <link rel="stylesheet" href="https://cdn.phpbe.com/scss/be.css" />
+    <link rel="stylesheet" href="//cdn.phpbe.com/scss/be.css" />
     <?php
     $libCss = \Be\Be::getLib('Css');
     $mainColor = '#f60';
