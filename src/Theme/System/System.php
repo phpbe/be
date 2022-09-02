@@ -13,9 +13,9 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon"/>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
 
-    <script src="https://libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
 
-    <link rel="stylesheet" href="https://cdn.phpbe.com/scss/be.css"/>
+    <link rel="stylesheet" href="//cdn.phpbe.com/scss/be.css"/>
 
     <?php
     $themeWwwUrl = \Be\Be::getProperty('Theme.System')->getWwwUrl();
