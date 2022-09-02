@@ -60,16 +60,18 @@ class Installer
                     $subDirs = scandir($subVendorPath);
                     foreach ($subDirs as $subDir) {
                         if ($subDir !== '..' && $subDir !== '.') {
-                            $propertyPath = $subVendorPath . '/' . $subDir . '/src/Property.php';
-                            if (!file_exists($propertyPath)) {
-                                $propertyPath = $subVendorPath . '/' . $subDir . '/Property.php';
-                            }
+                            if (is_dir($subVendorPath . '/' . $subDir)) {
+                                $propertyPath = $subVendorPath . '/' . $subDir . '/src/Property.php';
+                                if (!file_exists($propertyPath)) {
+                                    $propertyPath = $subVendorPath . '/' . $subDir . '/Property.php';
+                                }
 
-                            if (file_exists($propertyPath)) {
-                                $content = file_get_contents($propertyPath);
-                                preg_match('/namespace\s+Be\\\\App\\\\(\w+)/i', $content, $matches);
-                                if (isset($matches[1]) && $matches[1] !== 'System') {
-                                    $apps[] = $matches[1];
+                                if (file_exists($propertyPath)) {
+                                    $content = file_get_contents($propertyPath);
+                                    preg_match('/namespace\s+Be\\\\App\\\\(\w+)/i', $content, $matches);
+                                    if (isset($matches[1]) && $matches[1] !== 'System') {
+                                        $apps[] = $matches[1];
+                                    }
                                 }
                             }
                         }
