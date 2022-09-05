@@ -441,7 +441,7 @@ abstract class ThemeEditor
                 foreach ($items as $name) {
                     if ($name === '.' || $name === '..') continue;
                     $section = $this->getSectionSummary('App.' . $app->name . '.' . $name);
-                    if (count($section->positons) > 0 && (in_array($position, $section->positons) || in_array('*', $section->positons))) {
+                    if (count($section->positions) > 0 && (in_array($position, $section->positions) || in_array('*', $section->positions))) {
                         if (count($section->routes) > 0 && (in_array($route, $section->routes) || in_array('*', $section->routes))) {
                             $sections[] = $section;
                         }
