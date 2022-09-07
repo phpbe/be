@@ -128,8 +128,8 @@ class Common extends Driver
             $templateInstance->$key = $val;
         }
 
-        if (!isset($this->data['_page'])) {
-            $templateInstance->_page = Be::getService('App.System.Theme')->getPage($request->isAdmin() ? 'AdminTheme' : 'Theme', $themeName, $request->getRoute());
+        if (!isset($this->data['pageConfig'])) {
+            $templateInstance->pageConfig = Be::getService('App.System.Theme')->getPageConfig($request->isAdmin() ? 'AdminTheme' : 'Theme', $themeName, $request->getRoute());
         }
 
         $templateInstance->display();
