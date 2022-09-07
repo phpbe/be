@@ -394,6 +394,27 @@ abstract class Driver
         return $content;
     }
 
+    /**
+     * 获取页面配置
+     *
+     * @param string $themeName 主题名
+     * @param string $route 路由名
+     * @return object
+     */
+    public function getPageConfig(string $themeName = null, string $route = null): object
+    {
+        $request = Be::getRequest();
+
+        if ($themeName === null) {
+            $themeName = $request->getThemeName();
+        }
+
+        if ($route === null) {
+            $route = $request->getRoute();
+        }
+
+        return Be::getService('App.System.Theme')->getPageConfig($request->isAdmin() ? 'AdminTheme' : 'Theme', $themeName, $route);
+    }
 
     /**
      * 获取原生 Response 对像，仅适用 swoole 模式下
