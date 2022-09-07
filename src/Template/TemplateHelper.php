@@ -249,7 +249,7 @@ class TemplateHelper
                     case 'middle':
                         $codePhp .= 'public function ' . $key . '()' . "\n";
                         $codePhp .= '{' . "\n";
-                        $codePhp .= '  if ($this->_page->middle !== 0 || $this->_page->west !== 0 || $this->_page->east !== 0 || $this->_page->center !== 0) {' . "\n";
+                        $codePhp .= '  if ($this->pageConfig->middle !== 0 || $this->pageConfig->west !== 0 || $this->pageConfig->east !== 0 || $this->pageConfig->center !== 0) {' . "\n";
                         $codePhp .= '    echo $this->tag0(\'be-' . $key . '\');' . "\n";
                         $codePhp .= '    ?>' . "\n";
                         $codePhp .= $codeFunction . "\n";
@@ -265,7 +265,7 @@ class TemplateHelper
                     case 'south':
                         $codePhp .= 'public function ' . $key . '()' . "\n";
                         $codePhp .= '{' . "\n";
-                        $codePhp .= '  if ($this->_page->' . $key . ' !== 0) {' . "\n";
+                        $codePhp .= '  if ($this->pageConfig->' . $key . ' !== 0) {' . "\n";
                         $codePhp .= '    echo $this->tag0(\'be-' . $key . '\');' . "\n";
                         $codePhp .= '    ?>' . "\n";
                         $codePhp .= $codeFunction . "\n";
