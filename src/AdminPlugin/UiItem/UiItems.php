@@ -162,7 +162,7 @@ class UiItems
             }
         }
 
-        if (count($this->jsCode) == 0) {
+        if (count($this->jsCode) > 0) {
             $html .= '<script>' . implode('\n', $this->jsCode). '</script>';
         }
 
