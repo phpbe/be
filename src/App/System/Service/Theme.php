@@ -17,21 +17,21 @@ class Theme
      * @param string $route 页面路由
      * @return \stdClass
      */
-    public function getPage(string $themeType, string $themeName, string $route): object
+    public function getPageConfig(string $themeType, string $themeName, string $route): object
     {
-        $configPage = Be::getConfig($themeType . '.' . $themeName . '.Page.' . $route);
+        $pageConfig = Be::getConfig($themeType . '.' . $themeName . '.Page.' . $route);
         foreach (['north', 'middle', 'west', 'center', 'east', 'south'] as $position) {
-            if ($configPage->$position !== 0) {
+            if ($pageConfig->$position !== 0) {
                 $property = $position . 'Sections';
-                if (isset($configPage->$property) && is_array($configPage->$property) && count($configPage->$property) > 0) {
+                if (isset($pageConfig->$property) && is_array($pageConfig->$property) && count($pageConfig->$property) > 0) {
                     $sections = [];
-                    foreach ($configPage->$property as $sectionIndex => $sectionData) {
+                    foreach ($pageConfig->$property as $sectionIndex => $sectionData) {
 
                         $sectionName = $sectionData['name'];
                         if ($sectionData['name'] === 'be-page-title') {
-                            $sectionName = $configPage->pageTitleSection ?? ($themeType . '.System.PageTitle');
+                            $sectionName = $pageConfig->pageTitleSection ?? ($themeType . '.System.PageTitle');
                         } elseif ($sectionData['name'] === 'be-page-content') {
-                            $sectionName = $configPage->pageContentSection ?? ($themeType . '.System.PageContent');
+                            $sectionName = $pageConfig->pageContentSection ?? ($themeType . '.System.PageContent');
                         }
 
                         $sectionConfig = $sectionData['config'] ?? null;
@@ -42,18 +42,18 @@ class Theme
 
                         $sections[] = $section;
                     }
-                    $configPage->$property = $sections;
+                    $pageConfig->$property = $sections;
                 } else {
-                    $configPage->$property = [];
+                    $pageConfig->$property = [];
                 }
             }
         }
 
-        $configPage->spacingMobile = $configPage->spacingMobile ?? '';
-        $configPage->spacingTablet = $configPage->spacingTablet ?? '';
-        $configPage->spacingDesktop = $configPage->spacingDesktop ?? '';
+        $pageConfig->spacingMobile = $pageConfig->spacingMobile ?? '';
+        $pageConfig->spacingTablet = $pageConfig->spacingTablet ?? '';
+        $pageConfig->spacingDesktop = $pageConfig->spacingDesktop ?? '';
 
-        return $configPage;
+        return $pageConfig;
     }
 
     /**

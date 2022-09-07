@@ -25,8 +25,8 @@ abstract class Section
     // 配置数据
     public object $config;
 
-    // 调用此部件的页面模板
-    public object $pageTemplate;
+    // 调用此部件的页面
+    public object $page;
 
     /**
      * 输出内容

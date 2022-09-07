@@ -20,7 +20,7 @@ class Driver
     /**
      * @var object
      */
-    public object $_page; // 页面配置信息对象
+    public object $pageConfig; // 页面配置信息对象
 
     public function get(string $key, $default = null)
     {
@@ -42,7 +42,7 @@ class Driver
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-        <title><?php echo $this->title; ?></title>
+        <title><?php echo $this->title ?? ''; ?></title>
         <meta name="keywords" content="<?php echo $this->metaKeywords ?? ''; ?>">
         <meta name="description" content="<?php echo $this->metaDescription ?? ''; ?>">
         <meta name="applicable-device" content="pc,mobile">
@@ -74,12 +74,12 @@ class Driver
 
     public function north()
     {
-        if ($this->_page->north !== 0) {
+        if ($this->pageConfig->north !== 0) {
             echo $this->tag0('be-north');
-            if (count($this->_page->northSections)) {
-                foreach ($this->_page->northSections as $section) {
+            if (count($this->pageConfig->northSections)) {
+                foreach ($this->pageConfig->northSections as $section) {
                     echo '<div class="be-section" id="' . $section->id . '">';
-                    $section->template->pageTemplate = $this;
+                    $section->template->page = $this;
                     $section->template->display();
                     echo '</div>';
                 }
@@ -90,15 +90,15 @@ class Driver
 
     public function middle()
     {
-        if ($this->_page->middle !== 0 || $this->_page->west !== 0 || $this->_page->east !== 0 || $this->_page->center !== 0) {
+        if ($this->pageConfig->middle !== 0 || $this->pageConfig->west !== 0 || $this->pageConfig->east !== 0 || $this->pageConfig->center !== 0) {
 
             echo $this->tag0('be-middle');
-            if ($this->_page->middle !== 0) {
-                if (count($this->_page->middleSections)) {
-                    foreach ($this->_page->middleSections as $section) {
+            if ($this->pageConfig->middle !== 0) {
+                if (count($this->pageConfig->middleSections)) {
+                    foreach ($this->pageConfig->middleSections as $section) {
                         echo '<div class="be-section" id="' . $section->id . '">';
 
-                        $section->template->pageTemplate = $this;
+                        $section->template->page = $this;
 
                         if ($section->key === 'be-page-title') {
                             $section->template->before();
@@ -117,9 +117,9 @@ class Driver
                 }
             } else {
 
-                $spacingMobile = $this->_page->spacingMobile ?? '';
-                $spacingTablet = $this->_page->spacingTablet ?? '';
-                $spacingDesktop = $this->_page->spacingDesktop ?? '';
+                $spacingMobile = $this->pageConfig->spacingMobile ?? '';
+                $spacingTablet = $this->pageConfig->spacingTablet ?? '';
+                $spacingDesktop = $this->pageConfig->spacingDesktop ?? '';
 
                 echo '<div class="be-container">';
 
@@ -164,18 +164,18 @@ class Driver
 
                 $cols = 0;
                 $totalWidth = 0;
-                if ($this->_page->west !== 0) {
-                    $totalWidth += abs($this->_page->west);
+                if ($this->pageConfig->west !== 0) {
+                    $totalWidth += abs($this->pageConfig->west);
                     $cols++;
                 }
 
-                if ($this->_page->center !== 0) {
-                    $totalWidth += abs($this->_page->center);
+                if ($this->pageConfig->center !== 0) {
+                    $totalWidth += abs($this->pageConfig->center);
                     $cols++;
                 }
 
-                if ($this->_page->east !== 0) {
-                    $totalWidth += abs($this->_page->east);
+                if ($this->pageConfig->east !== 0) {
+                    $totalWidth += abs($this->pageConfig->east);
                     $cols++;
                 }
 
@@ -185,8 +185,8 @@ class Driver
                 }
 
                 echo '@media (min-width: 992px) {';
-                if ($this->_page->west !== 0) {
-                    $widthRatio = (abs($this->_page->west) / $totalWidth);
+                if ($this->pageConfig->west !== 0) {
+                    $widthRatio = (abs($this->pageConfig->west) / $totalWidth);
                     if ($calcStyle !== '') {
                         $widthStyle = 'calc(' . $calcStyle . ' * ' . $widthRatio . ')';
                     } else {
@@ -196,8 +196,8 @@ class Driver
                     echo '.west-container{flex-basis:'.$widthStyle.';}';
                 }
 
-                if ($this->_page->center !== 0) {
-                    $widthRatio = (abs($this->_page->center) / $totalWidth);
+                if ($this->pageConfig->center !== 0) {
+                    $widthRatio = (abs($this->pageConfig->center) / $totalWidth);
                     if ($calcStyle !== '') {
                         $widthStyle = 'calc(' . $calcStyle . ' * ' . $widthRatio . ')';
                     } else {
@@ -206,8 +206,8 @@ class Driver
                     echo '.center-container{flex-basis:'.$widthStyle.';}';
                 }
 
-                if ($this->_page->east !== 0) {
-                    $widthRatio = (abs($this->_page->east) / $totalWidth);
+                if ($this->pageConfig->east !== 0) {
+                    $widthRatio = (abs($this->pageConfig->east) / $totalWidth);
                     if ($calcStyle !== '') {
                         $widthStyle = 'calc(' . $calcStyle . ' * ' . $widthRatio . ')';
                     } else {
@@ -219,19 +219,19 @@ class Driver
                 echo '</style>';
 
                 echo '<div class="middle-container">';
-                if ($this->_page->west !== 0) {
+                if ($this->pageConfig->west !== 0) {
                     echo '<div class="west-container">';
                     $this->west();
                     echo '</div>';
                 }
 
-                if ($this->_page->center !== 0) {
+                if ($this->pageConfig->center !== 0) {
                     echo '<div class="center-container">';
                     $this->center();
                     echo '</div>';
                 }
 
-                if ($this->_page->east !== 0) {
+                if ($this->pageConfig->east !== 0) {
                     echo '<div class="east-container">';
                     $this->east();
                     echo '</div>';
@@ -247,12 +247,12 @@ class Driver
 
     public function west()
     {
-        if ($this->_page->west !== 0) {
+        if ($this->pageConfig->west !== 0) {
             echo $this->tag0('be-west');
-            if (count($this->_page->westSections)) {
-                foreach ($this->_page->westSections as $section) {
+            if (count($this->pageConfig->westSections)) {
+                foreach ($this->pageConfig->westSections as $section) {
                     echo '<div class="be-section" id="' . $section->id . '">';
-                    $section->template->pageTemplate = $this;
+                    $section->template->page = $this;
                     $section->template->display();
                     echo '</div>';
                 }
@@ -263,13 +263,13 @@ class Driver
 
     public function center()
     {
-        if ($this->_page->center !== 0) {
+        if ($this->pageConfig->center !== 0) {
             echo $this->tag0('be-center');
-            if (count($this->_page->centerSections)) {
-                foreach ($this->_page->centerSections as $section) {
+            if (count($this->pageConfig->centerSections)) {
+                foreach ($this->pageConfig->centerSections as $section) {
                     echo '<div class="be-section" id="' . $section->id . '">';
 
-                    $section->template->pageTemplate = $this;
+                    $section->template->page = $this;
 
                     if ($section->key === 'be-page-title') {
                         $section->template->before();
@@ -292,12 +292,12 @@ class Driver
 
     public function east()
     {
-        if ($this->_page->east !== 0) {
+        if ($this->pageConfig->east !== 0) {
             echo $this->tag0('be-east');
-            if (count($this->_page->eastSections)) {
-                foreach ($this->_page->eastSections as $section) {
+            if (count($this->pageConfig->eastSections)) {
+                foreach ($this->pageConfig->eastSections as $section) {
                     echo '<div class="be-section" id="' . $section->id . '">';
-                    $section->template->pageTemplate = $this;
+                    $section->template->page = $this;
                     $section->template->display();
                     echo '</div>';
                 }
@@ -308,12 +308,12 @@ class Driver
 
     public function south()
     {
-        if ($this->_page->south !== 0) {
+        if ($this->pageConfig->south !== 0) {
             echo $this->tag0('be-south');
-            if (count($this->_page->southSections)) {
-                foreach ($this->_page->southSections as $section) {
+            if (count($this->pageConfig->southSections)) {
+                foreach ($this->pageConfig->southSections as $section) {
                     echo '<div class="be-section" id="' . $section->id . '">';
-                    $section->template->pageTemplate = $this;
+                    $section->template->page = $this;
                     $section->template->display();
                     echo '</div>';
                 }

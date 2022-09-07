@@ -17,9 +17,9 @@ class Template extends Section
             echo '</style>';
 
             echo '<div class="rich-text">';
-            echo $this->pageTemplate->tag0('be-section-content');
+            echo $this->page->tag0('be-section-content');
             echo $this->config->content;
-            echo $this->pageTemplate->tag1('be-section-content');
+            echo $this->page->tag1('be-section-content');
             echo '</div>';
         }
     }
