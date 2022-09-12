@@ -31,6 +31,10 @@ class Common extends Driver
             date_default_timezone_set($configSystem->timezone);
 
             $admin = $request->get($this->adminAlias, false);
+            if ($admin !== false) {
+                $admin = true;
+            }
+
             $app = null;
             $controller = null;
             $action = null;

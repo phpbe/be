@@ -159,6 +159,9 @@ class Swoole extends Driver
                 $configSystem = Be::getConfig('App.System.System');
 
                 $admin = $request->get($this->adminAlias, false);
+                if ($admin !== false) {
+                    $admin = true;
+                }
                 $app = null;
                 $controller = null;
                 $action = null;

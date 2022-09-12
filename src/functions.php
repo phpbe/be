@@ -109,7 +109,7 @@ function beAdminUrl($route = null, array $params = null)
         }
         return $url;
     } else {
-        $url = $rootUrl . '/?' . $adminAlias . '=1&route=' . $route;
+        $url = $rootUrl . '/?' . $adminAlias . '&route=' . $route;
         if ($params !== null && $params) {
             $url .= '&' . http_build_query($params);
         }
