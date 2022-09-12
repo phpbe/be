@@ -86,6 +86,8 @@ class App
         $configApp->names = array_unique($names);
         ConfigHelper::update('App.System.App', $configApp);
 
+        Be::getService('App.System.Admin.AdminMenu')->update();
+
         return true;
     }
 
@@ -120,6 +122,8 @@ class App
         }
         $configApp->names = array_unique($newNames);
         ConfigHelper::update('App.System.App', $configApp);
+
+        Be::getService('App.System.Admin.AdminMenu')->update();
 
         return true;
     }
