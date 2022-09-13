@@ -1058,7 +1058,7 @@ abstract class Be
 
         if (isset(self::$cache['Language'][$package][$languageName])) return self::$cache['Language'][$package][$languageName];
 
-        $path = $runtime->getRootPath() . '/data/Runtime/Language/' . str_replace('.', '/', $package) . $underlineLanguageName . '.php';
+        $path = $runtime->getRootPath() . '/data/Runtime/Language/' . str_replace('.', '/', $package) . '/' . $underlineLanguageName . '.php';
         if (!file_exists($path)) {
             \Be\Language\LanguageHelper::update($package, $languageName);
         } else {
@@ -1069,7 +1069,7 @@ abstract class Be
             }
         }
 
-        $class = '\\Be\\Data\\Runtime\\Language\\' . str_replace('.', '\\', $package) . $underlineLanguageName;
+        $class = '\\Be\\Data\\Runtime\\Language\\' . str_replace('.', '\\', $package) . '\\' . $underlineLanguageName;
         self::$cache['Language'][$package][$languageName] = new $class();
         return self::$cache['Language'][$package][$languageName];
     }

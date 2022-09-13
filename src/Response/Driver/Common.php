@@ -129,7 +129,10 @@ class Common extends Driver
         }
 
         if (!isset($this->data['pageConfig'])) {
-            $templateInstance->pageConfig = Be::getService('App.System.Theme')->getPageConfig($request->isAdmin() ? 'AdminTheme' : 'Theme', $themeName, $request->getRoute());
+            $route = $request->getRoute();
+            if ($route !== null) {
+                $templateInstance->pageConfig = Be::getService('App.System.Theme')->getPageConfig($request->isAdmin() ? 'AdminTheme' : 'Theme', $themeName, $route);
+            }
         }
 
         $templateInstance->display();

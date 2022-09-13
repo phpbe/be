@@ -348,7 +348,7 @@ abstract class Driver
      *
      * @return null | string
      */
-    public function getRoute(): string
+    public function getRoute()
     {
         return $this->route;
     }

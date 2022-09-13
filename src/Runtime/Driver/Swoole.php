@@ -266,7 +266,7 @@ class Swoole extends Driver
                         $action = $routes[2];
                     } else {
                         $response->set('code', 404);
-                        $response->error('Route (' . $route . ') is unable to identify!');
+                        $response->error(beLang('App.System', 'RUNTIME.ROUTE_ERROR', $route));
                         Be::gc();
                         return true;
                     }
@@ -277,14 +277,14 @@ class Swoole extends Driver
                 $class = 'Be\\App\\' . $app . '\\Controller\\' . ($admin ? 'Admin\\' : '') . $controller;
                 if (!class_exists($class)) {
                     $response->set('code', 404);
-                    $response->error('Controller ' . $app . '/' . $controller . ' does not exist!');
+                    $response->error(beLang('App.System', 'RUNTIME.CONTROLLER_DOES_NOT_EXIST', $app, $controller));
                 } else {
                     $instance = new $class();
                     if (method_exists($instance, $action)) {
                         $instance->$action();
                     } else {
                         $response->set('code', 404);
-                        $response->error('Undefined action ' . $action . ' of class ' . $class . '!');
+                        $response->error(beLang('App.System', 'RUNTIME.UNDEFINED_ACTION', $action, $class));
                     }
                 }
 
