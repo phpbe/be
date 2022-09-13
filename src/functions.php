@@ -43,14 +43,14 @@ function beUrl($route = null, array $params = null)
             }
             $url .= $urlParams;
         }
-        $url .=  $configSystem->urlSuffix;
+        $url .= $configSystem->urlSuffix;
         return $url;
     } elseif ($configSystem->urlRewrite === '2') {
         return \Be\Router\Helper::encode($route, $params);
     } else {
         $url = $rootUrl . '/?route=' . $route;
         if ($params !== null && $params) {
-            $url .=  '&' . http_build_query($params);
+            $url .= '&' . http_build_query($params);
         }
         return $url;
     }
@@ -105,7 +105,7 @@ function beAdminUrl($route = null, array $params = null)
             $url .= $urlParams;
         }
         if ($configSystem->urlRewrite === '1') {
-            $url .=  $configSystem->urlSuffix;
+            $url .= $configSystem->urlSuffix;
         }
         return $url;
     } else {
@@ -127,4 +127,16 @@ function beAdminUrl($route = null, array $params = null)
 function beAdminOpLog($content, $details = '')
 {
     \Be\Be::getService('App.System.Admin.AdminOpLog')->addLog($content, $details);
+}
+
+/**
+ * 语言
+ *
+ * @param string $package 语言包名
+ * @param string $text 文字
+ * @return string
+ */
+function beLang(string $package, string $text, string ...$args): string
+{
+    return \Be\Be::getLanguage($package)->translate($text, ...$args);
 }

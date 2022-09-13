@@ -1036,6 +1036,45 @@ abstract class Be
     }
 
     /**
+     * 获取指定的一个语言包
+     *
+     * @param string $package 语言包包
+     * @param string $languageName 语言名
+     * @return \Be\Language\Driver
+     */
+    public static function getLanguage(string $package, string $languageName = null): \Be\Language\Driver
+    {
+        $runtime = self::getRuntime();
+
+        if ($languageName === null) {
+            if (!$runtime->isSwooleMode() || $runtime->isWorkerProcess()) {
+                $languageName = self::getRequest()->getLanguageName();
+            } else {
+                $languageName = self::getConfig('App.System.Language')->default;
+            }
+        }
+
+        $underlineLanguageName = str_replace('-', '_', $languageName);
+
+        if (isset(self::$cache['Language'][$package][$languageName])) return self::$cache['Language'][$package][$languageName];
+
+        $path = $runtime->getRootPath() . '/data/Runtime/Language/' . str_replace('.', '/', $package) . $underlineLanguageName . '.php';
+        if (!file_exists($path)) {
+            \Be\Language\LanguageHelper::update($package, $languageName);
+        } else {
+            if (self::getConfig('App.System.System')->developer) {
+                if (\Be\Language\LanguageHelper::hasChange($package, $languageName)) {
+                    \Be\Language\LanguageHelper::update($package, $languageName);
+                }
+            }
+        }
+
+        $class = '\\Be\\Data\\Runtime\\Language\\' . str_replace('.', '\\', $package) . $underlineLanguageName;
+        self::$cache['Language'][$package][$languageName] = new $class();
+        return self::$cache['Language'][$package][$languageName];
+    }
+
+    /**
      * 获取指定的一个后台菜单
      *
      * @return \Be\AdminMenu\Driver

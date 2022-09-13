@@ -16,6 +16,7 @@ abstract class Driver
     protected $actionName = null;
     protected $route = null;
     protected $themeName = null;
+    protected $languageName = null;
 
     protected $json = null;
 
@@ -398,6 +399,43 @@ abstract class Driver
         }
 
         return $this->themeName;
+    }
+
+    /**
+     * 获取语言名称
+     *
+     * @return string
+     */
+    public function getLanguageName(): string
+    {
+        if ($this->languageName === null) {
+            $languageName = $this->get('be-language', false);
+            if ($languageName) {
+                $this->languageName = $languageName;
+            } else {
+                $languageName = $this->cookie('be-language', false);
+                if ($languageName) {
+                    $this->languageName = $languageName;
+                } else {
+                    $configLanguage = Be::getConfig('App.System.Language');
+                    if ($configLanguage->autoDetect === 1) {
+                        $acceptLanguage = strtolower($this->header('accept-language'));
+                        foreach ($configLanguage->language as $x) {
+                            if (strpos($acceptLanguage, strtolower($x)) !== false) {
+                                $languageName = $x;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!$languageName) {
+                        $this->languageName = $configLanguage->default;
+                    }
+                }
+            }
+        }
+
+        return $this->languageName;
     }
 
     /**

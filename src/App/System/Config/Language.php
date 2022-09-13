@@ -1,17 +1,25 @@
 <?php
 namespace Be\App\System\Config;
 
-
+/**
+ * @BeConfig("多语言")
+ */
 class Language
 {
 
-    // 语言列表
-    public $languages = ['zh-CN', 'en-US'];
+    /**
+     * @BeConfigItem("语言列表", driver="FormItemCode", language="json", valueType = "array(string)")
+     */
+    public array $languages = ['zh-CN', 'en-US'];
 
-    // 默认语言
-    public $default = 'zh-CN';
+    /**
+     * @BeConfigItem("默认语言", driver="FormItemInput")
+     */
+    public string $default = 'zh-CN';
 
-    // 自动检测
-    public $autoDetect = 0;
+    /**
+     * @BeConfigItem("自动检测", driver="FormItemSwitch")
+     */
+    public int $autoDetect = 0;
 
 }
