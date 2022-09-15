@@ -4,8 +4,7 @@
     ?>
     <script src="<?php echo $appSystemWwwUrl; ?>/lib/sortable/sortable.min.js"></script>
     <script src="<?php echo $appSystemWwwUrl; ?>/lib/vuedraggable/vuedraggable.umd.min.js"></script>
-    <link rel="stylesheet" href="<?php echo $appSystemWwwUrl; ?>/admin/theme-editor/css/setting.css" type="text/css"/>
-
+    <link rel="stylesheet" href="<?php echo $appSystemWwwUrl; ?>/admin/theme-editor/css/setting.css?v=20220915" type="text/css"/>
 </be-head>
 
 <be-body>
