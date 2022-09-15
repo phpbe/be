@@ -778,6 +778,25 @@ abstract class ThemeEditor
                                 'config' => get_object_vars($itemInstance),
                             ];
                         }
+                    } else {
+
+                        $name = $item['name'];
+                        $config = $item['config'];
+
+                        if ($format === 'object') {
+                            if (is_array($config)) {
+                                $config = (object) $config;
+                            }
+                        } else {
+                            if (is_object($config)) {
+                                $config = get_object_vars($config);
+                            }
+                        }
+
+                        $items[] = [
+                            'name' => $name,
+                            'config' => $config
+                        ];
                     }
                 }
 
