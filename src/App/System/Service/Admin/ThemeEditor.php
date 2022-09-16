@@ -428,13 +428,11 @@ abstract class ThemeEditor
     {
         $appSections = [];
 
-        $rootPath = Be::getRuntime()->getRootPath();
-
         $apps = Be::getService('App.System.Admin.App')->getApps();
         foreach ($apps as $app) {
 
             $sections = [];
-            $path = $rootPath . $app->path . '/Section';
+            $path = $app->path . '/Section';
             if (file_exists($path) && is_dir($path)) {
                 // 分析目录
                 $items = scandir($path);
@@ -473,7 +471,7 @@ abstract class ThemeEditor
         foreach ($themes as $theme) {
 
             $sections = [];
-            $path = $rootPath . $theme->path . '/Section';
+            $path = $theme->path . '/Section';
             if (file_exists($path) && is_dir($path)) {
                 // 分析目录
                 $items = scandir($path);

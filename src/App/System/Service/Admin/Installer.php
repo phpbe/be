@@ -5,6 +5,8 @@ namespace Be\App\System\Service\Admin;
 use Be\Config\ConfigHelper;
 use Be\Be;
 use Be\App\ServiceException;
+use Be\Util\File\Dir;
+use Be\Util\Str\CaseConverter;
 
 class Installer
 {
@@ -81,58 +83,5 @@ class Installer
         }
         return $apps;
     }
-
-    /**
-     * 安装APP
-     *
-     * @param $app
-     */
-    public function installApp($app)
-    {
-        $class = '\\Be\\App\\' . $app . '\\Installer';
-        if (class_exists($class)) {
-            /**
-             * @var \Be\App\System\Installer $installer
-             */
-            $installer = new $class();
-            $installer->install();
-
-            $configApp = Be::getConfig('App.System.App');
-            $names = $configApp->names;
-            $names[] = $app;
-            $configApp->names = array_unique($names);
-            ConfigHelper::update('App.System.App', $configApp);
-        }
-    }
-
-    /**
-     * 卸载APP
-     *
-     * @param $app
-     */
-    public function uninstallApp($app)
-    {
-        $class = '\\Be\\App\\' . $app . '\\UnInstaller';
-        if (class_exists($class)) {
-            /**
-             * @var \Be\App\System\UnInstaller $unInstaller
-             */
-            $unInstaller = new $class();
-            $unInstaller->uninstall();
-
-            $configApp = Be::getConfig('App.System.App');
-            $names = $configApp->names;
-            $newNames = [];
-            foreach ($names as $name) {
-                if ($name === $app) {
-                    continue;
-                }
-                $newNames[] = $name;
-            }
-            $configApp->names = array_unique($newNames);
-            ConfigHelper::update('App.System.App', $configApp);
-        }
-    }
-
 
 }
