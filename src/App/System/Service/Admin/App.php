@@ -28,6 +28,7 @@ class App
                     'label' => $appProperty->getLabel(),
                     'icon' => $appProperty->getIcon(),
                     'path' => $appProperty->getPath(),
+                    'relativePath' => $appProperty->getRelativePath(),
                 ];
             }
 

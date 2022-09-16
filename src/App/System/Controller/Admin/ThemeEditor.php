@@ -135,7 +135,7 @@ class ThemeEditor
                             'width' => '160',
                         ],
                         [
-                            'name' => 'path',
+                            'name' => 'relativePath',
                             'label' => '路径',
                             'align' => 'left',
                         ],
