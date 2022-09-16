@@ -174,19 +174,15 @@ abstract class Be
                     $instance1 = new $class();
                 }
             }
-
-            if ($instance1 === null) {
-                $class = '\\Be\\Data\\' . $type . '\\' . $catalog . '\\Config\\Page';
-                if (class_exists($class)) {
-                    $instance1 = new $class();
-                }
-            }
         }
 
         if ($isPageConfig) {
-            $class = '\\Be\\' . $type . '\\' . $catalog . '\\Config\\Page';
+            $class = '\\Be\\Data\\' . $type . '\\' . $catalog . '\\Config\\Page';
             if (!class_exists($class)) {
-                throw new RuntimeException('Config (' . $type . '.' . $catalog . '.Page) does not exist!');
+                $class = '\\Be\\' . $type . '\\' . $catalog . '\\Config\\Page';
+                if (!class_exists($class)) {
+                    throw new RuntimeException('Config (' . $type . '.' . $catalog . '.Page) does not exist!');
+                }
             }
         } else {
             $class = '\\Be\\' . $type . '\\' . $catalog . '\\Config\\' . $classSuffix;
