@@ -1122,6 +1122,10 @@ class Curd extends Driver
 
                     $tuple->load($primaryKeyValue);
                     $tuple->$field = $value;
+                    if (isset($tuple->update_time)) {
+                        $tuple->update_time = date('Y-m-d H:i:s');
+                    }
+
                     $this->trigger('before', $tuple, $postData);
                     $tuple->save();
                     $this->trigger('after', $tuple, $postData);
