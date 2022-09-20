@@ -304,7 +304,7 @@ class FormItemCode extends FormItem
         return '
 .CodeMirror {
     font-size: 13px;
-    line-height: 150%;
+    line-height: 1.5rem;
     border: 1px solid #DCDFE6;
     min-height: 60px;
     height: auto !important;

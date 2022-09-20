@@ -163,7 +163,8 @@ class UiItems
         }
 
         if (count($this->jsCode) > 0) {
-            $html .= '<script>' . implode('\n', $this->jsCode). '</script>';
+            $jsCode = array_unique($this->jsCode);
+            $html .= '<script>' . implode('\n', $jsCode). '</script>';
         }
 
         return $html;
@@ -200,8 +201,9 @@ class UiItems
             }
         }
 
-        if (count($this->cssCode) == 0) {
-            $html .= '<style type="text/css">' . implode('\n', $this->cssCode). '</style>';
+        if (count($this->cssCode) > 0) {
+            $cssCode = array_unique($this->cssCode);
+            $html .= '<style type="text/css">' . implode('\n', $cssCode). '</style>';
         }
 
         return $html;
