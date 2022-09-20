@@ -85,5 +85,15 @@ class TableProperty
         return isset($this->_fields[$fieldName]) ? $this->_fields[$fieldName] : null;
     }
 
+    /**
+     * 是否存在指定字段
+     *
+     * @param string $fieldName 字段名
+     * @return bool
+     */
+    public function hasField(string $fieldName): bool
+    {
+        return isset($this->_fields[$fieldName]);
+    }
 
 }
