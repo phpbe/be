@@ -303,6 +303,18 @@ class DetailItemCode extends DetailItem
         return $css;
     }
 
+    public function getCssCode()
+    {
+        return '
+.CodeMirror {
+    font-size: 13px;
+    line-height: 1.5rem;
+    border: 1px solid #DCDFE6;
+    min-height: 60px;
+    height: auto !important;
+}';
+    }
+
     /**
      * 获取html内容
      *
