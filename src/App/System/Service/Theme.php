@@ -19,7 +19,7 @@ class Theme
      */
     public function getPageConfig(string $themeType, string $themeName, string $route): object
     {
-        $pageConfig = Be::getConfig($themeType . '.' . $themeName . '.Page.' . $route);
+        $pageConfig = clone Be::getConfig($themeType . '.' . $themeName . '.Page.' . $route);
         foreach (['north', 'middle', 'west', 'center', 'east', 'south'] as $position) {
             if ($pageConfig->$position !== 0) {
                 $property = $position . 'Sections';
