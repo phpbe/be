@@ -19,7 +19,7 @@
         });
     </script>
 
-    <link rel="stylesheet" href="//cdn.phpbe.com/scss/be.css" />
+    <link rel="stylesheet" href="//cdn.phpbe.com/ui/be.css" />
     <?php
     $libCss = \Be\Be::getLib('Css');
     $mainColor = '#f60';

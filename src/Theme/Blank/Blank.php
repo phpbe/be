@@ -7,7 +7,7 @@
     <title><?php echo $this->title; ?></title>
     <base href="<?php echo beUrl(); ?>/">
     <script src="//libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
-    <link rel="stylesheet" href="//cdn.phpbe.com/scss/be.css" />
+    <link rel="stylesheet" href="//cdn.phpbe.com/uo/be.css" />
     <style type="text/css">
         html {
             font-size: 14px;

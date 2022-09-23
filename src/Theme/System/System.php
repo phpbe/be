@@ -15,7 +15,7 @@
 
     <script src="//libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
 
-    <link rel="stylesheet" href="//cdn.phpbe.com/scss/be.css"/>
+    <link rel="stylesheet" href="//cdn.phpbe.com/ui/be.css"/>
 
     <?php
     $themeWwwUrl = \Be\Be::getProperty('Theme.System')->getWwwUrl();

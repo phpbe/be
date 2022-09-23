@@ -18,7 +18,7 @@
   ],
   "require": {
     "php": "~7.4",
-    "be/scss": "*",
+    "be/ui": "*",
     "aliyuncs/oss-sdk-php": "~2.4",
     "qcloud/cos-sdk-v5": "2.*",
     "elasticsearch/elasticsearch": "^v7.11",
