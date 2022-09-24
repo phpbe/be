@@ -18,6 +18,15 @@
     <link rel="stylesheet" href="//cdn.phpbe.com/ui/be.css"/>
 
     <?php
+    $configTheme = \Be\Be::getConfig('Theme.System.Theme');
+    if ($configTheme->loadBeIcons === 1) {
+        ?>
+        <link rel="stylesheet" href="//cdn.phpbe.com/ui/be-icons.css"/>
+        <?php
+    }
+    ?>
+
+    <?php
     $themeWwwUrl = \Be\Be::getProperty('Theme.System')->getWwwUrl();
     ?>
     <link rel="stylesheet" href="<?php echo $themeWwwUrl; ?>/css/drawer.css"/>
@@ -26,7 +35,6 @@
     <link rel="stylesheet" href="<?php echo $themeWwwUrl; ?>/css/theme.css"/>
 
     <?php
-    $configTheme = \Be\Be::getConfig('Theme.System.Theme');
 
     $libCss = \Be\Be::getLib('Css');
     $mainColor = $configTheme->mainColor;
