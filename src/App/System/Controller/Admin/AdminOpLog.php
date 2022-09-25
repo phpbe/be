@@ -9,7 +9,7 @@ use Be\AdminPlugin\Toolbar\Item\ToolbarItemDropDown;
 use Be\Be;
 
 /**
- * @BeMenuGroup("日志", icon="el-icon-tickets", ordering="4")
+ * @BeMenuGroup("日志", icon="bi-file-earmark-text", ordering="4")
  * @BePermissionGroup("日志", ordering="4")
  */
 class AdminOpLog extends Auth
@@ -18,7 +18,7 @@ class AdminOpLog extends Auth
     /**
      * 操作日志
      *
-     * @BeMenu("后台操作日志", icon="el-icon-fa fa-video-camera", ordering="4.1")
+     * @BeMenu("后台操作日志", icon="bi-file-earmark-check", ordering="4.1")
      * @BePermission("查看后台操作日志", ordering="4.1")
      */
     public function logs()

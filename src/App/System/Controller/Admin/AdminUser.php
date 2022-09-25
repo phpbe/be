@@ -20,7 +20,7 @@ use Be\Be;
  * Class AdminUser
  * @package App\System\Controller
  *
- * @BeMenuGroup("管理员", icon="el-icon-user", ordering="1")
+ * @BeMenuGroup("管理员", icon="bi-person", ordering="1")
  * @BePermissionGroup("管理员", ordering="1")
  */
 class AdminUser extends Auth
@@ -29,7 +29,7 @@ class AdminUser extends Auth
     /**
      * 管理员管理
      *
-     * @BeMenu("管理员管理", icon="el-icon-user", ordering="1.1")
+     * @BeMenu("管理员管理", icon="bi-people", ordering="1.1")
      * @BePermission("管理员管理", ordering="1.1")
      */
     public function adminUsers()

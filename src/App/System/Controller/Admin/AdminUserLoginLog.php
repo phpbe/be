@@ -20,7 +20,7 @@ class AdminUserLoginLog extends Auth
     /**
      * 系统日志
      *
-     * @BeMenu("登录日志", icon="el-icon-fa fa-user-circle", ordering="1.3")
+     * @BeMenu("登录日志", icon="bi-person-workspace", ordering="1.3")
      * @BePermission("查看登录日志", ordering="1.3")
      */
     public function logs()

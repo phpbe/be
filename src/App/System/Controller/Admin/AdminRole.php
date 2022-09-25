@@ -27,7 +27,7 @@ class AdminRole extends Auth
 {
 
     /**
-     * @BeMenu("角色管理", icon="el-icon-fa fa-user-secret", ordering="1.2")
+     * @BeMenu("角色管理", icon="bi-person-video", ordering="1.2")
      * @BePermission("角色管理", ordering="1.2")
      */
     public function roles()

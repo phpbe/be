@@ -63,6 +63,15 @@ class AdminMenu
                             }
 
                             if (isset($val[0]['label'])) {
+
+                                if (isset($val[0]['icon'])) {
+                                    if (strpos($val[0]['icon'], 'el-icon-') === false) {
+                                        if (strpos($val[0]['icon'], 'bi-') !== false) {
+                                            $val[0]['icon'] = 'el-icon-bi '. $val[0]['icon'];
+                                        }
+                                    }
+                                }
+
                                 $classMenuGroup = $val[0];
                             }
                         }
@@ -84,6 +93,15 @@ class AdminMenu
                                 }
 
                                 if (isset($val[0]['label'])) {
+
+                                    if (isset($val[0]['icon'])) {
+                                        if (strpos($val[0]['icon'], 'el-icon-') === false) {
+                                            if (strpos($val[0]['icon'], 'bi-') !== false) {
+                                                $val[0]['icon'] = 'el-icon-bi '. $val[0]['icon'];
+                                            }
+                                        }
+                                    }
+
                                     $menuGroup = $val[0];
                                 }
                             }
@@ -94,6 +112,15 @@ class AdminMenu
                                 }
 
                                 if (isset($val[0]['label'])) {
+
+                                    if (isset($val[0]['icon'])) {
+                                        if (strpos($val[0]['icon'], 'el-icon-') === false) {
+                                            if (strpos($val[0]['icon'], 'bi-') !== false) {
+                                                $val[0]['icon'] = 'el-icon-bi '. $val[0]['icon'];
+                                            }
+                                        }
+                                    }
+
                                     $item = $val[0];
                                 }
                             }

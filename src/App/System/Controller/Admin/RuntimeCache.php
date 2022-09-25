@@ -15,7 +15,7 @@ class RuntimeCache extends Auth
 {
 
     /**
-     * @BeMenu("运行时缓存", icon = "el-icon-fa fa-database", ordering="3.6")
+     * @BeMenu("运行时缓存", icon = "bi-hdd", ordering="3.6")
      * @BePermission("运行时缓存列表", ordering="3.6")
      */
     public function index()

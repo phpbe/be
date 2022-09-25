@@ -14,7 +14,7 @@ class Index
     /**
      * 控制台
      *
-     * @BeMenu("首页", icon="el-icon-s-home", ordering="0")
+     * @BeMenu("首页", icon="bi-house-door", ordering="0")
      */
     public function index()
     {
