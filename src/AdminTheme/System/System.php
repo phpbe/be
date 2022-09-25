@@ -25,12 +25,10 @@
     <link rel="stylesheet" href="<?php echo $appSystemWwwUrl; ?>/lib/element-ui/element-ui-2.15.7.css">
     <script src="<?php echo $appSystemWwwUrl; ?>/lib/element-ui/element-ui-2.15.7.js"></script>
 
-    <link rel="stylesheet" href="<?php echo $appSystemWwwUrl; ?>/lib/font-awesome/font-awesome-4.7.0.min.css" />
-
     <link rel="stylesheet" href="//cdn.phpbe.com/ui/be.css" />
     <link rel="stylesheet" href="//cdn.phpbe.com/ui/be-icons.css"/>
 
-    <link rel="stylesheet" href="<?php echo $adminThemeWwwUrl; ?>/css/theme.css?v=20220731" />
+    <link rel="stylesheet" href="<?php echo $adminThemeWwwUrl; ?>/css/theme.css?v=20220925" />
 
     <be-head>
     </be-head>

@@ -10,18 +10,6 @@ body {
 }
 
 [v-cloak] {display: none !important;}
-[class^="el-icon-fa"],
-[class*="el-icon-fa"] {
-    display: inline-block;
-    font-style: normal;
-    font-variant: normal;
-    font-weight: normal;
-    font-family: FontAwesome!important;
-    font-size: inherit;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
 
 .el-submenu__title i,
 .el-menu-item i {
