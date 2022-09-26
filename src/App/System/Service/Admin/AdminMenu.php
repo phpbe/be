@@ -22,6 +22,12 @@ class AdminMenu
         $apps = Be::getService('App.System.Admin.App')->getApps();
         foreach ($apps as $app) {
 
+            if (strpos($app->icon, 'el-icon-') === false) {
+                if (strpos($app->icon, 'bi-') !== false) {
+                    $app->icon = 'el-icon-bi '. $app->icon;
+                }
+            }
+
             $appProperty = Be::getProperty('App.'.$app->name);
             $appName = $app->name;
             $controllerDir = $appProperty->getPath(). '/Controller/Admin';
