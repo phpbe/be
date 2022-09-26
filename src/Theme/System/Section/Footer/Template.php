@@ -49,7 +49,7 @@ class Template extends Section
                         continue;
                     }
 
-                    echo '<div class="be-col-24 be-col-md-' . ($itemConfig->cols * 6) . '">';
+                    echo '<div class="be-col-24 be-md-col-' . ($itemConfig->cols * 6) . '">';
                     echo '<div class="be-p-100">';
                     switch ($item['name']) {
                         case 'Menu':
@@ -63,7 +63,7 @@ class Template extends Section
                                     continue;
                                 }
 
-                                echo '<div class="be-col-24 be-col-md-' . intval(24 / $itemConfig->quantity) . '">';
+                                echo '<div class="be-col-24 be-md-col-' . intval(24 / $itemConfig->quantity) . '">';
                                 $url = 'javascript:void(0);';
                                 if ($menuItem->route) {
                                     $url = beUrl($menuItem->route, $menuItem->params);

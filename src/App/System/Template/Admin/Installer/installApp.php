@@ -5,8 +5,8 @@
         {
             ?>
             <div class="be-row be-mt-200 be-bt-eee be-pt-100">
-                <div class="be-col-0 be-col-md-3 be-col-lg-6"></div>
-                <div class="be-col-24 be-col-md-18 be-col-lg-12">
+                <div class="be-col-0 be-md-col-3 be-lg-col-6"></div>
+                <div class="be-col-24 be-md-col-18 be-lg-col-12">
                     <div class="be-row">
                         <div class="be-col-auto">
                             <input type="checkbox" class="be-checkbox" name="names[]" id="name-<?php echo $appProperty['name']; ?>" <?php echo $appProperty['name'] === 'System' ? 'onchange="this.checked=true"': '' ?> value="<?php echo $appProperty['name']; ?>" checked>
@@ -25,7 +25,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="be-col-0 be-col-md-3 be-col-lg-6"></div>
+                <div class="be-col-0 be-md-col-3 be-lg-col-6"></div>
             </div>
             <?php
         }
