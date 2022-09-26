@@ -369,14 +369,22 @@ class FormItemCode extends FormItem
      */
     public function getVueHooks()
     {
-        $mountedCode = 'this.formItems.' . $this->name . '.codeMirror = CodeMirror.fromTextArea(this.$refs.refFormItemCode_' . $this->name . ',' . json_encode($this->option) . ');';
+        $index = 1;
+        $contextKey = 'Be:AdminPlugin:FormItemCode:index';
+        if (Be::hasContext($contextKey)) {
+            $index = Be::getContext($contextKey);
+        }
+        Be::setContext($contextKey, $index + 1);
+
+        $mountedCode = 'let _this_' . $index . ' = this;';
+        $mountedCode .= 'this.formItems.' . $this->name . '.codeMirror = CodeMirror.fromTextArea(this.$refs.refFormItemCode_' . $this->name . ',' . json_encode($this->option) . ');';
+        $mountedCode .= 'this.formItems.' . $this->name . '.codeMirror.on(\'change\', function(cm) { _this_' . $index . '.formData.' . $this->name . ' = cm.getValue(); });';
 
         $updatedCode = 'this.formItems.' . $this->name . '.codeMirror && this.formItems.' . $this->name . '.codeMirror.refresh();';
-        $updatedCode .= 'this.formData.' . $this->name . ' = this.formItems.' . $this->name . '.codeMirror.getValue();';
+        //$updatedCode .= 'this.formData.' . $this->name . ' = this.formItems.' . $this->name . '.codeMirror.getValue();';
         return [
             'mounted' => $mountedCode,
             'updated' => $updatedCode,
         ];
     }
-
 }
