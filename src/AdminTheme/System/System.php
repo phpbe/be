@@ -116,7 +116,7 @@
                     </div>
 
                     <div class="be-col-auto be-pr-150 north-links lh-60">
-                        <el-link href="https://www.phpbe.com/" icon="el-icon-warning-outline" target="_blank" :underline="false">技术支持</el-link>
+                        <el-link href="https://www.phpbe.com/doc/help/v2" icon="el-icon-warning-outline" target="_blank" :underline="false">使用帮助</el-link>
                     </div>
 
                     <div class="be-col-auto be-pr-150 lh-60">
