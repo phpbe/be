@@ -6,7 +6,7 @@
     <title><?php echo $this->title; ?></title>
     <base href="<?php echo beUrl(); ?>/" >
 
-    <script src="//libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
     <script>
         $(document).ready(function () {
             $.ajaxSetup({cache: false});
