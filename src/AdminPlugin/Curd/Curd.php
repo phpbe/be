@@ -108,7 +108,7 @@ class Curd extends Driver
                 $rows = $table->getArrays();
 
                 $formattedRows = [];
-                foreach ($rows as $row) {
+                foreach ($rows as &$row) {
                     $formattedRow = [];
 
                     foreach ($this->setting['grid'][$actualLayout]['items'] as $item) {
@@ -143,6 +143,7 @@ class Curd extends Driver
                             }
                         }
 
+                        $row[$itemName] = $itemValue;
                         $formattedRow[$itemName] = $itemValue;
                     }
 
@@ -162,6 +163,7 @@ class Curd extends Driver
                     }
                     $formattedRows[] = $formattedRow;
                 }
+                unset($row);
 
                 $responseData = [
                     'total' => $total,
