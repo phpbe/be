@@ -137,13 +137,14 @@ class Template extends Section
                 }
             } else {
                 echo 'top: 50%;';
-                echo 'transform: translateY(-50%);';
                 if ($this->config->contentPosition === 'left') {
+                    echo 'transform: translateY(-50%);';
                     echo 'left: 5%;';
                 } elseif ($this->config->contentPosition === 'center') {
                     echo 'left: 50%;';
-                    echo 'transform: translateX(-50%);';
+                    echo 'transform: translate(-50%, -50%);';
                 } elseif ($this->config->contentPosition === 'right') {
+                    echo 'transform: translateY(-50%);';
                     echo 'right: 5%;';
                 }
             }
@@ -207,9 +208,11 @@ class Template extends Section
             echo '<div class="banner-with-text-overlay-content">';
             echo '<h2 class="banner-with-text-overlay-title">' . $this->config->contentTitle . '</h2>';
             echo '<div class="banner-with-text-overlay-description">' . $this->config->contentDescription . '</div>';
-            echo '<div class="banner-with-text-overlay-button">';
-            echo '<a href="' . $this->config->contentButtonLink . '" class="be-btn be-btn-large">' . $this->config->contentButton . '</a>';
-            echo '</div>';
+            if ($this->config->contentButton !== '') {
+                echo '<div class="banner-with-text-overlay-button">';
+                echo '<a href="' . $this->config->contentButtonLink . '" class="be-btn be-btn-large">' . $this->config->contentButton . '</a>';
+                echo '</div>';
+            }
             echo '</div>';
             if ($this->position === 'middle' && $this->config->width === 'fullWidth') {
                 echo '</div>';
