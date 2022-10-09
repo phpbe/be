@@ -6,7 +6,7 @@
     <title><?php echo $this->title; ?></title>
     <base href="<?php echo beUrl(); ?>/" >
 
-    <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
             $.ajaxSetup({cache: false});
@@ -19,7 +19,7 @@
         });
     </script>
 
-    <link rel="stylesheet" href="//cdn.phpbe.com/ui/be.css" />
+    <link rel="stylesheet" href="https://cdn.phpbe.com/ui/be.css" />
     <?php
     $libCss = \Be\Be::getLib('Css');
     $mainColor = '#f60';

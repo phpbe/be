@@ -49,7 +49,7 @@ class Driver
         <base href="<?php echo beUrl(); ?>/">
         <link rel="icon" href="favicon.ico" type="image/x-icon"/>
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
-        <script src="https://libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
         <link rel="stylesheet" href="https://cdn.phpbe.com/ui/be.css"/>
         <?php $this->head(); ?>
     </head>
