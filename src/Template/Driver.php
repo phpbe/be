@@ -97,21 +97,8 @@ class Driver
                 if (count($this->pageConfig->middleSections)) {
                     foreach ($this->pageConfig->middleSections as $section) {
                         echo '<div class="be-section" id="' . $section->id . '">';
-
                         $section->template->page = $this;
-
-                        if ($section->key === 'be-page-title') {
-                            $section->template->before();
-                            $this->pageTitle();
-                            $section->template->after();
-                        } else if ($section->key === 'be-page-content') {
-                            $section->template->before();
-                            $this->pageContent();
-                            $section->template->after();
-                        } else {
-                            $section->template->display();
-                        }
-
+                        $section->template->display();
                         echo '</div>';
                     }
                 }
@@ -268,21 +255,8 @@ class Driver
             if (count($this->pageConfig->centerSections)) {
                 foreach ($this->pageConfig->centerSections as $section) {
                     echo '<div class="be-section" id="' . $section->id . '">';
-
                     $section->template->page = $this;
-
-                    if ($section->key === 'be-page-title') {
-                        $section->template->before();
-                        $this->pageTitle();
-                        $section->template->after();
-                    } else if ($section->key === 'be-page-content') {
-                        $section->template->before();
-                        $this->pageContent();
-                        $section->template->after();
-                    } else {
-                        $section->template->display();
-                    }
-
+                    $section->template->display();
                     echo '</div>';
                 }
             }

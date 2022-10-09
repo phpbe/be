@@ -365,21 +365,13 @@ abstract class ThemeEditor
                 $sections = [];
                 if (isset($configPage->$property) && count($configPage->$property)) {
                     foreach ($configPage->$property as $sectionIndex => $sectionData) {
-                        if ($sectionData['name'] === 'be-page-title') {
-                            $sectionName = $configPage->pageTitleSection ?? ($this->themeType . '.System.PageTitle');
-                        } else if ($sectionData['name'] === 'be-page-content') {
-                            $sectionName = $configPage->pageContentSection ?? ($this->themeType . '.System.PageContent');
-                        } else {
-                            $sectionName = $sectionData['name'];
-                        }
-
                         if (!isset($sectionData['config'])) {
-                            $sectionConfig = $this->getSectionConfig($sectionName, 'array');
+                            $sectionConfig = $this->getSectionConfig($sectionData['name'], 'array');
                         } else {
                             $sectionConfig = $sectionData['config'];
                         }
 
-                        $sections[] = $this->getSection($themeName, $pageName, $position, $sectionIndex, $sectionName, $sectionConfig);
+                        $sections[] = $this->getSection($themeName, $pageName, $position, $sectionIndex, $sectionData['name'], $sectionConfig);
                     }
                 }
                 $page->$property = $sections;
@@ -901,20 +893,13 @@ abstract class ThemeEditor
         $property = $position . 'Sections';
         $sectionData = $configPage->$property[$sectionIndex];
 
-        $sectionName = $sectionData['name'];
-        if ($sectionData['name'] === 'be-page-title') {
-            $sectionName = $configPage->pageTitleSection ?? ($this->themeType . '.System.PageTitle');
-        } elseif ($sectionData['name'] === 'be-page-content') {
-            $sectionName = $configPage->pageContentSection ?? ($this->themeType . '.System.PageContent');
-        }
-
         if (!isset($sectionData['config'])) {
-            $sectionConfig = $this->getSectionConfig($sectionName, 'array');
+            $sectionConfig = $this->getSectionConfig($sectionData['name'], 'array');
         } else {
             $sectionConfig = $sectionData['config'];
         }
 
-        $parts = explode('.', $sectionName);
+        $parts = explode('.', $sectionData['name']);
         $type = array_shift($parts);
         $name = array_shift($parts);
         $classPart = implode('\\', $parts);
@@ -977,15 +962,8 @@ abstract class ThemeEditor
         $property = $position . 'Sections';
         $sectionData = $configPage->$property[$sectionIndex];
 
-        $sectionName = $sectionData['name'];
-        if ($sectionData['name'] === 'be-page-title') {
-            $sectionName = $configPage->pageTitleSection ?? ($this->themeType . '.System.PageTitle');
-        } elseif ($sectionData['name'] === 'be-page-content') {
-            $sectionName = $configPage->pageContentSection ?? ($this->themeType . '.System.PageContent');
-        }
-
         if (!isset($sectionData['config'])) {
-            $sectionConfig = $this->getSectionConfig($sectionName, 'array');
+            $sectionConfig = $this->getSectionConfig($sectionData['name'], 'array');
         } else {
             $sectionConfig = $sectionData['config'];
         }
@@ -993,12 +971,12 @@ abstract class ThemeEditor
         $sectionItemData = $sectionConfig['items'][$itemIndex];
         $sectionItemName = $sectionItemData['name'];
         if (!isset($sectionItemData['config'])) {
-            $sectionItemConfig = $this->getSectionItemConfig($sectionName, $sectionItemName, 'array');
+            $sectionItemConfig = $this->getSectionItemConfig($sectionData['name'], $sectionItemName, 'array');
         } else {
             $sectionItemConfig = $sectionItemData['config'];
         }
 
-        $parts = explode('.', $sectionName);
+        $parts = explode('.', $sectionData['name']);
         $type = array_shift($parts);
         $name = array_shift($parts);
         $classPart = implode('\\', $parts);
@@ -1301,15 +1279,8 @@ abstract class ThemeEditor
 
         $sectionData = $configPage->$property[$sectionIndex];
 
-        $sectionName = $sectionData['name'];
-        if ($sectionData['name'] === 'be-page-title') {
-            $sectionName = $configPage->pageTitleSection ?? ($this->themeType . '.System.PageTitle');
-        } elseif ($sectionData['name'] === 'be-page-content') {
-            $sectionName = $configPage->pageContentSection ?? ($this->themeType . '.System.PageContent');
-        }
-
         if (!isset($sectionData['config'])) {
-            $sectionConfig = $this->getSectionConfig($sectionName, 'array');
+            $sectionConfig = $this->getSectionConfig($sectionData['name'], 'array');
             $configPage->$property[$sectionIndex]['config'] = $sectionConfig;
         } else {
             $sectionConfig = $sectionData['config'];
@@ -1353,15 +1324,8 @@ abstract class ThemeEditor
 
         $sectionData = $configPage->$property[$sectionIndex];
 
-        $sectionName = $sectionData['name'];
-        if ($sectionData['name'] === 'be-page-title') {
-            $sectionName = $configPage->pageTitleSection ?? ($this->themeType . '.System.PageTitle');
-        } elseif ($sectionData['name'] === 'be-page-content') {
-            $sectionName = $configPage->pageContentSection ?? ($this->themeType . '.System.PageContent');
-        }
-
         if (!isset($sectionData['config'])) {
-            $sectionConfig = $this->getSectionConfig($sectionName, 'array');
+            $sectionConfig = $this->getSectionConfig($sectionData['name'], 'array');
             $configPage->$property[$sectionIndex]['config'] = $sectionConfig;
         } else {
             $sectionConfig = $sectionData['config'];
@@ -1399,21 +1363,14 @@ abstract class ThemeEditor
 
         $sectionData = $configPage->$property[$sectionIndex];
 
-        $sectionName = $sectionData['name'];
-        if ($sectionData['name'] === 'be-page-title') {
-            $sectionName = $configPage->pageTitleSection ?? ($this->themeType . '.System.PageTitle');
-        } elseif ($sectionData['name'] === 'be-page-content') {
-            $sectionName = $configPage->pageContentSection ?? ($this->themeType . '.System.PageContent');
-        }
-
         if (!isset($sectionData['config'])) {
-            $sectionConfig = $this->getSectionConfig($sectionName, 'array');
+            $sectionConfig = $this->getSectionConfig($sectionData['name'], 'array');
             $configPage->$property[$sectionIndex]['config'] = $sectionConfig;
         } else {
             $sectionConfig = $sectionData['config'];
         }
 
-        $parts = explode('.', $sectionName);
+        $parts = explode('.', $sectionData['name']);
         $type = array_shift($parts);
         $name = array_shift($parts);
         $classPart = implode('\\', $parts);
@@ -1430,7 +1387,7 @@ abstract class ThemeEditor
             $sectionItemData = $sectionConfig['items'][$itemIndex];
             $sectionItemName = $sectionItemData['name'];
             if (!isset($sectionItemData['config'])) {
-                $sectionItemConfig = $this->getSectionItemConfig($sectionName, $sectionItemName, 'array');
+                $sectionItemConfig = $this->getSectionItemConfig($sectionData['name'], $sectionItemName, 'array');
             } else {
                 $sectionItemConfig = $sectionItemData['config'];
             }
@@ -1505,15 +1462,8 @@ abstract class ThemeEditor
 
         $sectionData = $configPage->$property[$sectionIndex];
 
-        $sectionName = $sectionData['name'];
-        if ($sectionData['name'] === 'be-page-title') {
-            $sectionName = $configPage->pageTitleSection ?? ($this->themeType . '.System.PageTitle');
-        } elseif ($sectionData['name'] === 'be-page-content') {
-            $sectionName = $configPage->pageContentSection ?? ($this->themeType . '.System.PageContent');
-        }
-
         if (!isset($sectionData['config'])) {
-            $sectionConfig = $this->getSectionConfig($sectionName, 'array');
+            $sectionConfig = $this->getSectionConfig($sectionData['name'], 'array');
             $configPage->$property[$sectionIndex]['config'] = $sectionConfig;
         } else {
             $sectionConfig = $sectionData['config'];

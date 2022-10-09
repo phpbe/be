@@ -13,10 +13,10 @@ class Page
 
     public array $centerSections = [
         [
-            'name' => 'be-page-title',
+            'name' => 'AdminTheme.System.PageTitle',
         ],
         [
-            'name' => 'be-page-content',
+            'name' => 'AdminTheme.System.PageContent',
         ],
     ];
 

@@ -27,18 +27,11 @@ class Theme
                     $sections = [];
                     foreach ($pageConfig->$property as $sectionIndex => $sectionData) {
 
-                        $sectionName = $sectionData['name'];
-                        if ($sectionData['name'] === 'be-page-title') {
-                            $sectionName = $pageConfig->pageTitleSection ?? ($themeType . '.System.PageTitle');
-                        } elseif ($sectionData['name'] === 'be-page-content') {
-                            $sectionName = $pageConfig->pageContentSection ?? ($themeType . '.System.PageContent');
-                        }
-
                         $sectionConfig = $sectionData['config'] ?? null;
 
-                        $section = $this->getSection($route, $sectionName, $sectionConfig, $position, $sectionIndex);
+                        $section = $this->getSection($route, $sectionData['name'], $sectionConfig, $position, $sectionIndex);
                         $section->key = $sectionData['name'];
-                        $section->name = $sectionName;
+                        $section->name = $sectionData['name'];
 
                         $sections[] = $section;
                     }

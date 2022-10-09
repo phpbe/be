@@ -38,26 +38,6 @@ abstract class Section
     }
 
     /**
-     * 输出前置内容
-     *
-     * 用于 be-page-title be-page-content 等用作包装功能的部件
-     * @return void
-     */
-    public function before()
-    {
-    }
-
-    /**
-     * 输出后置内容
-     *
-     * 用于 be-page-title be-page-content 等用作包装功能的部件
-     * @return void
-     */
-    public function after()
-    {
-    }
-
-    /**
      * 背景色 CSS
      *
      * @param string $cssClass 样式类名
