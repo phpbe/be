@@ -9,6 +9,13 @@ class Template extends Section
 
     public array $positions = ['middle', 'center'];
 
+    public function display()
+    {
+        $this->before();
+        $this->page->pageContent();
+        $this->after();
+    }
+
     public function before()
     {
         if ($this->config->enable) {
