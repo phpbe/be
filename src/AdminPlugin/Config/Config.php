@@ -62,7 +62,7 @@ class Config extends Driver
         $response->set('configs', $configs);
 
         $configName = $request->get('configName', '');
-        if (!$configName) {
+        if (!$configName && count($configs) > 0) {
             $configName = $configs[0]['name'];
         }
         $response->set('configName', $configName);
