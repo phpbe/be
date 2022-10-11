@@ -34,7 +34,7 @@ function beUrl($route = null, array $params = null)
         }
     }
 
-    if ($configSystem->urlRewrite === '1') {
+    if ($configSystem->urlRewrite === 'simple') {
         $url = $rootUrl . '/' . str_replace('.', '/', $route);
         if ($params !== null && $params) {
             $urlParams = '';
@@ -45,7 +45,7 @@ function beUrl($route = null, array $params = null)
         }
         $url .= $configSystem->urlSuffix;
         return $url;
-    } elseif ($configSystem->urlRewrite === '2') {
+    } elseif ($configSystem->urlRewrite === 'router') {
         return \Be\Router\Helper::encode($route, $params);
     } else {
         $url = $rootUrl . '/?route=' . $route;
@@ -87,15 +87,15 @@ function beAdminUrl($route = null, array $params = null)
                 $route = Be\Be::getConfig('App.System.Admin')->home;
             }
         } else {
-            if ($configSystem->urlRewrite) {
-                return $rootUrl . '/' . $adminAlias;
+            if ($configSystem->urlRewrite === 'disable') {
+                return $rootUrl . '/?' . $adminAlias;
             } else {
-                return $rootUrl . '/?' . $adminAlias . '=1';
+                return $rootUrl . '/' . $adminAlias;
             }
         }
     }
 
-    if ($configSystem->urlRewrite) {
+    if ($configSystem->urlRewrite !== 'disable') {
         $url = $rootUrl . '/' . $adminAlias . '/' . str_replace('.', '/', $route);
         if ($params !== null && $params) {
             $urlParams = '';
@@ -104,7 +104,7 @@ function beAdminUrl($route = null, array $params = null)
             }
             $url .= $urlParams;
         }
-        if ($configSystem->urlRewrite === '1') {
+        if ($configSystem->urlRewrite === 'simple') {
             $url .= $configSystem->urlSuffix;
         }
         return $url;

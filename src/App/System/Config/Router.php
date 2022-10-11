@@ -2,7 +2,7 @@
 namespace Be\App\System\Config;
 
 /**
- * @BeConfig("路由器", enable="return \Be\Be::getConfig('App.System.System')->urlRewrite === '2';")
+ * @BeConfig("路由器", enable="return \Be\Be::getConfig('App.System.System')->urlRewrite === 'router';")
  */
 class Router
 {

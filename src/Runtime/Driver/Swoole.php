@@ -167,10 +167,10 @@ class Swoole extends Driver
                 $action = null;
 
                 // 从网址中提取出 路径
-                if ($configSystem->urlRewrite) {
+                if ($configSystem->urlRewrite !== 'disable') {
 
                     // 移除网址后缀 如：.html
-                    if ($configSystem->urlRewrite === '1') {
+                    if ($configSystem->urlRewrite === 'simple') {
                         $lenSefSuffix = strlen($configSystem->urlSuffix);
                         if ($lenSefSuffix > 0 && substr($uri, -$lenSefSuffix, $lenSefSuffix) === $configSystem->urlSuffix) {
                             $uri = substr($uri, 0, strrpos($uri, $configSystem->urlSuffix));
@@ -187,7 +187,7 @@ class Swoole extends Driver
                     }
 
                     $routeParsed = false;
-                    if (!$admin && $configSystem->urlRewrite === '2') {
+                    if (!$admin && $configSystem->urlRewrite === 'router') {
                         if ($uri === '/') {
                             $route = $request->get('route', '');
                             if ($route) {

@@ -40,7 +40,7 @@ class Common extends Driver
             $action = null;
 
             // 从网址中提取出 路径
-            if ($configSystem->urlRewrite) {
+            if ($configSystem->urlRewrite !== 'disable') {
                 /*
                  * REQUEST_URI 可能值为：[/path]/{app}/{controller}/{action}[/{k-v}].html?[k=v]
                  * 需要解析的有效部分为： {app}/{controller}/{action}[/{k-v}]
@@ -67,7 +67,7 @@ class Common extends Driver
                 }
 
                 // 移除网址后缀 如：.html
-                if ($configSystem->urlRewrite === '1') {
+                if ($configSystem->urlRewrite === 'simple') {
                     $lenSefSuffix = strlen($configSystem->urlSuffix);
                     if ($lenSefSuffix > 0 && substr($uri, -$lenSefSuffix, $lenSefSuffix) === $configSystem->urlSuffix) {
                         $uri = substr($uri, 0, strrpos($uri, $configSystem->urlSuffix));
@@ -84,7 +84,7 @@ class Common extends Driver
                 }
 
                 $routeParsed = false;
-                if (!$admin && $configSystem->urlRewrite === '2') {
+                if (!$admin && $configSystem->urlRewrite === 'router') {
 
                     if ($uri === '/') {
                         $route = $request->get('route', '');
