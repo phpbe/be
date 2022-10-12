@@ -365,13 +365,20 @@ abstract class ThemeEditor
                 $sections = [];
                 if (isset($configPage->$property) && count($configPage->$property)) {
                     foreach ($configPage->$property as $sectionIndex => $sectionData) {
-                        if (!isset($sectionData['config'])) {
-                            $sectionConfig = $this->getSectionConfig($sectionData['name'], 'array');
-                        } else {
-                            $sectionConfig = $sectionData['config'];
+
+                        try {
+                            if (!isset($sectionData['config'])) {
+                                $sectionConfig = $this->getSectionConfig($sectionData['name'], 'array');
+                            } else {
+                                $sectionConfig = $sectionData['config'];
+                            }
+
+                            $section = $this->getSection($themeName, $pageName, $position, $sectionIndex, $sectionData['name'], $sectionConfig);
+                        } catch (\Throwable $t) {
+                            continue;
                         }
 
-                        $sections[] = $this->getSection($themeName, $pageName, $position, $sectionIndex, $sectionData['name'], $sectionConfig);
+                        $sections[] = $section;
                     }
                 }
                 $page->$property = $sections;
@@ -431,7 +438,11 @@ abstract class ThemeEditor
                 $items = scandir($path);
                 foreach ($items as $name) {
                     if ($name === '.' || $name === '..') continue;
-                    $section = $this->getSectionSummary('App.' . $app->name . '.' . $name);
+                    try {
+                        $section = $this->getSectionSummary('App.' . $app->name . '.' . $name);
+                    } catch (\Throwable $t) {
+                        continue;
+                    }
                     if (count($section->positions) > 0 && (in_array($position, $section->positions) || in_array('*', $section->positions))) {
                         if (count($section->routes) > 0 && (in_array($route, $section->routes) || in_array('*', $section->routes))) {
                             $sections[] = $section;
@@ -470,7 +481,13 @@ abstract class ThemeEditor
                 $items = scandir($path);
                 foreach ($items as $name) {
                     if ($name === '.' || $name === '..') continue;
-                    $section = $this->getSectionSummary($this->themeType . '.' . $theme->name . '.' . $name);
+
+                    try {
+                        $section = $this->getSectionSummary($this->themeType . '.' . $theme->name . '.' . $name);
+                    } catch (\Throwable $t) {
+                        continue;
+                    }
+
                     if (count($section->positions) > 0 && (in_array($position, $section->positions) || in_array('*', $section->positions))) {
                         if (count($section->routes) > 0 && (in_array($route, $section->routes) || in_array('*', $section->routes))) {
                             $sections[] = $section;

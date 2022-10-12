@@ -26,14 +26,14 @@ class Theme
                 if (isset($pageConfig->$property) && is_array($pageConfig->$property) && count($pageConfig->$property) > 0) {
                     $sections = [];
                     foreach ($pageConfig->$property as $sectionIndex => $sectionData) {
-
                         $sectionConfig = $sectionData['config'] ?? null;
-
-                        $section = $this->getSection($route, $sectionData['name'], $sectionConfig, $position, $sectionIndex);
-                        $section->key = $sectionData['name'];
-                        $section->name = $sectionData['name'];
-
-                        $sections[] = $section;
+                        try {
+                            $section = $this->getSection($route, $sectionData['name'], $sectionConfig, $position, $sectionIndex);
+                            $section->key = $sectionData['name'];
+                            $section->name = $sectionData['name'];
+                            $sections[] = $section;
+                        } catch (\Throwable $t) {
+                        }
                     }
                     $pageConfig->$property = $sections;
                 } else {
