@@ -3,7 +3,7 @@ namespace Be\Theme\System\Section\PageContent;
 
 
 /**
- * @BeConfig("页面主体内容", icon="el-icon-fa fa-navicon", ordering="2")
+ * @BeConfig("页面主体内容", icon="bi-text-left", ordering="2")
  */
 class Config
 {

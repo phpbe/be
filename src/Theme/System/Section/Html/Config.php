@@ -3,7 +3,7 @@ namespace Be\Theme\System\Section\Html;
 
 
 /**
- * @BeConfig("HTML源码", icon="el-icon-fa fa-file-code-o")
+ * @BeConfig("HTML源码", icon="bi-code")
  */
 class Config
 {

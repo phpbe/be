@@ -3,7 +3,7 @@ namespace Be\Theme\System\Section\Css;
 
 
 /**
- * @BeConfig("CSS样式", icon="el-icon-fa fa-file-code-o")
+ * @BeConfig("CSS样式", icon="bi-code")
  */
 class Config
 {

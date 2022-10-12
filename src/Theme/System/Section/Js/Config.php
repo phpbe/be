@@ -3,7 +3,7 @@ namespace Be\Theme\System\Section\Js;
 
 
 /**
- * @BeConfig("JS脚本", icon="el-icon-fa fa-file-code-o")
+ * @BeConfig("JS脚本", icon="bi-code")
  */
 class Config
 {

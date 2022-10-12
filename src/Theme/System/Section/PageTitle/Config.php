@@ -3,7 +3,7 @@ namespace Be\Theme\System\Section\PageTitle;
 
 
 /**
- * @BeConfig("页面主体标题", icon="el-icon-fa fa-minus", ordering="1")
+ * @BeConfig("页面主体标题", icon="bi-type-h1", ordering="1")
  */
 class Config
 {
