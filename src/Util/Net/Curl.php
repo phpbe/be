@@ -150,8 +150,6 @@ class Curl
      */
     static public function request(string $method, string $url, $data = null, array $headers = null, array $customOptions = null)
     {
-        $url = strtolower($url);
-
         $options = [
             CURLOPT_URL => $url,
             CURLOPT_CONNECTTIMEOUT => 15, // 连接超时
