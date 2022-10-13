@@ -47,7 +47,7 @@ $config = \Be\Be::getConfig('App.System.System');
 <?php
 $return = \Be\Be::getRequest()->get('return', '');
 if ($return=='') {
-    $return = beAdminUrl('System.Index.index');
+    $return = beAdminUrl('System.Home.index');
 } else {
     $return = base64_decode($return);
 }

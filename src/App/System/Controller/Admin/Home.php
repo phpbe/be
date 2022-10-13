@@ -5,10 +5,10 @@ use Be\App\ControllerException;
 use Be\Be;
 
 /**
- * Class Index
+ * Class Home
  * @package Be\App\System\Controller
  */
-class Index
+class Home
 {
 
     /**

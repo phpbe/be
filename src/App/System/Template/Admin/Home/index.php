@@ -83,7 +83,7 @@ $configAdminUser = \Be\Be::getConfig('App.System.AdminUser');
             <el-card shadow="hover">
                 <div slot="header" class="clearfix">
                     <span>最近操作日志</span>
-                    <el-button style="float: right; padding: 3px 0" type="text" @click="window.location.href='<?php echo beAdminUrl('System.SystemLog.logs')?>'">更多..</el-button>
+                    <el-button style="float: right; padding: 3px 0" type="text" @click="window.location.href='<?php echo beAdminUrl('System.AdminOpLog.logs')?>'">更多..</el-button>
                 </div>
 
                 <el-table :data="recentLogs" stripe size="medium">
@@ -111,7 +111,7 @@ $configAdminUser = \Be\Be::getConfig('App.System.AdminUser');
             <el-card shadow="hover">
                 <div slot="header" class="clearfix">
                     <span>最近登录日志</span>
-                    <el-button style="float: right; padding: 3px 0" type="text" @click="window.location.href='<?php echo beAdminUrl('System.UserLoginLog.logs')?>'">更多..</el-button>
+                    <el-button style="float: right; padding: 3px 0" type="text" @click="window.location.href='<?php echo beAdminUrl('System.AdminUserLoginLog.logs')?>'">更多..</el-button>
                 </div>
 
                 <el-table :data="recentLoginLogs" stripe size="medium">

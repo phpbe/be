@@ -10,7 +10,7 @@ class Admin
     /**
      * @BeConfigItem("默认首页", driver="FormItemInput")
      */
-    public $home = 'System.Index.index';
+    public $home = 'System.Home.index';
 
     /**
      * @BeConfigItem("默认分页条数（条/页）",
