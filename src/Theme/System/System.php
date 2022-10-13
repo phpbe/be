@@ -16,15 +16,7 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 
     <link rel="stylesheet" href="https://cdn.phpbe.com/ui/be.css"/>
-
-    <?php
-    $configTheme = \Be\Be::getConfig('Theme.System.Theme');
-    if ($configTheme->loadBeIcons === 1) {
-        ?>
-        <link rel="stylesheet" href="https://cdn.phpbe.com/ui/be-icons.css"/>
-        <?php
-    }
-    ?>
+    <link rel="stylesheet" href="https://cdn.phpbe.com/ui/be-icons.css"/>
 
     <?php
     $themeWwwUrl = \Be\Be::getProperty('Theme.System')->getWwwUrl();
