@@ -434,7 +434,7 @@ class Curd extends Driver
                         $sql = $buildSql($this->setting['db'], [$driver->name => $key]);
                         if ($sql) {
                             if (isset($sql[0]) && is_array($sql[0])) {
-                                $table->conditon($sql);
+                                $table->condition($sql);
                             } else {
                                 $table->where($sql);
                             }
@@ -474,7 +474,7 @@ class Curd extends Driver
                 $sql = $buildSql($this->setting['db'], $formData);
                 if ($sql) {
                     if (isset($sql[0]) && is_array($sql[0])) {
-                        $table->conditon($sql);
+                        $table->condition($sql);
                     } else {
                         $table->where($sql);
                     }
@@ -519,7 +519,7 @@ class Curd extends Driver
                     $sql = $buildSql($this->setting['db'], $formData);
                     if ($sql) {
                         if (isset($sql[0]) && is_array($sql[0])) {
-                            $table->conditon($sql);
+                            $table->condition($sql);
                         } else {
                             $table->where($sql);
                         }
@@ -774,7 +774,7 @@ class Curd extends Driver
                             $tableUnique = Be::getTable($this->setting['table'], $this->setting['db']);
                             $tableUnique->where($name, $driver->newValue);
                             if (is_array($item['unique'])) {
-                                $tableUnique->conditon($item['unique']);
+                                $tableUnique->condition($item['unique']);
                             }
                             if ($tableUnique->count() > 0) {
                                 throw new AdminPluginException($driver->label . ' 已存在 ' . $driver->newValue . ' 的记录！');
@@ -939,7 +939,7 @@ class Curd extends Driver
                             }
 
                             if (is_array($item['unique'])) {
-                                $tableUnique->conditon($item['unique']);
+                                $tableUnique->condition($item['unique']);
                             }
 
                             if ($tableUnique->count() > 0) {

@@ -197,7 +197,7 @@ class Table
      * @return Table
      * @example
      * <pre>
-     * $table->conditon([
+     * $table->condition([
      *     ['username','Tom'],
      *     'OR',
      *     ['age','>',18],
