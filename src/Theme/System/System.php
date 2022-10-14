@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="<?php echo $themeWwwUrl; ?>/css/theme.css"/>
 
     <?php
-
+    $configTheme = \Be\Be::getConfig('Theme.System.Theme');
     $libCss = \Be\Be::getLib('Css');
     $mainColor = $configTheme->mainColor;
     $mainColor1 = $libCss->lighter($mainColor, 10);
