@@ -181,8 +181,6 @@ class Template extends Section
         echo '}';
 
         echo '#' . $this->id . ' .header-desktop-menu li {';
-        echo 'margin: 0;';
-        echo 'padding: 0;';
         echo 'list-style: none;';
         echo '}';
 
