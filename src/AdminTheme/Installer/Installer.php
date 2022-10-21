@@ -153,7 +153,7 @@
                     if ($currentStep < $i) {
                         $class = 'be-c-ccc';
                     } else if ($currentStep === $i) {
-                        $class = 'be-c-main';
+                        $class = 'be-c-major';
                     } else {
                         $class = 'be-c-green';
                     }

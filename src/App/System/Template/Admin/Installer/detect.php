@@ -48,7 +48,7 @@
     ?>
     <div class="be-mt-200 be-bt-eee be-pt-100 be-ta-center">
         <form action="<?php echo \Be\Be::getRequest()->getUrl(); ?>" method="post">
-            <input type="submit" class="be-btn be-btn-main"<?php echo $this->isAllPassed ? '' : ' disabled'; ?> value="继续安装">
+            <input type="submit" class="be-btn be-btn-major"<?php echo $this->isAllPassed ? '' : ' disabled'; ?> value="继续安装">
         </form>
     </div>
 

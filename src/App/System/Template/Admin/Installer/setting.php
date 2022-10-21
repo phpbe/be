@@ -50,7 +50,7 @@
 
         <div class="be-mt-200 be-bt-eee be-pt-100 be-ta-center">
             <a class="be-btn" href="<?php echo beAdminUrl('System.Installer.installApp'); ?>">上一步</a>
-            <input type="button" class="be-btn be-btn-main" value="完成安装" onclick="setting()">
+            <input type="button" class="be-btn be-btn-major" value="完成安装" onclick="setting()">
         </div>
 
     </form>
