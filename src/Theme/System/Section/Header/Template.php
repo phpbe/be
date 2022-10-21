@@ -175,6 +175,16 @@ class Template extends Section
         echo 'font-size: 1.25rem;';
         echo '}';
 
+        echo '#' . $this->id . ' .header-desktop-menu ul {';
+        echo 'margin: 0;';
+        echo 'padding: 0;';
+        echo '}';
+
+        echo '#' . $this->id . ' .header-desktop-menu li {';
+        echo 'margin: 0;';
+        echo 'padding: 0;';
+        echo 'list-style: none;';
+        echo '}';
 
         echo '#' . $this->id . ' .header-desktop-menu-lv1-item,';
         echo '#' . $this->id . ' .header-desktop-menu-lv1-item-with-dropdown {';

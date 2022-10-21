@@ -49,6 +49,15 @@
             }
             ?>
         }
+
+        a {
+            color: <?php echo $configTheme->linkColor; ?>;
+        }
+
+        a:hover {
+            color: <?php echo $configTheme->linkHoverColor; ?>;
+        }
+
     </style>
 
     <be-head>

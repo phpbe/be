@@ -12,12 +12,10 @@ body {
 a {
     text-decoration: none;
     transition: color 0.3s ease;
-    color: var(--major-color);
 }
 
 a:active, a:hover {
     outline: none;
-    color: var(--major-color3);
     text-decoration: none;
 }
 
