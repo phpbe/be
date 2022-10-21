@@ -11,7 +11,7 @@ class Theme
      * @BeConfigItem("主色调",
      *     driver="FormItemColorPicker")
      */
-    public string $mainColor = '#FF6600';
+    public string $majorColor = '#FF6600';
 
     /**
      * @BeConfigItem("字体大小",
@@ -30,17 +30,5 @@ class Theme
      *     driver="FormItemColorPicker")
      */
     public string $fontColor = '#333333';
-
-    /**
-     * @BeConfigItem("超链接颜色",
-     *     driver="FormItemColorPicker")
-     */
-    public string $linkColor = '#333333';
-
-    /**
-     * @BeConfigItem("超链接悬停颜色",
-     *     driver="FormItemColorPicker")
-     */
-    public string $linkHoverColor = '#FF6600';
 
 }

@@ -19,28 +19,14 @@
     <link rel="stylesheet" href="https://cdn.phpbe.com/ui/be-icons.css"/>
 
     <?php
+    $configTheme = \Be\Be::getConfig('Theme.System.Theme');
     $themeWwwUrl = \Be\Be::getProperty('Theme.System')->getWwwUrl();
     ?>
     <link rel="stylesheet" href="<?php echo $themeWwwUrl; ?>/css/drawer.css"/>
     <script src="<?php echo $themeWwwUrl; ?>/js/drawer-menu.js"></script>
 
-    <link rel="stylesheet" href="<?php echo $themeWwwUrl; ?>/css/theme.css"/>
+    <link rel="stylesheet" href="<?php echo $themeWwwUrl; ?>/css/theme.css?v=20221021"/>
 
-    <?php
-    $configTheme = \Be\Be::getConfig('Theme.System.Theme');
-    $libCss = \Be\Be::getLib('Css');
-    $mainColor = $configTheme->mainColor;
-    $mainColor1 = $libCss->lighter($mainColor, 10);
-    $mainColor2 = $libCss->lighter($mainColor, 20);
-    $mainColor3 = $libCss->lighter($mainColor, 30);
-    $mainColor4 = $libCss->lighter($mainColor, 40);
-    $mainColor5 = $libCss->lighter($mainColor, 50);
-    $mainColor6 = $libCss->lighter($mainColor, 60);
-    $mainColor7 = $libCss->lighter($mainColor, 70);
-    $mainColor8 = $libCss->lighter($mainColor, 80);
-    $mainColor9 = $libCss->lighter($mainColor, 90);
-    $mainColorHover = $libCss->darker($mainColor, 10);
-    ?>
     <style type="text/css">
         html {
             font-size: <?php echo $configTheme->fontSize; ?>px;
@@ -49,29 +35,19 @@
         }
 
         body {
-            --main-color: <?php echo $mainColor; ?>;
-            --main-color-1: <?php echo $mainColor1; ?>;
-            --main-color-2: <?php echo $mainColor2; ?>;
-            --main-color-3: <?php echo $mainColor3; ?>;
-            --main-color-4: <?php echo $mainColor4; ?>;
-            --main-color-5: <?php echo $mainColor5; ?>;
-            --main-color-6: <?php echo $mainColor6; ?>;
-            --main-color-7: <?php echo $mainColor7; ?>;
-            --main-color-8: <?php echo $mainColor8; ?>;
-            --main-color-9: <?php echo $mainColor9; ?>;
-            --main-color-hover: <?php echo $mainColorHover; ?>;
-        }
+            <?php
+            // 主题配置
+            $configTheme = \Be\Be::getConfig('Theme.System.Theme');
 
-        a {
-            color: <?php echo $configTheme->linkColor; ?>;
-        }
+            echo '--major-color: ' . $configTheme->majorColor . ';';
 
-        a:hover {
-            color: <?php echo $configTheme->linkHoverColor; ?>;
-        }
-
-        .link-hover:before {
-            background-color: <?php echo $configTheme->linkHoverColor; ?>;
+            // CSS 处理库
+            $libCss = \Be\Be::getLib('Css');
+            for ($i=1; $i<=9; $i++) {
+                echo '--major-color-' . $i. ': ' . $libCss->lighter($configTheme->majorColor, $i * 10) . ';';
+                echo '--major-color' . $i. ': ' . $libCss->darker($configTheme->majorColor, $i * 10) . ';';
+            }
+            ?>
         }
     </style>
 
