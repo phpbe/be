@@ -13,7 +13,7 @@ $configAdminUser = \Be\Be::getConfig('App.System.AdminUser');
                 if ($this->adminUser->avatar === '') {
                     echo \Be\Be::getProperty('App.System')->getWwwUrl().'/admin/admin-user/images/avatar.png';
                 } else {
-                    echo $this->adminUser->avatar;
+                    echo \Be\Be::getStorage()->getRootUrl() . '/app/system/admin-user/avatar/'. $this->adminUser->avatar;
                 }
                 ?>"></el-image>
 

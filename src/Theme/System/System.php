@@ -36,9 +36,6 @@
 
         body {
             <?php
-            // 主题配置
-            $configTheme = \Be\Be::getConfig('Theme.System.Theme');
-
             echo '--major-color: ' . $configTheme->majorColor . ';';
 
             // CSS 处理库
