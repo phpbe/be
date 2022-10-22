@@ -92,7 +92,7 @@
                                 <template slot-scope="scope">
                                     <div v-if="scope.row.type === 'dir'" class="file-icon">
                                         <el-link @click="setPath(formData.path + scope.row.name + '/')" :underline="false">
-                                            <el-image src="<?php echo $appSystemWwwUrl; ?>/Template/Admin/Storage/images/types/folder_s.png"></el-image>
+                                            <el-image src="<?php echo $appSystemWwwUrl; ?>/admin/storage/images/types/folder_s.png"></el-image>
                                         </el-link>
                                     </div>
                                     <div v-else class="file-icon">
