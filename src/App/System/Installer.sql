@@ -145,16 +145,17 @@ CREATE TABLE `system_task` (
 
 
 CREATE TABLE `system_task_log` (
-  `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
-  `task_id` varchar(36) NOT NULL DEFAULT '' COMMENT '任务ID',
-  `data` varchar(300) NOT NULL DEFAULT '' COMMENT '任务数据（JSON格式）',
-  `status` varchar(30) NOT NULL DEFAULT 'RUNNING' COMMENT '状态（RUNNING：运行中/COMPLETE：执行完成/ERROR：出错）	',
-  `message` varchar(600) NOT NULL DEFAULT '' COMMENT '异常信息',
-  `trigger` varchar(30) NOT NULL DEFAULT 'SYSTEM' COMMENT '触发方式：SYSTEM：系统调度/MANUAL：人工启动',
-  `complete_time` timestamp NULL COMMENT '完成时间',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`),
-  KEY `task_id` (`task_id`)
+`id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
+`task_id` varchar(36) NOT NULL DEFAULT '' COMMENT '任务ID',
+`data` varchar(300) NOT NULL DEFAULT '' COMMENT '任务数据（JSON格式）',
+`status` varchar(30) NOT NULL DEFAULT 'RUNNING' COMMENT '状态（RUNNING：运行中/COMPLETE：执行完成/ERROR：出错）',
+`message` varchar(600) NOT NULL DEFAULT '' COMMENT '异常信息',
+`trigger` varchar(30) NOT NULL DEFAULT 'SYSTEM' COMMENT '触发方式：SYSTEM：系统调度/MANUAL：人工启动',
+`complete_time` timestamp NULL DEFAULT NULL COMMENT '完成时间',
+`create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+`update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='抽取数据';
 
+ALTER TABLE `system_task_log`
+ADD PRIMARY KEY (`id`),
+ADD KEY `task_id` (`task_id`,`status`) USING BTREE;

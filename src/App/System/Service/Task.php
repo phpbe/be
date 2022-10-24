@@ -218,6 +218,8 @@ class Task
                 curl_setopt($curl, CURLOPT_TIMEOUT, 1);
                 curl_exec($curl);
                 curl_close($curl);
+
+                usleep(100);
             }
         }
     }
