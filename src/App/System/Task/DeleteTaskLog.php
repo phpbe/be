@@ -6,7 +6,7 @@ use Be\Be;
 use Be\Task\TaskException;
 
 /**
- * @BeTask("删除任务日志", schedule='0 2 * * *')
+ * @BeTask("删除任务日志", schedule = "0 2 * * *")
  */
 class DeleteTaskLog extends \Be\Task\TaskInterval
 {
