@@ -193,7 +193,7 @@ class Template extends Section
         echo '}';
 
         echo '#' . $this->id . ' .header-desktop-menu-lv1-item-active > a {';
-        echo 'color: var(--main-color);';
+        echo 'color: var(--major-color);';
         echo '}';
 
         echo '#' . $this->id . ' .header-desktop-menu-lv1-item-with-dropdown:after {';

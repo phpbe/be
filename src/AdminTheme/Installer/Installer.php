@@ -19,36 +19,28 @@
         });
     </script>
 
-    <link rel="stylesheet" href="https://cdn.phpbe.com/ui/be.css" />
-    <?php
-    $libCss = \Be\Be::getLib('Css');
-    $mainColor = '#f60';
-    $mainColor1 = $libCss->lighter($mainColor, 10);
-    $mainColor2 = $libCss->lighter($mainColor, 20);
-    $mainColor3 = $libCss->lighter($mainColor, 30);
-    $mainColor4 = $libCss->lighter($mainColor, 40);
-    $mainColor5 = $libCss->lighter($mainColor, 50);
-    $mainColor6 = $libCss->lighter($mainColor, 60);
-    $mainColor7 = $libCss->lighter($mainColor, 70);
-    $mainColor8 = $libCss->lighter($mainColor, 80);
-    $mainColor9 = $libCss->lighter($mainColor, 90);
-    $mainColorHover = $libCss->darker($mainColor, 10);
-    ?>
+    <link rel="stylesheet" href="https://cdn.phpbe.com/ui/be.css"/>
+    <link rel="stylesheet" href="https://cdn.phpbe.com/ui/be-icons.css"/>
+
     <style type="text/css">
+        html {
+            font-size: 16px;
+            background-color: #fff;
+            color: #333;
+        }
+
         body {
-            --main-color: <?php echo $mainColor; ?>;
-            --main-color-1: <?php echo $mainColor1; ?>;
-            --main-color-2: <?php echo $mainColor2; ?>;
-            --main-color-3: <?php echo $mainColor3; ?>;
-            --main-color-4: <?php echo $mainColor4; ?>;
-            --main-color-5: <?php echo $mainColor5; ?>;
-            --main-color-6: <?php echo $mainColor6; ?>;
-            --main-color-7: <?php echo $mainColor7; ?>;
-            --main-color-8: <?php echo $mainColor8; ?>;
-            --main-color-9: <?php echo $mainColor9; ?>;
-            --main-color-hover: <?php echo $mainColorHover; ?>;
-            margin: 0;
-            padding: 0;
+        <?php
+        $majorColor = '#f60';
+        echo '--major-color: ' . $majorColor . ';';
+
+        // CSS 处理库
+        $libCss = \Be\Be::getLib('Css');
+        for ($i=1; $i<=9; $i++) {
+            echo '--major-color-' . $i. ': ' . $libCss->lighter($majorColor, $i * 10) . ';';
+            echo '--major-color' . $i. ': ' . $libCss->darker($majorColor, $i * 10) . ';';
+        }
+        ?>
         }
 
         @keyframes ajaxLoading {
@@ -87,7 +79,7 @@
             -webkit-animation: ajaxLoading 1.2s cubic-bezier(.5, 0, .5, 1) infinite;
             -o-animation: ajaxLoading 1.2s cubic-bezier(.5, 0, .5, 1) infinite;
             animation: ajaxLoading 1.2s cubic-bezier(.5, 0, .5, 1) infinite;
-            border-color: var(--main-color) transparent transparent transparent;
+            border-color: var(--major-color) transparent transparent transparent;
         }
 
         #ajax-loader div:nth-child(1) {
@@ -117,7 +109,7 @@
 </head>
 <body>
 <be-body>
-    <div class="be-py-75" style="background-color: var(--main-color-9)">
+    <div class="be-py-75" style="background-color: var(--major-color-9)">
         <div class="be-container">
             <div class="be-row">
                 <div class="be-col-auto">
