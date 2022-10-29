@@ -78,6 +78,15 @@ class FormItemTinymce extends FormItem
             'convert_urls' => false,
         ];
 
+        $contentCss = '';
+        $contentCss .= 'https://cdn.phpbe.com/ui/be.css,';
+        $contentCss .= 'https://cdn.phpbe.com/ui/be-icons.css';
+        if (!isset($this->option['content_css']) || $this->option['content_css'] === '') {
+            $this->option['content_css'] = $contentCss;
+        } else {
+            $this->option['content_css'] .= ',' . $contentCss;
+        }
+
         switch ($layout) {
             case 'basic':
                 $this->option = array_merge($this->option, [
@@ -111,9 +120,8 @@ class FormItemTinymce extends FormItem
 
                 $this->js[] = $appSystemWwwUrl . '/lib/highlight.js/highlight.js-11.5.1/highlight.min.js';
 
-                // $contentCss = Be::getProperty('App.System')->getWwwUrl() . '/lib/highlight.js/highlight.js-11.5.1/default.min.css';
                 $contentCss = $appSystemWwwUrl . '/lib/highlight.js/highlight.js-11.5.1/styles/atom-one-light.css';
-                $this->option['content_css'] = $contentCss;
+                $this->option['content_css'] .= ',' . $contentCss;
 
                 break;
         }
