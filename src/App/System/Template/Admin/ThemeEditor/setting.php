@@ -221,7 +221,7 @@
                                         <template v-if="section.items.existItems">
                                             <draggable v-model="section.items.existItems" :disabled="!section.items.newItems" handle=".item-drag-icon" force-fallback="true" :group="'<?php echo $position; ?>' + sectionIndex" animation="100" @update="sectionItemDragUpdate">
                                                 <transition-group>
-                                                    <li v-for="(existItem, existItemKey) in section.items.existItems" :key="existItemKey" data-position="<?php echo $position; ?>" :data-sectionIndex="sectionIndex">
+                                                    <li v-for="(existItem, existItemKey) in section.items.existItems" :key="existItemKey" data-position="<?php echo $position; ?>" :data-section-index="sectionIndex">
                                                         <div style="display: flex">
                                                             <div style="flex: 1">
                                                                 <a href="javascript:void(0);" @click="editItem(existItem.url, '<?php echo $position; ?>', sectionIndex)" :class="activeUrl === existItem.url ? 'active' : ''">
