@@ -191,7 +191,7 @@
                     <ul class="west-links <?php echo $position; ?>-west-links" v-if="currentPosition === '<?php echo $position; ?>'">
                         <draggable v-model="page.<?php echo $position; ?>Sections" handle=".drag-icon" force-fallback="true" group="<?php echo $position; ?>" animation="100" @update="sectionDragUpdate">
                             <transition-group>
-                                <li v-for="(section, sectionIndex) in page.<?php echo $position; ?>Sections" :key="sectionIndex" data-sectiontype="<?php echo $position; ?>">
+                                <li v-for="(section, sectionIndex) in page.<?php echo $position; ?>Sections" :key="sectionIndex" data-position="<?php echo $position; ?>">
                                     <div style="display: flex">
                                         <div style="flex: 0 0 20px; height: 30px; line-height: 30px;">
                                             <a v-if="section.items" href="javascript:void(0);" @click="toggleSectionItems('<?php echo $position; ?>', sectionIndex)">
@@ -221,7 +221,7 @@
                                         <template v-if="section.items.existItems">
                                             <draggable v-model="section.items.existItems" :disabled="!section.items.newItems" handle=".item-drag-icon" force-fallback="true" :group="'<?php echo $position; ?>' + sectionIndex" animation="100" @update="sectionItemDragUpdate">
                                                 <transition-group>
-                                                    <li v-for="(existItem, existItemKey) in section.items.existItems" :key="existItemKey" data-sectiontype="<?php echo $position; ?>" :data-sectionkey="sectionIndex">
+                                                    <li v-for="(existItem, existItemKey) in section.items.existItems" :key="existItemKey" data-position="<?php echo $position; ?>" :data-sectionIndex="sectionIndex">
                                                         <div style="display: flex">
                                                             <div style="flex: 1">
                                                                 <a href="javascript:void(0);" @click="editItem(existItem.url, '<?php echo $position; ?>', sectionIndex)" :class="activeUrl === existItem.url ? 'active' : ''">
@@ -518,7 +518,7 @@
 
                     var _this = this;
                     _this.$http.post("<?php echo beAdminUrl('System.'.$this->themeType.'.sortSection', ['themeName' => $this->themeName, 'pageName' => $this->pageName]); ?>", {
-                        position: event.item.dataset.sectiontype,
+                        position: event.item.dataset.position,
                         oldIndex: event.oldIndex,
                         newIndex: event.newIndex,
                     }).then(function (response) {
