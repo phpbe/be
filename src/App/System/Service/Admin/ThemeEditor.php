@@ -1495,7 +1495,7 @@ abstract class ThemeEditor
 
         $tmpData = $sectionConfigItems[$oldIndex];
         unset($sectionConfigItems[$oldIndex]);
-        $arr = array_slice($sectionConfigItems['items'], 0, $newIndex);
+        $arr = array_slice($sectionConfigItems, 0, $newIndex);
         $arr[] = $tmpData;
         $arr = array_merge($arr, array_slice($sectionConfigItems, $newIndex));
 
