@@ -1263,15 +1263,15 @@ abstract class ThemeEditor
             }
         }
 
-        $configInstance = Be::getConfig($configKey);
+        $configPage = Be::getConfig($configKey);
 
-        $newValues = $this->submitFormData($class, $formData, get_object_vars($configInstance));
+        $newValues = $this->submitFormData($class, $formData, get_object_vars($configPage));
 
         foreach ($newValues as $key => $val) {
-            $configInstance->$key = $val;
+            $configPage->$key = $val;
         }
 
-        ConfigHelper::update($configKey, $configInstance);
+        $this->saveConfigPage($configKey, $configPage);
     }
 
     /**
@@ -1287,6 +1287,7 @@ abstract class ThemeEditor
         } else {
             $configKey = $this->themeType . '.' . $themeName . '.Page.' . $pageName;
         }
+
         ConfigHelper::reset($configKey);
     }
 
@@ -1364,7 +1365,7 @@ abstract class ThemeEditor
             unset($configPage->$property);
         }
 
-        ConfigHelper::update($configKey, $configPage);
+        $this->saveConfigPage($configKey, $configPage);
     }
 
     /**
@@ -1404,7 +1405,7 @@ abstract class ThemeEditor
             }
         }
 
-        ConfigHelper::update($configKey, $configPage);
+        $this->saveConfigPage($configKey, $configPage);
     }
 
     /**
@@ -1450,7 +1451,7 @@ abstract class ThemeEditor
         }
         $configPage->$property[$sectionIndex]['config'] = $sectionConfig;
 
-        ConfigHelper::update($configKey, $configPage);
+        $this->saveConfigPage($configKey, $configPage);
     }
 
     /**
@@ -1476,7 +1477,7 @@ abstract class ThemeEditor
             'name' => $sectionName,
         ];
 
-        ConfigHelper::update($configKey, $configPage);
+        $this->saveConfigPage($configKey, $configPage);
     }
 
     /**
@@ -1503,7 +1504,7 @@ abstract class ThemeEditor
             $configPage->$property = array_values($configPage->$property);
         }
 
-        ConfigHelper::update($configKey, $configPage);
+        $this->saveConfigPage($configKey, $configPage);
     }
 
     /**
@@ -1538,7 +1539,7 @@ abstract class ThemeEditor
         $arr = array_merge($arr, array_slice($configPage->$property, $newIndex));
         $configPage->$property = array_values($arr);
 
-        ConfigHelper::update($configKey, $configPage);
+        $this->saveConfigPage($configKey, $configPage);
     }
 
     /**
@@ -1570,7 +1571,7 @@ abstract class ThemeEditor
             unset($configPage->$property[$sectionIndex]['config']);
         }
 
-        ConfigHelper::update($configKey, $configPage);
+        $this->saveConfigPage($configKey, $configPage);
     }
 
     /**
@@ -1625,7 +1626,7 @@ abstract class ThemeEditor
         }
         $configPage->$property[$sectionIndex]['config']['items'][$itemIndex]['config'] = $sectionItemConfig;
 
-        ConfigHelper::update($configKey, $configPage);
+        $this->saveConfigPage($configKey, $configPage);
     }
 
     /**
@@ -1670,7 +1671,7 @@ abstract class ThemeEditor
 
         $configPage->$property[$sectionIndex]['config']['items'] = $sectionConfigItems;
 
-        ConfigHelper::update($configKey, $configPage);
+        $this->saveConfigPage($configKey, $configPage);
     }
 
     /**
@@ -1708,7 +1709,7 @@ abstract class ThemeEditor
             $configPage->$property[$sectionIndex]['config']['items'] = array_values($sectionConfig['items']);
         }
 
-        ConfigHelper::update($configKey, $configPage);
+        $this->saveConfigPage($configKey, $configPage);
     }
 
     /**
@@ -1742,7 +1743,7 @@ abstract class ThemeEditor
             unset($configPage->$property[$sectionIndex]['config']['items'][$itemIndex]['config']);
         }
 
-        ConfigHelper::update($configKey, $configPage);
+        $this->saveConfigPage($configKey, $configPage);
     }
 
     /**
@@ -1790,6 +1791,37 @@ abstract class ThemeEditor
         $arr = array_merge($arr, array_slice($sectionConfigItems, $newIndex));
 
         $configPage->$property[$sectionIndex]['config']['items'] = array_values($arr);
+
+        $this->saveConfigPage($configKey, $configPage);
+    }
+
+    /**
+     * 保存页面配置
+     *
+     * @param string $configKey
+     * @param object $configPage
+     * @return void
+     */
+    private function saveConfigPage(string $configKey, object $configPage)
+    {
+        if ($configPage->middle !== 0) {
+            $configPage->west = 0;
+            $configPage->center = 0;
+            $configPage->east = 0;
+            unset($configPage->westSections, $configPage->centerSections, $configPage->eastSections);
+        }
+
+        if ($configPage->west !== 0 || $configPage->center !== 0 || $configPage->east !== 0) {
+            $configPage->middle = 0;
+            unset($configPage->middleSections);
+        }
+
+        foreach (['north', 'middle', 'west', 'center', 'east', 'south'] as $position) {
+            if ($configPage->$position <= 0) {
+                $property = $position . 'Sections';
+                unset($configPage->$property);
+            }
+        }
 
         ConfigHelper::update($configKey, $configPage);
     }
