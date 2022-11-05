@@ -7,6 +7,7 @@ use Be\App\ServiceException;
 use Be\Config\Annotation\BeConfig;
 use Be\Config\Annotation\BeConfigItem;
 use Be\Config\ConfigHelper;
+use Be\Runtime\RuntimeException;
 use Be\Util\Annotation;
 use Be\Util\File\Dir;
 use Be\Util\Str\CaseConverter;
@@ -252,7 +253,7 @@ abstract class ThemeEditor
         $theme = new \stdClass();
         $theme->name = $themeName;
         $theme->label = $property->getLabel();
-        $theme->url = beAdminUrl('System.' . $this->themeType . '.editSectionItem', ['themeName' => $themeName]);
+        $theme->url = beAdminUrl('System.' . $this->themeType . '.editTheme', ['themeName' => $themeName]);
         return $theme;
     }
 
@@ -321,7 +322,7 @@ abstract class ThemeEditor
                 if ($picker) {
                     $table = Be::getTable($picker['table']);
                     if (isset($picker['grid']['filter'])) {
-                        foreach($picker['grid']['filter'] as $filter) {
+                        foreach ($picker['grid']['filter'] as $filter) {
                             $table->where($filter);
                         }
                     }
@@ -636,7 +637,7 @@ abstract class ThemeEditor
         }
         $section->icon = $icon;
 
-        $section->url = beAdminUrl('System.' . $this->themeType . '.editSectionItem', ['themeName' => $themeName, 'pageName' => $pageName, 'position' => $position, 'sectionIndex' => $sectionIndex]);
+        $section->url = beAdminUrl('System.' . $this->themeType . '.editSection', ['themeName' => $themeName, 'pageName' => $pageName, 'position' => $position, 'sectionIndex' => $sectionIndex]);
 
         // 包含子项的部件
         if (isset($sectionConfigInstance->items)) {
@@ -793,7 +794,7 @@ abstract class ThemeEditor
 
                         if ($format === 'object') {
                             if (is_array($config)) {
-                                $config = (object) $config;
+                                $config = (object)$config;
                             }
                         } else {
                             if (is_object($config)) {
@@ -884,6 +885,109 @@ abstract class ThemeEditor
             }
 
             return $configItemDrivers;
+        }
+
+        return [];
+    }
+
+    private function getPageClass(string $themeName, string $pageName)
+    {
+
+
+        $parts = explode('.', $pageName);
+
+        $type = array_shift($parts);
+        $catalog = array_shift($parts);
+        $classSuffix = implode('\\', $parts);
+
+        $isPageConfig = ($type === 'Theme' || $type === 'AdminTheme') && $parts[0] === 'Page';
+
+        $instance1 = null;
+        $class = '\\Be\\Data\\' . $type . '\\' . $catalog . '\\Config\\' . $classSuffix;
+        if (class_exists($class)) {
+            $instance1 = new $class();
+        } elseif ($isPageConfig && count($parts) > 2) {
+
+            // 则检测对应页面在主题中是否存在指定配置
+            $class = '\\Be\\' . $type . '\\' . $catalog . '\\Config\\' . $classSuffix;
+
+            if ($instance1 === null) {
+                // 则检测对应页面在APP中是否存在指定配置
+                $class = '\\Be\\App\\' . $parts[1] . '\\Config\\Page\\' . ($type === 'AdminTheme' ? 'Admin\\' : '') . implode('\\', array_slice($parts, 2));
+                if (class_exists($class)) {
+                    $instance1 = new $class();
+                }
+            }
+        }
+
+        if ($isPageConfig) {
+            $class = '\\Be\\Data\\' . $type . '\\' . $catalog . '\\Config\\Page';
+            if (!class_exists($class)) {
+                $class = '\\Be\\' . $type . '\\' . $catalog . '\\Config\\Page';
+                if (!class_exists($class)) {
+                    throw new RuntimeException('Config (' . $type . '.' . $catalog . '.Page) does not exist!');
+                }
+            }
+        } else {
+            $class = '\\Be\\' . $type . '\\' . $catalog . '\\Config\\' . $classSuffix;
+            if (!class_exists($class)) {
+                throw new RuntimeException('Config ' . $name . ' does not exist!');
+            }
+        }
+    }
+
+    /**
+     * 获取页面 编辑表单驱动
+     *
+     * @param string $themeName 主题名
+     * @param string $pageName 页面名
+     * @return array
+     */
+    public function getPageDrivers(string $themeName, string $pageName): array
+    {
+        if ($pageName === 'default') {
+            $configInstance = Be::getConfig($this->themeType . '.' . $themeName . '.Page');
+            $class = '\\Be\\' . $this->themeType . '\\' . $themeName . '\\Config\\Page';
+        } else {
+            $configInstance = Be::getConfig($this->themeType . '.' . $themeName . '.Page.' . $pageName);
+            $class = '\\Be\\' . $this->themeType . '\\' . $themeName . '\\Config\\Page\\' . str_replace('.', '\\', $pageName);
+            if (!class_exists($class)) {
+                $parts = explode('.', $pageName);
+                $class = '\\Be\\App\\' . $parts[0] . '\\Config\\Page\\' . ($this->themeType === 'AdminTheme' ? 'Admin\\' : '') . implode('\\', array_slice($parts, 1));
+            }
+        }
+
+        try {
+            $configAnnotation = $this->getConfigAnnotation($class, true);
+            if ($configAnnotation['configItems']) {
+                $configItemDrivers = [];
+
+                foreach ($configAnnotation['configItems'] as $configItem) {
+
+                    $itemName = $configItem['name'];
+                    if (isset($configInstance->$itemName)) {
+                        $configItem['value'] = $configInstance->$itemName;
+                    }
+
+                    $driverClass = null;
+                    if (isset($configItem['driver'])) {
+                        if (substr($configItem['driver'], 0, 8) === 'FormItem') {
+                            $driverClass = '\\Be\\AdminPlugin\\Form\\Item\\' . $configItem['driver'];
+                        } else {
+                            $driverClass = $configItem['driver'];
+                        }
+                    } else {
+                        $driverClass = \Be\AdminPlugin\Form\Item\FormItemInput::class;
+                    }
+                    $driver = new $driverClass($configItem);
+
+                    $configItemDrivers[] = $driver;
+                }
+
+                return $configItemDrivers;
+            }
+        } catch (\Throwable $t) {
+            return [];
         }
 
         return [];
@@ -1108,6 +1212,85 @@ abstract class ThemeEditor
     }
 
     /**
+     * 保存配置信息
+     *
+     * @param string $themeName 主题名
+     * @param array $formData 表单数据
+     */
+    public function editTheme(string $themeName, array $formData)
+    {
+        $configKey = $this->themeType . '.' . $themeName . '.Theme';
+        $configInstance = Be::getConfig($configKey);
+
+        $className = '\\Be\\' . $this->themeType . '\\' . $themeName . '\\Config\\Theme';
+        $newValues = $this->submitFormData($className, $formData, get_object_vars($configInstance));
+
+        foreach ($newValues as $key => $val) {
+            $configInstance->$key = $val;
+        }
+
+        ConfigHelper::update($configKey, $configInstance);
+    }
+
+    /**
+     * 重置配置信息
+     *
+     * @param string $themeName 主题名
+     */
+    public function resetTheme(string $themeName)
+    {
+        ConfigHelper::reset($this->themeType . '.' . $themeName . '.Theme');
+    }
+
+    /**
+     * 保存页面配置信息
+     *
+     * @param string $themeName 主题名
+     * @param string $pageName 页面名
+     * @param array $formData 表单数据
+     */
+    public function editPage(string $themeName, string $pageName, array $formData)
+    {
+        if ($pageName === 'default') {
+            $configKey = $this->themeType . '.' . $themeName . '.Page';
+            $class = '\\Be\\' . $this->themeType . '\\' . $themeName . '\\Config\\Page';
+        } else {
+            $configKey = $this->themeType . '.' . $themeName . '.Page.' . $pageName;
+            $class = '\\Be\\' . $this->themeType . '\\' . $themeName . '\\Config\\Page\\' . str_replace('.', '\\', $pageName);
+            if (!class_exists($class)) {
+                $parts = explode('.', $pageName);
+                $class = '\\Be\\App\\' . $parts[0] . '\\Config\\Page\\' . ($this->themeType === 'AdminTheme' ? 'Admin\\' : '') . implode('\\', array_slice($parts, 1));
+            }
+        }
+
+        $configInstance = Be::getConfig($configKey);
+
+        $newValues = $this->submitFormData($class, $formData, get_object_vars($configInstance));
+
+        foreach ($newValues as $key => $val) {
+            $configInstance->$key = $val;
+        }
+
+        ConfigHelper::update($configKey, $configInstance);
+    }
+
+    /**
+     * 重置页面配置信息
+     *
+     * @param string $themeName 主题名
+     * @param string $pageName 页面名
+     */
+    public function resetPage(string $themeName, string $pageName)
+    {
+        if ($pageName === 'default') {
+            $configKey = $this->themeType . '.' . $themeName . '.Page';
+        } else {
+            $configKey = $this->themeType . '.' . $themeName . '.Page.' . $pageName;
+        }
+        ConfigHelper::reset($configKey);
+    }
+
+    /**
      * 指定页面指定方位配置
      *
      * @param string $themeName 主题名
@@ -1184,6 +1367,91 @@ abstract class ThemeEditor
         ConfigHelper::update($configKey, $configPage);
     }
 
+    /**
+     * 重置方位配置信息
+     *
+     * @param string $themeName 主题名
+     * @param string $pageName 页面名
+     * @param string $position 位置
+     */
+    public function resetPosition(string $themeName, string $pageName, string $position)
+    {
+        if ($pageName === 'default') {
+            $configKey = $this->themeType . '.' . $themeName . '.Page';
+            $classOriginal = '\\Be\\' . $this->themeType . '\\' . $themeName . '\\Config\\Page';
+            $class = '\\Be\\Data\\' . $this->themeType . '\\' . $themeName . '\\Config\\Page';
+        } else {
+            $configKey = $this->themeType . '.' . $themeName . '.Page.' . $pageName;
+            $classOriginal = '\\Be\\' . $this->themeType . '\\' . $themeName . '\\Config\\Page\\' . str_replace('.', '\\', $pageName);
+            $class = '\\Be\\Data\\' . $this->themeType . '\\' . $themeName . '\\Config\\Page\\' . str_replace('.', '\\', $pageName);
+        }
+
+        if (!class_exists($class)) {
+            return;
+        }
+
+        $instanceOriginal = new $classOriginal();
+        $configPage = Be::getConfig($configKey);
+
+        $property = $position . 'Sections';
+
+        // 重置部件配置
+        if (isset($configPage->$property)) {
+            if (isset($instanceOriginal->$property)) {
+                $configPage->$property = $instanceOriginal->$property;
+            } else {
+                unset($configPage->$property);
+            }
+        }
+
+        ConfigHelper::update($configKey, $configPage);
+    }
+
+    /**
+     * 保存配置信息
+     *
+     * @param string $themeName 主题名
+     * @param string $pageName 页面名
+     * @param string $position 位置
+     * @param int $sectionIndex 部件索引
+     * @param array $formData 表单数据
+     */
+    public function editSection(string $themeName, string $pageName, string $position, int $sectionIndex, array $formData)
+    {
+        if ($pageName === 'default') {
+            $configKey = $this->themeType . '.' . $themeName . '.Page';
+        } else {
+            $configKey = $this->themeType . '.' . $themeName . '.Page.' . $pageName;
+        }
+
+        $configPage = Be::getConfig($configKey);
+
+        $property = $position . 'Sections';
+
+        $sectionData = $configPage->$property[$sectionIndex];
+
+        if (!isset($sectionData['config'])) {
+            $sectionConfig = $this->getSectionConfig($sectionData['name'], 'array');
+            $configPage->$property[$sectionIndex]['config'] = $sectionConfig;
+        } else {
+            $sectionConfig = $sectionData['config'];
+        }
+
+        $parts = explode('.', $sectionData['name']);
+        $type = array_shift($parts);
+        $name = array_shift($parts);
+        $classPart = implode('\\', $parts);
+
+        // 配置部件信息
+        $class = '\\Be\\' . $type . '\\' . $name . '\\Section\\' . $classPart . '\\Config';
+        $newValues = $this->submitFormData($class, $formData, $sectionConfig);
+        foreach ($newValues as $key => $val) {
+            $sectionConfig[$key] = $val;
+        }
+        $configPage->$property[$sectionIndex]['config'] = $sectionConfig;
+
+        ConfigHelper::update($configKey, $configPage);
+    }
 
     /**
      * 新增部件
@@ -1274,6 +1542,93 @@ abstract class ThemeEditor
     }
 
     /**
+     * 重置配置信息
+     *
+     * @param string $themeName 主题名
+     * @param string $pageName 页面名
+     * @param string $position 位置
+     * @param int $sectionIndex 部件索引
+     */
+    public function resetSection(string $themeName, string $pageName, string $position, int $sectionIndex)
+    {
+        if ($pageName === 'default') {
+            $configKey = $this->themeType . '.' . $themeName . '.Page';
+            $class = '\\Be\\Data\\' . $this->themeType . '\\' . $themeName . '\\Config\\Page';
+        } else {
+            $configKey = $this->themeType . '.' . $themeName . '.Page.' . $pageName;
+            $class = '\\Be\\Data\\' . $this->themeType . '\\' . $themeName . '\\Config\\Page\\' . str_replace('.', '\\', $pageName);
+        }
+
+        if (!class_exists($class)) {
+            return;
+        }
+
+        $configPage = Be::getConfig($configKey);
+
+        $property = $position . 'Sections';
+        if (isset($configPage->$property[$sectionIndex]['config'])) {
+            unset($configPage->$property[$sectionIndex]['config']);
+        }
+
+        ConfigHelper::update($configKey, $configPage);
+    }
+
+    /**
+     * 保存配置信息
+     *
+     * @param string $themeName 主题名
+     * @param string $pageName 页面名
+     * @param string $position 位置
+     * @param int $sectionIndex 部件索引
+     * @param int $itemIndex 部件子项索引
+     * @param array $formData 表单数据
+     */
+    public function editSectionItem(string $themeName, string $pageName, string $position, int $sectionIndex, int $itemIndex, array $formData)
+    {
+        if ($pageName === 'default') {
+            $configKey = $this->themeType . '.' . $themeName . '.Page';
+        } else {
+            $configKey = $this->themeType . '.' . $themeName . '.Page.' . $pageName;
+        }
+
+        $configPage = Be::getConfig($configKey);
+
+        $property = $position . 'Sections';
+
+        $sectionData = $configPage->$property[$sectionIndex];
+
+        if (!isset($sectionData['config'])) {
+            $sectionConfig = $this->getSectionConfig($sectionData['name'], 'array');
+            $configPage->$property[$sectionIndex]['config'] = $sectionConfig;
+        } else {
+            $sectionConfig = $sectionData['config'];
+        }
+
+        $parts = explode('.', $sectionData['name']);
+        $type = array_shift($parts);
+        $name = array_shift($parts);
+        $classPart = implode('\\', $parts);
+
+        // 配置子部件信息
+        $sectionItemData = $sectionConfig['items'][$itemIndex];
+        $sectionItemName = $sectionItemData['name'];
+        if (!isset($sectionItemData['config'])) {
+            $sectionItemConfig = $this->getSectionItemConfig($sectionData['name'], $sectionItemName, 'array');
+        } else {
+            $sectionItemConfig = $sectionItemData['config'];
+        }
+
+        $class = '\\Be\\' . $type . '\\' . $name . '\\Section\\' . $classPart . '\\Item\\' . $sectionItemName;
+        $newValues = $this->submitFormData($class, $formData, $sectionItemConfig);
+        foreach ($newValues as $key => $val) {
+            $sectionItemConfig[$key] = $val;
+        }
+        $configPage->$property[$sectionIndex]['config']['items'][$itemIndex]['config'] = $sectionItemConfig;
+
+        ConfigHelper::update($configKey, $configPage);
+    }
+
+    /**
      * 新增子项目
      *
      * @param string $themeName 主题名
@@ -1357,70 +1712,6 @@ abstract class ThemeEditor
     }
 
     /**
-     * 保存配置信息
-     *
-     * @param string $themeName 主题名
-     * @param string $pageName 页面名
-     * @param string $position 位置
-     * @param int $sectionIndex 部件索引
-     * @param int $itemIndex 部件子项索引
-     * @param array $formData 表单数据
-     */
-    public function editSectionItem(string $themeName, string $pageName, string $position, int $sectionIndex, int $itemIndex, array $formData)
-    {
-        if ($pageName === 'default') {
-            $configKey = $this->themeType . '.' . $themeName . '.Page';
-        } else {
-            $configKey = $this->themeType . '.' . $themeName . '.Page.' . $pageName;
-        }
-
-        $configPage = Be::getConfig($configKey);
-
-        $property = $position . 'Sections';
-
-        $sectionData = $configPage->$property[$sectionIndex];
-
-        if (!isset($sectionData['config'])) {
-            $sectionConfig = $this->getSectionConfig($sectionData['name'], 'array');
-            $configPage->$property[$sectionIndex]['config'] = $sectionConfig;
-        } else {
-            $sectionConfig = $sectionData['config'];
-        }
-
-        $parts = explode('.', $sectionData['name']);
-        $type = array_shift($parts);
-        $name = array_shift($parts);
-        $classPart = implode('\\', $parts);
-
-        // 配置部件信息
-        if ($itemIndex === -1) {
-            $class = '\\Be\\' . $type . '\\' . $name . '\\Section\\' . $classPart . '\\Config';
-            $newValues = $this->submitFormData($class, $formData, $sectionConfig);
-            foreach ($newValues as $key => $val) {
-                $sectionConfig[$key] = $val;
-            }
-            $configPage->$property[$sectionIndex]['config'] = $sectionConfig;
-        } else {
-            $sectionItemData = $sectionConfig['items'][$itemIndex];
-            $sectionItemName = $sectionItemData['name'];
-            if (!isset($sectionItemData['config'])) {
-                $sectionItemConfig = $this->getSectionItemConfig($sectionData['name'], $sectionItemName, 'array');
-            } else {
-                $sectionItemConfig = $sectionItemData['config'];
-            }
-
-            $class = '\\Be\\' . $type . '\\' . $name . '\\Section\\' . $classPart . '\\Item\\' . $sectionItemName;
-            $newValues = $this->submitFormData($class, $formData, $sectionItemConfig);
-            foreach ($newValues as $key => $val) {
-                $sectionItemConfig[$key] = $val;
-            }
-            $configPage->$property[$sectionIndex]['config']['items'][$itemIndex]['config'] = $sectionItemConfig;
-        }
-
-        ConfigHelper::update($configKey, $configPage);
-    }
-
-    /**
      * 重置配置信息
      *
      * @param string $themeName 主题名
@@ -1433,23 +1724,22 @@ abstract class ThemeEditor
     {
         if ($pageName === 'default') {
             $configKey = $this->themeType . '.' . $themeName . '.Page';
+            $class = '\\Be\\Data\\' . $this->themeType . '\\' . $themeName . '\\Config\\Page';
         } else {
             $configKey = $this->themeType . '.' . $themeName . '.Page.' . $pageName;
+            $class = '\\Be\\Data\\' . $this->themeType . '\\' . $themeName . '\\Config\\Page\\' . str_replace('.', '\\', $pageName);
+        }
+
+        if (!class_exists($class)) {
+            return;
         }
 
         $configPage = Be::getConfig($configKey);
 
         $property = $position . 'Sections';
-
-        // 配置部件信息
-        if ($itemIndex === -1) {
-            if (isset($configPage->$property[$sectionIndex]['config'])) {
-                unset($configPage->$property[$sectionIndex]['config']);
-            }
-        } else {
-            if (isset($configPage->$property[$sectionIndex]['config']['items'][$itemIndex]['config'])) {
-                unset($configPage->$property[$sectionIndex]['config']['items'][$itemIndex]['config']);
-            }
+        // 重置部件子项配置
+        if (isset($configPage->$property[$sectionIndex]['config']['items'][$itemIndex]['config'])) {
+            unset($configPage->$property[$sectionIndex]['config']['items'][$itemIndex]['config']);
         }
 
         ConfigHelper::update($configKey, $configPage);
@@ -1505,37 +1795,6 @@ abstract class ThemeEditor
     }
 
     /**
-     * 保存配置信息
-     *
-     * @param string $themeName 主题名
-     * @param array $formData 表单数据
-     */
-    public function editThemeItem(string $themeName, array $formData)
-    {
-        $configKey = $this->themeType . '.' . $themeName . '.Theme';
-        $configInstance = Be::getConfig($configKey);
-
-        $className = '\\Be\\' . $this->themeType . '\\' . $themeName . '\\Config\\Theme';
-        $newValues = $this->submitFormData($className, $formData, get_object_vars($configInstance));
-
-        foreach ($newValues as $key => $val) {
-            $configInstance->$key = $val;
-        }
-
-        ConfigHelper::update($configKey, $configInstance);
-    }
-
-    /**
-     * 重置配置信息
-     *
-     * @param string $themeName 主题名
-     */
-    public function resetThemeItem(string $themeName)
-    {
-        ConfigHelper::reset($this->themeType . '.' . $themeName . '.Theme');
-    }
-
-    /**
      * 指定类名的配置项表单提交
      *
      * @param string $className 类名
@@ -1561,7 +1820,8 @@ abstract class ThemeEditor
             }
 
             if (!isset($formData[$itemName])) {
-                throw new ServiceException('参数 (' . $itemName . ') 缺失！');
+                continue;
+                //throw new ServiceException('参数 (' . $itemName . ') 缺失！');
             }
 
             $itemComment = $property->getDocComment();

@@ -286,6 +286,104 @@ class ThemeEditor
     }
 
     /**
+     * 编辑 模板
+     */
+    public function editTheme()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $themeName = $request->get('themeName', '');
+        $service = Be::getService('App.System.Admin.' . $this->themeType);
+
+        if ($request->isAjax()) {
+            $service->editTheme($themeName, $request->json('formData'));
+            $response->set('success', true);
+            $response->json();
+
+            Be::getRuntime()->reload();
+        } else {
+            $drivers = $service->getThemeDrivers($themeName);
+            $response->set('drivers', $drivers);
+
+            $response->set('editUrl', beAdminUrl('System.' . $this->themeType . '.editTheme', ['themeName' => $themeName]));
+            $response->set('resetUrl', beAdminUrl('System.' . $this->themeType . '.resetTheme', ['themeName' => $themeName]));
+
+            $response->display('App.System.Admin.ThemeEditor.edit', 'Blank');
+        }
+    }
+
+    /**
+     * 主题 恢复默认值
+     */
+    public function resetTheme()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $themeName = $request->get('themeName', '');
+
+        $service = Be::getService('App.System.Admin.' . $this->themeType);
+        $service->resetTheme($themeName);
+
+        $response->success('重置成功！');
+
+        Be::getRuntime()->reload();
+    }
+
+    /**
+     * 配置页面
+     *
+     * @return void
+     */
+    public function editPage()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $themeName = $request->get('themeName', '');
+        $pageName = $request->get('pageName', '');
+
+        $service = Be::getService('App.System.Admin.' . $this->themeType);
+
+        if ($request->isAjax()) {
+            $service->editPage($themeName, $pageName, $request->json('formData'));
+            $response->set('success', true);
+            $response->json();
+
+            Be::getRuntime()->reload();
+        } else {
+            $drivers = $service->getPageDrivers($themeName, $pageName);
+            $response->set('drivers', $drivers);
+
+            $response->set('editUrl', beAdminUrl('System.' . $this->themeType . '.editPage', ['themeName' => $themeName, 'pageName' => $pageName]));
+            $response->set('resetUrl', beAdminUrl('System.' . $this->themeType . '.resetPage', ['themeName' => $themeName, 'pageName' => $pageName]));
+
+            $response->display('App.System.Admin.ThemeEditor.edit', 'Blank');
+        }
+    }
+
+    /**
+     * 页面 恢复默认值
+     */
+    public function resetPage()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $themeName = $request->get('themeName', '');
+        $pageName = $request->get('pageName', '');
+
+        $service = Be::getService('App.System.Admin.' . $this->themeType);
+        $service->resetPage($themeName, $pageName);
+
+        $response->success('重置成功！');
+
+        Be::getRuntime()->reload();
+    }
+
+
+    /**
      * 配置方位
      *
      * @return void
@@ -305,6 +403,8 @@ class ThemeEditor
             $service->editPosition($themeName, $pageName, $position, $request->json('formData'));
             $response->set('success', true);
             $response->json();
+
+            Be::getRuntime()->reload();
         } else {
             $response->set('themeType', $this->themeType);
             $response->set('themeName', $themeName);
@@ -326,9 +426,62 @@ class ThemeEditor
         }
     }
 
+    /**
+     * 方位 恢复默认值
+     */
+    public function resetPosition()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $themeName = $request->get('themeName', '');
+        $pageName = $request->get('pageName', '');
+
+        $position = $request->get('position', '');
+
+        $service = Be::getService('App.System.Admin.' . $this->themeType);
+        $service->resetPosition($themeName, $pageName, $position);
+
+        $response->success('重置成功！');
+
+        Be::getRuntime()->reload();
+    }
 
     /**
-     * 新增组件
+     * 编辑 部件
+     */
+    public function editSection()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $themeName = $request->get('themeName', '');
+        $pageName = $request->get('pageName', 'Home');
+
+        $position = $request->get('position', '');
+        $sectionIndex = $request->get('sectionIndex', -1, 'int');
+
+        $service = Be::getService('App.System.Admin.' . $this->themeType);
+
+        if ($request->isAjax()) {
+            $service->editSection($themeName, $pageName, $position, $sectionIndex, $request->json('formData'));
+            $response->set('success', true);
+            $response->json();
+
+            Be::getRuntime()->reload();
+        } else {
+            $drivers = $service->getSectionDrivers($themeName, $pageName, $position, $sectionIndex);
+            $response->set('drivers', $drivers);
+
+            $response->set('editUrl', beAdminUrl('System.' . $this->themeType . '.editSection', ['themeName' => $themeName, 'pageName' => $pageName, 'position' => $position, 'sectionIndex' => $sectionIndex]));
+            $response->set('resetUrl', beAdminUrl('System.' . $this->themeType . '.resetSection', ['themeName' => $themeName, 'pageName' => $pageName, 'position' => $position, 'sectionIndex' => $sectionIndex]));
+
+            $response->display('App.System.Admin.ThemeEditor.edit', 'Blank');
+        }
+    }
+
+    /**
+     * 新增部件
      */
     public function addSection()
     {
@@ -354,7 +507,7 @@ class ThemeEditor
     }
 
     /**
-     * 删除组件
+     * 删除部件
      */
     public function deleteSection()
     {
@@ -380,7 +533,7 @@ class ThemeEditor
     }
 
     /**
-     * 组件排序
+     * 部件排序
      */
     public function sortSection()
     {
@@ -407,7 +560,64 @@ class ThemeEditor
     }
 
     /**
-     * 新增组件子项
+     * 部件 恢复默认值
+     */
+    public function resetSection()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $themeName = $request->get('themeName', '');
+        $pageName = $request->get('pageName', '');
+
+        $position = $request->get('position', '');
+        $sectionIndex = $request->get('sectionIndex', -1, 'int');
+
+        $service = Be::getService('App.System.Admin.' . $this->themeType);
+        $service->resetSection($themeName, $pageName, $position, $sectionIndex);
+
+        $response->success('重置成功！');
+
+        Be::getRuntime()->reload();
+    }
+
+    /**
+     * 编辑部件子项
+     */
+    public function editSectionItem()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $themeName = $request->get('themeName', '');
+        $pageName = $request->get('pageName', 'Home');
+
+        $position = $request->get('position', '');
+        $sectionIndex = $request->get('sectionIndex', -1, 'int');
+
+        $itemIndex = $request->get('itemIndex', -1, 'int');
+
+        $service = Be::getService('App.System.Admin.' . $this->themeType);
+
+        if ($request->isAjax()) {
+            $service->editSectionItem($themeName, $pageName, $position, $sectionIndex, $itemIndex, $request->json('formData'));
+            $response->set('success', true);
+            $response->json();
+
+            Be::getRuntime()->reload();
+        } else {
+            $drivers = $service->getSectionItemDrivers($themeName, $pageName, $position, $sectionIndex, $itemIndex);
+            $response->set('drivers', $drivers);
+
+            $response->set('editUrl', beAdminUrl('System.' . $this->themeType . '.editSectionItem', ['themeName' => $themeName, 'pageName' => $pageName, 'position' => $position, 'sectionIndex' => $sectionIndex, 'itemIndex' => $itemIndex]));
+            $response->set('resetUrl', beAdminUrl('System.' . $this->themeType . '.resetSectionItem', ['themeName' => $themeName, 'pageName' => $pageName, 'position' => $position, 'sectionIndex' => $sectionIndex, 'itemIndex' => $itemIndex]));
+
+            $response->display('App.System.Admin.ThemeEditor.edit', 'Blank');
+        }
+    }
+
+    /**
+     * 新增部件子项
      */
     public function addSectionItem()
     {
@@ -434,7 +644,7 @@ class ThemeEditor
     }
 
     /**
-     * 删除子组件
+     * 删除部件子项
      */
     public function deleteSectionItem()
     {
@@ -461,108 +671,7 @@ class ThemeEditor
     }
 
     /**
-     * 编辑 模板/部件/部件子项
-     */
-    public function editSectionItem()
-    {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
-
-        $themeName = $request->get('themeName', '');
-        $pageName = $request->get('pageName', 'Home');
-
-        $position = $request->get('position', '');
-        $sectionIndex = $request->get('sectionIndex', -1, 'int');
-
-        $itemIndex = $request->get('itemIndex', -1, 'int');
-
-        $response->set('themeType', $this->themeType);
-        $response->set('themeName', $themeName);
-        $response->set('pageName', $pageName);
-        $response->set('position', $position);
-        $response->set('sectionIndex', $sectionIndex);
-        $response->set('itemIndex', $itemIndex);
-
-        $service = Be::getService('App.System.Admin.' . $this->themeType);
-        if ($position === '') {
-            $drivers = $service->getThemeDrivers($themeName);
-            $response->set('drivers', $drivers);
-        } else {
-            if ($itemIndex === -1) {
-                $drivers = $service->getSectionDrivers($themeName, $pageName, $position, $sectionIndex);
-                $response->set('drivers', $drivers);
-            } else {
-                $drivers = $service->getSectionItemDrivers($themeName, $pageName, $position, $sectionIndex, $itemIndex);
-                $response->set('drivers', $drivers);
-            }
-        }
-
-        $response->display('App.System.Admin.ThemeEditor.editSectionItem', 'Blank');
-    }
-
-    /**
-     * 编辑 模板/部件/部件子项 保存
-     */
-    public function saveSectionItem()
-    {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
-
-        $postData = $request->json();
-        $formData = $postData['formData'];
-
-        $themeName = $request->get('themeName', '');
-        $pageName = $request->get('pageName', '');
-
-        $position = $request->get('position', '');
-        $sectionIndex = $request->get('sectionIndex', -1, 'int');
-
-        $itemIndex = $request->get('itemIndex', -1, 'int');
-
-        $service = Be::getService('App.System.Admin.' . $this->themeType);
-
-        if ($position === '') {
-            $service->editThemeItem($themeName, $formData);
-        } else {
-            $service->editSectionItem($themeName, $pageName, $position, $sectionIndex, $itemIndex, $formData);
-        }
-
-        $response->success('保存成功！');
-
-        Be::getRuntime()->reload();
-    }
-
-    /**
-     * 模板/部件/部件子项 恢复默认值
-     */
-    public function resetSectionItem()
-    {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
-
-        $themeName = $request->get('themeName', '');
-        $pageName = $request->get('pageName', '');
-
-        $position = $request->get('position', '');
-        $sectionIndex = $request->get('sectionIndex', -1, 'int');
-
-        $itemIndex = $request->get('itemIndex', -1, 'int');
-
-        $service = Be::getService('App.System.Admin.' . $this->themeType);
-
-        if ($position === '') {
-            $service->resetThemeItem($themeName);
-        } else {
-            $service->resetSectionItem($themeName, $pageName, $position, $sectionIndex, $itemIndex);
-        }
-
-        $response->success('重置成功！');
-
-        Be::getRuntime()->reload();
-    }
-
-    /**
-     * 组件排序
+     * 部件子项排序
      */
     public function sortSectionItem()
     {
@@ -586,6 +695,35 @@ class ThemeEditor
         $response->set('page', $page);
 
         $response->success('保存成功！');
+
+        Be::getRuntime()->reload();
+    }
+
+    /**
+     * 部件子项恢复默认值
+     */
+    public function resetSectionItem()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $themeName = $request->get('themeName', '');
+        $pageName = $request->get('pageName', '');
+
+        $position = $request->get('position', '');
+        $sectionIndex = $request->get('sectionIndex', -1, 'int');
+
+        $itemIndex = $request->get('itemIndex', -1, 'int');
+
+        $service = Be::getService('App.System.Admin.' . $this->themeType);
+
+        if ($position === '') {
+            $service->resetThemeItem($themeName);
+        } else {
+            $service->resetSectionItem($themeName, $pageName, $position, $sectionIndex, $itemIndex);
+        }
+
+        $response->success('重置成功！');
 
         Be::getRuntime()->reload();
     }

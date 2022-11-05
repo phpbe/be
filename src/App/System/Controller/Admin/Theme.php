@@ -76,13 +76,73 @@ class Theme extends Auth
      *
      * @BePermission("配置前台主题", ordering="2.23")
      */
+    public function editTheme()
+    {
+        $this->themeEditor->editTheme();
+    }
+
+    /**
+     * 重置主题
+     *
+     * @BePermission("配置前台主题", ordering="2.23")
+     */
+    public function resetTheme()
+    {
+        $this->themeEditor->resetTheme();
+    }
+
+    /**
+     * 配置页面
+     *
+     * @BePermission("配置前台主题", ordering="2.23")
+     */
+    public function editPage()
+    {
+        $this->themeEditor->editPage();
+    }
+
+    /**
+     * 重置页面
+     *
+     * @BePermission("配置前台主题", ordering="2.23")
+     */
+    public function resetPage()
+    {
+        $this->themeEditor->resetPage();
+    }
+
+    /**
+     * 配置方位
+     *
+     * @BePermission("配置前台主题", ordering="2.23")
+     */
     public function editPosition()
     {
         $this->themeEditor->editPosition();
     }
 
     /**
-     * 新增组件
+     * 重置方位
+     *
+     * @BePermission("配置前台主题", ordering="2.23")
+     */
+    public function resetPosition()
+    {
+        $this->themeEditor->resetPosition();
+    }
+
+    /**
+     * 编辑部件
+     *
+     * @BePermission("配置前台主题", ordering="2.23")
+     */
+    public function editSection()
+    {
+        $this->themeEditor->editSection();
+    }
+
+    /**
+     * 新增部件
      *
      * @BePermission("配置前台主题", ordering="2.23")
      */
@@ -92,7 +152,7 @@ class Theme extends Auth
     }
 
     /**
-     * 删除组件
+     * 删除部件
      *
      * @BePermission("配置前台主题", ordering="2.23")
      */
@@ -102,7 +162,7 @@ class Theme extends Auth
     }
 
     /**
-     * 组件排序
+     * 部件排序
      *
      * @BePermission("配置前台主题", ordering="2.23")
      */
@@ -112,7 +172,27 @@ class Theme extends Auth
     }
 
     /**
-     * 新增组件子项
+     * 部件重置
+     *
+     * @BePermission("配置前台主题", ordering="2.23")
+     */
+    public function resetSection()
+    {
+        $this->themeEditor->resetSection();
+    }
+
+    /**
+     * 编辑部件子项
+     *
+     * @BePermission("配置前台主题", ordering="2.23")
+     */
+    public function editSectionItem()
+    {
+        $this->themeEditor->editSectionItem();
+    }
+
+    /**
+     * 新增部件子项
      *
      * @BePermission("配置前台主题", ordering="2.23")
      */
@@ -122,7 +202,7 @@ class Theme extends Auth
     }
 
     /**
-     * 删除子组件
+     * 删除部件子项
      *
      * @BePermission("配置前台主题", ordering="2.23")
      */
@@ -132,42 +212,23 @@ class Theme extends Auth
     }
 
     /**
-     * 编辑 模板/部件/部件子项
-     *
-     * @BePermission("配置前台主题", ordering="2.23")
-     */
-    public function editSectionItem()
-    {
-        $this->themeEditor->editSectionItem();
-    }
-    /**
-     * 编辑 模板/部件/部件子项 保存
-     *
-     * @BePermission("配置前台主题", ordering="2.23")
-     */
-    public function saveSectionItem()
-    {
-        $this->themeEditor->saveSectionItem();
-    }
-
-    /**
-     * 模板/部件/部件子项 恢复默认值
-     *
-     * @BePermission("配置前台主题", ordering="2.23")
-     */
-    public function resetSectionItem()
-    {
-        $this->themeEditor->resetSectionItem();
-    }
-
-    /**
-     * 组件排序
+     * 部件子项排序
      *
      * @BePermission("配置前台主题", ordering="2.23")
      */
     public function sortSectionItem()
     {
         $this->themeEditor->sortSectionItem();
+    }
+
+    /**
+     * 部件子项恢复默认值
+     *
+     * @BePermission("配置前台主题", ordering="2.23")
+     */
+    public function resetSectionItem()
+    {
+        $this->themeEditor->resetSectionItem();
     }
 
     /**

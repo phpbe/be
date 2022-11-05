@@ -71,13 +71,73 @@ class AdminTheme extends Auth
      *
      * @BePermission("配置后台主题", ordering="2.33")
      */
+    public function editTheme()
+    {
+        $this->themeEditor->editTheme();
+    }
+
+    /**
+     * 重置主题
+     *
+     * @BePermission("配置后台主题", ordering="2.33")
+     */
+    public function resetTheme()
+    {
+        $this->themeEditor->resetTheme();
+    }
+
+    /**
+     * 配置页面
+     *
+     * @BePermission("配置后台主题", ordering="2.33")
+     */
+    public function editPage()
+    {
+        $this->themeEditor->editPage();
+    }
+
+    /**
+     * 重置页面
+     *
+     * @BePermission("配置后台主题", ordering="2.33")
+     */
+    public function resetPage()
+    {
+        $this->themeEditor->resetPage();
+    }
+
+    /**
+     * 配置方位
+     *
+     * @BePermission("配置后台主题", ordering="2.33")
+     */
     public function editPosition()
     {
         $this->themeEditor->editPosition();
     }
 
     /**
-     * 新增组件
+     * 重置方位
+     *
+     * @BePermission("配置后台主题", ordering="2.33")
+     */
+    public function resetPosition()
+    {
+        $this->themeEditor->resetPosition();
+    }
+
+    /**
+     * 编辑部件
+     *
+     * @BePermission("配置后台主题", ordering="2.33")
+     */
+    public function editSection()
+    {
+        $this->themeEditor->editSection();
+    }
+
+    /**
+     * 新增部件
      *
      * @BePermission("配置后台主题", ordering="2.33")
      */
@@ -87,7 +147,7 @@ class AdminTheme extends Auth
     }
 
     /**
-     * 删除组件
+     * 删除部件
      *
      * @BePermission("配置后台主题", ordering="2.33")
      */
@@ -97,7 +157,7 @@ class AdminTheme extends Auth
     }
 
     /**
-     * 组件排序
+     * 部件排序
      *
      * @BePermission("配置后台主题", ordering="2.33")
      */
@@ -107,27 +167,17 @@ class AdminTheme extends Auth
     }
 
     /**
-     * 新增组件子项
+     * 部件重置
      *
      * @BePermission("配置后台主题", ordering="2.33")
      */
-    public function addSectionItem()
+    public function resetSection()
     {
-        $this->themeEditor->addSectionItem();
+        $this->themeEditor->resetSection();
     }
 
     /**
-     * 删除子组件
-     *
-     * @BePermission("配置后台主题", ordering="2.33")
-     */
-    public function deleteSectionItem()
-    {
-        $this->themeEditor->deleteSectionItem();
-    }
-
-    /**
-     * 编辑 模板/部件/部件子项
+     * 编辑部件子项
      *
      * @BePermission("配置后台主题", ordering="2.33")
      */
@@ -137,33 +187,43 @@ class AdminTheme extends Auth
     }
 
     /**
-     * 编辑 模板/部件/部件子项 保存
+     * 新增部件子项
      *
      * @BePermission("配置后台主题", ordering="2.33")
      */
-    public function saveSectionItem()
+    public function addSectionItem()
     {
-        $this->themeEditor->saveSectionItem();
+        $this->themeEditor->addSectionItem();
     }
 
     /**
-     * 模板/部件/部件子项 恢复默认值
+     * 删除子部件
      *
      * @BePermission("配置后台主题", ordering="2.33")
      */
-    public function resetSectionItem()
+    public function deleteSectionItem()
     {
-        $this->themeEditor->resetSectionItem();
+        $this->themeEditor->deleteSectionItem();
     }
 
     /**
-     * 组件排序
+     * 部件排序
      *
      * @BePermission("配置后台主题", ordering="2.33")
      */
     public function sortSectionItem()
     {
         $this->themeEditor->sortSectionItem();
+    }
+
+    /**
+     * 部件子项恢复默认值
+     *
+     * @BePermission("配置后台主题", ordering="2.33")
+     */
+    public function resetSectionItem()
+    {
+        $this->themeEditor->resetSectionItem();
     }
 
     /**

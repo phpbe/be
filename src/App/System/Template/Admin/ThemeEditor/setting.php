@@ -54,8 +54,6 @@
             <div style="position: absolute; left:0; right:0 ;top: 0; bottom: 30px; overflow-y: auto;">
 
                 <?php
-                $currentPosition = '';
-                $positionOn = false;
                 $positionClasses = [];
                 $positionUrls = [];
                 foreach (['north', 'middle', 'west', 'center', 'east', 'south'] as $position) {
@@ -67,21 +65,8 @@
                         $positionClasses[$position] .= '\'position-' . $position.'-disable\':true,';
                     } else {
                         $positionClasses[$position] .= '\'position-' . $position.'-enable\':true,';
-                        if (!$positionOn) {
-                            $positionOn = true;
-                            $currentPosition = $position;
-                        }
                     }
                     $positionClasses[$position] .= '\'position-on\':currentPosition === \''.$position.'\'}';
-                }
-
-                if (!$positionOn) {
-                    foreach (['north', 'middle', 'west', 'center', 'east', 'south'] as $position) {
-                        if ($this->page->$position < 0) {
-                            $currentPosition = $position;
-                            break;
-                        }
-                    }
                 }
 
                 $totalWidth = 0;
@@ -398,12 +383,12 @@
                 pageTreeValue : <?php echo json_encode($pageTreeValue); ?>,
                 pageName : "<?php echo $this->pageName; ?>",
                 page : <?php echo json_encode($this->page); ?>,
-                currentPosition: "<?php echo $currentPosition; ?>",
+                currentPosition: "",
 
                 sectionDrawerToggle: <?php echo json_encode($sectionDrawerToggle); ?>,
                 sectionItemsToggle: <?php echo json_encode($sectionItemsToggle); ?>,
 
-                activeUrl: "<?php echo $positionUrls[$currentPosition]; //beAdminUrl('System.'.$this->themeType.'.editSectionItem', ['themeName' => $this->themeName, 'pageName' => $this->pageName, 'position' => $this->position, 'sectionIndex' => $this->sectionIndex, 'sectionName' => $this->sectionName, 'itemIndex' => $this->itemIndex, 'itemName' => $this->itemName]); ?>",
+                activeUrl: "<?php echo beAdminUrl('System.'.$this->themeType.'.editPage', ['themeName' => $this->themeName, 'pageName' => $this->pageName]); ?>",
                 previewUrl: "<?php echo $this->page->desktopPreviewUrl; ?>",
                 previewUrlTag: "",
                 screen: "desktop"

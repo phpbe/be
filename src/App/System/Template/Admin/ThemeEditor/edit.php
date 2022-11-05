@@ -1,80 +1,74 @@
 <be-head>
-    <link rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getWwwUrl(); ?>/admin/theme-editor/css/edit-position.css" type="text/css"/>
+    <link rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getWwwUrl(); ?>/admin/theme-editor/css/edit.css" type="text/css"/>
 </be-head>
 
 <be-body>
     <?php
     $formData = [];
+    $uiItems = new \Be\AdminPlugin\UiItem\UiItems();
     ?>
     <div id="app" v-cloak>
 
         <div style="position: absolute; left:0; right:0 ;top: 0; bottom: 50px; overflow-y: auto;">
 
+            <?php if (count($this->drivers) > 0) { ?>
             <el-form class="be-p-50" size="small" label-position="top" :disabled="loading">
-                <el-form-item label="<?php echo $this->positionDescription; ?>">
-                    <el-radio-group v-model="formData.enable">
-                        <?php
-                        if ($this->pageName === 'default') {
-                            ?>
-                            <div><el-radio :label="0">关闭</el-radio></div>
-                            <?php
-                        } else {
-                            ?>
-                            <div><el-radio :label="-1">继承公共页面</el-radio></div>
-                            <div class="be-mt-100"><el-radio :label="0">关闭</el-radio></div>
-                            <?php
+                <?php
+                foreach ($this->drivers as $driver) {
+
+                    echo $driver->getHtml();
+
+                    if ($driver instanceof \Be\AdminPlugin\Form\Item\FormItems) {
+                        if ($driver->name !== null) {
+                            $formData[$driver->name] = $driver->value;
                         }
-                        ?>
-                        <div class="be-mt-100"><el-radio :label="1">启用</el-radio></div>
-                    </el-radio-group>
-                </el-form-item>
-                <?php
-                $position = $this->position;
-                if ($this->configPage->$position < 0) {
-                    $formData['enable'] = -1;
-                } elseif ($this->configPage->$position === 0) {
-                    $formData['enable'] = 0;
-                } else {
-                    $formData['enable'] = 1;
+                    } else {
+                        if ($driver->name !== null) {
+                            if (is_array($driver->value) || is_object($driver->value)) {
+                                $formData[$driver->name] =  json_encode($driver->value, JSON_PRETTY_PRINT);
+                            } else {
+                                $formData[$driver->name] = $driver->value;
+                            }
+                        }
+                    }
+
+                    $uiItems->add($driver);
                 }
                 ?>
-
-                <?php
-                if (in_array($this->position, ['west', 'center', 'east'])) {
-                    ?>
-                    <el-form-item label="指定宽度" v-if="formData.enable != 0">
-                        <el-input-number v-model="formData.width" :min="1" :max="100" :step="1" label="描述文字" <?php echo $this->configPage->$position < 0 ? ':disabled="true"':''; ?>></el-input-number>
-                    </el-form-item>
-                    <div class="be-mt-50 be-c-999" v-if="formData.enable != 0">左，中，右将按照宽度比例分配</div>
-                    <?php
-                    $formData['width'] = abs($this->configPage->$position);
-                }
-                ?>
-
             </el-form>
+            <?php } ?>
         </div>
 
+        <?php if (count($this->drivers) > 0) { ?>
         <div style="position: absolute; left:0; right:0 ;bottom: 0; height: 50px; overflow: hidden;">
             <div class="be-pt-50 be-ta-center">
                 <el-button type="primary" :disabled="loading" @click="save" size="small">保存</el-button>
                 <el-button type="danger" :disabled="loading" @click="reset" size="small">恢复默认值</el-button>
             </div>
         </div>
+        <?php } ?>
     </div>
 
+    <?php
+    echo $uiItems->getJs();
+    echo $uiItems->getCss();
+    ?>
     <script>
         var vueForm = new Vue({
             el: '#app',
             data: {
                 formData: <?php echo json_encode($formData); ?>,
                 loading: false
+                <?php
+                echo $uiItems->getVueData();
+                ?>
             },
             methods: {
                 save: function () {
                     this.loading = true;
 
                     let _this = this;
-                    _this.$http.post("<?php echo beAdminUrl('System.' . $this->themeType . '.editPosition', ['themeName' => $this->themeName, 'pageName' => $this->pageName, 'position' => $this->position]); ?>", {
+                    _this.$http.post("<?php echo $this->editUrl; ?>", {
                         formData: _this.formData,
                     }).then(function (response) {
                         _this.loading = false;
@@ -95,7 +89,7 @@
 
                     let _this = this;
                     _this.$http.get(
-                        "<?php echo beAdminUrl('System.' . $this->themeType . '.resetPosition', ['themeName' => $this->themeName, 'pageName' => $this->pageName, 'position' => $this->position]); ?>"
+                        "<?php echo $this->resetUrl; ?>"
                     ).then(function (response) {
                         _this.loading = false;
                         if (response.status === 200) {
@@ -111,7 +105,13 @@
                         alert(error);
                     });
                 }
+                <?php
+                echo $uiItems->getVueMethods();
+                ?>
             }
+            <?php
+            echo $uiItems->getVueHooks();
+            ?>
         });
     </script>
 

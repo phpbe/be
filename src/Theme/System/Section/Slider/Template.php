@@ -37,14 +37,14 @@ class Template extends Section
 
             if ($this->config->pagination) {
                 echo '#' . $this->id . ' .swiper-pagination-bullet-active {';
-                echo 'background-color: ' . $configTheme->mainColor . ';';
+                echo 'background-color: ' . $configTheme->majorColor . ';';
                 echo '}';
             }
 
             if ($this->config->navigation) {
                 echo '#' . $this->id . ' .swiper-button-prev, ';
                 echo '#' . $this->id . ' .swiper-button-next {';
-                echo 'color: ' . $configTheme->mainColor . ';';
+                echo 'color: ' . $configTheme->majorColor . ';';
                 echo 'width: ' . ($this->config->navigationSize / 44 * 27) . 'px;';
                 echo 'height: ' . $this->config->navigationSize . 'px;';
                 echo 'margin-top: -' . ($this->config->navigationSize / 2) . 'px;';
