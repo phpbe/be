@@ -185,7 +185,7 @@ class index
     public string $title = 'PHPBE双驱框架';
 
     /**
-     * @BeConfigItem("Meta描述",
+     * @BeConfigItem("META描述",
      *     description="填写页面内容的简单描述，用于SEO",
      *     driver = "FormItemInputTextArea"
      * )
@@ -193,8 +193,8 @@ class index
     public string $metaDescription = 'PHPBE双驱框架';
 
     /**
-     * @BeConfigItem("Meta关键词",
-     *     description="填写页面内容的关键词，用于SEO",
+     * @BeConfigItem("META关键词",
+     *     description="填写页面内容的关键词，用于SEO，3~5个即可，不宜过多，以英文逗号分隔多个关键词。",
      *     driver = "FormItemInput"
      * )
      */
