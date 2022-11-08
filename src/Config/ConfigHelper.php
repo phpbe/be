@@ -31,21 +31,38 @@ class ConfigHelper
         $code .= 'class ' . $className . "\n";
         $code .= "{\n";
 
+        $constructCode = '';
+
         $vars = get_object_vars($instance);
         foreach ($vars as $k => $v) {
             $varType = '';
-            if (is_array($v)) {
-                $varType .= 'array ';
-            } elseif (is_int($v)) {
-                $varType .= 'int ';
-            } elseif (is_float($v)) {
-                $varType .= 'float ';
+            if (is_object($v)) {
+                $code .= '  public ?object $' . $k . ' = null;' . "\n";
+                $constructCode .= '    $this->' . $k . ' = ' . self::encode($v). ';' . "\n";
+            } elseif (is_array($v)) {
+                $code .= '  public ?array $' . $k . ' = null;' . "\n";
+                $constructCode .= '    $this->' . $k . ' = ' . self::encode($v). ';' . "\n";
             } else {
-                $varType .= 'string ';
-            }
+                if (is_int($v)) {
+                    $varType .= 'int';
+                } elseif (is_float($v)) {
+                    $varType .= 'float';
+                } else {
+                    $varType .= 'string';
+                }
 
-            $code .= '  public ' . $varType . '$' . $k . ' = ' . var_export($v, true) . ';' . "\n";
+                $code .= '  public ' . $varType . ' $' . $k . ' = ' . var_export($v, true) . ';' . "\n";
+            }
         }
+
+        if (!$constructCode !== '') {
+            $code .= "\n";
+            $code .= '  public function __construct() {' . "\n";
+            $code .= $constructCode;
+            $code .= '  }' . "\n";
+            $code .= "\n";
+        }
+
         $code .= "}\n";
 
         $path = $runtime->getRootPath() . '/data/' . $type . '/' . $catalog . '/Config/' . implode('/', $parts) . '/' . $className . '.php';
@@ -70,6 +87,39 @@ class ConfigHelper
         if (file_exists($path)) {
             unlink($path);
         }
+    }
+
+    public static function encode($x)
+    {
+        $code = '';
+        if (is_object($x)) {
+            $arr = get_object_vars($x);
+            $code .= '(object)[';
+            foreach ($arr as $k => $v) {
+                $code .= '\'' . $k . '\'';
+                $code .= ' => ';
+                $code .= self::encode($v);
+                $code .= ',';
+            }
+            $code .= ']';
+        } else if (is_array($x)) {
+            $code .= '[';
+            $i = 0;
+            foreach ($x as $k => $v) {
+                if ($i !== $k) {
+                    $code .= '\'' . $k . '\'';
+                    $code .= ' => ';
+                }
+                $code .= self::encode($v);
+                $code .= ',';
+                $i++;
+            }
+            $code .= ']';
+        } else {
+            $code = var_export($x, true);
+        }
+
+        return $code;
     }
 }
 

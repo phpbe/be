@@ -716,12 +716,7 @@ class ThemeEditor
         $itemIndex = $request->get('itemIndex', -1, 'int');
 
         $service = Be::getService('App.System.Admin.' . $this->themeType);
-
-        if ($position === '') {
-            $service->resetThemeItem($themeName);
-        } else {
-            $service->resetSectionItem($themeName, $pageName, $position, $sectionIndex, $itemIndex);
-        }
+        $service->resetSectionItem($themeName, $pageName, $position, $sectionIndex, $itemIndex);
 
         $response->success('重置成功！');
 

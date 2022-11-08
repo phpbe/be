@@ -16,19 +16,7 @@ class Page
 
     public int $south = 1;
 
-    public array $northSections = [
-        [
-            'name' => 'Theme.System.Header',
-            'config' => [
-                'enable' => 1,
-                'logoType' => 'image',
-                'logoImage' => 'https://cdn.phpbe.com/images/logo/be.png',
-                'logoImageMaxWidth' => 240,
-                'logoImageMaxHeight' => 64,
-                'backgroundColor' => '#fff',
-            ],
-        ],
-    ];
+    public array $northSections = [];
 
     public array $middleSections = [
         [
@@ -66,5 +54,21 @@ class Page
     public string $spacingMobile = '1.5rem';
     public string $spacingTablet = '1.75rem';
     public string $spacingDesktop = '2rem';
+
+    public function __construct() {
+        $this->northSections = [
+            [
+                'name' => 'Theme.System.Header',
+                'config' => (object)[
+                    'enable' => 1,
+                    'logoType' => 'image',
+                    'logoImage' => 'https://cdn.phpbe.com/images/logo/be.png',
+                    'logoImageMaxWidth' => 240,
+                    'logoImageMaxHeight' => 64,
+                    'backgroundColor' => '#fff',
+                ],
+            ],
+        ];
+    }
 
 }

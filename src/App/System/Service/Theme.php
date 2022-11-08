@@ -54,12 +54,12 @@ class Theme
      *
      * @param string $route 页面路由
      * @param string $sectionName 部件名
-     * @param array|null $sectionConfig 部件配置数据
+     * @param object|null $sectionConfig 部件配置数据
      * @param string $position 方位
      * @param int $sectionIndex 部件索引编号
      * @return object
      */
-    private function getSection(string $route, string $sectionName, ?array $sectionConfig, string $position, int $sectionIndex): object
+    private function getSection(string $route, string $sectionName, ?object $sectionConfig, string $position, int $sectionIndex): object
     {
         $parts = explode('.', $sectionName);
         $type = array_shift($parts);
@@ -105,8 +105,6 @@ class Theme
                 }
             }
         } else {
-            $sectionConfig = (object)$sectionConfig;
-
             if (isset($sectionConfig->items)) {
                 if (count($sectionConfig->items) > 0) {
                     foreach ($sectionConfig->items as &$item) {
@@ -117,8 +115,6 @@ class Theme
                             }
 
                             $item['config'] = new $class();
-                        } else {
-                            $item['config'] = (object)$item['config'];
                         }
                     }
                     unset($item);

@@ -369,7 +369,7 @@ abstract class ThemeEditor
 
                         try {
                             if (!isset($sectionData['config'])) {
-                                $sectionConfig = $this->getSectionConfig($sectionData['name'], 'array');
+                                $sectionConfig = $this->getSectionConfig($sectionData['name']);
                             } else {
                                 $sectionConfig = $sectionData['config'];
                             }
@@ -583,10 +583,10 @@ abstract class ThemeEditor
      * @param string $position 位置 方位
      * @param int $sectionIndex 部件索引 部件键名
      * @param string $sectionName 部件名称
-     * @param array $sectionConfig 部件配置数据
+     * @param object $sectionConfig 部件配置数据
      * @return object
      */
-    public function getSection(string $themeName, string $pageName, string $position, int $sectionIndex, string $sectionName, array $sectionConfig): object
+    public function getSection(string $themeName, string $pageName, string $position, int $sectionIndex, string $sectionName, object $sectionConfig): object
     {
         $parts = explode('.', $sectionName);
         $type = array_shift($parts);
@@ -666,8 +666,8 @@ abstract class ThemeEditor
             }
 
             $existItems = [];
-            if (isset($sectionConfig['items'])) {
-                foreach ($sectionConfig['items'] as $itemIndex => $item) {
+            if (isset($sectionConfig->items)) {
+                foreach ($sectionConfig->items as $itemIndex => $item) {
                     if (isset($itemDriverClasses[$item['name']])) {
 
                         $itemDriver = $itemDriverClasses[$item['name']];
@@ -736,7 +736,6 @@ abstract class ThemeEditor
             }
 
             $section->items = $items;
-
         }
 
         return $section;
@@ -746,11 +745,10 @@ abstract class ThemeEditor
      * 获取部件默认配置
      *
      * @param string $sectionName 部件名
-     * @param string $format 格式 array | object
      * @return array | object
      * @throws ServiceException
      */
-    public function getSectionConfig(string $sectionName, string $format = 'object')
+    public function getSectionConfig(string $sectionName)
     {
         $parts = explode('.', $sectionName);
         $type = array_shift($parts);
@@ -762,44 +760,26 @@ abstract class ThemeEditor
             throw new ServiceException('部件配置文件（' . $sectionName . '.Config）不存在!');
         }
 
-        $sectionConfigInstance = new $class();
-
-        $sectionConfig = $format === 'object' ? $sectionConfigInstance : get_object_vars($sectionConfigInstance);
-
-        if (isset($sectionConfigInstance->items)) {
-            if (count($sectionConfigInstance->items) > 0) {
+        $sectionConfig = new $class();
+        if (isset($sectionConfig->items)) {
+            if (count($sectionConfig->items) > 0) {
                 $items = [];
-                foreach ($sectionConfigInstance->items as $item) {
+                foreach ($sectionConfig->items as $item) {
                     if (!isset($item['config'])) {
                         $class = '\\Be\\' . $type . '\\' . $name . '\\Section\\' . $classPart . '\\Item\\' . $item['name'];
                         if (!class_exists($class)) {
                             throw new ServiceException('部件子项配置文件（' . $sectionName . '.Item.' . $item['name'] . '）不存在!');
                         }
                         $itemInstance = new $class();
-                        if ($format === 'object') {
-                            $items[] = [
-                                'name' => $item['name'],
-                                'config' => $itemInstance,
-                            ];
-                        } else {
-                            $items[] = [
-                                'name' => $item['name'],
-                                'config' => get_object_vars($itemInstance),
-                            ];
-                        }
+                        $items[] = [
+                            'name' => $item['name'],
+                            'config' => $itemInstance,
+                        ];
                     } else {
-
                         $name = $item['name'];
                         $config = $item['config'];
-
-                        if ($format === 'object') {
-                            if (is_array($config)) {
-                                $config = (object)$config;
-                            }
-                        } else {
-                            if (is_object($config)) {
-                                $config = get_object_vars($config);
-                            }
+                        if (is_array($config)) {
+                            $config = (object)$config;
                         }
 
                         $items[] = [
@@ -809,11 +789,7 @@ abstract class ThemeEditor
                     }
                 }
 
-                if ($format === 'object') {
-                    $sectionConfig->items = $items;
-                } else {
-                    $sectionConfig['items'] = $items;
-                }
+                $sectionConfig->items = $items;
             }
         }
 
@@ -829,7 +805,7 @@ abstract class ThemeEditor
      * @return array | object
      * @throws ServiceException
      */
-    public function getSectionItemConfig(string $sectionName, string $itemName, string $format = 'object')
+    public function getSectionItemConfig(string $sectionName, string $itemName)
     {
         $parts = explode('.', $sectionName);
         $type = array_shift($parts);
@@ -840,12 +816,7 @@ abstract class ThemeEditor
         if (!class_exists($class)) {
             throw new ServiceException('部件子项配置文件（' . $sectionName . '.Item.' . $itemName . '）不存在!');
         }
-        $itemInstance = new $class();
-        if ($format === 'object') {
-            return $itemInstance;
-        } else {
-            return get_object_vars($itemInstance);
-        }
+        return new $class();
     }
 
 
@@ -888,52 +859,6 @@ abstract class ThemeEditor
         }
 
         return [];
-    }
-
-    private function getPageClass(string $themeName, string $pageName)
-    {
-
-
-        $parts = explode('.', $pageName);
-
-        $type = array_shift($parts);
-        $catalog = array_shift($parts);
-        $classSuffix = implode('\\', $parts);
-
-        $isPageConfig = ($type === 'Theme' || $type === 'AdminTheme') && $parts[0] === 'Page';
-
-        $instance1 = null;
-        $class = '\\Be\\Data\\' . $type . '\\' . $catalog . '\\Config\\' . $classSuffix;
-        if (class_exists($class)) {
-            $instance1 = new $class();
-        } elseif ($isPageConfig && count($parts) > 2) {
-
-            // 则检测对应页面在主题中是否存在指定配置
-            $class = '\\Be\\' . $type . '\\' . $catalog . '\\Config\\' . $classSuffix;
-
-            if ($instance1 === null) {
-                // 则检测对应页面在APP中是否存在指定配置
-                $class = '\\Be\\App\\' . $parts[1] . '\\Config\\Page\\' . ($type === 'AdminTheme' ? 'Admin\\' : '') . implode('\\', array_slice($parts, 2));
-                if (class_exists($class)) {
-                    $instance1 = new $class();
-                }
-            }
-        }
-
-        if ($isPageConfig) {
-            $class = '\\Be\\Data\\' . $type . '\\' . $catalog . '\\Config\\Page';
-            if (!class_exists($class)) {
-                $class = '\\Be\\' . $type . '\\' . $catalog . '\\Config\\Page';
-                if (!class_exists($class)) {
-                    throw new RuntimeException('Config (' . $type . '.' . $catalog . '.Page) does not exist!');
-                }
-            }
-        } else {
-            $class = '\\Be\\' . $type . '\\' . $catalog . '\\Config\\' . $classSuffix;
-            if (!class_exists($class)) {
-                throw new RuntimeException('Config ' . $name . ' does not exist!');
-            }
-        }
     }
 
     /**
@@ -1015,7 +940,7 @@ abstract class ThemeEditor
         $sectionData = $configPage->$property[$sectionIndex];
 
         if (!isset($sectionData['config'])) {
-            $sectionConfig = $this->getSectionConfig($sectionData['name'], 'array');
+            $sectionConfig = $this->getSectionConfig($sectionData['name']);
         } else {
             $sectionConfig = $sectionData['config'];
         }
@@ -1036,8 +961,9 @@ abstract class ThemeEditor
                     continue;
                 }
 
-                if (isset($sectionConfig[$configItem['name']])) {
-                    $configItem['value'] = $sectionConfig[$configItem['name']];
+                $configItemName = $configItem['name'];
+                if (isset($sectionConfig->$configItemName)) {
+                    $configItem['value'] = $sectionConfig->$configItemName;
                 }
 
                 $driverClass = null;
@@ -1084,15 +1010,15 @@ abstract class ThemeEditor
         $sectionData = $configPage->$property[$sectionIndex];
 
         if (!isset($sectionData['config'])) {
-            $sectionConfig = $this->getSectionConfig($sectionData['name'], 'array');
+            $sectionConfig = $this->getSectionConfig($sectionData['name']);
         } else {
             $sectionConfig = $sectionData['config'];
         }
 
-        $sectionItemData = $sectionConfig['items'][$itemIndex];
+        $sectionItemData = $sectionConfig->items[$itemIndex];
         $sectionItemName = $sectionItemData['name'];
         if (!isset($sectionItemData['config'])) {
-            $sectionItemConfig = $this->getSectionItemConfig($sectionData['name'], $sectionItemName, 'array');
+            $sectionItemConfig = $this->getSectionItemConfig($sectionData['name'], $sectionItemName);
         } else {
             $sectionItemConfig = $sectionItemData['config'];
         }
@@ -1109,8 +1035,9 @@ abstract class ThemeEditor
             $configItemDrivers = [];
             foreach ($configAnnotation['configItems'] as $configItem) {
 
-                if (isset($sectionItemConfig[$configItem['name']])) {
-                    $configItem['value'] = $sectionItemConfig[$configItem['name']];
+                $configItemName = $configItem['name'];
+                if (isset($sectionItemConfig->$configItemName)) {
+                    $configItem['value'] = $sectionItemConfig->$configItemName;
                 }
 
                 $driverClass = null;
@@ -1223,7 +1150,7 @@ abstract class ThemeEditor
         $configInstance = Be::getConfig($configKey);
 
         $className = '\\Be\\' . $this->themeType . '\\' . $themeName . '\\Config\\Theme';
-        $newValues = $this->submitFormData($className, $formData, get_object_vars($configInstance));
+        $newValues = $this->submitFormData($className, $formData, $configInstance);
 
         foreach ($newValues as $key => $val) {
             $configInstance->$key = $val;
@@ -1265,7 +1192,7 @@ abstract class ThemeEditor
 
         $configPage = Be::getConfig($configKey);
 
-        $newValues = $this->submitFormData($class, $formData, get_object_vars($configPage));
+        $newValues = $this->submitFormData($class, $formData, $configPage);
 
         foreach ($newValues as $key => $val) {
             $configPage->$key = $val;
@@ -1432,8 +1359,7 @@ abstract class ThemeEditor
         $sectionData = $configPage->$property[$sectionIndex];
 
         if (!isset($sectionData['config'])) {
-            $sectionConfig = $this->getSectionConfig($sectionData['name'], 'array');
-            $configPage->$property[$sectionIndex]['config'] = $sectionConfig;
+            $sectionConfig = $this->getSectionConfig($sectionData['name']);
         } else {
             $sectionConfig = $sectionData['config'];
         }
@@ -1447,7 +1373,7 @@ abstract class ThemeEditor
         $class = '\\Be\\' . $type . '\\' . $name . '\\Section\\' . $classPart . '\\Config';
         $newValues = $this->submitFormData($class, $formData, $sectionConfig);
         foreach ($newValues as $key => $val) {
-            $sectionConfig[$key] = $val;
+            $sectionConfig->$key = $val;
         }
         $configPage->$property[$sectionIndex]['config'] = $sectionConfig;
 
@@ -1599,7 +1525,7 @@ abstract class ThemeEditor
         $sectionData = $configPage->$property[$sectionIndex];
 
         if (!isset($sectionData['config'])) {
-            $sectionConfig = $this->getSectionConfig($sectionData['name'], 'array');
+            $sectionConfig = $this->getSectionConfig($sectionData['name']);
             $configPage->$property[$sectionIndex]['config'] = $sectionConfig;
         } else {
             $sectionConfig = $sectionData['config'];
@@ -1611,10 +1537,10 @@ abstract class ThemeEditor
         $classPart = implode('\\', $parts);
 
         // 配置子部件信息
-        $sectionItemData = $sectionConfig['items'][$itemIndex];
+        $sectionItemData = $sectionConfig->items[$itemIndex];
         $sectionItemName = $sectionItemData['name'];
         if (!isset($sectionItemData['config'])) {
-            $sectionItemConfig = $this->getSectionItemConfig($sectionData['name'], $sectionItemName, 'array');
+            $sectionItemConfig = $this->getSectionItemConfig($sectionData['name'], $sectionItemName);
         } else {
             $sectionItemConfig = $sectionItemData['config'];
         }
@@ -1622,9 +1548,9 @@ abstract class ThemeEditor
         $class = '\\Be\\' . $type . '\\' . $name . '\\Section\\' . $classPart . '\\Item\\' . $sectionItemName;
         $newValues = $this->submitFormData($class, $formData, $sectionItemConfig);
         foreach ($newValues as $key => $val) {
-            $sectionItemConfig[$key] = $val;
+            $sectionItemConfig->$key = $val;
         }
-        $configPage->$property[$sectionIndex]['config']['items'][$itemIndex]['config'] = $sectionItemConfig;
+        $configPage->$property[$sectionIndex]['config']->items[$itemIndex]['config'] = $sectionItemConfig;
 
         $this->saveConfigPage($configKey, $configPage);
     }
@@ -1653,14 +1579,14 @@ abstract class ThemeEditor
         $sectionData = $configPage->$property[$sectionIndex];
 
         if (!isset($sectionData['config'])) {
-            $sectionConfig = $this->getSectionConfig($sectionData['name'], 'array');
+            $sectionConfig = $this->getSectionConfig($sectionData['name']);
             $configPage->$property[$sectionIndex]['config'] = $sectionConfig;
         } else {
             $sectionConfig = $sectionData['config'];
         }
 
-        if (isset($sectionConfig['items']) && is_array($sectionConfig['items'])) {
-            $sectionConfigItems = $sectionConfig['items'];
+        if (isset($sectionConfig->items) && is_array($sectionConfig->items)) {
+            $sectionConfigItems = $sectionConfig->items;
         } else {
             $sectionConfigItems = [];
         }
@@ -1669,7 +1595,7 @@ abstract class ThemeEditor
             'name' => $itemName,
         ];
 
-        $configPage->$property[$sectionIndex]['config']['items'] = $sectionConfigItems;
+        $configPage->$property[$sectionIndex]['config']->items = $sectionConfigItems;
 
         $this->saveConfigPage($configKey, $configPage);
     }
@@ -1698,15 +1624,15 @@ abstract class ThemeEditor
         $sectionData = $configPage->$property[$sectionIndex];
 
         if (!isset($sectionData['config'])) {
-            $sectionConfig = $this->getSectionConfig($sectionData['name'], 'array');
+            $sectionConfig = $this->getSectionConfig($sectionData['name']);
             $configPage->$property[$sectionIndex]['config'] = $sectionConfig;
         } else {
             $sectionConfig = $sectionData['config'];
         }
 
-        if (isset($sectionConfig['items'][$itemIndex])) {
-            unset($sectionConfig['items'][$itemIndex]);
-            $configPage->$property[$sectionIndex]['config']['items'] = array_values($sectionConfig['items']);
+        if (isset($sectionConfig->items[$itemIndex])) {
+            unset($sectionConfig->items[$itemIndex]);
+            $configPage->$property[$sectionIndex]['config']->items = array_values($sectionConfig->items);
         }
 
         $this->saveConfigPage($configKey, $configPage);
@@ -1739,8 +1665,8 @@ abstract class ThemeEditor
 
         $property = $position . 'Sections';
         // 重置部件子项配置
-        if (isset($configPage->$property[$sectionIndex]['config']['items'][$itemIndex]['config'])) {
-            unset($configPage->$property[$sectionIndex]['config']['items'][$itemIndex]['config']);
+        if (isset($configPage->$property[$sectionIndex]['config']->items[$itemIndex]['config'])) {
+            unset($configPage->$property[$sectionIndex]['config']->items[$itemIndex]['config']);
         }
 
         $this->saveConfigPage($configKey, $configPage);
@@ -1771,13 +1697,13 @@ abstract class ThemeEditor
         $sectionData = $configPage->$property[$sectionIndex];
 
         if (!isset($sectionData['config'])) {
-            $sectionConfig = $this->getSectionConfig($sectionData['name'], 'array');
+            $sectionConfig = $this->getSectionConfig($sectionData['name']);
             $configPage->$property[$sectionIndex]['config'] = $sectionConfig;
         } else {
             $sectionConfig = $sectionData['config'];
         }
 
-        $sectionConfigItems = $sectionConfig['items'];
+        $sectionConfigItems = $sectionConfig->items;
 
         if (!isset($sectionConfigItems[$oldIndex]) ||
             !isset($sectionConfigItems[$newIndex])) {
@@ -1790,7 +1716,7 @@ abstract class ThemeEditor
         $arr[] = $tmpData;
         $arr = array_merge($arr, array_slice($sectionConfigItems, $newIndex));
 
-        $configPage->$property[$sectionIndex]['config']['items'] = array_values($arr);
+        $configPage->$property[$sectionIndex]['config']->items = array_values($arr);
 
         $this->saveConfigPage($configKey, $configPage);
     }
@@ -1831,13 +1757,13 @@ abstract class ThemeEditor
      *
      * @param string $className 类名
      * @param array $formData 表单数据
-     * @param array $configData 配置数据
+     * @param object $config 配置数据
      * @return array
      * @throws ServiceException
      * @throws \Be\AdminPlugin\AdminPluginException
      * @throws \ReflectionException
      */
-    private function submitFormData(string $className, array $formData, array $configData): array
+    private function submitFormData(string $className, array $formData, object $config): array
     {
         $originalConfigInstance = new $className();
 
@@ -1888,8 +1814,8 @@ abstract class ThemeEditor
                     $driverClass = \Be\AdminPlugin\Form\Item\FormItemInput::class;
                 }
 
-                if (isset($configData[$itemName])) {
-                    $configItem['value'] = $configData[$itemName];
+                if (isset($config->$itemName)) {
+                    $configItem['value'] = $config->$itemName;
                 }
 
                 $driver = new $driverClass($configItem);
