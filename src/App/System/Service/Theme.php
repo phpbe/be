@@ -59,7 +59,7 @@ class Theme
      * @param int $sectionIndex 部件索引编号
      * @return object
      */
-    private function getSection(string $route, string $sectionName, ?object $sectionConfig, string $position, int $sectionIndex): object
+    public function getSection(string $route, string $sectionName, ?object $sectionConfig, string $position, int $sectionIndex): object
     {
         $parts = explode('.', $sectionName);
         $type = array_shift($parts);
