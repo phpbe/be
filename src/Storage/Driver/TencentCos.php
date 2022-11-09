@@ -536,8 +536,8 @@ class TencentCos extends Driver
                 'secretId' => $config->secretId,
                 'secretKey' => $config->secretKey,
             ],
-            'timeout' => 30,
-            'connect_timeout' => 10,
+            'timeout' => 10,
+            'connect_timeout' => 5,
         ];
 
         if ($config->token) {
