@@ -21,7 +21,7 @@ class Config
      *     keyValues = "return ['default' => '默认', 'fullWidth' => '全屏'];"
      * )
      */
-    public string $width = 'fullWidth';
+    public string $width = 'default';
 
     /**
      * @BeConfigItem("内容",
