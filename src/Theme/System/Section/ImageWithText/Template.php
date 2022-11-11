@@ -63,6 +63,7 @@ class Template extends Section
 
             echo '#' . $this->id . ' .image-with-text-image img {';
             echo 'width: 100%;';
+            echo 'display: block;';
             echo '}';
 
             echo '#' . $this->id . ' .image-with-text-image .no-image {';

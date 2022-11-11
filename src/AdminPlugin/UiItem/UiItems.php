@@ -164,7 +164,7 @@ class UiItems
 
         if (count($this->jsCode) > 0) {
             $jsCode = array_unique($this->jsCode);
-            $html .= '<script>' . implode('\n', $jsCode). '</script>';
+            $html .= '<script>' . implode("\n", $jsCode). '</script>';
         }
 
         return $html;
