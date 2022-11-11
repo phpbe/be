@@ -15,6 +15,15 @@ class Config
     public int $enable = 1;
 
     /**
+     * @BeConfigItem("宽度",
+     *     description="位于middle时有效",
+     *     driver="FormItemSelect",
+     *     keyValues = "return ['default' => '默认', 'fullWidth' => '全屏'];"
+     * )
+     */
+    public string $width = 'fullWidth';
+
+    /**
      * @BeConfigItem("内容",
      *     driver="FormItemTinymce",
      *     option="return ['height'=>300]"

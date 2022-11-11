@@ -9,8 +9,16 @@ class Template extends Section
 
     public function display()
     {
+        if ($this->position === 'middle' && $this->config->width === 'default') {
+            echo '<div class="be-container">';
+        }
+
         if ($this->config->enable) {
             echo $this->config->content;
+        }
+
+        if ($this->position === 'middle' && $this->config->width === 'default') {
+            echo '</div>';
         }
     }
 }

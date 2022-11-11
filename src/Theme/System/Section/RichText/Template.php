@@ -17,9 +17,16 @@ class Template extends Section
             echo '</style>';
 
             echo '<div class="rich-text">';
+            if ($this->position === 'middle' && $this->config->width === 'default') {
+                echo '<div class="be-container">';
+            }
             echo $this->page->tag0('be-section-content');
             echo $this->config->content;
             echo $this->page->tag1('be-section-content');
+
+            if ($this->position === 'middle' && $this->config->width === 'default') {
+                echo '</div>';
+            }
             echo '</div>';
         }
     }
