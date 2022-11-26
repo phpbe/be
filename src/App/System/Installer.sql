@@ -5,7 +5,7 @@ CREATE TABLE `system_admin_op_log` (
   `app` VARCHAR(60) NOT NULL DEFAULT '' COMMENT '应用名',
   `controller` VARCHAR(60) NOT NULL DEFAULT '' COMMENT '控制器名',
   `action` VARCHAR(60) NOT NULL DEFAULT '' COMMENT '动作名',
-  `content` VARCHAR(240) NOT NULL DEFAULT '' COMMENT '内容',
+  `content` VARCHAR(500) NOT NULL DEFAULT '' COMMENT '内容',
   `details` text NOT NULL COMMENT '明细',
   `ip` varchar(15) NOT NULL DEFAULT '' COMMENT 'IP',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

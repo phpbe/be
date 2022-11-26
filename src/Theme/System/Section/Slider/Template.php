@@ -23,9 +23,6 @@ class Template extends Section
                 return;
             }
 
-            echo '<script src="' . Be::getProperty('Theme.System')->getWwwUrl() . '/lib/swiper/swiper-bundle.min.js"></script>';
-            echo '<link rel="stylesheet" href="' . Be::getProperty('Theme.System')->getWwwUrl() . '/lib/swiper/swiper-bundle.min.css">';
-
             $themeName = Be::getRequest()->getThemeName();
             $configTheme = Be::getConfig('Theme.' . $themeName . '.Theme');
 
@@ -316,6 +313,13 @@ class Template extends Section
             }
 
             echo '</div>';
+
+            $key = 'Theme:System:swiper';
+            if (!Be::hasContext($key)) {
+                $wwwUrl = Be::getProperty('Theme.System')->getWwwUrl();
+                echo '<link rel="stylesheet" href="' . $wwwUrl . '/lib/swiper/8.3.2/swiper-bundle.min.css">';
+                echo '<script src="' . $wwwUrl . '/lib/swiper/8.3.2/swiper-bundle.min.js"></script>';
+            }
 
             echo '<script>';
             echo '$(document).ready(function () {';

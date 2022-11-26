@@ -1169,7 +1169,7 @@ class Curd extends Driver
                         $opLog = $this->setting['fieldEdit']['title'] . '（' . $title . '）';
                     }
 
-                    beAdminOpLog($opLog . '（#' . $strPrimaryKey . '：' . $strPrimaryKeyValue . '）');
+                    beAdminOpLog($opLog . '（' . count($primaryKeyValues) . ' 条）', $opLog . '（#' . $strPrimaryKey . '：' . $strPrimaryKeyValue . '）');
                 }
                 $db->commit();
 
@@ -1352,7 +1352,7 @@ class Curd extends Driver
                 $strPrimaryKeyValue = implode(',', $primaryKeyValues);
 
                 if (!isset($this->setting['opLog']) || $this->setting['opLog']) {
-                    beAdminOpLog($title . '（#' . $strPrimaryKey . '：' . $strPrimaryKeyValue . '）');
+                    beAdminOpLog($title . '（' . count($primaryKeyValues) . ' 条）', $title . '（#' . $strPrimaryKey . '：' . $strPrimaryKeyValue . '）');
                 }
                 $db->commit();
                 $this->trigger('success', $postData);
