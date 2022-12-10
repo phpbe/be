@@ -120,8 +120,8 @@ class Driver
         $request = Be::getRequest();
         $route = $request->getRoute();
         foreach ($this->items as $item) {
-            if ($item->params) {
-                if ($route === $item->route) {
+            if ($item->route) {
+                if ($item->params) {
                     $paramsMatched = true;
                     foreach ($item->params as $key => $val) {
                         if ($val != $request->get($key, '')) {
@@ -134,11 +134,19 @@ class Driver
                         $activeId = $item->id;
                         break;
                     }
+                } else {
+                    if ($route === $item->route) {
+                        $activeId = $item->id;
+                        break;
+                    }
                 }
             } else {
-                if ($route === $item->route) {
-                    $activeId = $item->id;
-                    break;
+                if ($item->url === '/') {
+                    $configSystem = Be::getConfig('App.System.System');
+                    if ($configSystem->home === $route) {
+                        $activeId = $item->id;
+                        break;
+                    }
                 }
             }
         }
