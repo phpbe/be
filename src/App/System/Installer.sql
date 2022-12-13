@@ -11,7 +11,7 @@ CREATE TABLE `system_admin_op_log` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`),
   KEY `admin_user_id` (`admin_user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统后台操作日志';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci COMMENT='系统后台操作日志';
 
 CREATE TABLE `system_admin_role` (
   `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
@@ -25,7 +25,7 @@ CREATE TABLE `system_admin_role` (
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户角色';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci COMMENT='用户角色';
 
 INSERT INTO `system_admin_role` (`id`, `name`, `remark`, `permission`, `permission_keys`, `is_enable`, `is_delete`, `ordering`, `create_time`, `update_time`) VALUES
 ((SELECT UUID()), '超级管理员', '能执行所有操作', 1, '', 1, 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
@@ -52,7 +52,7 @@ CREATE TABLE `system_admin_user` (
   `update_time` timestamp on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci COMMENT='用户';
 
 INSERT INTO `system_admin_user` (`id`, `username`, `password`, `salt`, `admin_role_id`, `avatar`, `email`, `name`, `gender`, `phone`, `mobile`, `last_login_time`, `this_login_time`, `last_login_ip`, `this_login_ip`, `is_enable`, `is_delete`, `create_time`, `update_time`) VALUES
 ((SELECT UUID()), 'admin', 'a2ad3e6e3acf5b182324ed782f8a0556d43e59dd', 'ybFD7uzKMH8yvPHvuPNNT0vDv7uF2811', (SELECT id FROM system_admin_role WHERE `name` = '超级管理员' LIMIT 1), '', 'be@phpbe.com', '管理员', 0, '', '', NULL, NULL, '', '', 1, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
@@ -65,7 +65,7 @@ CREATE TABLE `system_admin_user_login_log` (
   `ip` varchar(15) NOT NULL DEFAULT '' COMMENT 'IP',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户登录日志';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci COMMENT='用户登录日志';
 
 
 CREATE TABLE `system_mail_queue` (
@@ -85,7 +85,7 @@ CREATE TABLE `system_mail_queue` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='发送邮件队列';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci COMMENT='发送邮件队列';
 
 CREATE TABLE `system_menu` (
   `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
@@ -95,7 +95,7 @@ CREATE TABLE `system_menu` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='菜单';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci COMMENT='菜单';
 
 INSERT INTO `system_menu` (`id`, `name`, `label`, `is_system`, `create_time`, `update_time`) VALUES
 ((SELECT UUID()), 'North', '顶部菜单', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -117,7 +117,7 @@ CREATE TABLE `system_menu_item` (
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `menu_name` (`menu_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='菜单项';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci COMMENT='菜单项';
 
 INSERT INTO `system_menu_item` (`id`, `menu_name`, `parent_id`, `name`, `route`, `params`, `url`, `description`, `target`, `ordering`, `create_time`, `update_time`) VALUES
 ((SELECT UUID()), 'North', '', '首页', 'System.Home.index', '', '', '首页', '_self', 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
@@ -141,7 +141,7 @@ CREATE TABLE `system_task` (
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `app` (`app`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='计划任务';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci COMMENT='计划任务';
 
 
 CREATE TABLE `system_task_log` (
@@ -154,7 +154,7 @@ CREATE TABLE `system_task_log` (
 `complete_time` timestamp NULL DEFAULT NULL COMMENT '完成时间',
 `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='抽取数据';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci COMMENT='抽取数据';
 
 ALTER TABLE `system_task_log`
 ADD PRIMARY KEY (`id`),
