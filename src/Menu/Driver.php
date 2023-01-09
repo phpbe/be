@@ -38,6 +38,7 @@ class Driver
             $item->url = $url;
         }
         $item->target = $target;
+        $item->active = 0;
 
         $this->items[$itemId] = $item;
     }
@@ -97,6 +98,8 @@ class Driver
         }
         $contextKey = 'Be:Menu:' . $class . ':activeId';
         Be::setContext($contextKey, $activeId);
+
+        $this->updateActiveItems($activeId);
     }
 
     /**
@@ -151,8 +154,36 @@ class Driver
             }
         }
 
+        $this->updateActiveItems($activeId);
+
         Be::setContext($contextKey, $activeId);
         return $activeId;
+    }
+
+    /**
+     * 更新活动项
+     *
+     * @param string $activeId 活动项ID
+     * @return void
+     */
+    public function updateActiveItems(string $activeId = null)
+    {
+        if ($activeId === null) {
+            $this->getActiveId();
+        } else {
+            $parentId = $activeId;
+            while ($parentId !== '') {
+                $newParentId = '';
+                foreach ($this->items as $item) {
+                    if ($item->id === $parentId) {
+                        $item->active = 1;
+                        $newParentId = $item->parentId;
+                        break;
+                    }
+                }
+                $parentId = $newParentId;
+            }
+        }
     }
 
 }
