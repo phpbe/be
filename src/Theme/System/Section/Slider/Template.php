@@ -32,6 +32,12 @@ class Template extends Section
             echo $this->getCssPadding('slider');
             echo $this->getCssMargin('slider');
 
+            echo '#' . $this->id . ' .swiper {';
+            echo '--swiper-theme-color: #' . $configTheme->majorColor . ';';
+            echo '--swiper-navigation-color: #' . $configTheme->majorColor . ';';
+            echo '--swiper-navigation-size: ' . $this->config->navigationSize . 'px;';
+            echo '}';
+
             if ($this->config->pagination) {
                 echo '#' . $this->id . ' .swiper-pagination-bullet-active {';
                 echo 'background-color: ' . $configTheme->majorColor . ';';
@@ -41,10 +47,6 @@ class Template extends Section
             if ($this->config->navigation) {
                 echo '#' . $this->id . ' .swiper-button-prev, ';
                 echo '#' . $this->id . ' .swiper-button-next {';
-                echo 'color: ' . $configTheme->majorColor . ';';
-                echo 'width: ' . ($this->config->navigationSize / 44 * 27) . 'px;';
-                echo 'height: ' . $this->config->navigationSize . 'px;';
-                echo 'margin-top: -' . ($this->config->navigationSize / 2) . 'px;';
                 echo 'opacity: .1;';
                 echo 'transition: opacity 0.3s ease;';
                 echo '}';
@@ -52,11 +54,6 @@ class Template extends Section
                 echo '#' . $this->id . ' .swiper-container:hover .swiper-button-prev, ';
                 echo '#' . $this->id . ' .swiper-container:hover .swiper-button-next {';
                 echo 'opacity: 1;';
-                echo '}';
-
-                echo '#' . $this->id . ' .swiper-button-prev:after, ';
-                echo '#' . $this->id . ' .swiper-button-next:after {';
-                echo 'font-size: ' . $this->config->navigationSize . ';';
                 echo '}';
             }
 
@@ -189,7 +186,7 @@ class Template extends Section
                 echo '<div class="be-container">';
             }
 
-            echo '<div class="swiper-container" id="' . $this->id . '-slider">';
+            echo '<div class="swiper" id="' . $this->id . '-slider">';
 
             echo '<div class="swiper-wrapper">';
             foreach ($this->config->items as $item) {
@@ -325,10 +322,11 @@ class Template extends Section
             echo '$(document).ready(function () {';
             echo 'new Swiper("#' . $this->id . '-slider", {';
             if ($count > 1) {
+                echo 'speed: ' . $this->config->speed . ',';
                 if ($this->config->autoplay) {
-                    echo 'autoplay: true,';
-                    echo 'delay: ' . $this->config->delay . ',';
-                    echo 'speed: ' . $this->config->speed . ',';
+                    echo 'autoplay: {,';
+                    echo 'delay: ' . $this->config->delay;
+                    echo '},';
                 }
 
                 if ($this->config->loop) {
