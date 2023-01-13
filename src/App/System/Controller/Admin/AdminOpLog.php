@@ -93,7 +93,7 @@ class AdminOpLog extends Auth
                     'items' => [
                         [
                             'label' => '删除三个月前系统日志',
-                            'url' => beAdminUrl('System.OpLog.deleteLogs'),
+                            'url' => beAdminUrl('System.AdminOpLog.deleteLogs'),
                             'confirm' => '确认要删除么？',
                             "target" => 'ajax',
                             'ui' => [
