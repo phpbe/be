@@ -324,7 +324,7 @@ class Template extends Section
             if ($count > 1) {
                 echo 'speed: ' . $this->config->speed . ',';
                 if ($this->config->autoplay) {
-                    echo 'autoplay: {,';
+                    echo 'autoplay: {';
                     echo 'delay: ' . $this->config->delay;
                     echo '},';
                 }
