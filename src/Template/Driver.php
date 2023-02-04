@@ -142,7 +142,7 @@ class Driver
                     }
                 }
 
-                echo '.west-container,.center-container,.east-container{flex:0 0 0%; overflow:hidden;}';
+                echo '.west-container,.center-container,.east-container{flex:0 0 0%;}';
                 echo '@media (max-width: 992px) {';
                 echo '.west-container{display: none;}';
                 echo '.center-container{flex-basis:100%;}';
