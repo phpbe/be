@@ -16,6 +16,10 @@ class Template extends Section
         echo $this->getCssPadding('footer');
         echo $this->getCssMargin('footer');
 
+        echo '#' . $this->id . ' .footer {';
+        echo 'color: ' . $this->config->fontColor . ';';
+        echo '}';
+
         echo '#' . $this->id . ' .footer-menu-lv1 {';
         echo 'font-size: 1.25rem;';
         echo '}';

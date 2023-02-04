@@ -18,7 +18,14 @@ class Config
      *     driver="FormItemColorPicker"
      * )
      */
-    public string $backgroundColor = '#666666';
+    public string $backgroundColor = '#333';
+
+    /**
+     * @BeConfigItem("文字颜色",
+     *     driver="FormItemColorPicker"
+     * )
+     */
+    public string $fontColor = '#ccc';
 
     /**
      * @BeConfigItem("内边距 （手机端）",
