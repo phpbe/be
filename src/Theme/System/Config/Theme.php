@@ -11,13 +11,13 @@ class Theme
      * @BeConfigItem("主色调",
      *     driver="FormItemColorPicker")
      */
-    public string $majorColor = '#FF6600';
+    public string $majorColor = '#ff5c35';
 
     /**
      * @BeConfigItem("搭配颜色",
      *     driver="FormItemColorPicker")
      */
-    public string $minorColor = '#666666';
+    public string $minorColor = '#213343';
 
     /**
      * @BeConfigItem("字体大小",
@@ -29,24 +29,24 @@ class Theme
      * @BeConfigItem("背景颜色",
      *     driver="FormItemColorPicker")
      */
-    public string $backgroundColor = '#F5F5F5';
+    public string $backgroundColor = '#f6f9fc';
 
     /**
      * @BeConfigItem("字体颜色",
      *     driver="FormItemColorPicker")
      */
-    public string $fontColor = '#333333';
+    public string $fontColor = '#2e475d';
 
     /**
      * @BeConfigItem("超链接颜色",
      *     driver="FormItemColorPicker")
      */
-    public string $linkColor = '#333333';
+    public string $linkColor = '#ff5c35';
 
     /**
      * @BeConfigItem("超链接悬停颜色",
      *     driver="FormItemColorPicker")
      */
-    public string $linkHoverColor = '#FF6600';
+    public string $linkHoverColor = '#cc4a2a';
 
 }

@@ -25,13 +25,13 @@
     <style type="text/css">
         html {
             font-size: 16px;
-            background-color: #fff;
-            color: #333;
+            background-color: #f6f9fc;
+            color: #2e475d;
         }
 
         body {
         <?php
-        $majorColor = '#f60';
+        $majorColor = '#ff5c35';
         echo '--major-color: ' . $majorColor . ';';
 
         // CSS 处理库
@@ -115,7 +115,7 @@
                 <div class="be-col-auto">
                     <a href="<?php echo beUrl(); ?>" class="be-d-inline-block">
                         <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-                            <rect rx="8" width="64" height="64" y="0" x="0" fill="#ff6600"/>
+                            <rect rx="8" width="64" height="64" y="0" x="0" fill="#ff5c35"/>
                             <path d="M9 31 L15 31 M15 52 L9 52 L9 11 L15 11 C32 11 32 31 15 31 C32 32 32 52 15 52 M57 11 L39 11 L39 52 L57 52 M39 31 L55 31" stroke="#ffffff" stroke-width="4" fill="none" />
                         </svg>
                     </a>

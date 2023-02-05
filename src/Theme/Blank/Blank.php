@@ -23,7 +23,7 @@
         }
 
         a:hover {
-            color: #f60;
+            color: #ff5c35;
         }
     </style>
 

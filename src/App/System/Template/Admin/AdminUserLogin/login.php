@@ -16,9 +16,9 @@ $config = \Be\Be::getConfig('App.System.System');
         } else {
             ?>
             <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
-                <rect rx="5" height="40" width="40" x="10" y="10" fill="#ff6600"/>
+                <rect rx="5" height="40" width="40" x="10" y="10" fill="#ff5c35"/>
                 <path d="M16 29 L21 29 M21 42 L16 42 L16 17 L21 17 C30 17 30 29 21 29 C30 30 30 42 21 42 M45 17 L34 17 L34 42 L46 42 M35 29 L44 29" stroke="#ffffff" stroke-width="2" fill="none" />
-                <text x="65" y="35" style="font-size: 14px;"><tspan fill="#ff6600">B</tspan><tspan fill="#999999">eyound</tspan> <tspan fill="#ff6600">E</tspan><tspan fill="#999999">xception</tspan></text>
+                <text x="65" y="35" style="font-size: 14px;"><tspan fill="#ff5c35">B</tspan><tspan fill="#999999">eyound</tspan> <tspan fill="#ff5c35">E</tspan><tspan fill="#999999">xception</tspan></text>
             </svg>
             <?php
         }
