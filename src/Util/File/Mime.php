@@ -1142,27 +1142,19 @@ class Mime
             }
         }
 
-        $ext = false;
+        $arrExt = [];
         foreach (self::MAPPING as $key => $val) {
-            if ($mime === $val) {
-                if ($ext === false) {
-                    $ext = $key;
-                }
+            if ($defaultExt !== '' && $key === $defaultExt) {
+                return $key;
+            }
 
-                if ($defaultExt === '') {
-                    if ($ext) {
-                        return $ext;
-                    }
-                } else {
-                    if ($key === $defaultExt) {
-                        return $key;
-                    }
-                }
+            if ($mime === $val) {
+                $arrExt[] = $key;
             }
         }
 
-        if ($ext !== false) {
-            return $ext;
+        if (count($arrExt) >= 1) {
+            return $arrExt[0];
         }
 
         return $defaultExt;
