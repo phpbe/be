@@ -1,4 +1,5 @@
 <?php
+
 namespace Be\Theme\System\Section\GroupOfIconWithText;
 
 use Be\Theme\Section;
@@ -41,7 +42,9 @@ class Template extends Section
 
 
             echo '#' . $this->id . ' .group-of-icon-with-text-item-bg {';
-            echo 'background-color: ' . $this->config->itemBackgroundColor . ';';
+            if ($this->config->itemBackgroundColor !== '') {
+                echo 'background-color: ' . $this->config->itemBackgroundColor . ';';
+            }
             echo 'padding: 1.5rem 1rem;';
             echo 'box-shadow: 0 0 11px #eaf0f6;';
             echo 'transition: all 0.3s ease;';
@@ -78,7 +81,9 @@ class Template extends Section
             echo '}';
 
             echo '#' . $this->id . ' .group-of-icon-with-text-item-title {';
-            echo 'color: ' . $this->config->itemTitleColor . ';';
+            if ($this->config->itemTitleColor !== '') {
+                echo 'color: ' . $this->config->itemTitleColor . ';';
+            }
             echo 'overflow: hidden;';
             echo 'text-overflow: ellipsis;';
             echo 'white-space: nowrap;';
@@ -86,11 +91,16 @@ class Template extends Section
 
             echo '#' . $this->id . ' .group-of-icon-with-text-item-link {';
             echo 'margin-top: 0.5rem;';
-            echo 'color: ' . $this->config->itemLinkColor . ';';
+            if ($this->config->itemLinkColor !== '') {
+                echo 'color: ' . $this->config->itemLinkColor . ';';
+            }
             echo '}';
 
             echo '#' . $this->id . ' .group-of-icon-with-text-item-link a {';
-            echo 'color: ' . $this->config->itemLinkColor . ';';
+
+            if ($this->config->itemLinkColor !== '') {
+                echo 'color: ' . $this->config->itemLinkColor . ';';
+            }
             echo '}';
 
             echo '</style>';
@@ -118,7 +128,7 @@ class Template extends Section
                                         echo $itemConfig->iconSvg;
                                         break;
                                     case 'image':
-                                        echo '<img src="' . $itemConfig->iconImage  . '" />';
+                                        echo '<img src="' . $itemConfig->iconImage . '" />';
                                         break;
 
                                 }
