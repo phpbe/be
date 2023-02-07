@@ -92,7 +92,7 @@ class File extends Driver
         $dir = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
-            chmod($dir, 0777);
+            @chmod($dir, 0777);
         }
         $path = $dir . '/' . $hash;
 
@@ -108,7 +108,7 @@ class File extends Driver
         }
         $data = $expire . $value;
         if (!file_put_contents($path, $data)) return false;
-        chmod($path, 0777);
+        @chmod($path, 0777);
         return true;
     }
 
@@ -156,7 +156,7 @@ class File extends Driver
 
             $data = $expire . substr($content, 10);
             if (!file_put_contents($path, $data)) return false;
-            chmod($path, 0777);
+            @chmod($path, 0777);
             return true;
         } else {
             return false;
@@ -204,7 +204,7 @@ class File extends Driver
         $dir = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
-            chmod($dir, 0777);
+            @chmod($dir, 0777);
         }
         $path = $dir . '/' . $hash;
 
@@ -212,7 +212,7 @@ class File extends Driver
             $value = $step;
             $data = '9999999999' . $value;
             if (!file_put_contents($path, $data)) return false;
-            chmod($path, 0777);
+            @chmod($path, 0777);
             return $value;
         }
 
@@ -226,7 +226,7 @@ class File extends Driver
             $value = intval($content) + $step;
             $data = $expire . $value;
             if (!file_put_contents($path, $data)) return false;
-            chmod($path, 0777);
+            @chmod($path, 0777);
             return $value;
         } else {
             return false;
@@ -246,7 +246,7 @@ class File extends Driver
         $dir = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
-            chmod($dir, 0777);
+            @chmod($dir, 0777);
         }
         $path = $dir . '/' . $hash;
 
@@ -254,7 +254,7 @@ class File extends Driver
             $value = -$step;
             $data = '9999999999' . $value;
             if (!file_put_contents($path, $data)) return false;
-            chmod($path, 0777);
+            @chmod($path, 0777);
             return $value;
         }
 
@@ -268,7 +268,7 @@ class File extends Driver
             $value = intval($content) - $step;
             $data = $expire . $value;
             if (!file_put_contents($path, $data)) return false;
-            chmod($path, 0777);
+            @chmod($path, 0777);
             return $value;
         } else {
             return false;

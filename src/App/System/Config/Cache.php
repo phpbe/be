@@ -13,7 +13,7 @@ class Cache
      *     driver="FormItemSelect",
      *     keyValues = "return ['File' => '文件', 'Redis' => 'Redis'];")
      */
-    public $driver = 'File';
+    public string $driver = 'File';
 
     /**
      * @BeConfigItem("REDIS库",
@@ -21,6 +21,6 @@ class Cache
      *     keyValues = "return \Be\Redis\RedisHelper::getConfigKeyValues();",
      *     ui="return ['form-item' => ['v-show' => 'formData.driver === \'Redis\'']];")
      */
-    public $redis = 'master';
+    public string $redis = 'master';
 
 }

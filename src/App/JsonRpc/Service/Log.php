@@ -26,7 +26,7 @@ class Log
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
-            chmod($dir, 0777);
+            @chmod($dir, 0777);
         }
 
         $data = date('Y-m-d H:i:s') . ':' . "\n";
@@ -48,7 +48,7 @@ class Log
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
-            chmod($dir, 0777);
+            @chmod($dir, 0777);
         }
 
         $data = date('Y-m-d H:i:s') . ':' . "\n";

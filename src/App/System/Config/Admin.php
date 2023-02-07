@@ -10,7 +10,7 @@ class Admin
     /**
      * @BeConfigItem("默认首页", driver="FormItemInput")
      */
-    public $home = 'System.Home.index';
+    public string $home = 'System.Home.index';
 
     /**
      * @BeConfigItem("默认分页条数（条/页）",
@@ -18,6 +18,6 @@ class Admin
      *     values="return [10, 12, 15, 20, 25, 30, 50, 100, 200, 500]",
      *     valueType="int")
      */
-    public $pageSize = 10;
+    public int $pageSize = 10;
 
 }

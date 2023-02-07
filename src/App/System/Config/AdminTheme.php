@@ -6,12 +6,12 @@ class AdminTheme
 {
 
     // 排除的
-    public $exclude = ['Blank', 'Installer'];
+    public array $exclude = ['Blank', 'Installer'];
 
     // 已发现可用主题
-    public $available = ['System'];
+    public array $available = ['System'];
 
     // 默认主题
-    public $default = 'System';
+    public string $default = 'System';
 
 }

@@ -13,7 +13,7 @@ class User
      *     description="单位：像素，修改后仅对此后上传的头像生效",
      *     ui="return [':min' => 1];")
      */
-    public $avatarWidth = 96;
+    public int $avatarWidth = 96;
 
     /**
      * @BeConfigItem("用户头像高度",
@@ -21,7 +21,7 @@ class User
      *     description="单位：像素，修改后仅对此后上传的头像生效",
      *     ui="return [':min' => 1];")
      */
-    public $avatarHeight = 96;
+    public int $avatarHeight = 96;
 
 
 }

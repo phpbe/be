@@ -10,42 +10,42 @@ class StorageAliyunOss
     /**
      * @BeConfigItem("内网访问", driver="FormItemSwitch")
      */
-    public $internal = 0;
+    public int $internal = 0;
 
     /**
      * @BeConfigItem("AccessKey ID", driver="FormItemInput")
      */
-    public $accessKeyId = '';
+    public string $accessKeyId = '';
 
     /**
      * @BeConfigItem("AccessKey Secret", driver="FormItemInput")
      */
-    public $accessKeySecret = '';
+    public string $accessKeySecret = '';
 
     /**
      * @BeConfigItem("地域ID", driver="FormItemInput")
      */
-    public $regionId = 'oss-cn-shenzhen';
+    public string $regionId = 'oss-cn-shenzhen';
 
     /**
      * @BeConfigItem("访问域名", driver="FormItemInput")
      */
-    public $endpoint = 'https://oss-cn-shenzhen.aliyuncs.com';
+    public string $endpoint = 'https://oss-cn-shenzhen.aliyuncs.com';
 
     /**
      * @BeConfigItem("访问域名（内网）", driver="FormItemInput")
      */
-    public $endpointInternal = 'https://oss-cn-shenzhen-internal.aliyuncs.com';
+    public string $endpointInternal = 'https://oss-cn-shenzhen-internal.aliyuncs.com';
 
     /**
      * @BeConfigItem("Bucket", driver="FormItemInput")
      */
-    public $bucket = 'phpbe';
+    public string $bucket = 'phpbe';
 
     /**
      * @BeConfigItem("访问网址", driver="FormItemInput")
      */
-    public $rootUrl = 'https://cdn.phpbe.com';
+    public string $rootUrl = 'https://cdn.phpbe.com';
 
 
 }

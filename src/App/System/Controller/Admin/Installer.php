@@ -57,12 +57,12 @@ class Installer
 
             if (!is_dir($dataPath)) {
                 mkdir($dataPath, 0777, true);
-                chmod($dataPath, 0777);
+                @chmod($dataPath, 0777);
             }
 
             if (!is_dir($wwwPath)) {
                 mkdir($wwwPath, 0777, true);
-                chmod($wwwPath, 0777);
+                @chmod($wwwPath, 0777);
             }
 
             $response->redirect(beAdminUrl('System.Installer.configDb'));

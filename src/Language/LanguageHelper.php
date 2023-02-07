@@ -23,7 +23,7 @@ class LanguageHelper
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
-            chmod($dir, 0777);
+            @chmod($dir, 0777);
         }
 
         $namespace = 'Be\\Data\\Runtime\\Language\\' . str_replace('.', '\\', $package);
@@ -50,7 +50,7 @@ class LanguageHelper
         $codePhp .= '}' . "\n\n";
 
         file_put_contents($path, $codePhp, LOCK_EX);
-        chmod($path, 0777);
+        @chmod($path, 0777);
     }
 
 

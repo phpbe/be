@@ -14,21 +14,21 @@ class Mail
     /**
      * @BeConfigItem("发件人邮箱", driver="FormItemInput")
      */
-    public $fromMail = 'be@phpbe.com';
+    public string $fromMail = 'be@phpbe.com';
 
     /**
      * @BeConfigItem("发件人名称", driver="FormItemInput")
      */
-    public $fromName = 'BE';
+    public string $fromName = 'BE';
 
     /**
      * @BeConfigItem("邮件发送器",
      *     driver = "FormItemSelect",
-     *     keyValues = "return ['Smtp' => 'SMTP'];")
+     *     keyValues = "return ['smtp' => 'SMTP'];")
      */
-    public $driver = 'Smtp';
+    public string $driver = 'smtp';
 
-    public $smtp = [
+    public array $smtp = [
         'host' => '',
         'port' => 25,
         'username' => '',
@@ -42,7 +42,7 @@ class Mail
      *     driver="FormItemInputNumberInt",
      *     ui="return [':min' => 1];")
      */
-    public $mailQueueMaxTryTimes = 10;
+    public int $mailQueueMaxTryTimes = 10;
 
 
     public function _smtp() {

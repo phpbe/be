@@ -47,11 +47,11 @@ class AdminPermission
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
-            chmod($dir, 0777);
+            @chmod($dir, 0777);
         }
 
         file_put_contents($path, $code, LOCK_EX);
-        chmod($path, 0777);
+        @chmod($path, 0777);
 
         return $permissionTree;
     }

@@ -247,7 +247,7 @@ class Config extends Driver
             $dir = dirname($path);
             if (!is_dir($dir)) {
                 mkdir($dir, 0777, true);
-                chmod($path, 0777);
+                @chmod($path, 0777);
             }
             file_put_contents($path, $code, LOCK_EX);
 

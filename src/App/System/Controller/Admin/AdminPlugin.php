@@ -56,7 +56,7 @@ class AdminPlugin
             $dir = dirname($newFilePath);
             if (!is_dir($dir)) {
                 mkdir($dir, 0777, true);
-                chmod($dir, 0777);
+                @chmod($dir, 0777);
             }
 
             if (move_uploaded_file($file['tmp_name'], $newFilePath)) {
@@ -122,7 +122,7 @@ class AdminPlugin
                 $dir = dirname($newImagePath);
                 if (!is_dir($dir)) {
                     mkdir($dir, 0777, true);
-                    chmod($dir, 0777);
+                    @chmod($dir, 0777);
                 }
 
                 $resize = false;
@@ -219,7 +219,7 @@ class AdminPlugin
                 $dir = dirname($newImagePath);
                 if (!is_dir($dir)) {
                     mkdir($dir, 0777, true);
-                    chmod($dir, 0777);
+                    @chmod($dir, 0777);
                 }
 
                 $resize = false;

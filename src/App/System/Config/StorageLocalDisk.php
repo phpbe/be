@@ -10,7 +10,7 @@ class StorageLocalDisk
     /**
      * @BeConfigItem("访问网址", driver="FormItemInput")
      */
-    public $rootUrl = '';
+    public string $rootUrl = '';
 
 
 }

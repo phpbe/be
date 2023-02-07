@@ -14,7 +14,7 @@ class Smtp extends Driver
     public function __construct()
     {
         $config = Be::getConfig('App.System.Mail');
-        if ($config->driver !== 'Smtp') {
+        if ($config->driver !== 'smtp') {
             throw new ServiceException('实例化SMTP邮件发送器时报错：邮件配置参数非SMTP！');
         }
 

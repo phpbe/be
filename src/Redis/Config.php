@@ -8,8 +8,12 @@ use Be\AdminPlugin\Form\Item\FormItemsObject;
 
 class Config
 {
+    /**
+     * @BeConfigItem("是否启用", driver = "FormItemSwitch")
+     */
+    public int $enable = 0;
 
-    public $master = [
+    public array $master = [
         'host' => '127.0.0.1', // 主机名
         'port' => 6379, // 端口号
         'timeout' => 5, // 超时时间

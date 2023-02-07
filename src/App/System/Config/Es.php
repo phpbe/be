@@ -9,8 +9,17 @@ class Es
 {
 
     /**
-     * @BeConfigItem("ES服务器", driver="FormItemCode", language="json", valueType = "array(string)")
+     * @BeConfigItem("是否启用", driver = "FormItemSwitch")
      */
-    public $hosts = ['127.0.0.1:9200'];
+    public int $enable = 0;
+
+    /**
+     * @BeConfigItem("ES服务器",
+     *     driver="FormItemCode",
+     *     language="json",
+     *     valueType = "array(string)",
+     *     ui="return ['form-item' => ['v-show' => 'formData.enable === 1']];")
+     */
+    public array $hosts = ['127.0.0.1:9200'];
 
 }

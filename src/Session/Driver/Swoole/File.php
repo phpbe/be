@@ -39,7 +39,7 @@ class File extends Driver
             $dir =  Be::getRuntime()->getRootPath() . '/data/session';
             if (!is_dir($dir)) {
                 mkdir($dir, 0777, true);
-                chmod($dir, 0777);
+                @chmod($dir, 0777);
             }
 
             $path = $dir . '/' . $this->id;

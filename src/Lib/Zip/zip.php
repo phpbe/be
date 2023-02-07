@@ -75,7 +75,7 @@ class Zip
     {
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
-            chmod($dir, 0777);
+            @chmod($dir, 0777);
         }
 
         if (!$this->data) $this->loadData();
@@ -93,11 +93,11 @@ class Zip
 
                 if (!is_dir($extractToDir)) {
                     mkdir($extractToDir, 0777, true);
-                    chmod($extractToDir, 0777);
+                    @chmod($extractToDir, 0777);
                 }
 
                 file_put_contents($extractToPath, $buffer);
-                chmod($extractToPath, 0777);
+                @chmod($extractToPath, 0777);
             }
         }
         return true;

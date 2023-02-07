@@ -124,7 +124,7 @@ class LocalDisk extends Driver
         $dir = dirname($newFilePath);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
-            chmod($dir, 0777);
+            @chmod($dir, 0777);
         }
 
         if (file_exists($newFilePath)) {
@@ -256,7 +256,7 @@ class LocalDisk extends Driver
         }
 
         mkdir($path, 0777, true);
-        chmod($path, 0777);
+        @chmod($path, 0777);
 
         return $this->getRootUrl() . $dirPath;
     }

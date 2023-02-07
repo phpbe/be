@@ -27,7 +27,7 @@ class File extends Driver
         $dir = Be::getRuntime()->getRootPath() . '/data/log/' .  $year . '/' . $month . '/' . $day . '/';
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
-            chmod($dir, 0777);
+            @chmod($dir, 0777);
         }
 
         $logFileName = $content['id'];
@@ -36,7 +36,7 @@ class File extends Driver
 
         if (!file_exists($logFilePath)) {
             file_put_contents($logFilePath, json_encode($content));
-            chmod($logFilePath, 0777);
+            @chmod($logFilePath, 0777);
         }
 
         $indexFilePath = $dir . 'index';

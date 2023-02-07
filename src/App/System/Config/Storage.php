@@ -12,7 +12,7 @@ class Storage
      *     driver="FormItemSelect",
      *     keyValues = "return ['LocalDisk' => '本地磁盘', 'AliyunOss' => '阿里云OSS', 'TencentCos' => '腾讯云COS'];")
      */
-    public $driver = 'LocalDisk';
+    public string $driver = 'LocalDisk';
 
 
 }

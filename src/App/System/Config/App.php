@@ -5,6 +5,6 @@ namespace Be\App\System\Config;
 class App
 {
 
-    public $names = ['System'];
+    public array $names = ['System'];
 
 }
