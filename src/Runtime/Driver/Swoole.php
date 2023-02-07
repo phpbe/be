@@ -31,6 +31,10 @@ class Swoole extends Driver
         $configSystem = Be::getConfig('App.System.System');
         date_default_timezone_set($configSystem->timezone);
 
+        if ($configSystem->developer === 0) {
+            error_reporting(0);
+        }
+
         $configServer = Be::getConfig('App.System.Server');
         $this->swooleHttpServer = new \Swoole\Http\Server($configServer->host, $configServer->port);
 

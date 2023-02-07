@@ -14,6 +14,16 @@ class Common extends Driver
 
     public function execute()
     {
+        // 检查网站配置， 是否暂停服务
+        $configSystem = Be::getConfig('App.System.System');
+
+        // 默认时区
+        date_default_timezone_set($configSystem->timezone);
+
+        if ($configSystem->developer === 0) {
+            error_reporting(0);
+        }
+
         $request = new \Be\Request\Driver\Common();
         $response = new \Be\Response\Driver\Common();
         Be::setRequest($request);
@@ -24,12 +34,6 @@ class Common extends Driver
         $session->start();
 
         try {
-            // 检查网站配置， 是否暂停服务
-            $configSystem = Be::getConfig('App.System.System');
-
-            // 默认时区
-            date_default_timezone_set($configSystem->timezone);
-
             $admin = $request->get($this->adminAlias, false);
             if ($admin !== false) {
                 $admin = true;
