@@ -17,8 +17,7 @@ class Template extends Section
         echo '#' . $this->id . ' .header-desktop {';
         echo 'background-color: ' . $this->config->backgroundColor . ';';
         //echo 'border-bottom: #ddd 1px solid;';
-        echo 'box-shadow: 0 3px 5px 0 #eee;';
-        echo 'margin-bottom: 5px;';
+        echo 'box-shadow: 0 2px 4px rgb(33 51 67 / 12%);';
         echo '}';
 
         echo '#' . $this->id . ' .header-icon {';

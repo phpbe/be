@@ -14,18 +14,25 @@ class Config
     public int $enable = 1;
 
     /**
-     * @BeConfigItem("背景颜色",
+     * @BeConfigItem("文字颜色",
      *     driver="FormItemColorPicker"
      * )
      */
-    public string $backgroundColor = '#333';
+    public string $fontColor = '#ddd';
 
     /**
      * @BeConfigItem("文字颜色",
      *     driver="FormItemColorPicker"
      * )
      */
-    public string $fontColor = '#ccc';
+    public string $linkColor = '#b6c7d6';
+
+    /**
+     * @BeConfigItem("文字颜色",
+     *     driver="FormItemColorPicker"
+     * )
+     */
+    public string $linkHoverColor = '#b7ecec';
 
     /**
      * @BeConfigItem("内边距 （手机端）",

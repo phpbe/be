@@ -44,6 +44,9 @@
                 echo '--major-color-' . $i. ': ' . $libCss->lighter($configTheme->majorColor, $i * 10) . ';';
                 echo '--major-color' . $i. ': ' . $libCss->darker($configTheme->majorColor, $i * 10) . ';';
             }
+
+            echo '--minor-color: ' . $configTheme->minorColor . ';';
+            echo '--font-color: ' . $configTheme->fontColor . ';';
             ?>
         }
 

@@ -43,8 +43,13 @@ class Template extends Section
             echo '#' . $this->id . ' .group-of-icon-with-text-item-bg {';
             echo 'background-color: ' . $this->config->itemBackgroundColor . ';';
             echo 'padding: 1.5rem 1rem;';
+            echo 'box-shadow: 0 0 11px #eaf0f6;';
+            echo 'transition: all 0.3s ease;';
             echo '}';
 
+            echo '#' . $this->id . ' .group-of-icon-with-text-item-bg:hover {';
+            echo 'box-shadow: 0 10px 50px -5px rgb(46 71 93 / 12%);';
+            echo '}';
 
             echo '#' . $this->id . ' .group-of-icon-with-text-item-container {';
             echo 'display: flex;';

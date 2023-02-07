@@ -11,13 +11,20 @@ class Template extends Section
     public function css()
     {
         echo '<style type="text/css">';
-
-        echo $this->getCssBackgroundColor('footer');
         echo $this->getCssPadding('footer');
         echo $this->getCssMargin('footer');
 
         echo '#' . $this->id . ' .footer {';
+        echo 'background-color: var(--minor-color);';
         echo 'color: ' . $this->config->fontColor . ';';
+        echo '}';
+
+        echo '#' . $this->id . ' .footer a {';
+        echo 'color: ' . $this->config->linkColor . ';';
+        echo '}';
+
+        echo '#' . $this->id . ' .footer a:hover {';
+        echo 'color: ' . $this->config->linkHoverColor . ';';
         echo '}';
 
         echo '#' . $this->id . ' .footer-menu-lv1 {';
@@ -31,6 +38,19 @@ class Template extends Section
         echo '#' . $this->id . ' .footer-menu-lv2-item {';
         echo 'margin-top: 0.25rem';
         echo '}';
+
+
+        echo '#' . $this->id . ' .footer .link-hover:before {';
+        echo 'background-color: #b7ecec;';
+        echo '}';
+
+        echo '#' . $this->id . ' .footer-copyright {';
+        echo 'margin-top: 2rem;';
+        echo 'padding-top: 1rem;';
+        echo 'border-top: 1px solid #41566d;';
+        echo 'font-size: .9rem;';
+        echo '}';
+
 
         echo '</style>';
     }
