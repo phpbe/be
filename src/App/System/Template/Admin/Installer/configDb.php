@@ -13,7 +13,7 @@
 <be-center>
     <form id="form" action="<?php echo \Be\Be::getRequest()->getUrl(); ?>" method="post">
         <div class="be-row be-mt-200">
-            <div class="be-col be-ta-right be-lh-250 be-c-999">
+            <div class="be-col be-ta-right be-lh-250">
                 主机名：
             </div>
             <div class="be-col">
@@ -22,7 +22,7 @@
         </div>
 
         <div class="be-row be-mt-200">
-            <div class="be-col be-ta-right be-lh-250 be-c-999">
+            <div class="be-col be-ta-right be-lh-250">
                 端口号：
             </div>
             <div class="be-col">
@@ -31,7 +31,7 @@
         </div>
 
         <div class="be-row be-mt-200">
-            <div class="be-col be-ta-right be-lh-250 be-c-999">
+            <div class="be-col be-ta-right be-lh-250">
                 用户名：
             </div>
             <div class="be-col">
@@ -40,7 +40,7 @@
         </div>
 
         <div class="be-row be-mt-200">
-            <div class="be-col be-ta-right be-lh-250 be-c-999">
+            <div class="be-col be-ta-right be-lh-250">
                 密码：
             </div>
             <div class="be-col">
@@ -49,7 +49,7 @@
         </div>
 
         <div class="be-row be-mt-200">
-            <div class="be-col be-ta-right be-lh-250 be-c-999">
+            <div class="be-col be-ta-right be-lh-250">
             </div>
             <div class="be-col">
                 <input  type="button" class="be-btn be-btn-green" value="测试连接，并获取库名列表" onclick="testDb()">
@@ -57,7 +57,7 @@
         </div>
 
         <div class="be-row be-mt-200">
-            <div class="be-col be-ta-right be-lh-250 be-c-999">
+            <div class="be-col be-ta-right be-lh-250">
                 库名：
             </div>
             <div class="be-col">
@@ -66,7 +66,7 @@
         </div>
 
         <div class="be-row be-mt-200">
-            <div class="be-col be-ta-right be-lh-250 be-c-999">
+            <div class="be-col be-ta-right be-lh-250">
                 连接池大小（0：不启用）：
             </div>
             <div class="be-col">

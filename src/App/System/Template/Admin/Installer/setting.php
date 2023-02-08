@@ -13,7 +13,7 @@
 <be-center>
     <form id="form" action="<?php echo \Be\Be::getRequest()->getUrl(); ?>" method="post">
         <div class="be-row be-mt-200">
-            <div class="be-col be-ta-right be-lh-250 be-c-999">
+            <div class="be-col be-ta-right be-lh-250">
                 超级管理员账号：
             </div>
             <div class="be-col">
@@ -22,7 +22,7 @@
         </div>
 
         <div class="be-row be-mt-200">
-            <div class="be-col be-ta-right be-lh-250 be-c-999">
+            <div class="be-col be-ta-right be-lh-250">
                 密码：
             </div>
             <div class="be-col">
@@ -31,7 +31,7 @@
         </div>
 
         <div class="be-row be-mt-200">
-            <div class="be-col be-ta-right be-lh-250 be-c-999">
+            <div class="be-col be-ta-right be-lh-250">
                 名称：
             </div>
             <div class="be-col">
@@ -40,7 +40,7 @@
         </div>
 
         <div class="be-row be-mt-200">
-            <div class="be-col be-ta-right be-lh-250 be-c-999">
+            <div class="be-col be-ta-right be-lh-250">
                 邮箱：
             </div>
             <div class="be-col">

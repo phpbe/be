@@ -30,7 +30,7 @@
 
         ?>
         <div class="be-row be-mt-200">
-            <div class="be-col be-ta-right be-c-999">
+            <div class="be-col be-ta-right">
                 <?php echo $item['name']; ?>：
             </div>
             <div class="be-col">
