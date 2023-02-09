@@ -55,14 +55,14 @@ class Home
 
         $recentLogs = Be::getTable('system_admin_op_log')
             ->where('admin_user_id', $my->id)
-            ->orderBy('id', 'DESC')
+            ->orderBy('create_time', 'DESC')
             ->limit(5)
             ->getObjects();
         $response->set('recentLogs', $recentLogs);
 
         $recentLoginLogs = Be::getTable('system_admin_user_login_log')
             ->where('username', $my->username)
-            ->orderBy('id', 'DESC')
+            ->orderBy('create_time', 'DESC')
             ->limit(5)
             ->getObjects();
         $response->set('recentLoginLogs', $recentLoginLogs);
