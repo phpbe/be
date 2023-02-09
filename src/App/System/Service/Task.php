@@ -178,16 +178,26 @@ class Task
             Be::getRuntime()->task($task);
         } else {
             $config = Be::getConfig('App.System.Task');
+
             $url = beUrl('System.Task.run', ['password' => $config->password, 'taskId' => $task->id, 'trigger' => $triggerType]);
-            $curl = curl_init();
-            curl_setopt($curl, CURLOPT_URL, $url);
-            curl_setopt($curl, CURLOPT_HEADER, 1);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($curl, CURLOPT_TIMEOUT, 1);
+
+            $options = [
+                CURLOPT_URL => $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_CONNECTTIMEOUT => 1,
+                CURLOPT_TIMEOUT => 1,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_SSL_VERIFYHOST => false,
+            ];
+
             if ($taskData !== null && count($taskData) > 0) {
                 $options[CURLOPT_POST] = 1;
                 $options[CURLOPT_POSTFIELDS] = http_build_query($taskData);
             }
+
+            $curl = curl_init();
+            curl_setopt_array($curl, $options);
             curl_exec($curl);
             curl_close($curl);
         }
