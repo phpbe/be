@@ -376,6 +376,7 @@ abstract class ThemeEditor
 
                             $section = $this->getSection($themeName, $pageName, $position, $sectionIndex, $sectionData['name'], $sectionConfig);
                         } catch (\Throwable $t) {
+                            Be::getLog()->error($t);
                             continue;
                         }
 
@@ -486,6 +487,7 @@ abstract class ThemeEditor
                     try {
                         $section = $this->getSectionSummary($this->themeType . '.' . $theme->name . '.' . $name);
                     } catch (\Throwable $t) {
+                        Be::getLog()->error($t);
                         continue;
                     }
 

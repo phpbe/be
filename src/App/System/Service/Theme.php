@@ -33,6 +33,7 @@ class Theme
                             $section->name = $sectionData['name'];
                             $sections[] = $section;
                         } catch (\Throwable $t) {
+                            Be::getLog()->error($t);
                         }
                     }
                     $pageConfig->$property = $sections;
