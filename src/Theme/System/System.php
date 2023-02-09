@@ -25,39 +25,35 @@
     <link rel="stylesheet" href="<?php echo $themeWwwUrl; ?>/css/drawer.css"/>
     <script src="<?php echo $themeWwwUrl; ?>/js/drawer-menu.js"></script>
 
-    <link rel="stylesheet" href="<?php echo $themeWwwUrl; ?>/css/theme.css?v=20221021"/>
+    <link rel="stylesheet" href="<?php echo $themeWwwUrl; ?>/css/theme.css?v=2023.2.9"/>
 
     <style type="text/css">
-        html {
-            font-size: <?php echo $configTheme->fontSize; ?>px;
-            background-color: <?php echo $configTheme->backgroundColor; ?>;
-            color: <?php echo $configTheme->fontColor; ?>;
+        <?php
+        echo 'html {';
+        echo 'font-size: ' . $configTheme->fontSize. 'px;';
+        echo 'background-color: ' . $configTheme->backgroundColor. ';';
+        echo 'color: ' . $configTheme->fontColor. ';';
+        echo '}';
+
+        echo 'body {';
+        echo '--major-color: ' . $configTheme->majorColor . ';';
+        echo '--minor-color: ' . $configTheme->minorColor . ';';
+        echo '--font-color: ' . $configTheme->fontColor . ';';
+
+        // CSS 处理库
+        $libCss = \Be\Be::getLib('Css');
+        for ($i=1; $i<=9; $i++) {
+            echo '--major-color-' . $i. ': ' . $libCss->lighter($configTheme->majorColor, $i * 10) . ';';
+            echo '--major-color' . $i. ': ' . $libCss->darker($configTheme->majorColor, $i * 10) . ';';
+
+            echo '--minor-color-' . $i. ': ' . $libCss->lighter($configTheme->minorColor, $i * 10) . ';';
+            echo '--minor-color' . $i. ': ' . $libCss->darker($configTheme->minorColor, $i * 10) . ';';
+
+            echo '--font-color-' . $i. ': ' . $libCss->lighter($configTheme->fontColor, $i * 10) . ';';
+            echo '--font-color' . $i. ': ' . $libCss->darker($configTheme->fontColor, $i * 10) . ';';
         }
-
-        body {
-            <?php
-            echo '--major-color: ' . $configTheme->majorColor . ';';
-
-            // CSS 处理库
-            $libCss = \Be\Be::getLib('Css');
-            for ($i=1; $i<=9; $i++) {
-                echo '--major-color-' . $i. ': ' . $libCss->lighter($configTheme->majorColor, $i * 10) . ';';
-                echo '--major-color' . $i. ': ' . $libCss->darker($configTheme->majorColor, $i * 10) . ';';
-            }
-
-            echo '--minor-color: ' . $configTheme->minorColor . ';';
-            echo '--font-color: ' . $configTheme->fontColor . ';';
-            ?>
-        }
-
-        a {
-            color: <?php echo $configTheme->linkColor; ?>;
-        }
-
-        a:hover {
-            color: <?php echo $configTheme->linkHoverColor; ?>;
-        }
-
+        echo '}';
+        ?>
     </style>
 
     <be-head>
