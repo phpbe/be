@@ -21,14 +21,14 @@ class Config
     public string $fontColor = '#ddd';
 
     /**
-     * @BeConfigItem("文字颜色",
+     * @BeConfigItem("链接颜色",
      *     driver="FormItemColorPicker"
      * )
      */
     public string $linkColor = '#b6c7d6';
 
     /**
-     * @BeConfigItem("文字颜色",
+     * @BeConfigItem("链接悬停颜色",
      *     driver="FormItemColorPicker"
      * )
      */

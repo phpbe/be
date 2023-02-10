@@ -171,7 +171,7 @@ class Template extends Section
         echo 'line-height: 2.75rem;';
         echo 'position: relative;';
         echo 'z-index: 100;';
-        echo 'font-size: 1.25rem;';
+        echo 'font-size: '.$this->config->menuFontSize.';';
         echo '}';
 
         echo '#' . $this->id . ' .header-desktop-menu ul {';
@@ -191,7 +191,14 @@ class Template extends Section
         echo 'position: relative;';
         echo '}';
 
-        echo '#' . $this->id . ' .header-desktop-menu-lv1-item-active > a {';
+        echo '#' . $this->id . ' .header-desktop-menu-lv1-item > a,';
+        echo '#' . $this->id . ' .header-desktop-menu-lv1-item-with-dropdown > a {';
+        echo 'color: var(--font-color);';
+        echo '}';
+
+        echo '#' . $this->id . ' .header-desktop-menu-lv1-item-active > a,';
+        echo '#' . $this->id . ' .header-desktop-menu-lv1-item-with-dropdown > a:hover,';
+        echo '#' . $this->id . ' .header-desktop-menu-lv1-item > a:hover {';
         echo 'color: var(--major-color);';
         echo '}';
 
@@ -227,7 +234,15 @@ class Template extends Section
         echo 'padding: .2rem 2rem;';
         echo '}';
 
-        echo '#' . $this->id . ' .header-desktop-menu-lv2-item-active, ';
+        echo '#' . $this->id . ' .header-desktop-menu-lv2-item a {';
+        echo 'color: var(--font-color);';
+        echo '}';
+
+        echo '#' . $this->id . ' .header-desktop-menu-lv2-item-active a,';
+        echo '#' . $this->id . ' .header-desktop-menu-lv2-item a:hover {';
+        echo 'color: var(--major-color);';
+        echo '}';
+
         echo '#' . $this->id . ' .header-desktop-menu-lv2-item:hover  {';
         echo 'background-color: #f1f1f1;';
         echo '}';
