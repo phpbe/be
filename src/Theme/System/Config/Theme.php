@@ -37,4 +37,14 @@ class Theme
      */
     public string $fontColor = '#2e475d';
 
+    /**
+     * @BeConfigItem("链接颜色", driver="FormItemColorPicker")
+     */
+    public string $linkColor = '#2e475d';
+
+    /**
+     * @BeConfigItem("链接悬停颜色", driver="FormItemColorPicker")
+     */
+    public string $linkHoverColor = '#ff5c35';
+
 }

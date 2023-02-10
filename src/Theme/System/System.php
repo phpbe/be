@@ -53,6 +53,14 @@
             echo '--font-color' . $i. ': ' . $libCss->darker($configTheme->fontColor, $i * 10) . ';';
         }
         echo '}';
+
+        echo 'a {';
+        echo 'color: ' . $configTheme->linkColor. ';';
+        echo '}';
+
+        echo 'a:hover {';
+        echo 'color: ' . $configTheme->linkHoverColor. ';';
+        echo '}';
         ?>
     </style>
 
