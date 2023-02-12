@@ -180,4 +180,14 @@ class App
         }
     }
 
+    /**
+     * 某个APP是否已安装
+     * @return bool
+     */
+    public function isInstalled($appName): bool
+    {
+        $configApp = Be::getConfig('App.System.App');
+        return in_array($appName, $configApp->names);
+    }
+
 }

@@ -49,7 +49,8 @@ class AdminUser extends Auth
 
             'grid' => [
                 'title' => '管理员管理',
-
+                'orderBy' => 'create_time',
+                'orderByDir' => 'DESC',
                 'filter' => [
                     ['is_delete', '=', '0'],
                 ],
@@ -263,8 +264,6 @@ class AdminUser extends Auth
                         ]
                     ],
                 ],
-
-
             ],
 
             'detail' => [

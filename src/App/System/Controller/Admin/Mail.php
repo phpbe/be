@@ -68,7 +68,7 @@ class Mail extends Auth
                         ],
                     ],
                 ],
-                'theme' => 'Admin',
+                'theme' => 'System',
             ])->execute();
         }
     }

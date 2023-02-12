@@ -102,7 +102,7 @@ class Storage extends Auth
     }
 
     /**
-     * @BePermission("查看", ordering="3.41")
+     * @BePermission("弹窗管理", ordering="3.41")
      */
     public function pop()
     {
