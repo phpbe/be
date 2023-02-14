@@ -174,7 +174,22 @@ class File extends Driver
         $hash = sha1($key);
         $path = $this->path . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2) . '/' . $hash ;
 
-        return is_file($path) ? true : false;
+
+        if (!is_file($path)) return false;
+
+        $content = file_get_contents($path);
+
+        if (false !== $content) {
+            $expire = substr($content, 0, 10);
+            if (time() > intval($expire)) {
+                unlink($path);
+                return false;
+            }
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
