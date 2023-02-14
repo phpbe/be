@@ -78,6 +78,13 @@ class FormItemTinymce extends FormItem
             'convert_urls' => false,
         ];
 
+        $isOpenaiInstalled = Be::getService('App.System.Admin.App')->isInstalled('Openai');
+        if ($isOpenaiInstalled) {
+
+            $chatgptCallback = base64_encode('parent.window.bechatgpt.textCompletion = textCompletion; console.log(666, textCompletion);');
+            $this->option['be_openai_chatgpt_url'] = beAdminUrl('Openai.TextCompletion.pop', ['callback' => $chatgptCallback]);
+        }
+
         $contentCss = '';
         $contentCss .= 'https://cdn.phpbe.com/ui/be.css,';
         $contentCss .= 'https://cdn.phpbe.com/ui/be-icons.css';
@@ -98,19 +105,44 @@ class FormItemTinymce extends FormItem
                 ]);
                 break;
             case 'simple':
+                $plugins = 'advlist';
+                if ($autoresize) $plugins .= ' autoresize';
+                $plugins .= ' code fullscreen';
+                if ($isOpenaiInstalled) $plugins .= ' bechatgpt';
+                $plugins .= ' befile beimage indent2em link lists media table';
+
+                $toolbar = 'formatselect bold italic strikethrough underline forecolor backcolor align removeformat | bullist numlist outdent indent indent2em | link ';
+                if ($isOpenaiInstalled) {
+                    $toolbar .= ' bechatgpt';
+                }
+                $toolbar .= ' befile beimage media table | code fullscreen';
+
+
                 $this->option = array_merge($this->option, [
                     'min_height' => 300,
-                    'plugins' => 'advlist' .  ($autoresize ? ' autoresize' : '') . ' code fullscreen befile beimage indent2em link lists media table',
-                    'toolbar' => 'formatselect bold italic strikethrough underline forecolor backcolor align removeformat | bullist numlist outdent indent indent2em | link befile beimage media table | code fullscreen',
+                    'plugins' => $plugins,
+                    'toolbar' => $toolbar,
                     'menubar' => false,
                     'statusbar' => false,
                 ]);
                 break;
             case 'full':
+
+                $plugins = 'advlist anchor autolink';
+                if ($autoresize) $plugins .= ' autoresize';
+                if ($isOpenaiInstalled) $plugins .= ' bechatgpt';
+                $plugins .= ' befile beimage charmap charmap code becodesample directionality emoticons fullscreen help hr image importcss insertdatetime indent2em link lists media nonbreaking noneditable pagebreak paste preview print save searchreplace table template textpattern toc visualblocks visualchars wordcount';
+
+                $toolbar = 'undo redo | fontsizeselect formatselect bold italic underline strikethrough forecolor backcolor align removeformat | bullist numlist outdent indent indent2em | link ';
+                if ($isOpenaiInstalled) {
+                    $toolbar .= ' bechatgpt';
+                }
+                $toolbar .= ' befile beimage media table becodesample anchor pagebreak charmap emoticons template | code preview fullscreen';
+
                 $this->option = array_merge($this->option, [
                     'min_height' => 400,
-                    'plugins' => 'advlist anchor autolink' .  ($autoresize ? ' autoresize' : '') . ' befile beimage charmap charmap code becodesample directionality emoticons fullscreen help hr image importcss insertdatetime indent2em link lists media nonbreaking noneditable pagebreak paste preview print save searchreplace table template textpattern toc visualblocks visualchars wordcount',
-                    'toolbar' => 'undo redo | fontsizeselect formatselect bold italic underline strikethrough forecolor backcolor align removeformat | bullist numlist outdent indent indent2em | link befile beimage media table becodesample anchor pagebreak charmap emoticons template | code preview fullscreen',
+                    'plugins' => $plugins,
+                    'toolbar' => $toolbar,
                     //'menubar' => 'file edit view insert format tools table help',
                     'menubar' => false,
                     'statusbar' => false,
