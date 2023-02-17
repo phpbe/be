@@ -12,7 +12,7 @@ use Be\AdminPlugin\Driver;
  * 导入器
  *
  * Class Importer
- * @package Be\System\AdminPlugin\Importer
+ * @package Be\AdminPlugin\Importer
  */
 class Importer extends Driver
 {

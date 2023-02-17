@@ -3,14 +3,15 @@
 namespace Be\AdminPlugin\Exporter;
 
 use Be\AdminPlugin\AdminPluginException;
+use Be\AdminPlugin\Driver;
 
 /**
  * 导出器
  *
  * Class Exporter
- * @package Be\Mf\Plugin
+ * @package Be\AdminPlugin\Exporter
  */
-class Exporter
+class Exporter extends Driver
 {
 
     private $driver = null;

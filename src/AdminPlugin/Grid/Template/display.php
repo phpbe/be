@@ -1,6 +1,7 @@
 <be-head>
     <style type="text/css">
 
+        .be-middle .el-dropdown-link,
         .be-center .el-dropdown-link {
             cursor: pointer;
             color: #409eff;
