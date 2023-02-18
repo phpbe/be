@@ -43,7 +43,7 @@ class Importer extends Driver
      * @return Driver
      * @throws AdminPluginException
      */
-    public function setting($setting = [])
+    public function setting(array $setting = []): Driver
     {
         $request = Be::getRequest();
 

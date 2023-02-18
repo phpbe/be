@@ -13,7 +13,7 @@ class DetailItemText extends DetailItem
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         $html = '<el-form-item';
         foreach ($this->ui['form-item'] as $k => $v) {

@@ -16,7 +16,7 @@ class OperationItemCustom extends OperationItem
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         $html = '{{scope.row.'.$this->name.'}}';
         return $html;

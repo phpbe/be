@@ -11,29 +11,32 @@ use Be\Be;
 abstract class TableItem extends UiItem
 {
 
-    public $name = null; // 键名
-    public $label = ''; // 配置项中文名称
-    public $value = ''; // 值
-    public $keyValues = null; // 可选值键值对
-    public $ui = []; // UI界面参数
-    public $export = 1; // 是否可导出
-    public $exportValue = null; // 控制导出的值，默认取 value
+    protected ?string $name = null; // 键名
+    protected string $label = ''; // 配置项中文名称
 
-    public $url = ''; // 网址
-    public $postData = []; // 有后端请求时的附加上的数据
-    public $confirm = null; // 操作前确认
-    public $target = 'drawer';
-    public $dialog = [];
-    public $drawer = [];
+    protected string $url = ''; // 网址
+    protected array $postData = []; // 有后端请求时的附加上的数据
+    protected ?string $confirm = null; // 操作前确认
+    protected string $target = 'drawer';
+    protected array $dialog = [];
+    protected array $drawer = [];
 
-    protected static $nameIndex = 0;
+    protected array $ui = []; // UI界面参数
+
+    protected string $value = ''; // 值
+    protected ?array $keyValues = null; // 可选值键值对
+
+    protected int $export = 1; // 是否可导出
+    protected ?string $exportValue = null; // 控制导出的值，默认取 value
+
+    protected static int $nameIndex = 0;
 
     /**
      * 构造函数
      *
      * @param array $params 参数
      */
-    public function __construct($params = [])
+    public function __construct(array $params = [])
     {
 
         if (isset($params['name'])) {
@@ -244,7 +247,6 @@ abstract class TableItem extends UiItem
                 $this->ui['table-column']['header-align'] = $this->ui['table-column']['align'];
             }
         }
-
     }
 
 

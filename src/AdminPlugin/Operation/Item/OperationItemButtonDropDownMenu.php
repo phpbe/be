@@ -13,7 +13,7 @@ class OperationItemButtonDropDownMenu extends OperationItem
      *
      * @param array $params 参数
      */
-    public function __construct($params = [])
+    public function __construct(array $params = [])
     {
         parent::__construct($params);
         $this->ui[':command'] = 'operationItemButtonDropDownMenuCommand(\''.$params['parentName'].'\','.$params['index'].', scope.row)';
@@ -24,7 +24,7 @@ class OperationItemButtonDropDownMenu extends OperationItem
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         $html = '<el-dropdown-item';
         if (isset($this->ui)) {

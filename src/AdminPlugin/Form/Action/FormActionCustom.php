@@ -14,7 +14,7 @@ class FormActionCustom extends FormAction
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         return $this->value;
     }

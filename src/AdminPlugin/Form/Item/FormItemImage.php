@@ -12,13 +12,13 @@ use Be\Util\File\FileSize;
 class FormItemImage extends FormItem
 {
 
-    public $path = ''; // 保存路径
-    public $maxSizeInt = 0; // 最大尺寸（整型字节数）
-    public $maxSize = ''; // 最大尺寸（字符类型）
-    public $allowUploadImageTypes = []; // 允许上传的图像类型
-    public $maxWidth = 0;
-    public $maxHeight = 0;
-    public $filename = ''; // 指定存储的文件名
+    protected string $path = ''; // 保存路径
+    protected int $maxSizeInt = 0; // 最大尺寸（整型字节数）
+    protected string $maxSize = ''; // 最大尺寸（字符类型）
+    protected array $allowUploadImageTypes = []; // 允许上传的图像类型
+    protected int $maxWidth = 0;
+    protected int $maxHeight = 0;
+    protected string $filename = ''; // 指定存储的文件名
 
     /**
      * 构造函数
@@ -27,7 +27,7 @@ class FormItemImage extends FormItem
      * @param array $row 数据对象
      * @throws AdminPluginException
      */
-    public function __construct($params = [], $row = [])
+    public function __construct(array $params = [], array $row = [])
     {
         parent::__construct($params, $row);
 
@@ -115,7 +115,7 @@ class FormItemImage extends FormItem
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         if (!isset($this->ui['action'])) {
             $this->ui['action'] = beAdminUrl('System.AdminPlugin.uploadImage');

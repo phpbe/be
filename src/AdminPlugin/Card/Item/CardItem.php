@@ -11,29 +11,31 @@ use Be\Be;
 abstract class CardItem extends UiItem
 {
 
-    public $name = null; // 键名
-    public $label = ''; // 配置项中文名称
-    public $value = ''; // 值
-    public $keyValues = null; // 可选值键值对
-    public $ui = []; // UI界面参数
-    public $export = 1; // 是否可导出
-    public $exportValue = null; // 控制导出的值，默认取 value
+    protected ?string $name = null; // 键名
+    protected string $label = ''; // 配置项中文名称
 
-    public $url = ''; // 网址
-    public $postData = []; // 有后端请求时的附加上的数据
-    public $confirm = null; // 操作前确认
-    public $target = 'drawer';
-    public $dialog = [];
-    public $drawer = [];
+    protected array $ui = []; // UI界面参数
 
-    protected static $nameIndex = 0;
+    public string $value = ''; // 值
+    public ?array $keyValues = null; // 可选值键值对
+    public int $export = 1; // 是否可导出
+    public ?string $exportValue = null; // 控制导出的值，默认取 value
+
+    public string $url = ''; // 网址
+    public array $postData = []; // 有后端请求时的附加上的数据
+    public ?string $confirm = null; // 操作前确认
+    public string $target = 'drawer';
+    public array $dialog = [];
+    public array $drawer = [];
+
+    protected static int $nameIndex = 0;
 
     /**
      * 构造函数
      *
      * @param array $params 参数
      */
-    public function __construct($params = [])
+    public function __construct(array $params = [])
     {
 
         if (isset($params['name'])) {
@@ -215,6 +217,14 @@ abstract class CardItem extends UiItem
 
     }
 
+    public function __get(string $property)
+    {
+        if (isset($this->$property)) {
+            return ($this->$property);
+        } else {
+            return null;
+        }
+    }
 
     /**
      * 获取 vue data

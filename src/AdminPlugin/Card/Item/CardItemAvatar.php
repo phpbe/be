@@ -14,7 +14,7 @@ class CardItemAvatar extends CardItem
      *
      * @param array $params 参数
      */
-    public function __construct($params = [])
+    public function __construct(array $params = [])
     {
         parent::__construct($params);
 
@@ -38,7 +38,7 @@ class CardItemAvatar extends CardItem
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         $html = '<div class="card-item">';
         if ($this->label) {

@@ -11,16 +11,16 @@ use Be\Be;
 abstract class FormAction extends UiItem
 {
 
-    public $name = null; // 键名
-    public $label = ''; // 配置项中文名称
-    public $value = ''; // 值
-    public $ui = []; // UI界面参数
+    protected ?string $name = null; // 键名
+    protected string $label = ''; // 配置项中文名称
+    protected string $value = ''; // 值
+    protected array $ui = []; // UI界面参数
 
-    public $url = ''; // 网址
-    public $postData = []; // 有后端请求时的附加上的数据
-    public $target = 'drawer';
-    public $dialog = [];
-    public $drawer = [];
+    protected string $url = ''; // 网址
+    protected array $postData = []; // 有后端请求时的附加上的数据
+    protected string $target = 'drawer';
+    protected array $dialog = [];
+    protected array $drawer = [];
 
     protected static $nameIndex = 0;
 
@@ -29,7 +29,7 @@ abstract class FormAction extends UiItem
      *
      * @param array $params 参数
      */
-    public function __construct($params = [])
+    public function __construct(array $params = [])
     {
         if (isset($params['name'])) {
             $name = $params['name'];

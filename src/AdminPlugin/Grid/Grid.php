@@ -15,7 +15,7 @@ class Grid extends Driver
 {
 
 
-    public function setting($setting = [])
+    public function setting(array $setting = []): Driver
     {
         $request = Be::getRequest();
 

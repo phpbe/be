@@ -16,7 +16,7 @@ class DetailItemCustom extends DetailItem
      * @param array $params 参数
      * @param array $row 数据对象
      */
-    public function __construct($params = [], $row = [])
+    public function __construct(array $params = [], array $row = [])
     {
         parent::__construct($params, $row);
 
@@ -33,7 +33,7 @@ class DetailItemCustom extends DetailItem
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         return $this->html;
     }

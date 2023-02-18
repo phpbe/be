@@ -13,9 +13,9 @@ use Be\AdminPlugin\Driver;
  */
 class Form extends Driver
 {
-    protected $row = [];
+    protected array $row = [];
 
-    public function setting($setting = [])
+    public function setting(array $setting = []): Driver
     {
         if (!isset($setting['theme'])) {
             $setting['theme'] = 'Blank';
@@ -36,7 +36,7 @@ class Form extends Driver
         return parent::setting($setting);
     }
 
-    public function setValue($row)
+    public function setValue($row): Driver
     {
         if (is_object($row)) {
             $row = get_object_vars($row);

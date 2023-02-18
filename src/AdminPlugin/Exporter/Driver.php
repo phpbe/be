@@ -8,12 +8,12 @@ use Be\AdminPlugin\AdminPluginException;
 abstract class Driver
 {
 
-    protected $timeLimit = 3600;
-    protected $outputType = 'http';
-    protected $charset = 'GBK';
-    protected $outputFileNameOrPath = null;
-    protected $memoryLimit = '1g';
-    protected $split = null; // 数据量过大时，拆分为多个文件，打成一个 zip 压缩包
+    protected int $timeLimit = 3600;
+    protected string $outputType = 'http';
+    protected string $charset = 'GBK';
+    protected ?string $outputFileNameOrPath = null;
+    protected string $memoryLimit = '1g';
+    protected ?int $split = null; // 数据量过大时，拆分为多个文件，打成一个 zip 压缩包
 
     /**
      * 设置执行超时时间
@@ -21,7 +21,7 @@ abstract class Driver
      * @param int $timeLimit
      * @return Driver
      */
-    public function setTimeLimit($timeLimit)
+    public function setTimeLimit($timeLimit): Driver
     {
         $this->timeLimit = $timeLimit;
         return $this;
@@ -35,7 +35,7 @@ abstract class Driver
      * @return Driver
      * @throws AdminPluginException
      */
-    public function setOutput($outputType, $outputFileNameOrPath = null)
+    public function setOutput($outputType, $outputFileNameOrPath = null): Driver
     {
         if (!in_array($outputType, ['http', 'file'])) {
             throw new AdminPluginException('输出类型' . $outputType . '不支持！');
@@ -56,7 +56,7 @@ abstract class Driver
      * @param string $charset 字符编码
      * @return Driver
      */
-    public function setCharset($charset)
+    public function setCharset($charset): Driver
     {
         $this->charset = $charset;
         return $this;
@@ -68,7 +68,7 @@ abstract class Driver
      * @param int $split 行数，到达该行时生成一个新的文件
      * @return Driver
      */
-    public function setSplit($split)
+    public function setSplit($split): Driver
     {
         $this->split = $split;
         return $this;
@@ -80,7 +80,7 @@ abstract class Driver
      * @param int $memoryLimit 最大内存占用
      * @return Driver
      */
-    public function setMemoryLimit($memoryLimit)
+    public function setMemoryLimit($memoryLimit): Driver
     {
         $this->memoryLimit = $memoryLimit;
         return $this;
@@ -92,7 +92,7 @@ abstract class Driver
      * @param array $headers
      * @return Driver
      */
-    abstract public function setHeaders($headers = []);
+    abstract public function setHeaders($headers = []): Driver;
 
     /**
      * 添加一行数据
@@ -100,7 +100,7 @@ abstract class Driver
      * @param array $row
      * @return Driver
      */
-    abstract public function addRow($row = []);
+    abstract public function addRow($row = []): Driver;
 
     /**
      * 添加多行数据
@@ -108,7 +108,7 @@ abstract class Driver
      * @param array $rows
      * @return Driver
      */
-    public function addRows($rows = [])
+    public function addRows(array $rows = []): Driver
     {
         foreach ($rows as $row) {
             $this->addRow($row);
@@ -121,7 +121,7 @@ abstract class Driver
      * 结束输出，收尾
      * @return Driver
      */
-    public function end()
+    public function end(): Driver
     {
         return $this;
     }

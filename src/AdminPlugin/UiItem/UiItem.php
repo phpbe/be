@@ -9,6 +9,15 @@ namespace Be\AdminPlugin\UiItem;
 class UiItem
 {
 
+    public function __get(string $property)
+    {
+        if (isset($this->$property)) {
+            return ($this->$property);
+        } else {
+            return null;
+        }
+    }
+
     /**
      * 获取需要引入的 JS 文件
      *
@@ -54,7 +63,7 @@ class UiItem
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         return '';
     }

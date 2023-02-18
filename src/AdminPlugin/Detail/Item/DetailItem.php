@@ -10,13 +10,13 @@ use Be\AdminPlugin\UiItem\UiItem;
 abstract class DetailItem extends UiItem
 {
 
-    protected $name = ''; // 键名
+    protected string $name = ''; // 键名
     protected string $label = ''; // 配置项中文名称
-    protected $value = ''; // 值
-    protected $keyValues = null; // 可选值键值对
-    protected $ui = []; // UI界面参数
+    protected string $value = ''; // 值
+    protected ?array $keyValues = null; // 可选值键值对
+    protected array $ui = []; // UI界面参数
 
-    protected static $nameIndex = 0;
+    protected static int $nameIndex = 0;
 
     /**
      * 构造函数
@@ -24,7 +24,7 @@ abstract class DetailItem extends UiItem
      * @param array $params 参数
      * @param array $row 数据对象
      */
-    public function __construct($params = [], $row = [])
+    public function __construct(array $params = [], array $row = [])
     {
         if (isset($params['name'])) {
             $this->name = $params['name'];
@@ -97,7 +97,7 @@ abstract class DetailItem extends UiItem
     }
 
 
-    public function __get($property)
+    public function __get(string $property)
     {
         if (isset($this->$property)) {
             return ($this->$property);

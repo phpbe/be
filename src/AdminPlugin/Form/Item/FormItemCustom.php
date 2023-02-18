@@ -9,7 +9,7 @@ namespace Be\AdminPlugin\Form\Item;
 class FormItemCustom extends FormItem
 {
 
-    public $html = '';
+    protected $html = '';
 
     /**
      * 构造函数
@@ -17,7 +17,7 @@ class FormItemCustom extends FormItem
      * @param array $params 参数
      * @param array $row 数据对象
      */
-    public function __construct($params = [], $row = [])
+    public function __construct(array $params = [], array $row = [])
     {
         parent::__construct($params, $row);
 
@@ -35,7 +35,7 @@ class FormItemCustom extends FormItem
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         return $this->html;
     }

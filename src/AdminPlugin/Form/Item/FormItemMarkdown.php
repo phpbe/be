@@ -12,10 +12,10 @@ use Be\Util\Crypt\Random;
 class FormItemMarkdown extends FormItem
 {
 
-    protected $js = []; // 需要引入的 JS 文件
-    protected $css = []; // 需要引入的 CSS 文件
-    protected $option = []; // 配置项
-    protected $valueFormat = 'markdown'; // 值枨式： markdown 、html
+    protected array $js = []; // 需要引入的 JS 文件
+    protected array $css = []; // 需要引入的 CSS 文件
+    protected array $options = []; // 配置项
+    protected string $valueFormat = 'markdown'; // 值枨式： markdown 、html
 
     /**
      * 构造函数
@@ -24,7 +24,7 @@ class FormItemMarkdown extends FormItem
      * @param array $row 数据对象
      * @throws AdminPluginException
      */
-    public function __construct($params = [], $row = [])
+    public function __construct(array $params = [], array $row = [])
     {
         parent::__construct($params, $row);
 
@@ -49,7 +49,7 @@ class FormItemMarkdown extends FormItem
         $beLinkCallback = base64_encode('parent.window.beLink.selectFile(files);');
         $beImageCallback = base64_encode('parent.window.beImage.selectImage(files);');
 
-        $this->option = [
+        $this->options = [
             //'width' => '100%',
             'height' => '500',
             'tax' => true,
@@ -79,7 +79,7 @@ class FormItemMarkdown extends FormItem
         ];
 
         if ($this->valueFormat === 'html') {
-            $this->option['saveHTMLToTextarea'] = true;
+            $this->options['saveHTMLToTextarea'] = true;
         }
 
         if (isset($params['js'])) {
@@ -105,13 +105,13 @@ class FormItemMarkdown extends FormItem
         }
 
         if (isset($params['option'])) {
-            $option = $params['option'];
-            if ($option instanceof \Closure) {
-                $option = $option($row);
+            $options = $params['option'];
+            if ($options instanceof \Closure) {
+                $options = $options($row);
             }
 
-            if (is_array($option)) {
-                $this->option = array_merge($this->option, $option);
+            if (is_array($options)) {
+                $this->options = array_merge($this->options, $options);
             }
         }
 
@@ -159,7 +159,7 @@ class FormItemMarkdown extends FormItem
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         $html = '<el-form-item';
         foreach ($this->ui['form-item'] as $k => $v) {
@@ -221,7 +221,7 @@ class FormItemMarkdown extends FormItem
         $mountedCode .= 'let this_' . $rand . ' = this;';
 
         $mountedCode .= 'let editor_' . $rand . ' = editormd("formItemMarkdown_' . $this->name . '", {';
-        foreach ($this->option as $key => $val) {
+        foreach ($this->options as $key => $val) {
             if (is_string($val)) {
                 if (substr($val, 0, 9) === 'function(') {
                     $mountedCode .= $key . ':' . $val . ',';

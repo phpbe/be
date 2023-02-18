@@ -31,7 +31,7 @@ abstract class OperationItem extends UiItem
      *
      * @param array $params 参数
      */
-    public function __construct($params = [])
+    public function __construct(array $params = [])
     {
         if (isset($params['name'])) {
             $name = $params['name'];

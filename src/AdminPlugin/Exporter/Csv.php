@@ -6,16 +6,16 @@ namespace Be\AdminPlugin\Exporter;
 class Csv extends Driver
 {
 
-    private $started = false;
+    private bool $started = false;
 
     private $handler = null;
-    private $index = 0;
+    private int $index = 0;
 
     /**
      * 准备导出
      * @return Driver
      */
-    public function start()
+    public function start(): Driver
     {
         if (!$this->started) {
             $this->started = true;
@@ -46,7 +46,7 @@ class Csv extends Driver
      * @param array $headers
      * @return Driver
      */
-    public function setHeaders($headers = [])
+    public function setHeaders($headers = []): Driver
     {
         if (!$this->started) {
             $this->start();
@@ -83,7 +83,7 @@ class Csv extends Driver
      * @param array $row
      * @return Driver
      */
-    public function addRow($row = [])
+    public function addRow($row = []): Driver
     {
         if (!$this->started) {
             $this->start();
@@ -141,7 +141,7 @@ class Csv extends Driver
      * 结束输出，收尾
      * @return Driver
      */
-    public function end()
+    public function end(): Driver
     {
         if ($this->outputType === 'file' && is_resource($this->handler)) {
             fclose($this->handler);

@@ -11,19 +11,23 @@ use Be\AdminPlugin\UiItem\UiItem;
 abstract class FormItems extends UiItem
 {
 
-    protected $name = null; // 键名
+    protected ?string $name = null; // 键名
     protected string $label = ''; // 配置项中文名称
+    protected string $description = ''; // 描述
+
+    protected array $ui = []; // UI界面参数
+    protected bool $required = false; // 是否必填
+    protected bool $disabled = false; // 是否不可编辑
+
+    protected string $valueType = 'mixed'; // 值类型
     protected $value = null; // 值
     protected $nullValue = ''; // 空值
     protected $defaultValue = ''; // 默认址
-    protected $valueType = 'mixed'; // 值类型
-    protected $keyValues = null; // 可选值键值对
-    protected $description = ''; // 描述
-    protected $ui = []; // UI界面参数
     protected $newValue = ''; // 新值，提交后生成
-    protected $required = false; // 是否必填
-    protected $disabled = false; // 是否不可编辑
-    protected $items = [];
+
+    protected ?array $keyValues = null; // 可选值键值对
+
+    protected array $items = [];
 
     /**
      * 构造函数
@@ -32,7 +36,7 @@ abstract class FormItems extends UiItem
      * @param array $row 数据对象
      * @throws AdminPluginException
      */
-    public function __construct($params = [], $row = [])
+    public function __construct(array $params = [], array $row = [])
     {
         if (isset($params['name'])) {
             $name = $params['name'];
@@ -169,7 +173,16 @@ abstract class FormItems extends UiItem
 
     }
 
-    protected $js = [];
+    public function __get(string $property)
+    {
+        if (isset($this->$property)) {
+            return ($this->$property);
+        } else {
+            return null;
+        }
+    }
+
+    protected array $js = [];
 
     /**
      * 获取需要引入的 JS 文件
@@ -195,7 +208,7 @@ abstract class FormItems extends UiItem
         return false;
     }
 
-    protected $css = [];
+    protected array $css = [];
     /**
      * 获取需要引入的 CSS 文件
      *
@@ -220,7 +233,7 @@ abstract class FormItems extends UiItem
         return false;
     }
 
-    protected $vueData = [];
+    protected array $vueData = [];
 
     /**
      * 获取 vue data
@@ -236,7 +249,7 @@ abstract class FormItems extends UiItem
         return false;
     }
 
-    protected $vueMethods = [];
+    protected array $vueMethods = [];
 
     /**
      * 获取 vue 方法
@@ -251,7 +264,7 @@ abstract class FormItems extends UiItem
         return false;
     }
 
-    protected $vueHooks = [];
+    protected array $vueHooks = [];
 
     /**
      * 获取 vue 钩子
@@ -265,16 +278,6 @@ abstract class FormItems extends UiItem
         }
 
         return false;
-    }
-
-
-    public function __get($property)
-    {
-        if (isset($this->$property)) {
-            return ($this->$property);
-        } else {
-            return null;
-        }
     }
 
     /**

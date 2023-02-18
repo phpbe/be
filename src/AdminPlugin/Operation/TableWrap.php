@@ -7,18 +7,18 @@ namespace Be\AdminPlugin\Operation;
  */
 class TableWrap
 {
-    public $name = null; // 键名
-    public $label = ''; // 配置项中文名称
-    public $value = ''; // 值
-    public $ui = []; // UI界面参数
-    public $position = 'right';
+    protected ?string  $name = null; // 键名
+    protected string $label = ''; // 配置项中文名称
+    protected string $value = ''; // 值
+    protected array $ui = []; // UI界面参数
+    protected string $position = 'right';
 
     /**
      * 构造函数
      *
      * @param array $params 参数
      */
-    public function __construct($params = [])
+    public function __construct(array $params = [])
     {
         if (isset($params['name'])) {
             $name = $params['name'];
@@ -95,6 +95,15 @@ class TableWrap
             } else {
                 $this->ui['table-column']['header-align'] = $this->ui['table-column']['align'];
             }
+        }
+    }
+
+    public function __get(string $property)
+    {
+        if (isset($this->$property)) {
+            return ($this->$property);
+        } else {
+            return null;
         }
     }
 

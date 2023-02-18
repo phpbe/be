@@ -14,7 +14,7 @@ class OperationItemIcon extends OperationItem
      *
      * @param array $params 参数
      */
-    public function __construct($params = [])
+    public function __construct(array $params = [])
     {
         parent::__construct($params);
 
@@ -28,7 +28,7 @@ class OperationItemIcon extends OperationItem
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         $html = '';
 

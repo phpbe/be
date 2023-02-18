@@ -10,17 +10,18 @@ use Be\Be;
 abstract class Driver
 {
 
-    protected $setting = null;
+    protected ?array $setting = null;
 
-    protected $events = [];
+    protected array $events = [];
 
     /**
      * 监听事件
      * @param string $event 事件名
      * @param callable $callback 回调
-     * @return self
+     * @return Driver
      */
-    public function on($event, $callback) {
+    public function on(string $event, $callback): Driver
+    {
         if (isset($this->events[$event])) {
             if (is_array($this->events[$event])) {
                 $this->events[$event][] = $callback;
@@ -38,9 +39,10 @@ abstract class Driver
      * 触发事件
      * @param string $event 事件名
      * @param mixed ...$args 事件参数
-     * @return self
+     * @return Driver
      */
-    public function trigger($event, ...$args) {
+    public function trigger(string $event, ...$args): Driver
+    {
         if (isset($this->events[$event])) {
             if (is_array($this->events[$event])) {
                 foreach ($this->events[$event] as $callback) {
@@ -65,7 +67,7 @@ abstract class Driver
      * @param array $setting
      * @return Driver
      */
-    public function setting($setting = [])
+    public function setting(array $setting = []): Driver
     {
         $this->setting = $setting;
         return $this;
@@ -76,7 +78,7 @@ abstract class Driver
      *
      * @param string $task
      */
-    public function execute($task = null)
+    public function execute(string $task = null)
     {
         if ($task === null) {
             $task = Be::getRequest()->get('task', 'display');
@@ -90,7 +92,8 @@ abstract class Driver
     /**
      * 默认输出方法
      */
-    public function display() {
+    public function display()
+    {
 
     }
 

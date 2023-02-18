@@ -14,10 +14,10 @@ class FormActionButtonDropDownMenu extends FormAction
      *
      * @param array $params 参数
      */
-    public function __construct($params = [])
+    public function __construct(array $params = [])
     {
         parent::__construct($params);
-        $this->ui[':command'] = 'formActionButtonDropDownMenuCommand(\''.$params['parentName'].'\','.$params['index'].')';
+        $this->ui[':command'] = 'formActionButtonDropDownMenuCommand(\'' . $params['parentName'] . '\',' . $params['index'] . ')';
     }
 
     /**
@@ -25,7 +25,7 @@ class FormActionButtonDropDownMenu extends FormAction
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         $html = '<el-dropdown-item';
         if (isset($this->ui)) {

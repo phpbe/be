@@ -8,6 +8,6 @@ namespace Be\AdminMenu\Annotation;
 class BeMenuGroup extends Driver
 {
 
-    protected $icon = null;
+    protected ?string $icon = null;
 
 }

@@ -17,7 +17,7 @@ class FormItemsConfig extends FormItems
      * @param array $params 参数
      * @param array $row 数据对象
      */
-    public function __construct($params = [], $row = [])
+    public function __construct(array $params = [], array $row = [])
     {
         if (!isset($params['items'][0])) {
             throw new AdminPluginException('参数' . $this->label . ' (' . $this->name . ') 须指定子项目参数（items）');
@@ -91,7 +91,7 @@ class FormItemsConfig extends FormItems
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         $html = '<el-form-item';
         foreach ($this->ui['form-item'] as $k => $v) {

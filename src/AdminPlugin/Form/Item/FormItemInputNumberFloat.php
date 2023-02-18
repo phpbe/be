@@ -8,7 +8,7 @@ namespace Be\AdminPlugin\Form\Item;
 class FormItemInputNumberFloat extends FormItem
 {
 
-    public $valueType = 'float'; // 值类型
+    protected string $valueType = 'float'; // 值类型
 
     /**
      * 构造函数
@@ -16,7 +16,7 @@ class FormItemInputNumberFloat extends FormItem
      * @param array $params 参数
      * @param array $row 数据对象
      */
-    public function __construct($params = [], $row = [])
+    public function __construct(array $params = [], array $row = [])
     {
         parent::__construct($params, $row);
 
@@ -52,7 +52,7 @@ class FormItemInputNumberFloat extends FormItem
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         $html = '<el-form-item';
         foreach ($this->ui['form-item'] as $k => $v) {

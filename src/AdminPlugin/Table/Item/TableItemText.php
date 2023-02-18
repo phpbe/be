@@ -15,7 +15,7 @@ class TableItemText extends TableItem
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         $html = '<el-table-column';
         if (isset($this->ui['table-column'])) {

@@ -11,9 +11,9 @@ use Be\AdminPlugin\AdminPluginException;
 class FormItemCode extends FormItem
 {
 
-    protected $js = []; // 需要引入的 JS 文件
-    protected $css = []; // 需要引入的 CSS 文件
-    protected $option = []; // 配置项
+    protected array $js = []; // 需要引入的 JS 文件
+    protected array $css = []; // 需要引入的 CSS 文件
+    protected array $options = []; // 配置项
 
     /**
      * 构造函数
@@ -22,7 +22,7 @@ class FormItemCode extends FormItem
      * @param array $row 数据对象
      * @throws AdminPluginException
      */
-    public function __construct($params = [], $row = [])
+    public function __construct(array $params = [], array $row = [])
     {
         parent::__construct($params, $row);
 
@@ -54,7 +54,7 @@ class FormItemCode extends FormItem
                         $baseUrl . 'lib/codemirror.css',
                     ];
 
-                    $this->option = [
+                    $this->options = [
                         'theme' => 'default',
                         'mode' => 'htmlmixed',
                         'lineNumbers' => true,
@@ -77,7 +77,7 @@ class FormItemCode extends FormItem
                         $baseUrl . 'addon/hint/show-hint.css',
                     ];
 
-                    $this->option = [
+                    $this->options = [
                         'theme' => 'default',
                         'mode' => 'text/css',
                         'lineNumbers' => true,
@@ -96,7 +96,7 @@ class FormItemCode extends FormItem
                         $baseUrl . 'lib/codemirror.css',
                     ];
 
-                    $this->option = [
+                    $this->options = [
                         'theme' => 'default',
                         'mode' => 'text/javascript',
                         'lineNumbers' => true,
@@ -121,7 +121,7 @@ class FormItemCode extends FormItem
                         $baseUrl . 'addon/lint/lint.css',
                     ];
 
-                    $this->option = [
+                    $this->options = [
                         'theme' => 'default',
                         'mode' => 'application/json',
                         'lineNumbers' => true,
@@ -143,7 +143,7 @@ class FormItemCode extends FormItem
                         $baseUrl . 'lib/codemirror.css',
                     ];
 
-                    $this->option = [
+                    $this->options = [
                         'theme' => 'default',
                         'mode' => 'text/x-php',
                         'lineNumbers' => true,
@@ -165,7 +165,7 @@ class FormItemCode extends FormItem
                         $baseUrl . 'addon/hint/show-hint.css',
                     ];
 
-                    $this->option = [
+                    $this->options = [
                         'theme' => 'default',
                         'mode' => 'text/x-sql',
                         'lineNumbers' => true,
@@ -184,7 +184,7 @@ class FormItemCode extends FormItem
                         $baseUrl . 'lib/codemirror.css',
                     ];
 
-                    $this->option = [
+                    $this->options = [
                         'theme' => 'default',
                         'mode' => 'text/html',
                         'lineNumbers' => true,
@@ -202,7 +202,7 @@ class FormItemCode extends FormItem
                         $baseUrl . 'lib/codemirror.css',
                     ];
 
-                    $this->option = [
+                    $this->options = [
                         'theme' => 'default',
                         'mode' => 'javascript',
                         'lineNumbers' => true,
@@ -232,14 +232,14 @@ class FormItemCode extends FormItem
                 }
             }
 
-            if (isset($params['option'])) {
-                $option = $params['option'];
-                if ($option instanceof \Closure) {
-                    $option = $option($row);
+            if (isset($params['options'])) {
+                $options = $params['options'];
+                if ($options instanceof \Closure) {
+                    $options = $options($row);
                 }
 
-                if (is_array($option)) {
-                    $this->option = array_merge($this->option, $option);
+                if (is_array($options)) {
+                    $this->options = array_merge($this->options, $options);
                 }
             }
 
@@ -266,14 +266,14 @@ class FormItemCode extends FormItem
                 }
             }
 
-            if (isset($params['option'])) {
-                $option = $params['option'];
-                if ($option instanceof \Closure) {
-                    $option = $option($row);
+            if (isset($params['options'])) {
+                $options = $params['options'];
+                if ($options instanceof \Closure) {
+                    $options = $options($row);
                 }
 
-                if (is_array($option)) {
-                    $this->option = $option;
+                if (is_array($options)) {
+                    $this->options = $options;
                 }
             }
         }
@@ -316,7 +316,7 @@ class FormItemCode extends FormItem
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         $html = '<el-form-item';
         foreach ($this->ui['form-item'] as $k => $v) {
@@ -377,7 +377,7 @@ class FormItemCode extends FormItem
         Be::setContext($contextKey, $index + 1);
 
         $mountedCode = 'let _this_' . $index . ' = this;';
-        $mountedCode .= 'this.formItems.' . $this->name . '.codeMirror = CodeMirror.fromTextArea(this.$refs.refFormItemCode_' . $this->name . ',' . json_encode($this->option) . ');';
+        $mountedCode .= 'this.formItems.' . $this->name . '.codeMirror = CodeMirror.fromTextArea(this.$refs.refFormItemCode_' . $this->name . ',' . json_encode($this->options) . ');';
         $mountedCode .= 'this.formItems.' . $this->name . '.codeMirror.on(\'change\', function(cm) { _this_' . $index . '.formData.' . $this->name . ' = cm.getValue(); });';
 
         $updatedCode = 'this.formItems.' . $this->name . '.codeMirror && this.formItems.' . $this->name . '.codeMirror.refresh();';

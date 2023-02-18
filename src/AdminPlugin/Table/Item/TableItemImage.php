@@ -15,7 +15,7 @@ class TableItemImage extends TableItem
      *
      * @param array $params 参数
      */
-    public function __construct($params = [])
+    public function __construct(array $params = [])
     {
         parent::__construct($params);
 
@@ -35,7 +35,7 @@ class TableItemImage extends TableItem
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         $html = '<el-table-column';
         if (isset($this->ui['table-column'])) {

@@ -9,14 +9,14 @@ namespace Be\AdminPlugin\Form\Action;
 class FormActionButtonDropDown extends FormAction
 {
 
-    public $menus = []; // 下拉菜单
+    protected array $menus = []; // 下拉菜单
 
     /**
      * 构造函数
      *
      * @param array $params 参数
      */
-    public function __construct($params = [])
+    public function __construct(array $params = [])
     {
         parent::__construct($params);
 
@@ -56,7 +56,7 @@ class FormActionButtonDropDown extends FormAction
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         $html = '<el-dropdown';
         if (isset($this->ui['dropdown'])) {

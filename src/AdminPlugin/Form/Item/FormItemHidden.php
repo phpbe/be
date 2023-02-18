@@ -13,7 +13,7 @@ class FormItemHidden extends FormItem
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         return '';
     }

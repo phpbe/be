@@ -9,12 +9,12 @@ namespace Be\AdminPlugin\Table\Item;
 class TableItemToggleTag extends TableItem
 {
 
-    public $on = [
+    protected array $on = [
         'type' => 'success',
         'label' => '是',
     ];
 
-    public $off = [
+    protected array $off = [
         'type' => 'info',
         'label' => '否',
     ];
@@ -24,7 +24,7 @@ class TableItemToggleTag extends TableItem
      *
      * @param array $params 参数
      */
-    public function __construct($params = [])
+    public function __construct(array $params = [])
     {
         parent::__construct($params);
 
@@ -81,7 +81,7 @@ class TableItemToggleTag extends TableItem
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         $html = '<el-table-column';
         if (isset($this->ui['table-column'])) {

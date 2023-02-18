@@ -4,6 +4,7 @@ namespace Be\AdminPlugin\Exporter;
 
 use Be\AdminPlugin\AdminPluginException;
 use Be\AdminPlugin\Driver;
+use Be\AdminPlugin\Exporter\Driver as ExporterDriver;
 
 /**
  * 导出器
@@ -14,9 +15,10 @@ use Be\AdminPlugin\Driver;
 class Exporter extends Driver
 {
 
-    private $driver = null;
+    private ?ExporterDriver $driver = null;
 
-    public function setDriver($driverName){
+    public function setDriver($driverName): ExporterDriver
+    {
         switch ($driverName) {
             case 'csv':
                 $this->driver = new \Be\AdminPlugin\Exporter\Csv();

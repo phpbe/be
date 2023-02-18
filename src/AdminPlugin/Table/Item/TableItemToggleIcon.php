@@ -9,12 +9,12 @@ namespace Be\AdminPlugin\Table\Item;
 class TableItemToggleIcon extends TableItem
 {
 
-    public $on = [
+    protected array $on = [
         'type' => 'success',
         'icon' => 'el-icon-success',
     ];
 
-    public $off = [
+    protected array $off = [
         'type' => 'info',
         'icon' => 'el-icon-error',
     ];
@@ -24,7 +24,7 @@ class TableItemToggleIcon extends TableItem
      *
      * @param array $params 参数
      */
-    public function __construct($params = [])
+    public function __construct(array $params = [])
     {
         parent::__construct($params);
 
@@ -89,7 +89,7 @@ class TableItemToggleIcon extends TableItem
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         $html = '<el-table-column';
         if (isset($this->ui['table-column'])) {

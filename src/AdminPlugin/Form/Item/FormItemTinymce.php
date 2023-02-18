@@ -12,9 +12,9 @@ use Be\Util\Crypt\Random;
 class FormItemTinymce extends FormItem
 {
 
-    protected $js = []; // 需要引入的 JS 文件
-    protected $css = []; // 需要引入的 CSS 文件
-    protected $option = []; // 配置项
+    protected array $js = []; // 需要引入的 JS 文件
+    protected array $css = []; // 需要引入的 CSS 文件
+    protected array $options = []; // 配置项
 
     /**
      * 构造函数
@@ -23,7 +23,7 @@ class FormItemTinymce extends FormItem
      * @param array $row 数据对象
      * @throws AdminPluginException
      */
-    public function __construct($params = [], $row = [])
+    public function __construct(array $params = [], array $row = [])
     {
         parent::__construct($params, $row);
 
@@ -53,7 +53,7 @@ class FormItemTinymce extends FormItem
             $autoresize = $params['autoresize'];
         }
 
-        $this->option = [
+        $this->options = [
             'selector' => '#formItemTinymce_' . $this->name,
             'language' => 'zh_CN',
             //'inline' => true,
@@ -81,21 +81,21 @@ class FormItemTinymce extends FormItem
         $isOpenaiInstalled = Be::getService('App.System.Admin.App')->isInstalled('Openai');
         if ($isOpenaiInstalled) {
             $chatgptCallback = base64_encode('parent.window.bechatgpt.textCompletion = textCompletion;');
-            $this->option['be_openai_chatgpt_url'] = beAdminUrl('Openai.TextCompletion.pop', ['callback' => $chatgptCallback]);
+            $this->options['be_openai_chatgpt_url'] = beAdminUrl('Openai.TextCompletion.pop', ['callback' => $chatgptCallback]);
         }
 
         $contentCss = '';
         $contentCss .= 'https://cdn.phpbe.com/ui/be.css,';
         $contentCss .= 'https://cdn.phpbe.com/ui/be-icons.css';
-        if (!isset($this->option['content_css']) || $this->option['content_css'] === '') {
-            $this->option['content_css'] = $contentCss;
+        if (!isset($this->options['content_css']) || $this->options['content_css'] === '') {
+            $this->options['content_css'] = $contentCss;
         } else {
-            $this->option['content_css'] .= ',' . $contentCss;
+            $this->options['content_css'] .= ',' . $contentCss;
         }
 
         switch ($layout) {
             case 'basic':
-                $this->option = array_merge($this->option, [
+                $this->options = array_merge($this->options, [
                     'min_height' => 200,
                     'plugins' => 'advlist' .  ($autoresize ? ' autoresize' : '') . ' indent2em lists',
                     'toolbar' => 'formatselect bold italic strikethrough underline forecolor alignleft aligncenter alignright alignjustify removeformat | bullist numlist outdent indent indent2em',
@@ -117,7 +117,7 @@ class FormItemTinymce extends FormItem
                 $toolbar .= ' befile beimage media table | code fullscreen';
 
 
-                $this->option = array_merge($this->option, [
+                $this->options = array_merge($this->options, [
                     'min_height' => 300,
                     'plugins' => $plugins,
                     'toolbar' => $toolbar,
@@ -138,7 +138,7 @@ class FormItemTinymce extends FormItem
                 }
                 $toolbar .= ' befile beimage media table becodesample anchor pagebreak charmap emoticons template | code preview fullscreen';
 
-                $this->option = array_merge($this->option, [
+                $this->options = array_merge($this->options, [
                     'min_height' => 400,
                     'plugins' => $plugins,
                     'toolbar' => $toolbar,
@@ -152,7 +152,7 @@ class FormItemTinymce extends FormItem
                 $this->js[] = $appSystemWwwUrl . '/lib/highlight.js/highlight.js-11.5.1/highlight.min.js';
 
                 $contentCss = $appSystemWwwUrl . '/lib/highlight.js/highlight.js-11.5.1/styles/atom-one-light.css';
-                $this->option['content_css'] .= ',' . $contentCss;
+                $this->options['content_css'] .= ',' . $contentCss;
 
                 break;
         }
@@ -180,14 +180,14 @@ class FormItemTinymce extends FormItem
             }
         }
 
-        if (isset($params['option'])) {
-            $option = $params['option'];
-            if ($option instanceof \Closure) {
-                $option = $option($row);
+        if (isset($params['options'])) {
+            $options = $params['options'];
+            if ($options instanceof \Closure) {
+                $options = $options($row);
             }
 
-            if (is_array($option)) {
-                $this->option = array_merge($this->option, $option);
+            if (is_array($options)) {
+                $this->options = array_merge($this->options, $options);
             }
         }
 
@@ -218,7 +218,7 @@ class FormItemTinymce extends FormItem
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         $html = '<el-form-item';
         foreach ($this->ui['form-item'] as $k => $v) {
@@ -230,7 +230,7 @@ class FormItemTinymce extends FormItem
         }
         $html .= '>';
 
-        if (isset($this->option['inline']) && $this->option['inline']) {
+        if (isset($this->options['inline']) && $this->options['inline']) {
             $html .= '<div class="be-p-100" style="border:#DCDFE6 1px solid;" id="formItemTinymce_' . $this->name . '"></div>';
         } else {
             $html .= '<textarea id="formItemTinymce_' . $this->name . '"></textarea>';
@@ -272,7 +272,7 @@ class FormItemTinymce extends FormItem
         $mountedCode = '';
         $mountedCode .= 'let this_' . $rand . ' = this;';
         $mountedCode .= 'tinymce.init({';
-        foreach ($this->option as $key => $val) {
+        foreach ($this->options as $key => $val) {
             $mountedCode .= $key . ':' . json_encode($val) . ',';
         }
 

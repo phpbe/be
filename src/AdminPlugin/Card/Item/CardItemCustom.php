@@ -16,7 +16,7 @@ class CardItemCustom extends CardItem
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         $html = '<div class="card-item">';
         $html .= '<div v-html="item.'.$this->name.'"></div>';

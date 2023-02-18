@@ -14,9 +14,9 @@ use Be\AdminPlugin\Driver;
 class Detail extends Driver
 {
 
-    protected $row = [];
+    protected array $row = [];
 
-    public function setting($setting = [])
+    public function setting(array $setting = []): Driver
     {
         if (!isset($setting['title'])) {
             $setting['title'] = '查看明细';
@@ -36,7 +36,7 @@ class Detail extends Driver
     }
 
 
-    public function setValue($row)
+    public function setValue($row): Driver
     {
         if (is_object($row)) {
             $row = get_object_vars($row);

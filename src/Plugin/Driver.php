@@ -65,7 +65,7 @@ abstract class Driver
      * @param array $setting
      * @return Driver
      */
-    public function setting($setting = [])
+    public function setting(array $setting = []): Driver
     {
         $this->setting = $setting;
         return $this;

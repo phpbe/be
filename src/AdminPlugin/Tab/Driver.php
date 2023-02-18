@@ -10,15 +10,17 @@ use Be\AdminPlugin\UiItem\UiItem;
  */
 class Driver extends UiItem
 {
-    protected $name = null; // 键名
+    protected ?string $name = null; // 键名
     protected string $label = ''; // 配置项中文名称
+
+    protected array $ui = []; // UI界面参数
+
     protected $value = ''; // 值
     protected $nullValue = ''; // 空值
     protected $defaultValue = ''; // 默认址
-    protected $keyValues = null; // 可选值键值对
-    protected $ui = []; // UI界面参数
-
     protected $newValue = ''; // 新值，提交后生成
+
+    protected ?array $keyValues = null; // 可选值键值对
 
     protected $counter = false; // 是否显示计数
 
@@ -28,7 +30,7 @@ class Driver extends UiItem
      * @param array $params 参数
      * @throws AdminPluginException
      */
-    public function __construct($params = [])
+    public function __construct(array $params = [])
     {
         if (!isset($params['name'])) {
             throw new AdminPluginException('选项卡参数 name 缺失');
@@ -122,9 +124,9 @@ class Driver extends UiItem
     /**
      * 获取html内容
      *
-     * @return string | array
+     * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         $html = '<el-tabs';
         foreach ($this->ui as $k => $v) {
@@ -190,7 +192,7 @@ class Driver extends UiItem
         ];
     }
 
-    public function __get($property)
+    public function __get(string $property)
     {
         if (isset($this->$property)) {
             return ($this->$property);

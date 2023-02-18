@@ -15,8 +15,8 @@ use Be\Be;
 class MenuPicker extends Curd
 {
 
-    private $app;
-    private $route;
+    protected string $app;
+    protected string $route;
 
     /**
      * 配置项
@@ -24,7 +24,7 @@ class MenuPicker extends Curd
      * @param array $setting
      * @return Driver
      */
-    public function setting($setting = [])
+    public function setting(array $setting = []): Driver
     {
         $this->app = $setting['app'];
         $this->route = $setting['route'];

@@ -14,7 +14,7 @@ class ToolbarItemCustom extends ToolbarItem
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         return $this->value;
     }

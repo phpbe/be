@@ -8,9 +8,9 @@ namespace Be\AdminPlugin\Form\Item;
 class FormItemTree extends FormItem
 {
 
-    protected $valueType = 'array(string)';
+    protected string $valueType = 'array(string)';
 
-    protected $treeData = [];
+    protected array $treeData = [];
 
 
     /**
@@ -19,7 +19,7 @@ class FormItemTree extends FormItem
      * @param array $params 参数
      * @param array $row 数据对象
      */
-    public function __construct($params = [], $row = [])
+    public function __construct(array $params = [], array $row = [])
     {
         parent::__construct($params, $row);
 
@@ -70,7 +70,7 @@ class FormItemTree extends FormItem
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         $html = '<el-form-item';
         foreach ($this->ui['form-item'] as $k => $v) {

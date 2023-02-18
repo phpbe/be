@@ -15,7 +15,7 @@ class CardItemText extends CardItem
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         $html = '<div class="card-item">';
         if ($this->label) {

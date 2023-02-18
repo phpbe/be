@@ -11,13 +11,13 @@ class UiItems
 
     //private $this = [];
 
-    private $js = [];
-    private $jsCode = [];
-    private $css = [];
-    private $cssCode = [];
-    private $vueData = [];
-    private $vueMethods = [];
-    private $vueHooks = [];
+    protected array $js = [];
+    protected array $jsCode = [];
+    protected array $css = [];
+    protected array $cssCode = [];
+    protected array $vueData = [];
+    protected array $vueMethods = [];
+    protected array $vueHooks = [];
 
     public function add(UiItem $uiItem)
     {

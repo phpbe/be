@@ -9,24 +9,24 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 class Excel extends Driver
 {
 
-    private $started = false;
+    private bool $started = false;
 
     /**
      * @var Spreadsheet
      */
-    private $handler = null;
+    private ?Spreadsheet $handler = null;
 
     // 行号
-    private $index = 0;
+    private int $index = 0;
 
     // 输出格式 Excel5 : xls / Excel2007 : xlsx
-    private $xlsType = 'Xls';
+    private string $xlsType = 'Xls';
 
     /**
      * 准备导出
      * @return Driver
      */
-    public function start()
+    public function start(): Driver
     {
         if (!$this->started) {
             $this->started = true;
@@ -83,7 +83,7 @@ class Excel extends Driver
      * @param array $headers
      * @return Driver
      */
-    public function setHeaders($headers = [])
+    public function setHeaders($headers = []): Driver
     {
         if (!$this->started) {
             $this->start();
@@ -96,7 +96,7 @@ class Excel extends Driver
         $col = 1;
         foreach ($headers as $header) {
             $colName = Coordinate::stringFromColumnIndex($col);
-            $cellName = $colName. $this->index;
+            $cellName = $colName . $this->index;
             $activeSheet->setCellValue($cellName, $header);
             $col++;
         }
@@ -109,7 +109,7 @@ class Excel extends Driver
         );
 
         $colName = Coordinate::stringFromColumnIndex($col - 1);
-        $activeSheet->getStyle('A'.$this->index.':'. $colName .$this->index)->applyFromArray($style);
+        $activeSheet->getStyle('A' . $this->index . ':' . $colName . $this->index)->applyFromArray($style);
         return $this;
     }
 
@@ -119,7 +119,7 @@ class Excel extends Driver
      * @param array $row
      * @return Driver
      */
-    public function addRow($row = [])
+    public function addRow($row = []): Driver
     {
         if (!$this->started) {
             $this->start();
@@ -146,8 +146,8 @@ class Excel extends Driver
      *
      * @return Driver
      */
-    public function end() {
-
+    public function end(): Driver
+    {
         $writer = IOFactory::createWriter($this->handler, $this->xlsType);
 
         if ($this->outputType === 'http') {

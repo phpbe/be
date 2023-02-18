@@ -38,7 +38,7 @@ class CategoryTree extends Driver
      * @param array $setting
      * @return Driver
      */
-    public function setting($setting = [])
+    public function setting(array $setting = []): Driver
     {
         if (!isset($setting['db'])) {
             $setting['db'] = 'master';

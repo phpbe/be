@@ -10,10 +10,10 @@ use Be\AdminPlugin\AdminPluginException;
 class FormItemsMixedObjects extends FormItems
 {
 
-    private $resize = true;
-    private $minSize = 0;
-    private $maxSize = 0;
-    private $labelNewItem = '新增';
+    protected bool $resize = true;
+    protected int $minSize = 0;
+    protected int $maxSize = 0;
+    protected string $labelNewItem = '新增';
 
     /**
      * 构造函数
@@ -21,7 +21,7 @@ class FormItemsMixedObjects extends FormItems
      * @param array $params 参数
      * @param array $row 数据对象
      */
-    public function __construct($params = [], $row = [])
+    public function __construct(array $params = [], array $row = [])
     {
 
         //print_r($params);
@@ -57,7 +57,7 @@ class FormItemsMixedObjects extends FormItems
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         $html = '<el-form-item';
         foreach ($this->ui['form-item'] as $k => $v) {

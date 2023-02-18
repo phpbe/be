@@ -15,7 +15,7 @@ class ToolbarItemButton extends ToolbarItem
      *
      * @param array $params 参数
      */
-    public function __construct($params = [])
+    public function __construct(array $params = [])
     {
         parent::__construct($params);
 
@@ -34,7 +34,7 @@ class ToolbarItemButton extends ToolbarItem
      *
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         $html = '<el-button';
         foreach ($this->ui as $k => $v) {

@@ -11,18 +11,21 @@ use Be\AdminPlugin\UiItem\UiItem;
 abstract class FormItem extends UiItem
 {
 
-    protected $name = null; // 键名
+    protected ?string $name = null; // 键名
     protected string $label = ''; // 配置项中文名称
+    protected string $description = ''; // 描述
+
+    protected array $ui = []; // UI界面参数
+    protected bool $required = false; // 是否必填
+    protected bool $disabled = false; // 是否不可编辑
+
+    protected string $valueType = 'string'; // 值类型
     protected $value = null; // 值
     protected $nullValue = ''; // 空值
     protected $defaultValue = ''; // 默认址
-    protected $valueType = 'string'; // 值类型
-    protected $keyValues = null; // 可选值键值对
-    protected $description = ''; // 描述
-    protected $ui = []; // UI界面参数
     protected $newValue = ''; // 新值，提交后生成
-    protected $required = false; // 是否必填
-    protected $disabled = false; // 是否不可编辑
+
+    protected ?array $keyValues = null; // 可选值键值对
 
     /**
      * 构造函数
@@ -31,7 +34,7 @@ abstract class FormItem extends UiItem
      * @param array $row 数据对象
      * @throws AdminPluginException
      */
-    public function __construct($params = [], $row = [])
+    public function __construct(array $params = [], array $row = [])
     {
         if (isset($params['name'])) {
             $this->name = $params['name'];
@@ -43,15 +46,6 @@ abstract class FormItem extends UiItem
                 $this->label = $label($row);
             } else {
                 $this->label = $label;
-            }
-        }
-
-        if (isset($params['value'])) {
-            $value = $params['value'];
-            if ($value instanceof \Closure) {
-                $this->value = $value($row);
-            } else {
-                $this->value = $value;
             }
         }
 
@@ -70,6 +64,19 @@ abstract class FormItem extends UiItem
                 $this->defaultValue = $defaultValue($row);
             } else {
                 $this->defaultValue = $defaultValue;
+            }
+        }
+
+        if (isset($params['value'])) {
+            $value = $params['value'];
+            if ($value instanceof \Closure) {
+                $this->value = $value($row);
+            } else {
+                $this->value = $value;
+            }
+
+            if ($this->value === $this->nullValue) {
+                $this->value = $this->defaultValue;
             }
         }
 
@@ -157,15 +164,6 @@ abstract class FormItem extends UiItem
         }
     }
 
-    public function __get($property)
-    {
-        if (isset($this->$property)) {
-            return ($this->$property);
-        } else {
-            return null;
-        }
-    }
-
     /**
      * 获取值的字符形式
      *
@@ -195,10 +193,10 @@ abstract class FormItem extends UiItem
     /**
      * 提交处理
      *
-     * @param $data
+     * @param array $data
      * @throws AdminPluginException
      */
-    public function submit($data)
+    public function submit(array $data)
     {
         //print_r($data);
         if (isset($data[$this->name]) && $data[$this->name] !== $this->nullValue) {
