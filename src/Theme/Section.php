@@ -165,12 +165,13 @@ abstract class Section
         $css .= '#' . $this->id . ' .' . $cssClass . ' {';
         $css .= 'display: flex;';
         $css .= 'flex-wrap: wrap;';
-        $css .= 'overflow: hidden;';
+        //$css .= 'overflow: hidden;';
         $css .= '}';
 
         $css .= '#' . $this->id . ' .' . $cssItemClass . ' {';
         $css .= 'flex: 0 1 auto;';
-        $css .= 'overflow: hidden;';
+        //$css .= 'overflow: hidden;';
+        $css .= 'min-width:0;';
         $css .= '}';
 
         // 手机端
