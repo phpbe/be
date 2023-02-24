@@ -65,80 +65,57 @@ abstract class ThemeEditor
         $themes = [];
         $rootPath = Be::getRuntime()->getRootPath();
 
-        $vendorPath = $rootPath . '/vendor';
-        $dirs = scandir($vendorPath);
-        foreach ($dirs as $dir) {
-            if ($dir !== '..' && $dir !== '.') {
-                $subVendorPath = $vendorPath . '/' . $dir;
-                if (is_dir($subVendorPath)) {
-                    $subDirs = scandir($subVendorPath);
-                    foreach ($subDirs as $subDir) {
-                        if ($subDir !== '..' && $subDir !== '.') {
+        $vendorDirs = scandir($rootPath . '/vendor');
+        foreach ($vendorDirs as $vendorDir) {
+            if ($vendorDir === '.' || $vendorDir === '..') {
+                continue;
+            }
 
-                            // 应用中包含的 AdminTheme 或 Theme
-                            $themePath = $subVendorPath . '/' . $subDir . '/' . $this->themeType;
-                            if (!file_exists($themePath)) {
-                                $themePath = $subVendorPath . '/' . $subDir . '/src/' . $this->themeType;
-                                if (!file_exists($themePath)) {
-                                    $themePath = $subVendorPath . '/' . $subDir . '/' . strtolower($this->themeType);
-                                    if (!file_exists($themePath)) {
-                                        $themePath = $subVendorPath . '/' . $subDir . '/src/' . strtolower($this->themeType);
-                                    }
-                                }
-                            }
+            $vendorPath = $rootPath . '/vendor/' . $vendorDir;
+            if (!is_dir($vendorPath)) {
+                continue;
+            }
 
-                            if (file_exists($themePath)) {
-                                $dirs = scandir($themePath);
-                                foreach ($dirs as $dir) {
-                                    $propertyPath = $themePath . '/' . $dir . '/Property.php';
-                                    if (file_exists($propertyPath)) {
-                                        $content = file_get_contents($propertyPath);
-                                        preg_match('/namespace\s+Be\\\\' . $this->themeType . '\\\\(\w+)/i', $content, $matches);
-                                        if (isset($matches[1])) {
-                                            $themes[] = $matches[1];
-                                        }
-                                    }
-                                }
-                                continue;
-                            }
+            $subVendorDirs = scandir($vendorPath);
+            foreach ($subVendorDirs as $subVendorDir) {
 
-                            // 是否主题类型的包
-                            $propertyPath = $subVendorPath . '/' . $subDir . '/src/Property.php';
-                            if (!file_exists($propertyPath)) {
-                                $propertyPath = $subVendorPath . '/' . $subDir . '/Property.php';
-                            }
+                if ($subVendorDir === '.' || $subVendorDir === '..') {
+                    continue;
+                }
 
-                            if (file_exists($propertyPath)) {
-                                $content = file_get_contents($propertyPath);
-                                preg_match('/namespace\s+Be\\\\' . $this->themeType . '\\\\(\w+)/i', $content, $matches);
-                                if (isset($matches[1])) {
-                                    $themes[] = $matches[1];
-                                }
-                            }
+                if (!is_dir($vendorPath . '/' . $subVendorDir)) {
+                    continue;
+                }
+
+                // 应用中包含的 AdminTheme 或 Theme
+                $themePath = $vendorPath . '/' . $subVendorDir . '/' . $this->themeType;
+                if (!is_dir($themePath)) {
+                    $themePath = $vendorPath . '/' . $subVendorDir . '/' . strtolower($this->themeType);
+                }
+
+                if (!is_dir($themePath)) {
+                    // 有 src 目录的情况
+                    if (is_dir($vendorPath . '/' . $subVendorDir . '/src')) {
+                        $themePath = $vendorPath . '/' . $subVendorDir . '/src/' . $this->themeType;
+                        if (!is_dir($themePath)) {
+                            $themePath = $vendorPath . '/' . $subVendorDir . '/src/' . strtolower($this->themeType);
                         }
                     }
                 }
-            }
-        }
 
-        $themePath = $rootPath . '/' . $this->themeType;
-        if (!file_exists($themePath)) {
-            $themePath = $rootPath . '/src/' . $this->themeType;
-            if (!file_exists($themePath)) {
-                $themePath = $rootPath . '/' . strtolower($this->themeType);
-                if (!file_exists($themePath)) {
-                    $themePath = $rootPath . '/src/' . strtolower($this->themeType);
-                }
-            }
-        }
+                if (is_dir($themePath)) {
+                    $dirs = scandir($themePath);
+                    foreach ($dirs as $dir) {
 
-        if (file_exists($themePath)) {
-            $dirs = scandir($themePath);
-            foreach ($dirs as $dir) {
-                if ($dir !== '..' && $dir !== '.') {
-                    $subVendorPath = $themePath . '/' . $dir;
-                    if (is_dir($subVendorPath)) {
-                        $propertyPath = $subVendorPath . '/Property.php';
+                        if ($dir === '.' || $dir === '..') {
+                            continue;
+                        }
+
+                        if (!is_dir($themePath . '/' . $dir)) {
+                            continue;
+                        }
+
+                        $propertyPath = $themePath . '/' . $dir . '/Property.php';
                         if (file_exists($propertyPath)) {
                             $content = file_get_contents($propertyPath);
                             preg_match('/namespace\s+Be\\\\' . $this->themeType . '\\\\(\w+)/i', $content, $matches);
@@ -147,10 +124,61 @@ abstract class ThemeEditor
                             }
                         }
                     }
+                    continue;
+                }
+
+                // 是否主题类型的包
+                $propertyPath = $vendorPath . '/' . $subVendorDir . '/src/Property.php';
+                if (!file_exists($propertyPath)) {
+                    $propertyPath = $vendorPath . '/' . $subVendorDir . '/Property.php';
+                }
+
+                if (file_exists($propertyPath)) {
+                    $content = file_get_contents($propertyPath);
+                    preg_match('/namespace\s+Be\\\\' . $this->themeType . '\\\\(\w+)/i', $content, $matches);
+                    if (isset($matches[1])) {
+                        $themes[] = $matches[1];
+                    }
                 }
             }
         }
 
+
+        $themePath = $rootPath . '/' . $this->themeType;
+        if (!is_dir($themePath)) {
+            $themePath = $rootPath . '/' . strtolower($this->themeType);
+        }
+
+        if (!is_dir($themePath)) {
+            if (is_dir($rootPath . '/src')) {
+                $themePath = $rootPath . '/src/' . $this->themeType;
+                if (!is_dir($themePath)) {
+                    $themePath = $rootPath . '/src/' . strtolower($this->themeType);
+                }
+            }
+        }
+
+        if (is_dir($themePath)) {
+            $dirs = scandir($themePath);
+            foreach ($dirs as $dir) {
+                if ($dir === '.' || $dir === '..') {
+                    continue;
+                }
+
+                if (!is_dir($themePath . '/' . $dir)) {
+                    continue;
+                }
+
+                $propertyPath = $themePath . '/' . $dir . '/Property.php';
+                if (file_exists($propertyPath)) {
+                    $content = file_get_contents($propertyPath);
+                    preg_match('/namespace\s+Be\\\\' . $this->themeType . '\\\\(\w+)/i', $content, $matches);
+                    if (isset($matches[1])) {
+                        $themes[] = $matches[1];
+                    }
+                }
+            }
+        }
 
         $class = '\\Be\\App\\System\\Config\\' . $this->themeType;
         $originalConfigTheme = new $class();

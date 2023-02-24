@@ -316,6 +316,7 @@ class Template extends Section
                 $wwwUrl = Be::getProperty('Theme.System')->getWwwUrl();
                 echo '<link rel="stylesheet" href="' . $wwwUrl . '/lib/swiper/8.3.2/swiper-bundle.min.css">';
                 echo '<script src="' . $wwwUrl . '/lib/swiper/8.3.2/swiper-bundle.min.js"></script>';
+                Be::setContext($key, 1);
             }
 
             echo '<script>';
