@@ -127,10 +127,13 @@ abstract class ThemeEditor
                     continue;
                 }
 
-                // 是否主题类型的包
-                $propertyPath = $vendorPath . '/' . $subVendorDir . '/src/Property.php';
+
+                // vendor 子目录直接是主题的情况
+                $propertyPath = $vendorPath . '/' . $subVendorDir . '/Property.php';
                 if (!file_exists($propertyPath)) {
-                    $propertyPath = $vendorPath . '/' . $subVendorDir . '/Property.php';
+                    if (is_dir($vendorPath . '/' . $subVendorDir . '/src')) {
+                        $propertyPath = $vendorPath . '/' . $subVendorDir . '/src/Property.php';
+                    }
                 }
 
                 if (file_exists($propertyPath)) {
