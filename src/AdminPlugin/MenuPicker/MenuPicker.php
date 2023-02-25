@@ -15,7 +15,7 @@ use Be\Be;
 class MenuPicker extends Curd
 {
 
-    protected string $app;
+    protected \Be\App\Property $app;
     protected string $route;
 
     /**
