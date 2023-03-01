@@ -12,7 +12,7 @@ class AdminUser
      *     driver="FormItemSwitch",
      *     description="启用锁定IP时，若用户IP变化，需重新登录。")
      */
-    public int $ipLock = 1;
+    public int $ipLock = 0;
 
     /**
      * @BeConfigItem("用户头像宽度",
