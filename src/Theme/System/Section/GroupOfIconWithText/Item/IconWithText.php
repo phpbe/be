@@ -23,7 +23,7 @@ class IconWithText
     /**
      * @BeConfigItem("SVG图像数据",
      *     driver="FormItemInput",
-     *     ui="return ['form-item' => ['v-show' => 'formData.icon === \'svg\'']];"
+     *     ui="return ['form-item' => ['v-show' => 'formData.iconType === \'svg\'']];"
      * )
      */
     public string $iconSvg = '';
@@ -31,7 +31,7 @@ class IconWithText
     /**
      * @BeConfigItem("上传图像",
      *     driver="FormItemStorageImage",
-     *     ui="return ['form-item' => ['v-show' => 'formData.icon === \'image\'']];"
+     *     ui="return ['form-item' => ['v-show' => 'formData.iconType === \'image\'']];"
      * )
      */
     public string $iconImage = '';
