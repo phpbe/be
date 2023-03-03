@@ -29,7 +29,7 @@
         <hr>
         <p>
             <code># 每分钟访问一次任务调度中心</code><br>
-            <code>* * * * * curl <?php echo beUrl('System.Task.schedule', ['password' => $this->configTask->password ]); ?></code>
+            <code>* * * * * curl '<?php echo beUrl('System.Task.schedule', ['password' => $this->configTask->password ]); ?>'</code>
         </p>
 
         <h3>Windows 计划任务 配置</h3>

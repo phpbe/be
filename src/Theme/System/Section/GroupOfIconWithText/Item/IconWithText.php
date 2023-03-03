@@ -52,6 +52,6 @@ class IconWithText
      * @BeConfigItem("链接网址",
      *     driver="FormItemInput")
      */
-    public string $linkUrl = 'http://';
+    public string $linkUrl = '#';
 
 }
