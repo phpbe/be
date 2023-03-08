@@ -4,6 +4,7 @@ namespace Be\Router;
 
 use Be\Be;
 use Be\Util\Annotation;
+use Be\Util\Arr;
 use http\Exception\RuntimeException;
 
 class Helper
@@ -288,44 +289,69 @@ class Helper
             if ($router->$actionName === 'hashmap') {
 
                 // 路由到网址的映射键名
-                $route2uriKey = 'be:route2uri:' . $route . ':' . md5(serialize($params));
+                $route2uriKey = 'be:route2uri:' . $route . ':' . md5(serialize($uri[0]));
 
+                $cacheExists = false;
                 $configRouter = Be::getConfig('App.System.Router');
                 if ($configRouter->cache) {
                     // 开启缓存时，并且生成的网址与缓存一致时，直接返回网址
-                    if (isset(self::$cache[$route2uriKey]) && self::$cache[$route2uriKey] === $uri) {
-                        return $rootUrl . $uri;
+                    if (isset(self::$cache[$route2uriKey]) && self::$cache[$route2uriKey] === $uri[0]) {
+                        //return $rootUrl . $uri[0];
+                        $cacheExists = true;
                     }
                 }
 
-                // 网址到路由的映射键名
-                $uri2routeKey = 'be:uri2route:' . $uri;
+                if (!$cacheExists) {
+                    // 网址到路由的映射键名
+                    $uri2routeKey = 'be:uri2route:' . $uri[0];
 
-                // 将路由和网址的双向映射关系写入缓存
-                $cache = Be::getCache();
-                $cacheUri = $cache->get($route2uriKey);
-                if ($cacheUri) {
-                    // 路由到网址的映射与Redis中存储的不一致， 更新 REDIS 中的网址
-                    if ($uri !== $cacheUri) {
-                        $cache->set($route2uriKey, $uri);
-                        $cache->set($uri2routeKey, serialize([$route, $params]));
+                    // 将路由和网址的双向映射关系写入缓存
+                    $cache = Be::getCache();
+                    $cacheUri = $cache->get($route2uriKey);
+                    if ($cacheUri) {
+                        // 路由到网址的映射与Redis中存储的不一致， 更新 REDIS 中的网址
+                        if ($uri[0] !== $cacheUri) {
+                            $cache->set($route2uriKey, $uri[0]);
+                            $cache->set($uri2routeKey, serialize([$route, $uri[1]]));
 
-                        // 删除缓存中的旧网址到路由的映射
-                        $cache->delete('be:uri2route:' . $cacheUri);
+                            // 删除缓存中的旧网址到路由的映射
+                            $cache->delete('be:uri2route:' . $cacheUri);
+                        }
+                    } else {
+                        // 写入 Redis 网址
+                        $cache->set($route2uriKey, $uri[0]);
+                        $cache->set($uri2routeKey, serialize([$route , $uri[1]]));
                     }
+
+                    /*
+                     * 如果开启了内存缓存, 写入数组缓存
+                     */
+                    if ($configRouter->cache) {
+                        self::$cache[$route2uriKey] = $uri[0]; // 路由到网址缓存
+                        self::$cache[$uri2routeKey] = [$route, $uri[1]]; // 网址到路由缓存
+                    }
+                }
+
+                $paramsStr = '';
+                $paramsAvailable = false;
+
+                if (count($uri[1]) > 0) {
+                    $paramsAvailable = true;
+                    foreach ($params as $k => $v) {
+                        if (strpos($k, '-') !== false && strpos($v, '-') !== false) {
+                            $paramsAvailable = false;
+                            break;
+                        }
+                        $paramsStr .= '/' . $k . '-' . $v;
+                    }
+                }
+
+                if ($paramsAvailable) {
+                    return $rootUrl . $uri[0] . $paramsStr;
                 } else {
-                    // 写入 Redis 网址
-                    $cache->set($route2uriKey, $uri);
-                    $cache->set($uri2routeKey, serialize([$route, $params]));
+                    return $rootUrl . $uri[0] . '?' . http_build_query($params);
                 }
 
-                /*
-                 * 如果开启了内存缓存, 写入数组缓存
-                 */
-                if ($configRouter->cache) {
-                    self::$cache[$route2uriKey] = $uri; // 路由到网址缓存
-                    self::$cache[$uri2routeKey] = [$route, $params]; // 网址到路由缓存
-                }
             } elseif ($router->$actionName === 'static') {
                 // 静态路由有参数时，将参数以 GET 方式拼接到网址中
                 if ($params !== null && $params) {
@@ -406,7 +432,7 @@ class Helper
         }
 
         // 尝试逐个移除结尾的参数
-        if ($mapping->static) {
+        if ($mapping->static || $mapping->hashmap) {
 
             $uris = explode('/', $uri);
             $len = count($uris);
@@ -427,8 +453,41 @@ class Helper
 
                     $routeStr = implode('/', $uris);
 
-                    if (isset($mapping->staticMapping[$routeStr])) {
-                        return [$mapping->staticMapping[$routeStr], $params];
+                    if ($mapping->hashmap) {
+
+                        $route = null;
+                        $uri2routeKey = 'be:uri2route:' . $routeStr;
+                        if ($configRouter->cache) {
+                            if (isset(self::$cache[$uri2routeKey])) {
+                                $route =  self::$cache[$uri2routeKey];
+                            }
+                        }
+
+                        if ($route === null) {
+                            $cache = Be::getCache();
+                            $routeJson = $cache->get($uri2routeKey);
+                            if ($routeJson) {
+                                $route = unserialize($routeJson);
+                                if ($route) {
+                                    if ($configRouter->cache) {
+                                        self::$cache[$uri2routeKey] = $route;
+                                    }
+                                }
+                            }
+                        }
+
+                        if ($route !== null) {
+                            return [
+                                $route[0],
+                                Arr::merge($route[1], $params),
+                            ];
+                        }
+                    }
+
+                    if ($mapping->static) {
+                        if (isset($mapping->staticMapping[$routeStr])) {
+                            return [$mapping->staticMapping[$routeStr], $params];
+                        }
                     }
 
                     $i--;
