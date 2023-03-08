@@ -4,6 +4,7 @@ namespace Be\Router;
 
 use Be\Be;
 use Be\Util\Annotation;
+use http\Exception\RuntimeException;
 
 class Helper
 {
@@ -27,6 +28,10 @@ class Helper
             }
 
             $class = '\\Be\\Data\\Runtime\\Router\\' . $app . '\\' . $router;
+            if (!class_exists($class)) {
+                throw new RuntimeException(beLang('App.System', 'RUNTIME.ROUTE_ERROR', $app . '.' . $router));
+            }
+
             self::$cache[$key] = new $class();
         }
         return self::$cache[$key];
@@ -47,6 +52,10 @@ class Helper
         $code .= '{' . "\n";
 
         $controllerClassName = '\\Be\\App\\' . $app . '\\Controller\\' . $router;
+        if (!class_exists($controllerClassName)) {
+            throw new RuntimeException(beLang('App.System', 'RUNTIME.ROUTE_ERROR', $app . '.' . $router));
+        }
+
         $reflection = new \ReflectionClass($controllerClassName);
         $methods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
         foreach ($methods as &$method) {
@@ -279,7 +288,7 @@ class Helper
             if ($router->$actionName === 'hashmap') {
 
                 // 路由到网址的映射键名
-                $route2uriKey = 'be:route2uri:' . $route . ':' . md5(json_encode($params));
+                $route2uriKey = 'be:route2uri:' . $route . ':' . md5(serialize($params));
 
                 $configRouter = Be::getConfig('App.System.Router');
                 if ($configRouter->cache) {
@@ -299,7 +308,7 @@ class Helper
                     // 路由到网址的映射与Redis中存储的不一致， 更新 REDIS 中的网址
                     if ($uri !== $cacheUri) {
                         $cache->set($route2uriKey, $uri);
-                        $cache->set($uri2routeKey, json_encode([$route, $params]));
+                        $cache->set($uri2routeKey, serialize([$route, $params]));
 
                         // 删除缓存中的旧网址到路由的映射
                         $cache->delete('be:uri2route:' . $cacheUri);
@@ -307,7 +316,7 @@ class Helper
                 } else {
                     // 写入 Redis 网址
                     $cache->set($route2uriKey, $uri);
-                    $cache->set($uri2routeKey, json_encode([$route, $params]));
+                    $cache->set($uri2routeKey, serialize([$route, $params]));
                 }
 
                 /*
@@ -320,7 +329,22 @@ class Helper
             } elseif ($router->$actionName === 'static') {
                 // 静态路由有参数时，将参数以 GET 方式拼接到网址中
                 if ($params !== null && $params) {
-                    return $rootUrl . $uri . '?' . http_build_query($params);
+
+                    $paramsStr = '';
+                    $paramsAvailable = true;
+                    foreach ($params as $k => $v) {
+                        if (strpos($k, '-') !== false && strpos($v, '-') !== false) {
+                            $paramsAvailable = false;
+                            break;
+                        }
+                        $paramsStr .= '/' . $k . '-' . $v;
+                    }
+
+                    if ($paramsAvailable) {
+                        return $rootUrl . $uri . $paramsStr;
+                    } else {
+                        return $rootUrl . $uri . '?' . http_build_query($params);
+                    }
                 }
             }
 
@@ -358,21 +382,6 @@ class Helper
             }
         }
 
-        // 正则路由
-        if ($mapping->regular) {
-            foreach ($mapping->regularMapping as $key => $val) {
-                if (preg_match('/' . $key . '/', $uri, $results)) {
-                    $len = count($val[1]);
-                    $route = $val[0];
-                    $params = [];
-                    for ($i = 0; $i < $len; $i++) {
-                        $params[$val[1][$i]] = $results[$i + 1];
-                    }
-                    return [$route, $params];
-                }
-            }
-        }
-
         // Hashmap 路由
         if ($mapping->hashmap) {
             $uri2routeKey = 'be:uri2route:' . $uri;
@@ -386,12 +395,58 @@ class Helper
             $cache = Be::getCache();
             $routeJson = $cache->get($uri2routeKey);
             if ($routeJson) {
-                $route = json_decode($routeJson, true);
+                $route = unserialize($routeJson);
                 if ($route) {
                     if ($configRouter->cache) {
                         self::$cache[$uri2routeKey] = $route;
                     }
                     return $route;
+                }
+            }
+        }
+
+        // 尝试逐个移除结尾的参数
+        if ($mapping->static) {
+
+            $uris = explode('/', $uri);
+            $len = count($uris);
+
+            if ($len > 2) {
+                $params = [];
+                $i = $len;
+                do {
+                    $param = array_pop($uris);
+
+                    $pos = strpos($param, '-');
+                    if ($pos === false)  break;
+
+                    $key = substr($param, 0, $pos);
+                    $val = substr($param, $pos + 1);
+
+                    $params[$key] = $val;
+
+                    $routeStr = implode('/', $uris);
+
+                    if (isset($mapping->staticMapping[$routeStr])) {
+                        return [$mapping->staticMapping[$routeStr], $params];
+                    }
+
+                    $i--;
+                } while($i > 1);
+            }
+        }
+
+        // 正则路由
+        if ($mapping->regular) {
+            foreach ($mapping->regularMapping as $key => $val) {
+                if (preg_match('/' . $key . '/', $uri, $results)) {
+                    $len = count($val[1]);
+                    $route = $val[0];
+                    $params = [];
+                    for ($i = 0; $i < $len; $i++) {
+                        $params[$val[1][$i]] = $results[$i + 1];
+                    }
+                    return [$route, $params];
                 }
             }
         }
