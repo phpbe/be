@@ -113,7 +113,7 @@ class Common extends Driver
 
                             if (isset($decodedRoute[1])) {
                                 foreach ($decodedRoute[1] as $key => $val) {
-                                    $_GET[$key] = urldecode($val);
+                                    $_GET[$key] = $val;
                                 }
                             }
 

@@ -68,6 +68,18 @@ CREATE TABLE `system_admin_user_login_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci COMMENT='用户登录日志';
 
 
+
+CREATE TABLE `system_config` (
+  `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
+  `namespace` varchar(200) NOT NULL DEFAULT '' COMMENT '配置项命名空间',
+  `data` text NOT NULL COMMENT '序列化后的配置数据',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `namespace` (`namespace`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci COMMENT='配置';
+
+
 CREATE TABLE `system_mail_queue` (
   `id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
   `to_email` varchar(60) NOT NULL DEFAULT '' COMMENT '收件人邮箱',

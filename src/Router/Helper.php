@@ -423,7 +423,7 @@ class Helper
                     $key = substr($param, 0, $pos);
                     $val = substr($param, $pos + 1);
 
-                    $params[$key] = $val;
+                    $params[$key] = urldecode($val);
 
                     $routeStr = implode('/', $uris);
 
@@ -444,7 +444,7 @@ class Helper
                     $route = $val[0];
                     $params = [];
                     for ($i = 0; $i < $len; $i++) {
-                        $params[$val[1][$i]] = $results[$i + 1];
+                        $params[$val[1][$i]] = urldecode($results[$i + 1]);
                     }
                     return [$route, $params];
                 }
