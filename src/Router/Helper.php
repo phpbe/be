@@ -335,21 +335,23 @@ class Helper
                 $paramsStr = '';
                 $paramsAvailable = false;
 
-                if (count($uri[1]) > 0) {
+                if (count($uri[2]) > 0) {
                     $paramsAvailable = true;
-                    foreach ($params as $k => $v) {
+                    foreach ($uri[2] as $k => $v) {
                         if (strpos($k, '-') !== false && strpos($v, '-') !== false) {
                             $paramsAvailable = false;
                             break;
                         }
                         $paramsStr .= '/' . $k . '-' . $v;
                     }
-                }
 
-                if ($paramsAvailable) {
-                    return $rootUrl . $uri[0] . $paramsStr;
+                    if ($paramsAvailable) {
+                        return $rootUrl . $uri[0] . $paramsStr;
+                    } else {
+                        return $rootUrl . $uri[0] . '?' . http_build_query($uri[2]);
+                    }
                 } else {
-                    return $rootUrl . $uri[0] . '?' . http_build_query($params);
+                    return $rootUrl . $uri[0];
                 }
 
             } elseif ($router->$actionName === 'static') {
