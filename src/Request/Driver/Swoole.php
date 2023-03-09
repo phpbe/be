@@ -56,6 +56,9 @@ class Swoole extends Driver
      */
     public function get(string $name = null, $default = null, $format = 'string')
     {
+        if ($this->request->get === null) {
+            $this->request->get = [];
+        }
         return $this->_request($this->request->get, $name, $default, $format);
     }
 
@@ -68,6 +71,9 @@ class Swoole extends Driver
      */
     public function post(string $name = null, $default = null, $format = 'string')
     {
+        if ($this->request->post === null) {
+            $this->request->post = [];
+        }
         return $this->_request($this->request->post, $name, $default, $format);
     }
 
@@ -80,6 +86,9 @@ class Swoole extends Driver
      */
     public function request(string $name = null, $default = null, $format = 'string')
     {
+        if ($this->request->request === null) {
+            $this->request->request = [];
+        }
         return $this->_request($this->request->request, $name, $default, $format);
     }
 
@@ -134,6 +143,10 @@ class Swoole extends Driver
      */
     public function files(string $name = null)
     {
+        if ($this->request->files === null) {
+            $this->request->files = [];
+        }
+
         if ($name === null) {
             return $this->request->files;
         }
