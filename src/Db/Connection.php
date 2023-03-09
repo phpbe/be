@@ -37,9 +37,9 @@ abstract class Connection
     /**
      * 获取原生PDO连接
      *
-     * @return \PDO
+     * @return \PDO|\Swoole\Database\PDOProxy
      */
-    public function getPdo(): \PDO
+    public function getPdo()
     {
         return $this->pdo;
     }
