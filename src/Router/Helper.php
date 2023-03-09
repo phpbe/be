@@ -332,10 +332,8 @@ class Helper
                     }
                 }
 
-                $paramsStr = '';
-                $paramsAvailable = false;
-
                 if (count($uri[2]) > 0) {
+                    $paramsStr = '';
                     $paramsAvailable = true;
                     foreach ($uri[2] as $k => $v) {
                         if (strpos($k, '-') !== false && strpos($v, '-') !== false) {
