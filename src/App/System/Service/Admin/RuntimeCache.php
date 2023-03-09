@@ -66,6 +66,13 @@ class RuntimeCache
             'icon' => 'el-icon-folder',
         ],
         [
+            'name' => 'Language',
+            'label' => '多语言缓存',
+            'description' => '应用语言包生成的的缓存，当已存在的语言包变更时，需手动清除存。',
+            'type' => 'folder',
+            'icon' => 'el-icon-folder',
+        ],
+        [
             'name' => 'Menu',
             'label' => '菜单缓存',
             'description' => '管理人员配置的前台菜单缓存，菜单有变动时，需手动清除除存。',
