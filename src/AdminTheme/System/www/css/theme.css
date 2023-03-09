@@ -169,6 +169,10 @@ body {
     line-height: 60px;
 }
 
+.be-north .el-submenu__title {
+    padding: 0 6px;
+}
+
 .be-north .el-dropdown-link {
     cursor: pointer;
 }
