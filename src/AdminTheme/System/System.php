@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="//cdn.phpbe.com/ui/be.css?v=20220926" />
     <link rel="stylesheet" href="//cdn.phpbe.com/ui/be-icons.css"/>
 
-    <link rel="stylesheet" href="<?php echo $adminThemeWwwUrl; ?>/css/theme.css?v=20220925" />
+    <link rel="stylesheet" href="<?php echo $adminThemeWwwUrl; ?>/css/theme.css?v=20230309" />
 
     <be-head>
     </be-head>
