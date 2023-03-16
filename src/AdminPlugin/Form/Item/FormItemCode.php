@@ -346,7 +346,15 @@ class FormItemCode extends FormItem
 
         $mountedCode = 'let _this_' . $index . ' = this;';
         $mountedCode .= 'this.formItems.' . $this->name . '.codeMirror = CodeMirror.fromTextArea(this.$refs.refFormItemCode_' . $this->name . ',' . json_encode($this->options) . ');';
-        $mountedCode .= 'this.formItems.' . $this->name . '.codeMirror.on(\'change\', function(cm) { _this_' . $index . '.formData.' . $this->name . ' = cm.getValue(); });';
+
+        if ($this->name !== null) {
+            if (!isset($this->ui['v-model'])) {
+                $vModel  = 'formData.' . $this->name . '';
+            } else {
+                $vModel  = $this->ui['v-model'];
+            }
+            $mountedCode .= 'this.formItems.' . $this->name . '.codeMirror.on(\'change\', function(cm) { _this_' . $index . '.' . $vModel . ' = cm.getValue(); });';
+        }
 
         $updatedCode = 'this.formItems.' . $this->name . '.codeMirror && this.formItems.' . $this->name . '.codeMirror.refresh();';
         //$updatedCode .= 'this.formData.' . $this->name . ' = this.formItems.' . $this->name . '.codeMirror.getValue();';
