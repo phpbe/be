@@ -295,10 +295,6 @@ class Importer extends Driver
                     $formattedValues = [];
                     foreach ($this->setting['mapping']['items'] as $item) {
 
-                        if (isset($item['value'])) {
-                            continue;
-                        }
-
                         $val = $values[$colMapping[$item['label']]];
 
                         if (isset($item['type'])) {
