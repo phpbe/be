@@ -1074,11 +1074,13 @@ class Curd extends Driver
             $primaryKey = $tuple->getPrimaryKey();
             if (is_array($primaryKey)) {
                 $primaryKeyValue = [];
+                $primaryKeyDefault = [];
                 foreach ($primaryKey as $pKey) {
                     if (!isset($postData['row'][$pKey])) {
                         throw new AdminPluginException('主键（' . $pKey . '）缺失！');
                     }
 
+                    $primaryKeyDefault[$pKey] = $tuple->$pKey;
                     $primaryKeyValue[$pKey] = $postData['row'][$pKey];
                 }
             } else {
@@ -1086,6 +1088,7 @@ class Curd extends Driver
                     throw new AdminPluginException('主键（' . $primaryKey . '）缺失！');
                 }
 
+                $primaryKeyDefault = $tuple->$primaryKey;
                 $primaryKeyValue = $postData['row'][$primaryKey];
             }
             $tuple->load($primaryKeyValue);
@@ -1112,16 +1115,14 @@ class Curd extends Driver
 
             if (is_array($primaryKey)) {
                 foreach ($primaryKey as $pKey) {
-                    unset($tuple->$pKey);
+                    $tuple->$pKey = $primaryKeyDefault[$pKey];
                 }
             } else {
-                unset($tuple->$primaryKey);
+                $tuple->$primaryKey = $primaryKeyDefault;
             }
 
             $this->trigger('before', $tuple, $postData);
             $tupleChangeDetails = $tuple->getChangeDetails();
-            print_r($tuple);
-
             $tuple->insert();
             $this->trigger('after', $tuple, $postData);
 

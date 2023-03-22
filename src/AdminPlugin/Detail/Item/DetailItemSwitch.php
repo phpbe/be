@@ -20,15 +20,22 @@ class DetailItemSwitch extends DetailItem
         parent::__construct($params, $row);
 
         if (!isset($this->ui[':active-value'])) {
-            $this->ui[':active-value'] = '1';
+            $this->ui[':active-value'] = 1;
         }
 
         if (!isset($this->ui[':inactive-value'])) {
-            $this->ui[':inactive-value'] = '0';
+            $this->ui[':inactive-value'] = 0;
         }
 
         if (!isset($this->ui[':value'])) {
             $this->ui[':value'] = 'detailItems.' . $this->name . '.value';
+        }
+
+
+        if ($this->name !== null) {
+            if (!isset($this->ui['v-model.number'])) {
+                $this->ui['v-model.number'] = 'formData.' . $this->name;
+            }
         }
     }
 

@@ -241,12 +241,20 @@ class AdminUser extends Auth
                     'exclude' => ['password', 'salt'],
                     'operation' => [
                         'label' => '操作',
-                        'width' => '120',
+                        'width' => '180',
                         'items' => [
                             [
                                 'label' => '编辑',
                                 'task' => 'edit',
                                 'target' => 'drawer',
+                            ],
+                            [
+                                'label' => '复制',
+                                'task' => 'copy',
+                                'target' => 'ajax',
+                                'ui' => [
+                                    'type' => 'warning'
+                                ]
                             ],
                             [
                                 'label' => '删除',
@@ -511,6 +519,20 @@ class AdminUser extends Auth
                         }
                     }
                 ]
+            ],
+
+            'copy' => [
+                'events' => [
+                    'before' => function ($tuple) {
+                        $i = 2;
+                        do {
+                            $username = $tuple->username . '-' . $i;
+                            $count =  Be::getTable('system_admin_user')->where('username', $username)->count();
+                        } while($count > 0);
+
+                        $tuple->username = $username;
+                    },
+                ],
             ],
 
             'fieldEdit' => [
