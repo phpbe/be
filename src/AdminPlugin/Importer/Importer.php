@@ -167,12 +167,7 @@ class Importer extends Driver
             }
             $tableName = $this->setting['table'];
 
-            $batchLimit = $this->setting['batch'] ?? 1000;
-
             $rows = $this->process();
-
-            $offset = 0;
-            $batch = [];
             foreach ($rows as $i => $row) {
 
                 foreach ($this->setting['mapping']['items'] as $item) {
@@ -185,17 +180,9 @@ class Importer extends Driver
                     }
                 }
 
-                $offset++;
-                $batch[] = $row;
-                if ($offset >= $batchLimit) {
-                    $db->quickInsertMany($tableName, $batch);
-                    $offset = 0;
-                    $batch = [];
-                }
-            }
-
-            if ($offset > 0) {
-                $db->quickInsertMany($tableName, $batch);
+                $tuple = Be::getTuple($this->setting['table'], $dbName);
+                $tuple->bind($row);
+                $tuple->insert();
             }
 
             $db->commit();
