@@ -882,7 +882,7 @@ class Curd extends Driver
                 }
 
                 if (isset($this->setting['edit']['events']['after'])) {
-                    $this->on('after', $this->setting['create']['events']['after']);
+                    $this->on('after', $this->setting['edit']['events']['after']);
                 }
 
                 if (isset($this->setting['edit']['events']['success'])) {
@@ -1046,6 +1046,107 @@ class Curd extends Driver
                 $response->error($t->getMessage());
                 Be::getLog()->error($t);
             }
+        }
+    }
+
+    /**
+     * 复制
+     *
+     */
+    public function copy()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+
+        $title = isset($this->setting['copy']['title']) ? $this->setting['copy']['title'] : '复制';
+
+        $tuple = Be::getTuple($this->setting['table'], $this->setting['db']);
+
+        $postData = $request->json();
+
+        $db = Be::getDb($this->setting['db']);
+        $db->startTransaction();
+        try {
+
+            $postData = $request->json();
+            $formData = $postData['formData'];
+
+            $primaryKey = $tuple->getPrimaryKey();
+            if (is_array($primaryKey)) {
+                $primaryKeyValue = [];
+                foreach ($primaryKey as $pKey) {
+                    if (!isset($postData['row'][$pKey])) {
+                        throw new AdminPluginException('主键（' . $pKey . '）缺失！');
+                    }
+
+                    $primaryKeyValue[$pKey] = $postData['row'][$pKey];
+                }
+            } else {
+                if (!isset($postData['row'][$primaryKey])) {
+                    throw new AdminPluginException('主键（' . $primaryKey . '）缺失！');
+                }
+
+                $primaryKeyValue = $postData['row'][$primaryKey];
+            }
+            $tuple->load($primaryKeyValue);
+
+            if (isset($this->setting['copy']['events']['before'])) {
+                $this->on('before', $this->setting['copy']['events']['before']);
+            }
+
+            if (isset($this->setting['copy']['events']['after'])) {
+                $this->on('after', $this->setting['copy']['events']['after']);
+            }
+
+            if (isset($this->setting['copy']['events']['success'])) {
+                $this->on('success', $this->setting['copy']['events']['success']);
+            }
+
+            if (isset($this->setting['copy']['events']['error'])) {
+                $this->on('error', $this->setting['copy']['events']['error']);
+            }
+
+            if (isset($tuple->update_time)) {
+                $tuple->update_time = date('Y-m-d H:i:s');
+            }
+
+            if (is_array($primaryKey)) {
+                foreach ($primaryKey as $pKey) {
+                    unset($tuple->$pKey);
+                }
+            } else {
+                unset($tuple->$primaryKey);
+            }
+
+            $this->trigger('before', $tuple, $postData);
+            $tupleChangeDetails = $tuple->getChangeDetails();
+            print_r($tuple);
+
+            $tuple->insert();
+            $this->trigger('after', $tuple, $postData);
+
+            $strPrimaryKey = null;
+            $strPrimaryKeyValue = null;
+            if (is_array($primaryKey)) {
+                $strPrimaryKey = '（' . implode(',', $primaryKey) . '）';
+                $strPrimaryKeyValue = '（' . implode(',', array_values($primaryKeyValue)) . '）';
+            } else {
+                $strPrimaryKey = $primaryKey;
+                $strPrimaryKeyValue = $tuple->$primaryKey;
+            }
+
+            if (!isset($this->setting['opLog']) || $this->setting['opLog']) {
+                beAdminOpLog($title . '：复制' . $strPrimaryKey . '为' . $strPrimaryKeyValue . '的记录！', $tupleChangeDetails);
+            }
+
+            $db->commit();
+            $this->trigger('success', $tuple, $postData);
+            $response->success($title . '：复制成功！');
+        } catch (\Throwable $t) {
+            $db->rollback();
+            $this->trigger('error', $t, $postData);
+            $response->error($t->getMessage());
+            Be::getLog()->error($t);
         }
     }
 
