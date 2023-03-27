@@ -28,10 +28,246 @@
     <link rel="stylesheet" href="//cdn.phpbe.com/ui/be.css?v=20220926" />
     <link rel="stylesheet" href="//cdn.phpbe.com/ui/be-icons.css"/>
 
-    <link rel="stylesheet" href="<?php echo $adminThemeWwwUrl; ?>/css/theme.css?v=20230309" />
-
     <be-head>
     </be-head>
+
+    <style>
+        html {
+            font-size: 14px;
+            background-color: #eef0f5;
+            color: #333;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        [v-cloak] {display: none !important;}
+
+        .el-submenu__title i,
+        .el-menu-item i {
+            color: inherit;
+        }
+
+        .el-submenu .el-link,
+        .el-menu-item .el-link {
+            display: block;
+        }
+
+        .el-table th.el-table__cell {
+            color: #666;
+            background-color: #EBEEF5;
+        }
+
+        .be-west {
+            width: 200px;
+            position: fixed;
+            height: 100%;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            background-color: #30354d;
+            z-index: 999;
+            overflow: hidden;
+        }
+
+        #app-west {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .be-west a {
+            display: inline-block;
+        }
+
+        .be-west .logo {
+            flex:0;
+            height: 60px;
+            background-color: #22273b;
+        }
+
+        .be-west .logo img,
+        .be-west .logo svg {
+            width: 200px;
+            height: 60px;
+        }
+
+        .be-west .menu {
+            flex:1;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .be-west .menu::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .be-west .menu::-webkit-scrollbar-thumb {
+            background-color: #59648f;
+        }
+
+        .be-west .menu::-webkit-scrollbar-track {
+            background-color: #22273b;
+        }
+
+        .be-west .menu .el-menu {
+            border-right: 0;
+        }
+
+        .be-west .menu .el-menu-item,
+        .be-west-popup-menu .el-menu-item,
+        .be-west .menu .el-submenu__title {
+            height: 40px;
+            line-height: 40px;
+        }
+
+        .be-west .menu .el-menu-item,
+        .be-west-popup-menu .el-menu-item {
+            padding: 0 !important;
+        }
+
+        .be-west .menu .el-menu-item .el-link,
+        .be-west-popup-menu .el-menu-item .el-link {
+            color: #aaa;
+            padding-left: 20px !important;
+        }
+
+        .be-west .menu .el-menu-item .el-link span {
+            margin-left: 0;
+        }
+
+        .be-west .menu .el-submenu .el-menu-item .el-link {
+            padding-left: 50px !important;
+        }
+
+        .be-west .menu .el-submenu .el-submenu__title:hover,
+        .be-west .menu .el-menu-item:hover,
+        .be-west-popup-menu .el-menu-item:hover {
+            background-color: transparent !important;
+        }
+
+        .be-west .menu .el-menu-item.is-active,
+        .be-west-popup-menu .el-menu-item.is-active {
+            background-color: #4b5377 !important;
+        }
+
+        .be-west .menu .el-menu-item .el-link:hover,
+        .be-west-popup-menu .el-menu-item .el-link:hover,
+        .be-west .menu .el-submenu .el-submenu__title:hover i,
+        .be-west .menu .el-submenu .el-submenu__title:hover span,
+        .be-west .menu .el-submenu.is-opened .el-submenu__title i,
+        .be-west .menu .el-submenu.is-opened .el-submenu__title span,
+        .be-west .menu .el-submenu.is-active .el-submenu__title i,
+        .be-west .menu .el-submenu.is-active .el-submenu__title span,
+        .be-west-popup-menu .el-submenu.is-active .el-submenu__title i,
+        .be-west-popup-menu .el-submenu.is-active .el-submenu__title span,
+        .be-west .menu .el-menu-item.is-active i,
+        .be-west .menu .el-menu-item.is-active span,
+        .be-west-popup-menu .el-menu-item.is-active i,
+        .be-west-popup-menu .el-menu-item.is-active span {
+            color: #fff;
+        }
+
+        .be-west .toggle {
+            flex: 0;
+            cursor: pointer;
+            background-color: #22273b;
+            text-align: center;
+            color: #aaa;
+            line-height: 40px;
+        }
+
+        .be-west .toggle:hover {
+            color: #fff;
+        }
+
+        .be-north {
+            position: fixed;
+            left: 200px;
+            right: 0;
+            top: 0;
+            height: 60px;
+            background-color: #fff;
+            border-bottom: 1px solid #cfd6db;
+            z-index: 1000;
+        }
+
+        .be-north .north-links i {
+            font-size: 16px;
+            vertical-align: middle;
+        }
+
+        .be-north .lh-60 {
+            line-height: 60px;
+        }
+
+        .be-north .el-submenu__title,
+        .be-north .el-menu-item {
+            padding: 0 10px;
+        }
+
+
+        .be-north .el-dropdown-link {
+            cursor: pointer;
+        }
+
+        .be-north-popup-menu .el-submenu .el-submenu__title:hover i,
+        .be-north-popup-menu .el-submenu .el-submenu__title:hover span,
+        .be-north-popup-menu .el-submenu.is-opened .el-submenu__title i ,
+        .be-north-popup-menu .el-submenu.is-opened .el-submenu__title span,
+        .be-north-popup-menu .el-submenu.is-active .el-submenu__title i,
+        .be-north-popup-menu .el-submenu.is-active .el-submenu__title span,
+        .be-north-popup-menu .el-menu-item.is-active i,
+        .be-north-popup-menu .el-menu-item.is-active span {
+            /*color: #409EFF;*/
+        }
+
+        .be-middle {
+            margin-top: 60px;
+            margin-left: 200px;
+            overflow: auto;
+        }
+
+        .be-page-title {
+            font-size: 1.25rem;
+            height: 3.5rem;
+            line-height: 3.5rem;
+        }
+
+        .be-page-content {
+        }
+
+        .be-dialog,
+        .be-drawer {
+            z-index: 999999 !important;
+        }
+
+        .be-dialog .el-dialog__body {padding: 0 5px;}
+
+        .el-drawer__header {
+            padding: 10px 20px 20px 20px;
+            margin-bottom: 0;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .be-north-menu-style-toggle {
+            height: 20px;
+            line-height: 20px;
+            font-size: 20px;
+            color: #ccc;
+            cursor: pointer;
+            display: inline-block;
+            padding-left: 2px;
+        }
+
+        .be-north-menu-style-toggle-on {
+            color: #999;
+        }
+
+    </style>
 </head>
 <body>
     <be-body>
@@ -39,88 +275,435 @@
             <div id="app-north" v-cloak>
 
                 <div class="be-row">
-                    <div class="be-col be-pl-200">
+
+                    <?php
+                    $adminMenuStyle = (int) \Be\Be::getRequest()->cookie('be-admin-north-menu-style', 6);
+                    ?>
+                    <div class="be-col-auto lh-60">
+                        <div style="line-height: 1;">
+                            <div class="be-row">
+                                <div class="be-col-auto">
+                                    <a @click="toggleStyle(1)" class="be-north-menu-style-toggle <?php echo 1 === $adminMenuStyle ? 'be-north-menu-style-toggle-on' : ''; ?>">
+                                        <i class="bi-1-square<?php echo 1 === $adminMenuStyle ? '-fill' : ''; ?>"></i>
+                                    </a>
+                                </div>
+                                <div class="be-col-auto">
+                                    <a @click="toggleStyle(2)" class="be-north-menu-style-toggle <?php echo 2 === $adminMenuStyle ? 'be-north-menu-style-toggle-on' : ''; ?>">
+                                        <i class="bi-2-square<?php echo 2 === $adminMenuStyle ? '-fill' : ''; ?>"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="be-row">
+                                <div class="be-col-auto">
+                                    <a @click="toggleStyle(3)" class="be-north-menu-style-toggle <?php echo 3 === $adminMenuStyle ? 'be-north-menu-style-toggle-on' : ''; ?>">
+                                        <i class="bi-3-square<?php echo 3 === $adminMenuStyle ? '-fill' : ''; ?>"></i>
+                                    </a>
+                                </div>
+                                <div class="be-col-auto">
+                                    <a @click="toggleStyle(4)" class="be-north-menu-style-toggle <?php echo 4 === $adminMenuStyle ? 'be-north-menu-style-toggle-on' : ''; ?>">
+                                        <i class="bi-4-square<?php echo 4 === $adminMenuStyle ? '-fill' : ''; ?>"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="be-row">
+                                <div class="be-col-auto">
+                                    <a @click="toggleStyle(5)" class="be-north-menu-style-toggle <?php echo 5 === $adminMenuStyle ? 'be-north-menu-style-toggle-on' : ''; ?>">
+                                        <i class="bi-5-square<?php echo 5 === $adminMenuStyle ? '-fill' : ''; ?>"></i>
+                                    </a>
+                                </div>
+                                <div class="be-col-auto">
+                                    <a @click="toggleStyle(6)" class="be-north-menu-style-toggle <?php echo 6 === $adminMenuStyle ? 'be-north-menu-style-toggle-on' : ''; ?>">
+                                        <i class="bi-6-square<?php echo 6 === $adminMenuStyle ? '-fill' : ''; ?>"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="be-col be-pl-50">
                         <?php
                         $adminMenu = \Be\Be::getAdminMenu();
                         $adminMenuTree = $adminMenu->getTree();
                         $adminMenuActiveMenuKey = $adminMenu->getActiveMenuKey();
-                        ?>
-                        <el-menu
-                                mode="horizontal"
-                                :default-active="defaultActive">
-                            <?php
-                            foreach ($adminMenuTree as $item) {
 
-                                $hasSubItem = false;
-                                if (isset($item->subItems) && is_array($item->subItems) && count($item->subItems) > 0) {
-                                    $hasSubItem = true;
-                                }
+                        switch ($adminMenuStyle) {
+                            case 1:
+                                ?>
+                                <el-menu
+                                        mode="horizontal"
+                                        :default-active="defaultActive">
+                                    <?php
 
-                                // 有子菜单
-                                if ($hasSubItem) {
-                                    echo '<el-submenu index="north-menu-'.$item->id.'" popper-class="be-north-popup-menu">';
+                                    echo '<el-submenu popper-class="be-north-popup-menu">';
 
                                     echo '<template slot="title">';
-                                    if ($item->url) {
-                                        echo '<el-link href="'.$item->url.'" icon="'.$item->icon.'" :underline="false" style="display:inline !important;">';
-                                        echo $item->label;
-                                        echo '</el-link>';
-                                    } else {
-                                        echo '<i class="'.$item->icon.'"></i>';
-                                        echo '<span>'.$item->label.'</span>';
-                                    }
+                                    echo '<i class="el-icon-bi bi-list"></i>';
+                                    echo '<span>已安装应用</span>';
                                     echo '</template>';
 
-                                    foreach ($item->subItems as $subItem) {
+                                    foreach ($adminMenuTree as $item) {
 
-                                        $hasSubSubItem = false;
-                                        if (isset($subItem->subItems) && is_array($subItem->subItems) && count($subItem->subItems) > 0) {
-                                            $hasSubSubItem = true;
-                                        }
+                                        if (isset($item->subItems) && is_array($item->subItems) && count($item->subItems) > 0) {
+                                            echo '<el-menu-item index="north-menu-'.$item->id.'">';
 
-                                        if ($hasSubSubItem) {
-                                            echo '<el-submenu index="north-menu-'.$subItem->id.'" popper-class="be-north-popup-menu">';
+                                            $url = '';
+                                            if ($item->url) {
+                                                $url = $item->url;
+                                            } else {
+                                                foreach ($item->subItems as $subItem) {
+                                                    if ($subItem->url) {
+                                                        $url = $subItem->url;
+                                                        break;
+                                                    }
+
+                                                    if (isset($subItem->subItems) && is_array($subItem->subItems) && count($subItem->subItems) > 0) {
+                                                        foreach ($subItem->subItems as $subSubItem) {
+                                                            $url = $subSubItem->url;
+                                                            break 2;
+                                                        }
+                                                    }
+                                                }
+                                            }
 
                                             echo '<template slot="title">';
-                                            if ($subItem->url) {
-                                                echo '<el-link href="'.$subItem->url.'" icon="'.$subItem->icon.'" :underline="false">';
-                                                echo $subItem->label;
-                                                echo '</el-link>';
-                                            } else {
-                                                echo '<i class="'.$subItem->icon.'"></i>';
-                                                echo '<span>'.$subItem->label.'</span>';
-                                            }
+                                            echo '<el-link href="'.$url.'" icon="'.$item->icon.'" :underline="false" style="display:inline !important;">';
+                                            echo $item->label;
+                                            echo '</el-link>';
                                             echo '</template>';
 
-                                            foreach ($subItem->subItems as $subSubItem) {
-                                                echo '<el-menu-item index="north-menu-'.$subSubItem->id.'">';
-                                                echo '<el-link href="'.$subSubItem->url.'" icon="'.$subSubItem->icon.'" :underline="false">';
-                                                echo $subSubItem->label;
-                                                echo '</el-link>';
-                                                echo '</el-menu-item>';
-                                            }
-                                            echo '</el-submenu>';
-                                        } else {
-                                            echo '<el-menu-item index="north-menu-'.$subItem->id.'">';
-                                            echo '<el-link href="'.$subItem->url.'" icon="'.$subItem->icon.'" :underline="false">';
-                                            echo $subItem->label;
-                                            echo '</el-link>';
                                             echo '</el-menu-item>';
                                         }
                                     }
                                     echo '</el-submenu>';
-                                }
-                            }
-                            ?>
-                        </el-menu>
+                                    ?>
+                                </el-menu>
+                                <?php
+                                break;
+                            case 2:
+                                ?>
+                                <el-menu
+                                        mode="horizontal"
+                                        :default-active="defaultActive">
+                                    <?php
+
+                                    echo '<el-submenu popper-class="be-north-popup-menu">';
+
+                                    echo '<template slot="title">';
+                                    echo '<i class="el-icon-bi bi-list"></i>';
+                                    echo '<span>已安装应用</span>';
+                                    echo '</template>';
+
+                                    foreach ($adminMenuTree as $item) {
+
+                                        $hasSubItem = false;
+                                        if (isset($item->subItems) && is_array($item->subItems) && count($item->subItems) > 0) {
+                                            $hasSubItem = true;
+                                        }
+
+                                        // 有子菜单
+                                        if ($hasSubItem) {
+                                            echo '<el-submenu index="north-menu-'.$item->id.'" popper-class="be-north-popup-menu">';
+
+                                            echo '<template slot="title">';
+                                            if ($item->url) {
+                                                echo '<el-link href="'.$item->url.'" icon="'.$item->icon.'" :underline="false" style="display:inline !important;">';
+                                                echo $item->label;
+                                                echo '</el-link>';
+                                            } else {
+                                                echo '<i class="'.$item->icon.'"></i>';
+                                                echo '<span>'.$item->label.'</span>';
+                                            }
+                                            echo '</template>';
+
+                                            foreach ($item->subItems as $subItem) {
+
+                                                $hasSubSubItem = false;
+                                                if (isset($subItem->subItems) && is_array($subItem->subItems) && count($subItem->subItems) > 0) {
+                                                    $hasSubSubItem = true;
+                                                }
+
+                                                if ($hasSubSubItem) {
+                                                    echo '<el-submenu index="north-menu-'.$subItem->id.'" popper-class="be-north-popup-menu">';
+
+                                                    echo '<template slot="title">';
+                                                    if ($subItem->url) {
+                                                        echo '<el-link href="'.$subItem->url.'" icon="'.$subItem->icon.'" :underline="false">';
+                                                        echo $subItem->label;
+                                                        echo '</el-link>';
+                                                    } else {
+                                                        echo '<i class="'.$subItem->icon.'"></i>';
+                                                        echo '<span>'.$subItem->label.'</span>';
+                                                    }
+                                                    echo '</template>';
+
+                                                    foreach ($subItem->subItems as $subSubItem) {
+                                                        echo '<el-menu-item index="north-menu-'.$subSubItem->id.'">';
+                                                        echo '<el-link href="'.$subSubItem->url.'" icon="'.$subSubItem->icon.'" :underline="false">';
+                                                        echo $subSubItem->label;
+                                                        echo '</el-link>';
+                                                        echo '</el-menu-item>';
+                                                    }
+                                                    echo '</el-submenu>';
+                                                } else {
+                                                    echo '<el-menu-item index="north-menu-'.$subItem->id.'">';
+                                                    echo '<el-link href="'.$subItem->url.'" icon="'.$subItem->icon.'" :underline="false">';
+                                                    echo $subItem->label;
+                                                    echo '</el-link>';
+                                                    echo '</el-menu-item>';
+                                                }
+                                            }
+                                            echo '</el-submenu>';
+                                        }
+                                    }
+
+
+
+                                    echo '</el-submenu>';
+                                    ?>
+                                </el-menu>
+                                <?php
+                                break;
+                            case 3:
+                                ?>
+                                <el-menu
+                                        mode="horizontal"
+                                        :default-active="defaultActive">
+                                    <?php
+                                    foreach ($adminMenuTree as $item) {
+
+                                        if (isset($item->subItems) && is_array($item->subItems) && count($item->subItems) > 0) {
+                                            echo '<el-menu-item index="north-menu-'.$item->id.'">';
+
+                                            $url = '';
+                                            if ($item->url) {
+                                                $url = $item->url;
+                                            } else {
+                                                foreach ($item->subItems as $subItem) {
+                                                    if ($subItem->url) {
+                                                        $url = $subItem->url;
+                                                        break;
+                                                    }
+
+                                                    if (isset($subItem->subItems) && is_array($subItem->subItems) && count($subItem->subItems) > 0) {
+                                                        foreach ($subItem->subItems as $subSubItem) {
+                                                            $url = $subSubItem->url;
+                                                            break 2;
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            echo '<template slot="title">';
+                                            echo '<el-link href="'.$url.'" icon="'.$item->icon.'" :underline="false" style="display:inline !important;">';
+                                            echo '</el-link>';
+                                            echo '</template>';
+
+                                            echo '</el-menu-item>';
+                                        }
+                                    }
+                                    ?>
+                                </el-menu>
+                                <?php
+                                break;
+                            case 4:
+                                ?>
+                                <el-menu
+                                        mode="horizontal"
+                                        :default-active="defaultActive">
+                                    <?php
+                                    foreach ($adminMenuTree as $item) {
+
+                                        if (isset($item->subItems) && is_array($item->subItems) && count($item->subItems) > 0) {
+                                            echo '<el-menu-item index="north-menu-'.$item->id.'">';
+
+                                            $url = '';
+                                            if ($item->url) {
+                                                $url = $item->url;
+                                            } else {
+                                                foreach ($item->subItems as $subItem) {
+                                                    if ($subItem->url) {
+                                                        $url = $subItem->url;
+                                                        break;
+                                                    }
+
+                                                    if (isset($subItem->subItems) && is_array($subItem->subItems) && count($subItem->subItems) > 0) {
+                                                        foreach ($subItem->subItems as $subSubItem) {
+                                                            $url = $subSubItem->url;
+                                                            break 2;
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            echo '<template slot="title">';
+                                            echo '<el-link href="'.$url.'" icon="'.$item->icon.'" :underline="false" style="display:inline !important;">';
+                                            echo $item->label;
+                                            echo '</el-link>';
+                                            echo '</template>';
+
+                                            echo '</el-menu-item>';
+                                        }
+                                    }
+                                    ?>
+                                </el-menu>
+                                <?php
+                                break;
+                            case 5:
+                                ?>
+                                <el-menu
+                                        mode="horizontal"
+                                        :default-active="defaultActive">
+                                    <?php
+                                    foreach ($adminMenuTree as $item) {
+
+                                        $hasSubItem = false;
+                                        if (isset($item->subItems) && is_array($item->subItems) && count($item->subItems) > 0) {
+                                            $hasSubItem = true;
+                                        }
+
+                                        // 有子菜单
+                                        if ($hasSubItem) {
+                                            echo '<el-submenu index="north-menu-'.$item->id.'" popper-class="be-north-popup-menu">';
+
+                                            echo '<template slot="title">';
+                                            if ($item->url) {
+                                                echo '<el-link href="'.$item->url.'" icon="'.$item->icon.'" :underline="false" style="display:inline !important;">';
+                                                //echo $item->label;
+                                                echo '</el-link>';
+                                            } else {
+                                                echo '<i class="'.$item->icon.'"></i>';
+                                                //echo '<span>'.$item->label.'</span>';
+                                            }
+                                            echo '</template>';
+
+                                            foreach ($item->subItems as $subItem) {
+
+                                                $hasSubSubItem = false;
+                                                if (isset($subItem->subItems) && is_array($subItem->subItems) && count($subItem->subItems) > 0) {
+                                                    $hasSubSubItem = true;
+                                                }
+
+                                                if ($hasSubSubItem) {
+                                                    echo '<el-submenu index="north-menu-'.$subItem->id.'" popper-class="be-north-popup-menu">';
+
+                                                    echo '<template slot="title">';
+                                                    if ($subItem->url) {
+                                                        echo '<el-link href="'.$subItem->url.'" icon="'.$subItem->icon.'" :underline="false">';
+                                                        echo $subItem->label;
+                                                        echo '</el-link>';
+                                                    } else {
+                                                        echo '<i class="'.$subItem->icon.'"></i>';
+                                                        echo '<span>'.$subItem->label.'</span>';
+                                                    }
+                                                    echo '</template>';
+
+                                                    foreach ($subItem->subItems as $subSubItem) {
+                                                        echo '<el-menu-item index="north-menu-'.$subSubItem->id.'">';
+                                                        echo '<el-link href="'.$subSubItem->url.'" icon="'.$subSubItem->icon.'" :underline="false">';
+                                                        echo $subSubItem->label;
+                                                        echo '</el-link>';
+                                                        echo '</el-menu-item>';
+                                                    }
+                                                    echo '</el-submenu>';
+                                                } else {
+                                                    echo '<el-menu-item index="north-menu-'.$subItem->id.'">';
+                                                    echo '<el-link href="'.$subItem->url.'" icon="'.$subItem->icon.'" :underline="false">';
+                                                    echo $subItem->label;
+                                                    echo '</el-link>';
+                                                    echo '</el-menu-item>';
+                                                }
+                                            }
+                                            echo '</el-submenu>';
+                                        }
+                                    }
+                                    ?>
+                                </el-menu>
+                                <?php
+                                break;
+                            case 6:
+                                ?>
+                                <el-menu
+                                        mode="horizontal"
+                                        :default-active="defaultActive">
+                                    <?php
+                                    foreach ($adminMenuTree as $item) {
+
+                                        $hasSubItem = false;
+                                        if (isset($item->subItems) && is_array($item->subItems) && count($item->subItems) > 0) {
+                                            $hasSubItem = true;
+                                        }
+
+                                        // 有子菜单
+                                        if ($hasSubItem) {
+                                            echo '<el-submenu index="north-menu-'.$item->id.'" popper-class="be-north-popup-menu">';
+
+                                            echo '<template slot="title">';
+                                            if ($item->url) {
+                                                echo '<el-link href="'.$item->url.'" icon="'.$item->icon.'" :underline="false" style="display:inline !important;">';
+                                                echo $item->label;
+                                                echo '</el-link>';
+                                            } else {
+                                                echo '<i class="'.$item->icon.'"></i>';
+                                                echo '<span>'.$item->label.'</span>';
+                                            }
+                                            echo '</template>';
+
+                                            foreach ($item->subItems as $subItem) {
+
+                                                $hasSubSubItem = false;
+                                                if (isset($subItem->subItems) && is_array($subItem->subItems) && count($subItem->subItems) > 0) {
+                                                    $hasSubSubItem = true;
+                                                }
+
+                                                if ($hasSubSubItem) {
+                                                    echo '<el-submenu index="north-menu-'.$subItem->id.'" popper-class="be-north-popup-menu">';
+
+                                                    echo '<template slot="title">';
+                                                    if ($subItem->url) {
+                                                        echo '<el-link href="'.$subItem->url.'" icon="'.$subItem->icon.'" :underline="false">';
+                                                        echo $subItem->label;
+                                                        echo '</el-link>';
+                                                    } else {
+                                                        echo '<i class="'.$subItem->icon.'"></i>';
+                                                        echo '<span>'.$subItem->label.'</span>';
+                                                    }
+                                                    echo '</template>';
+
+                                                    foreach ($subItem->subItems as $subSubItem) {
+                                                        echo '<el-menu-item index="north-menu-'.$subSubItem->id.'">';
+                                                        echo '<el-link href="'.$subSubItem->url.'" icon="'.$subSubItem->icon.'" :underline="false">';
+                                                        echo $subSubItem->label;
+                                                        echo '</el-link>';
+                                                        echo '</el-menu-item>';
+                                                    }
+                                                    echo '</el-submenu>';
+                                                } else {
+                                                    echo '<el-menu-item index="north-menu-'.$subItem->id.'">';
+                                                    echo '<el-link href="'.$subItem->url.'" icon="'.$subItem->icon.'" :underline="false">';
+                                                    echo $subItem->label;
+                                                    echo '</el-link>';
+                                                    echo '</el-menu-item>';
+                                                }
+                                            }
+                                            echo '</el-submenu>';
+                                        }
+                                    }
+                                    ?>
+                                </el-menu>
+                                <?php
+                                break;
+                        }
+                        ?>
                     </div>
 
                     <div class="be-col-auto be-pr-150 north-links lh-60">
-                        <el-link href="https://www.phpbe.com/doc/help/v2" icon="el-icon-warning-outline" target="_blank" :underline="false">使用帮助</el-link>
+                        <el-link href="https://www.phpbe.com/doc/help/v2" icon="el-icon-warning-outline" target="_blank" :underline="false">帮助</el-link>
                     </div>
 
                     <div class="be-col-auto be-pr-150 lh-60">
-                        <el-link href="<?php echo beUrl() ?>" icon="el-icon-view" target="_blank" :underline="false">预览网站</el-link>
+                        <el-link href="<?php echo beUrl() ?>" icon="el-icon-view" target="_blank" :underline="false">主页</el-link>
                     </div>
 
                     <?php
@@ -162,7 +745,10 @@
                         aboutModel: false
                     },
                     methods: {
-
+                        toggleStyle: function (style) {
+                            this.$cookies.set("be-admin-north-menu-style", style);
+                            window.location.reload();
+                        }
                     }
                 });
             </script>
