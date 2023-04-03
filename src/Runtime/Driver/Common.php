@@ -155,6 +155,14 @@ class Common extends Driver
 
             // 默认访问控制台页面
             if (!$app) {
+                if ($uri !== '/') {
+                    $response->status(404);
+                    $response->set('code', 404);
+                    $response->error(beLang('App.System', 'RUNTIME.404'));
+                    Be::gc();
+                    return;
+                }
+
                 if ($admin) {
                     $route = $request->get('route', Be::getConfig('App.System.Admin')->home);
                 } else {
@@ -166,6 +174,7 @@ class Common extends Driver
                     $controller = $routes[1];
                     $action = $routes[2];
                 } else {
+                    $response->status(404);
                     $response->set('code', 404);
                     $response->error(beLang('App.System', 'RUNTIME.ROUTE_ERROR', $route));
                     Be::gc();
@@ -177,6 +186,7 @@ class Common extends Driver
 
             $class = 'Be\\App\\' . $app . '\\Controller\\' . ($admin ? 'Admin\\' : '') . $controller;
             if (!class_exists($class)) {
+                $response->status(404);
                 $response->set('code', 404);
                 $response->error(beLang('App.System', 'RUNTIME.CONTROLLER_DOES_NOT_EXIST', $app, $controller));
             } else {
@@ -184,6 +194,7 @@ class Common extends Driver
                 if (method_exists($instance, $action)) {
                     $instance->$action();
                 } else {
+                    $response->status(404);
                     $response->set('code', 404);
                     $response->error(beLang('App.System', 'RUNTIME.UNDEFINED_ACTION', $action, $class));
                 }
@@ -191,6 +202,8 @@ class Common extends Driver
 
         } catch (\Throwable $t) {
             if ($t instanceof \Be\Exception) {
+                $response->status(500);
+
                 /**
                  * @var \Be\Exception $t
                  */

@@ -258,6 +258,14 @@ class Swoole extends Driver
 
                 // 默认访问控制台页面
                 if (!$app) {
+                    if ($uri !== '/') {
+                        $response->status(404);
+                        $response->set('code', 404);
+                        $response->error(beLang('App.System', 'RUNTIME.404'));
+                        Be::gc();
+                        return true;
+                    }
+
                     if ($admin) {
                         $route = $request->get('route', Be::getConfig('App.System.Admin')->home);
                     } else {
@@ -269,6 +277,7 @@ class Swoole extends Driver
                         $controller = $routes[1];
                         $action = $routes[2];
                     } else {
+                        $response->status(404);
                         $response->set('code', 404);
                         $response->error(beLang('App.System', 'RUNTIME.ROUTE_ERROR', $route));
                         Be::gc();
@@ -280,6 +289,7 @@ class Swoole extends Driver
 
                 $class = 'Be\\App\\' . $app . '\\Controller\\' . ($admin ? 'Admin\\' : '') . $controller;
                 if (!class_exists($class)) {
+                    $response->status(404);
                     $response->set('code', 404);
                     $response->error(beLang('App.System', 'RUNTIME.CONTROLLER_DOES_NOT_EXIST', $app, $controller));
                 } else {
@@ -287,12 +297,15 @@ class Swoole extends Driver
                     if (method_exists($instance, $action)) {
                         $instance->$action();
                     } else {
+                        $response->status(404);
                         $response->set('code', 404);
                         $response->error(beLang('App.System', 'RUNTIME.UNDEFINED_ACTION', $action, $class));
                     }
                 }
 
             } catch (\Throwable $t) {
+
+                $response->status(500);
 
                 if ($t instanceof \Be\Exception) {
                     /**
@@ -304,6 +317,7 @@ class Swoole extends Driver
                         $response->set('logId', $logId);
                         $response->set('code', $t->getCode());
                     }
+
                     $response->error($t->getMessage(), $t->getRedirect());
                 } else {
                     $logId = Be::getLog()->fatal($t);
