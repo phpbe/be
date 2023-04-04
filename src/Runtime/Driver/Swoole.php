@@ -258,7 +258,7 @@ class Swoole extends Driver
 
                 // 默认访问控制台页面
                 if (!$app) {
-                    if ($uri !== '/') {
+                    if ($uri !== '' && $uri !== '/') {
                         $response->status(404);
                         $response->set('code', 404);
                         $response->error(beLang('App.System', 'RUNTIME.404'));

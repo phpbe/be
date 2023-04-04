@@ -43,32 +43,34 @@ class Common extends Driver
             $controller = null;
             $action = null;
 
-            // 从网址中提取出 路径
-            if ($configSystem->urlRewrite !== 'disable') {
-                /*
-                 * REQUEST_URI 可能值为：[/path]/{app}/{controller}/{action}[/{k-v}].html?[k=v]
-                 * 需要解析的有效部分为： {app}/{controller}/{action}[/{k-v}]
-                 */
-                $uri = $_SERVER['REQUEST_URI'];    // 返回值为:
+            /*
+             * REQUEST_URI 可能值为：[/path]/{app}/{controller}/{action}[/{k-v}].html?[k=v]
+             * 需要解析的有效部分为： {app}/{controller}/{action}[/{k-v}]
+             */
+            $uri = $_SERVER['REQUEST_URI'];    // 返回值为:
 
-                // 移除 [/path]
-                $scriptName = $_SERVER['SCRIPT_NAME'];
-                $indexName = '/index.php';
-                $pos = strrpos($scriptName, $indexName);
-                if ($pos !== false) {
-                    $path = substr($scriptName, 0, $pos);
-                    if ($path) {
-                        if (strpos($uri, $path) === 0) {
-                            $uri = substr($uri, strlen($path));
-                        }
+            // 移除 [/path]
+            $scriptName = $_SERVER['SCRIPT_NAME'];
+            $indexName = '/index.php';
+            $pos = strrpos($scriptName, $indexName);
+            if ($pos !== false) {
+                $path = substr($scriptName, 0, $pos);
+                if ($path) {
+                    if (strpos($uri, $path) === 0) {
+                        $uri = substr($uri, strlen($path));
                     }
                 }
+            }
 
-                // 移除 ?[k=v]
-                $pos = strpos($uri, '?');
-                if ($pos !== false) {
-                    $uri = substr($uri, 0, $pos);
-                }
+            // 移除 ?[k=v]
+            $pos = strpos($uri, '?');
+            if ($pos !== false) {
+                $uri = substr($uri, 0, $pos);
+            }
+
+            // 从网址中提取出 路径
+            if ($configSystem->urlRewrite !== 'disable') {
+
 
                 // 移除网址后缀 如：.html
                 if ($configSystem->urlRewrite === 'simple') {
@@ -155,7 +157,8 @@ class Common extends Driver
 
             // 默认访问控制台页面
             if (!$app) {
-                if ($uri !== '/') {
+
+                if ($uri !== '' && $uri !== '/') {
                     $response->status(404);
                     $response->set('code', 404);
                     $response->error(beLang('App.System', 'RUNTIME.404'));
