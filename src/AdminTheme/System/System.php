@@ -28,9 +28,6 @@
     <link rel="stylesheet" href="//cdn.phpbe.com/ui/be.css?v=20220926" />
     <link rel="stylesheet" href="//cdn.phpbe.com/ui/be-icons.css"/>
 
-    <be-head>
-    </be-head>
-
     <style>
         html {
             font-size: 14px;
@@ -268,6 +265,10 @@
         }
 
     </style>
+
+    <be-head>
+    </be-head>
+
 </head>
 <body>
     <be-body>

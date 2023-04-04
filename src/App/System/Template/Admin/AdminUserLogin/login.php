@@ -1,5 +1,39 @@
 <be-head>
-<link type="text/css" rel="stylesheet" href="<?php echo \Be\Be::getProperty('App.System')->getWwwUrl(); ?>/admin/admin-user-login/css/login.css?v=20220711" />
+    <style type="text/css">
+        html {
+            font-size: 14px;
+            background-color: #fff;
+            color: #333;
+        }
+
+        body {
+            text-align: center;
+            background-color: #fff;
+        }
+
+        #app {
+            margin: 0 auto;
+            width: 350px;
+        }
+
+        .logo {
+            margin: 50px 0 0 0;
+        }
+
+        .logo img,
+        .logo svg {
+            width: 300px;
+            height: 90px;
+        }
+
+        .login-box {
+            text-align: left;
+            margin-top: 40px;
+            padding: 30px 30px 10px 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px #bbb;
+        }
+    </style>
 </be-head>
 
 <be-body>
