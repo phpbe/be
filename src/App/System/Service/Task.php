@@ -24,7 +24,7 @@ class Task
         $dbTasks = $db->getKeyObjects($sql, null, 'name');
 
         $taskNames = [];
-        $dir =  Be::getProperty('App.' . $appName)->getPath() . '/Task';
+        $dir = Be::getProperty('App.' . $appName)->getPath() . '/Task';
         if (file_exists($dir) && is_dir($dir)) {
             $fileNames = scandir($dir);
             foreach ($fileNames as $fileName) {
@@ -258,6 +258,7 @@ class Task
         */
 
         $task->parallel = (int)$task->parallel;
+        $task->timeout = (int)$task->timeout;
 
         if ($taskData !== null) {
             $task->data = $taskData;
@@ -272,17 +273,26 @@ class Task
     public function run($task, $trigger)
     {
         $cache = null;
-        $cacheKey =  null;
+        $cacheKey = null;
         if ($task->parallel === 0) {
             $cache = Be::getCache();
             $cacheKey = 'be:task:running:' . $task->id;
 
+            $t = time();
+
             // 计划任务串行且正在执行，直接返回
             if ($cache->has($cacheKey)) {
-                return;
-            } else {
-                $cache->set($cacheKey, 1, $task->timeout);
+                if ($task->timeout > 0) {
+                    $t0 = (int)$cache->get($cacheKey);
+                    if ($t - $t0 < $task->timeout) {
+                        return;
+                    }
+                } else {
+                    return;
+                }
             }
+
+            $cache->set($cacheKey, $t, $task->timeout);
         }
 
         $db = Be::getDb();
