@@ -268,7 +268,7 @@ class Menu
 
                 $tupleMenuItem->ordering = $ordering;
 
-                if (!$isNew) {
+                if ($isNew) {
                     $tupleMenuItem->create_time = $now;
                 }
 
@@ -325,7 +325,9 @@ class Menu
                     $params = $decodedParams;
                 }
             }
-            $code .= '    $this->addItem(\'' . $v->id . '\', \'' . $v->parent_id . '\', \'' . $v->name . '\', \'' . $v->route . '\', ' . var_export($params, true) . ', \'' . $v->url . '\', \'' . $v->target . '\');' . "\n";
+
+            $name = str_replace('\'', '&#039;', $v->name);
+            $code .= '    $this->addItem(\'' . $v->id . '\', \'' . $v->parent_id . '\', \'' . $name . '\', \'' . $v->route . '\', ' . var_export($params, true) . ', \'' . $v->url . '\', \'' . $v->target . '\');' . "\n";
         }
 
         $code .= '  }' . "\n";
