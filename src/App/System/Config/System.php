@@ -44,7 +44,7 @@ class System
     public array $allowUploadImageTypes = ['jpg', 'jpeg', 'gif', 'png', 'svg', 'webp'];
 
     /**
-     * @BeConfigItem("时区", driver="FormItemInput")
+     * @BeConfigItem("时区", description="支持的时区列表：https://www.phpbe.com/doc/help/v2/timezones, driver="FormItemInput")
      */
     public string $timezone = 'Asia/Shanghai';
 
