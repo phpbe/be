@@ -467,21 +467,7 @@ abstract class ThemeEditor
             $sections = [];
             $path = $app->path . '/Section';
             if (file_exists($path) && is_dir($path)) {
-                // 分析目录
-                $items = scandir($path);
-                foreach ($items as $name) {
-                    if ($name === '.' || $name === '..') continue;
-                    try {
-                        $section = $this->getSectionSummary('App.' . $app->name . '.' . $name);
-                    } catch (\Throwable $t) {
-                        continue;
-                    }
-                    if (count($section->positions) > 0 && (in_array($position, $section->positions) || in_array('*', $section->positions))) {
-                        if (count($section->routes) > 0 && (in_array($route, $section->routes) || in_array('*', $section->routes))) {
-                            $sections[] = $section;
-                        }
-                    }
-                }
+                $sections = $this->makeAvailableSections($route, $position, 'App.' . $app->name, $path);
             }
 
             if (count($sections) > 0) {
@@ -510,24 +496,7 @@ abstract class ThemeEditor
             $sections = [];
             $path = $theme->path . '/Section';
             if (file_exists($path) && is_dir($path)) {
-                // 分析目录
-                $items = scandir($path);
-                foreach ($items as $name) {
-                    if ($name === '.' || $name === '..') continue;
-
-                    try {
-                        $section = $this->getSectionSummary($this->themeType . '.' . $theme->name . '.' . $name);
-                    } catch (\Throwable $t) {
-                        Be::getLog()->error($t);
-                        continue;
-                    }
-
-                    if (count($section->positions) > 0 && (in_array($position, $section->positions) || in_array('*', $section->positions))) {
-                        if (count($section->routes) > 0 && (in_array($route, $section->routes) || in_array('*', $section->routes))) {
-                            $sections[] = $section;
-                        }
-                    }
-                }
+                $sections = $this->makeAvailableSections($route, $position, $this->themeType . '.' . $theme->name, $path);
             }
 
             if (count($sections) > 0) {
@@ -554,6 +523,49 @@ abstract class ThemeEditor
             'themeSections' => $themeSections,
         ];
     }
+
+
+    private function makeAvailableSections(string $route, string $position, string $namespace, string $path): array
+    {
+        $sections = [];
+        if (file_exists($path) && is_dir($path)) {
+            // 分析目录
+            $items = scandir($path);
+            foreach ($items as $item) {
+                if ($item === '.' || $item === '..') continue;
+
+                $itemNamespace = $namespace . '.' . $item;
+                $itemPath = $path . '/' . $item;
+
+                if (!is_dir($itemPath)) continue;
+
+                $pathConfig = $itemPath . '/Config.php';
+                $pathTemplate = $itemPath . '/Template.php';
+                if (file_exists($pathConfig) && file_exists($pathTemplate)) {
+                    try {
+                        $section = $this->getSectionSummary($itemNamespace);
+                    } catch (\Throwable $t) {
+                        Be::getLog()->error($t);
+                        continue;
+                    }
+
+                    if (count($section->positions) > 0 && (in_array($position, $section->positions) || in_array('*', $section->positions))) {
+                        if (count($section->routes) > 0 && (in_array($route, $section->routes) || in_array('*', $section->routes))) {
+                            $sections[] = $section;
+                        }
+                    }
+                } else {
+                    $sections2 = $this->makeAvailableSections($route, $position, $itemNamespace, $itemPath);
+                    if (count($sections2) > 0) {
+                        $sections = array_merge($sections, $sections2);
+                    }
+                }
+            }
+        }
+
+        return $sections;
+    }
+
 
     /**
      * 获取指定的部件摘要
