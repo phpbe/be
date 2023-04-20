@@ -153,12 +153,17 @@ abstract class Section
      *
      * @param string $cssClass 样式类名
      * @param string $cssItemClass 子项样式类名
-     * @param string $itemWidthDesktop 子项宽度 - 电脑羰
-     * @param string $itemWidthTablet 子项宽度 - 平板端
      * @param string $itemWidthMobile 子项宽度 - 手机端
+     * @param string $itemWidthTablet 子项宽度 - 平板端
+     * @param string $itemWidthDesktop 子项宽度 - 电脑羰
+     * @param string $itemWidthDesktopXl 子项宽度 - 电脑羰xl
+     * @param string $itemWidthDesktopXxl 子项宽度 - 电脑羰xxl
+     * @param string $itemWidthDesktopX3l 子项宽度 - 电脑羰x3l
+     * @param string $itemWidthDesktopX4l 子项宽度 - 电脑羰x4l
+     *
      * @return string
      */
-    public function getCssSpacing(string $cssClass = 'items', string $cssItemClass = 'item', $itemWidthMobile = '100%', $itemWidthTablet = '50%', $itemWidthDesktop = '33.333333333333%'): string
+    public function getCssSpacing(string $cssClass = 'items', string $cssItemClass = 'item', $itemWidthMobile = '100%', $itemWidthTablet = '50%', $itemWidthDesktop = '33.333333333333%', $itemWidthDesktopXl = '', $itemWidthDesktopXxl = '', $itemWidthDesktopX3l = '', $itemWidthDesktopX4l = ''): string
     {
         $css = '';
 
@@ -232,6 +237,83 @@ abstract class Section
             $css .= '}';
 
             $css .= '}';
+
+
+            if ($itemWidthDesktopXl !== '') {
+                $css .= '@media (min-width: 1200px) {';
+
+                $css .= '#' . $this->id . ' .' . $cssClass . ' {';
+                $css .= 'margin-left: calc(-' . $this->config->spacingDesktop . ' / 2);';
+                $css .= 'margin-right: calc(-' . $this->config->spacingDesktop . ' / 2);';
+                $css .= 'margin-bottom: -' . $this->config->spacingDesktop . ';';
+                $css .= '}';
+
+                $css .= '#' . $this->id . ' .' . $cssItemClass . ' {';
+                $css .= 'width: ' . $itemWidthDesktopXl . ';';
+                $css .= 'padding-left: calc(' . $this->config->spacingDesktop . ' / 2);';
+                $css .= 'padding-right: calc(' . $this->config->spacingDesktop . ' / 2);';
+                $css .= 'margin-bottom: ' . $this->config->spacingDesktop . ';';
+                $css .= '}';
+
+                $css .= '}';
+            }
+
+            if ($itemWidthDesktopXxl !== '') {
+                $css .= '@media (min-width: 1400px) {';
+
+                $css .= '#' . $this->id . ' .' . $cssClass . ' {';
+                $css .= 'margin-left: calc(-' . $this->config->spacingDesktop . ' / 2);';
+                $css .= 'margin-right: calc(-' . $this->config->spacingDesktop . ' / 2);';
+                $css .= 'margin-bottom: -' . $this->config->spacingDesktop . ';';
+                $css .= '}';
+
+                $css .= '#' . $this->id . ' .' . $cssItemClass . ' {';
+                $css .= 'width: ' . $itemWidthDesktopXxl . ';';
+                $css .= 'padding-left: calc(' . $this->config->spacingDesktop . ' / 2);';
+                $css .= 'padding-right: calc(' . $this->config->spacingDesktop . ' / 2);';
+                $css .= 'margin-bottom: ' . $this->config->spacingDesktop . ';';
+                $css .= '}';
+
+                $css .= '}';
+            }
+
+            if ($itemWidthDesktopX3l !== '') {
+                $css .= '@media (min-width: 1600px) {';
+
+                $css .= '#' . $this->id . ' .' . $cssClass . ' {';
+                $css .= 'margin-left: calc(-' . $this->config->spacingDesktop . ' / 2);';
+                $css .= 'margin-right: calc(-' . $this->config->spacingDesktop . ' / 2);';
+                $css .= 'margin-bottom: -' . $this->config->spacingDesktop . ';';
+                $css .= '}';
+
+                $css .= '#' . $this->id . ' .' . $cssItemClass . ' {';
+                $css .= 'width: ' . $itemWidthDesktopX3l . ';';
+                $css .= 'padding-left: calc(' . $this->config->spacingDesktop . ' / 2);';
+                $css .= 'padding-right: calc(' . $this->config->spacingDesktop . ' / 2);';
+                $css .= 'margin-bottom: ' . $this->config->spacingDesktop . ';';
+                $css .= '}';
+
+                $css .= '}';
+            }
+
+            if ($itemWidthDesktopX4l !== '') {
+                $css .= '@media (min-width: 1920px) {';
+
+                $css .= '#' . $this->id . ' .' . $cssClass . ' {';
+                $css .= 'margin-left: calc(-' . $this->config->spacingDesktop . ' / 2);';
+                $css .= 'margin-right: calc(-' . $this->config->spacingDesktop . ' / 2);';
+                $css .= 'margin-bottom: -' . $this->config->spacingDesktop . ';';
+                $css .= '}';
+
+                $css .= '#' . $this->id . ' .' . $cssItemClass . ' {';
+                $css .= 'width: ' . $itemWidthDesktopX4l . ';';
+                $css .= 'padding-left: calc(' . $this->config->spacingDesktop . ' / 2);';
+                $css .= 'padding-right: calc(' . $this->config->spacingDesktop . ' / 2);';
+                $css .= 'margin-bottom: ' . $this->config->spacingDesktop . ';';
+                $css .= '}';
+
+                $css .= '}';
+            }
         }
 
         return $css;
