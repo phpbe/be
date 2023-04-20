@@ -80,8 +80,8 @@ class FormItemTinymce extends FormItem
 
         $isOpenaiInstalled = Be::getService('App.System.Admin.App')->isInstalled('Openai');
         if ($isOpenaiInstalled) {
-            $chatgptCallback = base64_encode('parent.window.bechatgpt.textCompletion = textCompletion;');
-            $this->options['be_openai_chatgpt_url'] = beAdminUrl('Openai.TextCompletion.pop', ['callback' => $chatgptCallback]);
+            $chatgptCallback = base64_encode('parent.window.bechatgpt.chatCompletion = chatCompletion;');
+            $this->options['be_openai_chatgpt_url'] = beAdminUrl('Openai.chatCompletion.pop', ['callback' => $chatgptCallback]);
         }
 
         $contentCss = '';
