@@ -19,7 +19,6 @@ class Db
         'username' => 'root', // 用户名
         'password' => 'root', // 密码
         'name' => 'be', // 数据库名称
-        'charset' => 'UTF8', // 字符集
         'pool' => 0, // 连接池，<=0 时不启用
     ]; // 主数据库
 
@@ -58,12 +57,6 @@ class Db
                     'name' => 'name',
                     'label' => '数据库名称',
                     'driver' => FormItemInput::class,
-                ],
-                [
-                    'name' => 'charset',
-                    'label' => '字符集',
-                    'driver' => FormItemSelect::class,
-                    'values' => ['UTF8', 'GBK'],
                 ],
                 [
                     'name' => 'pool',
