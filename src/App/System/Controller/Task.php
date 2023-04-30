@@ -103,6 +103,8 @@ class Task
         }
 
         Be::getService('App.System.Task')->onTask($taskId, $timestamp, $trigger, $taskData);
+
+        $response->success('任务执行完成！');
     }
 
 
