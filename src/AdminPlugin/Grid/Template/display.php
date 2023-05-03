@@ -885,6 +885,22 @@
                             }
                             _this.resize();
                             _this.updateToolbars();
+
+                            setTimeout(function () {
+                                _this.$forceUpdate();
+                            }, 500);
+
+                            setTimeout(function () {
+                                _this.$forceUpdate();
+                            }, 1000);
+
+                            setTimeout(function () {
+                                _this.$forceUpdate();
+                            }, 3000);
+
+                            setTimeout(function () {
+                                _this.$forceUpdate();
+                            }, 10000);
                         }
                     }).catch(function (error) {
                         _this.loading = false;
@@ -915,8 +931,25 @@
                                 }
                                 ?>
                             }
+
                             _this.resize();
                             _this.updateToolbars();
+
+                            setTimeout(function () {
+                                _this.$forceUpdate();
+                            }, 500);
+
+                            setTimeout(function () {
+                                _this.$forceUpdate();
+                            }, 1000);
+
+                            setTimeout(function () {
+                                _this.$forceUpdate();
+                            }, 3000);
+
+                            setTimeout(function () {
+                                _this.$forceUpdate();
+                            }, 10000);
                         }
                     }).catch(function (error) {
                         _this.loading = false;
