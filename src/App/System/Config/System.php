@@ -36,7 +36,7 @@ class System
     /**
      * @BeConfigItem("允许上传的文件类型", driver="FormItemCode", language="json", valueType = "array(string)")
      */
-    public array $allowUploadFileTypes = ['jpg', 'jpeg', 'gif', 'png', 'svg', 'webp', 'txt', 'pdf', 'doc', 'docx', 'csv', 'xls', 'xlsx', 'ppt', 'pptx', 'zip', 'rar', 'ttf', 'woff'];
+    public array $allowUploadFileTypes = ['jpg', 'jpeg', 'gif', 'png', 'svg', 'webp', 'txt', 'pdf', 'doc', 'docx', 'csv', 'xls', 'xlsx', 'ppt', 'pptx', 'zip', 'rar', 'js', 'css', 'ttf', 'woff', 'woff2', 'eot'];
 
     /**
      * @BeConfigItem("允许上传的图片类型", driver="FormItemCode", language="json", valueType = "array(string)")
