@@ -30,17 +30,19 @@
         }
 
         body {
-        <?php
-        $majorColor = '#ff5c35';
-        echo '--major-color: ' . $majorColor . ';';
+            margin: 0;
+            padding: 0;
+            <?php
+            $majorColor = '#ff5c35';
+            echo '--major-color: ' . $majorColor . ';';
 
-        // CSS 处理库
-        $libCss = \Be\Be::getLib('Css');
-        for ($i=1; $i<=9; $i++) {
-            echo '--major-color-' . $i. ': ' . $libCss->lighter($majorColor, $i * 10) . ';';
-            echo '--major-color' . $i. ': ' . $libCss->darker($majorColor, $i * 10) . ';';
-        }
-        ?>
+            // CSS 处理库
+            $libCss = \Be\Be::getLib('Css');
+            for ($i=1; $i<=9; $i++) {
+                echo '--major-color-' . $i. ': ' . $libCss->lighter($majorColor, $i * 10) . ';';
+                echo '--major-color' . $i. ': ' . $libCss->darker($majorColor, $i * 10) . ';';
+            }
+            ?>
         }
 
         @keyframes ajaxLoading {
