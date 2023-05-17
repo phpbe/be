@@ -25,8 +25,8 @@
     <link rel="stylesheet" href="<?php echo $appSystemWwwUrl; ?>/lib/element-ui/element-ui-2.15.7.css">
     <script src="<?php echo $appSystemWwwUrl; ?>/lib/element-ui/element-ui-2.15.7.js"></script>
 
-    <link rel="stylesheet" href="//cdn.phpbe.com/ui/be.css?v=20220926" />
-    <link rel="stylesheet" href="//cdn.phpbe.com/ui/be-icons.css"/>
+    <link rel="stylesheet" href="https://cdn.phpbe.com/ui/be.css" />
+    <link rel="stylesheet" href="https://cdn.phpbe.com/ui/be-icons.css"/>
 
     <style>
         html {
