@@ -150,7 +150,7 @@ class Task
     {
         $parts = explode('.', $taskRoute);
         if (count($parts) !== 2) {
-            return;
+            return '';
         }
 
         $app = $parts[0];
@@ -165,7 +165,7 @@ class Task
         } catch (\Throwable $t) {
             Be::getLog()->warning($t);
             // throw new ServiceException('Task does not register!');
-            return;
+            return '';
         }
 
         $task = $tupleTask->toObject();
@@ -176,6 +176,8 @@ class Task
                 $task->data = $taskData;
             }
             Be::getRuntime()->task($task);
+
+            return '';
         } else {
             $config = Be::getConfig('App.System.Task');
 
@@ -200,6 +202,8 @@ class Task
             curl_setopt_array($curl, $options);
             curl_exec($curl);
             curl_close($curl);
+
+            return $url;
         }
     }
 

@@ -87,4 +87,12 @@ class Server extends Auth
         }
     }
 
+    public function server()
+    {
+        $request = Be::getRequest();
+        $response = Be::getResponse();
+        $response->set('server', $request->server());
+        $response->display();
+    }
+
 }

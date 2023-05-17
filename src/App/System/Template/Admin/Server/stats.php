@@ -21,6 +21,7 @@
             <div class="be-col">
                 <?php echo $this->phpversion; ?>
                 <el-link class="be-ml-100" type="primary" href="<?php echo beAdminUrl('System.Server.phpinfo'); ?>" target="_blank">phpinfo 信息</el-link>
+                <el-link class="be-ml-100" type="primary" href="<?php echo beAdminUrl('System.Server.server'); ?>" target="_blank">server 变量</el-link>
             </div>
         </div>
 
