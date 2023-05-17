@@ -295,14 +295,7 @@ class Common extends Driver
     public function getUrl(): string
     {
         if ($this->url === null) {
-            $url = null;
-            if (isset($_SERVER['HTTP_SCHEME']) && ($_SERVER['HTTP_SCHEME'] === 'http' || $_SERVER['HTTP_SCHEME'] === 'https')) {
-                $url = $_SERVER['HTTP_SCHEME'] . '://';
-            } else {
-                $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
-            }
-
-            $url .= isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ($_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT']));
+            $url = $this->getRootUrl();
             $url .= $_SERVER['REQUEST_URI'];
             $this->url = $url;
         }

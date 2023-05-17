@@ -316,13 +316,7 @@ class Swoole extends Driver
     public function getUrl(): string
     {
         if ($this->url === null) {
-            $url = null;
-            if (isset($this->request->header['scheme']) && ($this->request->header['scheme'] === 'http' || $this->request->header['scheme'] === 'https')) {
-                $url = $this->request->header['scheme'] . '://';
-            } else {
-                $url = 'http://';
-            }
-            $url .= $this->request->header['host'];
+            $url = $this->getRootUrl();
             $url .= $this->request->server['request_uri'];
             if ($this->request->server['query_string']) {
                 $url .= '?' . $this->request->server['query_string'];
