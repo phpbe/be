@@ -835,7 +835,7 @@
                 tableActionLeft: "<?php echo $tableActionLeft; ?>",
                 tableActionHeight: "55px",
                 dialog: {visible: false, width: "600px", height: "400px", title: ""},
-                drawer: {visible: false, width: "40%", title: ""}
+                drawer: {visible: false, width: "60%", title: ""}
                 <?php
                 echo $uiItems->getVueData();
                 ?>
