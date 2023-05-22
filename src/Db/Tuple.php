@@ -749,6 +749,8 @@ abstract class Tuple
         $tableProperty = Be::getTableProperty($this->_tableName, $this->_dbName);
         $field = $tableProperty->getField($fieldName);
 
+        if ($field === null) return;
+
         $initValue = $this->_init[$fieldName] ?? null;
         if (in_array($field['type'], ['int', 'tinyint', 'smallint', 'mediumint', 'bigint'])) {
             if ($initValue !== null) {

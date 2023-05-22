@@ -45,6 +45,8 @@ class Task
         }
 
         Be::getService('App.System.Task')->schedule();
+
+        $response->success('任务已触发！');
     }
 
     /**
