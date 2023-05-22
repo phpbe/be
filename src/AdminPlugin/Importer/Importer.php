@@ -157,6 +157,22 @@ class Importer extends Driver
             $dbName = $this->setting['db'];
         }
 
+        if (isset($this->setting['events']['before'])) {
+            $this->on('before', $this->setting['events']['before']);
+        }
+
+        if (isset($this->setting['events']['after'])) {
+            $this->on('after', $this->setting['events']['after']);
+        }
+
+        if (isset($this->setting['events']['success'])) {
+            $this->on('success', $this->setting['events']['success']);
+        }
+
+        if (isset($this->setting['events']['error'])) {
+            $this->on('error', $this->setting['events']['error']);
+        }
+
         $db = Be::getDb($dbName);
 
         $db->startTransaction();
@@ -182,7 +198,10 @@ class Importer extends Driver
 
                 $tuple = Be::getTuple($this->setting['table'], $dbName);
                 $tuple->bind($row);
+
+                $this->trigger('before', $tuple, $row);
                 $tuple->insert();
+                $this->trigger('after', $tuple, $row);
             }
 
             $db->commit();

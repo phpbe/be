@@ -230,6 +230,10 @@ class Curd extends Driver
             $setting['mapping']['items'] = $mappingItems;
         }
 
+        if (isset($this->setting['import']['events'])) {
+            $setting['events'] = $this->setting['import']['events'];
+        }
+
         if (!isset($setting['downloadTemplateUrl'])) {
             $downloadTemplateUrl = $request->getUrl();
             if (strpos($downloadTemplateUrl, 'task=import') === false) {
@@ -794,13 +798,11 @@ class Curd extends Driver
                 }
 
                 $this->trigger('before', $tuple, $postData);
-                $tuple->save();
+                $tuple->insert();
                 $this->trigger('after', $tuple, $postData);
 
                 $primaryKey = $tuple->getPrimaryKey();
 
-                $strPrimaryKey = null;
-                $strPrimaryKeyValue = null;
                 if (is_array($primaryKey)) {
                     $strPrimaryKey = '（' . implode(',', $primaryKey) . '）';
                     $primaryKeyValue = [];
