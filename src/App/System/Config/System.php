@@ -51,7 +51,7 @@ class System
     /**
      * @BeConfigItem("内存限制", description="代码可使用的内存（即 memory_limit，依服务器内存大小配置）“, driver="FormItemInput")
      */
-    public string $memoryLimit = '1024M';
+    public string $memoryLimit = '512M';
 
     /**
      * @BeConfigItem("默认首页", driver="FormItemInput")
