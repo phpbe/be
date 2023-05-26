@@ -31,6 +31,8 @@ class Swoole extends Driver
         $configSystem = Be::getConfig('App.System.System');
         date_default_timezone_set($configSystem->timezone);
 
+        ini_set('memory_limit',$configSystem->memoryLimit);
+
         if ($configSystem->developer === 0) {
             error_reporting(0);
         }

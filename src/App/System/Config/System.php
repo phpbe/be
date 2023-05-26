@@ -44,9 +44,14 @@ class System
     public array $allowUploadImageTypes = ['jpg', 'jpeg', 'gif', 'png', 'svg', 'webp'];
 
     /**
-     * @BeConfigItem("时区", description="支持的时区列表：https://www.phpbe.com/doc/help/v2/timezones, driver="FormItemInput")
+     * @BeConfigItem("时区", description="支持的时区列表：https://www.phpbe.com/doc/help/v2/timezones", driver="FormItemInput")
      */
     public string $timezone = 'Asia/Shanghai';
+
+    /**
+     * @BeConfigItem("内存限制", description="代码可使用的内存（即 memory_limit，依服务器内存大小配置）“, driver="FormItemInput")
+     */
+    public string $memoryLimit = '1024M';
 
     /**
      * @BeConfigItem("默认首页", driver="FormItemInput")

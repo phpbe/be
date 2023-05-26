@@ -19,6 +19,8 @@ class Common extends Driver
 
         // 默认时区
         date_default_timezone_set($configSystem->timezone);
+        
+        ini_set('memory_limit',$configSystem->memoryLimit);
 
         if ($configSystem->developer === 0) {
             error_reporting(0);
