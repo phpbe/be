@@ -148,6 +148,12 @@ class AwsS3 extends Driver
             throw new StorageException('Illegal file path：' . $path . '!');
         }
 
+        $type = strtolower(substr(strrchr($path, '.'), 1));
+        $config = Be::getConfig('App.System.System');
+        if (!in_array($type, $config->allowUploadFileTypes)) {
+            throw new StorageException('Forbidden destination file type：' . $type . '!');
+        }
+
         $s3Path = substr($path, 1);
 
         $config = Be::getConfig('App.System.StorageAwsS3');
