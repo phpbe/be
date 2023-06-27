@@ -94,6 +94,9 @@ class Storage extends Auth
                 case 'TencentCos':
                     $storageDriver = '腾讯云COS';
                     break;
+                case 'AwsS3':
+                    $storageDriver = '亚马逊AWS S3';
+                    break;
             }
 
             $response->set('title', '存储（' . $storageDriver . '）');

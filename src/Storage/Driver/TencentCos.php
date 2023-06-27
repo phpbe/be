@@ -54,7 +54,7 @@ class TencentCos extends Driver
                 'Bucket' => $config->bucket, // 存储桶名称，由BucketName-Appid 组成，可以在COS控制台查看 https://console.cloud.tencent.com/cos5/bucket
                 'Delimiter' => '/', // Delimiter表示分隔符, 设置为/表示列出当前目录下的object, 设置为空表示列出所有的object
                 //'EncodingType' => 'url',// 编码格式，对应请求中的 encoding-type 参数
-                'Marker' => $option['nextPage'] ?? '',// 起始对象键标记
+                'Marker' => $option['nextToken'] ?? '',// 起始对象键标记
                 'Prefix' => $cosDirPath, // Prefix表示列出的object的key以prefix开始
                 'MaxKeys' => 1000, // 设置最大遍历出多少个对象, 一次listObjects最大支持1000
             ]);
