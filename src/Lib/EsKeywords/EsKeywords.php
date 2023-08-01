@@ -31,7 +31,7 @@ class EsKeywords
     public function setDict($path)
     {
         if (is_file($path)) {
-            throw new LibException('File(' . $path . ') does not exists!');
+            throw new LibException('File(' . $path . ') does not exist!');
         }
 
         $this->dictPath = $path;

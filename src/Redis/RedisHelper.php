@@ -23,6 +23,10 @@ abstract class RedisHelper
             $properties = $reflection->getProperties(\ReflectionMethod::IS_PUBLIC);
             foreach ($properties as $property) {
                 $itemName = $property->getName();
+                if ($itemName === 'enable') {
+                    continue;
+                }
+
                 $itemComment = $property->getDocComment();
                 $parseItemComments = Annotation::parse($itemComment);
                 if (isset($parseItemComments['BeConfigItem'][0])) {
@@ -46,6 +50,10 @@ abstract class RedisHelper
         $config = Be::getConfig('App.System.redis');
         $arrConfig = get_object_vars($config);
         foreach ($arrConfig as $k => $v) {
+            if ($k === 'enable') {
+                continue;
+            }
+
             if (!isset($keyValues[$k])) {
                 $keyValues[$k] = $k;
             }

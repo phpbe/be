@@ -5,7 +5,7 @@ namespace Be\Router;
 use Be\Be;
 use Be\Util\Annotation;
 use Be\Util\Arr;
-use http\Exception\RuntimeException;
+use Be\Runtime\RuntimeException;
 
 class Helper
 {

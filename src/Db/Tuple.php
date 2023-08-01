@@ -144,10 +144,10 @@ abstract class Tuple
         if (!$data) {
             if (is_array($primaryKeyValue)) {
                 // 主键编号（ implode(',', $this->_primaryKey)  ）为  implode(',', $primaryKeyValue)  的记录不存在
-                throw new TupleException('Tuple:load - The record of primary key (' . implode(',', $this->_primaryKey) . '), values ' . implode(',', $primaryKeyValue) . ' does not exists!');
+                throw new TupleException('Tuple:load - The record of primary key (' . implode(',', $this->_primaryKey) . '), values ' . implode(',', $primaryKeyValue) . ' does not exist!');
             } else {
                 // 主键编号（$this->_primaryKey）为  $primaryKeyValue 的记录不存在
-                throw new TupleException('Tuple:load - The record of primary key (' . $this->_primaryKey . '), value ' . $primaryKeyValue . ' does not exists!');
+                throw new TupleException('Tuple:load - The record of primary key (' . $this->_primaryKey . '), value ' . $primaryKeyValue . ' does not exist!');
             }
         }
 

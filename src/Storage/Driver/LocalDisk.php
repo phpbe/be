@@ -47,7 +47,7 @@ class LocalDisk extends Driver
         $uploadPath = Be::getRuntime()->getRootPath() . '/www';
         $path = $uploadPath . $dirPath;
         if (!is_dir($path)) {
-            throw new StorageException('Folder ' . $dirPath . ' does not exists！');
+            throw new StorageException('Folder ' . $dirPath . ' does not exist！');
         }
 
         $configSystem = Be::getConfig('App.System.System');
