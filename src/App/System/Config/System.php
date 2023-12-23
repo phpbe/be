@@ -49,7 +49,7 @@ class System
     public string $timezone = 'Asia/Shanghai';
 
     /**
-     * @BeConfigItem("内存限制", description="代码可使用的内存（即 memory_limit，依服务器内存大小配置）“, driver="FormItemInput")
+     * @BeConfigItem("内存限制", description="代码可使用的内存（即 memory_limit，依服务器内存大小配置）", driver="FormItemInput")
      */
     public string $memoryLimit = '512M';
 
