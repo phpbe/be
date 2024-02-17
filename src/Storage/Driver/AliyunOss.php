@@ -56,7 +56,7 @@ class AliyunOss extends Driver
                 'delimiter' => $delimiter,
                 'prefix' => $ossDirPath,  // 前缀，即路径
                 'max-keys' => 1000, // 超过 1000 个分页
-                'marker' => $option['nextPage'] ?? '', // 分页
+                'marker' => $option['nextToken'] ?? '', // 分页
             ];
 
             $listObjects = $ossClient->listObjects($config->bucket, $ossOption);
@@ -416,6 +416,8 @@ class AliyunOss extends Driver
                 if (!empty($objectList)) {
                     foreach ($objectList as $objectInfo) {
                         $ossOldPath = $objectInfo->getKey();
+                        if ($ossOldPath === $ossOldDirPath) continue;
+
                         $ossNewPath = $ossNewDirPath . substr($ossOldPath, strlen($ossOldDirPath));
                         $ossClient->copyObject($config->bucket, $ossOldPath, $config->bucket, $ossNewPath); // 拷备文件
                     }
@@ -441,8 +443,12 @@ class AliyunOss extends Driver
                 $objectList = $listObjects->getObjectList();
                 if (!empty($objectList)) {
                     foreach ($objectList as $objectInfo) {
-                        $ossClient->deleteObject($config->bucket, $objectInfo->getKey());
+                        $ossOldPath = $objectInfo->getKey();
+                        if ($ossOldPath === $ossOldDirPath) continue;
+                        $ossClient->deleteObject($config->bucket, $ossOldPath);
                     }
+
+                    $ossClient->deleteObject($config->bucket, $ossOldDirPath);
                 }
 
                 $nextMarker = $listObjects->getNextMarker();
