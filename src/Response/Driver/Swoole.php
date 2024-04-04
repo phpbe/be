@@ -78,13 +78,13 @@ class Swoole extends Driver
     /**
      * 以 JSON 输出暂存数据
      */
-    public function json($data = null)
+    public function json($data = null, int $flags = JSON_UNESCAPED_UNICODE, int $depth = 512)
     {
         $this->response->header('Content-type', 'application/json');
         if ($data === null) {
-            $this->response->end(json_encode($this->data));
+            $this->response->end(json_encode($this->data, $flags, $depth));
         } else {
-            $this->response->end(json_encode(array_merge($this->data, $data)));
+            $this->response->end(json_encode(array_merge($this->data, $data), $flags, $depth));
         }
     }
 

@@ -64,13 +64,13 @@ class Common extends Driver
     /**
      * 以 JSON 输出暂存数据
      */
-    public function json($data = null)
+    public function json($data = null, int $flags = JSON_UNESCAPED_UNICODE, int $depth = 512)
     {
         header('Content-type: application/json');
         if ($data === null) {
-            echo json_encode($this->data);
+            echo json_encode($this->data, $flags, $depth);
         } else {
-            echo json_encode(array_merge($this->data, $data));
+            echo json_encode(array_merge($this->data, $data), $flags, $depth);
         }
     }
 
