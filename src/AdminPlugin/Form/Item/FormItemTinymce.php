@@ -76,6 +76,9 @@ class FormItemTinymce extends FormItem
 
             // 不处理资源网址
             'convert_urls' => false,
+
+            // 链接默认在新窗口打开
+            'default_link_target' => '_blank',
         ];
 
         $isOpenaiInstalled = Be::getService('App.System.Admin.App')->isInstalled('Openai');
