@@ -103,12 +103,12 @@ RUN mkdir /phpbe \
   && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
   && php composer-setup.php \
   && php -r "unlink('composer-setup.php');" \
-  && mv composer.phar /usr/local/bin/composer
+  && mv composer.phar /usr/local/bin/composer \
   && composer create-project be/new /phpbe \
   && mkdir -p /phpbe/data \
   && chmod -R 777 /phpbe/data \
   && mkdir -p /phpbe/www \
-  && chmod -R 777 /phpbe/www \
+  && chmod -R 777 /phpbe/www
 
 WORKDIR /phpbe
 
