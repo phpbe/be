@@ -816,7 +816,6 @@ class Table
                                 break;
                             case 'BETWEEN':
                             case 'NOT BETWEEN':
-                                $sql .= ' ' . $op;
                                 if (is_array($where[2]) && count($where[2]) === 2) {
                                     $sql .= ' ? AND ?';
                                     $values = array_merge($values, $where[2]);
