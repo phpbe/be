@@ -65,14 +65,14 @@ class Driver
             return Be::getContext($contextKey);
         }
 
-        $request = Be::getRequest();
+        
 
         $menuKey1Matched = false;
         $menuKey2Matched = false;
         $menuKey3Matched = false;
-        $menuKey1Flag = $request->getAppName() . '.';
-        $menuKey2Flag = $request->getAppName() . '.' . $request->getControllerName() . '.';
-        $menuKey3Flag = $request->getAppName() . '.' . $request->getControllerName() . '.' . $request->getActionName();
+        $menuKey1Flag = Request::getAppName() . '.';
+        $menuKey2Flag = Request::getAppName() . '.' . Request::getControllerName() . '.';
+        $menuKey3Flag = Request::getAppName() . '.' . Request::getControllerName() . '.' . Request::getActionName();
         $menuKey1 = null;
         $menuKey2 = null;
         $menuKey3 = null;

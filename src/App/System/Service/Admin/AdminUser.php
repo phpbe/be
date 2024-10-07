@@ -36,8 +36,8 @@ class AdminUser
             throw new ServiceException('参数IP（$ip）缺失！');
         }
 
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
         $session = Be::getSession();
 
         $timesKey = 'Be-AdminUser-login-ip-' . $ip;
@@ -137,7 +137,7 @@ class AdminUser
             $this->makeLogin($tupleAdminUser);
 
             $adminRememberMe = $username . '|' . Aes::encrypt($password, $tupleAdminUser->salt);
-            $response->cookie('Be-AdminUser-rememberMe', $adminRememberMe, time() + 30 * 86400, '/', '', false, true);
+            Resonse::cookie('Be-AdminUser-rememberMe', $adminRememberMe, time() + 30 * 86400, '/', '', false, true);
 
             $tupleAdminUserLoginLog->success = 1;
             $tupleAdminUserLoginLog->description = '登陆成功！';
@@ -193,8 +193,8 @@ class AdminUser
      */
     public function rememberMe()
     {
-        $request = Be::getRequest();
-        $rememberMe = $request->cookie('Be-AdminUser-rememberMe', null);
+        
+        $rememberMe = Request::cookie('Be-AdminUser-rememberMe', null);
         if ($rememberMe) {
             $rememberMe = explode('|', $rememberMe);
             if (count($rememberMe) !== 2) return;
@@ -207,7 +207,7 @@ class AdminUser
                 if ($tupleAdminUser->is_delete === 0 && $tupleAdminUser->is_enable === 1) {
                     $password = $rememberMe[1];
                     $password = Aes::decrypt($password, $tupleAdminUser->salt);
-                    $this->login($username, $password, $request->getIp());
+                    $this->login($username, $password, Request::getIp());
                 }
             } catch (\Exception $e) {
                 return;

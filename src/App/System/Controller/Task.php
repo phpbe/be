@@ -12,10 +12,10 @@ class Task
      */
     public function index()
     {
-        $response = Be::getResponse();
+        
 
         if (Be::getRuntime()->isSwooleMode()) {
-            $response->error('Swoole 模式下，不需要使用本功能。');
+            Resonse::error('Swoole 模式下，不需要使用本功能。');
             return;
         }
 
@@ -29,24 +29,24 @@ class Task
      */
     public function schedule()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
         if (Be::getRuntime()->isSwooleMode()) {
-            $response->error('Swoole 模式下，不需要使用本功能。');
+            Resonse::error('Swoole 模式下，不需要使用本功能。');
             return;
         }
 
-        $password = $request->get('password', '');
+        $password = Request::get('password', '');
         $config = Be::getConfig('App.System.Task');
         if ($config->password !== $password) {
-            $response->error('密码错误, 任务调度中止！');
+            Resonse::error('密码错误, 任务调度中止！');
             return;
         }
 
         Be::getService('App.System.Task')->schedule();
 
-        $response->success('任务已触发！');
+        Resonse::success('任务已触发！');
     }
 
     /**
@@ -54,18 +54,18 @@ class Task
      */
     public function run()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
         if (Be::getRuntime()->isSwooleMode()) {
-            $response->error('Swoole 模式下，不需要使用本功能。');
+            Resonse::error('Swoole 模式下，不需要使用本功能。');
             return;
         }
 
-        $password = $request->get('password', '');
+        $password = Request::get('password', '');
         $config = Be::getConfig('App.System.Task');
         if ($config->password !== $password) {
-            $response->error('密码（password）错误, 任务调度中止！');
+            Resonse::error('密码（password）错误, 任务调度中止！');
             return;
         }
 
@@ -77,14 +77,14 @@ class Task
         header("HTTP/1.1 200 OK");
         ob_implicit_flush();
 
-        $taskId = $request->get('taskId', '');
+        $taskId = Request::get('taskId', '');
         if (!$taskId) {
-            $response->error('参数（taskId）缺失, 任务中止！');
+            Resonse::error('参数（taskId）缺失, 任务中止！');
             return;
         }
 
-        $timestamp = $request->get('timestamp', time());
-        $trigger = $request->get('trigger', '');
+        $timestamp = Request::get('timestamp', time());
+        $trigger = Request::get('trigger', '');
 
         /**
          * SYSTEM: 系统定时任务按时启动
@@ -92,13 +92,13 @@ class Task
          * RELATED：程序功能关联触发。
          */
         if (!in_array($trigger, ['SYSTEM', 'MANUAL', 'RELATED'])) {
-            $response->error('参数（trigger）无效, 任务中止！');
+            Resonse::error('参数（trigger）无效, 任务中止！');
             return;
         }
 
         $taskData = null;
-        if ($request->isPost()) {
-            $postData = $request->post();
+        if (Request::isPost()) {
+            $postData = Request::post();
             if (is_array($postData) && count($postData) > 0) {
                 $taskData = $postData;
             }
@@ -106,7 +106,7 @@ class Task
 
         Be::getService('App.System.Task')->onTask($taskId, $timestamp, $trigger, $taskData);
 
-        $response->success('任务执行完成！');
+        Resonse::success('任务执行完成！');
     }
 
 

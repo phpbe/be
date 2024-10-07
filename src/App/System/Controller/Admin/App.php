@@ -17,25 +17,25 @@ class App extends Auth
      */
     public function apps()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
-        if ($request->isAjax()) {
+        
+        
+        if (Request::isAjax()) {
             try {
-                $postData = $request->json();
+                $postData = Request::json();
                 $apps = Be::getService('App.System.Admin.App')->getApps();
                 $page = $postData['page'];
                 $pageSize = $postData['pageSize'];
                 $gridData = array_slice($apps, ($page - 1) * $pageSize, $pageSize);
-                $response->set('success', true);
-                $response->set('data', [
+                Resonse::set('success', true);
+                Resonse::set('data', [
                     'total' => count($apps),
                     'gridData' => $gridData,
                 ]);
-                $response->json();
+                Resonse::json();
             } catch (\Throwable $t) {
-                $response->set('success', false);
-                $response->set('message', $t->getMessage());
-                $response->json();
+                Resonse::set('success', false);
+                Resonse::set('message', $t->getMessage());
+                Resonse::json();
                 Be::getLog()->error($t);
             }
 
@@ -110,7 +110,7 @@ class App extends Auth
                 ])
                 ->display();
 
-            $response->createHistory();
+            Resonse::createHistory();
         }
     }
 
@@ -121,13 +121,13 @@ class App extends Auth
      */
     public function install()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
-        if ($request->isAjax()) {
-            $postData = $request->json();
+        
+        
+        if (Request::isAjax()) {
+            $postData = Request::json();
 
             if (!isset($postData['formData']['appName'])) {
-                $response->error('参数应用名缺失！');
+                Resonse::error('参数应用名缺失！');
             }
 
             $appName = $postData['formData']['appName'];
@@ -137,13 +137,13 @@ class App extends Auth
                 $serviceApp->install($appName);
 
                 beAdminOpLog('安装新应用：' . $appName);
-                $response->success('应用安装成功！');
+                Resonse::success('应用安装成功！');
 
                 if (Be::getRuntime()->isSwooleMode()) {
                     Be::getRuntime()->reload();
                 }
             } catch (\Throwable $t) {
-                $response->error($t->getMessage());
+                Resonse::error($t->getMessage());
             }
 
         } else {
@@ -174,13 +174,13 @@ class App extends Auth
      */
     public function uninstall()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
-        $postData = $request->json();
+        $postData = Request::json();
 
         if (!isset($postData['row']['name'])) {
-            $response->error('参数应用名缺失！');
+            Resonse::error('参数应用名缺失！');
         }
 
         $appName = $postData['row']['name'];
@@ -190,13 +190,13 @@ class App extends Auth
             $serviceApp->uninstall($appName);
 
             beAdminOpLog('卸载应用：' . $appName);
-            $response->success('应用卸载成功！');
+            Resonse::success('应用卸载成功！');
 
             if (Be::getRuntime()->isSwooleMode()) {
                 Be::getRuntime()->reload();
             }
         } catch (\Throwable $t) {
-            $response->error($t->getMessage());
+            Resonse::error($t->getMessage());
         }
     }
 
@@ -207,13 +207,13 @@ class App extends Auth
      */
     public function updateWww()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
-        $postData = $request->json();
+        $postData = Request::json();
 
         if (!isset($postData['row']['name'])) {
-            $response->error('参数应用名缺失！');
+            Resonse::error('参数应用名缺失！');
         }
 
         $appName = $postData['row']['name'];
@@ -223,9 +223,9 @@ class App extends Auth
             $serviceApp->updateWww($appName);
 
             beAdminOpLog('更新应用 www：' . $appName);
-            $response->success('更新应用 www成功！');
+            Resonse::success('更新应用 www成功！');
         } catch (\Throwable $t) {
-            $response->error($t->getMessage());
+            Resonse::error($t->getMessage());
         }
     }
 

@@ -120,14 +120,14 @@ class Driver
         }
 
         $activeId = '';
-        $request = Be::getRequest();
-        $route = $request->getRoute();
+        
+        $route = Request::getRoute();
         foreach ($this->items as $item) {
             if ($item->route) {
                 if ($item->params) {
                     $paramsMatched = true;
                     foreach ($item->params as $key => $val) {
-                        if ($val != $request->get($key, '')) {
+                        if ($val != Request::get($key, '')) {
                             $paramsMatched = false;
                             break;
                         }

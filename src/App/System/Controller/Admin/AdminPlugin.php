@@ -23,18 +23,18 @@ class AdminPlugin
 
     public function uploadFile()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
-        $file = $request->files('file');
+        $file = Request::files('file');
         if ($file['error'] === 0) {
             $configSystem = Be::getConfig('App.System.System');
             $maxSize = $configSystem->uploadMaxSize;
             $maxSizeInt = FileSize::string2Int($maxSize);
             if ($file['size'] > $maxSizeInt) {
-                $response->set('success', false);
-                $response->set('message', '您上传的文件尺寸已超过最大限制：' . $maxSize . '！');
-                $response->json();
+                Resonse::set('success', false);
+                Resonse::set('message', '您上传的文件尺寸已超过最大限制：' . $maxSize . '！');
+                Resonse::json();
                 return;
             }
 
@@ -44,9 +44,9 @@ class AdminPlugin
                 $ext = substr($file['name'], $rPos + 1);
             }
             if (!in_array($ext, $configSystem->allowUploadFileTypes)) {
-                $response->set('success', false);
-                $response->set('message', '禁止上传的文件类型：' . $ext . '！');
-                $response->json();
+                Resonse::set('success', false);
+                Resonse::set('message', '禁止上传的文件类型：' . $ext . '！');
+                Resonse::json();
                 return;
             }
 
@@ -61,42 +61,42 @@ class AdminPlugin
 
             if (move_uploaded_file($file['tmp_name'], $newFilePath)) {
                 $newFileUrl = Be::getRequest()->getRootUrl(). '/tmp/' . $newFileName;
-                $response->set('newValue', $newFileName);
-                $response->set('url', $newFileUrl);
-                $response->set('success', true);
-                $response->set('message', '上传成功！');
-                $response->json();
+                Resonse::set('newValue', $newFileName);
+                Resonse::set('url', $newFileUrl);
+                Resonse::set('success', true);
+                Resonse::set('message', '上传成功！');
+                Resonse::json();
                 return;
             } else {
-                $response->set('success', false);
-                $response->set('message', '服务器处理上传文件出错！');
-                $response->json();
+                Resonse::set('success', false);
+                Resonse::set('message', '服务器处理上传文件出错！');
+                Resonse::json();
                 return;
             }
         } else {
             $errorDesc = FileUpload::errorDescription($file['error']);
-            $response->set('success', false);
-            $response->set('message', '上传失败' . '(' . $errorDesc . ')');
-            $response->json();
+            Resonse::set('success', false);
+            Resonse::set('message', '上传失败' . '(' . $errorDesc . ')');
+            Resonse::json();
             return;
         }
     }
 
     public function uploadAvatar()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
-        $file = $request->files('file');
+        $file = Request::files('file');
         if ($file['error'] === 0) {
 
             $configSystem = Be::getConfig('App.System.System');
             $maxSize = $configSystem->uploadMaxSize;
             $maxSizeInt = FileSize::string2Int($maxSize);
             if ($file['size'] > $maxSizeInt) {
-                $response->set('success', false);
-                $response->set('message', '您上传的头像尺寸已超过最大限制：' . $maxSize . '！');
-                $response->json();
+                Resonse::set('success', false);
+                Resonse::set('message', '您上传的头像尺寸已超过最大限制：' . $maxSize . '！');
+                Resonse::json();
                 return;
             }
 
@@ -106,9 +106,9 @@ class AdminPlugin
                 $ext = substr($file['name'], $rPos + 1);
             }
             if (!in_array($ext, $configSystem->allowUploadImageTypes)) {
-                $response->set('success', false);
-                $response->set('message', '禁止上传的图像类型：' . $ext . '！');
-                $response->json();
+                Resonse::set('success', false);
+                Resonse::set('message', '禁止上传的图像类型：' . $ext . '！');
+                Resonse::json();
                 return;
             }
 
@@ -126,8 +126,8 @@ class AdminPlugin
                 }
 
                 $resize = false;
-                $maxWidth = $request->post('maxWidth', 0, 'int');
-                $maxHeight = $request->post('maxHeight', 0, 'int');
+                $maxWidth = Request::post('maxWidth', 0, 'int');
+                $maxHeight = Request::post('maxHeight', 0, 'int');
                 if ($maxWidth > 0 && $maxHeight> 0) {
                     if ($libImage->getWidth() > $maxWidth || $libImage->getheight() > $maxHeight) {
                         $libImage->resize($maxWidth, $maxHeight, 'center');
@@ -142,42 +142,42 @@ class AdminPlugin
                 }
 
                 $newImageUrl = Be::getRequest()->getRootUrl(). '/tmp/' . $newImageName;
-                $response->set('newValue', $newImageName);
-                $response->set('url', $newImageUrl);
-                $response->set('success', true);
-                $response->set('message', '上传成功！');
-                $response->json();
+                Resonse::set('newValue', $newImageName);
+                Resonse::set('url', $newImageUrl);
+                Resonse::set('success', true);
+                Resonse::set('message', '上传成功！');
+                Resonse::json();
                 return;
             } else {
-                $response->set('success', false);
-                $response->set('message', '您上传的不是有效的图像文件！');
-                $response->json();
+                Resonse::set('success', false);
+                Resonse::set('message', '您上传的不是有效的图像文件！');
+                Resonse::json();
                 return;
             }
         } else {
             $errorDesc = FileUpload::errorDescription($file['error']);
-            $response->set('success', false);
-            $response->set('message', '上传失败' . '(' . $errorDesc . ')');
-            $response->json();
+            Resonse::set('success', false);
+            Resonse::set('message', '上传失败' . '(' . $errorDesc . ')');
+            Resonse::json();
             return;
         }
     }
 
     public function uploadImage()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
-        $file = $request->files('file');
+        $file = Request::files('file');
         if ($file['error'] === 0) {
 
             $configSystem = Be::getConfig('App.System.System');
             $maxSize = $configSystem->uploadMaxSize;
             $maxSizeInt = FileSize::string2Int($maxSize);
             if ($file['size'] > $maxSizeInt) {
-                $response->set('success', false);
-                $response->set('message', '您上传的图像尺寸已超过最大限制：' . $maxSize . '！');
-                $response->json();
+                Resonse::set('success', false);
+                Resonse::set('message', '您上传的图像尺寸已超过最大限制：' . $maxSize . '！');
+                Resonse::json();
                 return;
             }
 
@@ -187,9 +187,9 @@ class AdminPlugin
                 $ext = substr($file['name'], $rPos + 1);
             }
             if (!in_array($ext, $configSystem->allowUploadImageTypes)) {
-                $response->set('success', false);
-                $response->set('message', '禁止上传的图像类型：' . $ext . '！');
-                $response->json();
+                Resonse::set('success', false);
+                Resonse::set('message', '禁止上传的图像类型：' . $ext . '！');
+                Resonse::json();
                 return;
             }
 
@@ -198,7 +198,7 @@ class AdminPlugin
             $libImage->open($file['tmp_name']);
             if ($libImage->isImage()) {
 
-                $filename = $request->post('filename', '');
+                $filename = Request::post('filename', '');
                 $newImageName = null;
                 if ($filename) {
                     if (strpos($filename, '{datetime}') !== false) {
@@ -223,8 +223,8 @@ class AdminPlugin
                 }
 
                 $resize = false;
-                $maxWidth = $request->post('maxWidth', 0, 'int');
-                $maxHeight = $request->post('maxHeight', 0, 'int');
+                $maxWidth = Request::post('maxWidth', 0, 'int');
+                $maxHeight = Request::post('maxHeight', 0, 'int');
                 if ($maxWidth > 0 && $maxHeight> 0) {
                     if ($libImage->getWidth() > $maxWidth || $libImage->getheight() > $maxHeight) {
                         $libImage->resize($maxWidth, $maxHeight, 'scale');
@@ -238,23 +238,23 @@ class AdminPlugin
                 }
 
                 $newImageUrl = Be::getRequest()->getRootUrl(). '/tmp/' . $newImageName;
-                $response->set('newValue', $newImageName);
-                $response->set('url', $newImageUrl);
-                $response->set('success', true);
-                $response->set('message', '上传成功！');
-                $response->json();
+                Resonse::set('newValue', $newImageName);
+                Resonse::set('url', $newImageUrl);
+                Resonse::set('success', true);
+                Resonse::set('message', '上传成功！');
+                Resonse::json();
                 return;
             } else {
-                $response->set('success', false);
-                $response->set('message', '您上传的不是有效的图像文件！');
-                $response->json();
+                Resonse::set('success', false);
+                Resonse::set('message', '您上传的不是有效的图像文件！');
+                Resonse::json();
                 return;
             }
         } else {
             $errorDesc = FileUpload::errorDescription($file['error']);
-            $response->set('success', false);
-            $response->set('message', '上传失败' . '(' . $errorDesc . ')');
-            $response->json();
+            Resonse::set('success', false);
+            Resonse::set('message', '上传失败' . '(' . $errorDesc . ')');
+            Resonse::json();
             return;
         }
     }

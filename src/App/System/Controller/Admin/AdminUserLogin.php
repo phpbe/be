@@ -15,29 +15,29 @@ class AdminUserLogin
      */
     public function login()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
-        if ($request->isPost()) {
-            $username = $request->json('username', '');
-            $password = $request->json('password', '');
-            $ip = $request->getIp();
+        if (Request::isPost()) {
+            $username = Request::json('username', '');
+            $password = Request::json('password', '');
+            $ip = Request::getIp();
             try {
                 $serviceUser = Be::getService('App.System.Admin.AdminUser');
                 $serviceUser->login($username, $password, $ip);
-                $response->success('登录成功！');
+                Resonse::success('登录成功！');
             } catch (\Exception $e) {
-                $response->error($e->getMessage());
+                Resonse::error($e->getMessage());
             }
         } else {
             $my = Be::getAdminUser();
             if ($my->id !== '') {
-                $response->redirect(beAdminUrl('System.Home.index'));
+                Resonse::redirect(beAdminUrl('System.Home.index'));
                 return;
             }
 
-            $response->set('title', '登录');
-            $response->display();
+            Resonse::set('title', '登录');
+            Resonse::display();
         }
     }
 
@@ -46,7 +46,7 @@ class AdminUserLogin
      */
     public function logout()
     {
-        $response = Be::getResponse();
+        
         try {
             Be::getService('App.System.Admin.AdminUser')->logout();
 
@@ -57,9 +57,9 @@ class AdminUserLogin
                 'timeout' => 3,
             ];
 
-            $response->success('成功退出！', $redirect);
+            Resonse::success('成功退出！', $redirect);
         } catch (\Exception $e) {
-            $response->error($e->getMessage());
+            Resonse::error($e->getMessage());
         }
     }
 

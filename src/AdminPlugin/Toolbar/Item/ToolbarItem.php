@@ -83,9 +83,9 @@ abstract class ToolbarItem extends UiItem
                     $action = $action();
                 }
 
-                $request = Be::getRequest();
-                $appName = $request->getAppName();
-                $controllerName = $request->getControllerName();
+                
+                $appName = Request::getAppName();
+                $controllerName = Request::getControllerName();
                 $this->url = beAdminUrl($appName . '.' . $controllerName . '.' . $action);
             }
         }

@@ -39,22 +39,22 @@ if ($configSystem->developer) {
                 <pre class="prettyprint linenums"><?php print_r($this->e->getTrace()); ?></pre>
             </el-tab-pane>
             <el-tab-pane label="GET" name="tab-get">
-                <pre class="prettyprint linenums"><?php print_r($request->get()) ?></pre>
+                <pre class="prettyprint linenums"><?php print_r(Request::get()) ?></pre>
             </el-tab-pane>
             <el-tab-pane label="POST" name="tab-post">
-                <pre class="prettyprint linenums"><?php print_r($request->post()) ?></pre>
+                <pre class="prettyprint linenums"><?php print_r(Request::post()) ?></pre>
             </el-tab-pane>
             <el-tab-pane label="REQUEST" name="tab-request">
-                <pre class="prettyprint linenums"><?php print_r($request->request()) ?></pre>
+                <pre class="prettyprint linenums"><?php print_r(Request::request()) ?></pre>
             </el-tab-pane>
             <el-tab-pane label="COOKIE" name="tab-cookie">
-                <pre class="prettyprint linenums"><?php print_r($request->cookie()) ?></pre>
+                <pre class="prettyprint linenums"><?php print_r(Request::cookie()) ?></pre>
             </el-tab-pane>
             <el-tab-pane label="头信息" name="tab-server">
-                <pre class="prettyprint linenums"><?php print_r($request->header()) ?></pre>
+                <pre class="prettyprint linenums"><?php print_r(Request::header()) ?></pre>
             </el-tab-pane>
             <el-tab-pane label="SERVER" name="tab-server">
-                <pre class="prettyprint linenums"><?php print_r($request->server()) ?></pre>
+                <pre class="prettyprint linenums"><?php print_r(Request::server()) ?></pre>
             </el-tab-pane>
         </el-tabs>
     </div>

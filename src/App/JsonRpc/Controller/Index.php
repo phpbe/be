@@ -29,17 +29,17 @@ class Index
 
     public function index()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
         if (Be::getRuntime()->isSwooleMode()) {
-            $inputDataStr = $request->getRequest()->getContent();
+            $inputDataStr = Request::getRequest()->getContent();
         } else {
             $inputDataStr = file_get_contents('php://input');
         }
         $inputData = json_decode($inputDataStr);
         if (!$inputData) {
-            $response->end(json_encode($this->error(null, static::ERR_PARSE)));
+            Resonse::end(json_encode($this->error(null, static::ERR_PARSE)));
             return;
         }
 
@@ -64,7 +64,7 @@ class Index
             if ($this->configLog->errorLog && $hasError) {
                 Be::getService('App.JsonRpc.Log')->errorLog($inputDataStr, $resultsStr);
             }
-            $response->end($resultsStr);
+            Resonse::end($resultsStr);
         } else {
             $result = $this->handle($inputData);
             $resultStr = json_encode($result);
@@ -75,7 +75,7 @@ class Index
             if ($this->configLog->errorLog && isset($result['error'])) {
                 Be::getService('App.JsonRpc.Log')->errorLog($inputDataStr, $resultStr);
             }
-            $response->end($resultStr);
+            Resonse::end($resultStr);
         }
     }
 

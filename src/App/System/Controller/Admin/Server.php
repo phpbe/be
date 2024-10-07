@@ -18,14 +18,14 @@ class Server extends Auth
      */
     public function stats()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
         $runtime = Be::getRuntime();
 
         $isSwooleMode = $runtime->isSwooleMode();
-        $response->set('isSwooleMode', $isSwooleMode);
+        Resonse::set('isSwooleMode', $isSwooleMode);
 
-        $response->set('phpversion', phpversion());
+        Resonse::set('phpversion', phpversion());
 
         $serverStats = [];
         if ($isSwooleMode) {
@@ -61,17 +61,17 @@ class Server extends Auth
             //$serverStats[] = ['name' => 'master 进程向当前 Worker 进程投递任务的计数', 'value' => $stats['worker_dispatch_count']];
         }
 
-        $response->set('serverStats', $serverStats);
+        Resonse::set('serverStats', $serverStats);
 
 
-        $response->set('title', '服务器状态');
-        $response->display();
+        Resonse::set('title', '服务器状态');
+        Resonse::display();
     }
 
     public function phpinfo()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
         $runtime = Be::getRuntime();
         if ($runtime->isSwooleMode()) {
@@ -80,8 +80,8 @@ class Server extends Auth
             $phpinfo = ob_get_contents();
             ob_end_clean();
 
-            $response->set('phpinfo', $phpinfo);
-            $response->display();
+            Resonse::set('phpinfo', $phpinfo);
+            Resonse::display();
         } else {
             phpinfo();
         }
@@ -89,10 +89,10 @@ class Server extends Auth
 
     public function server()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
-        $response->set('server', $request->server());
-        $response->display();
+        
+        
+        Resonse::set('server', Request::server());
+        Resonse::display();
     }
 
 }

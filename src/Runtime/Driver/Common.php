@@ -36,7 +36,7 @@ class Common extends Driver
         $session->start();
 
         try {
-            $admin = $request->get($this->adminAlias, false);
+            $admin = Request::get($this->adminAlias, false);
             if ($admin !== false) {
                 $admin = true;
             }
@@ -95,7 +95,7 @@ class Common extends Driver
                 if (!$admin && $configSystem->urlRewrite === 'router') {
 
                     if ($uri === '/') {
-                        $route = $request->get('route', '');
+                        $route = Request::get('route', '');
                         if ($route) {
                             $routes = explode('.', $route);
                             if (count($routes) === 3) {
@@ -155,23 +155,23 @@ class Common extends Driver
                 }
             }
 
-            if ($admin) $request->setAdmin($admin);
+            if ($admin) Request::setAdmin($admin);
 
             // 默认访问控制台页面
             if (!$app) {
 
                 if ($uri !== '' && $uri !== '/') {
-                    $response->status(404);
-                    $response->set('code', 404);
-                    $response->error(beLang('App.System', 'RUNTIME.404'));
+                    Resonse::status(404);
+                    Resonse::set('code', 404);
+                    Resonse::error(beLang('App.System', 'RUNTIME.404'));
                     Be::gc();
                     return;
                 }
 
                 if ($admin) {
-                    $route = $request->get('route', Be::getConfig('App.System.Admin')->home);
+                    $route = Request::get('route', Be::getConfig('App.System.Admin')->home);
                 } else {
-                    $route = $request->get('route', $configSystem->home);
+                    $route = Request::get('route', $configSystem->home);
                 }
                 $routes = explode('.', $route);
                 if (count($routes) === 3) {
@@ -179,35 +179,35 @@ class Common extends Driver
                     $controller = $routes[1];
                     $action = $routes[2];
                 } else {
-                    $response->status(404);
-                    $response->set('code', 404);
-                    $response->error(beLang('App.System', 'RUNTIME.ROUTE_ERROR', $route));
+                    Resonse::status(404);
+                    Resonse::set('code', 404);
+                    Resonse::error(beLang('App.System', 'RUNTIME.ROUTE_ERROR', $route));
                     Be::gc();
                     return;
                 }
             }
 
-            $request->setRoute($app, $controller, $action);
+            Request::setRoute($app, $controller, $action);
 
             $class = 'Be\\App\\' . $app . '\\Controller\\' . ($admin ? 'Admin\\' : '') . $controller;
             if (!class_exists($class)) {
-                $response->status(404);
-                $response->set('code', 404);
-                $response->error(beLang('App.System', 'RUNTIME.CONTROLLER_DOES_NOT_EXIST', $app, $controller));
+                Resonse::status(404);
+                Resonse::set('code', 404);
+                Resonse::error(beLang('App.System', 'RUNTIME.CONTROLLER_DOES_NOT_EXIST', $app, $controller));
             } else {
                 $instance = new $class();
                 if (method_exists($instance, $action)) {
                     $instance->$action();
                 } else {
-                    $response->status(404);
-                    $response->set('code', 404);
-                    $response->error(beLang('App.System', 'RUNTIME.UNDEFINED_ACTION', $action, $class));
+                    Resonse::status(404);
+                    Resonse::set('code', 404);
+                    Resonse::error(beLang('App.System', 'RUNTIME.UNDEFINED_ACTION', $action, $class));
                 }
             }
 
         } catch (\Throwable $t) {
             if ($t instanceof \Be\Exception) {
-                $response->status(500);
+                Resonse::status(500);
 
                 /**
                  * @var \Be\Exception $t
@@ -215,14 +215,14 @@ class Common extends Driver
                 $code = $t->getCode();
                 if ($code !== 0) {
                     $logId = Be::getLog()->fatal($t);
-                    $response->set('logId', $logId);
-                    $response->set('code', $t->getCode());
+                    Resonse::set('logId', $logId);
+                    Resonse::set('code', $t->getCode());
                 }
-                $response->error($t->getMessage(), $t->getRedirect());
+                Resonse::error($t->getMessage(), $t->getRedirect());
             } else {
                 $logId = Be::getLog()->fatal($t);
-                $response->set('logId', $logId);
-                $response->exception($t);
+                Resonse::set('logId', $logId);
+                Resonse::exception($t);
             }
         }
 

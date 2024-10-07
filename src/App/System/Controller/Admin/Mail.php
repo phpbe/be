@@ -18,14 +18,14 @@ class Mail extends Auth
      */
     public function test()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
-        if ($request->isAjax()) {
+        if (Request::isAjax()) {
 
-            $toEmail = $request->json('formData.toEmail', '');
-            $subject = $request->json('formData.subject', '');
-            $body = $request->json('formData.body', '', 'html');
+            $toEmail = Request::json('formData.toEmail', '');
+            $subject = Request::json('formData.subject', '');
+            $body = Request::json('formData.body', '', 'html');
 
             $redirectUrl = beAdminUrl('System.Mail.test', ['toEmail' => $toEmail]);
             $redirect = [
@@ -36,11 +36,11 @@ class Mail extends Auth
 
             try {
                 Be::getService('App.System.Mail')->send($toEmail, $subject, $body);
-                beAdminOpLog('发送测试邮件到 ' . $toEmail . ' -成功',  $request->json('formData'));
-                $response->success('发送邮件成功！', $redirect);
+                beAdminOpLog('发送测试邮件到 ' . $toEmail . ' -成功',  Request::json('formData'));
+                Resonse::success('发送邮件成功！', $redirect);
             } catch (\Exception $e) {
                 beAdminOpLog('发送测试邮件到 ' . $toEmail . ' -失败：' . $e->getMessage());
-                $response->error('发送邮件失败：' . $e->getMessage(), $redirect);
+                Resonse::error('发送邮件失败：' . $e->getMessage(), $redirect);
             }
 
         } else {

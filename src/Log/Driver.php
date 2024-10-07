@@ -104,22 +104,22 @@ abstract class Driver
             ]));
         }
 
-        $request = Be::getRequest();
+        
         if ($request) {
             if (isset($configSystemLog->get) && $configSystemLog->get) {
-                $content['get'] = $request->get();
+                $content['get'] = Request::get();
             }
 
             if (isset($configSystemLog->post) && $configSystemLog->post) {
-                $content['post'] = $request->post();
+                $content['post'] = Request::post();
             }
 
             if (isset($configSystemLog->request) && $configSystemLog->request) {
-                $content['request'] = $request->request();
+                $content['request'] = Request::request();
             }
 
             if (isset($configSystemLog->cookie) && $configSystemLog->cookie) {
-                $content['cookie'] = $request->cookie();
+                $content['cookie'] = Request::cookie();
             }
 
             if (isset($configSystemLog->session) && $configSystemLog->session) {
@@ -128,11 +128,11 @@ abstract class Driver
             }
 
             if (isset($configSystemLog->header) && $configSystemLog->header) {
-                $content['header'] = $request->header();
+                $content['header'] = Request::header();
             }
 
             if (isset($configSystemLog->server) && $configSystemLog->server) {
-                $content['server'] = $request->server();
+                $content['server'] = Request::server();
             }
 
             if (isset($configSystemLog->memery) && $configSystemLog->memery) {

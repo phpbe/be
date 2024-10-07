@@ -15,18 +15,18 @@ class Home
      */
     public function index()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
-        $pageConfig = $response->getPageConfig();
-        $response->set('pageConfig', $pageConfig);
+        $pageConfig = Resonse::getPageConfig();
+        Resonse::set('pageConfig', $pageConfig);
 
-        $response->set('title', $pageConfig->title ?: '');
-        $response->set('metaDescription', $pageConfig->metaDescription ?: '');
-        $response->set('metaKeywords', $pageConfig->metaKeywords ?: '');
-        $response->set('pageTitle', $pageConfig->pageTitle ?: ($pageConfig->title ?: ''));
+        Resonse::set('title', $pageConfig->title ?: '');
+        Resonse::set('metaDescription', $pageConfig->metaDescription ?: '');
+        Resonse::set('metaKeywords', $pageConfig->metaKeywords ?: '');
+        Resonse::set('pageTitle', $pageConfig->pageTitle ?: ($pageConfig->title ?: ''));
 
-        $response->display();
+        Resonse::display();
     }
 
 

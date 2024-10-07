@@ -70,12 +70,12 @@ class Detail extends Driver
 
     public function display()
     {
-        $response = Be::getResponse();
+        
 
-        $response->set('title', $this->setting['title']);
-        $response->set('setting', $this->setting);
-        $response->set('row', $this->row);
-        $response->display('AdminPlugin.Detail.display', $this->setting['theme']);
+        Resonse::set('title', $this->setting['title']);
+        Resonse::set('setting', $this->setting);
+        Resonse::set('row', $this->row);
+        Resonse::display('AdminPlugin.Detail.display', $this->setting['theme']);
     }
 
 }

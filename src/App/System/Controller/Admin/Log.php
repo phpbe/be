@@ -21,15 +21,15 @@ class Log extends Auth
      */
     public function lists()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
         //$a = 1/0;
         //Be::getTable('op_log');
 
         $serviceSystemLog = Be::getService('App.System.Admin.Log');
-        if ($request->isAjax()) {
-            $postData = $request->json();
+        if (Request::isAjax()) {
+            $postData = Request::json();
             $formData = $postData['formData'];
 
             $year = $formData['year'];
@@ -46,12 +46,12 @@ class Log extends Auth
 
             $gridData = $serviceSystemLog->getlogs($year, $month, $day, $offset, $pageSize);
 
-            $response->set('success', true);
-            $response->set('data', [
+            Resonse::set('success', true);
+            Resonse::set('data', [
                 'total' => $total,
                 'gridData' => $gridData,
             ]);
-            $response->json();
+            Resonse::json();
 
         } else {
 
@@ -61,8 +61,8 @@ class Log extends Auth
             $month = date('m');
             $day = date('d');
 
-            if ($request->isPost()) {
-                $postData = $request->post('data', '', '');
+            if (Request::isPost()) {
+                $postData = Request::post('data', '', '');
                 $postData = json_decode($postData, true);
                 $formData = $postData['formData'];
 
@@ -242,19 +242,19 @@ class Log extends Auth
      */
     public function detail()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
-        $data = $request->post('data', '', '');
+        $data = Request::post('data', '', '');
         $data = json_decode($data, true);
         try {
             $servicebeAdminOpLog = Be::getService('App.System.Admin.Log');
             $log = $servicebeAdminOpLog->getlog($data['row']['year'], $data['row']['month'], $data['row']['day'], $data['row']['id']);
-            $response->set('title', '系统日志明细');
-            $response->set('log', $log);
-            $response->display(null, 'Blank');
+            Resonse::set('title', '系统日志明细');
+            Resonse::set('log', $log);
+            Resonse::display(null, 'Blank');
         } catch (\Exception $e) {
-            $response->error($e->getMessage());
+            Resonse::error($e->getMessage());
         }
     }
 
@@ -265,12 +265,12 @@ class Log extends Auth
      */
     public function delete()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
-        $range = $request->get('range', 'day');
+        $range = Request::get('range', 'day');
 
-        $postData = $request->json();
+        $postData = Request::json();
         $formData = $postData['formData'];
         $year = $formData['year'];
         $month = $formData['month'];
@@ -279,9 +279,9 @@ class Log extends Auth
         try {
             $servicebeAdminOpLog = Be::getService('App.System.Admin.Log');
             $servicebeAdminOpLog->deleteLogs($range, $year, $month, $day);
-            $response->success('删除日志成功！');
+            Resonse::success('删除日志成功！');
         } catch (\Exception $e) {
-            $response->error($e->getMessage());
+            Resonse::error($e->getMessage());
         }
     }
 

@@ -222,8 +222,8 @@ class AdminOpLog extends Auth
      */
     public function deleteLogs()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
         $db = Be::getDb();
         $db->startTransaction();
@@ -233,10 +233,10 @@ class AdminOpLog extends Auth
                 ->delete();
             beAdminOpLog('删除三个月前操作日志！');
             $db->commit();
-            $response->success('删除三个月前操作日志成功！');
+            Resonse::success('删除三个月前操作日志成功！');
         } catch (\Exception $e) {
             $db->rollback();
-            $response->error($e->getMessage());
+            Resonse::error($e->getMessage());
         }
     }
 

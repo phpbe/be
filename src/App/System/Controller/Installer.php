@@ -9,7 +9,7 @@ class Installer
 
     public function index()
     {
-        $response = Be::getResponse();
+        
 
         //系统配置
         $configSystem = Be::getConfig('App.System.System');
@@ -25,13 +25,13 @@ class Installer
                 $configDb->master['name'] === 'be') {
 
                 // 跳转到安装页面
-                $response->redirect(beAdminUrl('System.Installer.index'));
+                Resonse::redirect(beAdminUrl('System.Installer.index'));
                 return;
             }
         }
 
         // 跳转到安装页面
-        $response->redirect(beUrl('System.Home.index'));
+        Resonse::redirect(beUrl('System.Home.index'));
     }
 
 }

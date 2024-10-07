@@ -19,13 +19,13 @@ class Config extends Driver
 
     public function display()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
-        $appName = isset($this->setting['appName']) ? $this->setting['appName'] : $request->getAppName();
+        $appName = isset($this->setting['appName']) ? $this->setting['appName'] : Request::getAppName();
         $appProperty = Be::getProperty('App.' . $appName);
 
-        $response->set('title', $this->setting['title'] ?? ($appProperty->getLabel() . '配置'));
+        Resonse::set('title', $this->setting['title'] ?? ($appProperty->getLabel() . '配置'));
 
         $configs = [];
         $dir =  Be::getProperty('App.' . $appName)->getPath() . '/Config';
@@ -52,20 +52,20 @@ class Config extends Driver
                                 unset($config['value']);
                             }
                             $config['name'] = $configName;
-                            $config['url'] = beAdminUrl($request->getRoute(), ['configName' => $configName]);
+                            $config['url'] = beAdminUrl(Request::getRoute(), ['configName' => $configName]);
                             $configs[] = $config;
                         }
                     }
                 }
             }
         }
-        $response->set('configs', $configs);
+        Resonse::set('configs', $configs);
 
-        $configName = $request->get('configName', '');
+        $configName = Request::get('configName', '');
         if (!$configName && count($configs) > 0) {
             $configName = $configs[0]['name'];
         }
-        $response->set('configName', $configName);
+        Resonse::set('configName', $configName);
 
         $configItemDrivers = [];
         $className = '\\Be\\App\\' . $appName . '\\Config\\' . $configName;
@@ -116,29 +116,29 @@ class Config extends Driver
                 }
             }
         }
-        $response->set('configItemDrivers', $configItemDrivers);
+        Resonse::set('configItemDrivers', $configItemDrivers);
 
         $theme = null;
         if (isset($this->setting['theme'])) {
             $theme = $this->setting['theme'];
         }
-        $response->display('AdminPlugin.Config.display', $theme);
+        Resonse::display('AdminPlugin.Config.display', $theme);
     }
 
 
     public function saveConfig()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
         try {
-            $appName = isset($this->setting['appName']) ? $this->setting['appName'] : $request->getAppName();
-            $configName = $request->get('configName', '');
+            $appName = isset($this->setting['appName']) ? $this->setting['appName'] : Request::getAppName();
+            $configName = Request::get('configName', '');
             if (!$configName) {
                 throw new AdminPluginException('参数（configName）缺失！');
             }
 
-            $postData = $request->json();
+            $postData = Request::json();
             $formData = $postData['formData'];
 
             $code = "<?php\n";
@@ -256,24 +256,24 @@ class Config extends Driver
                 $configInstance->$k = $newValues[$k];
             }
 
-            $response->success('保存成功，系统将自动重载！');
+            Resonse::success('保存成功，系统将自动重载！');
 
             // 重启系统
             Be::getRuntime()->reload();
 
         } catch (\Throwable $t) {
-            $response->error('保存失败：' . $t->getMessage());
+            Resonse::error('保存失败：' . $t->getMessage());
             Be::getLog()->error($t);
         }
     }
 
     public function resetConfig()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
         try {
-            $appName = isset($this->setting['appName']) ? $this->setting['appName'] : $request->getAppName();
-            $configName = $request->get('configName', '');
+            $appName = isset($this->setting['appName']) ? $this->setting['appName'] : Request::getAppName();
+            $configName = Request::get('configName', '');
             if (!$configName) {
                 throw new AdminPluginException('参数（configName）缺失！');
             }
@@ -301,13 +301,13 @@ class Config extends Driver
                 }
             }
 
-            $response->success('恢复默认值成功，系统将自动重载！');
+            Resonse::success('恢复默认值成功，系统将自动重载！');
 
             // 重启系统
             Be::getRuntime()->reload();
 
         } catch (\Throwable $t) {
-            $response->error('恢复默认值失败：' . $t->getMessage());
+            Resonse::error('恢复默认值失败：' . $t->getMessage());
             Be::getLog()->error($t);
         }
     }

@@ -57,10 +57,10 @@ class Report extends Driver
      */
     public function lists()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
-        if ($request->isAjax()) {
+        if (Request::isAjax()) {
             try {
                 $db = Be::getDb($this->setting['db']);
 
@@ -86,7 +86,7 @@ class Report extends Driver
                     $sqlCount = 'SELECT COUNT(*) FROM (' . $sqlData . ') t';
                 }
 
-                $postData = $request->json();
+                $postData = Request::json();
                 $formData = $postData['formData'];
 
                 $wheres = $this->getWheres($formData);
@@ -233,16 +233,16 @@ class Report extends Driver
                     $formattedRows[] = $formattedRow;
                 }
 
-                $response->set('success', true);
-                $response->set('data', [
+                Resonse::set('success', true);
+                Resonse::set('data', [
                     'total' => $total,
                     'gridData' => $formattedRows,
                 ]);
-                $response->json();
+                Resonse::json();
             } catch (\Throwable $t) {
-                $response->set('success', false);
-                $response->set('message', $t->getMessage());
-                $response->json();
+                Resonse::set('success', false);
+                Resonse::set('message', $t->getMessage());
+                Resonse::json();
                 Be::getLog()->error($t);
             }
 
@@ -253,7 +253,7 @@ class Report extends Driver
                 ->setting($setting)
                 ->display();
 
-            $response->createHistory();
+            Resonse::createHistory();
         }
     }
 
@@ -263,8 +263,8 @@ class Report extends Driver
      */
     public function export()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
         try {
             $db = Be::getDb($this->setting['db']);
@@ -284,7 +284,7 @@ class Report extends Driver
                 $sqlData = $this->setting['sql'];
             }
 
-            $postData = $request->post('data', '', '');
+            $postData = Request::post('data', '', '');
             $postData = json_decode($postData, true);
             $formData = $postData['formData'];
 
@@ -418,7 +418,7 @@ class Report extends Driver
             }
 
         } catch (\Throwable $t) {
-            $response->error($t->getMessage());
+            Resonse::error($t->getMessage());
             Be::getLog()->error($t);
         }
     }

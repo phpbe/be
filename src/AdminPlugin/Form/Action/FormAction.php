@@ -68,14 +68,14 @@ abstract class FormAction extends UiItem
                 $this->url = $url;
             }
         } else {
-            $request = Be::getRequest();
+            
             if (isset($params['task'])) {
                 $task = $params['task'];
                 if ($task instanceof \Closure) {
                     $task = $task();
                 }
 
-                $url = $request->getUrl();
+                $url = Request::getUrl();
                 $url .= (strpos($url, '?') === false ? '?' : '&') . 'task=' . $task;
                 $this->url = $url;
             } elseif (isset($params['action'])) {
@@ -83,7 +83,7 @@ abstract class FormAction extends UiItem
                 if ($action instanceof \Closure) {
                     $action = $action();
                 }
-                $this->url = beAdminUrl($request->getAppName() . '.' . $request->getControllerName() . '.' . $action);
+                $this->url = beAdminUrl(Request::getAppName() . '.' . Request::getControllerName() . '.' . $action);
             }
         }
 

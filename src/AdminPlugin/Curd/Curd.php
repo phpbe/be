@@ -70,11 +70,11 @@ class Curd extends Driver
      */
     public function Grid()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
-        if ($request->isAjax()) {
+        
+        
+        if (Request::isAjax()) {
             try {
-                $postData = $request->json();
+                $postData = Request::json();
                 $formData = $postData['formData'];
                 $table = $this->getTable($formData);
 
@@ -174,13 +174,13 @@ class Curd extends Driver
                     $responseData['tabCounters'] = $this->getTabCounters();
                 }
 
-                $response->set('success', true);
-                $response->set('data', $responseData);
-                $response->json();
+                Resonse::set('success', true);
+                Resonse::set('data', $responseData);
+                Resonse::json();
             } catch (\Throwable $t) {
-                $response->set('success', false);
-                $response->set('message', $t->getMessage());
-                $response->json();
+                Resonse::set('success', false);
+                Resonse::set('message', $t->getMessage());
+                Resonse::json();
                 Be::getLog()->error($t);
             }
 
@@ -191,7 +191,7 @@ class Curd extends Driver
                 ->setting($setting)
                 ->display();
 
-            $response->createHistory();
+            Resonse::createHistory();
         }
 
     }
@@ -202,7 +202,7 @@ class Curd extends Driver
      */
     public function import()
     {
-        $request = Be::getRequest();
+        
 
         $importer = Be::getAdminPlugin('Importer');
 
@@ -235,7 +235,7 @@ class Curd extends Driver
         }
 
         if (!isset($setting['downloadTemplateUrl'])) {
-            $downloadTemplateUrl = $request->getUrl();
+            $downloadTemplateUrl = Request::getUrl();
             if (strpos($downloadTemplateUrl, 'task=import') === false) {
                 $downloadTemplateUrl .= (strpos($downloadTemplateUrl, '?') === false ? '?' : '&') . 'task=importDownloadTemplate';
             } else {
@@ -244,7 +244,7 @@ class Curd extends Driver
             $setting['downloadTemplateUrl'] = $downloadTemplateUrl;
         }
 
-        if ($request->isAjax()) {
+        if (Request::isAjax()) {
             $importer->setting($setting)->import();
         } else {
             $importer->setting($setting)->display();
@@ -288,11 +288,11 @@ class Curd extends Driver
      */
     public function export()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
         try {
-            $postData = $request->post('data', '', '');
+            $postData = Request::post('data', '', '');
             $postData = json_decode($postData, true);
             $formData = $postData['formData'];
 
@@ -405,7 +405,7 @@ class Curd extends Driver
             }
 
         } catch (\Throwable $t) {
-            $response->error($t->getMessage());
+            Resonse::error($t->getMessage());
             Be::getLog()->error($t);
         }
     }
@@ -606,10 +606,10 @@ class Curd extends Driver
      */
     public function detail()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
-        $postData = $request->post('data', '', '');
+        $postData = Request::post('data', '', '');
         $postData = json_decode($postData, true);
 
         $tuple = Be::getTuple($this->setting['table'], $this->setting['db']);
@@ -701,7 +701,7 @@ class Curd extends Driver
             $this->trigger('after', $tuple, $postData);
 
         } catch (\Throwable $t) {
-            $response->error($t->getMessage());
+            Resonse::error($t->getMessage());
             Be::getLog()->error($t);
         }
     }
@@ -712,18 +712,18 @@ class Curd extends Driver
      */
     public function create()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
         $title = isset($this->setting['create']['title']) ? $this->setting['create']['title'] : '新建';
 
-        if ($request->isAjax()) {
+        if (Request::isAjax()) {
 
             $db = Be::getDb($this->setting['db']);
             $db->startTransaction();
             try {
 
-                $postData = $request->json();
+                $postData = Request::json();
                 $formData = $postData['formData'];
 
                 $tuple = Be::getTuple($this->setting['table'], $this->setting['db']);
@@ -820,17 +820,17 @@ class Curd extends Driver
                 }
                 $db->commit();
                 $this->trigger('success', $tuple, $postData);
-                $response->success($title . '：新建成功！');
+                Resonse::success($title . '：新建成功！');
 
             } catch (\Throwable $t) {
                 $db->rollback();
                 $this->trigger('error', $t, $postData);
-                $response->error($t->getMessage());
+                Resonse::error($t->getMessage());
                 Be::getLog()->error($t);
             }
 
         } else {
-            $response->set('title', $title);
+            Resonse::set('title', $title);
 
             $setting = $this->setting['create'];
             Be::getAdminPlugin('Form')->setting($setting)->display();
@@ -843,20 +843,20 @@ class Curd extends Driver
      */
     public function edit()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
         $title = isset($this->setting['edit']['title']) ? $this->setting['edit']['title'] : '编辑';
 
         $tuple = Be::getTuple($this->setting['table'], $this->setting['db']);
 
-        if ($request->isAjax()) {
+        if (Request::isAjax()) {
 
             $db = Be::getDb($this->setting['db']);
             $db->startTransaction();
             try {
 
-                $postData = $request->json();
+                $postData = Request::json();
                 $formData = $postData['formData'];
 
                 $primaryKey = $tuple->getPrimaryKey();
@@ -984,11 +984,11 @@ class Curd extends Driver
                 }
                 $db->commit();
                 $this->trigger('success', $tuple, $postData);
-                $response->success($title . '：编辑成功！');
+                Resonse::success($title . '：编辑成功！');
             } catch (\Throwable $t) {
                 $db->rollback();
                 $this->trigger('error', $t, $postData);
-                $response->error($t->getMessage());
+                Resonse::error($t->getMessage());
                 Be::getLog()->error($t);
             }
 
@@ -996,7 +996,7 @@ class Curd extends Driver
 
             try {
 
-                $postData = $request->post('data', '', '');
+                $postData = Request::post('data', '', '');
                 $postData = json_decode($postData, true);
 
                 $primaryKey = $tuple->getPrimaryKey();
@@ -1038,14 +1038,14 @@ class Curd extends Driver
                     ];
                 }
 
-                $response->set('title', $title);
+                Resonse::set('title', $title);
                 Be::getAdminPlugin('Form')
                     ->setting($setting)
                     ->setValue($tuple->toArray())
                     ->display();
 
             } catch (\Throwable $t) {
-                $response->error($t->getMessage());
+                Resonse::error($t->getMessage());
                 Be::getLog()->error($t);
             }
         }
@@ -1057,20 +1057,20 @@ class Curd extends Driver
      */
     public function copy()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
         $title = isset($this->setting['copy']['title']) ? $this->setting['copy']['title'] : '复制';
 
         $tuple = Be::getTuple($this->setting['table'], $this->setting['db']);
 
-        $postData = $request->json();
+        $postData = Request::json();
 
         $db = Be::getDb($this->setting['db']);
         $db->startTransaction();
         try {
 
-            $postData = $request->json();
+            $postData = Request::json();
             $formData = $postData['formData'];
 
             $primaryKey = $tuple->getPrimaryKey();
@@ -1144,11 +1144,11 @@ class Curd extends Driver
 
             $db->commit();
             $this->trigger('success', $tuple, $postData);
-            $response->success($title . '：复制成功！');
+            Resonse::success($title . '：复制成功！');
         } catch (\Throwable $t) {
             $db->rollback();
             $this->trigger('error', $t, $postData);
-            $response->error($t->getMessage());
+            Resonse::error($t->getMessage());
             Be::getLog()->error($t);
         }
     }
@@ -1158,8 +1158,8 @@ class Curd extends Driver
      */
     public function fieldEdit()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
         if (isset($this->setting['fieldEdit']['events']['before'])) {
             $this->on('before', $this->setting['fieldEdit']['events']['before']);
@@ -1177,9 +1177,9 @@ class Curd extends Driver
             $this->on('error', $this->setting['fieldEdit']['events']['error']);
         }
 
-        $postData = $request->json();
+        $postData = Request::json();
         if (!isset($postData['postData']['field'])) {
-            $response->error('参数（postData.field）缺失！');
+            Resonse::error('参数（postData.field）缺失！');
             return;
         }
         $field = $postData['postData']['field'];
@@ -1278,12 +1278,12 @@ class Curd extends Driver
                 $db->commit();
 
                 $this->trigger('success', $postData);
-                $response->success('执行成功！');
+                Resonse::success('执行成功！');
 
             } catch (\Throwable $t) {
                 $db->rollback();
                 $this->trigger('error', $t, $postData);
-                $response->error($t->getMessage());
+                Resonse::error($t->getMessage());
                 Be::getLog()->error($t);
             }
 
@@ -1348,15 +1348,15 @@ class Curd extends Driver
                 }
                 $db->commit();
                 $this->trigger('success', $tuple, $postData);
-                $response->success('执行成功！');
+                Resonse::success('执行成功！');
             } catch (\Throwable $t) {
                 $db->rollback();
                 $this->trigger('error', $t, $postData);
-                $response->error($t->getMessage());
+                Resonse::error($t->getMessage());
                 Be::getLog()->error($t);
             }
         } else {
-            $response->error('参数（rows或row）缺失！');
+            Resonse::error('参数（rows或row）缺失！');
         }
     }
 
@@ -1366,10 +1366,10 @@ class Curd extends Driver
      */
     public function delete()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
-        $postData = $request->json();
+        $postData = Request::json();
 
         $title = null;
         if (isset($this->setting['delete']['title'])) {
@@ -1399,7 +1399,7 @@ class Curd extends Driver
         if (isset($postData['selectedRows'])) {
 
             if (!is_array($postData['selectedRows']) || count($postData['selectedRows']) === 0) {
-                $response->error('你尚未选择要操作的数据！');
+                Resonse::error('你尚未选择要操作的数据！');
                 return;
             }
 
@@ -1460,11 +1460,11 @@ class Curd extends Driver
                 }
                 $db->commit();
                 $this->trigger('success', $postData);
-                $response->success($title . '，执行成功！');
+                Resonse::success($title . '，执行成功！');
             } catch (\Throwable $t) {
                 $db->rollback();
                 $this->trigger('error', $t, $postData);
-                $response->error($t->getMessage());
+                Resonse::error($t->getMessage());
                 Be::getLog()->error($t);
             }
 
@@ -1511,11 +1511,11 @@ class Curd extends Driver
                 }
                 $db->commit();
                 $this->trigger('success', $tuple, $postData);
-                $response->success($title . '，执行成功！');
+                Resonse::success($title . '，执行成功！');
             } catch (\Throwable $t) {
                 $db->rollback();
                 $this->trigger('error', $t, $postData);
-                $response->error($t->getMessage());
+                Resonse::error($t->getMessage());
                 Be::getLog()->error($t);
             }
         }

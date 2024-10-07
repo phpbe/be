@@ -64,22 +64,22 @@
                         <pre class="prettyprint linenums"><?php print_r($this->e->getTrace()); ?></pre>
                     </div>
                     <div class="be-tab-pane" id="be-tab-pane-get">
-                        <pre class="prettyprint linenums"><?php print_r($request->get()) ?></pre>
+                        <pre class="prettyprint linenums"><?php print_r(Request::get()) ?></pre>
                     </div>
                     <div class="be-tab-pane" id="be-tab-pane-post">
-                        <pre class="prettyprint linenums"><?php print_r($request->post()) ?></pre>
+                        <pre class="prettyprint linenums"><?php print_r(Request::post()) ?></pre>
                     </div>
                     <div class="be-tab-pane" id="be-tab-pane-request">
-                        <pre class="prettyprint linenums"><?php print_r($request->request()) ?></pre>
+                        <pre class="prettyprint linenums"><?php print_r(Request::request()) ?></pre>
                     </div>
                     <div class="be-tab-pane" id="be-tab-pane-cookie">
-                        <pre class="prettyprint linenums"><?php print_r($request->cookie()) ?></pre>
+                        <pre class="prettyprint linenums"><?php print_r(Request::cookie()) ?></pre>
                     </div>
                     <div class="be-tab-pane" id="be-tab-pane-header">
-                        <pre class="prettyprint linenums"><?php print_r($request->header()) ?></pre>
+                        <pre class="prettyprint linenums"><?php print_r(Request::header()) ?></pre>
                     </div>
                     <div class="be-tab-pane" id="be-tab-pane-server">
-                        <pre class="prettyprint linenums"><?php print_r($request->server()) ?></pre>
+                        <pre class="prettyprint linenums"><?php print_r(Request::server()) ?></pre>
                     </div>
                 </div>
             </div>

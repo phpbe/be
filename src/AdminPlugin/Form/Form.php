@@ -67,11 +67,11 @@ class Form extends Driver
 
     public function display()
     {
-        $response = Be::getResponse();
-        $response->set('setting', $this->setting);
-        $response->set('row', $this->row);
-        $response->set('title', $this->setting['title'] ?? '');
-        $response->display('AdminPlugin.Form.display', $this->setting['theme']);
+        
+        Resonse::set('setting', $this->setting);
+        Resonse::set('row', $this->row);
+        Resonse::set('title', $this->setting['title'] ?? '');
+        Resonse::display('AdminPlugin.Form.display', $this->setting['theme']);
     }
 
 }

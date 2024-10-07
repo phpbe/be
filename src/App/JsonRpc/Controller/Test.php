@@ -11,11 +11,11 @@ class Test
 
     public function index()
     {
-        $response = Be::getResponse();
+        
 
         // 远程服务调用
         $result = Be::getService('App.JsonRpc.JsonRpc')->proxy('JsonRpc.Test')->sum(1, 1);
-        $response->write(print_r($result, true));
+        Resonse::write(print_r($result, true));
 
         // 批量调用
         $result = Be::getService('App.JsonRpc.JsonRpc')->bulk([
@@ -35,7 +35,7 @@ class Test
                 'params' => [4, 4]
             ],
         ]);
-        $response->write(print_r($result, true));
+        Resonse::write(print_r($result, true));
 
         /**
          * 调用其它服务
@@ -43,7 +43,7 @@ class Test
          * 远程调用 System 应用下 App Service 的 getApps 方法
          */
         $result = Be::getService('App.JsonRpc.JsonRpc')->proxy('System.App')->getApps();
-        $response->write(print_r($result, true));
+        Resonse::write(print_r($result, true));
 
     }
 

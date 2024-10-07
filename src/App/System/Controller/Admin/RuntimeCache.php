@@ -20,17 +20,17 @@ class RuntimeCache extends Auth
      */
     public function index()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
-        if ($request->isAjax()) {
+        
+        
+        if (Request::isAjax()) {
             $service = Be::getService('App.System.Admin.RuntimeCache');
             $gridData = $service->getCategories();
-            $response->set('success', true);
-            $response->set('data', [
+            Resonse::set('success', true);
+            Resonse::set('data', [
                 'total' => 0,
                 'gridData' => $gridData,
             ]);
-            $response->json();
+            Resonse::json();
         } else {
             Be::getAdminPlugin('Grid')->setting([
                 'title' => '运行时缓存',
@@ -164,17 +164,17 @@ class RuntimeCache extends Auth
      */
     public function delete()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
         try {
-            $postData = $request->json();
+            $postData = Request::json();
             $name = $postData['row']['name'] ?? null;
             $serviceSystemCache = Be::getService('App.System.Admin.RuntimeCache');
             $serviceSystemCache->delete($name);
             beAdminOpLog($name ? ('清除运行时缓存（' . $name. '）') : '清除所有运行时缓存' );
-            $response->success('清除运行时缓存成功！');
+            Resonse::success('清除运行时缓存成功！');
         } catch (\Exception $e) {
-            $response->error($e->getMessage());
+            Resonse::error($e->getMessage());
         }
     }
 

@@ -178,13 +178,13 @@ class Menu extends Auth
      */
     public function goItems()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
-        $postData = $request->post('data', '', '');
+        
+        
+        $postData = Request::post('data', '', '');
         if ($postData) {
             $postData = json_decode($postData, true);
             if (isset($postData['row']['id']) && $postData['row']['id']) {
-                $response->redirect(beAdminUrl('System.Menu.items', ['id' => $postData['row']['id']]));
+                Resonse::redirect(beAdminUrl('System.Menu.items', ['id' => $postData['row']['id']]));
             }
         }
     }
@@ -196,35 +196,35 @@ class Menu extends Auth
      */
     public function items()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
-        $menuId = $request->get('id');
+        $menuId = Request::get('id');
         $service = Be::getService('App.System.Admin.Menu');
         $menu = $service->getMenuById($menuId);
 
-        if ($request->isAjax()) {
+        if (Request::isAjax()) {
             try {
-                $service->saveItems($menuId, $request->json('formData'));
-                $response->set('success', true);
-                $response->set('message', '保存成功！');
-                $response->json();
+                $service->saveItems($menuId, Request::json('formData'));
+                Resonse::set('success', true);
+                Resonse::set('message', '保存成功！');
+                Resonse::json();
             } catch (\Throwable $t) {
-                $response->set('success', false);
-                $response->set('message', $t->getMessage());
-                $response->json();
+                Resonse::set('success', false);
+                Resonse::set('message', $t->getMessage());
+                Resonse::json();
             }
         } else {
             $flatTree = $service->getFlatTree($menu->name);
-            $response->set('flatTree', $flatTree);
+            Resonse::set('flatTree', $flatTree);
 
             $menuPickers = $service->getMenuPickers();
-            $response->set('menuPickers', $menuPickers);
+            Resonse::set('menuPickers', $menuPickers);
 
-            $response->set('title', $menu->label . ' - 菜单项管理');
-            $response->set('menu', $menu);
+            Resonse::set('title', $menu->label . ' - 菜单项管理');
+            Resonse::set('menu', $menu);
 
-            $response->display('App.System.Admin.Menu.items');
+            Resonse::display('App.System.Admin.Menu.items');
         }
     }
 
@@ -235,18 +235,18 @@ class Menu extends Auth
      */
     public function picker()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
         try {
-            $pickerRoute = $request->get('pickerRoute');
+            $pickerRoute = Request::get('pickerRoute');
             $service = Be::getService('App.System.Admin.Menu');
             $menuPicker = $service->getMenuPicker($pickerRoute);
             Be::getAdminPlugin('MenuPicker')
                 ->setting($menuPicker)
                 ->execute();
         } catch (\Throwable $t) {
-            $response->error($t->getMessage());
+            Resonse::error($t->getMessage());
         }
     }
 
@@ -257,10 +257,10 @@ class Menu extends Auth
      */
     public function setUrl()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
-        $response->display('App.System.Admin.Menu.setUrl', 'Blank');
+        Resonse::display('App.System.Admin.Menu.setUrl', 'Blank');
     }
 
 

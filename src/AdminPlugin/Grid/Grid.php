@@ -17,7 +17,7 @@ class Grid extends Driver
 
     public function setting(array $setting = []): Driver
     {
-        $request = Be::getRequest();
+        
 
         if (!isset($setting['form']['action'])) {
             $setting['form']['action'] = Be::getRequest()->getUrl();
@@ -46,7 +46,7 @@ class Grid extends Driver
                 $setting['defaultLayout'] = 'card';
             }
 
-            $setting['actualLayout'] = $request->get('layout', $setting['defaultLayout']);
+            $setting['actualLayout'] = Request::get('layout', $setting['defaultLayout']);
         } else {
             $setting['actualLayout'] = $setting['layout'];
         }
@@ -114,8 +114,8 @@ class Grid extends Driver
 
     public function display()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
         $pageSize = null;
         if (isset($this->setting['pageSize']) &&
@@ -127,17 +127,17 @@ class Grid extends Driver
             $pageSize = Be::getConfig('App.System.Admin')->pageSize;;
         }
 
-        $response->set('title', $this->setting['title'] ?? '');
-        $response->set('url', $request->getUrl());
-        $response->set('setting', $this->setting);
-        $response->set('pageSize', $pageSize);
+        Resonse::set('title', $this->setting['title'] ?? '');
+        Resonse::set('url', Request::getUrl());
+        Resonse::set('setting', $this->setting);
+        Resonse::set('pageSize', $pageSize);
 
         $theme = null;
         if (isset($this->setting['theme'])) {
             $theme = $this->setting['theme'];
         }
-        $response->display('AdminPlugin.Grid.display', $theme);
-        $response->createHistory();
+        Resonse::display('AdminPlugin.Grid.display', $theme);
+        Resonse::createHistory();
     }
 
 

@@ -431,8 +431,8 @@ class AdminRole extends Auth
             'fieldEdit' => [
                 'events' => [
                     'before' => function (Tuple &$tuple) {
-                        $request = Be::getRequest();
-                        $postData = $request->json();
+                        
+                        $postData = Request::json();
                         $field = $postData['postData']['field'];
                         if ($field === 'is_enable') {
                             if ($tuple->is_enable === 0) {

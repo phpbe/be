@@ -35,8 +35,8 @@ class Installer
      */
     public function index()
     {
-        $response = Be::getResponse();
-        $response->redirect(beAdminUrl('System.Installer.detect'));
+        
+        Resonse::redirect(beAdminUrl('System.Installer.detect'));
     }
 
     /**
@@ -44,12 +44,12 @@ class Installer
      */
     public function detect()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
         $runtime = Be::getRuntime();
 
-        if ($request->isPost()) {
+        if (Request::isPost()) {
 
             $rootPath = $runtime->getRootPath();
             $dataPath = $rootPath . '/data';
@@ -65,7 +65,7 @@ class Installer
                 @chmod($wwwPath, 0777);
             }
 
-            $response->redirect(beAdminUrl('System.Installer.configDb'));
+            Resonse::redirect(beAdminUrl('System.Installer.configDb'));
         } else {
             $value = [];
             $value['isPhpVersionGtMatch'] = version_compare(PHP_VERSION, '7.4.0') >= 0 ? 1 : 0;
@@ -88,16 +88,16 @@ class Installer
                 $value['isWwwDirWritable'] = is_writable($rootPath) ? 1 : 0;
             }
 
-            $response->set('value', $value);
+            Resonse::set('value', $value);
 
             $isAllPassed = array_sum($value) === count($value);
-            $response->set('isAllPassed', $isAllPassed);
+            Resonse::set('isAllPassed', $isAllPassed);
 
-            $response->set('steps', $this->steps);
-            $response->set('step', 1);
-            $response->set('title', $this->steps[0]);
+            Resonse::set('steps', $this->steps);
+            Resonse::set('step', 1);
+            Resonse::set('title', $this->steps[0]);
 
-            $response->display('App.System.Admin.Installer.detect', 'Installer');
+            Resonse::display('App.System.Admin.Installer.detect', 'Installer');
         }
     }
 
@@ -106,12 +106,12 @@ class Installer
      */
     public function configDb()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
-        if ($request->isPost()) {
+        if (Request::isPost()) {
             try {
-                $postData = $request->post();
+                $postData = Request::post();
                 Be::getService('App.System.Admin.Installer')->testDb($postData);
 
                 $configDb = Be::getConfig('App.System.Db');
@@ -125,24 +125,24 @@ class Installer
 
                 ConfigHelper::update('App.System.Db', $configDb);
 
-                $response->set('success', true);
-                $response->set('redirectUrl', beAdminUrl('System.Installer.installApp'));
-                $response->json();
+                Resonse::set('success', true);
+                Resonse::set('redirectUrl', beAdminUrl('System.Installer.installApp'));
+                Resonse::json();
             } catch (\Throwable $t) {
-                $response->set('success', false);
-                $response->set('message', $t->getMessage());
-                $response->json();
+                Resonse::set('success', false);
+                Resonse::set('message', $t->getMessage());
+                Resonse::json();
             }
         } else {
-            $response->set('steps', $this->steps);
-            $response->set('step', 2);
+            Resonse::set('steps', $this->steps);
+            Resonse::set('step', 2);
 
-            $response->set('title', $this->steps[1]);
+            Resonse::set('title', $this->steps[1]);
 
             $configDb = Be::getConfig('App.System.Db');
-            $response->set('configDb', $configDb);
+            Resonse::set('configDb', $configDb);
 
-            $response->display('App.System.Admin.Installer.configDb', 'Installer');
+            Resonse::display('App.System.Admin.Installer.configDb', 'Installer');
         }
     }
 
@@ -151,21 +151,21 @@ class Installer
      */
     public function testDb()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
         try {
-            $postData = $request->post();
+            $postData = Request::post();
             $databases = Be::getService('App.System.Admin.Installer')->testDb($postData);
-            $response->set('success', true);
-            $response->set('message', '数据库连接成功！');
-            $response->set('data', [
+            Resonse::set('success', true);
+            Resonse::set('message', '数据库连接成功！');
+            Resonse::set('data', [
                 'databases' => $databases,
             ]);
-            $response->json();
+            Resonse::json();
         } catch (\Throwable $t) {
-            $response->set('success', false);
-            $response->set('message', $t->getMessage());
-            $response->json();
+            Resonse::set('success', false);
+            Resonse::set('message', $t->getMessage());
+            Resonse::json();
         }
     }
 
@@ -174,29 +174,29 @@ class Installer
      */
     public function installApp()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
-        if ($request->isPost()) {
+        
+        
+        if (Request::isPost()) {
             try {
-                $postData = $request->post();
+                $postData = Request::post();
                 $service = Be::getService('App.System.Admin.App');
                 if (isset($postData['names']) && is_array($postData['names']) && count($postData['names'])) {
                     foreach ($postData['names'] as $appName) {
                         $service->install($appName);
                     }
                 }
-                $response->set('success', true);
-                $response->set('redirectUrl', beAdminUrl('System.Installer.setting'));
-                $response->json();
+                Resonse::set('success', true);
+                Resonse::set('redirectUrl', beAdminUrl('System.Installer.setting'));
+                Resonse::json();
             } catch (\Throwable $t) {
-                $response->set('success', false);
-                $response->set('message', $t->getMessage());
-                $response->json();
+                Resonse::set('success', false);
+                Resonse::set('message', $t->getMessage());
+                Resonse::json();
             }
         } else {
-            $response->set('steps', $this->steps);
-            $response->set('step', 3);
-            $response->set('title', $this->steps[2]);
+            Resonse::set('steps', $this->steps);
+            Resonse::set('step', 3);
+            Resonse::set('title', $this->steps[2]);
 
             $appProperties = [];
             $property = Be::getProperty('App.System');
@@ -217,8 +217,8 @@ class Installer
                 ];
             }
 
-            $response->set('appProperties', $appProperties);
-            $response->display('App.System.Admin.Installer.installApp', 'Installer');
+            Resonse::set('appProperties', $appProperties);
+            Resonse::display('App.System.Admin.Installer.installApp', 'Installer');
         }
     }
 
@@ -227,15 +227,15 @@ class Installer
      */
     public function setting()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
         $tuple = Be::getTuple('system_admin_user');
         $tuple->loadBy('username', 'admin');
 
-        if ($request->isPost()) {
+        if (Request::isPost()) {
             try {
-                $postData = $request->post();
+                $postData = Request::post();
 
                 if (!isset($postData['username'])) {
                     throw new ControllerException('超级管理员账号缺失！');
@@ -269,21 +269,21 @@ class Installer
                 $tuple->update_time = date('Y-m-d H:i:s');
                 $tuple->update();
 
-                $response->set('success', true);
-                $response->set('redirectUrl', beAdminUrl('System.Installer.complete'));
-                $response->json();
+                Resonse::set('success', true);
+                Resonse::set('redirectUrl', beAdminUrl('System.Installer.complete'));
+                Resonse::json();
             } catch (\Throwable $t) {
-                $response->set('success', false);
-                $response->set('message', $t->getMessage());
-                $response->json();
+                Resonse::set('success', false);
+                Resonse::set('message', $t->getMessage());
+                Resonse::json();
             }
 
         } else {
-            $response->set('steps', $this->steps);
-            $response->set('step', 4);
-            $response->set('title', $this->steps[3]);
+            Resonse::set('steps', $this->steps);
+            Resonse::set('step', 4);
+            Resonse::set('title', $this->steps[3]);
 
-            $response->display('App.System.Admin.Installer.setting', 'Installer');
+            Resonse::display('App.System.Admin.Installer.setting', 'Installer');
         }
     }
 
@@ -292,13 +292,13 @@ class Installer
      */
     public function complete()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
-        $response->set('steps', $this->steps);
-        $response->set('step', 5);
-        $response->set('url', beAdminUrl());
-        $response->display('App.System.Admin.Installer.complete', 'Installer');
+        Resonse::set('steps', $this->steps);
+        Resonse::set('step', 5);
+        Resonse::set('url', beAdminUrl());
+        Resonse::display('App.System.Admin.Installer.complete', 'Installer');
 
         $config = Be::getConfig('App.System.System');
         $config->home = 'System.Home.index';

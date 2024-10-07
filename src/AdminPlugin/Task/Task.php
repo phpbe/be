@@ -38,10 +38,10 @@ class Task extends Driver
      */
     public function execute($task = null)
     {
-        $request = Be::getRequest();
+        
 
         if ($task === null) {
-            $task = $request->get('task', 'Grid');
+            $task = Request::get('task', 'Grid');
         }
 
         if (method_exists($this, $task)) {
@@ -49,7 +49,7 @@ class Task extends Driver
             return;
         }
 
-        $appName = isset($this->setting['appName']) ? $this->setting['appName'] : $request->getAppName();
+        $appName = isset($this->setting['appName']) ? $this->setting['appName'] : Request::getAppName();
         $key = 'be:task:discover:' . $appName;
         if (!Be::hasGlobal($key)) {
             $serviceTask = Be::getService('App.System.Task');
@@ -454,15 +454,15 @@ class Task extends Driver
      */
     public function discover()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
         try {
             $serviceTask = Be::getService('App.System.Task');
-            $appName = isset($this->setting['appName']) ? $this->setting['appName'] : $request->getAppName();
+            $appName = isset($this->setting['appName']) ? $this->setting['appName'] : Request::getAppName();
             $n = $serviceTask->discover($appName);
-            $response->success('发现 ' . $n . ' 个新任务！');
+            Resonse::success('发现 ' . $n . ' 个新任务！');
         } catch (\Throwable $t) {
-            $response->error($t->getMessage());
+            Resonse::error($t->getMessage());
         }
     }
 
@@ -471,21 +471,21 @@ class Task extends Driver
      */
     public function run()
     {
-        $response = Be::getResponse();
+        
         try {
-            $request = Be::getRequest();
-            $postData = $request->json();
+            
+            $postData = Request::json();
             $tupleTask = Be::getTuple('system_task');
             $tupleTask->load($postData['row']['id']);
 
             $url = Be::getService('App.System.Task')->trigger($tupleTask->app . '.' . $tupleTask->name, null, 'MANUAL');
-            $response->set('url', $url);
+            Resonse::set('url', $url);
 
             beAdminOpLog('手工启动任务：' . $tupleTask->label . '（' . $tupleTask->app . '.' . $tupleTask->name . '）');
 
-            $response->success('任务启动成功！');
+            Resonse::success('任务启动成功！');
         } catch (\Throwable $t) {
-            $response->error($t->getMessage());
+            Resonse::error($t->getMessage());
             Be::getLog()->error($t);
         }
     }
@@ -496,14 +496,14 @@ class Task extends Driver
      */
     public function showLogs()
     {
-        $request = Be::getRequest();
-        $postData = $request->post('data', '', '');
+        
+        $postData = Request::post('data', '', '');
         $postData = json_decode($postData, true);
         $taskId = $postData['row']['id'];
 
         $url = beAdminUrl(null, ['task' => 'logs', 'task_id' => $taskId]);
-        $response = Be::getResponse();
-        $response->redirect($url);
+        
+        Resonse::redirect($url);
     }
 
     /**
@@ -511,8 +511,8 @@ class Task extends Driver
      */
     public function logs()
     {
-        $request = Be::getRequest();
-        $taskId = $request->get('task_id', 0);
+        
+        $taskId = Request::get('task_id', 0);
 
         $statusKeyValues = [
             'RUNNING' => '运行中',
@@ -726,19 +726,19 @@ class Task extends Driver
      */
     public function deleteLog()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
         try {
-            $postData = $request->json();
+            $postData = Request::json();
             $tuple = Be::getTuple('system_task_log');
             $tuple->load($postData['row']['id']);
             $taskId = $tuple->task_id;
             $taskLogId = $tuple->id;
             $tuple->delete();
             beAdminOpLog('删除了一条计划任务（#' . $taskId . '）日志（#' . $taskLogId . '）。');
-            $response->success('删除计划任务日志成功！');
+            Resonse::success('删除计划任务日志成功！');
         } catch (\Throwable $t) {
-            $response->error($t->getMessage());
+            Resonse::error($t->getMessage());
             Be::getLog()->error($t);
         }
     }
@@ -748,35 +748,35 @@ class Task extends Driver
      */
     public function deleteLogs()
     {
-        $response = Be::getResponse();
+        
         try {
             $lastMonth = Datetime::getLastMonth(date('Y-m-d H:i:s'));
             Be::getTable('system_task_log')
                 ->where('create_time', '<', $lastMonth)
                 ->delete();
             beAdminOpLog('删除了一个月前计划任务日志。');
-            $response->success('删除一个月前计划任务日志成功！');
+            Resonse::success('删除一个月前计划任务日志成功！');
         } catch (\Throwable $t) {
-            $response->error($t->getMessage());
+            Resonse::error($t->getMessage());
             Be::getLog()->error($t);
         }
     }
 
     public function cronHelp()
     {
-        $response = Be::getResponse();
+        
 
         $configTask = Be::getConfig('App.System.Task');
         if ($configTask->password === '') {
             $configTask->password = Random::complex(16);
             ConfigHelper::update('App.System.Task', $configTask);
-            $response->set('configTaskPassword', 1);
+            Resonse::set('configTaskPassword', 1);
         } else {
-            $response->set('configTaskPassword', 0);
+            Resonse::set('configTaskPassword', 0);
         }
-        $response->set('configTask', $configTask);
+        Resonse::set('configTask', $configTask);
 
-        $response->display('AdminPlugin.Task.cronHelp', 'Blank');
+        Resonse::display('AdminPlugin.Task.cronHelp', 'Blank');
     }
 
 }

@@ -15,11 +15,11 @@ class Auth
 
     public function __construct()
     {
-        $request = Be::getRequest();
+        
 
-        $appName = $request->getAppName();
-        $controllerName = $request->getControllerName();
-        $actionName = $request->getActionName();
+        $appName = Request::getAppName();
+        $controllerName = Request::getControllerName();
+        $actionName = Request::getActionName();
 
         $my = Be::getAdminUser();
         if ($my->id === '') {
@@ -31,13 +31,13 @@ class Auth
         if ($my->id === '') {
 
             $redirect = null;
-            if ($request->isAjax()) {
+            if (Request::isAjax()) {
                 $redirectUrl = beAdminUrl('System.AdminUserLogin.login');
                 $redirect = [
                     'url' => $redirectUrl,
                 ];
             } else {
-                $redirectUrl = beAdminUrl('System.AdminUserLogin.login', ['return' => base64_encode($request->getUrl())]);
+                $redirectUrl = beAdminUrl('System.AdminUserLogin.login', ['return' => base64_encode(Request::getUrl())]);
                 $redirect = [
                     'url' => $redirectUrl,
                     'message' => '{timeout} 秒后跳转到 <a href="{url}">登录页</a>',
@@ -54,12 +54,12 @@ class Auth
             // 已登录用户，IP锁定功能校验
             $configAdminUser = Be::getConfig('App.System.AdminUser');
             if ($configAdminUser->ipLock) {
-                if ($my->this_login_ip !== $request->getIp()) {
+                if ($my->this_login_ip !== Request::getIp()) {
                     Be::getService('App.System.Admin.AdminUser')->logout();
 
                     $redirectUrl = beAdminUrl('System.AdminUserLogin.login');
                     $redirect = null;
-                    if ($request->isAjax()) {
+                    if (Request::isAjax()) {
                         $redirect = [
                             'url' => $redirectUrl,
                         ];

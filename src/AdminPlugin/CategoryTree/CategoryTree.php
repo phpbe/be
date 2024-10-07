@@ -70,16 +70,16 @@ class CategoryTree extends Driver
      */
     public function display()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
 
         $theme = null;
         if (isset($this->setting['theme'])) {
             $theme = $this->setting['theme'];
         }
-        $response->display('AdminPlugin.CategoryTree.display', $theme);
-        $response->createHistory();
+        Resonse::display('AdminPlugin.CategoryTree.display', $theme);
+        Resonse::createHistory();
 
     }
 

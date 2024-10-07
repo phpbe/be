@@ -18,56 +18,56 @@ class Home
      */
     public function index()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();;
+        
+        ;
 
         $my = Be::getAdminUser();
         if ($my->id === '') {
-            $response->redirect(beAdminUrl('System.AdminUserLogin.login'));
+            Resonse::redirect(beAdminUrl('System.AdminUserLogin.login'));
             return;
         }
 
-        $response->set('title', '后台首页');
+        Resonse::set('title', '后台首页');
 
         $tupleAdminUser = Be::getTuple('system_admin_user');
         try {
             $tupleAdminUser->load($my->id);
         } catch (\Throwable $t) {
-            $response->redirect(beAdminUrl('System.AdminUserLogin.logout'));
+            Resonse::redirect(beAdminUrl('System.AdminUserLogin.logout'));
             return;
         }
 
         unset($tupleAdminUser->password, $tupleAdminUser->salt, $tupleAdminUser->remember_me_token);
-        $response->set('adminUser', $tupleAdminUser);
+        Resonse::set('adminUser', $tupleAdminUser);
 
         $tableAdminUser = Be::getTable('system_admin_user');
         $adminUserCount = $tableAdminUser->count();
-        $response->set('adminUserCount', $adminUserCount);
+        Resonse::set('adminUserCount', $adminUserCount);
 
         $serviceApp = Be::getService('App.System.Admin.App');
-        $response->set('appCount', $serviceApp->getAppCount());
+        Resonse::set('appCount', $serviceApp->getAppCount());
 
         $serviceTheme = Be::getService('App.System.Admin.Theme');
-        $response->set('themeCount', $serviceTheme->getThemeCount());
+        Resonse::set('themeCount', $serviceTheme->getThemeCount());
 
         $serviceAdminTheme = Be::getService('App.System.Admin.AdminTheme');
-        $response->set('adminThemeCount', $serviceAdminTheme->getThemeCount());
+        Resonse::set('adminThemeCount', $serviceAdminTheme->getThemeCount());
 
         $recentLogs = Be::getTable('system_admin_op_log')
             ->where('admin_user_id', $my->id)
             ->orderBy('create_time', 'DESC')
             ->limit(5)
             ->getObjects();
-        $response->set('recentLogs', $recentLogs);
+        Resonse::set('recentLogs', $recentLogs);
 
         $recentLoginLogs = Be::getTable('system_admin_user_login_log')
             ->where('username', $my->username)
             ->orderBy('create_time', 'DESC')
             ->limit(5)
             ->getObjects();
-        $response->set('recentLoginLogs', $recentLoginLogs);
+        Resonse::set('recentLoginLogs', $recentLoginLogs);
 
-        $response->display();
+        Resonse::display();
     }
 
 

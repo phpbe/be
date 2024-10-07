@@ -38,20 +38,20 @@ class MenuPicker extends Curd
      */
     public function Grid()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
-        if ($request->isAjax()) {
+        if (Request::isAjax()) {
             parent::Grid();
         } else {
 
-            $response->set('title', $this->setting['grid']['title'] ?? '');
-            $response->set('app', $this->app);
-            $response->set('route', $this->route);
-            $response->set('url', $request->getUrl());
+            Resonse::set('title', $this->setting['grid']['title'] ?? '');
+            Resonse::set('app', $this->app);
+            Resonse::set('route', $this->route);
+            Resonse::set('url', Request::getUrl());
 
             if (!isset($this->setting['grid']['form']['action'])) {
-                $this->setting['grid']['form']['action'] = $request->getUrl();
+                $this->setting['grid']['form']['action'] = Request::getUrl();
             }
 
             if (!isset($this->setting['grid']['form']['actions'])) {
@@ -64,7 +64,7 @@ class MenuPicker extends Curd
                 $this->setting['field'] = $this->setting['name'];
             }
 
-            $response->set('setting', $this->setting);
+            Resonse::set('setting', $this->setting);
 
             $pageSize = null;
             if (isset($this->setting['grid']['pageSize']) &&
@@ -75,10 +75,10 @@ class MenuPicker extends Curd
             } else {
                 $pageSize = Be::getConfig('App.System.Admin')->pageSize;;
             }
-            $response->set('pageSize', $pageSize);
+            Resonse::set('pageSize', $pageSize);
 
             $theme = $this->setting['grid']['theme'] ?? 'Blank';
-            $response->display('AdminPlugin.MenuPicker.display', $theme);
+            Resonse::display('AdminPlugin.MenuPicker.display', $theme);
         }
 
     }

@@ -45,10 +45,10 @@ class Importer extends Driver
      */
     public function setting(array $setting = []): Driver
     {
-        $request = Be::getRequest();
+        
 
         if (!isset($setting['form']['action'])) {
-            $action = $request->getUrl();
+            $action = Request::getUrl();
             $action .= (strpos($action, '?') === false ? '?' : '&') . 'task=import';
             $setting['form']['action'] = $action;
         }
@@ -102,7 +102,7 @@ class Importer extends Driver
         }
 
         if (!isset($setting['downloadTemplateUrl'])) {
-            $downloadTemplateUrl = $request->getUrl();
+            $downloadTemplateUrl = Request::getUrl();
             if (strpos($downloadTemplateUrl, 'task=import') === false) {
                 $downloadTemplateUrl .= (strpos($downloadTemplateUrl, '?') === false ? '?' : '&') . 'task=downloadTemplate';
             } else {
@@ -138,10 +138,10 @@ class Importer extends Driver
 
     public function display()
     {
-        $response = Be::getResponse();
+        
 
         $title = isset($this->setting['title']) ? $this->setting['title'] : '导入';
-        $response->set('title', $title);
+        Resonse::set('title', $title);
 
         Be::getAdminPlugin('Form')
             ->setting($this->setting)
@@ -150,7 +150,7 @@ class Importer extends Driver
 
     public function import()
     {
-        $response = Be::getResponse();
+        
 
         $dbName = 'master';
         if (isset($this->setting['db'])) {
@@ -205,18 +205,18 @@ class Importer extends Driver
             }
 
             $db->commit();
-            $response->success('导入成功！');
+            Resonse::success('导入成功！');
         } catch (\Exception $e) {
             $db->rollback();
-            $response->error($e->getMessage());
+            Resonse::error($e->getMessage());
         }
     }
 
     public function process()
     {
-        $request = Be::getRequest();
+        
 
-        $postData = $request->json();
+        $postData = Request::json();
         $formData = $postData['formData'];
 
         $type = $formData['type'] ?? 'csv';
@@ -511,9 +511,9 @@ class Importer extends Driver
 
     public function downloadTemplate()
     {
-        $request = Be::getRequest();
+        
 
-        $postData = $request->post('data', '', '');
+        $postData = Request::post('data', '', '');
         $postData = json_decode($postData, true);
         $formData = $postData['formData'];
 

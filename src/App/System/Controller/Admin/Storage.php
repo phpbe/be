@@ -24,16 +24,16 @@ class Storage extends Auth
      */
     public function index()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
         $session = Be::getSession();
 
         $sessionKeyPath = 'be-storage-path';
         $sessionKeyView = 'be-storage-view';
 
-        if ($request->isAjax()) {
+        if (Request::isAjax()) {
 
-            $postData = $request->json();
+            $postData = Request::json();
             $formData = $postData['formData'] ?? [];
 
             // 要查看的路径
@@ -42,7 +42,7 @@ class Storage extends Auth
                 $path = '/';
             }
             $session->set($sessionKeyPath, $path);
-            $response->set('path', $path);
+            Resonse::set('path', $path);
 
             // 显示方式 thumbnail 缩略图 list 详细列表
             $view = $formData['view'] ?? '';
@@ -50,11 +50,11 @@ class Storage extends Auth
                 $view = 'thumbnail';
             }
             $session->set($sessionKeyView, $view);
-            $response->set('view', $view);
+            Resonse::set('view', $view);
 
             if (isset($postData['toggleView']) && $postData['toggleView']) {
-                $response->set('success', true);
-                $response->json();
+                Resonse::set('success', true);
+                Resonse::json();
                 return;
             }
 
@@ -62,24 +62,24 @@ class Storage extends Auth
             $option = [];
             $storage = Be::getStorage();
             $files = $storage->getFiles($path, $option);
-            $response->set('files', $files);
+            Resonse::set('files', $files);
 
-            $response->set('success', true);
-            $response->json();
+            Resonse::set('success', true);
+            Resonse::json();
         } else {
             // 要查看的路径
             $path = $session->get($sessionKeyPath, '');
             if ($path === '') {
                 $path = '/';
             }
-            $response->set('path', $path);
+            Resonse::set('path', $path);
 
             // 显示方式 thumbnail 缩略图 list 详细列表
             $view = $session->get($sessionKeyView, '');
             if ($view !== 'thumbnail' && $view !== 'list') {
                 $view = 'thumbnail';
             }
-            $response->set('view', $view);
+            Resonse::set('view', $view);
 
             $configStorage = Be::getConfig('App.System.Storage');
 
@@ -99,8 +99,8 @@ class Storage extends Auth
                     break;
             }
 
-            $response->set('title', '存储（' . $storageDriver . '）');
-            $response->display();
+            Resonse::set('title', '存储（' . $storageDriver . '）');
+            Resonse::display();
         }
     }
 
@@ -109,30 +109,30 @@ class Storage extends Auth
      */
     public function pop()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
         $session = Be::getSession();
 
         // 是否启用过滤，只显示图像
-        $filterImage = $request->get('filterImage', -1, 'int');
+        $filterImage = Request::get('filterImage', -1, 'int');
         if ($filterImage !== 0 && $filterImage !== 1) {
             $filterImage = 0;
         }
-        $response->set('filterImage', $filterImage);
+        Resonse::set('filterImage', $filterImage);
 
         // JS 回调代码，base64编码
-        $callback = $request->get('callback', '');
+        $callback = Request::get('callback', '');
         if ($callback) {
             $callback = base64_decode($callback);
         }
-        $response->set('callback', $callback);
+        Resonse::set('callback', $callback);
 
         $sessionKeyPath = 'be-storage-' . $filterImage . '-path';
         $sessionKeyView = 'be-storage-' . $filterImage . '-view';
 
-        if ($request->isAjax()) {
+        if (Request::isAjax()) {
 
-            $postData = $request->json();
+            $postData = Request::json();
             $formData = $postData['formData'] ?? [];
 
             // 要查看的路径
@@ -141,7 +141,7 @@ class Storage extends Auth
                 $path = '/';
             }
             $session->set($sessionKeyPath, $path);
-            $response->set('path', $path);
+            Resonse::set('path', $path);
 
             // 显示方式 thumbnail 缩略图 list 详细列表
             $view = $formData['view'] ?? '';
@@ -149,11 +149,11 @@ class Storage extends Auth
                 $view = 'thumbnail';
             }
             $session->set($sessionKeyView, $view);
-            $response->set('view', $view);
+            Resonse::set('view', $view);
 
             if (isset($postData['toggleView']) && $postData['toggleView']) {
-                $response->set('success', true);
-                $response->json();
+                Resonse::set('success', true);
+                Resonse::json();
                 return;
             }
 
@@ -162,26 +162,26 @@ class Storage extends Auth
             $option['filterImage'] = $filterImage;
             $storage = Be::getStorage();
             $files = $storage->getFiles($path, $option);
-            $response->set('files', $files);
+            Resonse::set('files', $files);
 
-            $response->set('success', true);
-            $response->json();
+            Resonse::set('success', true);
+            Resonse::json();
         } else {
             // 要查看的路径
             $path = $session->get($sessionKeyPath, '');
             if ($path === '') {
                 $path = '/';
             }
-            $response->set('path', $path);
+            Resonse::set('path', $path);
 
             // 显示方式 thumbnail 缩略图 list 详细列表
             $view = $session->get($sessionKeyView, '');
             if ($view !== 'thumbnail' && $view !== 'list') {
                 $view = 'thumbnail';
             }
-            $response->set('view', $view);
+            Resonse::set('view', $view);
 
-            $response->display();
+            Resonse::display();
         }
     }
 
@@ -190,10 +190,10 @@ class Storage extends Auth
      */
     public function createDir()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
-        $postData = $request->json();
+        $postData = Request::json();
         $formData = $postData['formData'] ?? [];
 
         try {
@@ -214,13 +214,13 @@ class Storage extends Auth
             }
             $storage->createDir($fullPath);
 
-            $response->set('success', true);
-            $response->set('message', '创建文件夹成功！');
-            $response->json();
+            Resonse::set('success', true);
+            Resonse::set('message', '创建文件夹成功！');
+            Resonse::json();
         } catch (\Throwable $t) {
-            $response->set('success', false);
-            $response->set('message', '创建文件夹失败：' . $t->getMessage());
-            $response->json();
+            Resonse::set('success', false);
+            Resonse::set('message', '创建文件夹失败：' . $t->getMessage());
+            Resonse::json();
         }
     }
 
@@ -231,10 +231,10 @@ class Storage extends Auth
      */
     public function renameDir()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
-        $postData = $request->json();
+        $postData = Request::json();
         $formData = $postData['formData'] ?? [];
 
         try {
@@ -263,13 +263,13 @@ class Storage extends Auth
 
             $storage->renameDir($oldFullPath, $newFullPath);
 
-            $response->set('success', true);
-            $response->set('message', '修改文件夹名称成功！');
-            $response->json();
+            Resonse::set('success', true);
+            Resonse::set('message', '修改文件夹名称成功！');
+            Resonse::json();
         } catch (\Throwable $t) {
-            $response->set('success', false);
-            $response->set('message', '修改文件夹名称失败：' . $t->getMessage());
-            $response->json();
+            Resonse::set('success', false);
+            Resonse::set('message', '修改文件夹名称失败：' . $t->getMessage());
+            Resonse::json();
         }
     }
 
@@ -280,10 +280,10 @@ class Storage extends Auth
      */
     public function deleteDir()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
-        $postData = $request->json();
+        $postData = Request::json();
         $formData = $postData['formData'] ?? [];
 
         try {
@@ -302,13 +302,13 @@ class Storage extends Auth
 
             $storage->deleteDir($fullPath);
 
-            $response->set('success', true);
-            $response->set('message', '删除文件夹成功！');
-            $response->json();
+            Resonse::set('success', true);
+            Resonse::set('message', '删除文件夹成功！');
+            Resonse::json();
         } catch (\Throwable $t) {
-            $response->set('success', false);
-            $response->set('message', '删除文件夹失败：' . $t->getMessage());
-            $response->json();
+            Resonse::set('success', false);
+            Resonse::set('message', '删除文件夹失败：' . $t->getMessage());
+            Resonse::json();
         }
     }
 
@@ -319,16 +319,16 @@ class Storage extends Auth
      */
     public function uploadImage()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
         try {
-            $path = $request->post('path');
+            $path = Request::post('path');
             if (!$path) {
                 throw new ControllerException('参数（path）缺失！');
             }
 
-            $file = $request->files('file');
+            $file = Request::files('file');
             if ($file['error'] !== 0) {
                 throw new ControllerException(FileUpload::errorDescription($file['error']));
             }
@@ -372,14 +372,14 @@ class Storage extends Auth
 
             $url = $storage->uploadFile($fullPath, $file['tmp_name']);
 
-            $response->set('success', true);
-            $response->set('message', '上传成功！');
-            $response->set('url', $url);
-            $response->json();
+            Resonse::set('success', true);
+            Resonse::set('message', '上传成功！');
+            Resonse::set('url', $url);
+            Resonse::json();
         } catch (\Throwable $t) {
-            $response->set('success', false);
-            $response->set('message', '上传图像失败：' . $t->getMessage());
-            $response->json();
+            Resonse::set('success', false);
+            Resonse::set('message', '上传图像失败：' . $t->getMessage());
+            Resonse::json();
         }
     }
 
@@ -390,16 +390,16 @@ class Storage extends Auth
      */
     public function uploadFile()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
         try {
-            $path = $request->post('path');
+            $path = Request::post('path');
             if (!$path) {
                 throw new ControllerException('参数（path）缺失！');
             }
 
-            $file = $request->files('file');
+            $file = Request::files('file');
             if ($file['error'] !== 0) {
                 throw new ControllerException(FileUpload::errorDescription($file['error']));
             }
@@ -443,14 +443,14 @@ class Storage extends Auth
 
             $url = $storage->uploadFile($fullPath, $file['tmp_name']);
 
-            $response->set('success', true);
-            $response->set('message', '上传文件成功！');
-            $response->set('url', $url);
-            $response->json();
+            Resonse::set('success', true);
+            Resonse::set('message', '上传文件成功！');
+            Resonse::set('url', $url);
+            Resonse::json();
         } catch (\Throwable $t) {
-            $response->set('success', false);
-            $response->set('message', '上传文件失败：' . $t->getMessage());
-            $response->json();
+            Resonse::set('success', false);
+            Resonse::set('message', '上传文件失败：' . $t->getMessage());
+            Resonse::json();
         }
     }
 
@@ -461,15 +461,15 @@ class Storage extends Auth
      */
     public function renameFile()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
-        $postData = $request->json();
+        $postData = Request::json();
         $formData = $postData['formData'] ?? [];
 
         try {
 
-            $filterImage = $request->get('filterImage', -1, 'int');
+            $filterImage = Request::get('filterImage', -1, 'int');
 
             if (!isset($formData['path'])) {
                 throw new ControllerException('参数（path）缺失！');
@@ -513,13 +513,13 @@ class Storage extends Auth
 
             $storage->renameFile($oldFullPath, $newFullPath);
 
-            $response->set('success', true);
-            $response->set('message', '修改文件名称成功！');
-            $response->json();
+            Resonse::set('success', true);
+            Resonse::set('message', '修改文件名称成功！');
+            Resonse::json();
         } catch (\Throwable $t) {
-            $response->set('success', false);
-            $response->set('message', '修改文件名称失败：' . $t->getMessage());
-            $response->json();
+            Resonse::set('success', false);
+            Resonse::set('message', '修改文件名称失败：' . $t->getMessage());
+            Resonse::json();
         }
     }
 
@@ -530,10 +530,10 @@ class Storage extends Auth
      */
     public function deleteFile()
     {
-        $request = Be::getRequest();
-        $response = Be::getResponse();
+        
+        
 
-        $postData = $request->json();
+        $postData = Request::json();
         $formData = $postData['formData'] ?? [];
 
         try {
@@ -552,13 +552,13 @@ class Storage extends Auth
 
             $storage->deleteFile($fullPath);
 
-            $response->set('success', true);
-            $response->set('message', '删除文件成功！');
-            $response->json();
+            Resonse::set('success', true);
+            Resonse::set('message', '删除文件成功！');
+            Resonse::json();
         } catch (\Throwable $t) {
-            $response->set('success', false);
-            $response->set('message', '删除文件失败：' . $t->getMessage());
-            $response->json();
+            Resonse::set('success', false);
+            Resonse::set('message', '删除文件失败：' . $t->getMessage());
+            Resonse::json();
         }
     }
 
