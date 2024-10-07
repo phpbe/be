@@ -22,10 +22,6 @@ abstract class Be
      */
     public static function getCid(): int
     {
-        $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode()) {
-            return \Swoole\Coroutine::getCid();
-        }
 
         return 0;
     }
@@ -56,13 +52,7 @@ abstract class Be
      */
     public static function setRequest(\Be\Request\Driver $request)
     {
-        $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            self::$cache[$cid]['request'] = $request;
-        } else {
-            self::$cache['request'] = $request;
-        }
+        self::$cache['request'] = $request;
     }
 
     /**
@@ -72,16 +62,8 @@ abstract class Be
      */
     public static function getRequest()
     {
-        $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['request'])) {
-                return self::$cache[$cid]['request'];
-            }
-        } else {
-            if (isset(self::$cache['request'])) {
-                return self::$cache['request'];
-            }
+        if (isset(self::$cache['request'])) {
+            return self::$cache['request'];
         }
 
         return null;
@@ -94,13 +76,7 @@ abstract class Be
      */
     public static function setResponse(\Be\Response\Driver $response)
     {
-        $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            self::$cache[$cid]['response'] = $response;
-        } else {
-            self::$cache['response'] = $response;
-        }
+        self::$cache['response'] = $response;
     }
 
     /**
@@ -110,16 +86,8 @@ abstract class Be
      */
     public static function getResponse()
     {
-        $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['response'])) {
-                return self::$cache[$cid]['response'];
-            }
-        } else {
-            if (isset(self::$cache['response'])) {
-                return self::$cache['response'];
-            }
+        if (isset(self::$cache['response'])) {
+            return self::$cache['response'];
         }
 
         return null;
@@ -242,19 +210,10 @@ abstract class Be
      */
     public static function getLog(): \Be\Log\Driver
     {
-        $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            if (!isset(self::$cache[$cid]['log'])) {
-                self::$cache[$cid]['log'] = self::newLog();
-            }
-            return self::$cache[$cid]['log'];
-        } else {
-            if (!isset(self::$cache['log'])) {
-                self::$cache['log'] = self::newLog();
-            }
-            return self::$cache['log'];
+        if (!isset(self::$cache['log'])) {
+            self::$cache['log'] = self::newLog();
         }
+        return self::$cache['log'];
     }
 
     /**
@@ -295,33 +254,18 @@ abstract class Be
     public static function getSession(): \Be\Session\Driver
     {
         $config = self::getConfig('App.System.Session');
-        $runtime = self::getRuntime();
 
-        if ($runtime->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['session'])) {
-                return self::$cache[$cid]['session'];
-            }
-
-            $driver = '\\Be\\Session\\Driver\\Swoole\\' . $config->driver;
-            if (!class_exists($driver)) {
-                throw new RuntimeException('Session driver' . $config->driver . ' does not exist!');
-            }
-            self::$cache[$cid]['session'] = new $driver($config);
-            return self::$cache[$cid]['session'];
-        } else {
-            if (isset(self::$cache['session'])) {
-                return self::$cache['session'];
-            }
-
-            $driver = '\\Be\\Session\\Driver\\Common\\' . $config->driver;
-            if (!class_exists($driver)) {
-                throw new RuntimeException('Session driver' . $config->driver . ' does not exist!');
-            }
-
-            self::$cache['session'] = new $driver($config);
+        if (isset(self::$cache['session'])) {
             return self::$cache['session'];
         }
+
+        $driver = '\\Be\\Session\\Driver\\Common\\' . $config->driver;
+        if (!class_exists($driver)) {
+            throw new RuntimeException('Session driver' . $config->driver . ' does not exist!');
+        }
+
+        self::$cache['session'] = new $driver($config);
+        return self::$cache['session'];
     }
 
     /**
@@ -331,19 +275,10 @@ abstract class Be
      */
     public static function getCache(): \Be\Cache\Driver
     {
-        $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            if (!isset(self::$cache[$cid]['cache'])) {
-                self::$cache[$cid]['cache'] = self::newCache();
-            }
-            return self::$cache[$cid]['cache'];
-        } else {
-            if (!isset(self::$cache['cache'])) {
-                self::$cache['cache'] = self::newCache();
-            }
-            return self::$cache['cache'];
+        if (!isset(self::$cache['cache'])) {
+            self::$cache['cache'] = self::newCache();
         }
+        return self::$cache['cache'];
     }
 
     /**
@@ -368,18 +303,10 @@ abstract class Be
      */
     public static function getStorage(): \Be\Storage\Driver
     {
-        if (self::getRuntime()->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            if (!isset(self::$cache[$cid]['storage'])) {
-                self::$cache[$cid]['storage'] = self::newStorage();
-            }
-            return self::$cache[$cid]['storage'];
-        } else {
-            if (!isset(self::$cache['storage'])) {
-                self::$cache['storage'] = self::newStorage();
-            }
-            return self::$cache['storage'];
+        if (!isset(self::$cache['storage'])) {
+            self::$cache['storage'] = self::newStorage();
         }
+        return self::$cache['storage'];
     }
 
     /**
@@ -398,45 +325,6 @@ abstract class Be
     }
 
     /**
-     * 初始货Redis连接池
-     */
-    public static function initRedisPools()
-    {
-        if (self::$cache['redis']['pools'] === null) {
-            self::$cache['redis']['pools'] = [];
-            $config = Be::getConfig('App.System.Redis');
-            foreach ($config as $k => $v) {
-                $size = isset($v['pool']) ? intval($v['pool']) : 0;
-                if ($size <= 0) {
-                    continue;
-                }
-
-                $redisConfig = new \Swoole\Database\RedisConfig();
-
-                $redisConfig->withHost($v['host']);
-
-                if (isset($v['port'])) {
-                    $redisConfig->withPort($v['port']);
-                }
-
-                if (isset($v['auth']) && $v['auth']) {
-                    $redisConfig->withAuth($v['auth']);
-                }
-
-                if (isset($v['db']) && $v['db']) {
-                    $redisConfig->withDbIndex($v['db']);
-                }
-
-                if (isset($v['timeout']) && $v['timeout']) {
-                    $redisConfig->withTimeout($v['timeout']);
-                }
-
-                self::$cache['redis']['pools'][$k] = new \Swoole\Database\RedisPool($redisConfig, $size);
-            }
-        }
-    }
-
-    /**
      * 获取Redis对象 单例
      *
      * @param string $name Redis名
@@ -445,33 +333,10 @@ abstract class Be
      */
     public static function getRedis(string $name = 'master'): \Be\Redis\Driver
     {
-        $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['redis'][$name])) return self::$cache[$cid]['redis'][$name];
-
-            $config = Be::getConfig('App.System.Redis');
-            if (!isset($config->$name)) {
-                throw new RuntimeException('Redis config item (' . $name . ') does not exist!');
-            }
-
-            $driver = null;
-            if ($runtime->isWorkerProcess() && isset(self::$cache['redis']['pools'][$name])) {
-                $pool = self::$cache['redis']['pools'][$name];
-                $redis = $pool->get();
-                $driver = new \Be\Redis\Driver($name, $redis);
-            } else {
-                $driver = new \Be\Redis\Driver($name);
-            }
-
-            self::$cache[$cid]['redis'][$name] = $driver;
-            return self::$cache[$cid]['redis'][$name];
-        } else {
-            if (!isset(self::$cache['redis'][$name])) {
-                self::$cache['redis'][$name] = self::newRedis($name);
-            }
-            return self::$cache['redis'][$name];
+        if (!isset(self::$cache['redis'][$name])) {
+            self::$cache['redis'][$name] = self::newRedis($name);
         }
+        return self::$cache['redis'][$name];
     }
 
     /**
@@ -499,19 +364,10 @@ abstract class Be
      */
     public static function getEs(): \Elasticsearch\Client
     {
-        $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            if (!isset(self::$cache[$cid]['es'])) {
-                self::$cache[$cid]['es'] = self::newEs();
-            }
-            return self::$cache[$cid]['es'];
-        } else {
-            if (!isset(self::$cache['es'])) {
-                self::$cache['es'] = self::newEs();
-            }
-            return self::$cache['es'];
+        if (!isset(self::$cache['es'])) {
+            self::$cache['es'] = self::newEs();
         }
+        return self::$cache['es'];
     }
 
     /**
@@ -528,44 +384,6 @@ abstract class Be
     }
 
     /**
-     * 初始货数据库连接池
-     */
-    public static function initDbPools()
-    {
-        if (self::$cache['db']['pools'] === null) {
-            self::$cache['db']['pools'] = [];
-
-            $config = self::getConfig('App.System.Db');
-            foreach ($config as $k => $v) {
-                if ($v['driver'] !== 'mysql') continue;
-
-                $size = isset($v['pool']) ? intval($v['pool']) : 0;
-                if ($size <= 0) {
-                    continue;
-                }
-
-                $options = array(
-                    \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
-                );
-
-                $port = isset($v['port']) ? $v['port'] : 3306;
-                $charset = isset($v['charset']) ? $v['charset'] : 'utf8mb4';
-
-                $pdoConfig = new \Swoole\Database\PDOConfig();
-                $pdoConfig->withHost($v['host'])
-                    ->withPort($port)
-                    ->withDbName($v['name'])
-                    ->withUsername($v['username'])
-                    ->withPassword($v['password'])
-                    ->withCharset($charset)
-                    ->withOptions($options);
-
-                self::$cache['db']['pools'][$k] = new \Swoole\Database\PDOPool($pdoConfig, $size);
-            }
-        }
-    }
-
-    /**
      * 获取 数据库对象 单例
      *
      * @param string $name 数据库名
@@ -574,43 +392,9 @@ abstract class Be
      */
     public static function getDb(string $name = 'master'): \Be\Db\Driver
     {
-        $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['db'][$name])) return self::$cache[$cid]['db'][$name];
-
-            $config = self::getConfig('App.System.Db');
-            if (!isset($config->$name)) {
-                throw new RuntimeException('Db config item (' . $name . ') does not exist!');
-            }
-            $configData = $config->$name;
-
-            $driver = null;
-            switch ($configData['driver']) {
-                case 'mysql':
-                    if ($runtime->isWorkerProcess() && isset(self::$cache['db']['pools'][$name])) {
-                        $pool = self::$cache['db']['pools'][$name];
-                        $pdo = $pool->get();
-                        $driver = new \Be\Db\Driver\Mysql($name, $pdo);
-                    } else {
-                        $driver = new \Be\Db\Driver\Mysql($name);
-                    }
-                    break;
-                case 'Mssql':
-                    $driver = new \Be\Db\Driver\Mssql($name);
-                    break;
-                case 'Oracle':
-                    $driver = new \Be\Db\Driver\Oracle($name);
-                    break;
-            }
-
-            self::$cache[$cid]['db'][$name] = $driver;
-            return self::$cache[$cid]['db'][$name];
-        } else {
-            if (isset(self::$cache['db'][$name])) return self::$cache['db'][$name];
-            self::$cache['db'][$name] = self::newDb($name);
-            return self::$cache['db'][$name];
-        }
+        if (isset(self::$cache['db'][$name])) return self::$cache['db'][$name];
+        self::$cache['db'][$name] = self::newDb($name);
+        return self::$cache['db'][$name];
     }
 
     /**
@@ -711,18 +495,10 @@ abstract class Be
      */
     public static function getMongoDb(string $name): \Be\MongoDb\Driver
     {
-        if (self::getRuntime()->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            if (!isset(self::$cache[$cid]['mongoDb'][$name])) {
-                self::$cache[$cid]['mongoDb'][$name] = self::newMongoDb($name);
-            }
-            return self::$cache[$cid]['mongoDb'][$name];
-        } else {
-            if (!isset(self::$cache['mongoDb'][$name])) {
-                self::$cache['mongoDb'][$name] = self::newMongoDb($name);
-            }
-            return self::$cache['mongoDb'][$name];
+        if (!isset(self::$cache['mongoDb'][$name])) {
+            self::$cache['mongoDb'][$name] = self::newMongoDb($name);
         }
+        return self::$cache['mongoDb'][$name];
     }
 
     /**
@@ -749,18 +525,10 @@ abstract class Be
      */
     public static function getService(string $name)
     {
-        if (self::getRuntime()->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            if (!isset(self::$cache[$cid]['service'][$name])) {
-                self::$cache[$cid]['service'][$name] = self::newService($name);
-            }
-            return self::$cache[$cid]['service'][$name];
-        } else {
-            if (!isset(self::$cache['service'][$name])) {
-                self::$cache['service'][$name] = self::newService($name);
-            }
-            return self::$cache['service'][$name];
+        if (!isset(self::$cache['service'][$name])) {
+            self::$cache['service'][$name] = self::newService($name);
         }
+        return self::$cache['service'][$name];
     }
 
     /**
@@ -791,18 +559,10 @@ abstract class Be
      */
     public static function getLib(string $name)
     {
-        if (self::getRuntime()->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            if (!isset(self::$cache[$cid]['lib'][$name])) {
-                self::$cache[$cid]['lib'][$name] = self::newLib($name);
-            }
-            return self::$cache[$cid]['lib'][$name];
-        } else {
-            if (!isset(self::$cache['lib'][$name])) {
-                self::$cache['lib'][$name] = self::newLib($name);
-            }
-            return self::$cache['lib'][$name];
+        if (!isset(self::$cache['lib'][$name])) {
+            self::$cache['lib'][$name] = self::newLib($name);
         }
+        return self::$cache['lib'][$name];
     }
 
     /**
@@ -834,18 +594,10 @@ abstract class Be
      */
     public static function getPlugin(string $name): \Be\Plugin\Driver
     {
-        if (self::getRuntime()->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            if (!isset(self::$cache[$cid]['plugin'][$name])) {
-                self::$cache[$cid]['plugin'][$name] = self::newPlugin($name);
-            }
-            return self::$cache[$cid]['plugin'][$name];
-        } else {
-            if (!isset(self::$cache['plugin'][$name])) {
-                self::$cache['plugin'][$name] = self::newPlugin($name);
-            }
-            return self::$cache['plugin'][$name];
+        if (!isset(self::$cache['plugin'][$name])) {
+            self::$cache['plugin'][$name] = self::newPlugin($name);
         }
+        return self::$cache['plugin'][$name];
     }
 
     /**
@@ -874,18 +626,10 @@ abstract class Be
      */
     public static function getAdminPlugin(string $name): \Be\AdminPlugin\Driver
     {
-        if (self::getRuntime()->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            if (!isset(self::$cache[$cid]['adminPlugin'][$name])) {
-                self::$cache[$cid]['adminPlugin'][$name] = self::newAdminPlugin($name);
-            }
-            return self::$cache[$cid]['adminPlugin'][$name];
-        } else {
-            if (!isset(self::$cache['adminPlugin'][$name])) {
-                self::$cache['adminPlugin'][$name] = self::newAdminPlugin($name);
-            }
-            return self::$cache['adminPlugin'][$name];
+        if (!isset(self::$cache['adminPlugin'][$name])) {
+            self::$cache['adminPlugin'][$name] = self::newAdminPlugin($name);
         }
+        return self::$cache['adminPlugin'][$name];
     }
 
     /**
@@ -923,18 +667,11 @@ abstract class Be
             $theme = self::getConfig('App.System.Theme')->default;
         }
 
-        $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['template'][$theme][$template])) {
-                return self::$cache[$cid]['template'][$theme][$template];
-            }
-        } else {
-            if (isset(self::$cache['template'][$theme][$template])) {
-                return self::$cache['template'][$theme][$template];
-            }
+        if (isset(self::$cache['template'][$theme][$template])) {
+            return self::$cache['template'][$theme][$template];
         }
 
+        $runtime = self::getRuntime();
         $path = $runtime->getRootPath() . '/data/Runtime/Template/' . $theme . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
         if (!file_exists($path)) {
             \Be\Template\TemplateHelper::update($template, $theme);
@@ -948,14 +685,8 @@ abstract class Be
 
         $class = '\\Be\\Data\\Runtime\\Template\\' . $theme . '\\' . $type . '\\' . $name . '\\' . implode('\\', $parts);
 
-        if ($runtime->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            self::$cache[$cid]['template'][$theme][$template] = new $class();
-            return self::$cache[$cid]['template'][$theme][$template];
-        } else {
-            self::$cache['template'][$theme][$template] = new $class();
-            return self::$cache['template'][$theme][$template];
-        }
+        self::$cache['template'][$theme][$template] = new $class();
+        return self::$cache['template'][$theme][$template];
     }
 
     /**
@@ -977,15 +708,8 @@ abstract class Be
         }
 
         $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['adminTemplate'][$theme][$template])) {
-                return self::$cache[$cid]['adminTemplate'][$theme][$template];
-            }
-        } else {
-            if (isset(self::$cache['adminTemplate'][$theme][$template])) {
-                return self::$cache['adminTemplate'][$theme][$template];
-            }
+        if (isset(self::$cache['adminTemplate'][$theme][$template])) {
+            return self::$cache['adminTemplate'][$theme][$template];
         }
 
         $path = $runtime->getRootPath() . '/data/Runtime/AdminTemplate/' . $theme . '/' . $type . '/' . $name . '/' . implode('/', $parts) . '.php';
@@ -1000,15 +724,9 @@ abstract class Be
         }
 
         $class = '\\Be\\Data\\Runtime\\AdminTemplate\\' . $theme . '\\' . $type . '\\' . $name . '\\' . implode('\\', $parts);
+        self::$cache['adminTemplate'][$theme][$template] = new $class();
+        return self::$cache['adminTemplate'][$theme][$template];
 
-        if ($runtime->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            self::$cache[$cid]['adminTemplate'][$theme][$template] = new $class();
-            return self::$cache[$cid]['adminTemplate'][$theme][$template];
-        } else {
-            self::$cache['adminTemplate'][$theme][$template] = new $class();
-            return self::$cache['adminTemplate'][$theme][$template];
-        }
     }
 
     /**
@@ -1155,23 +873,11 @@ abstract class Be
     public static function setAdminUser($adminUser = null)
     {
         Be::getSession()->set('Be-AdminUser', $adminUser);
-        $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['adminUser'])) {
-                if ($adminUser === null) {
-                    unset(self::$cache[$cid]['adminUser']);
-                } else {
-                    self::$cache[$cid]['adminUser'] = new \Be\AdminUser\AdminUser($adminUser);
-                }
-            }
-        } else {
-            if (isset(self::$cache['adminUser'])) {
-                if ($adminUser === null) {
-                    unset(self::$cache['adminUser']);
-                } else {
-                    self::$cache['adminUser'] = new \Be\AdminUser\AdminUser($adminUser);
-                }
+        if (isset(self::$cache['adminUser'])) {
+            if ($adminUser === null) {
+                unset(self::$cache['adminUser']);
+            } else {
+                self::$cache['adminUser'] = new \Be\AdminUser\AdminUser($adminUser);
             }
         }
     }
@@ -1183,25 +889,13 @@ abstract class Be
      */
     public static function getAdminUser(): \Be\AdminUser\AdminUser
     {
-        $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['adminUser'])) {
-                return self::$cache[$cid]['adminUser'];
-            }
-
-            $user = Be::getSession()->get('Be-AdminUser');
-            self::$cache[$cid]['adminUser'] = new \Be\AdminUser\AdminUser($user);
-            return self::$cache[$cid]['adminUser'];
-        } else {
-            if (isset(self::$cache['adminUser'])) {
-                return self::$cache['adminUser'];
-            }
-
-            $user = Be::getSession()->get('Be-AdminUser');
-            self::$cache['adminUser'] = new \Be\AdminUser\AdminUser($user);
+        if (isset(self::$cache['adminUser'])) {
             return self::$cache['adminUser'];
         }
+
+        $user = Be::getSession()->get('Be-AdminUser');
+        self::$cache['adminUser'] = new \Be\AdminUser\AdminUser($user);
+        return self::$cache['adminUser'];
     }
 
     /**
@@ -1212,23 +906,11 @@ abstract class Be
     public static function setUser($user = null)
     {
         Be::getSession()->set('Be-User', $user);
-        $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['user'])) {
-                if ($user === null) {
-                    unset(self::$cache[$cid]['user']);
-                } else {
-                    self::$cache[$cid]['user'] = new \Be\User\User($user);
-                }
-            }
-        } else {
-            if (isset(self::$cache['user'])) {
-                if ($user === null) {
-                    unset(self::$cache['user']);
-                } else {
-                    self::$cache['user'] = new \Be\User\User($user);
-                }
+        if (isset(self::$cache['user'])) {
+            if ($user === null) {
+                unset(self::$cache['user']);
+            } else {
+                self::$cache['user'] = new \Be\User\User($user);
             }
         }
     }
@@ -1240,25 +922,13 @@ abstract class Be
      */
     public static function getUser(): \Be\User\User
     {
-        $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['user'])) {
-                return self::$cache[$cid]['user'];
-            }
-
-            $user = Be::getSession()->get('Be-User');
-            self::$cache[$cid]['user'] = new \Be\User\User($user);
-            return self::$cache[$cid]['user'];
-        } else {
-            if (isset(self::$cache['user'])) {
-                return self::$cache['user'];
-            }
-
-            $user = Be::getSession()->get('Be-User');
-            self::$cache['user'] = new \Be\User\User($user);
+        if (isset(self::$cache['user'])) {
             return self::$cache['user'];
         }
+
+        $user = Be::getSession()->get('Be-User');
+        self::$cache['user'] = new \Be\User\User($user);
+        return self::$cache['user'];
     }
 
     /**
@@ -1305,12 +975,7 @@ abstract class Be
      */
     public static function setContext(string $name, $value)
     {
-        if (self::getRuntime()->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            self::$cache[$cid]['context'][$name] = $value;
-        } else {
-            self::$cache['context'][$name] = $value;
-        }
+        self::$cache['context'][$name] = $value;
     }
 
     /**
@@ -1321,18 +986,10 @@ abstract class Be
      */
     public static function getContext(string $name)
     {
-        if (self::getRuntime()->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            if (isset(self::$cache[$cid]['context'][$name])) {
-                return self::$cache[$cid]['context'][$name];
-            }
-            return null;
-        } else {
-            if (isset(self::$cache['context'][$name])) {
-                return self::$cache['context'][$name];
-            }
-            return null;
+        if (isset(self::$cache['context'][$name])) {
+            return self::$cache['context'][$name];
         }
+        return null;
     }
 
     /**
@@ -1343,12 +1000,7 @@ abstract class Be
      */
     public static function hasContext(string $name): bool
     {
-        if (self::getRuntime()->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-            return isset(self::$cache[$cid]['context'][$name]);
-        } else {
-            return isset(self::$cache['context'][$name]);
-        }
+        return isset(self::$cache['context'][$name]);
     }
 
     /**
@@ -1356,73 +1008,13 @@ abstract class Be
      */
     public static function gc()
     {
-        $runtime = self::getRuntime();
-        if ($runtime->isSwooleMode()) {
-            $cid = \Swoole\Coroutine::getCid();
-
-            // worker 进程回收
-            if ($runtime->isWorkerProcess()) {
-                // 关闭 SESSION
-                if (isset(self::$cache[$cid]['session'])) {
-                    /**
-                     * @var \Be\Session\Driver
-                     */
-                    $driver = self::$cache[$cid]['session'];
-                    $driver->close();
-                }
-
-                // 回收 db 连接池
-                if (isset(self::$cache[$cid]['db'])) {
-                    foreach (self::$cache[$cid]['db'] as $name => $driver) {
-                        if (isset(self::$cache['db']['pools'][$name])) {
-                            $pool = self::$cache['db']['pools'][$name];
-
-                            /**
-                             * @var \Be\Db\Driver $driver
-                             */
-                            $pdo = $driver->getConnection()->getPdo();
-                            $driver->release();
-
-                            if ($pdo->inTransaction()) {
-                                $pdo->rollBack();
-                            }
-
-                            $pool->put($pdo);
-                        }
-                    }
-                }
-
-                // 回收 redis 连接池
-                if (isset(self::$cache[$cid]['redis'])) {
-                    foreach (self::$cache[$cid]['redis'] as $name => $driver) {
-                        if (isset(self::$cache['redis']['pools'][$name])) {
-                            $pool = self::$cache['redis']['pools'][$name];
-
-                            /**
-                             * @var \Be\Redis\Driver $driver
-                             */
-                            $redis = $driver->getRedis();
-                            $driver->release();
-                            $pool->put($redis);
-                        }
-                    }
-                }
-            }
-
-            // 释放用户协程创建的对象
-            unset(self::$cache[$cid]);
-
-        } else {
-
-            // 关闭 SESSION
-            if (isset(self::$cache['session'])) {
-                /**
-                 * @var \Be\Session\Driver
-                 */
-                $driver = self::$cache['session'];
-                $driver->close();
-            }
-
+        // 关闭 SESSION
+        if (isset(self::$cache['session'])) {
+            /**
+             * @var \Be\Session\Driver
+             */
+            $driver = self::$cache['session'];
+            $driver->close();
         }
     }
 }

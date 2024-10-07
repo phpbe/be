@@ -8,7 +8,6 @@ namespace Be\Runtime;
  */
 abstract class Driver
 {
-    protected $mode = null; // 运行模式 Swoole / Common
 
     protected $rootPath = null;
 
@@ -16,56 +15,6 @@ abstract class Driver
 
     public function __construct()
     {
-    }
-
-    /**
-     * 获取BE框架启动模式
-     *
-     * @return string
-     */
-    public function getMode(): string
-    {
-        return $this->mode;
-    }
-
-    /**
-     * 当前是否Swoole模式
-     *
-     * @return bool
-     */
-    public function isSwooleMode(): bool
-    {
-        return $this->mode === 'Swoole';
-    }
-
-    /**
-     * 当前是否Worker进程
-     *
-     * @return bool
-     */
-    public function isWorkerProcess(): bool
-    {
-        return false;
-    }
-
-    /**
-     * 当前是否Task进程
-     *
-     * @return bool
-     */
-    public function isTaskProcess(): bool
-    {
-        return false;
-    }
-
-    /**
-     * 当前是否用户自定义进程
-     *
-     * @return bool
-     */
-    public function isUserProcess(): bool
-    {
-        return false;
     }
 
     /**
@@ -118,11 +67,6 @@ abstract class Driver
 
     public function task($data)
     {
-    }
-
-    public function getSwooleHttpServer()
-    {
-        return null;
     }
 
 
