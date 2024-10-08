@@ -58,6 +58,6 @@ Swoole模式下入口文件为 server.php
 > http://localhost
 
 
-## 更多信息请访问官方网站
+## 网站
     
 https://www.phpbe.com
