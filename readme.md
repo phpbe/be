@@ -41,16 +41,31 @@ Swoole模式下入口文件为 server.php
 
 #### Swoole模式方案一：php标准环境下，安装swoole
 
-> php server.php start
+```shell
+ php server.php start
+ ```
 
 
-#### Swoole模式方案二：Docker容器
+#### Docker部署
 
-> 示例(PHP7.4)： docker run -d --name=be -v /your_code_path:/var/www -p 80:80 liu12/swoole:4.8.5-php7.4 php /var/www/server.php start
+```shell
+docker run -d --name=be  -p 80:80 phpbe/be:latest
+```
+
+持载数据目录和web 目录
+
+```shell
+docker run -d --name=be -v /path/to/data:/phpbe/data -v /path/to/www:/phpbe/www -p 80:80 phpbe/be:latest
+```
 
 
-> 示例(PHP8.1)： docker run -d --name=be -v /your_code_path:/var/www -p 80:80 liu12/swoole:4.8.5-php8.1 php /var/www/server.php start
+#### Docker compose 部署
 
+```shell
+git clone https://git.junyouji.com/phpbe/be
+cd be/docker-compose
+docker compose up -d
+```
 
 
 ## 访问系统，自动跳转到安装界面
