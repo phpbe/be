@@ -44,26 +44,20 @@ EOF
 RUN cat > /etc/apache2/sites-available/000-default.conf <<-EOF
 <VirtualHost *:80>
   DocumentRoot /phpbe/www
-
-  ErrorLog ${APACHE_LOG_DIR}/error.log
-  CustomLog ${APACHE_LOG_DIR}/access.log combined
-  
-  <Directory /phpbe>
-    Options FollowSymLinks
-    AllowOverride All
-    Require all granted
-  </Directory>
-  
-  <Directory "/phpbe/www">
-    Options +FollowSymLinks +IncludesNOEXEC -Indexes
-    DirectoryIndex index.php index.html index.htm
-    AllowOverride All
-    Order Deny,Allow
-    Allow from all
-    php_admin_value open_basedir /phpbe:/tmp
-  </Directory>
-  
 </VirtualHost>
+<Directory /phpbe>
+  Options FollowSymLinks
+  AllowOverride All
+  Require all granted
+</Directory>
+<Directory /phpbe/www>
+  Options +FollowSymLinks +IncludesNOEXEC -Indexes
+  DirectoryIndex index.php index.html index.htm
+  AllowOverride All
+  Order Deny,Allow
+  Allow from all
+  php_admin_value open_basedir /phpbe:/tmp
+</Directory>
 EOF
 
 
