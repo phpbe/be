@@ -121,7 +121,7 @@ RUN mkdir /phpbe \
 
 WORKDIR /phpbe
 
-ADD entrypoint.sh /entrypoint.sh
+ADD ./docker/swoole/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT /entrypoint.sh

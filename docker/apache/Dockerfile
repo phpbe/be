@@ -224,7 +224,7 @@ EOF
 
 WORKDIR /phpbe
 
-ADD entrypoint.sh /entrypoint.sh
+ADD ./docker/apache/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT /entrypoint.sh
