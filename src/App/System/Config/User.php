@@ -23,5 +23,27 @@ class User
      */
     public int $avatarHeight = 96;
 
+    /**
+     * @BeConfigItem("Hashmap路由 - 内存缓存",
+     *     driver="FormItemSwitch",
+     *     description="当有使用 Hashmap路由 时才需要此配置藉由, 开启后将占用较多内存")
+     */
+    public int $username = 1;
+
+    /**
+     * @BeConfigItem("Hashmap路由 - 内存缓存",
+     *     driver="FormItemSwitch",
+     *     description="当有使用 Hashmap路由 时才需要此配置藉由, 开启后将占用较多内存")
+     */
+    public int $email = 1;
+
+    /**
+     * @BeConfigItem("Hashmap路由 - 内存缓存",
+     *     driver="FormItemSwitch",
+     *     description="当有使用 Hashmap路由 时才需要此配置藉由, 开启后将占用较多内存")
+     */
+    public int $mobile = 1;
+
+
 
 }

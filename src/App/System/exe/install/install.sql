@@ -171,3 +171,51 @@ CREATE TABLE `system_task_log` (
 ALTER TABLE `system_task_log`
 ADD PRIMARY KEY (`id`),
 ADD KEY `task_id` (`task_id`,`status`) USING BTREE;
+
+
+
+CREATE TABLE `system_user` (
+`id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
+`username` varchar(120) NOT NULL DEFAULT '' COMMENT '用户名',
+`email` varchar(120) NOT NULL DEFAULT '' COMMENT '邮箱',
+`mobile` varchar(20) NOT NULL DEFAULT '' COMMENT '手机号',
+`password` char(40) NOT NULL DEFAULT '' COMMENT '密码',
+`salt` char(32) NOT NULL DEFAULT '' COMMENT '密码盐值',
+`name` varchar(120) NOT NULL DEFAULT '' COMMENT '乐称',
+`avatar` varchar(60) NOT NULL DEFAULT '' COMMENT '头像',
+`gender` tinyint(3) NOT NULL DEFAULT '-1' COMMENT '性别（0：女/1：男/-1：保密）',
+`phone` varchar(20) NOT NULL DEFAULT '' COMMENT '电话',
+`last_login_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '上次登陆时间',
+`this_login_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '本次登陆时间',
+`last_login_ip` varchar(15) NOT NULL DEFAULT '' COMMENT '上次登录的IP',
+`this_login_ip` varchar(15) NOT NULL DEFAULT '' COMMENT '本次登录的IP',
+`is_enable` tinyint(3) UNSIGNED NOT NULL DEFAULT '1' COMMENT '是否可用',
+`is_delete` tinyint(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否已删除',
+`create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+`update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci COMMENT='用户';
+
+ALTER TABLE `system_user`
+ADD PRIMARY KEY (`id`),
+ADD KEY `username` (`username`) USING BTREE,
+ADD KEY `email` (`email`) USING BTREE,
+ADD KEY `mobile` (`mobile`) USING BTREE,
+
+
+CREATE TABLE `system_user_token` (
+`id` varchar(36) NOT NULL DEFAULT 'uuid()' COMMENT 'UUID',
+`user_id` varchar(37) NOT NULL DEFAULT '' COMMENT '用户ID',
+`token` varchar(32) NOT NULL DEFAULT '' COMMENT '识别token',
+`last_login_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '上次登录时间',
+`this_login_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '本次登录时间',
+`last_login_ip` varchar(15) NOT NULL DEFAULT '' COMMENT '上次登录IP',
+`this_login_ip` varchar(15) NOT NULL DEFAULT '' COMMENT '本次登录IP',
+`create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+`update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci COMMENT='用户身份识别 token';
+
+
+ALTER TABLE `system_user_token`
+ADD PRIMARY KEY (`id`),
+ADD UNIQUE KEY `token` (`token`);
+

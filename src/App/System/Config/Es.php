@@ -17,7 +17,7 @@ class Es
      * @BeConfigItem("ES服务器",
      *     driver="FormItemCode",
      *     language="json",
-     *     valueType = "array(string)",
+     *     valueType = "mixed",
      *     ui="return ['form-item' => ['v-show' => 'formData.enable === 1']];")
      */
     public array $hosts = ['127.0.0.1:9200'];

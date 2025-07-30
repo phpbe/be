@@ -1,0 +1,48 @@
+name: Docker Buid
+ 
+on:
+  push:
+    branches: [ "main" ]
+ 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - name: checkout code
+      uses: actions/checkout@v4
+
+    - name: extract tag
+      id: extract-tag
+      run: |
+        LATEST_TAG=$(git describe --tags --abbrev=0)
+        echo "LATEST_TAG=${LATEST_TAG}" >> $GITHUB_OUTPUT
+
+    - name: login to docker
+      uses: docker/login-action@v3
+      with:
+        username: phpbe
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        
+    - name: build apache version
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./docker/apache/Dockerfile
+        push: true
+        tags: |
+          phpbe/be:latest
+          phpbe/be:${{ steps.extract-tag.outputs.LATEST_TAG }}-apache
+        
+    - name: build swoole version
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./docker/swoole/Dockerfile
+        push: true
+        tags: phpbe/be:${{ steps.extract-tag.outputs.LATEST_TAG }}-swoole
+        
