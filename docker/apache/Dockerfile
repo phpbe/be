@@ -1,6 +1,7 @@
 
 FROM liu12/apache-php:7.4.33
 
+RUN a2enmod rewrite
 
 RUN mkdir /phpbe-src \
   && cd /phpbe-src \
