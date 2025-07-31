@@ -8,15 +8,7 @@ RUN mkdir /phpbe-src \
   && mv composer.phar /usr/local/bin/composer \
   && composer create-project be/new /phpbe-src
 
-
-RUN mkdir /phpbe \
-  && cd /phpbe \
-  && cp -r /phpbe-src/* /phpbe/ \
-  && mkdir -p /phpbe/data \
-  && chmod -R 777 /phpbe/data \
-  && mkdir -p /phpbe/www \
-  && chmod -R 777 /phpbe/www
-
+VOLUME /phpbe
 
 WORKDIR /phpbe
 
@@ -24,4 +16,3 @@ ADD ./docker/swoole/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT /entrypoint.sh
-ENTRYPOINT php server.php start

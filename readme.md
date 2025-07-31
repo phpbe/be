@@ -52,10 +52,10 @@ Swoole模式下入口文件为 server.php
 docker run -d --name=be  -p 80:80 phpbe/be:latest
 ```
 
-持载数据目录和web 目录
+挂载 phpbe 目录，源码，安装的应用，缓存，日志等都将何存在该目录中
 
 ```shell
-docker run -d --name=be -v /path/to/data:/phpbe/data -v /path/to/www:/phpbe/www -p 80:80 phpbe/be:latest
+docker run -d --name=be -v /path/to/phpbe:/phpbe -p 80:80 phpbe/be:latest
 ```
 
 
