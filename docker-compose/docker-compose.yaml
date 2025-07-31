@@ -29,16 +29,15 @@ services:
       - mysql
       - redis
     volumes:
-      # 挂载 php 目录
-      - ./volumes/phpbe/data:/phpbe/data
-      - ./volumes/phpbe/www:/phpbe/www
+      # 挂载 phpbe 目录
+      - ./volumes/phpbe:/phpbe
 
 
   mysql:
     image: mysql:5.7
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${POSTGRES_PASSWORD:-phpbe@123456}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-phpbe@123456}
     volumes:
       # 挂载 MySQL 持久化目录
       - ./volumes/mysql/data:/var/lib/mysql

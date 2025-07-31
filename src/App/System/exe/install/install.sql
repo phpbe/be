@@ -199,7 +199,7 @@ ALTER TABLE `system_user`
 ADD PRIMARY KEY (`id`),
 ADD KEY `username` (`username`) USING BTREE,
 ADD KEY `email` (`email`) USING BTREE,
-ADD KEY `mobile` (`mobile`) USING BTREE,
+ADD KEY `mobile` (`mobile`) USING BTREE;
 
 
 CREATE TABLE `system_user_token` (

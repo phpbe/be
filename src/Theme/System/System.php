@@ -12,9 +12,6 @@
     <base href="<?php echo beUrl(); ?>/">
     <link rel="icon" href="favicon.ico" type="image/x-icon"/>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
-
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-
     <link rel="stylesheet" href="https://cdn.phpbe.com/ui/be.css"/>
     <link rel="stylesheet" href="https://cdn.phpbe.com/ui/be-icons.css"/>
 
@@ -22,6 +19,9 @@
     $configTheme = \Be\Be::getConfig('Theme.System.Theme');
     $themeWwwUrl = \Be\Be::getProperty('Theme.System')->getWwwUrl();
     ?>
+
+    <script src="<?php echo $themeWwwUrl; ?>/js/jquery-3.6.1.min.js"></script>
+
     <link rel="stylesheet" href="<?php echo $themeWwwUrl; ?>/css/drawer.css"/>
     <script src="<?php echo $themeWwwUrl; ?>/js/drawer-menu.js"></script>
 
