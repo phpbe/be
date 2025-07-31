@@ -22,8 +22,10 @@ jobs:
     - name: extract tag
       id: extract-tag
       run: |
-        git fetch --tags
-        LATEST_TAG=$(git tag --sort=-creatordate | head -n 1)
+        # git fetch --tags
+        # LATEST_TAG=$(git tag --sort=-creatordate | head -n 1)
+        # echo "LATEST_TAG=${LATEST_TAG}" >> $GITHUB_OUTPUT
+        LATEST_TAG=${GITHUB_REF#refs/tags/}
         echo "LATEST_TAG=${LATEST_TAG}" >> $GITHUB_OUTPUT
 
     - name: login to docker
