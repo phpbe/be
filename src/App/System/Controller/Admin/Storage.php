@@ -493,7 +493,7 @@ class Storage extends Auth
             }
 
             $configSystem = Be::getConfig('App.System.System');
-            if ($filterImage) {
+            if ($filterImage===1) {
                 if (!in_array($ext, $configSystem->allowUploadImageTypes)) {
                     throw new ControllerException('禁止使用的图像类型：' . $ext . '！');
                 }
