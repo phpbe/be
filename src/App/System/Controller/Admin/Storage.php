@@ -127,6 +127,13 @@ class Storage extends Auth
         }
         $response->set('callback', $callback);
 
+        // 是否启用确认模式（选择文件后需点确认才回调）
+        $confirmMode = $request->get('confirmMode', 0, 'int');
+        if ($confirmMode !== 1) {
+            $confirmMode = 0;
+        }
+        $response->set('confirmMode', $confirmMode);
+
         $sessionKeyPath = 'be-storage-' . $filterImage . '-path';
         $sessionKeyView = 'be-storage-' . $filterImage . '-view';
 

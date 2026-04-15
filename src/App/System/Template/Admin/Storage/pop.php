@@ -39,7 +39,7 @@
                 </el-breadcrumb>
             </div>
 
-            <div class="storage-files" v-loading="loading">
+            <div :class="{'storage-files': true, 'storage-files-with-confirm': confirmMode}" v-loading="loading">
                 <template v-if="formData.view==='thumbnail'">
                     <div class="storage-view-thumbnail">
                         <ul>
@@ -155,6 +155,14 @@
                 </template>
             </div>
 
+        </div>
+
+        <div v-if="confirmMode" class="storage-confirm-bar">
+            <span class="storage-confirm-info">{{selectedFiles.length > 0 ? '已选择 ' + selectedFiles.length + ' 个<?php echo $filterName; ?>' : '未选择<?php echo $filterName; ?>'}}</span>
+            <span class="storage-confirm-actions">
+                <el-button size="mini" :disabled="selectedFiles.length === 0" @click="clearSelection">取消选择</el-button>
+                <el-button type="primary" size="mini" :disabled="selectedFiles.length === 0" @click="confirmSelection">确认插入</el-button>
+            </span>
         </div>
 
 
@@ -302,6 +310,7 @@
                 },
 
                 filterImage: <?php echo $this->filterImage; ?>,
+                confirmMode: <?php echo $this->confirmMode; ?>,
                 imageTypes: ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'svg', 'webp'],
                 fileTypes: ["ac3","avi","bmp","css","csv","csv","dmg","doc","docx","exe","fla","flv","gif","gz","htm","html","jpeg","jpg","json","log","mid","mov","mp3","mp4","mpeg","mpg","ogg","pdf","png","ppt","pptx","psd","rar","rtf","sql","svg","swf","tar","tiff","txt","wav","wma","xhtml","xls","xlsx","xml","zip"],
                 t: false
@@ -581,7 +590,7 @@
                     return row.type !== 'dir';
                 },
 
-                // 列表祋图下的表格选择
+                // 列表视图下的表格选择
                 tableSelectionChange: function (val) {
                     this.selectedFiles = val;
 
@@ -593,11 +602,13 @@
                         }
                     }
 
-                    this.callback(this.selectedFiles);
+                    if (!this.confirmMode) {
+                        this.callback(this.selectedFiles);
+                    }
                 },
 
 
-                // 缩略图祋图下选择文件
+                // 缩略图视图下选择文件
                 selectFile: function (file) {
                     file.selected = !file.selected;
                     if (this.formData.view === 'list') {
@@ -612,12 +623,32 @@
                     }
                     this.selectedFiles = selectedFiles;
 
-                    this.callback(selectedFiles);
+                    if (!this.confirmMode) {
+                        this.callback(selectedFiles);
+                    }
                 },
 
                 // 回调
                 callback: function (files) {
                     <?php echo $this->callback; ?>
+                },
+
+                // 确认模式：确认插入
+                confirmSelection: function () {
+                    if (this.selectedFiles.length > 0) {
+                        this.callback(this.selectedFiles);
+                    }
+                },
+
+                // 确认模式：取消选择
+                clearSelection: function () {
+                    for (let file of this.files) {
+                        file.selected = false;
+                    }
+                    this.selectedFiles = [];
+                    if (this.formData.view === 'list') {
+                        this.$refs.filesTableRef.clearSelection();
+                    }
                 }
 
             },

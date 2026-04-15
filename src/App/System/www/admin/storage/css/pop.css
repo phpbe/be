@@ -152,3 +152,29 @@
     max-height: 200px;
     overflow-y: auto;
 }
+
+.storage-confirm-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    background: #ecf5ff;
+    border-top: 1px solid #b3d8ff;
+    font-size: 13px;
+    color: #409eff;
+    z-index: 999;
+}
+
+.storage-confirm-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.storage-files-with-confirm {
+    bottom: 40px !important;
+}
